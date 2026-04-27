@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página no encontrada - Futunet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/navbar.css" />
+  <link rel="icon" type="image/png" href="/img/logo.png" />
+  <meta name="theme-color" content="#0B7EB5" />
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    }
+    .error-code {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(6rem, 15vw, 10rem);
+      font-weight: 800;
+      color: var(--brand-pale);
+      line-height: 1;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .error-code::after {
+      content: '404';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--brand);
+      opacity: 0.1;
+      filter: blur(8px);
+      z-index: -1;
+    }
+    .error-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+    .error-desc {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 500px;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+    .error-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+  <main class="error-page">
+    <a href="/index.html" class="nav-logo" style="margin-bottom: 40px;">
+      <img src="/img/logo-navbar.png" alt="Futunet" width="200" height="41" />
+    </a>
+    <div class="error-code">404</div>
+    <h1 class="error-title">No pudimos encontrar esa página</h1>
+    <p class="error-desc">Parece que el enlace que seguiste está roto o la página ha sido movida. Explora nuestras soluciones o vuelve al inicio.</p>
+    <div class="error-actions">
+      <a href="/index.html" class="btn btn-primary">
+        <i data-lucide="home"></i> Volver al inicio
+      </a>
+      <a href="/catalogo.html" class="btn btn-outline">
+        <i data-lucide="layout-grid"></i> Ver catálogo
+      </a>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

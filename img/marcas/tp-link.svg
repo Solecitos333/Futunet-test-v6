@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" role="img" aria-labelledby="title">
+  <title>TP-Link</title>
+  <rect width="220" height="180" fill="none"/>
+  <path
+    d="M116 8c52 0 94 42 94 94s-42 70-94 70H76v-52H16c-8.8 0-16-7.2-16-16s7.2-16 16-16h60V44c0-19.9 16.1-36 36-36h4zM116 44h-4c-.9 0-2 1.1-2 2v88h6c32 0 58-26 58-58S148 44 116 44z"
+    fill="#56c4cf"
+  />
+</svg>

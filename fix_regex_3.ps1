@@ -1,0 +1,68 @@
+﻿$files = @(
+    'c:\Users\Admin\Desktop\Catalogo futune\proyecto_github_pages\index.html',
+    'c:\Users\Admin\Desktop\Catalogo futune\proyecto_github_pages\catalogo.html',
+    'c:\Users\Admin\Desktop\Catalogo futune\proyecto_github_pages\js\catalog.js'
+)
+
+foreach ($f in $files) {
+    if (-not (Test-Path $f)) { continue }
+    
+    $text = [System.IO.File]::ReadAllText($f, [System.Text.Encoding]::UTF8)
+
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Tecnolog.a", "Tecnología")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "tecnol.gicas", "tecnológicas")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "electr.nica", "electrónica")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "men.", "menú")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Men.", "Menú")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "acompa.am.s", "acompañamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "C.maras", "Cámaras")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "protecci.n", "protección")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "f.sicos", "físicos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "sam.sung", "samsung", [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".Y", "¿Y")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Qui.nes", "Quiénes")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Seleccionam.s", "Seleccionamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".tiles", "útiles")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Protegem.s", "Protegemos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Relaci.n", "Relación")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Trabajam.s", "Trabajamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".realistas", "realistas")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "comunicaci.n", "comunicación")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Asesor.a", "Asesoría")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "guiam.s", "guiamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".oCalidad", "Calidad")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Som.s", "Somos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "tecnol.gicos", "tecnológicos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Ubicaci.n", "Ubicación")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".Tienes", "¿Tienes")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Cu.ntanos", "Cuéntanos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "ayudam.s", "ayudamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "soluci.n", "solución")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, ".realista", "realista")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Estam.s", "Estamos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "aqu.", "aquí")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Conversem.s", "Conversemos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Escr.benos", "Escríbenos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "orientaci.n", "orientación")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "pr.ximo", "próximo")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "item.s", "items")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Direcci.n", "Dirección")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "s.bado", "sábado")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "Tel.fono", "Teléfono")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "opci.n", "opción")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "magn.ticas", "magnéticas")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "m.sg", "msg")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "texta.rea", "textarea")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "gustar.a", "gustaría")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "tel.fono", "teléfono")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "ubicaci.n", "ubicación")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "r.pidos", "rápidos")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "m.viles", "móviles")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "a.gil", "ágil")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "\?", "¿")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "'", "ó")
+    $text = [System.Text.RegularExpressions.Regex]::Replace($text, "", "")
+
+    [System.IO.File]::WriteAllText($f, $text, [System.Text.Encoding]::UTF8)
+}
+Write-Host "Fixed comprehensive corruptions"

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://futunet.com.do/sitemap.xml
