@@ -33,7 +33,7 @@
   <link rel="icon" type="image/png" href="img/logo.png" />
   <meta name="theme-color" content="#0B7EB5" />
   <meta name="twitter:card" content="summary_large_image" />
-  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="is-loading">
   <div id="page-preloader" class="page-preloader" aria-hidden="true">
@@ -154,7 +154,10 @@
           <a href="catalogo.html?cat=infra" class="chip"><span class="chip-icon"><i data-lucide="building-2"></i></span> Infraestructura</a>
         </div>
 
-        <a href="#servicios" class="hero-secondary-link">Ver soluciones</a>
+        <div class="hero-scroll-indicator" aria-hidden="true">
+          <span class="hero-scroll-indicator__mouse"><span class="hero-scroll-indicator__wheel"></span></span>
+          <span class="hero-scroll-indicator__text">Desplaza hacia abajo</span>
+        </div>
       </div>
     </div>
   </section>
@@ -335,22 +338,6 @@
     </div>
   </section>
 
-  <hr class="section-divider" />
-
-  <section id="destacados-catalogo" class="section showcase-section">
-    <div class="container">
-      <div class="text-center reveal">
-        <span class="section-label">Explora visualmente</span>
-        <h2 class="section-title">Artículos destacados del catálogo</h2>
-        <p class="section-sub showcase-subtitle">Descubre productos listos para cotizar y entra directo al detalle que más se parezca a lo que estás buscando.</p>
-      </div>
-
-      <div class="showcase-shell reveal" id="home-showcase" aria-label="Carrusel de artículos destacados">
-        <div class="showcase-row showcase-row--left" data-showcase-row="left"></div>
-        <div class="showcase-row showcase-row--right" data-showcase-row="right"></div>
-      </div>
-    </div>
-  </section>
 
   <section id="marcas" class="section section-sm bg-light">
     <div class="container text-center reveal">
@@ -613,6 +600,10 @@
     </a>
   </div>
 
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Volver al inicio" hidden>
+    <i data-lucide="chevron-up"></i>
+  </button>
+
 
 
   <script defer src="js/chatbot.js"></script>
@@ -623,22 +614,34 @@
   <script defer src="js/form.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const showcaseSections = document.querySelectorAll('section#destacados-catalogo');
-      showcaseSections.forEach((section, index) => {
-        if (index === 0) return;
-        section.hidden = true;
-        section.removeAttribute('id');
-
-        const legacyShell = section.querySelector('#home-showcase');
-        if (legacyShell) {
-          legacyShell.id = 'home-showcase-legacy';
-          legacyShell.querySelectorAll('[data-showcase-row]').forEach((row) => {
-            row.removeAttribute('data-showcase-row');
-          });
-        }
-      });
-
       if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // Back-to-top button
+      const btt = document.getElementById('back-to-top');
+      if (btt) {
+        window.addEventListener('scroll', () => {
+          btt.hidden = window.scrollY < 600;
+        }, { passive: true });
+        btt.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      // Lazy-load Google Maps iframe
+      const mapFrame = document.querySelector('.contact-map-frame');
+      if (mapFrame && 'IntersectionObserver' in window) {
+        const realSrc = mapFrame.dataset.src || mapFrame.getAttribute('src');
+        mapFrame.removeAttribute('src');
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              mapFrame.setAttribute('src', realSrc);
+              obs.disconnect();
+            }
+          });
+        }, { rootMargin: '200px' });
+        obs.observe(mapFrame);
+      }
     });
   </script>
 </body>
