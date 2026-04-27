@@ -1271,7 +1271,7 @@ function renderProductsGridLegacy(productsList, options = {}) {
     if (actionButton) {
       actionButton.addEventListener('click', (event) => {
         event.stopPropagation();
-        openProductModal(product.id);
+        window.location.href = 'producto.html?id=' + product.id;
       });
     }
 
@@ -1293,7 +1293,7 @@ function shouldIgnoreProductCardActivation(event, card) {
 function bindProductCardActivation(card, productId) {
   card.addEventListener('click', (event) => {
     if (shouldIgnoreProductCardActivation(event, card)) return;
-    openProductModal(productId);
+    window.location.href = 'producto.html?id=' + productId;
   });
 
   card.addEventListener('keydown', (event) => {
@@ -1302,7 +1302,7 @@ function bindProductCardActivation(card, productId) {
     if (shouldIgnoreProductCardActivation(event, card)) return;
 
     event.preventDefault();
-    openProductModal(productId);
+    window.location.href = 'producto.html?id=' + productId;
   });
 }
 
@@ -1362,7 +1362,7 @@ function renderProductsGrid(productsList, options = {}) {
     if (actionButton) {
       actionButton.addEventListener('click', (event) => {
         event.stopPropagation();
-        openProductModal(product.id);
+        window.location.href = 'producto.html?id=' + product.id;
       });
     }
 
