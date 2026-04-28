@@ -427,107 +427,99 @@ function renderMobileVisualBrowserSection({ title, description, items }) {
   container.appendChild(section);
 }
 
-function renderCompactMobileCatalogView() {
-  if (!isCompactMobileViewport()) return false;
+function renderCompactMobileSearchView() {
+  const q = state.searchQuery.toLowerCase();
+  const results = mockDatabase.filter(p =>
+    p.title.toLowerCase().includes(q) ||
+    p.desc.toLowerCase().includes(q) ||
+    p.category.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q)
+  );
 
-  if (state.searchQuery) {
-    const q = state.searchQuery.toLowerCase();
-    const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+  updateCatalogContextBar({
+    title: 'Resultados',
+    description: `${results.length} coincidencia${results.length !== 1 ? 's' : ''} para "${state.searchQuery}".`,
+    resultsLabel: `${results.length} coincidencia${results.length !== 1 ? 's' : ''}`,
+    activeLabel: `Busqueda activa: ${state.searchQuery}`,
+    canReset: true
+  });
+
+  if (results.length === 0) {
+    renderEmptyState(
+      'Sin resultados',
+      'No encontramos productos con esos terminos. Intenta con otras palabras o explora las categorias.'
     );
-
-    updateCatalogContextBar({
-      title: 'Resultados',
-      description: `${results.length} coincidencia${results.length !== 1 ? 's' : ''} para "${state.searchQuery}".`,
-      resultsLabel: `${results.length} coincidencia${results.length !== 1 ? 's' : ''}`,
-      activeLabel: `Busqueda activa: ${state.searchQuery}`,
-      canReset: true
-    });
-
-    if (results.length === 0) {
-      renderEmptyState(
-        'Sin resultados',
-        'No encontramos productos con esos terminos. Intenta con otras palabras o explora las categorias.'
-      );
-    } else {
-      state.allFilteredProducts = results;
-      state.page = 0;
-      renderPaginatedProducts();
-    }
-    return true;
+  } else {
+    state.allFilteredProducts = results;
+    state.page = 0;
+    renderPaginatedProducts();
   }
+}
 
-  let db = mockDatabase;
-  if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
+function renderCompactMobileDepartmentsView(db) {
+  const deptItems = mobileDeptOrder
+    .map((deptKey) => {
+      const deptProducts = db.filter((product) => product.department === deptKey);
+      if (!deptProducts.length) return null;
+      return {
+        title: getDeptDisplayName(deptKey),
+        meta: getDeptCountLabel(deptProducts.length),
+        image: getDeptFallbackImg(deptKey),
+        onSelect: () => {
+          filterCat(deptKey, null);
+          scrollCatalogToTop();
+        },
+        ariaLabel: `Abrir area ${getDeptDisplayName(deptKey)}`
+      };
+    })
+    .filter(Boolean);
 
-  if (state.category === 'all') {
-    if (state.dept === 'all') {
-      const deptItems = mobileDeptOrder
-        .map((deptKey) => {
-          const deptProducts = db.filter((product) => product.department === deptKey);
-          if (!deptProducts.length) return null;
-          return {
-            title: getDeptDisplayName(deptKey),
-            meta: getDeptCountLabel(deptProducts.length),
-            image: getDeptFallbackImg(deptKey),
-            onSelect: () => {
-              filterCat(deptKey, null);
-              scrollCatalogToTop();
-            },
-            ariaLabel: `Abrir area ${getDeptDisplayName(deptKey)}`
-          };
-        })
-        .filter(Boolean);
+  updateCatalogContextBar({
+    title: 'Areas del catalogo',
+    description: 'Entra por departamento y luego navega por subcategorias con una vista mas limpia.',
+    resultsLabel: `${deptItems.length} areas`,
+    activeLabel: `${db.length} articulos listos para explorar`,
+    canReset: false
+  });
 
-      updateCatalogContextBar({
-        title: 'Areas del catalogo',
-        description: 'Entra por departamento y luego navega por subcategorias con una vista mas limpia.',
-        resultsLabel: `${deptItems.length} areas`,
-        activeLabel: `${db.length} articulos listos para explorar`,
-        canReset: false
-      });
+  renderMobileVisualBrowserSection({
+    title: 'Explora por area',
+    description: 'Toca un departamento para abrir sus subcategorias y navegar de forma mas ordenada.',
+    items: deptItems
+  });
+}
 
-      renderMobileVisualBrowserSection({
-        title: 'Explora por area',
-        description: 'Toca un departamento para abrir sus subcategorias y navegar de forma mas ordenada.',
-        items: deptItems
-      });
-      return true;
-    }
+function renderCompactMobileCategoriesView(db) {
+  const categoriesGroups = {};
+  db.forEach((product) => {
+    if (!categoriesGroups[product.category]) categoriesGroups[product.category] = [];
+    categoriesGroups[product.category].push(product);
+  });
 
-    const categoriesGroups = {};
-    db.forEach((product) => {
-      if (!categoriesGroups[product.category]) categoriesGroups[product.category] = [];
-      categoriesGroups[product.category].push(product);
-    });
+  const sortedCategories = sortEntriesBySize(categoriesGroups);
 
-    const sortedCategories = sortEntriesBySize(categoriesGroups);
+  updateCatalogContextBar({
+    title: getDeptDisplayName(state.dept),
+    description: 'Selecciona una subcategoria y luego entra a sus productos con una vista mas clara.',
+    resultsLabel: `${sortedCategories.length} subcategorias`,
+    activeLabel: `${db.length} articulos en ${getDeptDisplayName(state.dept)}`,
+    canReset: true
+  });
 
-    updateCatalogContextBar({
-      title: getDeptDisplayName(state.dept),
-      description: 'Selecciona una subcategoria y luego entra a sus productos con una vista mas clara.',
-      resultsLabel: `${sortedCategories.length} subcategorias`,
-      activeLabel: `${db.length} articulos en ${getDeptDisplayName(state.dept)}`,
-      canReset: true
-    });
+  renderMobileVisualBrowserSection({
+    title: 'Explora por subcategoria',
+    description: 'Entra al grupo exacto que necesitas antes de ver los productos.',
+    items: sortedCategories.map(([categoryName, products]) => ({
+      title: categoryName,
+      meta: getCategoryCountLabel(categoryName, products.length),
+      image: getFallbackImg(categoryName),
+      onSelect: () => setCategory(categoryName),
+      ariaLabel: `Abrir subcategoria ${categoryName}`
+    }))
+  });
+}
 
-    renderMobileVisualBrowserSection({
-      title: 'Explora por subcategoria',
-      description: 'Entra al grupo exacto que necesitas antes de ver los productos.',
-      items: sortedCategories.map(([categoryName, products]) => ({
-        title: categoryName,
-        meta: getCategoryCountLabel(categoryName, products.length),
-        image: getFallbackImg(categoryName),
-        onSelect: () => setCategory(categoryName),
-        ariaLabel: `Abrir subcategoria ${categoryName}`
-      }))
-    });
-    return true;
-  }
-
+function renderCompactMobileBrandsView(db) {
   const catDb = db.filter(p => p.category === state.category);
 
   updateCatalogContextBar({
@@ -556,7 +548,30 @@ function renderCompactMobileCatalogView() {
     if (container) container.appendChild(headerDiv);
     renderProductsGrid(brandProducts, { compactMobile: true });
   }
+}
 
+function renderCompactMobileCatalogView() {
+  if (!isCompactMobileViewport()) return false;
+
+  if (state.searchQuery) {
+    renderCompactMobileSearchView();
+    return true;
+  }
+
+  let db = mockDatabase;
+  if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
+
+  if (state.category === 'all') {
+    if (state.dept === 'all') {
+      renderCompactMobileDepartmentsView(db);
+      return true;
+    }
+
+    renderCompactMobileCategoriesView(db);
+    return true;
+  }
+
+  renderCompactMobileBrandsView(db);
   return true;
 }
 
