@@ -398,19 +398,6 @@ function buildVisualTileGrid(items, compact = false) {
   return grid;
 }
 
-function buildSubcategoryGrid(categoriesGroups, compact = false) {
-  return buildVisualTileGrid(
-    Object.keys(categoriesGroups).map((catName) => ({
-      title: catName,
-      meta: getCategoryCountLabel(catName, categoriesGroups[catName]),
-      image: getFallbackImg(catName),
-      onSelect: () => setCategory(catName),
-      ariaLabel: `Abrir subcategoria ${catName}`
-    })),
-    compact
-  );
-}
-
 function renderMobileVisualBrowserSection({ title, description, items }) {
   const container = document.getElementById('catalog-grid-container');
   if (!container || !items.length) return;
