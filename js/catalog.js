@@ -1590,24 +1590,45 @@ function initSmartSearch(inputId, dropdownId) {
   const drop = document.getElementById(dropdownId);
   if (!input || !drop) return;
 
+  // Cache para el índice de búsqueda
+  let _cachedDbLen = -1;
+  let _searchIndex = null;
+
+  function _getSearchIndex() {
+    if (_cachedDbLen !== mockDatabase.length) {
+      _searchIndex = mockDatabase.map(p => ({
+        p: p,
+        categoryLower: p.category.toLowerCase(),
+        brandLower: p.brand.toLowerCase(),
+        titleLower: p.title.toLowerCase(),
+        descLower: p.desc.toLowerCase()
+      }));
+      _cachedDbLen = mockDatabase.length;
+    }
+    return _searchIndex;
+  }
+
   const handleSearch = debounce((q) => {
     if (q.length < 2) {
       drop.classList.remove('active');
       return;
     }
 
-    // Algoritmo de coincidencias B2B
+    // Algoritmo de coincidencias B2B optimizado
     const resultCats = new Set();
     const resultBrands = new Set();
     const resultModels = [];
 
-    mockDatabase.forEach(p => {
-      if (p.category.toLowerCase().includes(q)) resultCats.add(p.category);
-      if (p.brand.toLowerCase().includes(q)) resultBrands.add(p.brand);
-      if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
-        resultModels.push(p);
+    const index = _getSearchIndex();
+
+    for (let i = 0, len = index.length; i < len; i++) {
+      const item = index[i];
+      if (item.categoryLower.includes(q)) resultCats.add(item.p.category);
+      if (item.brandLower.includes(q)) resultBrands.add(item.p.brand);
+      if (item.titleLower.includes(q) || item.descLower.includes(q)) {
+        resultModels.push(item.p);
       }
-    });
+    }
 
     let html = '';
 
