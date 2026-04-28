@@ -226,46 +226,6 @@
 
   <script defer src="js/chatbot.js"></script>
 
-  <div id="product-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-      <button class="modal-close" type="button" data-close-product-modal aria-label="Cerrar ficha">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body">
-        <div class="modal-gallery">
-          <div class="main-img-wrapper">
-            <img id="modal-main-img" src="" alt="" />
-          </div>
-          <div id="modal-thumbnails" class="modal-thumbnails"></div>
-        </div>
-
-        <div class="modal-info">
-          <span id="modal-brand" class="product-badge modal-brand-badge"></span>
-          <span id="modal-availability" class="modal-availability-pill">Disponible</span>
-          <h2 id="modal-title"></h2>
-          <div id="modal-price" class="modal-price"></div>
-          <div id="modal-meta-summary" class="modal-meta-summary"></div>
-          <div class="modal-actions">
-            <button class="btn btn-primary" id="modal-add-cart-btn" type="button">
-              <i data-lucide="shopping-cart"></i>
-              Añadir al carrito
-            </button>
-            <button class="btn btn-wa-quote" id="modal-quote-btn" type="button">
-              <i data-lucide="message-circle"></i>
-              Cotizar modelo exacto
-            </button>
-          </div>
-
-          <h4 class="modal-copy-title">Resumen del producto</h4>
-          <p id="modal-desc"></p>
-
-          <h4 class="specs-title">Especificaciones técnicas</h4>
-          <ul id="modal-specs" class="specs-list"></ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="mobile-bottom-bar mobile-bottom-bar--catalog" aria-label="Accesos rápidos móviles del catálogo">
     <button class="mobile-bottom-bar__action" id="catalog-mobile-filter-bar-trigger" type="button">
       <i data-lucide="sliders-horizontal"></i>
