@@ -1,6 +1,4 @@
 (function () {
-  const CART_STORAGE_KEY = 'futunetCatalogCart';
-  const cartState = { items: {} };
   let currentDetail = null;
   let selectedQuantity = 1;
 
@@ -12,31 +10,6 @@
 
   function refreshIcons() {
     if (window.lucide) window.lucide.createIcons();
-  }
-
-  function loadCartState() {
-    try {
-      const stored = window.localStorage.getItem(CART_STORAGE_KEY);
-      if (!stored) return;
-      const parsed = JSON.parse(stored);
-      if (parsed && typeof parsed === 'object' && parsed.items) {
-        cartState.items = parsed.items;
-      }
-    } catch (error) {
-      console.warn('No se pudo cargar el carrito:', error);
-    }
-  }
-
-  function saveCartState() {
-    try {
-      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState));
-    } catch (error) {
-      console.warn('No se pudo guardar el carrito:', error);
-    }
-  }
-
-  function getCartItemCount() {
-    return Object.values(cartState.items).reduce((total, item) => total + (item.qty || 0), 0);
   }
 
   function getCatalogData() {
@@ -70,7 +43,7 @@
   }
 
   function updateCartIndicators() {
-    const count = getCartItemCount();
+    const count = window.FutunetCart.getCartItemCount();
     const badgeEls = document.querySelectorAll('#cart-count, .cart-fab__count');
     badgeEls.forEach((el) => {
       el.textContent = count;
@@ -102,39 +75,39 @@
   }
 
   function getCartItems() {
-    return Object.keys(cartState.items).map((id) => {
+    return Object.keys(window.FutunetCart.cartState.items).map((id) => {
       const product = findProduct(id);
-      return product ? { ...product, qty: cartState.items[id].qty } : null;
+      return product ? { ...product, qty: window.FutunetCart.cartState.items[id].qty } : null;
     }).filter(Boolean);
   }
 
   function addToCart(productId, qty) {
     const product = findProduct(productId);
     if (!product) return;
-    const currentQty = cartState.items[productId]?.qty || 0;
-    cartState.items[productId] = { qty: currentQty + qty };
-    saveCartState();
+    const currentQty = window.FutunetCart.cartState.items[productId]?.qty || 0;
+    window.FutunetCart.cartState.items[productId] = { qty: currentQty + qty };
+    window.FutunetCart.saveCartState();
     updateCartIndicators();
     renderCartDrawer();
   }
 
   function removeFromCart(productId) {
-    if (!cartState.items[productId]) return;
-    delete cartState.items[productId];
-    saveCartState();
+    if (!window.FutunetCart.cartState.items[productId]) return;
+    delete window.FutunetCart.cartState.items[productId];
+    window.FutunetCart.saveCartState();
     updateCartIndicators();
     renderCartDrawer();
   }
 
   function changeCartQuantity(productId, delta) {
-    const current = cartState.items[productId]?.qty || 0;
+    const current = window.FutunetCart.cartState.items[productId]?.qty || 0;
     const next = Math.max(0, current + delta);
     if (next === 0) {
       removeFromCart(productId);
       return;
     }
-    cartState.items[productId].qty = next;
-    saveCartState();
+    window.FutunetCart.cartState.items[productId].qty = next;
+    window.FutunetCart.saveCartState();
     updateCartIndicators();
     renderCartDrawer();
   }
@@ -144,7 +117,7 @@
     let total = 0;
 
     items.forEach((product, index) => {
-      const qty = cartState.items[product.id]?.qty || 0;
+      const qty = window.FutunetCart.cartState.items[product.id]?.qty || 0;
       const unitPrice = parsePriceToNumber(product.price);
       const lineTotal = unitPrice * qty;
       total += lineTotal;
@@ -181,7 +154,7 @@
     }
 
     items.forEach((product) => {
-      const qty = cartState.items[product.id]?.qty || 0;
+      const qty = window.FutunetCart.cartState.items[product.id]?.qty || 0;
       const card = document.createElement('div');
       card.className = 'cart-item';
       card.innerHTML = `
@@ -200,7 +173,7 @@
       list.appendChild(card);
     });
 
-    summary.textContent = formatCartQuantity(getCartItemCount());
+    summary.textContent = formatCartQuantity(window.FutunetCart.getCartItemCount());
     checkoutBtn.disabled = false;
     checkoutBtn.innerHTML = '<i data-lucide="credit-card"></i> Solicitar carrito por WhatsApp';
     refreshIcons();
@@ -251,7 +224,7 @@
   }
 
   function bindCartUI() {
-    loadCartState();
+    window.FutunetCart.loadCartState();
     updateCartIndicators();
     renderCartDrawer();
 
