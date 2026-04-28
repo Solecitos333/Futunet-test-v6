@@ -599,32 +599,6 @@ function initCartUI() {
   }
 }
 
-function setModalCartHandler(productId) {
-  const btnAddCart = document.getElementById('modal-add-cart-btn');
-  if (!btnAddCart) return;
-  btnAddCart.onclick = (event) => {
-    event.stopPropagation();
-    addToCart(productId);
-  };
-}
-
-function initModalCartButton() {
-  const cartBtn = document.getElementById('modal-add-cart-btn');
-  if (cartBtn) {
-    cartBtn.addEventListener('click', () => {
-      const currentProductId = cartBtn.dataset.productId;
-      if (currentProductId) addToCart(currentProductId);
-    });
-  }
-}
-
-function setModalCartProduct(productId) {
-  const cartBtn = document.getElementById('modal-add-cart-btn');
-  if (cartBtn) {
-    cartBtn.dataset.productId = productId;
-  }
-}
-
 function initPageCart() {
   initCartUI();
   setTimeout(() => renderCartDrawer(), 50);
@@ -661,18 +635,12 @@ function isMobileFilterSheetOpen() {
   return Boolean(getMobileFilterSheet()?.classList.contains('is-open'));
 }
 
-function isProductModalOpen() {
-  const modal = document.getElementById('product-modal');
-  if (!modal) return false;
-  return modal.classList.contains('show') || (modal.style.display && modal.style.display !== 'none');
-}
-
 function isMobileMenuOpen() {
   return Boolean(document.getElementById('mobileMenu')?.classList.contains('open'));
 }
 
 function syncCatalogScrollLock() {
-  const shouldLock = isMobileFilterSheetOpen() || isProductModalOpen() || isMobileMenuOpen();
+  const shouldLock = isMobileFilterSheetOpen() || isMobileMenuOpen();
   document.body.style.overflow = shouldLock ? 'hidden' : '';
 }
 
@@ -1435,106 +1403,6 @@ function setBrand(brandName) {
    6. PRODUCT MODAL (MARKETPLACE)
    ------------------------------------------------------------- */
 
-let lastModalTrigger = null;
-
-function openProductModal(id) {
-  const product = mockDatabase.find(p => p.id === id);
-  if (!product) return;
-  const serviceItem = isServiceItem(product);
-  closeMobileFilters();
-  lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-  setModalCartProduct(id);
-
-  document.getElementById('modal-title').textContent = product.title;
-  document.getElementById('modal-price').textContent = product.price;
-  document.getElementById('modal-brand').textContent = serviceItem ? 'SERVICIO' : product.brand;
-  const availabilityPill = document.getElementById('modal-availability');
-  if (availabilityPill) {
-    availabilityPill.textContent = serviceItem ? 'A medida' : 'Disponible';
-    availabilityPill.classList.toggle('modal-availability-pill--service', serviceItem);
-  }
-  document.getElementById('modal-desc').textContent = product.desc;
-  const metaSummary = document.getElementById('modal-meta-summary');
-  if (metaSummary) {
-    metaSummary.textContent = serviceItem
-      ? `${getDeptDisplayName(product.department)} · ${product.category}`
-      : `${product.brand} · ${product.category}`;
-  }
-  const specsTitle = document.querySelector('.specs-title');
-  if (specsTitle) {
-    specsTitle.textContent = serviceItem ? 'Alcance del Servicio' : 'Especificaciones Técnicas';
-  }
-
-  const mainImg = document.getElementById('modal-main-img');
-  mainImg.src = product.img;
-  mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
-
-  const thumbsContainer = document.getElementById('modal-thumbnails');
-  thumbsContainer.innerHTML = '';
-  thumbsContainer.hidden = !product.gallery || product.gallery.length <= 1;
-
-  if (product.gallery && product.gallery.length > 0) {
-    product.gallery.forEach((url, i) => {
-      const thumb = document.createElement('img');
-      thumb.className = i === 0 ? 'thumb-img active' : 'thumb-img';
-      thumb.src = url;
-      thumb.alt = `${product.title} - Imagen ${i + 1}`;
-      thumb.onerror = function () { this.style.display = 'none'; };
-      thumb.addEventListener('click', () => {
-        mainImg.src = url;
-        mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
-        document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
-      });
-      thumbsContainer.appendChild(thumb);
-    });
-  }
-
-  const specsList = document.getElementById('modal-specs');
-  specsList.innerHTML = '';
-  if (product.specs && product.specs.length > 0) {
-    product.specs.forEach(spec => {
-      const li = document.createElement('li');
-      li.innerHTML = `<i data-lucide="check-circle-2"></i> <span>${escapeHTML(spec)}</span>`;
-      specsList.appendChild(li);
-    });
-  }
-
-  const btnQuote = document.getElementById('modal-quote-btn');
-  btnQuote.innerHTML = `<i data-lucide="message-circle"></i> ${serviceItem ? 'Solicitar este servicio' : 'Cotizar Modelo Exacto'}`;
-  btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem); };
-  const btnAddCart = document.getElementById('modal-add-cart-btn');
-  if (btnAddCart) {
-    btnAddCart.setAttribute('aria-label', `Agregar ${product.title} al carrito`);
-  }
-
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-
-  const modal = document.getElementById('product-modal');
-  const modalContent = modal.querySelector('.modal-content');
-  modal.style.display = 'flex';
-  modal.setAttribute('aria-hidden', 'false');
-  if (modalContent) modalContent.scrollTop = 0;
-  setTimeout(() => modal.classList.add('show'), 10);
-  const closeButton = modal.querySelector('[data-close-product-modal]');
-  if (closeButton) closeButton.focus();
-  syncCatalogScrollLock();
-}
-
-function closeProductModal() {
-  const modal = document.getElementById('product-modal');
-  if (!modal || modal.style.display === 'none') return;
-  modal.classList.remove('show');
-  setTimeout(() => {
-    modal.style.display = 'none';
-    modal.setAttribute('aria-hidden', 'true');
-    syncCatalogScrollLock();
-    if (lastModalTrigger && typeof lastModalTrigger.focus === 'function') {
-      lastModalTrigger.focus();
-    }
-  }, 300);
-}
-
 // Cerrar modal con Escape o click fuera
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
@@ -1542,11 +1410,6 @@ document.addEventListener('keydown', (e) => {
     closeMobileFilters();
     return;
   }
-  if (isProductModalOpen()) closeProductModal();
-});
-document.addEventListener('click', (e) => {
-  const modal = document.getElementById('product-modal');
-  if (modal && e.target === modal) closeProductModal();
 });
 
 function requestQuote(product, brand, price, serviceItem = false) {
@@ -1572,10 +1435,6 @@ function bindCatalogInterface() {
       const input = inputId ? document.getElementById(inputId) : null;
       if (input) executeSearch(input.value.trim());
       return;
-    }
-
-    if (event.target.closest('[data-close-product-modal]')) {
-      closeProductModal();
     }
   });
 }
@@ -1760,7 +1619,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initPageCart();
-  initModalCartButton();
 
   // Inicializar Buscadores si existen en el DOM
   initSmartSearch('search-home', 'search-drop-home');
