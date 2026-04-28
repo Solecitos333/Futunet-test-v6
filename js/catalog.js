@@ -51,10 +51,6 @@ const state = {
   allFilteredProducts: [] // todos los productos filtrados
 };
 
-const CART_STORAGE_KEY = 'futunetCatalogCart';
-const cartState = {
-  items: {}
-};
 let hasInitializedCartCount = false;
 let lastCartItemCount = 0;
 
@@ -76,35 +72,8 @@ function pulseCartFab(mode = 'add') {
   fab.classList.add(mode === 'add' ? 'cart-fab--pulse' : 'cart-fab--settle');
 }
 
-function loadCartState() {
-  try {
-    const stored = window.localStorage.getItem(CART_STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed && typeof parsed === 'object' && parsed.items) {
-        cartState.items = parsed.items;
-      }
-    }
-  } catch (error) {
-    console.warn('No se pudo cargar el carrito:', error);
-  }
-  updateCartCount();
-}
-
-function saveCartState() {
-  try {
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState));
-  } catch (error) {
-    console.warn('No se pudo guardar el carrito:', error);
-  }
-}
-
-function getCartItemCount() {
-  return Object.values(cartState.items).reduce((total, item) => total + (item.qty || 0), 0);
-}
-
 function updateCartCount() {
-  const count = getCartItemCount();
+  const count = window.FutunetCart.getCartItemCount();
   const { fab, label, labelCount, labelCopy } = getCartFabElements();
   const countEls = document.querySelectorAll('#cart-count, .cart-fab__count');
   countEls.forEach(el => {
@@ -137,41 +106,41 @@ function updateCartCount() {
 }
 
 function getCartItems() {
-  return Object.keys(cartState.items).map((id) => {
+  return Object.keys(window.FutunetCart.cartState.items).map((id) => {
     const product = mockDatabase.find((item) => item.id === id);
-    return product ? { ...product, qty: cartState.items[id].qty } : null;
+    return product ? { ...product, qty: window.FutunetCart.cartState.items[id].qty } : null;
   }).filter(Boolean);
 }
 
 function addToCart(productId, qty = 1) {
   const product = mockDatabase.find(p => p.id === productId);
   if (!product) return;
-  const currentQty = cartState.items[productId]?.qty || 0;
-  cartState.items[productId] = { qty: currentQty + qty };
-  saveCartState();
+  const currentQty = window.FutunetCart.cartState.items[productId]?.qty || 0;
+  window.FutunetCart.cartState.items[productId] = { qty: currentQty + qty };
+  window.FutunetCart.saveCartState();
   updateCartCount();
   renderCartDrawer();
   if(typeof updateInlineCartButtons === 'function') updateInlineCartButtons();
 }
 
 function removeFromCart(productId) {
-  if (!cartState.items[productId]) return;
-  delete cartState.items[productId];
-  saveCartState();
+  if (!window.FutunetCart.cartState.items[productId]) return;
+  delete window.FutunetCart.cartState.items[productId];
+  window.FutunetCart.saveCartState();
   updateCartCount();
   renderCartDrawer();
   if(typeof updateInlineCartButtons === 'function') updateInlineCartButtons();
 }
 
 function changeCartQuantity(productId, delta) {
-  const current = cartState.items[productId]?.qty || 0;
+  const current = window.FutunetCart.cartState.items[productId]?.qty || 0;
   const next = Math.max(0, current + delta);
   if (next === 0) {
     removeFromCart(productId);
     return;
   }
-  cartState.items[productId].qty = next;
-  saveCartState();
+  window.FutunetCart.cartState.items[productId].qty = next;
+  window.FutunetCart.saveCartState();
   updateCartCount();
   renderCartDrawer();
   if(typeof updateInlineCartButtons === 'function') updateInlineCartButtons();
@@ -247,7 +216,7 @@ function renderCartDrawer() {
     items.forEach((product) => {
       const card = document.createElement('div');
       card.className = 'cart-item';
-      const qty = cartState.items[product.id]?.qty || 0;
+      const qty = window.FutunetCart.cartState.items[product.id]?.qty || 0;
       card.innerHTML = `
         <div class="cart-item__image"><img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" onerror="this.src='img/placeholder.svg'" /></div>
         <div class="cart-item__info">
@@ -268,9 +237,9 @@ function renderCartDrawer() {
     checkoutBtn.textContent = 'Solicitar carrito por WhatsApp';
   }
 
-  const totalCount = items.reduce((sum, product) => sum + (cartState.items[product.id]?.qty || 0), 0);
+  const totalCount = items.reduce((sum, product) => sum + (window.FutunetCart.cartState.items[product.id]?.qty || 0), 0);
   const totalValue = items.reduce((sum, product) => {
-    const qty = cartState.items[product.id]?.qty || 0;
+    const qty = window.FutunetCart.cartState.items[product.id]?.qty || 0;
     return sum + parsePriceToNumber(product.price) * qty;
   }, 0);
   summary.textContent = `${formatCartQuantity(totalCount)} · Total ${formatCurrency(totalValue)}`;
@@ -282,7 +251,7 @@ function buildCartWhatsAppMessage() {
   let totalValue = 0;
   let message = 'Hola Futunet, deseo solicitar los siguientes productos:';
   items.forEach((product) => {
-    const qty = cartState.items[product.id]?.qty || 0;
+    const qty = window.FutunetCart.cartState.items[product.id]?.qty || 0;
     const unitValue = parsePriceToNumber(product.price);
     const lineTotal = unitValue * qty;
     totalValue += lineTotal;
@@ -316,7 +285,7 @@ function handleCartInteraction(event) {
 }
 
 function renderInlineAddButtonHTML(productId, variant = 'default') {
-  const qty = cartState.items[productId]?.qty || 0;
+  const qty = window.FutunetCart.cartState.items[productId]?.qty || 0;
   const compact = variant === 'compact';
   if (qty > 0) {
     if (compact) {
@@ -561,7 +530,8 @@ function renderCompactMobileCatalogView() {
 }
 
 function initCartUI() {
-  loadCartState();
+  window.FutunetCart.loadCartState();
+  updateCartCount();
   document.addEventListener('click', (event) => {
     const inlineAdd = event.target.closest('.inline-add-btn');
     if (inlineAdd) {
