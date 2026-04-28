@@ -178,7 +178,13 @@
 
     const items = uniqueById(getCatalogData())
       .filter(isCandidate)
-      .sort((a, b) => scoreProduct(b) - scoreProduct(a) || normalizeText(a.title).localeCompare(normalizeText(b.title)));
+      .map((item) => ({
+        item,
+        score: scoreProduct(item),
+        titleNorm: normalizeText(item.title)
+      }))
+      .sort((a, b) => b.score - a.score || a.titleNorm.localeCompare(b.titleNorm))
+      .map((wrapper) => wrapper.item);
 
     if (items.length < 8) {
       if (!window.inventoryDataLoaded && typeof window.loadInventoryDataScript === 'function') {
