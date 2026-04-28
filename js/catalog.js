@@ -136,9 +136,17 @@ function updateCartCount() {
   hasInitializedCartCount = true;
 }
 
+let mockDatabaseMap = null;
+
 function getCartItems() {
+  if (!mockDatabaseMap) {
+    mockDatabaseMap = mockDatabase.reduce((acc, item) => {
+      acc[item.id] = item;
+      return acc;
+    }, {});
+  }
   return Object.keys(cartState.items).map((id) => {
-    const product = mockDatabase.find((item) => item.id === id);
+    const product = mockDatabaseMap[id];
     return product ? { ...product, qty: cartState.items[id].qty } : null;
   }).filter(Boolean);
 }
