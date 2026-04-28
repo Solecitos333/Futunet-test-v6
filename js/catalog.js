@@ -14,6 +14,18 @@
    ------------------------------------------------------------- */
 
 /**
+ * Helper para cachear valores en minúscula de propiedades de objetos,
+ * optimizando el rendimiento en búsquedas y filtrados repetitivos.
+ */
+function getLower(obj, key) {
+  const cacheKey = '_lower_' + key;
+  if (obj[cacheKey] === undefined) {
+    obj[cacheKey] = String(obj[key] || '').toLowerCase();
+  }
+  return obj[cacheKey];
+}
+
+/**
  * Escapa caracteres HTML especiales para prevenir XSS
  */
 function escapeHTML(str) {
@@ -433,10 +445,10 @@ function renderCompactMobileCatalogView() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -959,10 +971,10 @@ function renderUI() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -1602,9 +1614,9 @@ function initSmartSearch(inputId, dropdownId) {
     const resultModels = [];
 
     mockDatabase.forEach(p => {
-      if (p.category.toLowerCase().includes(q)) resultCats.add(p.category);
-      if (p.brand.toLowerCase().includes(q)) resultBrands.add(p.brand);
-      if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+      if (getLower(p, 'category').includes(q)) resultCats.add(p.category);
+      if (getLower(p, 'brand').includes(q)) resultBrands.add(p.brand);
+      if (getLower(p, 'title').includes(q) || getLower(p, 'desc').includes(q)) {
         resultModels.push(p);
       }
     });
