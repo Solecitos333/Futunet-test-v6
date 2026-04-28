@@ -734,6 +734,7 @@
     feeds: supplierFeeds,
     register: registerSupplierFeed,
     normalizeSupplierProduct,
+    inferDepartment,
     getMergedCatalog() {
       return typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)
         ? mockDatabase
