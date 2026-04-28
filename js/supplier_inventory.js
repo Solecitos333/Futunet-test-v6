@@ -711,11 +711,10 @@
   function mergeIntoCatalog(products) {
     if (typeof mockDatabase === 'undefined' || !Array.isArray(mockDatabase) || !products.length) return;
     const existingIds = new Set(mockDatabase.map((item) => item.id));
-    products.forEach((product) => {
-      if (!existingIds.has(product.id)) {
-        mockDatabase.unshift(product);
-      }
-    });
+    const newProducts = products.filter(product => !existingIds.has(product.id));
+    if (newProducts.length > 0) {
+      mockDatabase.unshift(...newProducts.reverse());
+    }
   }
 
   function registerSupplierFeed(source, items) {
