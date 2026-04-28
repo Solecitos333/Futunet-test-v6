@@ -136,15 +136,30 @@ function updateCartCount() {
   hasInitializedCartCount = true;
 }
 
+let _productMapCache = null;
+let _lastMockDatabaseLength = -1;
+
+function getProductById(id) {
+  if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)) {
+    if (!_productMapCache || mockDatabase.length !== _lastMockDatabaseLength) {
+      _productMapCache = new Map();
+      mockDatabase.forEach(p => _productMapCache.set(p.id, p));
+      _lastMockDatabaseLength = mockDatabase.length;
+    }
+    return _productMapCache.get(id);
+  }
+  return undefined;
+}
+
 function getCartItems() {
   return Object.keys(cartState.items).map((id) => {
-    const product = mockDatabase.find((item) => item.id === id);
+    const product = getProductById(id);
     return product ? { ...product, qty: cartState.items[id].qty } : null;
   }).filter(Boolean);
 }
 
 function addToCart(productId, qty = 1) {
-  const product = mockDatabase.find(p => p.id === productId);
+  const product = getProductById(productId);
   if (!product) return;
   const currentQty = cartState.items[productId]?.qty || 0;
   cartState.items[productId] = { qty: currentQty + qty };
@@ -1379,7 +1394,7 @@ function renderProductsGrid(productsList, options = {}) {
 
 
 function handleImageError(imgEl, productId, currentIndex) {
-  const product = mockDatabase.find(p => p.id === productId);
+  const product = getProductById(productId);
   if (product && product.gallery && currentIndex + 1 < product.gallery.length) {
     // Try the next image in the gallery
     const nextIndex = currentIndex + 1;
@@ -1438,7 +1453,7 @@ function setBrand(brandName) {
 let lastModalTrigger = null;
 
 function openProductModal(id) {
-  const product = mockDatabase.find(p => p.id === id);
+  const product = getProductById(id);
   if (!product) return;
   const serviceItem = isServiceItem(product);
   closeMobileFilters();
