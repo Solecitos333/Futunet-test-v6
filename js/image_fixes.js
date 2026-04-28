@@ -120,6 +120,9 @@
 
     // ─── MOTOR / CERCO ───
     'prod_62c0mi985': 'https://wsrv.nl/?url=m.media-amazon.com/images/I/71E+LKVpxQL._AC_SX679_.jpg&w=400&output=webp&q=75', // Kit motor 800kg
+
+    // ─── DVR / NVR ───
+    'prod_v4n47vlw2': 'https://wsrv.nl/?url=m.media-amazon.com/images/I/61X4GhSRSQL._AC_SX679_.jpg&w=400&output=webp&q=75', // DVR 16 CH Hikvision
   };
 
   // Aplicar correcciones
