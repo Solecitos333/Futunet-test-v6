@@ -615,7 +615,6 @@
   }
 
   function normalizeGallery(item) {
-    const images = [];
     const candidates = [];
 
     if (item.img) candidates.push(item.img);
@@ -623,12 +622,11 @@
       item.gallery.forEach((img) => candidates.push(img));
     }
 
-    candidates
-      .map((img) => String(img || '').trim())
-      .filter(Boolean)
-      .forEach((img) => {
-        if (!images.includes(img)) images.push(img);
-      });
+    const images = Array.from(new Set(
+      candidates
+        .map((img) => String(img || '').trim())
+        .filter(Boolean)
+    ));
 
     if (images.length === 1) images.push(images[0]);
     return images;
