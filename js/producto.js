@@ -400,6 +400,8 @@
     thumbs.innerHTML = '';
     thumbs.hidden = images.length <= 1;
 
+    const thumbButtons = [];
+
     images.forEach((url, index) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -412,10 +414,11 @@
           this.onerror = null;
           this.src = 'img/placeholder.svg';
         };
-        thumbs.querySelectorAll('.product-detail-thumb').forEach((thumb) => thumb.classList.remove('is-active'));
+        thumbButtons.forEach((thumb) => thumb.classList.remove('is-active'));
         button.classList.add('is-active');
       });
       thumbs.appendChild(button);
+      thumbButtons.push(button);
     });
   }
 
