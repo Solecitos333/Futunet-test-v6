@@ -254,9 +254,9 @@ function renderCartDrawer() {
           <div class="cart-item__title">${escapeHTML(product.title)}</div>
           <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
           <div class="cart-item__qty">
-            <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+            <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Quitar una unidad del carrito">-</button>
             <span>${qty}</span>
-            <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+            <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Agregar una unidad al carrito">+</button>
           </div>
           <div class="cart-item__meta">Precio: ${escapeHTML(product.price)}</div>
         </div>
@@ -332,12 +332,12 @@ function renderInlineAddButtonHTML(productId, variant = 'default') {
     }
     return `
       <div class="inline-cart-control">
-        <button class="inline-qty-btn" type="button" data-inline-change="-1" data-product-id="${escapeHTML(productId)}"><i data-lucide="minus"></i></button>
+        <button class="inline-qty-btn" type="button" data-inline-change="-1" data-product-id="${escapeHTML(productId)}" aria-label="Quitar una unidad"><i data-lucide="minus"></i></button>
         <span class="inline-qty-readout">
           <span class="inline-qty-count">${qty}</span>
           <span class="inline-qty-label">en carrito</span>
         </span>
-        <button class="inline-qty-btn" type="button" data-inline-change="1" data-product-id="${escapeHTML(productId)}"><i data-lucide="plus"></i></button>
+        <button class="inline-qty-btn" type="button" data-inline-change="1" data-product-id="${escapeHTML(productId)}" aria-label="Agregar una unidad"><i data-lucide="plus"></i></button>
       </div>
     `;
   }

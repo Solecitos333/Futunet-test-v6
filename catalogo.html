@@ -140,7 +140,7 @@
           </button>
 
           <div class="smart-search-wrapper smart-search-wrapper--compact">
-            <i data-lucide="search" class="smart-search-icon"></i>
+            <i data-lucide="search" class="smart-search-icon" aria-hidden="true"></i>
             <input
               type="text"
               id="search-catalog-page"
@@ -149,8 +149,8 @@
               autocomplete="off"
               aria-label="Buscar dentro del catálogo"
             />
-            <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-catalog-page">
-              <i data-lucide="arrow-right"></i>
+            <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-catalog-page" aria-label="Ejecutar búsqueda">
+              <i data-lucide="arrow-right" aria-hidden="true"></i>
             </button>
             <div id="search-drop-catalog" class="search-dropdown" aria-label="Resultados de búsqueda" role="listbox" aria-live="polite"></div>
           </div>
