@@ -1,0 +1,3 @@
+## 2024-05-19 - Cache String Operations in Loops
+**Learning:** During large list filtering and autocompletion routines (e.g. searching through a product database of ~6000 items), computing `toLowerCase()` on object properties on every iteration causes a significant performance bottleneck due to redundant string allocations and processing.
+**Action:** Implemented a generic `getLower(obj, key)` helper that lazy-caches the lowercase version of the property onto the object itself (`_lower_key`). This reduced the execution time of repeated search operations dramatically. Always cache expensive computations inside large iterations.
