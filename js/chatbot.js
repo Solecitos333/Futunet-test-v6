@@ -188,7 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bubble = document.createElement('div');
     bubble.className = `cb-bubble cb-bubble--${sender}`;
-    bubble.innerHTML = html;
+    if (sender === 'user') {
+      bubble.textContent = html;
+    } else {
+      bubble.innerHTML = html;
+    }
     row.appendChild(bubble);
     messages.appendChild(row);
     messages.scrollTop = messages.scrollHeight;
