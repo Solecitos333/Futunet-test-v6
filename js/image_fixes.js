@@ -262,17 +262,7 @@
       if (f.dept)  { p.department = f.dept; deptF++; }
     }
 
-    // ── Limpiar texto corrupto (mojibake) en TODOS los productos ──
-    if (p.description && typeof p.description === 'string') {
-      p.description = p.description
-        .replace(/ã€[??]*Calidad\s*Premiumã€[??'']*/g, 'Calidad Premium. ')
-        .replace(/ã€[??]*/g, '')
-        .replace(/â€[^a-zA-Z]*/g, '')
-        .replace(/Ã©/g, 'é').replace(/Ã¡/g, 'á').replace(/Ã­/g, 'í')
-        .replace(/Ã³/g, 'ó').replace(/Ãº/g, 'ú').replace(/Ã±/g, 'ñ')
-        .replace(/Ã¼/g, 'ü').replace(/Â°/g, '°').replace(/Â®/g, '®')
-        .replace(/\s{2,}/g, ' ').trim();
-    }
+
   });
 
   console.log('[Futunet] Fixes: ' + imgF + ' imgs, ' + brandF + ' brands, ' + catF + ' cats, ' + deptF + ' depts');
