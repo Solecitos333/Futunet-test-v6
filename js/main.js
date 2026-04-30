@@ -384,6 +384,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* -------------------------------------------------------------
+   5. HOME SEARCH — Redirect logic for hero search
+   ------------------------------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('search-home');
+  const searchBtn = document.querySelector('[data-search-trigger][data-search-input="search-home"]');
+
+  if (!searchInput || !searchBtn) return;
+
+  function handleSearch() {
+    const q = searchInput.value.trim();
+    if (q) {
+      // Redirect to catalog page with search query
+      window.location.href = `catalogo.html?q=${encodeURIComponent(q)}`;
+    }
+  }
+
+  searchBtn.addEventListener('click', handleSearch);
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearch();
+    }
+  });
+});
+
+
+/* -------------------------------------------------------------
    6. TYPING ANIMATION — Search placeholder rotator
    ------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
