@@ -249,6 +249,63 @@
     'prod_vf9g9ypru':  {img:b+'pintura-acrilica.jpg'},
     'prod_bqs26gjpy':  {img:b+'pintura-acrilica.jpg'},
     'prod_wu9zt66ic':  {img:b+'pintura-acrilica.jpg'},
+
+    // ═══════════════════════════════════════
+    // ÚLTIMOS 39 PRODUCTOS CON IMAGEN GENÉRICA
+    // ═══════════════════════════════════════
+
+    // Educación
+    'prod_9fwdeomcv':  {img:b+'ajedrez.jpg', cat:'Educación y Didáctica'},
+    'prod_y9fn9qw5p':  {img:b+'bloques-educativos.jpg', cat:'Educación y Didáctica'},
+    'prod_hzx5k891t':  {img:b+'educacion.jpg'},
+
+    // Deportes
+    'prod_5sy71o0vo':  {img:b+'aro-hula.jpg', cat:'Deportes y Recreación'},
+
+    // Oficina / Papelería
+    'prod_do7scjyqx':  {img:b+'carpeta-anillos.jpg'},
+    'prod_0sbd2t214':  {img:b+'cartulina.jpg'},
+    'prod_sz47q4qhy':  {img:b+'cartulina.jpg'},
+    'prod_ws4sk3zhg':  {img:b+'cartulina.jpg'},
+    'prod_43xoob4nt':  {img:b+'grapadora.jpg'},
+    'prod_ca3i5l5vx':  {img:b+'calculadora.jpg', brand:'Sharp'},
+    'prod_9i3rntl7a':  {img:b+'carpeta-anillos.jpg'},
+    'prod_kkvhvx121':  {img:b+'carpeta-anillos.jpg'},
+    'prod_8yhmripoe':  {img:b+'folder-manila.jpg'},
+    'prod_ajmwyngxz':  {img:b+'bandera.jpg'},
+    'prod_akvr1ewvy':  {img:b+'cinta-scotch.jpg'},
+    'prod_rg3m6r2bb':  {img:b+'bocina.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_mmffzpx11':  {img:b+'bocina.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_3giupevua':  {img:b+'microfono.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+
+    // Mobiliario
+    'prod_jn0r7zygh':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
+    'prod_pv4k4dixy':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
+    'prod_r6n2atzcv':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
+    'prod_elgtfyda4':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
+    'prod_7fxzhrsl1':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
+    'prod_ldt8qpyqd':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
+    'prod_rlch8e9bx':  {img:b+'silla-visita.jpg', cat:'Mobiliario'},
+    'prod_3s7mmtjdr':  {img:b+'silla-visita.jpg', cat:'Mobiliario'},
+
+    // Equipos / TV
+    'prod_vgdtwk69e':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_sx997vnsv':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_tk6it44v0':  {img:b+'impresora-termica.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
+
+    // Seguridad
+    'prod_hup4kfqpz':  {img:b+'camara-ip.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_v0u1qvzs2':  {img:b+'abrazadera-emt.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_j1ixov27m':  {img:b+'abrazadera-emt.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_0v1wm22fq':  {img:b+'abrazadera-emt.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_57nl0tl7s':  {img:b+'dvr-hikvision.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_c5fqoo8ym':  {img:b+'camara-ip.jpg', dept:'seguridad', cat:'Servicios'},
+    'prod_pb8eucs66':  {img:b+'camara-ip.jpg', dept:'seguridad', cat:'Servicios'},
+
+    // Infraestructura
+    'prod_543wvp27p':  {img:b+'pintura-aceite.jpg', dept:'infra', cat:'Remozamiento Profesional', brand:'Tropical'},
+    'prod_sz08xa5c5':  {img:b+'bandeja-pintar.jpg', dept:'infra', cat:'Servicios'},
+    'prod_f63uo2uj1':  {img:b+'bebedero.jpg', dept:'energia', cat:'Energía y Respaldo', brand:'Daiwa'},
   };
 
   // ── Aplicar correcciones ──
