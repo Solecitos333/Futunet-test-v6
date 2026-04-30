@@ -1,0 +1,3 @@
+## 2024-04-30 - Lazy Property Caching for Fast Searching
+**Learning:** In frontend environments with large arrays of static data (like `mockDatabase`), frequently transforming string values for case-insensitive searching in filter loops (e.g., `p.title.toLowerCase().includes(q)`) creates massive memory allocation overhead and redundant CPU usage. This acts as a severe bottleneck, particularly when triggering functions on input keystrokes.
+**Action:** Replace direct `.toLowerCase()` calls in heavy loops with a lazy-caching helper (e.g., `getLower(obj, key)`) that stores the lowercase value directly on the object during its first evaluation (`obj['_lower_' + key]`), reusing it in all subsequent searches.
