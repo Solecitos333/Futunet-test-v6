@@ -34,6 +34,68 @@ function debounce(fn, delay) {
   };
 }
 
+/**
+ * Normaliza texto para búsqueda tolerante:
+ * - Minúsculas
+ * - Elimina acentos (á→a, é→e, í→i, ó→o, ú→u, ñ→n)
+ * - Elimina caracteres especiales
+ */
+function normalizeSearch(str) {
+  return String(str || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\u00f1/g, 'n').replace(/\u00d1/g, 'n')
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim();
+}
+
+/**
+ * Genera variantes de un término de búsqueda quitando terminaciones
+ * comunes del español (plurales, género, diminutivos).
+ */
+function getStemVariants(word) {
+  const variants = [word];
+  if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
+  if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
+  if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
+  if (word.endsWith('o') && word.length > 2) variants.push(word.slice(0, -1) + 'a');
+  if (word.endsWith('iones') && word.length > 5) variants.push(word.slice(0, -2));
+  return [...new Set(variants)];
+}
+
+/**
+ * Búsqueda fuzzy: devuelve true si el query coincide
+ * de forma tolerante con el texto objetivo.
+ */
+function fuzzyMatch(normalizedTarget, normalizedQuery) {
+  if (normalizedTarget.includes(normalizedQuery)) return true;
+  const queryWords = normalizedQuery.split(/\s+/).filter(w => w.length >= 2);
+  if (queryWords.length === 0) return false;
+  return queryWords.every(qWord => {
+    const variants = getStemVariants(qWord);
+    return variants.some(variant => normalizedTarget.includes(variant));
+  });
+}
+
+/**
+ * Filtra un producto contra un query normalizado.
+ * Devuelve un score (0 = no match, mayor = mejor match).
+ */
+function scoreProductMatch(product, normalizedQuery) {
+  const title = normalizeSearch(product.title);
+  const desc = normalizeSearch(product.desc);
+  const category = normalizeSearch(product.category);
+  const brand = normalizeSearch(product.brand);
+  let score = 0;
+  if (title.includes(normalizedQuery)) score += 100;
+  else if (fuzzyMatch(title, normalizedQuery)) score += 60;
+  if (brand.includes(normalizedQuery)) score += 80;
+  else if (fuzzyMatch(brand, normalizedQuery)) score += 40;
+  if (category.includes(normalizedQuery)) score += 70;
+  else if (fuzzyMatch(category, normalizedQuery)) score += 35;
+  if (fuzzyMatch(desc, normalizedQuery)) score += 20;
+  return score;
+}
+
 
 /* -------------------------------------------------------------
    1. ESTADO GLOBAL Y CONFIGURACIÓN
@@ -431,13 +493,12 @@ function renderCompactMobileCatalogView() {
   if (!isCompactMobileViewport()) return false;
 
   if (state.searchQuery) {
-    const q = state.searchQuery.toLowerCase();
-    const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
-    );
+    const q = normalizeSearch(state.searchQuery);
+    const results = mockDatabase
+      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(r => r.product);
 
     updateCatalogContextBar({
       title: 'Resultados',
@@ -957,13 +1018,12 @@ function renderUI() {
 
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
-    const q = state.searchQuery.toLowerCase();
-    const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
-    );
+    const q = normalizeSearch(state.searchQuery);
+    const results = mockDatabase
+      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(r => r.product);
 
     updateCatalogContextBar({
       title: 'Resultados de búsqueda',
@@ -1601,10 +1661,15 @@ function initSmartSearch(inputId, dropdownId) {
     const resultBrands = new Set();
     const resultModels = [];
 
+    const nq = normalizeSearch(q);
     mockDatabase.forEach(p => {
-      if (p.category.toLowerCase().includes(q)) resultCats.add(p.category);
-      if (p.brand.toLowerCase().includes(q)) resultBrands.add(p.brand);
-      if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+      const nCat = normalizeSearch(p.category);
+      const nBrand = normalizeSearch(p.brand);
+      const nTitle = normalizeSearch(p.title);
+      const nDesc = normalizeSearch(p.desc);
+      if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
+      if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
+      if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {
         resultModels.push(p);
       }
     });
