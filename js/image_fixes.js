@@ -1,5 +1,5 @@
 /**
- * FIXES — Corrige imágenes, marcas, categorías y departamentos.
+ * FIXES — Corrige imágenes, marcas, categorías, departamentos y texto corrupto.
  * Imágenes locales en img/productos/catalogo/ (~6-34KB c/u).
  */
 (function() {
@@ -7,58 +7,68 @@
   var b = 'img/productos/catalogo/';
 
   var fixes = {
-    // ── TECNOLOGÍA (dept: equipos) ──
+    // ═══════════════════════════════════════════════════════
+    // PRODUCTOS QUE DEBEN SALIR DE "Papelería y Suministros"
+    // ═══════════════════════════════════════════════════════
+
+    // ── TECNOLOGÍA → dept:equipos, cat:Periféricos y Partes ──
     'prod_ad1d2a977b': {img:b+'airpods-2gen.jpg', brand:'Apple', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_yny47xadr':  {img:b+'airpods-2gen.jpg', brand:'Apple', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_ppho60uwv':  {img:b+'tv-smart.jpg', brand:'KTC', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_tubkzzpxi':  {img:b+'tv-smart.jpg', brand:'KTC', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_jfwxxu99l':  {img:b+'sandisk-32gb.jpg', brand:'SanDisk', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_fvb5vixvg':  {img:b+'papeleria-oficina.jpg', brand:'Genérico', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_w5fl5uh6a':  {img:b+'papeleria-oficina.jpg', brand:'Genérico', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_xrhbe3kbc':  {img:b+'papeleria-oficina.jpg', brand:'Genérico', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_jsn83vpc6':  {img:b+'tv-smart.jpg', brand:'Genérico', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_ubp9oyvaq':  {img:b+'papeleria-oficina.jpg', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_q8ul4kpio':  {brand:'Epson', dept:'equipos', cat:'Periféricos y Partes'},
+
+    // ── ENERGÍA → dept:energia, cat:Energía y Respaldo ──
     'prod_bbdw9woh3':  {img:b+'regleta.jpg', dept:'energia', cat:'Energía y Respaldo'},
     'prod_4zs3vjzp7':  {img:b+'regleta.jpg', dept:'energia', cat:'Energía y Respaldo'},
-    'prod_3giupevua':  {img:b+'papeleria-oficina.jpg', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_ubp9oyvaq':  {img:b+'papeleria-oficina.jpg', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_lg95td0ov':  {img:b+'papeleria-oficina.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_37431uj9f':  {dept:'energia', cat:'Energía y Respaldo'},
+    'prod_j7viwqx46':  {dept:'energia', cat:'Energía y Respaldo'},
 
-    // ── IMPRESORAS (dept: equipos) ──
-    'prod_tk6it44v0':  {img:b+'papeleria-oficina.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
+    // ── IMPRESORAS → dept:equipos, cat:Impresoras y Consumibles ──
     'prod_p0wqnr5bc':  {img:b+'brother-t720dw.jpg', brand:'Brother', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_oh55hargc':  {img:b+'canon-pixma-g2110.jpg', brand:'Canon', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_3bma5wlf5':  {brand:'Canon', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_dsu2skor9':  {dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_ypa1lutg8':  {dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_bkl2rdbja':  {dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_9l3ruezvt':  {dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_3pe40yw5r':  {img:b+'papeleria-oficina.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
 
-    // ── SEGURIDAD (dept: seguridad) ──
+    // ── SEGURIDAD → dept:seguridad, cat:Control de Accesos ──
     'prod_v4n47vlw2':  {img:b+'dvr-hikvision.jpg', brand:'Hikvision'},
+    'prod_2jgqsnmhb':  {brand:'Hikvision', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_ggflojr4r':  {brand:'Hikvision', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_i07dob6kp':  {brand:'Hikvision', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_dgb61tzu9':  {img:b+'dvr-hikvision.jpg', brand:'UNV', dept:'seguridad', cat:'Control de Accesos'},
     'prod_8ymxsbgt5':  {img:b+'cerradura-magnetica.jpg', dept:'seguridad', cat:'Control de Accesos'},
-    'prod_dgb61tzu9':  {img:b+'dvr-hikvision.jpg', dept:'seguridad', cat:'Control de Accesos'},
-    'prod_f754nr1g1':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
     'prod_irpyxjvid':  {dept:'seguridad', cat:'Control de Accesos'},
-    'prod_57nl0tl7s':  {dept:'seguridad', cat:'Control de Accesos'},
     'prod_zetp0ct03':  {dept:'seguridad', cat:'Control de Accesos'},
-    'prod_0v1wm22fq':  {dept:'seguridad', cat:'Control de Accesos'},
     'prod_hcr6riule':  {dept:'seguridad', cat:'Control de Accesos'},
+    'prod_lg95td0ov':  {dept:'seguridad', cat:'Control de Accesos'},
+    'prod_62c0mi985':  {dept:'seguridad', cat:'Control de Accesos'},
+    'prod_ys6kcahet':  {dept:'seguridad', cat:'Control de Accesos'},
+    'prod_pxexmmvn1':  {dept:'seguridad', cat:'Control de Accesos'},
+    'prod_xz31q2ui7':  {dept:'seguridad', cat:'Control de Accesos'},
 
-    // ── REDES (dept: redes) ──
+    // ── REDES → dept:redes, cat:Redes ──
     'prod_fy2c5keb5':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
     'prod_e9yrvwgwu':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
+    'prod_f754nr1g1':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
     'prod_d2i5bt9x4':  {dept:'redes', cat:'Redes'},
-    'prod_alqh8rvsc':  {dept:'redes', cat:'Redes'},
 
-    // ── MOBILIARIO (dept: oficina, cat: Mobiliario) ──
+    // ── MOBILIARIO → cat:Mobiliario ──
     'prod_0r5dh65ow':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
     'prod_16sjt1g9y':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
-    'prod_rlch8e9bx':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
-    'prod_3s7mmtjdr':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
     'prod_4kju1p7bm':  {cat:'Mobiliario'},
-    'prod_4f7stivlu':  {cat:'Mobiliario'},
     'prod_hmeic6hvu':  {cat:'Mobiliario'},
     'prod_p4yre7qrr':  {cat:'Mobiliario'},
+    'prod_4f7stivlu':  {cat:'Mobiliario'},
+    'prod_i8dch05mb':  {img:b+'papeleria-oficina.jpg', cat:'Mobiliario'},
+    'prod_1kwnqvdge':  {img:b+'papeleria-oficina.jpg', cat:'Mobiliario'},
 
-    // ── LIMPIEZA (dept: oficina, cat: Limpieza) ──
+    // ── LIMPIEZA → cat:Limpieza ──
     'prod_964ur4qe3':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_660w2f5s9':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_4bzwrmga6':  {img:b+'limpieza.jpg', cat:'Limpieza'},
@@ -66,23 +76,31 @@
     'prod_b8vtelpjw':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_4pamj5g19':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_2v644exsk':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_cyc8mnsl0':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_jrtuzvr2y':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_3ck218d0f':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_ux1v86dkh':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_ad02p61re':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_sd5ukzzlw':  {img:b+'limpieza.jpg', cat:'Limpieza'},
+    'prod_8dqiwsp5y':  {img:b+'limpieza.jpg', cat:'Limpieza'},
 
-    // ── DEPORTES Y RECREACIÓN ──
+    // ── DEPORTES → cat:Deportes y Recreación ──
     'prod_pafvgei9p':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
     'prod_6ybvfg94c':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
     'prod_qm547qt8g':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
     'prod_omekh9gfz':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
     'prod_oi6ahed1d':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
-    'prod_5sy71o0vo':  {img:b+'pelota-basket.jpg', cat:'Deportes y Recreación'},
+    'prod_2m9na4jqf':  {cat:'Deportes y Recreación'},
+    'prod_t154b8elk':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
+    'prod_0seb4g8lv':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
+    'prod_6k2wjm6lo':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
 
-    // ── EDUCACIÓN ──
+    // ── EDUCACIÓN → cat:Educación y Didáctica ──
     'prod_gowax7pqx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_dlcn0dvbw':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_0n2ezucck':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_n18qsxc52':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_ljvqvr6k5':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
-    'prod_9fwdeomcv':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
-    'prod_elc2mu2jc':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_wsrub1azp':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_spbbxw09m':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_1rf7qqoys':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
@@ -94,44 +112,14 @@
     'prod_j7zfzz9mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_n7wz60o0l':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_106fbm7mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
+    'prod_elc2mu2jc':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
+    'prod_wcboxk58r':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
 
-    // ── PAPELERÍA (se quedan donde están, solo imagen) ──
-    'prod_qch1yu72k':  {img:b+'resma-papel.jpg'},
-    'prod_apm0zzqc5':  {img:b+'resma-papel.jpg'},
-    'prod_iq0yf8kja':  {img:b+'resma-papel.jpg'},
-    'prod_fwntni0z7':  {img:b+'papeleria-oficina.jpg'},
-    'prod_vh2jmdv9d':  {img:b+'papeleria-oficina.jpg'},
-    'prod_77oec80bi':  {img:b+'papeleria-oficina.jpg'},
-    'prod_tdx0fs91j':  {img:b+'papeleria-oficina.jpg'},
-    'prod_dplst0sx8':  {img:b+'papeleria-oficina.jpg'},
-    'prod_tdxrolpob':  {img:b+'papeleria-oficina.jpg'},
-    'prod_73hwgt99t':  {img:b+'papeleria-oficina.jpg'},
-    'prod_bve20u216':  {img:b+'papeleria-oficina.jpg'},
-    'prod_omulmjuur':  {img:b+'papeleria-oficina.jpg'},
-    'prod_wmqmv9ymn':  {img:b+'papeleria-oficina.jpg'},
-    'prod_qou4rnok2':  {img:b+'papeleria-oficina.jpg'},
-    'prod_v76v94fhn':  {img:b+'papeleria-oficina.jpg'},
-    'prod_aqu76wluk':  {img:b+'papeleria-oficina.jpg'},
-    'prod_r22feluqh':  {img:b+'papeleria-oficina.jpg'},
-    'prod_69o7lkyyd':  {img:b+'papeleria-oficina.jpg'},
-    'prod_wcboxk58r':  {img:b+'papeleria-oficina.jpg'},
-    'prod_4o6g79ztp':  {img:b+'papeleria-oficina.jpg'},
-    'prod_wdtm2bvlm':  {img:b+'papeleria-oficina.jpg'},
-    'prod_w0xr1czq3':  {img:b+'papeleria-oficina.jpg'},
-    'prod_7jxkdrt2x':  {img:b+'papeleria-oficina.jpg'},
-    'prod_3pe40yw5r':  {img:b+'papeleria-oficina.jpg'},
-    'prod_fo6bsjf2r':  {img:b+'papeleria-oficina.jpg'},
-    'prod_epv6q7mid':  {img:b+'papeleria-oficina.jpg'},
-    'prod_cfdaqyzhq':  {img:b+'papeleria-oficina.jpg'},
-    'prod_dnluchszx':  {img:b+'papeleria-oficina.jpg'},
-
-    // ── HERRAMIENTAS / PISTOLAS → infra ──
-    'prod_m54v413vd':  {img:b+'papeleria-oficina.jpg', dept:'infra', cat:'Remozamiento Profesional'},
-    'prod_4fmctb6nd':  {img:b+'papeleria-oficina.jpg', dept:'infra', cat:'Remozamiento Profesional'},
+    // ── REMOZAMIENTO → dept:infra, cat:Remozamiento Profesional ──
+    'prod_m54v413vd':  {img:b+'abrazadera-emt.jpg', dept:'infra', cat:'Remozamiento Profesional'},
+    'prod_4fmctb6nd':  {img:b+'abrazadera-emt.jpg', dept:'infra', cat:'Remozamiento Profesional'},
     'prod_etnks90ht':  {dept:'infra', cat:'Remozamiento Profesional'},
     'prod_4conwdbfb':  {dept:'infra', cat:'Remozamiento Profesional'},
-
-    // ── EMT/REGISTROS → infra ──
     'prod_iyd1fr1g0':  {img:b+'tubo-emt.jpg', dept:'infra', cat:'Remozamiento Profesional'},
     'prod_95tpqs7sz':  {img:b+'tubo-emt.jpg', dept:'infra', cat:'Remozamiento Profesional'},
     'prod_2rv556wr1':  {img:b+'abrazadera-emt.jpg', dept:'infra', cat:'Remozamiento Profesional'},
@@ -147,8 +135,75 @@
     'prod_vacxxprz0':  {img:b+'bandeja-pintar.jpg', dept:'infra', cat:'Remozamiento Profesional'},
     'prod_69h9nvus8':  {img:b+'bandeja-pintar.jpg', dept:'infra', cat:'Remozamiento Profesional'},
     'prod_r2n83myqm':  {dept:'infra', cat:'Remozamiento Profesional'},
+    'prod_12im6c9yo':  {img:b+'pintura-aceite.jpg', dept:'infra', cat:'Remozamiento Profesional', brand:'Eagle Paint'},
+    'prod_ywokd9kjb':  {img:b+'pintura-aceite.jpg', dept:'infra', cat:'Remozamiento Profesional'},
+    'prod_oyigj4so7':  {dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_n57ur7vgu':  {cat:'Servicios'},
 
-    // ── REMOZAMIENTO (pinturas) ──
+    // ═══════════════════════════════════════
+    // PRODUCTOS QUE SE QUEDAN EN PAPELERÍA
+    // (solo corregir imágenes y marcas)
+    // ═══════════════════════════════════════
+    'prod_qch1yu72k':  {img:b+'resma-papel.jpg'},
+    'prod_apm0zzqc5':  {img:b+'resma-papel.jpg'},
+    'prod_iq0yf8kja':  {img:b+'resma-papel.jpg'},
+    'prod_epv6q7mid':  {img:b+'resma-papel.jpg'},
+    'prod_cfdaqyzhq':  {img:b+'resma-papel.jpg'},
+    'prod_ehgxkm40o':  {img:b+'resma-papel.jpg'},
+    'prod_mi92wpmph':  {img:b+'resma-papel.jpg'},
+    'prod_3mmcv0sgo':  {img:b+'resma-papel.jpg'},
+    'prod_fwntni0z7':  {img:b+'papeleria-oficina.jpg'},
+    'prod_vh2jmdv9d':  {img:b+'papeleria-oficina.jpg'},
+    'prod_77oec80bi':  {img:b+'papeleria-oficina.jpg'},
+    'prod_tdx0fs91j':  {img:b+'papeleria-oficina.jpg'},
+    'prod_dplst0sx8':  {img:b+'papeleria-oficina.jpg'},
+    'prod_tdxrolpob':  {img:b+'papeleria-oficina.jpg'},
+    'prod_73hwgt99t':  {img:b+'papeleria-oficina.jpg'},
+    'prod_bve20u216':  {img:b+'papeleria-oficina.jpg'},
+    'prod_omulmjuur':  {img:b+'papeleria-oficina.jpg'},
+    'prod_wmqmv9ymn':  {img:b+'papeleria-oficina.jpg'},
+    'prod_qou4rnok2':  {img:b+'papeleria-oficina.jpg'},
+    'prod_v76v94fhn':  {img:b+'papeleria-oficina.jpg'},
+    'prod_aqu76wluk':  {img:b+'papeleria-oficina.jpg'},
+    'prod_r22feluqh':  {img:b+'papeleria-oficina.jpg'},
+    'prod_69o7lkyyd':  {img:b+'papeleria-oficina.jpg'},
+    'prod_4o6g79ztp':  {img:b+'papeleria-oficina.jpg'},
+    'prod_wdtm2bvlm':  {img:b+'papeleria-oficina.jpg'},
+    'prod_w0xr1czq3':  {img:b+'papeleria-oficina.jpg'},
+    'prod_7jxkdrt2x':  {img:b+'papeleria-oficina.jpg'},
+    'prod_fo6bsjf2r':  {img:b+'papeleria-oficina.jpg'},
+    'prod_dnluchszx':  {img:b+'papeleria-oficina.jpg'},
+    'prod_y9id01bvc':  {img:b+'papeleria-oficina.jpg'},
+    'prod_fc6um05pc':  {img:b+'papeleria-oficina.jpg'},
+    'prod_3ub9sjdda':  {img:b+'papeleria-oficina.jpg'},
+    'prod_niysooqbl':  {img:b+'papeleria-oficina.jpg'},
+    'prod_wd9o2f0gk':  {img:b+'papeleria-oficina.jpg'},
+    'prod_uu5gqjyp6':  {img:b+'papeleria-oficina.jpg'},
+    'prod_xomuyjeig':  {img:b+'papeleria-oficina.jpg'},
+    'prod_hhdf2sbhw':  {img:b+'papeleria-oficina.jpg'},
+    'prod_j678gzz2e':  {img:b+'papeleria-oficina.jpg'},
+    'prod_2qw2dl3k3':  {img:b+'papeleria-oficina.jpg'},
+    'prod_hn72fkg6t':  {img:b+'papeleria-oficina.jpg'},
+    'prod_drsbrwqov':  {img:b+'papeleria-oficina.jpg'},
+    'prod_h3dpf48x5':  {img:b+'papeleria-oficina.jpg'},
+    'prod_72dz82us1':  {img:b+'papeleria-oficina.jpg'},
+    'prod_1hwg9veqw':  {img:b+'papeleria-oficina.jpg'},
+    'prod_i7e87pop8':  {img:b+'papeleria-oficina.jpg'},
+    'prod_6cw69dkjz':  {img:b+'papeleria-oficina.jpg'},
+    'prod_yw467f1gv':  {img:b+'papeleria-oficina.jpg'},
+    'prod_y1lodb30x':  {img:b+'papeleria-oficina.jpg'},
+    'prod_jgilr42mx':  {img:b+'papeleria-oficina.jpg'},
+    'prod_oyqspxnap':  {img:b+'papeleria-oficina.jpg', brand:'BIC'},
+    'prod_j8osyd5by':  {img:b+'papeleria-oficina.jpg', brand:'3M'},
+    'prod_xa3myztu6':  {img:b+'papeleria-oficina.jpg'},
+    'prod_6wzdwza5a':  {img:b+'papeleria-oficina.jpg'},
+    'prod_axp7tgy7b':  {img:b+'papeleria-oficina.jpg'},
+    'prod_ggjbeu4gz':  {img:b+'papeleria-oficina.jpg'},
+    'prod_zerbf6n8a':  {img:b+'papeleria-oficina.jpg'},
+
+    // ═══════════════════════════════════════
+    // REMOZAMIENTO PROFESIONAL (pinturas)
+    // ═══════════════════════════════════════
     'prod_8rfkpfrr5':  {img:b+'masilla-pared.jpg'},
     'prod_eb42bviah':  {img:b+'cemento-blanco.jpg'},
     'prod_g7qgkxtxx':  {img:b+'tubo-emt.jpg'},
@@ -194,19 +249,30 @@
     'prod_vf9g9ypru':  {img:b+'pintura-acrilica.jpg'},
     'prod_bqs26gjpy':  {img:b+'pintura-acrilica.jpg'},
     'prod_wu9zt66ic':  {img:b+'pintura-acrilica.jpg'},
-
-    // ── BEBEDERO → energia ──
-    'prod_f63uo2uj1':  {dept:'energia', cat:'Energía y Respaldo', brand:'Daiwa'},
   };
 
+  // ── Aplicar correcciones ──
   var imgF=0, brandF=0, catF=0, deptF=0;
   mockDatabase.forEach(function(p) {
     var f = fixes[p.id];
-    if (!f) return;
-    if (f.img)   { p.img = f.img; p.gallery = [f.img]; imgF++; }
-    if (f.brand) { p.brand = f.brand; brandF++; }
-    if (f.cat)   { p.category = f.cat; catF++; }
-    if (f.dept)  { p.department = f.dept; deptF++; }
+    if (f) {
+      if (f.img)   { p.img = f.img; p.gallery = [f.img]; imgF++; }
+      if (f.brand) { p.brand = f.brand; brandF++; }
+      if (f.cat)   { p.category = f.cat; catF++; }
+      if (f.dept)  { p.department = f.dept; deptF++; }
+    }
+
+    // ── Limpiar texto corrupto (mojibake) en TODOS los productos ──
+    if (p.description && typeof p.description === 'string') {
+      p.description = p.description
+        .replace(/ã€[??]*Calidad\s*Premiumã€[??'']*/g, 'Calidad Premium. ')
+        .replace(/ã€[??]*/g, '')
+        .replace(/â€[^a-zA-Z]*/g, '')
+        .replace(/Ã©/g, 'é').replace(/Ã¡/g, 'á').replace(/Ã­/g, 'í')
+        .replace(/Ã³/g, 'ó').replace(/Ãº/g, 'ú').replace(/Ã±/g, 'ñ')
+        .replace(/Ã¼/g, 'ü').replace(/Â°/g, '°').replace(/Â®/g, '®')
+        .replace(/\s{2,}/g, ' ').trim();
+    }
   });
 
   console.log('[Futunet] Fixes: ' + imgF + ' imgs, ' + brandF + ' brands, ' + catF + ' cats, ' + deptF + ' depts');
