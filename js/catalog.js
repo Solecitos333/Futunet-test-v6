@@ -35,6 +35,19 @@ function debounce(fn, delay) {
 }
 
 
+/**
+ * Performance optimization: Lazily cache lowercase strings for fast searching
+ */
+function getLower(obj, key) {
+  const cacheKey = '_lower_' + key;
+  if (obj[cacheKey] === undefined) {
+    // Default to empty string for missing properties to avoid errors
+    obj[cacheKey] = String(obj[key] || '').toLowerCase();
+  }
+  return obj[cacheKey];
+}
+
+
 /* -------------------------------------------------------------
    1. ESTADO GLOBAL Y CONFIGURACIÓN
    ------------------------------------------------------------- */
@@ -433,10 +446,10 @@ function renderCompactMobileCatalogView() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -742,8 +755,8 @@ const deptImages = {
 
 function isServiceItem(product) {
   return Boolean(product) && (
-    String(product.brand || '').toLowerCase() === 'servicios' ||
-    String(product.category || '').toLowerCase() === 'servicios'
+    getLower(product, 'brand') === 'servicios' ||
+    getLower(product, 'category') === 'servicios'
   );
 }
 
@@ -959,10 +972,10 @@ function renderUI() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -1602,9 +1615,9 @@ function initSmartSearch(inputId, dropdownId) {
     const resultModels = [];
 
     mockDatabase.forEach(p => {
-      if (p.category.toLowerCase().includes(q)) resultCats.add(p.category);
-      if (p.brand.toLowerCase().includes(q)) resultBrands.add(p.brand);
-      if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+      if (getLower(p, 'category').includes(q)) resultCats.add(p.category);
+      if (getLower(p, 'brand').includes(q)) resultBrands.add(p.brand);
+      if (getLower(p, 'title').includes(q) || getLower(p, 'desc').includes(q)) {
         resultModels.push(p);
       }
     });
