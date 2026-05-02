@@ -190,11 +190,11 @@
           <div class="cart-item__title">${escapeHTML(product.title)}</div>
           <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
           <div class="cart-item__qty">
-            <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+            <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Quitar una unidad">-</button>
             <span>${qty}</span>
-            <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+            <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Agregar una unidad">+</button>
           </div>
-          <button type="button" class="cart-item__remove" data-cart-remove="${escapeHTML(product.id)}">Quitar</button>
+          <button type="button" class="cart-item__remove" data-cart-remove="${escapeHTML(product.id)}" aria-label="Eliminar ${escapeHTML(product.title)} del carrito">Quitar</button>
         </div>
       `;
       list.appendChild(card);

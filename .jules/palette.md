@@ -1,0 +1,3 @@
+## 2026-05-02 - Icon-Only Button Accessibility in Dynamic Templates
+**Learning:** Found multiple instances of icon-only buttons (like `+` and `-` quantity controls) that are generated dynamically via JavaScript template literals (e.g., in `js/producto.js` and `js/catalog.js`). Since these don't exist in the static HTML, they might miss automated static analysis tools, resulting in poor screen reader experience where users just hear "button, plus" or "button" if an icon font is used.
+**Action:** When working on dynamic UI components, always ensure `aria-label` attributes are included in the JavaScript string interpolation for icon-only buttons to provide context (e.g., "Quitar una unidad de producto").
