@@ -34,6 +34,22 @@ function debounce(fn, delay) {
   };
 }
 
+/**
+ * Optimizacion de busqueda: Almacena en cache la version en minusculas
+ * de las propiedades de los objetos para evitar llamadas redundantes a toLowerCase()
+ */
+function getLower(obj, key) {
+  const cacheKey = '_lower_' + key;
+  if (obj[cacheKey] === undefined) {
+    Object.defineProperty(obj, cacheKey, {
+      value: String(obj[key] || '').toLowerCase(),
+      enumerable: false,
+      writable: true,
+      configurable: true
+    });
+  }
+  return obj[cacheKey];
+}
 
 /* -------------------------------------------------------------
    1. ESTADO GLOBAL Y CONFIGURACIÓN
@@ -433,10 +449,10 @@ function renderCompactMobileCatalogView() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -959,10 +975,10 @@ function renderUI() {
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
     const results = mockDatabase.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.desc.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q)
+      getLower(p, 'title').includes(q) ||
+      getLower(p, 'desc').includes(q) ||
+      getLower(p, 'category').includes(q) ||
+      getLower(p, 'brand').includes(q)
     );
 
     updateCatalogContextBar({
@@ -1602,9 +1618,9 @@ function initSmartSearch(inputId, dropdownId) {
     const resultModels = [];
 
     mockDatabase.forEach(p => {
-      if (p.category.toLowerCase().includes(q)) resultCats.add(p.category);
-      if (p.brand.toLowerCase().includes(q)) resultBrands.add(p.brand);
-      if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+      if (getLower(p, 'category').includes(q)) resultCats.add(p.category);
+      if (getLower(p, 'brand').includes(q)) resultBrands.add(p.brand);
+      if (getLower(p, 'title').includes(q) || getLower(p, 'desc').includes(q)) {
         resultModels.push(p);
       }
     });
