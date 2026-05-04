@@ -49,6 +49,20 @@ function normalizeSearch(str) {
 }
 
 /**
+ * ⚡ Bolt: Cache normalized search terms to avoid re-computing
+ * string operations during expensive catalog filters.
+ */
+function getLower(obj, key) {
+  const cacheKey = '_lower_' + key;
+  if (obj[cacheKey] !== undefined) {
+    return obj[cacheKey];
+  }
+  const val = normalizeSearch(obj[key]);
+  Object.defineProperty(obj, cacheKey, { value: val, enumerable: false });
+  return val;
+}
+
+/**
  * Genera variantes de un término de búsqueda quitando terminaciones
  * comunes del español (plurales, género, diminutivos).
  */
@@ -81,10 +95,10 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getLower(product, 'title');
+  const desc = getLower(product, 'desc');
+  const category = getLower(product, 'category');
+  const brand = getLower(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -1663,10 +1677,10 @@ function initSmartSearch(inputId, dropdownId) {
 
     const nq = normalizeSearch(q);
     mockDatabase.forEach(p => {
-      const nCat = normalizeSearch(p.category);
-      const nBrand = normalizeSearch(p.brand);
-      const nTitle = normalizeSearch(p.title);
-      const nDesc = normalizeSearch(p.desc);
+      const nCat = getLower(p, 'category');
+      const nBrand = getLower(p, 'brand');
+      const nTitle = getLower(p, 'title');
+      const nDesc = getLower(p, 'desc');
       if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
       if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
       if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {
