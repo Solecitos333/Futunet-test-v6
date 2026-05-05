@@ -70,7 +70,7 @@
 
     // ── LIMPIEZA → cat:Limpieza ──
     'prod_964ur4qe3':  {img:b+'jabon-cuaba.jpg', cat:'Limpieza'},
-    'prod_660w2f5s9':  {img:b+'jabon-cuaba.jpg', cat:'Limpieza'},
+    'prod_660w2f5s9':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_4bzwrmga6':  {img:b+'papel-higienico.jpg', cat:'Limpieza'},
     'prod_0ye7xtbtg':  {img:b+'papel-toalla.jpg', cat:'Limpieza'},
     'prod_b8vtelpjw':  {img:b+'papel-toalla.jpg', cat:'Limpieza'},
@@ -110,7 +110,7 @@
     'prod_cabuhpj5f':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_r4w6v9y3k':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_j7zfzz9mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
-    'prod_n7wz60o0l':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
+    'prod_n7wz60o0l':  {img:b+'papeleria-oficina.jpg', cat:'Educación y Didáctica'},
     'prod_106fbm7mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_elc2mu2jc':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_wcboxk58r':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
@@ -293,7 +293,7 @@
     // Equipos / TV
     'prod_vgdtwk69e':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_sx997vnsv':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_tk6it44v0':  {img:b+'impresora-termica.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_tk6it44v0':  {img:'img/impresoras.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
 
     // Seguridad
     'prod_hup4kfqpz':  {img:b+'camara-ip.jpg', dept:'seguridad', cat:'Control de Accesos'},
@@ -339,7 +339,7 @@
     'prod_fwntni0z7':  {img:b+'grapadora.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_hmeic6hvu':  {img:b+'greca.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_7jxkdrt2x':  {img:b+'guillotina.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
-    'prod_tk6it44v0':  {img:b+'impresora-termica.jpg', brand:'Genérico', dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_tk6it44v0':  {img:'img/impresoras.jpg', brand:'Genérico', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_964ur4qe3':  {img:b+'jabon-cuaba.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_bve20u216':  {img:b+'lapiz-hb.jpg', brand:'Pointer', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_wmqmv9ymn':  {img:b+'marcador-permanente.jpg', brand:'Talbot', dept:'oficina', cat:'Papelería y Suministros'},
