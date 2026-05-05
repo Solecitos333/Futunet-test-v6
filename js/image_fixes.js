@@ -55,7 +55,7 @@
     // ── REDES → dept:redes, cat:Redes ──
     'prod_fy2c5keb5':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
     'prod_e9yrvwgwu':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
-    'prod_f754nr1g1':  {img:b+'gabinete-9u.jpg', dept:'redes', cat:'Redes'},
+    'prod_f754nr1g1':  {img:'img/productos/hikvision-switch-poe-8-2.png', dept:'redes', cat:'Redes'},
     'prod_d2i5bt9x4':  {dept:'redes', cat:'Redes'},
 
     // ── MOBILIARIO → cat:Mobiliario ──
