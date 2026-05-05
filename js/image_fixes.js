@@ -287,8 +287,8 @@
     'prod_elgtfyda4':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
     'prod_7fxzhrsl1':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
     'prod_ldt8qpyqd':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
-    'prod_rlch8e9bx':  {img:b+'silla-visita.jpg', cat:'Mobiliario'},
-    'prod_3s7mmtjdr':  {img:b+'silla-visita.jpg', cat:'Mobiliario'},
+    'prod_rlch8e9bx':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
+    'prod_3s7mmtjdr':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
 
     // Equipos / TV
     'prod_vgdtwk69e':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
@@ -313,7 +313,7 @@
     'prod_72dz82us1':  {img:b+'folder-manila.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_6cw69dkjz':  {img:b+'folder-manila.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
     'prod_69o7lkyyd':  {img:b+'folder-manila.jpg', brand:'Genérico', dept:'oficina', cat:'Papelería y Suministros'},
-    'prod_silla_visita': {img:b+'silla-visita.jpg', brand:'Genérico', dept:'oficina', cat:'Mobiliario'},
+    'prod_silla_visita': {img:b+'sillon-ejecutivo.jpg', brand:'Genérico', dept:'oficina', cat:'Mobiliario'},
     'prod_ldt8qpyqd':  {img:b+'escritorio.jpg', brand:'Genérico', dept:'oficina', cat:'Mobiliario'},
 
     // Papelería y Suministros Específicos
