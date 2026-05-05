@@ -43,10 +43,10 @@
     'prod_i07dob6kp':  {brand:'Hikvision', dept:'seguridad', cat:'Control de Accesos'},
     'prod_dgb61tzu9':  {img:b+'dvr-hikvision.jpg', brand:'UNV', dept:'seguridad', cat:'Control de Accesos'},
     'prod_8ymxsbgt5':  {img:b+'cerradura-magnetica.jpg', dept:'seguridad', cat:'Control de Accesos'},
-    'prod_irpyxjvid':  {img:b+'video-balun.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_irpyxjvid':  {img:b+'camaras.jpg', dept:'seguridad', cat:'Control de Accesos'},
     'prod_zetp0ct03':  {dept:'seguridad', cat:'Control de Accesos'},
     'prod_hcr6riule':  {dept:'seguridad', cat:'Control de Accesos'},
-    'prod_lg95td0ov':  {img:b+'timbre-campana.jpg', dept:'seguridad', cat:'Control de Accesos'},
+    'prod_lg95td0ov':  {img:b+'materiales-ferreteros.png', dept:'seguridad', cat:'Control de Accesos'},
     'prod_62c0mi985':  {dept:'seguridad', cat:'Control de Accesos'},
     'prod_ys6kcahet':  {dept:'seguridad', cat:'Control de Accesos'},
     'prod_pxexmmvn1':  {dept:'seguridad', cat:'Control de Accesos'},
@@ -70,7 +70,7 @@
 
     // ── LIMPIEZA → cat:Limpieza ──
     'prod_964ur4qe3':  {img:b+'jabon-cuaba.jpg', cat:'Limpieza'},
-    'prod_660w2f5s9':  {img:b+'jabon-fregar-liquido.jpg', cat:'Limpieza'},
+    'prod_660w2f5s9':  {img:b+'limpieza.jpg', cat:'Limpieza'},
     'prod_4bzwrmga6':  {img:b+'papel-higienico.jpg', cat:'Limpieza'},
     'prod_0ye7xtbtg':  {img:b+'papel-toalla.jpg', cat:'Limpieza'},
     'prod_b8vtelpjw':  {img:b+'papel-toalla.jpg', cat:'Limpieza'},
@@ -91,9 +91,9 @@
     'prod_omekh9gfz':  {img:b+'pelota-basket-real.jpg', cat:'Deportes y Recreación'},
     'prod_oi6ahed1d':  {cat:'Deportes y Recreación'},
     'prod_2m9na4jqf':  {cat:'Deportes y Recreación'},
-    'prod_t154b8elk':  {img:b+'vejigas-globos.jpg', cat:'Deportes y Recreación'},
-    'prod_0seb4g8lv':  {img:b+'vejigas-globos.jpg', cat:'Deportes y Recreación'},
-    'prod_6k2wjm6lo':  {img:b+'vejigas-globos.jpg', cat:'Deportes y Recreación'},
+    'prod_t154b8elk':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
+    'prod_0seb4g8lv':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
+    'prod_6k2wjm6lo':  {img:b+'educacion.jpg', cat:'Deportes y Recreación'},
 
     // ── EDUCACIÓN → cat:Educación y Didáctica ──
     'prod_gowax7pqx':  {img:b+'globo-terraqueo.jpg', cat:'Educación y Didáctica'},
@@ -110,7 +110,7 @@
     'prod_cabuhpj5f':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_r4w6v9y3k':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_j7zfzz9mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
-    'prod_n7wz60o0l':  {img:b+'iman-herradura.jpg', cat:'Educación y Didáctica'},
+    'prod_n7wz60o0l':  {img:b+'papeleria-oficina.jpg', cat:'Educación y Didáctica'},
     'prod_106fbm7mx':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_elc2mu2jc':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
     'prod_wcboxk58r':  {img:b+'educacion.jpg', cat:'Educación y Didáctica'},
@@ -287,13 +287,13 @@
     'prod_elgtfyda4':  {img:b+'armario-metal.jpg', cat:'Mobiliario'},
     'prod_7fxzhrsl1':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
     'prod_ldt8qpyqd':  {img:b+'escritorio.jpg', cat:'Mobiliario'},
-    'prod_rlch8e9bx':  {img:b+'silla-ejecutiva-malla.jpg', cat:'Mobiliario'},
-    'prod_3s7mmtjdr':  {img:b+'silla-ejecutiva-malla.jpg', cat:'Mobiliario'},
+    'prod_rlch8e9bx':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
+    'prod_3s7mmtjdr':  {img:b+'sillon-ejecutivo.jpg', cat:'Mobiliario'},
 
     // Equipos / TV
     'prod_vgdtwk69e':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_sx997vnsv':  {img:b+'base-tv.jpg', dept:'equipos', cat:'Periféricos y Partes'},
-    'prod_tk6it44v0':  {img:b+'impresora-termica-pos.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_tk6it44v0':  {img:'img/impresoras.jpg', dept:'equipos', cat:'Impresoras y Consumibles'},
 
     // Seguridad
     'prod_hup4kfqpz':  {img:b+'camara-ip.jpg', dept:'seguridad', cat:'Control de Accesos'},
