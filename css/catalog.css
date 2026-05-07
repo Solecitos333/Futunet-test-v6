@@ -174,7 +174,7 @@
   border-radius: var(--radius);
   overflow: hidden;
   display: flex; flex-direction: column;
-  transition: var(--transition);
+  transition: var(--spring);
   box-shadow: var(--shadow-sm);
   position: relative;
   touch-action: manipulation;
@@ -184,13 +184,13 @@
   height: 3px;
   background: linear-gradient(90deg, var(--brand), var(--brand-light));
   transform: scaleX(0); transform-origin: left;
-  transition: transform .4s cubic-bezier(.4,0,.2,1);
+  transition: transform .5s cubic-bezier(.175,.885,.32,1.275);
   z-index: 2;
 }
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(11,126,181,0.15);
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-pale);
 }
 .product-card:hover::before { transform: scaleX(1); }
 .product-card--service {
@@ -302,12 +302,16 @@
   border-color: var(--brand);
   color: var(--brand);
   background: var(--brand-pale);
+  transform: translateY(-1px);
+}
+.product-view-btn:active {
+  transform: scale(0.97);
 }
 .product-view-btn svg { width: 14px; height: 14px; }
 .product-add-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  border: 1px solid rgba(11,126,181,0.24);
-  background: linear-gradient(135deg, rgba(11,126,181,0.12), rgba(27,163,224,0.06));
+  border: 1px solid rgba(10, 112, 162, 0.2);
+  background: linear-gradient(135deg, rgba(10, 112, 162, 0.1), rgba(29, 161, 219, 0.05));
   color: var(--brand);
   min-height: 46px;
   padding: 10px 14px;
@@ -316,14 +320,18 @@
   font-size: .82rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 12px 24px rgba(11,126,181,0.08), inset 0 1px 0 rgba(255,255,255,0.75);
-  transition: transform .24s ease, box-shadow .24s ease, background .24s ease, border-color .24s ease;
+  box-shadow: 0 8px 20px rgba(10, 112, 162, 0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: transform .25s cubic-bezier(.175,.885,.32,1.275), box-shadow .2s ease, background .2s ease, border-color .2s ease;
 }
 .product-add-btn:hover {
-  background: linear-gradient(135deg, rgba(11,126,181,0.16), rgba(27,163,224,0.1));
-  border-color: rgba(11,126,181,0.34);
-  box-shadow: 0 16px 30px rgba(11,126,181,0.12), inset 0 1px 0 rgba(255,255,255,0.85);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, rgba(10, 112, 162, 0.15), rgba(29, 161, 219, 0.1));
+  border-color: rgba(10, 112, 162, 0.3);
+  box-shadow: 0 14px 28px rgba(10, 112, 162, 0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  transform: translateY(-2px);
+}
+.product-add-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 10px rgba(10, 112, 162, 0.05);
 }
 .product-add-btn svg { width: 14px; height: 14px; }
 .product-add-btn__icon-wrap {
@@ -745,8 +753,8 @@
 .cart-drawer__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(15, 23, 42, 0.52);
-  backdrop-filter: blur(4px);
+  background: rgba(10, 16, 29, 0.6);
+  backdrop-filter: blur(8px);
 }
 .cart-drawer__panel {
   position: absolute;
@@ -754,10 +762,12 @@
   right: 0;
   width: min(420px, 100%);
   height: 100%;
-  background: #fff;
-  box-shadow: -18px 0 48px rgba(0, 0, 0, 0.16);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: -24px 0 56px rgba(10, 112, 162, 0.12);
   transform: translateX(110%);
-  transition: transform .28s ease;
+  transition: transform .35s cubic-bezier(.175,.885,.32,1.275);
   display: flex;
   flex-direction: column;
   padding: 22px;

@@ -8,8 +8,8 @@
   position: fixed; top: 0; left: 0; right: 0; z-index: 900;
   height: var(--navbar-height-mobile);
   display: flex; align-items: center;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(24px) saturate(150%); -webkit-backdrop-filter: blur(24px) saturate(150%);
   border-bottom: 1px solid rgba(17, 24, 39, 0.05);
   transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
               box-shadow .3s ease,
@@ -18,9 +18,9 @@
 }
 #navbar.scrolled {
   background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: 0 18px 38px rgba(15, 25, 35, 0.08);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  box-shadow: 0 12px 32px rgba(10, 112, 162, 0.06);
 }
 #navbar.nav-hidden {
   transform: translateY(-100%);
