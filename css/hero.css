@@ -16,17 +16,20 @@
   min-height: 100svh;
 }
 .hero-carousel-track {
-  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
-/* Each slide fills the same space, stacked */
+/* All slides occupy the same grid cell, stacked via z-index */
 .hero-carousel-slide {
-  position: absolute;
-  inset: 0;
+  grid-area: 1 / 1;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.6s ease, visibility 0.6s ease;
@@ -36,9 +39,6 @@
   opacity: 1;
   visibility: visible;
   z-index: 2;
-  position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
 }
 
 /* Hero slide inherits original styling */
@@ -52,25 +52,24 @@
     linear-gradient(180deg, #f9fbff 0%, #eef4fb 55%, #eaf2fb 100%);
 }
 
-/* Banner slides */
+/* Banner slides — full-bleed images */
 .hero-carousel-slide--banner {
+  position: relative;
+  background: linear-gradient(180deg, #0a1928 0%, #0d2240 40%, #0d2240 60%, #0a1928 100%);
+  min-height: 100vh;
+  min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #0a1a2e 0%, #0f2540 50%, #0a1a2e 100%);
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 80px 40px 40px;
+  padding: 70px 0 0;
 }
 .hero-carousel-slide--banner img {
   width: 100%;
-  max-width: 1200px;
   height: auto;
-  max-height: 70vh;
+  max-height: calc(100vh - 70px);
   object-fit: contain;
-  border-radius: 18px;
-  margin: 0 auto;
-  box-shadow: 0 28px 72px rgba(0,0,0,0.35);
+  object-position: center center;
+  border-radius: 0;
 }
 
 /* ── Hero Carousel Arrows ── */
@@ -147,11 +146,14 @@
   .hero-carousel-dots { bottom: 14px; gap: 7px; }
   .hero-carousel-dot { width: 9px; height: 9px; }
   .hero-carousel-slide--banner {
-    min-height: 55vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 60px 0 0;
   }
   .hero-carousel-slide--banner img {
-    max-height: 35vh;
-    border-radius: 12px;
+    object-fit: contain;
+    max-height: calc(100vh - 60px);
+    border-radius: 0;
   }
 }
 
