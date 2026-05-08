@@ -101,69 +101,78 @@
 </header>
 
   <main id="main-content" tabindex="-1">
-  <section id="inicio">
-    <div class="hero-bg"></div>
-    <div class="hero-dots"></div>
-    <div class="hero-glow"></div>
-
-    <div class="container">
-      <div class="hero-content">
-        <div id="hero-logo-anchor" class="hero-logo-anchor" aria-hidden="true"></div>
-
-        <div class="hero-brand-mark" aria-hidden="true">
-          <img src="img/logo-navbar.png" alt="Logo Futunet" width="1009" height="207" />
+  <section id="inicio" class="hero-carousel-section">
+    <!-- Hero Carousel Viewport -->
+    <div class="hero-carousel" id="hero-carousel">
+      <div class="hero-carousel-track">
+        <!-- SLIDE 0: Hero Original -->
+        <div class="hero-carousel-slide hero-carousel-slide--hero active" data-slide="hero">
+          <div class="hero-bg"></div>
+          <div class="hero-dots"></div>
+          <div class="hero-glow"></div>
+          <div class="container">
+            <div class="hero-content">
+              <div id="hero-logo-anchor" class="hero-logo-anchor" aria-hidden="true"></div>
+              <div class="hero-brand-mark" aria-hidden="true">
+                <img src="img/logo-navbar.png" alt="Logo Futunet" width="1009" height="207" />
+              </div>
+              <div class="hero-badge"><span class="dot"></span>Santiago, República Dominicana</div>
+              <h1 class="hero-title">
+                <span class="hero-title-line">La tecnología del</span>
+                <span class="hero-title-line hero-title-accent">futuro</span>
+              </h1>
+              <div class="smart-search-wrapper hero-search-block" role="search" aria-label="Buscador de productos y servicios">
+                <i data-lucide="search" class="smart-search-icon" aria-hidden="true"></i>
+                <input type="search" id="search-home" name="query" class="smart-search-input" placeholder="Buscar cámaras, laptops, servicios o marcas..." autocomplete="off" aria-label="Buscar productos, marcas o servicios" />
+                <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-home" aria-label="Ejecutar búsqueda">
+                  <i data-lucide="arrow-right" aria-hidden="true"></i>
+                </button>
+                <div id="search-drop-home" class="search-dropdown" aria-label="Resultados de búsqueda" role="listbox" aria-live="polite"></div>
+              </div>
+              <div class="hero-ctas">
+                <a href="#servicios" class="btn btn-primary hero-cta-solutions">Ver soluciones</a>
+                <a href="catalogo.html" class="btn btn-outline hero-cta-catalog">Explorar catálogo</a>
+                <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="btn btn-wa hero-cta-whatsapp">
+                  <svg width="16" height="16"><use href="#wa-icon"/></svg>
+                  Hablar con un asesor
+                </a>
+              </div>
+              <div class="hero-chips">
+                <a href="catalogo.html?cat=seguridad" class="chip"><span class="chip-icon"><i data-lucide="shield-check"></i></span> Seguridad electrónica</a>
+                <a href="catalogo.html?cat=redes" class="chip"><span class="chip-icon"><i data-lucide="wifi"></i></span> Redes y energía</a>
+                <a href="catalogo.html?cat=equipos" class="chip"><span class="chip-icon"><i data-lucide="monitor"></i></span> Equipos de oficina</a>
+                <a href="catalogo.html?cat=infra" class="chip"><span class="chip-icon"><i data-lucide="building-2"></i></span> Infraestructura</a>
+              </div>
+              <div class="hero-scroll-indicator" aria-hidden="true">
+                <span class="hero-scroll-indicator__mouse"><span class="hero-scroll-indicator__wheel"></span></span>
+                <span class="hero-scroll-indicator__text">Desplaza hacia abajo</span>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div class="hero-badge"><span class="dot"></span>Santiago, República Dominicana</div>
-        
-        <h1 class="hero-title">
-          <span class="hero-title-line">La tecnología del</span>
-          <span class="hero-title-line hero-title-accent">futuro</span>
-        </h1>
-        
-        <div class="smart-search-wrapper hero-search-block" role="search" aria-label="Buscador de productos y servicios">
-          <i data-lucide="search" class="smart-search-icon" aria-hidden="true"></i>
-          <input
-            type="search"
-            id="search-home"
-            name="query"
-            class="smart-search-input"
-            placeholder="Buscar cámaras, laptops, servicios o marcas..."
-            autocomplete="off"
-            aria-label="Buscar productos, marcas o servicios"
-          />
-          <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-home" aria-label="Ejecutar búsqueda">
-            <i data-lucide="arrow-right" aria-hidden="true"></i>
-          </button>
-          <div id="search-drop-home" class="search-dropdown" aria-label="Resultados de búsqueda" role="listbox" aria-live="polite"></div>
+        <!-- SLIDE 1-4: Banners Promocionales -->
+        <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
+          <img src="img/banners/equipamos.png" alt="Equipamos tu oficina con todo lo que necesita" loading="eager" />
         </div>
-
-        <div class="hero-ctas">
-          <a href="#servicios" class="btn btn-primary hero-cta-solutions">Ver soluciones</a>
-          <a href="catalogo.html" class="btn btn-outline hero-cta-catalog">Explorar catálogo</a>
-          <a
-            href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n."
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-wa hero-cta-whatsapp"
-          >
-            <svg width="16" height="16"><use href="#wa-icon"/></svg>
-            Hablar con un asesor
-          </a>
+        <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
+          <img src="img/banners/seguridad.png" alt="Protege tu negocio — Soluciones de seguridad" loading="lazy" />
         </div>
-
-        <div class="hero-chips">
-          <a href="catalogo.html?cat=seguridad" class="chip"><span class="chip-icon"><i data-lucide="shield-check"></i></span> Seguridad electrónica</a>
-          <a href="catalogo.html?cat=redes" class="chip"><span class="chip-icon"><i data-lucide="wifi"></i></span> Redes y energía</a>
-          <a href="catalogo.html?cat=equipos" class="chip"><span class="chip-icon"><i data-lucide="monitor"></i></span> Equipos de oficina</a>
-          <a href="catalogo.html?cat=infra" class="chip"><span class="chip-icon"><i data-lucide="building-2"></i></span> Infraestructura</a>
+        <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
+          <img src="img/banners/redes.png" alt="Conecta tu negocio — Redes empresariales" loading="lazy" />
         </div>
-
-        <div class="hero-scroll-indicator" aria-hidden="true">
-          <span class="hero-scroll-indicator__mouse"><span class="hero-scroll-indicator__wheel"></span></span>
-          <span class="hero-scroll-indicator__text">Desplaza hacia abajo</span>
+        <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
+          <img src="img/banners/energia.png" alt="Energía sin interrupciones — UPS y respaldo" loading="lazy" />
         </div>
       </div>
+      <!-- Flechas flotantes -->
+      <button class="hero-carousel-arrow hero-carousel-arrow--prev" aria-label="Anterior">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="hero-carousel-arrow hero-carousel-arrow--next" aria-label="Siguiente">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <!-- Indicadores -->
+      <div class="hero-carousel-dots" aria-label="Indicadores"></div>
     </div>
   </section>
 
@@ -237,33 +246,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ═══ CARRUSEL DE PROMOCIONES ═══ -->
-  <section id="promo-carousel" class="promo-carousel" aria-label="Promociones y ofertas">
-    <div class="promo-viewport">
-      <div class="promo-track">
-        <div class="promo-slide" aria-hidden="false">
-          <img src="img/banners/equipamos.png" alt="Equipamos tu oficina con todo lo que necesita" loading="eager" />
-        </div>
-        <div class="promo-slide" aria-hidden="true">
-          <img src="img/banners/seguridad.png" alt="Protege tu negocio — Soluciones de seguridad" loading="lazy" />
-        </div>
-        <div class="promo-slide" aria-hidden="true">
-          <img src="img/banners/redes.png" alt="Conecta tu negocio — Redes empresariales" loading="lazy" />
-        </div>
-        <div class="promo-slide" aria-hidden="true">
-          <img src="img/banners/energia.png" alt="Energía sin interrupciones — UPS y respaldo" loading="lazy" />
-        </div>
-      </div>
-    </div>
-    <button class="promo-arrow promo-arrow--prev" aria-label="Promoción anterior">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-    </button>
-    <button class="promo-arrow promo-arrow--next" aria-label="Siguiente promoción">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-    </button>
-    <div class="promo-dots" aria-label="Indicadores de promoción"></div>
-  </section>
 
   <hr class="section-divider" />
 

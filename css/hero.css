@@ -4,12 +4,155 @@
    ============================================================= */
 
 #inicio {
-  min-height: 100vh; min-height: 100svh; position: relative;
-  display: flex; align-items: flex-start;
+  position: relative;
   overflow: hidden;
+}
+
+/* ── Hero Carousel ── */
+.hero-carousel {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.hero-carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Each slide fills the same space, stacked */
+.hero-carousel-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  z-index: 1;
+}
+.hero-carousel-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* Hero slide inherits original styling */
+.hero-carousel-slide--hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-start;
   background:
     radial-gradient(circle at top center, rgba(11, 126, 181, 0.12), transparent 30%),
     linear-gradient(180deg, #f9fbff 0%, #eef4fb 55%, #eaf2fb 100%);
+}
+
+/* Banner slides */
+.hero-carousel-slide--banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #0a1a2e 0%, #0f2540 50%, #0a1a2e 100%);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 80px 40px 40px;
+}
+.hero-carousel-slide--banner img {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 18px;
+  margin: 0 auto;
+  box-shadow: 0 28px 72px rgba(0,0,0,0.35);
+}
+
+/* ── Hero Carousel Arrows ── */
+.hero-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  border: 2px solid rgba(11, 126, 181, 0.2);
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  color: var(--brand);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+}
+.hero-carousel-arrow:hover {
+  background: rgba(10, 112, 162, 0.15);
+  border-color: var(--brand);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 12px 36px rgba(10, 112, 162, 0.2);
+}
+.hero-carousel-arrow--prev { left: 18px; }
+.hero-carousel-arrow--next { right: 18px; }
+
+/* On banner slides, arrows become white */
+.hero-carousel-slide--banner.active ~ .hero-carousel-arrow,
+.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-arrow {
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* ── Hero Carousel Dots ── */
+.hero-carousel-dots {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+.hero-carousel-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--brand);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  opacity: 0.5;
+}
+.hero-carousel-dot.active {
+  background: var(--brand);
+  opacity: 1;
+  transform: scale(1.2);
+}
+.hero-carousel-dot:hover:not(.active) {
+  opacity: 0.8;
+}
+
+@media (max-width: 767px) {
+  .hero-carousel-arrow {
+    width: 38px; height: 38px;
+  }
+  .hero-carousel-arrow--prev { left: 8px; }
+  .hero-carousel-arrow--next { right: 8px; }
+  .hero-carousel-arrow svg { width: 16px; height: 16px; }
+  .hero-carousel-dots { bottom: 14px; gap: 7px; }
+  .hero-carousel-dot { width: 9px; height: 9px; }
+  .hero-carousel-slide--banner {
+    min-height: 55vh;
+  }
+  .hero-carousel-slide--banner img {
+    max-height: 35vh;
+    border-radius: 12px;
+  }
 }
 
 /* ── Fondos decorativos ── */

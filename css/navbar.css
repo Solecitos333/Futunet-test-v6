@@ -65,13 +65,44 @@
   box-shadow: 0 0 0 3px rgba(10, 112, 162, 0.08);
 }
 
-/* Show search when scrolled past hero */
+/* Show search when scrolled past hero OR when a banner slide is active */
 #navbar.scrolled .nav-search-compact {
   display: flex;
   opacity: 1;
   transform: translateY(0);
 }
-#navbar.nav-hero-logo-hidden .nav-search-compact {
+/* When hero slide is showing and logo is visible, hide navbar logo+search */
+#navbar.hero-slide-active:not(.scrolled) .nav-search-compact {
+  display: none;
+}
+#navbar.hero-slide-active:not(.scrolled) .nav-logo {
+  opacity: 0;
+  pointer-events: none;
+}
+/* When banner slide is active, always show navbar logo+search */
+#navbar.banner-slide-active .nav-search-compact {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+#navbar.banner-slide-active .nav-logo {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+/* Give navbar a solid background on banner slides */
+#navbar.banner-slide-active {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(10, 112, 162, 0.08);
+}
+/* Override nav-hero-logo-hidden when banner is active */
+#navbar.nav-hero-logo-hidden.banner-slide-active .nav-logo {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+#navbar.nav-hero-logo-hidden:not(.banner-slide-active) .nav-search-compact {
   display: none;
 }
 
