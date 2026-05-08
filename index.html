@@ -56,6 +56,11 @@
         <a href="#inicio" class="nav-logo" aria-label="Ir al inicio de Futunet">
           <img src="img/logo-navbar.png" alt="Futunet - La Tecnología del Futuro" width="1009" height="207" />
         </a>
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
       <ul class="nav-menu">
         <li><a href="#inicio">Inicio</a></li>
         <li><a href="#servicios">Servicios</a></li>
@@ -233,6 +238,56 @@
     </div>
   </div>
 
+  <!-- ═══ CARRUSEL DE PROMOCIONES ═══ -->
+  <section id="promo-carousel" class="promo-carousel" aria-label="Promociones y ofertas">
+    <div class="promo-viewport">
+      <div class="promo-track">
+        <div class="promo-slide" aria-hidden="false">
+          <img src="img/banners/equipamos.png" alt="Equipamos tu oficina con todo lo que necesita" loading="eager" />
+        </div>
+        <div class="promo-slide" aria-hidden="true">
+          <img src="img/banners/seguridad.png" alt="Protege tu negocio — Soluciones de seguridad" loading="lazy" />
+        </div>
+        <div class="promo-slide" aria-hidden="true">
+          <img src="img/banners/redes.png" alt="Conecta tu negocio — Redes empresariales" loading="lazy" />
+        </div>
+        <div class="promo-slide" aria-hidden="true">
+          <img src="img/banners/energia.png" alt="Energía sin interrupciones — UPS y respaldo" loading="lazy" />
+        </div>
+      </div>
+    </div>
+    <button class="promo-arrow promo-arrow--prev" aria-label="Promoción anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button class="promo-arrow promo-arrow--next" aria-label="Siguiente promoción">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    <div class="promo-dots" aria-label="Indicadores de promoción"></div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ═══ PRODUCTOS POR CATEGORÍA (Tabs + Carrusel) ═══ -->
+  <section id="productos-categoria" class="section catshowcase-section">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Descubre nuestro inventario</span>
+        <h2 class="section-title">Productos por categoría</h2>
+        <p class="section-sub">Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.</p>
+      </div>
+      <div class="category-tabs reveal" aria-label="Filtrar por categoría"></div>
+      <div class="catshowcase-wrapper reveal">
+        <button class="catshowcase-arrow catshowcase-arrow--prev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="catshowcase-grid" id="catshowcase-grid"></div>
+        <button class="catshowcase-arrow catshowcase-arrow--next" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <hr class="section-divider" />
 
   <section id="destacados-catalogo" class="section showcase-section">
@@ -339,44 +394,124 @@
   </section>
 
 
+  <!-- ═══ EQUIPA TU OFICINA ═══ -->
+  <section id="equipa-oficina" class="section office-section">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Todo lo que necesitas</span>
+        <h2 class="section-title">Equipa tu oficina</h2>
+        <p class="section-sub">Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.</p>
+      </div>
+      <div class="office-grid reveal">
+        <a href="catalogo.html?cat=equipos" class="office-card">
+          <div class="office-card__media">
+            <img src="img/office/computadoras.png" alt="Computadoras y laptops" loading="lazy" decoding="async" />
+          </div>
+          <div class="office-card__body">
+            <h3 class="office-card__title">Computadoras</h3>
+            <p class="office-card__desc">Laptops, desktops, monitores y más.</p>
+            <span class="office-card__btn">Ver Productos</span>
+          </div>
+        </a>
+        <a href="catalogo.html?cat=oficina&q=mobiliario" class="office-card">
+          <div class="office-card__media">
+            <img src="img/office/mobiliario.png" alt="Mobiliario de oficina" loading="lazy" decoding="async" />
+          </div>
+          <div class="office-card__body">
+            <h3 class="office-card__title">Mobiliario</h3>
+            <p class="office-card__desc">Sillas, escritorios, counter y más.</p>
+            <span class="office-card__btn">Ver Productos</span>
+          </div>
+        </a>
+        <a href="catalogo.html?cat=oficina&q=suministro" class="office-card">
+          <div class="office-card__media">
+            <img src="img/office/suministros.png" alt="Suministros de oficina" loading="lazy" decoding="async" />
+          </div>
+          <div class="office-card__body">
+            <h3 class="office-card__title">Suministros</h3>
+            <p class="office-card__desc">Calculadoras, teléfonos, trituradoras...</p>
+            <span class="office-card__btn">Ver Productos</span>
+          </div>
+        </a>
+        <a href="catalogo.html?cat=equipos&q=impresora" class="office-card">
+          <div class="office-card__media">
+            <img src="img/office/impresoras.png" alt="Impresoras" loading="lazy" decoding="async" />
+          </div>
+          <div class="office-card__body">
+            <h3 class="office-card__title">Impresoras</h3>
+            <p class="office-card__desc">Amplia gama de impresoras disponibles.</p>
+            <span class="office-card__btn">Ver Productos</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ═══ MARCAS CON PREVIEW ═══ -->
   <section id="marcas" class="section section-sm bg-light">
     <div class="container text-center reveal">
       <span class="section-label">Confianza y calidad</span>
       <h2 class="section-title brands-title">Marcas con las que trabajamos</h2>
-      <p class="section-sub brands-sub">Selecciona una marca y entra directo a lo que más te conviene cotizar.</p>
-      <div class="brands-grid">
-        <a href="catalogo.html?brand=dell" class="brand-item" title="Ver productos Dell" aria-label="Ver productos Dell">
+      <p class="section-sub brands-sub">Pasa el cursor sobre una marca para descubrir sus productos destacados.</p>
+      <div class="brands-grid brands-grid--preview">
+        <div class="brand-item" data-brand-preview="dell" title="Ver productos Dell" aria-label="Ver productos Dell">
           <img src="img/marcas/dell.svg" alt="Dell" loading="lazy" />
-          <span class="brand-fallback" hidden>Dell</span>
-        </a>
-        <a href="catalogo.html?brand=lenovo" class="brand-item" title="Buscar marca Lenovo en el catálogo" aria-label="Buscar marca Lenovo en el catálogo">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/dell.png" alt="Productos Dell" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=dell" class="brand-preview-btn">Ver productos Dell</a>
+          </div>
+        </div>
+        <div class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo">
           <img src="img/marcas/lenovo.svg" alt="Lenovo" loading="lazy" />
-          <span class="brand-fallback" hidden>Lenovo</span>
-        </a>
-        <a href="catalogo.html?brand=epson" class="brand-item" title="Ver productos Epson" aria-label="Ver productos Epson">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/lenovo.png" alt="Productos Lenovo" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=lenovo" class="brand-preview-btn">Ver productos Lenovo</a>
+          </div>
+        </div>
+        <div class="brand-item" data-brand-preview="epson" title="Ver productos Epson">
           <img src="img/marcas/epson.svg" alt="Epson" loading="lazy" />
-          <span class="brand-fallback" hidden>Epson</span>
-        </a>
-        <a href="catalogo.html?brand=hikvision" class="brand-item" title="Ver productos Hikvision" aria-label="Ver productos Hikvision">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/epson.png" alt="Productos Epson" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=epson" class="brand-preview-btn">Ver productos Epson</a>
+          </div>
+        </div>
+        <div class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision">
           <img src="img/marcas/hikvision.svg" alt="Hikvision" loading="lazy" />
-          <span class="brand-fallback" hidden>Hikvision</span>
-        </a>
-        <a href="catalogo.html?brand=samsung" class="brand-item brand-item--samsung" title="Buscar marca Samsung en el catálogo" aria-label="Buscar marca Samsung en el catálogo">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/hikvision.png" alt="Productos Hikvision" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=hikvision" class="brand-preview-btn">Ver productos Hikvision</a>
+          </div>
+        </div>
+        <div class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung">
           <img src="img/marcas/samsung.png" alt="Samsung" loading="lazy" />
-          <span class="brand-fallback" hidden>Samsung</span>
-        </a>
-        <a href="catalogo.html?brand=hp" class="brand-item" title="Ver productos HP" aria-label="Ver productos HP">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/samsung.png" alt="Productos Samsung" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=samsung" class="brand-preview-btn">Ver productos Samsung</a>
+          </div>
+        </div>
+        <div class="brand-item" data-brand-preview="hp" title="Ver productos HP">
           <img src="img/marcas/hp.svg" alt="HP" loading="lazy" class="brand-image-hp" />
-          <span class="brand-fallback" hidden>HP</span>
-        </a>
-        <a href="catalogo.html?brand=tp%20link" class="brand-item brand-item--tplink" title="Buscar marca TP-Link en el catálogo" aria-label="Buscar marca TP-Link en el catálogo">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/hp.png" alt="Productos HP" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=hp" class="brand-preview-btn">Ver productos HP</a>
+          </div>
+        </div>
+        <div class="brand-item brand-item--tplink" data-brand-preview="tplink" title="Ver productos TP-Link">
           <img src="img/marcas/tp-link.png" alt="TP-Link" loading="lazy" />
-          <span class="brand-fallback" hidden>TP-Link</span>
-        </a>
-        <a href="catalogo.html?brand=logitech" class="brand-item" title="Buscar marca Logitech en el catálogo" aria-label="Buscar marca Logitech en el catálogo">
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/tplink.png" alt="Productos TP-Link" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=tp%20link" class="brand-preview-btn">Ver productos TP-Link</a>
+          </div>
+        </div>
+        <div class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech">
           <img src="img/marcas/logitech.svg" alt="Logitech" loading="lazy" />
-          <span class="brand-fallback" hidden>Logitech</span>
-        </a>
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/logitech.png" alt="Productos Logitech" class="brand-preview-img" loading="lazy" />
+            <a href="catalogo.html?brand=logitech" class="brand-preview-btn">Ver productos Logitech</a>
+          </div>
+        </div>
       </div>
       <div class="brands-more">¡Y muchas más!</div>
       <div class="state-provider">
@@ -615,6 +750,9 @@
   <script defer src="js/image_fixes.js?v=v9"></script>
   <script defer src="js/catalog.js"></script>
   <script defer src="js/home_showcase.js"></script>
+  <script defer src="js/promo-carousel.js"></script>
+  <script defer src="js/category-showcase.js"></script>
+  <script defer src="js/brands-preview.js"></script>
   <script defer src="js/form.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {

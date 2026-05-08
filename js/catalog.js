@@ -1547,5 +1547,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Inicializar Buscadores si existen en el DOM
   initSmartSearch('search-home', 'search-drop-home');
+  initSmartSearch('search-navbar', 'search-drop-navbar');
   initSmartSearch('search-catalog-page', 'search-drop-catalog');
 });
