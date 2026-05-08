@@ -1,0 +1,3 @@
+## 2024-05-18 - Catalog Search Optimization
+**Learning:** In frontend environments without complex build steps, array iteration methods like chained `.map().filter().sort().map()` can cause significant memory allocation and garbage collection overhead, particularly with large lists (e.g. 5,000+ items). Additionally, repeatedly parsing strings dynamically during search indexing or autocomplete filtering without caching creates a redundant CPU bottleneck.
+**Action:** Replace map-filter chains with imperative `for` loops in search/filter algorithms. Use `Object.defineProperty` to lazily cache parsed/normalized strings onto existing data objects (setting `enumerable: false` to prevent breaking serialization or loops) rather than repeatedly computing them.
