@@ -1,0 +1,4 @@
+## 2026-05-13 - Add ARIA Labels to Dynamically Generated Buttons\n**Learning:** Dynamic template literals for UI elements often lack static analysis coverage for accessibility, so it's essential to manually add `aria-label` attributes to icon-only buttons like  and  generated this way.\n**Action:** When adding or reviewing dynamically created icon-only buttons via template literals, always verify that an explicit `aria-label` has been included.
+## 2024-05-24 - Add ARIA Labels to Dynamically Generated Buttons
+**Learning:** Dynamic template literals for UI elements often lack static analysis coverage for accessibility, making manual addition of `aria-label` essential for icon-only buttons like `-` and `+`.
+**Action:** Always verify that an explicit `aria-label` is included when creating or reviewing icon-only buttons via template literals.
