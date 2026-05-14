@@ -274,9 +274,9 @@
             <div class="cart-item__title">${escapeHTML(product.title)}</div>
             <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
             <div class="cart-item__qty">
-              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Disminuir cantidad">-</button>
               <span>${qty}</span>
-              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Aumentar cantidad">+</button>
             </div>
             <div class="cart-item__meta">Precio: ${escapeHTML(product.price)}</div>
           </div>
