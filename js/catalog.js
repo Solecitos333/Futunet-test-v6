@@ -35,6 +35,18 @@ function debounce(fn, delay) {
 }
 
 /**
+ * Helper to cache normalized strings for search to avoid repeated regex mapping.
+ * Uses enumerable: false to prevent the cache from leaking into serialization.
+ */
+function getNormalized(obj, key) {
+  const cacheKey = '_norm_' + key;
+  if (obj[cacheKey] !== undefined) return obj[cacheKey];
+  const val = normalizeSearch(obj[key]);
+  Object.defineProperty(obj, cacheKey, { value: val, enumerable: false });
+  return val;
+}
+
+/**
  * Normaliza texto para búsqueda tolerante:
  * - Minúsculas
  * - Elimina acentos (á→a, é→e, í→i, ó→o, ú→u, ñ→n)
@@ -81,10 +93,10 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getNormalized(product, 'title');
+  const desc = getNormalized(product, 'desc');
+  const category = getNormalized(product, 'category');
+  const brand = getNormalized(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -1381,10 +1393,10 @@ function initSmartSearch(inputId, dropdownId) {
 
     const nq = normalizeSearch(q);
     mockDatabase.forEach(p => {
-      const nCat = normalizeSearch(p.category);
-      const nBrand = normalizeSearch(p.brand);
-      const nTitle = normalizeSearch(p.title);
-      const nDesc = normalizeSearch(p.desc);
+      const nCat = getNormalized(p, 'category');
+      const nBrand = getNormalized(p, 'brand');
+      const nTitle = getNormalized(p, 'title');
+      const nDesc = getNormalized(p, 'desc');
       if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
       if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
       if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {
