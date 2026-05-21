@@ -230,9 +230,16 @@ function renderCompactMobileCatalogView() {
 
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
+    const scoredResults = [];
+    // Performance optimization: Single-pass loop to avoid intermediate array allocations
+    // Replaces: mockDatabase.map(...).filter(...)
+    for (const p of mockDatabase) {
+      const score = scoreProductMatch(p, q);
+      if (score > 0) {
+        scoredResults.push({ product: p, score });
+      }
+    }
+    const results = scoredResults
       .sort((a, b) => b.score - a.score)
       .map(r => r.product);
 
@@ -737,9 +744,16 @@ function renderUI() {
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
+    const scoredResults = [];
+    // Performance optimization: Single-pass loop to avoid intermediate array allocations
+    // Replaces: mockDatabase.map(...).filter(...)
+    for (const p of mockDatabase) {
+      const score = scoreProductMatch(p, q);
+      if (score > 0) {
+        scoredResults.push({ product: p, score });
+      }
+    }
+    const results = scoredResults
       .sort((a, b) => b.score - a.score)
       .map(r => r.product);
 
