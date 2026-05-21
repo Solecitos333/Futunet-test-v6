@@ -1,0 +1,3 @@
+## 2024-05-22 - [Array Allocation Reduction in Search]
+**Learning:** Replaced chained `.map().filter().sort().map()` operations in catalog search with an imperative `for...of` loop. The chained approach created multiple intermediate arrays, causing unnecessary garbage collection overhead when filtering large datasets like `mockDatabase`.
+**Action:** When filtering and mapping over large arrays (like products or inventory), prefer a single-pass imperative loop (`for...of` or `reduce`) over chained array methods to minimize intermediate allocations and improve performance, especially on constrained mobile devices.
