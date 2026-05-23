@@ -23,6 +23,24 @@ function escapeHTML(str) {
 }
 
 /**
+ * Caches and returns normalized strings on object properties.
+ */
+function getNormalized(obj, key) {
+  const cacheKey = `_norm_${key}`;
+  if (obj[cacheKey] !== undefined) {
+    return obj[cacheKey];
+  }
+  const normalized = normalizeSearch(obj[key]);
+  Object.defineProperty(obj, cacheKey, {
+    value: normalized,
+    enumerable: false,
+    writable: false,
+    configurable: true
+  });
+  return normalized;
+}
+
+/**
  * Debounce: retrasa la ejecución de una función hasta que
  * pase un tiempo sin nuevas llamadas.
  */
@@ -81,10 +99,10 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getNormalized(product, 'title');
+  const desc = getNormalized(product, 'desc');
+  const category = getNormalized(product, 'category');
+  const brand = getNormalized(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -230,11 +248,19 @@ function renderCompactMobileCatalogView() {
 
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(r => r.product);
+    const scoredResults = [];
+    for (let i = 0; i < mockDatabase.length; i++) {
+      const p = mockDatabase[i];
+      const score = scoreProductMatch(p, q);
+      if (score > 0) {
+        scoredResults.push({ product: p, score });
+      }
+    }
+    scoredResults.sort((a, b) => b.score - a.score);
+    const results = [];
+    for (let i = 0; i < scoredResults.length; i++) {
+      results.push(scoredResults[i].product);
+    }
 
     updateCatalogContextBar({
       title: 'Resultados',
@@ -737,11 +763,19 @@ function renderUI() {
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(r => r.product);
+    const scoredResults = [];
+    for (let i = 0; i < mockDatabase.length; i++) {
+      const p = mockDatabase[i];
+      const score = scoreProductMatch(p, q);
+      if (score > 0) {
+        scoredResults.push({ product: p, score });
+      }
+    }
+    scoredResults.sort((a, b) => b.score - a.score);
+    const results = [];
+    for (let i = 0; i < scoredResults.length; i++) {
+      results.push(scoredResults[i].product);
+    }
 
     updateCatalogContextBar({
       title: 'Resultados de búsqueda',
@@ -1381,10 +1415,10 @@ function initSmartSearch(inputId, dropdownId) {
 
     const nq = normalizeSearch(q);
     mockDatabase.forEach(p => {
-      const nCat = normalizeSearch(p.category);
-      const nBrand = normalizeSearch(p.brand);
-      const nTitle = normalizeSearch(p.title);
-      const nDesc = normalizeSearch(p.desc);
+      const nCat = getNormalized(p, 'category');
+      const nBrand = getNormalized(p, 'brand');
+      const nTitle = getNormalized(p, 'title');
+      const nDesc = getNormalized(p, 'desc');
       if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
       if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
       if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {

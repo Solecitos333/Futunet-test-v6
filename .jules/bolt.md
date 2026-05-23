@@ -1,0 +1,3 @@
+## 2024-05-24 - Search Optimization via Caching and Single Pass Filtering
+**Learning:** Chained array operations like `.map().filter().sort().map()` create multiple intermediate arrays, causing garbage collection overhead. Normalizing strings using Regex and `.normalize('NFD')` repeatedly in a loop is extremely slow.
+**Action:** Replace chained array operations with a single-pass imperative `for` loop that filters and scores. Cache expensive string normalization directly on object instances using `Object.defineProperty(obj, cacheKey, { value, enumerable: false })` to avoid polluting serialization/iteration while saving CPU cycles.
