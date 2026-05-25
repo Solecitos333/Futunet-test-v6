@@ -1285,7 +1285,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   bottom: calc(100% + 14px);
   left: 50%;
   transform: translateX(-50%) translateY(8px);
-  width: 360px;
+  width: 400px;
   background: #fff;
   border: 1px solid rgba(11, 126, 181, 0.12);
   border-radius: 20px;
@@ -1317,14 +1317,15 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 }
 
 .brand-preview-img {
+  display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 10;
+  height: 240px;
   border-radius: 12px;
   margin-bottom: 12px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
-  background-color: var(--bg-secondary);
+  background: linear-gradient(180deg, #f8fafe 0%, #eef3fa 100%);
+  padding: 12px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .brand-item:hover .brand-preview-img {
