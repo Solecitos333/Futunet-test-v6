@@ -119,6 +119,58 @@
     return getAuth().sendPasswordResetEmail(email);
   }
 
+  // ─── Passwordless Sign In (Email Link) ───
+  async function sendSignInLink(email) {
+    var auth = getAuth();
+    // Use the current URL path as the redirect URL (without query/hashes)
+    var redirectUrl = window.location.origin + window.location.pathname;
+
+    var actionCodeSettings = {
+      url: redirectUrl,
+      handleCodeInApp: true
+    };
+
+    await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+    window.localStorage.setItem('emailForSignIn', email);
+    console.log('%c✉️ Sign-in link sent to ' + email, 'color: #2980b9');
+  }
+
+  function isSignInWithEmailLink(link) {
+    return getAuth().isSignInWithEmailLink(link || window.location.href);
+  }
+
+  async function signInWithEmailLink(email, link) {
+    var auth = getAuth();
+    var cred = await auth.signInWithEmailLink(email, link || window.location.href);
+
+    // Clean up email from localStorage
+    window.localStorage.removeItem('emailForSignIn');
+
+    // Check if Firestore user document exists, create if not
+    var userDoc;
+    try {
+      userDoc = await getDB().collection('users').doc(cred.user.uid).get();
+    } catch (e) {
+      userDoc = { exists: false };
+    }
+
+    if (!userDoc.exists) {
+      await ensureUserDoc(cred.user.uid, {
+        displayName: cred.user.displayName || '',
+        email: cred.user.email || email,
+        phone: cred.user.phoneNumber || ''
+      });
+    } else {
+      getDB().collection('users').doc(cred.user.uid).update({
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(function () { });
+    }
+
+    currentUserData = await fetchUserData(cred.user.uid);
+    return cred.user;
+  }
+
+
   // ─── Sign Out ───
   async function signOut() {
     currentUserData = null;
@@ -261,6 +313,9 @@
     signInWithGoogle: signInWithGoogle,
     signOut: signOut,
     sendPasswordReset: sendPasswordReset,
+    sendSignInLink: sendSignInLink,
+    isSignInWithEmailLink: isSignInWithEmailLink,
+    signInWithEmailLink: signInWithEmailLink,
     onAuthChanged: onAuthChanged,
     getUserRole: getUserRole,
     getUserData: function () { return currentUserData; },

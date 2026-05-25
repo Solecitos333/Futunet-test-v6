@@ -298,19 +298,26 @@
   text-decoration: underline;
 }
 
-/* ─── Forgot Password Link ─── */
-.auth-forgot {
-  display: block;
-  text-align: right;
+/* ─── Login Helper Links ─── */
+.auth-login-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
   font-size: 0.8rem;
-  color: #76889e;
-  text-decoration: none;
-  margin-top: 6px;
-  transition: color 0.2s;
+  gap: 12px;
 }
 
-.auth-forgot:hover {
+.auth-link-sec {
+  color: #76889e;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  font-weight: 500;
+}
+
+.auth-link-sec:hover {
   color: #0A70A2;
+  text-decoration: none;
 }
 
 /* ─── Error / Success Messages ─── */
