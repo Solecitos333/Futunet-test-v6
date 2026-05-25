@@ -1371,8 +1371,13 @@
   var adminChatHistory = [];
 
   function formatHistoryForGemini(historyArray) {
-    return historyArray.map(function (msg) {
-      if (msg.role === 'user') {
+    var formatted = [];
+    
+    historyArray.forEach(function (msg) {
+      var role = msg.role === 'user' ? 'user' : 'model';
+      var text = '';
+      
+      if (role === 'user') {
         var timeStr = '';
         if (msg.timestamp) {
           var date;
@@ -1382,18 +1387,26 @@
         } else {
           timeStr = new Date().toLocaleString('es-DO');
         }
-        var formattedText = `[Mensaje de ${msg.userName || 'Admin'} (${msg.userEmail || ''}) el ${timeStr}]: ${msg.message}`;
-        return {
-          role: 'user',
-          parts: [{ text: formattedText }]
-        };
+        text = `[Mensaje de ${msg.userName || 'Admin'} (${msg.userEmail || ''}) el ${timeStr}]: ${msg.message}`;
       } else {
-        return {
-          role: 'model',
-          parts: [{ text: msg.message }]
-        };
+        text = msg.message || '';
+      }
+      
+      if (formatted.length > 0 && formatted[formatted.length - 1].role === role) {
+        formatted[formatted.length - 1].parts[0].text += '\n\n' + text;
+      } else {
+        formatted.push({
+          role: role,
+          parts: [{ text: text }]
+        });
       }
     });
+
+    while (formatted.length > 0 && formatted[0].role !== 'user') {
+      formatted.shift();
+    }
+
+    return formatted;
   }
 
   async function loadAdminChatHistory() {
@@ -1541,7 +1554,14 @@ Requisitos:
         });
 
         if (!response.ok) {
-          throw new Error('Error en el servicio de IA (Gemini)');
+          var errText = '';
+          try {
+            var errJson = await response.json();
+            errText = (errJson.error && errJson.error.message) || response.statusText;
+          } catch (_) {
+            errText = response.statusText;
+          }
+          throw new Error('Servicio de IA: ' + errText);
         }
 
         var resData = await response.json();
