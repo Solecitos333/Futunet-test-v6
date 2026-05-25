@@ -512,9 +512,24 @@
   }
 
   // ═══════════════════════════════════
-  // USERS
-  // ═══════════════════════════════════
   var allUsers = [];
+  var currentUserSearchQuery = '';
+
+  function filterAndRenderUsers() {
+    var query = (currentUserSearchQuery || '').toLowerCase().trim();
+    if (!query) {
+      renderUsersTable(allUsers);
+      return;
+    }
+    var filtered = allUsers.filter(function (u) {
+      var name = (u.displayName || '').toLowerCase();
+      var email = (u.email || '').toLowerCase();
+      var role = (u.role || '').toLowerCase();
+      var status = (u.status || '').toLowerCase();
+      return name.indexOf(query) !== -1 || email.indexOf(query) !== -1 || role.indexOf(query) !== -1 || status.indexOf(query) !== -1;
+    });
+    renderUsersTable(filtered);
+  }
 
   async function loadUsers() {
     var tbody = document.getElementById('users-table-body');
@@ -525,7 +540,7 @@
       var snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
       allUsers = [];
       snapshot.forEach(function (doc) { allUsers.push({ id: doc.id, ...doc.data() }); });
-      renderUsersTable(allUsers);
+      filterAndRenderUsers();
     } catch (e) {
       console.error('Users load error:', e);
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar usuarios</td></tr>';
@@ -1700,6 +1715,20 @@
       categoryFilter.addEventListener('change', function () {
         currentCategoryFilter = this.value;
         filterAndRenderInventory();
+      });
+    }
+
+    // Users search
+    var usersSearchInput = document.getElementById('users-search');
+    if (usersSearchInput) {
+      var userDebounceTimer;
+      usersSearchInput.addEventListener('input', function () {
+        clearTimeout(userDebounceTimer);
+        var q = this.value;
+        userDebounceTimer = setTimeout(function () {
+          currentUserSearchQuery = q;
+          filterAndRenderUsers();
+        }, 300);
       });
     }
   }
