@@ -249,12 +249,13 @@
       for (var i = 0; i < backupItems.length; i++) {
         var p = { ...backupItems[i] };
         
-        // Preserve active status if it exists in DB, otherwise set default active status
-        if (existingStatus[p.id] !== undefined) {
+        // Desks (mob_oficina_*) are forced active (true) to restore showcases, others preserve status or default to false
+        if (p.id.startsWith('mob_oficina_')) {
+          p.isActive = true;
+        } else if (existingStatus[p.id] !== undefined) {
           p.isActive = existingStatus[p.id];
         } else {
-          // Desks (mob_oficina_*) are active by default, others hidden
-          p.isActive = p.id.startsWith('mob_oficina_');
+          p.isActive = false;
         }
 
         var docRef = db.collection('products').doc(p.id);
@@ -271,12 +272,13 @@
       for (var j = 0; j < selektronicItems.length; j++) {
         var p = { ...selektronicItems[j] };
         
-        // Preserve active status if it exists in DB, otherwise set to true by default
-        if (existingStatus[p.id] !== undefined) {
+        // Selektronic items are forced active (true) to restore showcases
+        if (p.id.startsWith('supplier_selektronic_')) {
+          p.isActive = true;
+        } else if (existingStatus[p.id] !== undefined) {
           p.isActive = existingStatus[p.id];
         } else {
-          // Selektronic items are active by default
-          p.isActive = p.id.startsWith('supplier_selektronic_');
+          p.isActive = true;
         }
 
         var docRef = db.collection('products').doc(p.id);
