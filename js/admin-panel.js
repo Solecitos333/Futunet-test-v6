@@ -1538,7 +1538,7 @@ Requisitos:
 - Sugiere ideas prácticas y recomendaciones de reabastecimiento o marketing.
 - Utiliza etiquetas HTML básicas (como <strong>, <ul>, <li>, <br>) para estructurar tu respuesta de forma visual y elegante. No utilices markdown (* o #).`;
 
-        var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -2645,7 +2645,7 @@ ${recentOrders.join('\n')}`;
         try {
           var prompt = `Escribe una descripción comercial y profesional para una tienda en línea llamada Futunet.\nEl producto es:\n- Título: ${title}\n- Categoría: ${category || 'Varios'}\n- Marca: ${brand || 'Genérico'}\n${specs ? `- Características: \n${specs}` : ''}\n\nRequisitos:\n- Redacta en español de República Dominicana de manera persuasiva.\n- Detalla los beneficios clave de forma atractiva.\n- Mantén la respuesta concisa y profesional (entre 2 y 3 párrafos cortos).\n- No uses rodeos como "Aquí tienes la descripción:" ni introducciones, responde directamente con la descripción.`;
 
-          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -2708,7 +2708,7 @@ ${recentOrders.join('\n')}`;
         try {
           var prompt = `Enumera las especificaciones técnicas y características clave más comunes del siguiente producto para venderlo en una tienda en línea.\nProducto:\n- Título: ${title}\n- Marca: ${brand || 'Genérico'}\n- Categoría: ${category || 'Varios'}\n\nRequisitos:\n- Escribe una característica o especificación por línea.\n- Máximo 5 o 6 líneas en total.\n- Responde únicamente con las especificaciones técnicas una por línea, sin introducciones ni números ni viñetas (* o -).`;
 
-          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

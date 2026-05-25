@@ -501,7 +501,7 @@ Instrucciones de Respuesta:
 - Intenta que tus respuestas sean cortas, estructuradas y fáciles de leer en un chat de móvil (máximo 2-3 párrafos cortos).`;
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
