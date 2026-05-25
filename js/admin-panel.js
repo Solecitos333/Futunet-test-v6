@@ -205,19 +205,57 @@
   }
 
   async function syncToFirebase() {
-    if (typeof window.backupDatabase === 'undefined' || !window.backupDatabase.length) {
-      showToast('No se encontró window.backupDatabase local.', 'error');
+    var backupItems = (typeof window.backupDatabase !== 'undefined' && Array.isArray(window.backupDatabase)) ? window.backupDatabase : [];
+    
+    // Normalize and retrieve Selektronic products
+    var selektronicItems = [];
+    if (window.supplierInventory && window.supplierInventory.feeds && window.supplierInventory.feeds.selektronic) {
+      var feed = window.supplierInventory.feeds.selektronic;
+      for (var i = 0; i < feed.length; i++) {
+        var norm = window.supplierInventory.normalizeSupplierProduct('selektronic', feed[i], i);
+        if (norm) {
+          selektronicItems.push(norm);
+        }
+      }
+    }
+
+    var totalItemsToSync = backupItems.length + selektronicItems.length;
+    if (totalItemsToSync === 0) {
+      showToast('No se encontraron artículos locales para restaurar.', 'error');
       return;
     }
-    if (!confirm('¿Deseas restaurar los ' + window.backupDatabase.length + ' artículos del inventario anterior? Se guardarán en la base de datos como OCULTOS por defecto.')) {
+
+    if (!confirm('¿Deseas restaurar los ' + totalItemsToSync + ' artículos del inventario anterior (incluyendo computadoras Selektronic y escritorios custom)? Se guardarán en la base de datos como OCULTOS por defecto y se conservará el estado visible de los que ya hayas activado.')) {
       return;
     }
+
     try {
+      showToast('Iniciando sincronización...', 'success');
+      
+      // Load current active status from Firestore to preserve it
+      var snapshot = await db.collection('products').get();
+      var existingStatus = {};
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        if (data && data.isActive !== undefined) {
+          existingStatus[doc.id] = data.isActive;
+        }
+      });
+
       var batch = db.batch();
       var count = 0;
-      for (var i = 0; i < window.backupDatabase.length; i++) {
-        var p = window.backupDatabase[i];
-        p.isActive = false; // Set default active status to HIDDEN
+
+      // 1. Sync backup items (Excel + Custom desks)
+      for (var i = 0; i < backupItems.length; i++) {
+        var p = { ...backupItems[i] };
+        
+        // Preserve active status if it exists in DB, otherwise set to false
+        if (existingStatus[p.id] !== undefined) {
+          p.isActive = existingStatus[p.id];
+        } else {
+          p.isActive = false;
+        }
+
         var docRef = db.collection('products').doc(p.id);
         batch.set(docRef, p);
         count++;
@@ -227,13 +265,37 @@
           count = 0;
         }
       }
+
+      // 2. Sync Selektronic items
+      for (var j = 0; j < selektronicItems.length; j++) {
+        var p = { ...selektronicItems[j] };
+        
+        // Preserve active status if it exists in DB, otherwise set to false
+        if (existingStatus[p.id] !== undefined) {
+          p.isActive = existingStatus[p.id];
+        } else {
+          p.isActive = false;
+        }
+
+        var docRef = db.collection('products').doc(p.id);
+        batch.set(docRef, p);
+        count++;
+        if (count === 400) {
+          await batch.commit();
+          batch = db.batch();
+          count = 0;
+        }
+      }
+
       if (count > 0) {
         await batch.commit();
       }
-      showToast('Sincronización oculta completada', 'success');
+
+      showToast('Sincronización de ' + totalItemsToSync + ' artículos completada', 'success');
       loadInventory();
       loadDashboardStats();
     } catch (e) {
+      console.error('Sync error:', e);
       showToast('Error en sincronización: ' + e.message, 'error');
     }
   }

@@ -354,18 +354,24 @@
   };
 
   // ── Aplicar correcciones ──
-  var imgF=0, brandF=0, catF=0, deptF=0;
-  mockDatabase.forEach(function(p) {
-    var f = fixes[p.id];
-    if (f) {
-      if (f.img)   { p.img = f.img; p.gallery = [f.img]; imgF++; }
-      if (f.brand) { p.brand = f.brand; brandF++; }
-      if (f.cat)   { p.category = f.cat; catF++; }
-      if (f.dept)  { p.department = f.dept; deptF++; }
-    }
+  function applyFixes(list) {
+    if (!list || !Array.isArray(list)) return;
+    var imgF=0, brandF=0, catF=0, deptF=0;
+    list.forEach(function(p) {
+      var f = fixes[p.id];
+      if (f) {
+        if (f.img)   { p.img = f.img; p.gallery = [f.img]; imgF++; }
+        if (f.brand) { p.brand = f.brand; brandF++; }
+        if (f.cat)   { p.category = f.cat; catF++; }
+        if (f.dept)  { p.department = f.dept; deptF++; }
+      }
+    });
+    console.log('[Futunet] Image fixes applied to ' + list.length + ' items: ' + imgF + ' imgs, ' + brandF + ' brands, ' + catF + ' cats, ' + deptF + ' depts');
+  }
 
+  window.applyImageFixes = applyFixes;
 
-  });
-
-  console.log('[Futunet] Fixes: ' + imgF + ' imgs, ' + brandF + ' brands, ' + catF + ' cats, ' + deptF + ' depts');
+  if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase) && mockDatabase.length > 0) {
+    applyFixes(mockDatabase);
+  }
 })();
