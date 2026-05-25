@@ -288,13 +288,13 @@
         if (toggle && dropdown) {
           toggle.addEventListener('click', function (e) {
             e.stopPropagation();
-            var isActive = dropdown.classList.contains('active');
-            document.querySelectorAll('.nav-auth-dropdown.active').forEach(function(d){ d.classList.remove('active'); });
-            if (!isActive) dropdown.classList.add('active');
+            var isActive = dropdown.classList.contains('is-open');
+            document.querySelectorAll('.nav-auth-dropdown.is-open').forEach(function(d){ d.classList.remove('is-open'); });
+            if (!isActive) dropdown.classList.add('is-open');
           });
           document.addEventListener('click', function (e) {
             if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
-              dropdown.classList.remove('active');
+              dropdown.classList.remove('is-open');
             }
           });
         }
