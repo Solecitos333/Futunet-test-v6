@@ -86,10 +86,6 @@
     
     // Check if email is verified
     if (!cred.user.emailVerified) {
-      // Re-send verification link just in case
-      await cred.user.sendEmailVerification().catch(function(e) {
-        console.error('Error re-sending verification email:', e);
-      });
       await getAuth().signOut();
       currentUserData = null;
       var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
@@ -103,6 +99,14 @@
     }).catch(function () { });
     currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;
+  }
+
+  // ─── Resend Verification Email (Manual) ───
+  async function resendVerification(email, password) {
+    var auth = getAuth();
+    var cred = await auth.signInWithEmailAndPassword(email, password);
+    await cred.user.sendEmailVerification();
+    await auth.signOut();
   }
 
   // ─── Sign In with Google ───
@@ -347,6 +351,7 @@
   window.FutunetAuth = {
     signUp: signUp,
     signIn: signIn,
+    resendVerification: resendVerification,
     signInWithGoogle: signInWithGoogle,
     signOut: signOut,
     sendPasswordReset: sendPasswordReset,

@@ -326,7 +326,30 @@
           setTimeout(function () { redirectByRole(userData); }, 800);
         } catch (err) {
           console.error('Login error:', err);
-          showMessage('login-message', translateError(err.code, err.message), 'error');
+          if (err.code === 'auth/email-not-verified') {
+            var msgEl = document.getElementById('login-message');
+            if (msgEl) {
+              msgEl.innerHTML = 'Tu correo electrónico no ha sido verificado. Revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta. ' +
+                '<br><a href="#" id="resend-verification" style="color:#0A70A2;text-decoration:underline;font-weight:600;margin-top:8px;display:inline-block;">¿No recibiste el correo? Reenviar enlace</a>';
+              msgEl.className = 'auth-message is-visible error';
+              
+              document.getElementById('resend-verification').addEventListener('click', async function(ev) {
+                ev.preventDefault();
+                var linkBtn = this;
+                linkBtn.textContent = 'Enviando...';
+                linkBtn.style.pointerEvents = 'none';
+                try {
+                  await FutunetAuth.resendVerification(email, password);
+                  showMessage('login-message', '¡Correo de verificación reenviado con éxito! Revisa tu bandeja de entrada (y carpeta de spam).', 'success');
+                } catch(resendErr) {
+                  console.error('Resend error:', resendErr);
+                  showMessage('login-message', 'Error al reenviar: ' + translateError(resendErr.code, resendErr.message), 'error');
+                }
+              });
+            }
+          } else {
+            showMessage('login-message', translateError(err.code, err.message), 'error');
+          }
           setLoading('login-btn', false);
         }
       });
