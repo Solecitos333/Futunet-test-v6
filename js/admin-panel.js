@@ -22,8 +22,8 @@
     initImageUploader(); // Ensure image uploader starts
 
     // Auto-migrate hidden items ONCE without user intervention
-    if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated')) {
-      localStorage.setItem('futunet_auto_migrated', 'true');
+    if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated_v2')) {
+      localStorage.setItem('futunet_auto_migrated_v2', 'true');
       syncToFirebase();
     }
   }
@@ -143,18 +143,17 @@
   }
 
   async function syncToFirebase() {
-    if (typeof window.mockDatabase === 'undefined' || !window.mockDatabase.length) {
-      showToast('No se encontró window.mockDatabase local.', 'error');
+    if (typeof window.backupDatabase === 'undefined' || !window.backupDatabase.length) {
+      showToast('No se encontró window.backupDatabase local.', 'error');
       return;
     }
-    if (!confirm('¿Restaurar ' + window.mockDatabase.length + ' productos como OCULTOS a Firebase?')) return;
     try {
-      for (var i = 0; i < window.mockDatabase.length; i++) {
-        var p = window.mockDatabase[i];
+      for (var i = 0; i < window.backupDatabase.length; i++) {
+        var p = window.backupDatabase[i];
         p.isActive = false; // Set default active status to HIDDEN
         await db.collection('products').doc(p.id).set(p);
       }
-      showToast('Sincronización completada', 'success');
+      showToast('Sincronización oculta completada', 'success');
       loadInventory();
       loadDashboardStats();
     } catch (e) {
