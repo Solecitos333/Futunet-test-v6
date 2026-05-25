@@ -1,6 +1,7 @@
 /**
  * Futunet Auth Module
  * Maneja login, registro, roles y estado de autenticación
+ * Seguridad: Firebase Auth + Firestore Rules (NoSQL, inmune a SQL injection)
  */
 (function () {
   'use strict';
@@ -21,23 +22,53 @@
   function getAuth() { return window.FutunetFirebase.auth; }
   function getDB() { return window.FutunetFirebase.db; }
 
+  // ─── Determine role for new user (first user = superadmin) ───
+  async function determineNewUserRole() {
+    try {
+      var snapshot = await getDB().collection('users').limit(1).get();
+      if (snapshot.empty) {
+        return ROLES.SUPERADMIN; // First user ever → superadmin
+      }
+    } catch (e) {
+      console.warn('Could not check user count, defaulting to user role:', e);
+    }
+    return ROLES.USER;
+  }
+
+  // ─── Create/ensure user document in Firestore ───
+  async function ensureUserDoc(uid, data) {
+    try {
+      var role = await determineNewUserRole();
+      await getDB().collection('users').doc(uid).set({
+        displayName: data.displayName || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        address: '',
+        role: role,
+        status: 'active',
+        favorites: [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
+      return role;
+    } catch (err) {
+      console.error('Firestore write failed:', err);
+      // Still allow auth to work even if Firestore fails
+      return null;
+    }
+  }
+
   // ─── Sign Up ───
   async function signUp(email, password, displayName) {
-    const auth = getAuth();
-    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    var auth = getAuth();
+    var cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: displayName });
 
-    // Create user document in Firestore
-    await getDB().collection('users').doc(cred.user.uid).set({
+    // Create user document (resilient - won't block if Firestore fails)
+    await ensureUserDoc(cred.user.uid, {
       displayName: displayName,
-      email: email,
-      phone: '',
-      address: '',
-      role: ROLES.USER,
-      status: 'active',
-      favorites: [],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      email: email
     });
 
     currentUserData = await fetchUserData(cred.user.uid);
@@ -46,8 +77,9 @@
 
   // ─── Sign In with Email ───
   async function signIn(email, password) {
-    const cred = await getAuth().signInWithEmailAndPassword(email, password);
-    await getDB().collection('users').doc(cred.user.uid).update({
+    var cred = await getAuth().signInWithEmailAndPassword(email, password);
+    // Update last login (best effort)
+    getDB().collection('users').doc(cred.user.uid).update({
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
     }).catch(function () { });
     currentUserData = await fetchUserData(cred.user.uid);
@@ -56,26 +88,26 @@
 
   // ─── Sign In with Google ───
   async function signInWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    const cred = await getAuth().signInWithPopup(provider);
+    var provider = new firebase.auth.GoogleAuthProvider();
+    var cred = await getAuth().signInWithPopup(provider);
 
-    const userDoc = await getDB().collection('users').doc(cred.user.uid).get();
+    var userDoc;
+    try {
+      userDoc = await getDB().collection('users').doc(cred.user.uid).get();
+    } catch (e) {
+      userDoc = { exists: false };
+    }
+
     if (!userDoc.exists) {
-      await getDB().collection('users').doc(cred.user.uid).set({
+      await ensureUserDoc(cred.user.uid, {
         displayName: cred.user.displayName || '',
         email: cred.user.email || '',
-        phone: cred.user.phoneNumber || '',
-        address: '',
-        role: ROLES.USER,
-        status: 'active',
-        favorites: [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        phone: cred.user.phoneNumber || ''
       });
     } else {
-      await getDB().collection('users').doc(cred.user.uid).update({
+      getDB().collection('users').doc(cred.user.uid).update({
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      }).catch(function () { });
     }
 
     currentUserData = await fetchUserData(cred.user.uid);
@@ -95,9 +127,24 @@
 
   // ─── Fetch user data from Firestore ───
   async function fetchUserData(uid) {
-    const doc = await getDB().collection('users').doc(uid).get();
-    if (doc.exists) {
-      return { uid: uid, ...doc.data() };
+    try {
+      var doc = await getDB().collection('users').doc(uid).get();
+      if (doc.exists) {
+        return { uid: uid, ...doc.data() };
+      }
+    } catch (e) {
+      console.warn('Could not fetch user data:', e);
+    }
+    // Return minimal data from Auth if Firestore unavailable
+    var authUser = getAuth().currentUser;
+    if (authUser) {
+      return {
+        uid: authUser.uid,
+        displayName: authUser.displayName || '',
+        email: authUser.email || '',
+        role: ROLES.USER,
+        status: 'active'
+      };
     }
     return null;
   }
@@ -125,7 +172,6 @@
     getAuth().onAuthStateChanged(async function (user) {
       if (user) {
         currentUserData = await fetchUserData(user.uid);
-        // Check if user is disabled
         if (currentUserData && currentUserData.status === 'disabled') {
           await signOut();
           callback(null, null);
@@ -146,7 +192,6 @@
       currentUserData = null;
     }
     authReadyResolve();
-    // Dispatch custom event for navbar etc.
     window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
       detail: { user: user, userData: currentUserData }
     }));
@@ -176,7 +221,6 @@
         '  <button class="nav-auth-dropdown-item nav-auth-logout" id="nav-auth-logout"><i data-lucide="log-out"></i> Cerrar sesión</button>' +
         '</div>';
 
-      // Bind events
       var toggle = document.getElementById('nav-auth-toggle');
       var dropdown = document.getElementById('nav-auth-dropdown');
       var logoutBtn = document.getElementById('nav-auth-logout');
@@ -208,7 +252,6 @@
     }
   }
 
-  // Listen for auth ready to render navbar
   window.addEventListener('futunet-auth-ready', renderNavbarAuth);
 
   // ─── Public API ───

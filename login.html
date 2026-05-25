@@ -2,18 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Iniciar Sesión — Futunet</title>
   <meta name="description" content="Accede a tu cuenta Futunet para gestionar pedidos, guardar carritos y más." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/auth.css?v=2.3" />
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
   <link rel="icon" type="image/png" href="img/logo.png" />
-  <meta name="theme-color" content="#0a1628" />
+  <meta name="theme-color" content="#ffffff" />
 </head>
 <body>
   <main class="auth-page" id="auth-page">
+    <a href="index.html" class="auth-back-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Volver al inicio
+    </a>
+
     <div class="auth-card">
       <!-- Logo -->
       <div class="auth-logo">
@@ -195,7 +200,7 @@
         }
       }
 
-      function translateError(code) {
+      function translateError(code, rawMsg) {
         var messages = {
           'auth/email-already-in-use': 'Este correo ya está registrado. Intenta iniciar sesión.',
           'auth/invalid-email': 'El formato del correo no es válido.',
@@ -205,9 +210,14 @@
           'auth/invalid-credential': 'Credenciales inválidas. Verifica tu correo y contraseña.',
           'auth/too-many-requests': 'Demasiados intentos. Espera un momento e intenta de nuevo.',
           'auth/popup-closed-by-user': 'Se cerró la ventana de Google. Intenta de nuevo.',
-          'auth/network-request-failed': 'Error de conexión. Verifica tu internet.'
+          'auth/network-request-failed': 'Error de conexión. Verifica tu internet.',
+          'permission-denied': 'Error de permisos en la base de datos. Contacta al administrador.',
+          'unavailable': 'Servicio no disponible. Intenta más tarde.'
         };
-        return messages[code] || 'Ocurrió un error. Intenta de nuevo.';
+        if (code && messages[code]) return messages[code];
+        // Show raw message for debugging unknown errors
+        if (rawMsg) return rawMsg;
+        return 'Ocurrió un error inesperado. Revisa la consola del navegador (F12) para más detalles.';
       }
 
       // ─── Redirect logic ───
@@ -249,7 +259,8 @@
           showMessage('login-message', '¡Bienvenido! Redirigiendo...', 'success');
           setTimeout(function () { redirectByRole(userData); }, 800);
         } catch (err) {
-          showMessage('login-message', translateError(err.code), 'error');
+          console.error('Login error:', err);
+          showMessage('login-message', translateError(err.code, err.message), 'error');
           setLoading('login-btn', false);
         }
       });
@@ -272,10 +283,22 @@
 
         try {
           await FutunetAuth.signUp(email, password, name);
-          showMessage('register-message', '¡Cuenta creada! Redirigiendo...', 'success');
-          setTimeout(function () { window.location.href = 'mi-cuenta.html'; }, 800);
+          var userData = FutunetAuth.getUserData();
+          var roleMsg = '';
+          if (userData && userData.role === 'superadmin') {
+            roleMsg = ' ¡Eres el primer usuario — asignado como Superadmin!';
+          }
+          showMessage('register-message', '¡Cuenta creada exitosamente!' + roleMsg + ' Redirigiendo...', 'success');
+          setTimeout(function () {
+            if (userData && (userData.role === 'superadmin' || userData.role === 'admin')) {
+              window.location.href = 'admin.html';
+            } else {
+              window.location.href = 'mi-cuenta.html';
+            }
+          }, 1500);
         } catch (err) {
-          showMessage('register-message', translateError(err.code), 'error');
+          console.error('Register error:', err);
+          showMessage('register-message', translateError(err.code, err.message), 'error');
           setLoading('register-btn', false);
         }
       });
@@ -287,7 +310,8 @@
           var userData = FutunetAuth.getUserData();
           redirectByRole(userData);
         } catch (err) {
-          showMessage('login-message', translateError(err.code), 'error');
+          console.error('Google sign-in error:', err);
+          showMessage('login-message', translateError(err.code, err.message), 'error');
         }
       }
 
@@ -306,7 +330,8 @@
           await FutunetAuth.sendPasswordReset(email);
           showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
         } catch (err) {
-          showMessage('reset-message', translateError(err.code), 'error');
+          console.error('Reset error:', err);
+          showMessage('reset-message', translateError(err.code, err.message), 'error');
         }
         setLoading('reset-btn', false);
       });

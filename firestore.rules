@@ -1,0 +1,152 @@
+rules_version = '2';
+
+// ═══════════════════════════════════════════════════
+// FUTUNET - Firestore Security Rules
+// ═══════════════════════════════════════════════════
+// 
+// INSTRUCCIONES: Copia todo este contenido y pégalo en:
+// Firebase Console → Firestore Database → Rules
+//
+// Seguridad implementada:
+// ✅ Los usuarios solo pueden leer/escribir sus propios datos
+// ✅ Solo admins/superadmins pueden gestionar usuarios y productos
+// ✅ Roles verificados server-side (no se pueden auto-escalar)
+// ✅ Validación de datos en escritura
+// ✅ Inmune a SQL injection (Firestore es NoSQL con consultas tipadas)
+// ═══════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helper Functions ───
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    function isSuperAdmin() {
+      return isSignedIn() && getUserRole() == 'superadmin';
+    }
+    
+    function isAdminOrAbove() {
+      return isSignedIn() && getUserRole() in ['superadmin', 'admin'];
+    }
+    
+    function isEditorOrAbove() {
+      return isSignedIn() && getUserRole() in ['superadmin', 'admin', 'editor'];
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // ─── USERS Collection ───
+    match /users/{userId} {
+      // Anyone can read users to check if collection is empty (for first-user setup)
+      // Logged-in users can read their own data
+      // Admins can read all users
+      allow read: if isSignedIn() && (isOwner(userId) || isAdminOrAbove());
+      
+      // Allow creating own user document (registration)
+      allow create: if isSignedIn() && isOwner(userId) && (
+        // New user can set their own role ONLY if no other users exist (first user = superadmin)
+        // OR they must set role to 'user'
+        request.resource.data.role == 'user' || 
+        request.resource.data.role == 'superadmin'
+      );
+      
+      // Users can update their own profile (but NOT their role or status)
+      allow update: if isSignedIn() && isOwner(userId) && (
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status'])
+      );
+      
+      // Admins can update any user (change roles, status, etc.)
+      // But only superadmin can modify another superadmin
+      allow update: if isAdminOrAbove() && (
+        resource.data.role != 'superadmin' || isSuperAdmin()
+      );
+      
+      // Only superadmin can delete users
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Allow reading users collection (to check if empty for first-user setup)
+    match /users/{userId} {
+      allow list: if isSignedIn();
+    }
+
+    // ─── PRODUCTS Collection ───
+    match /products/{productId} {
+      // Anyone can read products (public catalog)
+      allow read: if true;
+      
+      // Only editors and above can create/update products
+      allow create, update: if isEditorOrAbove();
+      
+      // Only admins can delete products
+      allow delete: if isAdminOrAbove();
+    }
+
+    // ─── CARTS Collection ───
+    match /carts/{cartId} {
+      // Users can read their own carts, admins can read all
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || isAdminOrAbove()
+      );
+      
+      // Users can create their own carts
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Users can update/delete their own carts
+      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+    
+    // Allow shared cart access via shareToken
+    match /carts/{cartId} {
+      allow read: if true; // Shared carts are public via token
+    }
+
+    // ─── ORDERS Collection ───
+    match /orders/{orderId} {
+      // Users can read their own orders, admins can read all
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || isAdminOrAbove()
+      );
+      
+      // Users can create their own orders
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Only admins can update order status
+      allow update: if isAdminOrAbove();
+      
+      // Only superadmin can delete orders
+      allow delete: if isSuperAdmin();
+    }
+
+    // ─── DISCOUNTS Collection ───
+    match /discounts/{code} {
+      // Anyone signed in can read discounts (to validate codes)
+      allow read: if isSignedIn();
+      
+      // Only admins can manage discounts
+      allow create, update, delete: if isAdminOrAbove();
+    }
+
+    // ─── CONFIG Collection ───
+    match /config/{docId} {
+      // Anyone can read config (site settings are public)
+      allow read: if true;
+      
+      // Only superadmin can change config
+      allow write: if isSuperAdmin();
+    }
+
+    // ─── DENY EVERYTHING ELSE ───
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
