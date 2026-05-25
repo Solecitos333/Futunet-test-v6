@@ -28,6 +28,7 @@
     loadBrands();
     loadSearchQueries();
     loadAuditLogs();
+    loadLayout();
 
     setupModals();
     initImageUploader();
@@ -927,6 +928,183 @@
   }
 
   // ═══════════════════════════════════
+  // VISUAL EDITOR / LAYOUT
+  // ═══════════════════════════════════
+  var layoutSections = [];
+
+  async function loadLayout() {
+    try {
+      var doc = await db.collection('config').doc('layout').get();
+      if (doc.exists) {
+        var data = doc.data();
+        if (data.sections && Array.isArray(data.sections)) {
+          layoutSections = data.sections;
+        } else {
+          layoutSections = getDefaultLayout();
+        }
+      } else {
+        layoutSections = getDefaultLayout();
+      }
+    } catch (e) {
+      console.warn('Failed to load layout, using defaults:', e);
+      layoutSections = getDefaultLayout();
+    }
+    renderLayoutControls();
+    updateLivePreview();
+  }
+
+  function getDefaultLayout() {
+    return [
+      { id: 'inicio', name: 'Banner Rotativo', visible: true, title: 'La tecnología del<br><span class="hero-title-accent">futuro</span>', subtitle: '' },
+      { id: 'productos-categoria', name: 'Productos por Categoría', visible: true, title: 'Productos por categoría', subtitle: 'Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.' },
+      { id: 'destacados-catalogo', name: 'Artículos Destacados', visible: true, title: 'Artículos destacados del catálogo', subtitle: 'Descubre productos listos para cotizar y entra directo al detalle que más se parezca a lo que estás buscando.' },
+      { id: 'servicios', name: 'Nuestros Servicios / Soluciones', visible: true, title: 'Soluciones para vender, operar y proteger mejor', subtitle: 'Explora las áreas en las que acompañamos a empresas, instituciones y hogares con equipos, instalación y soporte.' },
+      { id: 'equipa-oficina', name: 'Equipa tu Oficina', visible: true, title: 'Equipa tu oficina', subtitle: 'Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.' },
+      { id: 'marcas', name: 'Logos de Marcas', visible: true, title: 'Marcas con las que trabajamos', subtitle: 'Pasa el cursor sobre una marca para descubrir sus productos destacados.' },
+      { id: 'nosotros', name: 'Quiénes Somos', visible: true, title: 'Tecnología con criterio, servicio con respaldo', subtitle: '' },
+      { id: 'contacto', name: 'Contacto / Mensaje', visible: true, title: 'Conversemos sobre lo que necesitas', subtitle: 'Escríbenos y recibe una orientación clara para tu compra, tu instalación o tu próximo proyecto.' }
+    ];
+  }
+
+  function renderLayoutControls() {
+    var container = document.getElementById('visual-editor-controls');
+    if (!container) return;
+    container.innerHTML = '';
+
+    layoutSections.forEach(function (sec, idx) {
+      var item = document.createElement('div');
+      item.className = 'visual-editor-item';
+      item.style.cssText = 'border: 1px solid #e5eef8; border-radius: 12px; padding: 16px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; gap: 12px;';
+      
+      var isFirst = idx === 0;
+      var isLast = idx === layoutSections.length - 1;
+      
+      var html = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 700; color: #0a101d; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;">${sec.name}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionUp('${sec.id}')" style="padding: 4px 8px;" title="Subir" ${isFirst ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+            </button>
+            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionDown('${sec.id}')" style="padding: 4px 8px;" title="Bajar" ${isLast ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <label class="admin-switch">
+              <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="AdminPanel.toggleSectionVisibility('${sec.id}', this.checked)">
+              <span class="admin-slider"></span>
+            </label>
+          </div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 8px; ${sec.visible ? '' : 'display: none;'}">
+          <div>
+            <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Título</label>
+            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;">
+          </div>
+          ${sec.id !== 'inicio' && sec.id !== 'nosotros' ? `
+          <div>
+            <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Subtítulo</label>
+            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;">${sec.subtitle || ''}</textarea>
+          </div>
+          ` : ''}
+        </div>
+      `;
+      item.innerHTML = html;
+      container.appendChild(item);
+    });
+  }
+
+  function updateLivePreview() {
+    var iframe = document.getElementById('visual-preview-iframe');
+    if (!iframe) return;
+    try {
+      if (iframe.contentWindow && iframe.contentWindow.FutunetLayout) {
+        iframe.contentWindow.FutunetLayout.applyLiveChanges(layoutSections);
+      } else {
+        iframe.onload = function() {
+          if (iframe.contentWindow && iframe.contentWindow.FutunetLayout) {
+            iframe.contentWindow.FutunetLayout.applyLiveChanges(layoutSections);
+          }
+        };
+      }
+    } catch(e) {
+      console.warn('Cannot push live preview changes directly:', e);
+    }
+  }
+
+  async function saveLayoutConfig() {
+    try {
+      await db.collection('config').doc('layout').set({
+        sections: layoutSections,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      writeAuditLog('Actualizar Portada', 'Se modificó el diseño y reordenamiento de secciones de la portada');
+      showToast('Diseño de portada guardado exitosamente', 'success');
+      updateLivePreview();
+    } catch (e) {
+      showToast('Error al guardar: ' + e.message, 'error');
+    }
+  }
+
+  async function resetDefaultLayout() {
+    if (confirm('¿Está seguro de que desea restaurar el diseño original de la portada? Esto restablecerá el orden, visibilidad y títulos de fábrica.')) {
+      layoutSections = getDefaultLayout();
+      renderLayoutControls();
+      updateLivePreview();
+      showToast('Valores restaurados (debe hacer clic en "Guardar Cambios" para aplicarlos)', 'info');
+    }
+  }
+
+  function moveSectionUp(id) {
+    var idx = layoutSections.findIndex(function(s) { return s.id === id; });
+    if (idx > 0) {
+      var temp = layoutSections[idx];
+      layoutSections[idx] = layoutSections[idx - 1];
+      layoutSections[idx - 1] = temp;
+      renderLayoutControls();
+      updateLivePreview();
+    }
+  }
+
+  function moveSectionDown(id) {
+    var idx = layoutSections.findIndex(function(s) { return s.id === id; });
+    if (idx >= 0 && idx < layoutSections.length - 1) {
+      var temp = layoutSections[idx];
+      layoutSections[idx] = layoutSections[idx + 1];
+      layoutSections[idx + 1] = temp;
+      renderLayoutControls();
+      updateLivePreview();
+    }
+  }
+
+  function toggleSectionVisibility(id, visible) {
+    var sec = layoutSections.find(function(s) { return s.id === id; });
+    if (sec) {
+      sec.visible = visible;
+      renderLayoutControls();
+      updateLivePreview();
+    }
+  }
+
+  function updateSectionTitle(id, title) {
+    var sec = layoutSections.find(function(s) { return s.id === id; });
+    if (sec) {
+      sec.title = title;
+      updateLivePreview();
+    }
+  }
+
+  function updateSectionSubtitle(id, subtitle) {
+    var sec = layoutSections.find(function(s) { return s.id === id; });
+    if (sec) {
+      sec.subtitle = subtitle;
+      updateLivePreview();
+    }
+  }
+
+  // ═══════════════════════════════════
   // BANNERS CRUD
   // ═══════════════════════════════════
   var allBanners = [];
@@ -1605,7 +1783,18 @@
     clearSearchQueries: clearSearchQueries,
     
     // Order details
-    showOrderDetail: showOrderDetail
+    showOrderDetail: showOrderDetail,
+
+    // Visual Editor / Layout
+    loadLayout: loadLayout,
+    saveLayoutConfig: saveLayoutConfig,
+    resetDefaultLayout: resetDefaultLayout,
+    moveSectionUp: moveSectionUp,
+    moveSectionDown: moveSectionDown,
+    toggleSectionVisibility: toggleSectionVisibility,
+    updateSectionTitle: updateSectionTitle,
+    updateSectionSubtitle: updateSectionSubtitle,
+    updateLivePreview: updateLivePreview
   };
 })();
 

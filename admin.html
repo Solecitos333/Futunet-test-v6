@@ -76,6 +76,10 @@
         </button>
 
         <div class="admin-nav-label">Sistema</div>
+        <button class="admin-nav-item" data-admin-nav="visual-editor">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+          Editor Visual
+        </button>
         <button class="admin-nav-item" data-admin-nav="config">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
           Configuración
@@ -439,6 +443,46 @@
                 <tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ VISUAL EDITOR PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="visual-editor" style="max-width: 100%;">
+        <div class="admin-topbar">
+          <h1>Editor Visual en Tiempo Real</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.resetDefaultLayout()">
+              Restaurar Valores por Defecto
+            </button>
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.saveLayoutConfig()">
+              Guardar Cambios
+            </button>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:20px; align-items:stretch; min-height:75vh; flex-wrap:wrap;">
+          <!-- Controls Panel (35%) -->
+          <div class="admin-table-card" style="flex: 1 1 350px; padding:20px; max-height:80vh; overflow-y:auto; box-sizing:border-box;">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:#0a101d;margin:0 0 16px;">Secciones de la Portada</h3>
+            <p style="font-size:0.8rem; color:#76889e; margin-bottom:20px;">Reordena las secciones, actívalas o edita sus textos y mira los cambios en tiempo real en la previsualización.</p>
+            
+            <div id="visual-editor-controls" style="display:flex; flex-direction:column; gap:16px;">
+              <div style="text-align:center; padding:32px; color:#76889e;">Cargando secciones...</div>
+            </div>
+          </div>
+
+          <!-- Preview Frame (65%) -->
+          <div class="admin-table-card" style="flex: 2 1 600px; display:flex; flex-direction:column; background:#0f1923; overflow:hidden; min-height:500px; box-sizing:border-box; border:3px solid #0f1923; border-radius:16px;">
+            <div style="background:#0f1923; padding:8px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1);">
+              <span style="color:#a0b0c4; font-size:0.8rem; font-weight:600; font-family:monospace;">PREVISUALIZACIÓN EN VIVO</span>
+              <div style="display:flex; gap:6px;">
+                <span style="width:10px; height:10px; background:#ef4444; border-radius:50%;"></span>
+                <span style="width:10px; height:10px; background:#fbbf24; border-radius:50%;"></span>
+                <span style="width:10px; height:10px; background:#10b981; border-radius:50%;"></span>
+              </div>
+            </div>
+            <iframe id="visual-preview-iframe" src="index.html?preview=true" style="width:100%; flex-grow:1; border:none; background:#ffffff; min-height:450px;"></iframe>
           </div>
         </div>
       </div>
