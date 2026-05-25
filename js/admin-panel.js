@@ -74,12 +74,12 @@
     products.forEach(function (p) {
       var img = p.img || p.gallery?.[0] || 'img/logo.png';
       html += '<tr>' +
-        '<td><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.png\'"></td>' +
-        '<td><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong></td>' +
-        '<td class="col-hide-mobile">' + escapeHtml(p.category || p.department || '—') + '</td>' +
-        '<td>' + formatPrice(p.price) + '</td>' +
-        '<td class="col-hide-mobile">' + (p.stock != null ? p.stock : '—') + '</td>' +
-        '<td>' +
+        '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.png\'"></td>' +
+        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong></td>' +
+        '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
+        '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
+        '<td data-label="Stock" class="col-hide-mobile">' + (p.stock != null ? p.stock : '-') + '</td>' +
+        '<td data-label="Acciones">' +
         '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editProduct(\'' + p.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
         '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteProduct(\'' + p.id + '\')" title="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>' +
         '</td>' +
@@ -193,11 +193,11 @@
     users.forEach(function (u) {
       var canEdit = currentUserData.role === 'superadmin' || (u.role !== 'superadmin' && u.role !== 'admin');
       html += '<tr>' +
-        '<td><strong style="color:#0a101d;">' + escapeHtml(u.displayName || 'Sin nombre') + '</strong></td>' +
-        '<td>' + escapeHtml(u.email || '') + '</td>' +
-        '<td><span class="admin-role-badge role-' + (u.role || 'user') + '">' + (u.role || 'user') + '</span></td>' +
-        '<td><span class="admin-status-badge status-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td>' +
-        '<td>' +
+        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(u.displayName || 'Sin nombre') + '</strong></td>' +
+        '<td data-label="Email">' + escapeHtml(u.email || '') + '</td>' +
+        '<td data-label="Rol"><span class="admin-role-badge role-' + (u.role || 'user') + '">' + (u.role || 'user') + '</span></td>' +
+        '<td data-label="Estado"><span class="admin-status-badge status-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td>' +
+        '<td data-label="Acciones">' +
         (canEdit
           ? '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editUser(\'' + u.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>'
           : '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>') +
@@ -282,12 +282,12 @@
         var statusLabel = d.isActive ? 'Activo' : 'Inactivo';
 
         html += '<tr>' +
-          '<td><strong style="color:#0a101d;font-family:monospace;">' + escapeHtml(doc.id) + '</strong></td>' +
-          '<td>' + (d.type === 'percent' ? 'Porcentaje' : 'Monto fijo') + '</td>' +
-          '<td>' + typeLabel + '</td>' +
-          '<td>' + (d.usageCount || 0) + '/' + (d.maxUses || '∞') + '</td>' +
-          '<td><span class="admin-status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
-          '<td>' +
+          '<td data-label="Código"><strong style="color:#0a101d;font-family:monospace;">' + escapeHtml(doc.id) + '</strong></td>' +
+          '<td data-label="Tipo">' + (d.type === 'percent' ? 'Porcentaje' : 'Monto fijo') + '</td>' +
+          '<td data-label="Valor">' + typeLabel + '</td>' +
+          '<td data-label="Uso">' + (d.usageCount || 0) + '/' + (d.maxUses || '∞') + '</td>' +
+          '<td data-label="Estado"><span class="admin-status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
+          '<td data-label="Acciones">' +
           '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleDiscount(\'' + doc.id + '\', ' + !d.isActive + ')" title="' + (d.isActive ? 'Desactivar' : 'Activar') + '">' + (d.isActive ? '⏸' : '▶') + '</button>' +
           '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteDiscount(\'' + doc.id + '\')" title="Eliminar">✕</button>' +
           '</td>' +
@@ -372,12 +372,12 @@
         var statusLabel = statusMap[o.status] || o.status || 'Pendiente';
 
         html += '<tr>' +
-          '<td style="font-family:monospace;font-size:0.78rem;">' + doc.id.substring(0, 8) + '...</td>' +
-          '<td>' + escapeHtml(o.userName || '—') + '</td>' +
-          '<td><strong>' + formatPrice(o.total) + '</strong></td>' +
-          '<td><span class="admin-role-badge role-' + (o.status === 'delivered' ? 'editor' : o.status === 'processing' ? 'admin' : 'user') + '">' + statusLabel + '</span></td>' +
-          '<td class="col-hide-mobile">' + date + '</td>' +
-          '<td>' +
+          '<td data-label="ID" style="font-family:monospace;font-size:0.78rem;">' + doc.id.substring(0, 8) + '...</td>' +
+          '<td data-label="Cliente">' + escapeHtml(o.userName || '—') + '</td>' +
+          '<td data-label="Total"><strong>' + formatPrice(o.total) + '</strong></td>' +
+          '<td data-label="Estado"><span class="admin-role-badge role-' + (o.status === 'delivered' ? 'editor' : o.status === 'processing' ? 'admin' : 'user') + '">' + statusLabel + '</span></td>' +
+          '<td data-label="Fecha" class="col-hide-mobile">' + date + '</td>' +
+          '<td data-label="Acciones">' +
           '  <select onchange="AdminPanel.updateOrderStatus(\'' + doc.id + '\', this.value)" style="padding:4px 8px;border:1px solid #e5eef8;border-radius:8px;font-size:0.78rem;font-family:Outfit;">' +
           '    <option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pendiente</option>' +
           '    <option value="processing"' + (o.status === 'processing' ? ' selected' : '') + '>Procesando</option>' +

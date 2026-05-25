@@ -223,11 +223,25 @@
       .up-header { flex-direction: column; text-align: center; padding: 22px 18px; }
       .up-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
       .up-header-info h1 { font-size: 1.1rem; }
-      .up-tabs { gap: 2px; padding: 3px; }
-      .up-tab { padding: 10px 12px; font-size: 0.76rem; }
+      
+      .up-tabs { 
+        gap: 6px; padding: 4px; 
+        overflow-x: auto; 
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+      }
+      .up-tab { padding: 10px 16px; font-size: 0.82rem; flex-shrink: 0; }
       .up-tab svg { display: none; }
+      
       .up-card { padding: 20px 16px; border-radius: 16px; }
-      .up-cart-card { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .up-form-group input { font-size: 16px; padding: 14px 16px; } /* Prevents iOS zoom */
+      
+      .up-cart-card { flex-direction: column; gap: 12px; align-items: stretch; }
+      .up-cart-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+      .up-btn-sm { text-align: center; padding: 10px 0; font-size: 0.85rem; }
+      
+      .up-btn-save { width: 100%; }
+      .up-btn-save-cart { width: 100%; justify-content: center; }
     }
   </style>
 </head>
