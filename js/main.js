@@ -78,8 +78,12 @@ function initHomeHeroLogoSync() {
   if (!navbar || !navLogo || !heroBrandMark) return;
 
   const setHeroLogoState = (isHeroLogoVisible) => {
-    navbar.classList.toggle('nav-hero-logo-hidden', isHeroLogoVisible);
-    if (isHeroLogoVisible) {
+    const heroSlide = document.querySelector('.hero-carousel-slide[data-slide="hero"]');
+    const isHeroActive = heroSlide ? heroSlide.classList.contains('active') : true;
+    const shouldHideLogo = isHeroLogoVisible && isHeroActive;
+
+    navbar.classList.toggle('nav-hero-logo-hidden', shouldHideLogo);
+    if (shouldHideLogo) {
       navLogo.setAttribute('aria-hidden', 'true');
       navLogo.setAttribute('tabindex', '-1');
     } else {
