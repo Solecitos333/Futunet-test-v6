@@ -187,26 +187,6 @@
           </div>
         </div>
 
-        <!-- Asistente de Negocios IA -->
-        <div class="admin-table-card" style="padding:20px; margin-top:24px;">
-          <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9b59b6" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Asistente de Negocios IA
-          </h3>
-          <div style="display:flex; flex-direction:column; height:320px; background:#f8fbfe; border:1px solid #e1eaf5; border-radius:12px; overflow:hidden;">
-            <div id="admin-ai-chat-messages" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; font-family:'Outfit',sans-serif; font-size:0.85rem;">
-              <div style="background:#fff; color:#233246; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; box-shadow:0 8px 16px rgba(12,35,64,0.04); max-width:85%; align-self:flex-start; line-height:1.5; border:1px solid #e5eef8;">
-                ¡Hola! Soy tu asistente de negocios IA. Puedo ayudarte a analizar las ventas, clientes e inventario. Pregúntame cosas como <em>"¿Cuáles son los productos con bajo stock?"</em> o <em>"Dame un resumen del rendimiento de pedidos"</em>.
-              </div>
-            </div>
-            <div style="display:flex; gap:8px; padding:10px 12px; background:#fff; border-top:1px solid #e1eaf5; align-items:center;">
-              <input type="text" id="admin-ai-chat-input" placeholder="Pregúntale a la IA sobre tu negocio..." style="flex:1; border:0; background:transparent; outline:none; font-family:'Outfit',sans-serif; font-size:0.85rem; color:#233246; padding:6px 0;" />
-              <button type="button" id="admin-ai-chat-send" style="border:0; background:#9b59b6; color:white; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; cursor:pointer; transition:all 0.2s; flex-shrink:0;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- ═══ INVENTORY PANEL ═══ -->
@@ -633,10 +613,7 @@
                 </div>
               </div>
 
-              <div class="auth-form-group">
-                <label class="auth-label" for="config-gemini-key">Google Gemini API Key (para Asistente IA)</label>
-                <input class="auth-input" type="password" id="config-gemini-key" placeholder="AIzaSy..." />
-              </div>
+
 
               <div class="auth-form-group" style="display:flex;align-items:center;gap:12px; margin-bottom:8px;">
                 <input type="checkbox" id="config-maintenance" style="width:20px;height:20px;accent-color:#0A70A2;" />
@@ -867,24 +844,12 @@
           </div>
 
           <div class="auth-form-group">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <label class="auth-label" for="product-desc" style="margin-bottom:0;">Descripción</label>
-              <button type="button" id="btn-generate-desc-ai" class="admin-btn" style="min-height:28px; padding:3px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; border:1px dashed #0b5fc6; color:#0b5fc6; background:rgba(11,95,198,0.06); border-radius:6px; font-family:'Outfit',sans-serif; font-weight:600; cursor:pointer; transition:all 0.2s;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                Generar con IA
-              </button>
-            </div>
+            <label class="auth-label" for="product-desc">Descripción</label>
             <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical; margin-top:6px;" placeholder="Describe el estado, medidas, material, etc."></textarea>
           </div>
 
           <div class="auth-form-group">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <label class="auth-label" for="product-specs" style="margin-bottom:0;">Características principales (Una por línea)</label>
-              <button type="button" id="btn-generate-specs-ai" class="admin-btn" style="min-height:28px; padding:3px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; border:1px dashed #9b59b6; color:#9b59b6; background:rgba(155,89,182,0.06); border-radius:6px; font-family:'Outfit',sans-serif; font-weight:600; cursor:pointer; transition:all 0.2s;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                Generar con IA
-              </button>
-            </div>
+            <label class="auth-label" for="product-specs">Características principales (Una por línea)</label>
             <textarea class="auth-input" id="product-specs" rows="3" style="resize:vertical; margin-top:6px;" placeholder="Color negro&#10;Garantía de 1 año&#10;Incluye instalación"></textarea>
           </div>
 
