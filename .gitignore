@@ -1,0 +1,11 @@
+# Temporary and scratch files
+scratch/
+scratch_products.json
+scratch_products_api.json
+temp_search_more.js
+.gemini/
+.idea/
+.vscode/
+node_modules/
+dist/
+*.log

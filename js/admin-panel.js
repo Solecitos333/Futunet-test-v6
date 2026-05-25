@@ -5,7 +5,62 @@
 (function () {
   'use strict';
 
-  var db, storage, currentUserData;
+  var db, storage, currentUserData, ordersChart, searchesChart;
+
+  function compressToWebP(file, quality) {
+    return new Promise(function(resolve, reject) {
+      if (!file || !file.type.match(/image.*/)) {
+        resolve(file);
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var max_width = 1200;
+          var max_height = 1200;
+          var width = img.width;
+          var height = img.height;
+          
+          if (width > height) {
+            if (width > max_width) {
+              height = Math.round((height * max_width) / width);
+              width = max_width;
+            }
+          } else {
+            if (height > max_height) {
+              width = Math.round((width * max_height) / height);
+              height = max_height;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          canvas.toBlob(function(blob) {
+            if (blob) {
+              var newFileName = file.name.substring(0, file.name.lastIndexOf('.')) + '.webp';
+              var compressedFile = new File([blob], newFileName, {
+                type: 'image/webp',
+                lastModified: Date.now()
+              });
+              resolve(compressedFile);
+            } else {
+              resolve(file);
+            }
+          }, 'image/webp', quality || 0.82);
+        };
+        img.onerror = function() { resolve(file); };
+        img.src = e.target.result;
+      };
+      reader.onerror = function() { resolve(file); };
+      reader.readAsDataURL(file);
+    });
+  }
+
   var currentHistoryUserId = null;
   var currentPageInventory = 1;
   var currentPageUsers = 1;
@@ -205,6 +260,142 @@
             '</div>';
         });
         activityContainer.innerHTML = html || '<div style="color:#76889e; text-align:center; padding:16px;">Sin actividad registrada</div>';
+      }
+
+      // Render monthly orders chart (line chart)
+      var monthlyCounts = {};
+      orders.forEach(function (doc) {
+        var o = doc.data();
+        var date;
+        if (o.createdAt && typeof o.createdAt.toDate === 'function') {
+          date = o.createdAt.toDate();
+        } else if (o.createdAt && o.createdAt.seconds) {
+          date = new Date(o.createdAt.seconds * 1000);
+        } else if (o.createdAt) {
+          date = new Date(o.createdAt);
+        } else {
+          return;
+        }
+        var year = date.getFullYear();
+        var month = date.getMonth(); // 0-11
+        var key = year + '-' + (month < 9 ? '0' : '') + (month + 1);
+        monthlyCounts[key] = (monthlyCounts[key] || 0) + 1;
+      });
+
+      var monthKeys = [];
+      var now = new Date();
+      for (var i = 5; i >= 0; i--) {
+        var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        var y = d.getFullYear();
+        var m = d.getMonth();
+        var k = y + '-' + (m < 9 ? '0' : '') + (m + 1);
+        monthKeys.push(k);
+      }
+
+      var monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      var labels = monthKeys.map(function (k) {
+        var parts = k.split('-');
+        var y = parts[0];
+        var mIndex = parseInt(parts[1], 10) - 1;
+        return monthNames[mIndex] + ' ' + y;
+      });
+
+      var dataPoints = monthKeys.map(function (k) {
+        return monthlyCounts[k] || 0;
+      });
+
+      var ctxOrders = document.getElementById('chart-orders');
+      if (ctxOrders && typeof Chart !== 'undefined') {
+        if (ordersChart) {
+          ordersChart.destroy();
+        }
+        ordersChart = new Chart(ctxOrders, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Pedidos',
+              data: dataPoints,
+              borderColor: '#2ecc71',
+              backgroundColor: 'rgba(46, 204, 113, 0.1)',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.3,
+              pointBackgroundColor: '#2ecc71',
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                  precision: 0
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // Render search query frequency chart (bar chart)
+      var searchSnap = await db.collection('search_queries').get();
+      var searchFreq = {};
+      searchSnap.forEach(function (doc) {
+        var data = doc.data();
+        var q = String(data.query || '').trim().toLowerCase();
+        if (q) {
+          searchFreq[q] = (searchFreq[q] || 0) + 1;
+        }
+      });
+
+      var topSearches = Object.entries(searchFreq)
+        .sort(function (a, b) { return b[1] - a[1]; })
+        .slice(0, 5);
+
+      var searchLabels = topSearches.map(function (x) { return x[0]; });
+      var searchCounts = topSearches.map(function (x) { return x[1]; });
+
+      var ctxSearches = document.getElementById('chart-searches');
+      if (ctxSearches && typeof Chart !== 'undefined') {
+        if (searchesChart) {
+          searchesChart.destroy();
+        }
+        searchesChart = new Chart(ctxSearches, {
+          type: 'bar',
+          data: {
+            labels: searchLabels.length > 0 ? searchLabels : ['Sin búsquedas'],
+            datasets: [{
+              label: 'Frecuencia',
+              data: searchCounts.length > 0 ? searchCounts : [0],
+              backgroundColor: '#f1c40f',
+              borderRadius: 4,
+              barThickness: 24
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1,
+                  precision: 0
+                }
+              }
+            }
+          }
+        });
       }
 
     } catch (e) {
@@ -1449,10 +1640,10 @@
         if (typeof bannerUploadFile === 'string') {
           imageUrl = bannerUploadFile;
         } else {
-          var ext = bannerUploadFile.name.split('.').pop();
-          var fileName = 'banner_' + Date.now() + '.' + ext;
+          var compressed = await compressToWebP(bannerUploadFile, 0.85);
+          var fileName = 'banner_' + Date.now() + '.webp';
           var ref = storage.ref('banners/' + fileName);
-          await ref.put(bannerUploadFile);
+          await ref.put(compressed);
           imageUrl = await ref.getDownloadURL();
         }
       }
@@ -1730,10 +1921,10 @@
         if (typeof brandUploadFile === 'string') {
           logoUrl = brandUploadFile;
         } else {
-          var ext = brandUploadFile.name.split('.').pop();
-          var fileName = 'brand_' + Date.now() + '.' + ext;
+          var compressed = await compressToWebP(brandUploadFile, 0.85);
+          var fileName = 'brand_' + Date.now() + '.webp';
           var ref = storage.ref('brands/' + fileName);
-          await ref.put(brandUploadFile);
+          await ref.put(compressed);
           logoUrl = await ref.getDownloadURL();
         }
       }
@@ -2100,10 +2291,10 @@
 
           for(var i=0; i<uploadFiles.length; i++) {
             var file = uploadFiles[i];
-            var ext = file.name.split('.').pop();
-            var fileName = 'product_' + Date.now() + '_' + Math.floor(Math.random()*1000) + '.' + ext;
+            var compressed = await compressToWebP(file, 0.82);
+            var fileName = 'product_' + Date.now() + '_' + Math.floor(Math.random()*1000) + '.webp';
             var ref = storage.ref('products/' + fileName);
-            await ref.put(file);
+            await ref.put(compressed);
             var url = await ref.getDownloadURL();
             finalGallery.push(url);
           }

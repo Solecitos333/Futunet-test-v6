@@ -253,11 +253,54 @@
     document.getElementById('product-detail-code').textContent = detail.productCode;
     document.getElementById('product-description-text').textContent = detail.description;
 
+    function injectProductJsonLd(detail) {
+      const existingScript = document.getElementById('product-jsonld');
+      if (existingScript) existingScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'product-jsonld';
+      script.type = 'application/ld+json';
+
+      const priceVal = parseFloat(String(detail.price || '').replace(/[^0-9.-]+/g, '')) || 0;
+
+      const schema = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": detail.title,
+        "image": detail.gallery && detail.gallery.length ? detail.gallery : [detail.img],
+        "description": detail.description || detail.summary,
+        "sku": detail.productCode || detail.id,
+        "brand": {
+          "@type": "Brand",
+          "name": detail.brand
+        },
+        "offers": {
+          "@type": "Offer",
+          "url": window.location.href,
+          "priceCurrency": "DOP",
+          "price": priceVal,
+          "priceValidUntil": new Date(Date.now() + 365*24*60*60*1000).toISOString().split('T')[0],
+          "itemCondition": "https://schema.org/NewCondition",
+          "availability": detail.isService
+            ? "https://schema.org/InStock"
+            : (detail.availabilityLabel === 'Agotado' ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"),
+          "seller": {
+            "@type": "LocalBusiness",
+            "name": "Futunet"
+          }
+        }
+      };
+
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    }
+
     renderGallery(detail);
     renderSpecs(detail);
     bindTabs(detail);
     updateSelectedQuantity(1);
     updateShareActions(detail);
+    injectProductJsonLd(detail);
 
     const qtyBox = document.getElementById('product-detail-qty-box');
     const primaryAction = document.getElementById('product-primary-action');

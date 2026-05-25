@@ -87,8 +87,52 @@
   function saveCartState() {
     try {
       window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState));
+      
+      const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+      if (user && window.FutunetFirebase && window.FutunetFirebase.db) {
+        const db = window.FutunetFirebase.db;
+        db.collection('carts').doc(user.uid).set({
+          items: cartState.items,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).catch(function(err) {
+          console.warn('Error al guardar carrito en Firestore:', err);
+        });
+      }
     } catch (error) {
       console.warn('No se pudo guardar el carrito:', error);
+    }
+  }
+
+  async function syncCartToFirestore(user) {
+    if (!user || !window.FutunetFirebase || !window.FutunetFirebase.db) return;
+    try {
+      const db = window.FutunetFirebase.db;
+      const docRef = db.collection('carts').doc(user.uid);
+      const doc = await docRef.get();
+      if (doc.exists) {
+        const dbCart = doc.data();
+        if (dbCart && dbCart.items) {
+          let merged = { ...cartState.items };
+          for (const [id, value] of Object.entries(dbCart.items)) {
+            if (merged[id]) {
+              merged[id].qty = Math.max(merged[id].qty, value.qty);
+            } else {
+              merged[id] = { qty: value.qty };
+            }
+          }
+          cartState.items = merged;
+          window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartState));
+          updateCartCount();
+          renderCartDrawer();
+        }
+      }
+      
+      await docRef.set({
+        items: cartState.items,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch (e) {
+      console.warn('Error al sincronizar el carrito con Firestore:', e);
     }
   }
 
@@ -353,4 +397,12 @@
 
   // Inicialización automática
   document.addEventListener('DOMContentLoaded', bindCartUI);
+
+  // Sincronizar carrito cuando la autenticación esté lista o cambie
+  window.addEventListener('futunet-auth-ready', async function(event) {
+    const user = event.detail.user;
+    if (user) {
+      await syncCartToFirestore(user);
+    }
+  });
 })();

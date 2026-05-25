@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="css/auth.css?v=2.3" />
   <link rel="icon" type="image/png" href="img/logo.png" />
   <meta name="theme-color" content="#0B7EB5" />
+  <link rel="manifest" href="manifest.json" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Catálogo Corporativo - Futunet" />
   <meta name="twitter:description" content="Explora productos y servicios de Futunet para cotizar con confianza." />
@@ -122,6 +123,22 @@
           <button class="cat-btn" data-filter-dept="oficina" type="button">Papelería y mobiliario</button>
           <button class="cat-btn" data-filter-dept="infra" type="button">Infraestructura</button>
         </div>
+
+        <div class="sidebar-header" style="margin-top: 24px;">
+          <i data-lucide="dollar-sign"></i>
+          <h3>Rango de precios</h3>
+        </div>
+        <div class="price-filter-widget">
+          <div class="price-slider-container">
+            <input type="range" id="price-min" min="0" max="150000" step="1000" value="0" aria-label="Precio mínimo" />
+            <input type="range" id="price-max" min="0" max="150000" step="1000" value="150000" aria-label="Precio máximo" />
+            <div class="price-slider-track" id="price-track"></div>
+          </div>
+          <div class="price-range-values">
+            <span id="price-min-val">RD$ 0</span>
+            <span id="price-max-val">RD$ 150,000+</span>
+          </div>
+        </div>
       </aside>
 
       <div class="ecom-main">
@@ -180,6 +197,20 @@
           </div>
           <div class="mobile-filter-sheet__actions">
             <button class="mobile-filter-clear-btn" type="button" data-filter-dept="all">Ver todo</button>
+          </div>
+          <div class="mobile-filter-sheet__actions" style="margin-top: 16px; padding: 0 10px;">
+            <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; color:var(--text-primary);"><i data-lucide="dollar-sign" style="width:16px; height:16px; color:var(--brand);"></i> Rango de precios</h4>
+            <div class="price-filter-widget">
+              <div class="price-slider-container">
+                <input type="range" id="mobile-price-min" min="0" max="150000" step="1000" value="0" aria-label="Precio mínimo móvil" />
+                <input type="range" id="mobile-price-max" min="0" max="150000" step="1000" value="150000" aria-label="Precio máximo móvil" />
+                <div class="price-slider-track" id="mobile-price-track"></div>
+              </div>
+              <div class="price-range-values">
+                <span id="mobile-price-min-val">RD$ 0</span>
+                <span id="mobile-price-max-val">RD$ 150,000+</span>
+              </div>
+            </div>
           </div>
           <div class="mobile-filter-sheet__list">
             <button class="cat-btn active" data-filter-dept="all" type="button">Todo el catálogo</button>

@@ -110,7 +110,9 @@ const state = {
   page: 0,
   pageSize: 20,
   currentProducts: [], // productos actualmente visibles
-  allFilteredProducts: [] // todos los productos filtrados
+  allFilteredProducts: [], // todos los productos filtrados
+  minPrice: 0,
+  maxPrice: 9999999
 };
 
 function renderInlineAddButtonHTML(productId, variant = 'default') {
@@ -719,7 +721,11 @@ function updateCatalogContextBar({ resultsLabel, activeLabel, canReset = false, 
     resetBtn.textContent = getCatalogResetLabel();
   }
 }
-
+function parsePrice(priceString) {
+  const normalized = String(priceString || '').replace(/[^0-9.-]+/g, '');
+  const value = parseFloat(normalized);
+  return Number.isFinite(value) ? value : 0;
+}
 
 /* -------------------------------------------------------------
    2. RENDERIZADO PRINCIPAL
@@ -734,14 +740,25 @@ function renderUI() {
     return;
   }
 
+  const isServiceItemLocal = (p) => {
+    return typeof isServiceItem === 'function' ? isServiceItem(p) : (p.isService || p.department === 'infra' || String(p.brand || '').toLowerCase() === 'servicios');
+  };
+
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
+    let results = mockDatabase
       .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
       .map(r => r.product);
+
+    // Apply Price Range Filter
+    results = results.filter(p => {
+      if (isServiceItemLocal(p)) return true;
+      const price = parsePrice(p.price);
+      return price >= state.minPrice && price <= state.maxPrice;
+    });
 
     updateCatalogContextBar({
       title: 'Resultados de búsqueda',
@@ -759,7 +776,7 @@ function renderUI() {
     if (results.length === 0) {
       renderEmptyState(
         'Sin resultados',
-        'No encontramos productos con esos términos. Intenta con otras palabras o explora las categorías.'
+        'No encontramos productos con esos términos dentro del rango de precio seleccionado. Intenta con otras palabras o limpia los filtros.'
       );
     } else {
       state.allFilteredProducts = results;
@@ -772,6 +789,13 @@ function renderUI() {
   // 2. Filtrado Base por Departamento
   let db = mockDatabase;
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
+
+  // Apply Price Range Filter
+  db = db.filter(p => {
+    if (isServiceItemLocal(p)) return true;
+    const price = parsePrice(p.price);
+    return price >= state.minPrice && price <= state.maxPrice;
+  });
 
   // NIVEL 1: CUBÍCULOS DE SUBCATEGORÍAS
   if (state.category === 'all') {
@@ -919,6 +943,40 @@ function renderEmptyState(title, description) {
 /**
  * Limpia la búsqueda y vuelve al catálogo
  */
+function resetPriceSliders() {
+  state.minPrice = 0;
+  state.maxPrice = 9999999;
+  
+  const minInput = document.getElementById('price-min');
+  const maxInput = document.getElementById('price-max');
+  const minVal = document.getElementById('price-min-val');
+  const maxVal = document.getElementById('price-max-val');
+  const track = document.getElementById('price-track');
+
+  const mMinInput = document.getElementById('mobile-price-min');
+  const mMaxInput = document.getElementById('mobile-price-max');
+  const mMinVal = document.getElementById('mobile-price-min-val');
+  const mMaxVal = document.getElementById('mobile-price-max-val');
+  const mTrack = document.getElementById('mobile-price-track');
+
+  if (minInput) minInput.value = 0;
+  if (maxInput) maxInput.value = 150000;
+  if (minVal) minVal.textContent = 'RD$ 0';
+  if (maxVal) maxVal.textContent = 'RD$ 150,000+';
+
+  if (mMinInput) mMinInput.value = 0;
+  if (mMaxInput) mMaxInput.value = 150000;
+  if (mMinVal) mMinVal.textContent = 'RD$ 0';
+  if (mMaxVal) mMaxVal.textContent = 'RD$ 150,000+';
+
+  if (minInput && maxInput && track) {
+    track.style.background = `linear-gradient(to right, var(--brand) 0%, var(--brand) 100%)`;
+  }
+  if (mMinInput && mMaxInput && mTrack) {
+    mTrack.style.background = `linear-gradient(to right, var(--brand) 0%, var(--brand) 100%)`;
+  }
+}
+
 function clearSearch() {
   state.searchQuery = null;
   state.dept = 'all';
@@ -930,7 +988,7 @@ function clearSearch() {
   if (catalogSearch) catalogSearch.value = '';
 
   syncFilterButtons('all');
-
+  resetPriceSliders();
   renderUI();
 }
 
@@ -1414,7 +1472,14 @@ function initSmartSearch(inputId, dropdownId) {
     if (resultModels.length > 0) {
       html += `<div class="search-group-title">Modelos Específicos</div>`;
       resultModels.slice(0, 5).forEach(m => {
-        html += `<div class="search-item" data-search="${escapeHTML(m.title)}" role="option" tabindex="0"><i data-lucide="box"></i> ${escapeHTML(m.title)} <span class="search-item-meta">${escapeHTML(m.brand)}</span></div>`;
+        html += `<div class="search-item search-item--product" data-search="${escapeHTML(m.title)}" role="option" tabindex="0">` +
+                `  <img src="${escapeHTML(m.img || 'img/placeholder.svg')}" class="search-item-thumb" alt="" onerror="this.src='img/placeholder.svg'" />` +
+                `  <div class="search-item-info">` +
+                `    <span class="search-item-name">${escapeHTML(m.title)}</span>` +
+                `    <span class="search-item-brand">${escapeHTML(m.brand)}</span>` +
+                `  </div>` +
+                `  <span class="search-item-price">${escapeHTML(m.price)}</span>` +
+                `</div>`;
       });
     }
 
@@ -1509,6 +1574,95 @@ function executeSearch(query) {
 }
 
 
+function initPriceFilter() {
+  const minInput = document.getElementById('price-min');
+  const maxInput = document.getElementById('price-max');
+  const minVal = document.getElementById('price-min-val');
+  const maxVal = document.getElementById('price-max-val');
+  const track = document.getElementById('price-track');
+
+  const mMinInput = document.getElementById('mobile-price-min');
+  const mMaxInput = document.getElementById('mobile-price-max');
+  const mMinVal = document.getElementById('mobile-price-min-val');
+  const mMaxVal = document.getElementById('mobile-price-max-val');
+  const mTrack = document.getElementById('mobile-price-track');
+
+  if (!minInput || !maxInput) return;
+
+  function formatDop(val) {
+    if (val >= 150000) return 'RD$ 150,000+';
+    return new Intl.NumberFormat('es-DO', {
+      style: 'currency',
+      currency: 'DOP',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(val);
+  }
+
+  function updateTrack(sliderMin, sliderMax, trackEl) {
+    if (!trackEl) return;
+    const minVal = parseInt(sliderMin.value);
+    const maxVal = parseInt(sliderMax.value);
+    const minPercent = (minVal / sliderMin.max) * 100;
+    const maxPercent = (maxVal / sliderMax.max) * 100;
+    trackEl.style.background = `linear-gradient(to right, #e5eef8 ${minPercent}%, var(--brand) ${minPercent}%, var(--brand) ${maxPercent}%, #e5eef8 ${maxPercent}%)`;
+  }
+
+  const handlePriceChange = debounce(() => {
+    renderUI();
+  }, 200);
+
+  function syncSliders(isMobileSource) {
+    const srcMin = isMobileSource ? mMinInput : minInput;
+    const srcMax = isMobileSource ? mMaxInput : maxInput;
+    const destMin = isMobileSource ? minInput : mMinInput;
+    const destMax = isMobileSource ? maxInput : mMaxInput;
+
+    if (!srcMin || !srcMax) return;
+
+    let minV = parseInt(srcMin.value);
+    let maxV = parseInt(srcMax.value);
+
+    const gap = 5000;
+    if (maxV - minV < gap) {
+      if (srcMin === document.activeElement || (mMinInput && mMinInput === document.activeElement)) {
+        srcMin.value = maxV - gap;
+        minV = maxV - gap;
+      } else {
+        srcMax.value = minV + gap;
+        maxV = minV + gap;
+      }
+    }
+
+    if (destMin) destMin.value = minV;
+    if (destMax) destMax.value = maxV;
+
+    state.minPrice = minV;
+    state.maxPrice = maxV >= 150000 ? 9999999 : maxV;
+
+    if (minVal) minVal.textContent = formatDop(minV);
+    if (maxVal) maxVal.textContent = formatDop(maxV);
+    if (mMinVal) mMinVal.textContent = formatDop(minV);
+    if (mMaxVal) mMaxVal.textContent = formatDop(maxV);
+
+    updateTrack(minInput, maxInput, track);
+    if (mMinInput && mMaxInput) updateTrack(mMinInput, mMaxInput, mTrack);
+
+    handlePriceChange();
+  }
+
+  minInput.addEventListener('input', () => syncSliders(false));
+  maxInput.addEventListener('input', () => syncSliders(false));
+
+  if (mMinInput && mMaxInput) {
+    mMinInput.addEventListener('input', () => syncSliders(true));
+    mMaxInput.addEventListener('input', () => syncSliders(true));
+  }
+
+  updateTrack(minInput, maxInput, track);
+  if (mMinInput && mMaxInput) updateTrack(mMinInput, mMaxInput, mTrack);
+}
+
 /* -------------------------------------------------------------
    8. BOOTSTRAPPING
    ------------------------------------------------------------- */
@@ -1518,6 +1672,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await window.FutunetData.readyPromise;
   }
   bindCatalogInterface();
+  initPriceFilter();
   const mobileFilterTrigger = document.getElementById('catalog-mobile-filter-trigger');
   const mobileFilterBarTrigger = document.getElementById('catalog-mobile-filter-bar-trigger');
   const mobileFilterClosers = document.querySelectorAll('[data-close-mobile-filters]');

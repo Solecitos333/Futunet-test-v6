@@ -2857,3 +2857,114 @@
     letter-spacing: .06em;
   }
 }
+
+/* Autocompletado con miniaturas */
+.search-item--product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+}
+.search-item-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+.search-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.search-item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search-item-brand {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.search-item-price {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brand);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Slider de precios */
+.price-filter-widget {
+  padding: 10px 4px;
+}
+.price-slider-container {
+  position: relative;
+  height: 24px;
+  margin-bottom: 12px;
+}
+.price-slider-container input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.price-slider-container input[type="range"]::-webkit-slider-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 6px rgba(10, 112, 162, 0.3);
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: transform 0.1s;
+}
+.price-slider-container input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+.price-slider-container input[type="range"]::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 6px rgba(10, 112, 162, 0.3);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.1s;
+}
+.price-slider-container input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.15);
+}
+.price-slider-track {
+  position: absolute;
+  height: 4px;
+  background: var(--border);
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  z-index: -1;
+}
+.price-range-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}

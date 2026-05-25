@@ -532,3 +532,69 @@ function hidePagePreloader() {
 window.addEventListener('load', hidePagePreloader);
 // Fallback timeout in case resources (images, large scripts) hang the load event on mobile
 setTimeout(hidePagePreloader, 1250);
+
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[PWA] Service Worker registered:', reg.scope))
+      .catch(err => console.warn('[PWA] Service Worker registration failed:', err));
+  });
+}
+
+// Inject LocalBusiness Schema
+function injectLocalBusinessSchema() {
+  const existing = document.getElementById('localbusiness-jsonld');
+  if (existing) existing.remove();
+
+  const script = document.createElement('script');
+  script.id = 'localbusiness-jsonld';
+  script.type = 'application/ld+json';
+
+  const address = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.ADDRESS : 'Santiago, República Dominicana';
+  const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Futunet",
+    "image": window.location.origin + "/img/logo.png",
+    "@id": window.location.origin + "/#localbusiness",
+    "url": window.location.origin,
+    "telephone": phone,
+    "priceRange": "$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": address,
+      "addressLocality": "Santiago",
+      "addressCountry": "DO"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 19.476061,
+      "longitude": -70.715163
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "08:00",
+      "closes": "18:00"
+    }
+  };
+
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
+}
+
+if (typeof window.FutunetConfigReady !== 'undefined') {
+  window.FutunetConfigReady.then(injectLocalBusinessSchema);
+} else {
+  document.addEventListener('DOMContentLoaded', injectLocalBusinessSchema);
+}
