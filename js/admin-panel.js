@@ -1370,16 +1370,100 @@
   // ═══════════════════════════════════
   var adminChatHistory = [];
 
+  function formatHistoryForGemini(historyArray) {
+    return historyArray.map(function (msg) {
+      if (msg.role === 'user') {
+        var timeStr = '';
+        if (msg.timestamp) {
+          var date;
+          if (msg.timestamp.toDate) date = msg.timestamp.toDate();
+          else date = new Date(msg.timestamp);
+          timeStr = date.toLocaleString('es-DO');
+        } else {
+          timeStr = new Date().toLocaleString('es-DO');
+        }
+        var formattedText = `[Mensaje de ${msg.userName || 'Admin'} (${msg.userEmail || ''}) el ${timeStr}]: ${msg.message}`;
+        return {
+          role: 'user',
+          parts: [{ text: formattedText }]
+        };
+      } else {
+        return {
+          role: 'model',
+          parts: [{ text: msg.message }]
+        };
+      }
+    });
+  }
+
+  async function loadAdminChatHistory() {
+    var messagesContainer = document.getElementById('admin-ai-chat-messages');
+    if (!messagesContainer) return;
+
+    try {
+      var snap = await db.collection('admin_chats')
+        .orderBy('timestamp', 'desc')
+        .limit(30)
+        .get();
+
+      var dbMessages = [];
+      snap.forEach(function (doc) {
+        dbMessages.push(doc.data());
+      });
+      dbMessages.reverse();
+
+      var welcomeHtml = `
+        <div style="background:#fff; color:#233246; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; box-shadow:0 8px 16px rgba(12,35,64,0.04); max-width:85%; align-self:flex-start; line-height:1.5; border:1px solid #e5eef8;">
+          ¡Hola! Soy tu asistente de negocios IA. Puedo ayudarte a analizar las ventas, clientes e inventario. Pregúntame cosas como <em>"¿Cuáles son los productos con bajo stock?"</em> o <em>"Dame un resumen del rendimiento de pedidos"</em>.
+        </div>
+      `;
+      messagesContainer.innerHTML = welcomeHtml;
+
+      adminChatHistory = [];
+
+      dbMessages.forEach(function (msg) {
+        adminChatHistory.push({
+          role: msg.role,
+          message: msg.message,
+          userName: msg.userName,
+          userEmail: msg.userEmail,
+          timestamp: msg.timestamp
+        });
+
+        var sender = msg.role === 'user' ? 'user' : 'bot';
+        var senderName = msg.userName || (msg.role === 'user' ? 'Admin' : 'Asistente IA');
+        var timeStr = '';
+        if (msg.timestamp) {
+          var date = msg.timestamp.toDate ? msg.timestamp.toDate() : new Date(msg.timestamp);
+          timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        addAdminChatMessage(sender, msg.message, senderName, timeStr);
+      });
+
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (e) {
+      console.error('Error al cargar historial de chat de administración:', e);
+    }
+  }
+
   function initAdminAIChat() {
     var chatInput = document.getElementById('admin-ai-chat-input');
     var sendBtn = document.getElementById('admin-ai-chat-send');
     if (!chatInput || !sendBtn) return;
 
+    loadAdminChatHistory();
+
     async function handleSend() {
       var query = chatInput.value.trim();
       if (!query) return;
 
-      addAdminChatMessage('user', query);
+      var currentUserName = (currentUserData && (currentUserData.displayName || currentUserData.name || currentUserData.email)) || 'Admin';
+      var currentUserEmail = (currentUserData && currentUserData.email) || '';
+      var currentUserId = (currentUserData && (currentUserData.uid || currentUserData.userId)) || 'unknown';
+      var now = new Date();
+      var timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      addAdminChatMessage('user', query, currentUserName, timeStr);
       chatInput.value = '';
       chatInput.disabled = true;
       sendBtn.disabled = true;
@@ -1403,20 +1487,49 @@
           throw new Error('No se ha configurado la API Key de Gemini. Ve a Ajustes para guardarla.');
         }
 
+        var userMsgDoc = {
+          userId: currentUserId,
+          userName: currentUserName,
+          userEmail: currentUserEmail,
+          role: 'user',
+          message: query,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        await db.collection('admin_chats').add(userMsgDoc);
+
+        adminChatHistory.push({
+          role: 'user',
+          message: query,
+          userName: currentUserName,
+          userEmail: currentUserEmail,
+          timestamp: now
+        });
+
         var snapshotText = await buildBusinessSnapshot();
 
-        adminChatHistory.push({ role: 'user', parts: [{ text: query }] });
-        if (adminChatHistory.length > 10) {
-          adminChatHistory = adminChatHistory.slice(adminChatHistory.length - 10);
-        }
+        var historyToSend = adminChatHistory.slice(-15);
+        var geminiContents = formatHistoryForGemini(historyToSend);
 
-        var systemPrompt = `Eres un Analista de Negocios de Inteligencia Artificial para el panel administrativo de Futunet.\nTu tarea es responder preguntas sobre el rendimiento de la tienda, stock de productos, ingresos y pedidos utilizando el Snapshot de datos actual que te proporcionamos.\n\nSnapshot de Datos Actual del Negocio:\n${snapshotText}\n\nRequisitos:\n- Sé sumamente profesional, analítico y directo en tu respuesta.\n- Habla en español de República Dominicana.\n- Si te piden un reporte de ventas o ingresos, menciona las cifras de pedidos y el acumulado (RD$).\n- Si te preguntan por productos agotados o bajo stock, enuméralos según el Snapshot.\n- Sugiere ideas prácticas y recomendaciones de reabastecimiento o marketing.\n- Utiliza etiquetas HTML básicas (como <strong>, <ul>, <li>, <br>) para estructurar tu respuesta de forma visual y elegante. No utilices markdown (* o #).`;
+        var systemPrompt = `Eres un Analista de Negocios de Inteligencia Artificial para el panel administrativo de Futunet.
+Tu tarea es responder preguntas sobre el rendimiento de la tienda, stock de productos, ingresos y pedidos utilizando el Snapshot de datos actual que te proporcionamos.
+Conoces el historial de conversación, quién hace cada pregunta (nombre y correo) y en qué momento (fecha y hora) según el prefijo de cada mensaje del usuario. Utiliza esto para personalizar tus respuestas si es relevante (por ejemplo, saludando por su nombre o refiriéndote a preguntas previas del mismo u otro administrador).
+
+Snapshot de Datos Actual del Negocio:
+${snapshotText}
+
+Requisitos:
+- Sé sumamente profesional, analítico y directo en tu respuesta.
+- Habla en español de República Dominicana.
+- Si te piden un reporte de ventas o ingresos, menciona las cifras de pedidos y el acumulado (RD$).
+- Si te preguntan por productos agotados o bajo stock, enuméralos según el Snapshot.
+- Sugiere ideas prácticas y recomendaciones de reabastecimiento o marketing.
+- Utiliza etiquetas HTML básicas (como <strong>, <ul>, <li>, <br>) para estructurar tu respuesta de forma visual y elegante. No utilices markdown (* o #).`;
 
         var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: adminChatHistory,
+            contents: geminiContents,
             systemInstruction: {
               parts: [{ text: systemPrompt }]
             },
@@ -1434,12 +1547,24 @@
         var resData = await response.json();
         if (resData.candidates && resData.candidates[0] && resData.candidates[0].content && resData.candidates[0].content.parts[0]) {
           var botText = resData.candidates[0].content.parts[0].text.trim();
-          adminChatHistory.push({ role: 'model', parts: [{ text: botText }] });
+
+          var botMsgDoc = {
+            role: 'model',
+            message: botText,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          await db.collection('admin_chats').add(botMsgDoc);
+
+          adminChatHistory.push({
+            role: 'model',
+            message: botText,
+            timestamp: new Date()
+          });
           
           var indicator = document.getElementById(typingId);
           if (indicator) indicator.remove();
 
-          addAdminChatMessage('bot', botText);
+          addAdminChatMessage('bot', botText, 'Asistente IA', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
         } else {
           throw new Error('Respuesta vacía de la IA');
         }
@@ -1447,7 +1572,7 @@
         console.error(err);
         var indicator = document.getElementById(typingId);
         if (indicator) indicator.remove();
-        addAdminChatMessage('bot', `<span style="color:#ef4444;">Error: ${err.message}</span>`);
+        addAdminChatMessage('bot', `<span style="color:#ef4444;">Error: ${err.message}</span>`, 'Sistema');
         adminChatHistory.pop();
       } finally {
         chatInput.disabled = false;
@@ -1464,19 +1589,32 @@
     });
   }
 
-  function addAdminChatMessage(sender, text) {
+  function addAdminChatMessage(sender, text, senderName, timeStr) {
     var container = document.getElementById('admin-ai-chat-messages');
     if (!container) return;
 
+    var wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display: flex; flex-direction: column; margin-bottom: 4px;';
+
+    var metaSpan = document.createElement('span');
+    metaSpan.style.cssText = 'font-size: 0.7rem; color: #76889e; margin-bottom: 3px;';
+
     var div = document.createElement('div');
     if (sender === 'user') {
-      div.style.cssText = 'background:linear-gradient(135deg,#9b59b6,#8e44ad); color:#fff; padding:10px 14px; border-radius:12px; border-bottom-right-radius:4px; max-width:85%; align-self:flex-end; line-height:1.5; box-shadow:0 8px 16px rgba(155,89,182,0.1);';
+      wrapper.style.alignItems = 'flex-end';
+      metaSpan.textContent = `${senderName || 'Admin'} • ${timeStr || 'ahora'}`;
+      div.style.cssText = 'background:linear-gradient(135deg,#9b59b6,#8e44ad); color:#fff; padding:10px 14px; border-radius:12px; border-bottom-right-radius:4px; max-width:85%; line-height:1.5; box-shadow:0 8px 16px rgba(155,89,182,0.1); word-break: break-word;';
       div.textContent = text;
     } else {
-      div.style.cssText = 'background:#fff; color:#233246; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; max-width:85%; align-self:flex-start; line-height:1.5; box-shadow:0 8px 16px rgba(12,35,64,0.04); border:1px solid #e5eef8;';
+      wrapper.style.alignItems = 'flex-start';
+      metaSpan.textContent = `${senderName || 'Asistente IA'} • ${timeStr || 'ahora'}`;
+      div.style.cssText = 'background:#fff; color:#233246; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; max-width:85%; line-height:1.5; box-shadow:0 8px 16px rgba(12,35,64,0.04); border:1px solid #e5eef8; word-break: break-word;';
       div.innerHTML = text;
     }
-    container.appendChild(div);
+
+    wrapper.appendChild(metaSpan);
+    wrapper.appendChild(div);
+    container.appendChild(wrapper);
     container.scrollTop = container.scrollHeight;
   }
 
