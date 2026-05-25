@@ -246,6 +246,7 @@
           'auth/invalid-action-code': 'El enlace de inicio de sesión no es válido o ya ha expirado.',
           'auth/expired-action-code': 'El enlace de inicio de sesión ha expirado.',
           'auth/user-disabled': 'El usuario correspondiente a este correo ha sido desactivado.',
+          'auth/email-not-verified': 'Tu correo electrónico no ha sido verificado. Por favor, revisa tu bandeja de entrada y haz clic en el enlace de verificación para activar tu cuenta. Te hemos enviado un nuevo correo de verificación.',
           'permission-denied': 'Error de permisos en la base de datos. Contacta al administrador.',
           'unavailable': 'Servicio no disponible. Intenta más tarde.'
         };
@@ -348,19 +349,14 @@
 
         try {
           await FutunetAuth.signUp(email, password, name);
-          var userData = FutunetAuth.getUserData();
-          var roleMsg = '';
-          if (userData && userData.role === 'superadmin') {
-            roleMsg = ' ¡Eres el primer usuario — asignado como Superadmin!';
-          }
-          showMessage('register-message', '¡Cuenta creada exitosamente!' + roleMsg + ' Redirigiendo...', 'success');
+          showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
+          document.getElementById('register-form').reset();
+          setLoading('register-btn', false);
+          
           setTimeout(function () {
-            if (userData && (userData.role === 'superadmin' || userData.role === 'admin')) {
-              window.location.href = 'admin.html';
-            } else {
-              window.location.href = 'mi-cuenta.html';
-            }
-          }, 1500);
+            showPanel('panel-login');
+            showMessage('login-message', 'Te hemos enviado un correo de verificación. Confírmalo e inicia sesión aquí.', 'success');
+          }, 5000);
         } catch (err) {
           console.error('Register error:', err);
           showMessage('register-message', translateError(err.code, err.message), 'error');

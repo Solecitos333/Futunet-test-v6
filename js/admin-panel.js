@@ -225,7 +225,7 @@
       return;
     }
 
-    if (!confirm('¿Deseas restaurar los ' + totalItemsToSync + ' artículos del inventario anterior (incluyendo computadoras Selektronic y escritorios custom)? Se guardarán en la base de datos como OCULTOS por defecto y se conservará el estado visible de los que ya hayas activado.')) {
+    if (!confirm('¿Deseas restaurar los ' + totalItemsToSync + ' artículos del inventario anterior? Las computadoras Selektronic y escritorios se configurarán como VISIBLES por defecto, mientras que el resto estará OCULTO. Se conservará el estado actual de los que ya existan en la base de datos.')) {
       return;
     }
 
@@ -249,11 +249,12 @@
       for (var i = 0; i < backupItems.length; i++) {
         var p = { ...backupItems[i] };
         
-        // Preserve active status if it exists in DB, otherwise set to false
+        // Preserve active status if it exists in DB, otherwise set default active status
         if (existingStatus[p.id] !== undefined) {
           p.isActive = existingStatus[p.id];
         } else {
-          p.isActive = false;
+          // Desks (mob_oficina_*) are active by default, others hidden
+          p.isActive = p.id.startsWith('mob_oficina_');
         }
 
         var docRef = db.collection('products').doc(p.id);
@@ -270,11 +271,12 @@
       for (var j = 0; j < selektronicItems.length; j++) {
         var p = { ...selektronicItems[j] };
         
-        // Preserve active status if it exists in DB, otherwise set to false
+        // Preserve active status if it exists in DB, otherwise set to true by default
         if (existingStatus[p.id] !== undefined) {
           p.isActive = existingStatus[p.id];
         } else {
-          p.isActive = false;
+          // Selektronic items are active by default
+          p.isActive = p.id.startsWith('supplier_selektronic_');
         }
 
         var docRef = db.collection('products').doc(p.id);

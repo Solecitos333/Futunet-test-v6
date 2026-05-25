@@ -65,19 +65,38 @@
     var cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: displayName });
 
+    // Send verification email
+    await cred.user.sendEmailVerification();
+
     // Create user document (resilient - won't block if Firestore fails)
     await ensureUserDoc(cred.user.uid, {
       displayName: displayName,
       email: email
     });
 
-    currentUserData = await fetchUserData(cred.user.uid);
+    // Sign out immediately so they must verify and log in
+    await auth.signOut();
+    currentUserData = null;
     return cred.user;
   }
 
   // ─── Sign In with Email ───
   async function signIn(email, password) {
     var cred = await getAuth().signInWithEmailAndPassword(email, password);
+    
+    // Check if email is verified
+    if (!cred.user.emailVerified) {
+      // Re-send verification link just in case
+      await cred.user.sendEmailVerification().catch(function(e) {
+        console.error('Error re-sending verification email:', e);
+      });
+      await getAuth().signOut();
+      currentUserData = null;
+      var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
+      err.code = 'auth/email-not-verified';
+      throw err;
+    }
+
     // Update last login (best effort)
     getDB().collection('users').doc(cred.user.uid).update({
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
@@ -217,35 +236,39 @@
   function isSuperAdmin() { return getUserRole() === ROLES.SUPERADMIN; }
   function isAdmin() { return hasRole(ROLES.ADMIN); }
   function isEditor() { return hasRole(ROLES.EDITOR); }
-  function isLoggedIn() { return !!getAuth().currentUser; }
+  function isLoggedIn() {
+    var user = getAuth().currentUser;
+    return !!(user && user.emailVerified);
+  }
 
   // ─── Auth State Listener ───
   function onAuthChanged(callback) {
     getAuth().onAuthStateChanged(async function (user) {
-      if (user) {
+      if (user && user.emailVerified) {
         currentUserData = await fetchUserData(user.uid);
         if (currentUserData && currentUserData.status === 'disabled') {
           await signOut();
           callback(null, null);
           return;
         }
+        callback(user, currentUserData);
       } else {
         currentUserData = null;
+        callback(null, null);
       }
-      callback(user, currentUserData);
     });
   }
 
   // ─── Initialize auth state listener ───
   getAuth().onAuthStateChanged(async function (user) {
-    if (user) {
+    if (user && user.emailVerified) {
       currentUserData = await fetchUserData(user.uid);
     } else {
       currentUserData = null;
     }
     authReadyResolve();
     window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
-      detail: { user: user, userData: currentUserData }
+      detail: { user: (user && user.emailVerified) ? user : null, userData: currentUserData }
     }));
   });
 
