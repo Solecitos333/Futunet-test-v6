@@ -51,6 +51,8 @@
   // INVENTORY
   // ═══════════════════════════════════
   var allProducts = [];
+  var currentCategoryFilter = 'all';
+  var currentSearchQuery = '';
 
   async function loadInventory() {
     if (currentUserData.role === 'superadmin') {
@@ -66,7 +68,8 @@
       var snapshot = await db.collection('products').orderBy('title').get();
       allProducts = [];
       snapshot.forEach(function (doc) { allProducts.push({ id: doc.id, ...doc.data() }); });
-      renderInventoryTable(allProducts);
+      populateCategoryFilter(allProducts);
+      filterAndRenderInventory();
     } catch (e) {
       console.error('Inventory load error:', e);
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar inventario. Verifica las reglas de Firestore.</td></tr>';
@@ -109,15 +112,74 @@
     tbody.innerHTML = html;
   }
 
-  function searchInventory(query) {
-    var q = query.toLowerCase().trim();
-    if (!q) { renderInventoryTable(allProducts); return; }
-    var filtered = allProducts.filter(function (p) {
-      return (p.title || '').toLowerCase().includes(q) ||
-        (p.category || '').toLowerCase().includes(q) ||
-        (p.brand || '').toLowerCase().includes(q);
-    });
+  function normalizeSearchText(str) {
+    return String(str || '').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/\u00f1/g, 'n').replace(/\u00d1/g, 'n')
+      .replace(/[^a-z0-9\s]/g, '')
+      .trim();
+  }
+
+  function filterAndRenderInventory() {
+    var filtered = allProducts;
+    
+    // 1. Filter by category
+    if (currentCategoryFilter !== 'all') {
+      filtered = filtered.filter(function (p) {
+        var cat = p.category || p.department || '';
+        return cat.trim() === currentCategoryFilter;
+      });
+    }
+    
+    // 2. Filter by smart search query (all query words must match somewhere)
+    var cleanQuery = normalizeSearchText(currentSearchQuery);
+    if (cleanQuery) {
+      var queryWords = cleanQuery.split(/\s+/).filter(Boolean);
+      filtered = filtered.filter(function (p) {
+        var title = normalizeSearchText(p.title);
+        var brand = normalizeSearchText(p.brand);
+        var category = normalizeSearchText(p.category || p.department);
+        var desc = normalizeSearchText(p.desc);
+        var combinedText = title + ' ' + brand + ' ' + category + ' ' + desc;
+        
+        return queryWords.every(function (word) {
+          return combinedText.includes(word);
+        });
+      });
+    }
+    
     renderInventoryTable(filtered);
+  }
+
+  function populateCategoryFilter(products) {
+    var select = document.getElementById('inventory-category-filter');
+    if (!select) return;
+    
+    var currentVal = select.value;
+    var categories = new Set();
+    products.forEach(function (p) {
+      var cat = p.category || p.department;
+      if (cat) categories.add(cat.trim());
+    });
+    
+    var sortedCategories = Array.from(categories).sort();
+    var html = '<option value="all">Todas las categorías</option>';
+    sortedCategories.forEach(function (cat) {
+      html += '<option value="' + escapeAttr(cat) + '">' + escapeHtml(cat) + '</option>';
+    });
+    
+    select.innerHTML = html;
+    
+    if (sortedCategories.includes(currentVal)) {
+      select.value = currentVal;
+    } else {
+      select.value = 'all';
+    }
+  }
+
+  function searchInventory(query) {
+    currentSearchQuery = query;
+    filterAndRenderInventory();
   }
 
   async function saveProduct(data, productId) {
@@ -627,7 +689,19 @@
       searchInput.addEventListener('input', function () {
         clearTimeout(debounceTimer);
         var q = this.value;
-        debounceTimer = setTimeout(function () { searchInventory(q); }, 300);
+        debounceTimer = setTimeout(function () {
+          currentSearchQuery = q;
+          filterAndRenderInventory();
+        }, 300);
+      });
+    }
+
+    // Inventory category filter
+    var categoryFilter = document.getElementById('inventory-category-filter');
+    if (categoryFilter) {
+      categoryFilter.addEventListener('change', function () {
+        currentCategoryFilter = this.value;
+        filterAndRenderInventory();
       });
     }
   }
