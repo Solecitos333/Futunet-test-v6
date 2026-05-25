@@ -52,10 +52,7 @@ service cloud.firestore {
       
       // Allow creating own user document (registration)
       allow create: if isSignedIn() && isOwner(userId) && (
-        // New user can set their own role ONLY if no other users exist (first user = superadmin)
-        // OR they must set role to 'user'
-        request.resource.data.role == 'user' || 
-        request.resource.data.role == 'superadmin'
+        request.resource.data.role == 'user'
       );
       
       // Users can update their own profile (but NOT their role or status)

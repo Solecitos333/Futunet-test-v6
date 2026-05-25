@@ -272,7 +272,7 @@
             </a>
           </li>
           <li class="nav-auth-wrapper" style="position:relative;">
-            <div id="navbar-auth"></div>
+            <div class="navbar-auth-container"></div>
           </li>
         </ul>
         <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
@@ -280,6 +280,19 @@
         </button>
       </div>
     </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+      <a href="index.html#servicios" data-close-mobile-menu>Servicios</a>
+      <a href="catalogo.html" data-close-mobile-menu>Catálogo</a>
+      <a href="index.html#nosotros" data-close-mobile-menu>Nosotros</a>
+      <a href="index.html#contacto" data-close-mobile-menu>Contacto</a>
+      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+        829-741-1041
+      </a>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 16px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center;"></div>
+    </div>
   </header>
 
   <main id="user-panel-page" class="up-page">

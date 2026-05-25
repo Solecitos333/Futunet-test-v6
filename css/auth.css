@@ -367,6 +367,10 @@
 }
 
 /* ─── Navbar Auth Elements ─── */
+.navbar-auth-container {
+  position: relative;
+}
+
 .nav-auth-login {
   display: flex;
   align-items: center;

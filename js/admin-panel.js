@@ -148,10 +148,22 @@
       return;
     }
     try {
+      var batch = db.batch();
+      var count = 0;
       for (var i = 0; i < window.backupDatabase.length; i++) {
         var p = window.backupDatabase[i];
         p.isActive = false; // Set default active status to HIDDEN
-        await db.collection('products').doc(p.id).set(p);
+        var docRef = db.collection('products').doc(p.id);
+        batch.set(docRef, p);
+        count++;
+        if (count === 400) {
+          await batch.commit();
+          batch = db.batch();
+          count = 0;
+        }
+      }
+      if (count > 0) {
+        await batch.commit();
       }
       showToast('Sincronización oculta completada', 'success');
       loadInventory();
