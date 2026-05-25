@@ -136,6 +136,7 @@
   font-weight: 700; color: #fff;
   margin-bottom: 12px;
   letter-spacing: -0.04em;
+  margin-inline: auto;
 }
 .cta-banner p {
   color: rgba(255,255,255,0.74);
