@@ -1323,10 +1323,9 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   max-height: none;
   border-radius: 12px;
   margin-bottom: 12px;
-  object-fit: contain;
-  object-position: center;
+  object-fit: cover;
+  object-position: center bottom;
   background: linear-gradient(180deg, #f8fafe 0%, #eef3fa 100%);
-  padding: 12px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .brand-item:hover .brand-preview-img {
