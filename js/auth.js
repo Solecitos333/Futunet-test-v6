@@ -97,6 +97,16 @@
     getDB().collection('users').doc(cred.user.uid).update({
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
     }).catch(function () { });
+
+    // Write audit log
+    getDB().collection('audit_logs').add({
+      action: 'Inicio de sesión',
+      details: 'Inicio de sesión con correo y contraseña',
+      userEmail: cred.user.email || 'Anónimo',
+      userId: cred.user.uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function () {});
+
     currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;
   }
@@ -132,6 +142,15 @@
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
       }).catch(function () { });
     }
+
+    // Write audit log
+    getDB().collection('audit_logs').add({
+      action: 'Inicio de sesión',
+      details: 'Inicio de sesión con Google',
+      userEmail: cred.user.email || 'Anónimo',
+      userId: cred.user.uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function () {});
 
     currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;
@@ -188,6 +207,15 @@
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
       }).catch(function () { });
     }
+
+    // Write audit log
+    getDB().collection('audit_logs').add({
+      action: 'Inicio de sesión',
+      details: 'Inicio de sesión con enlace de correo',
+      userEmail: cred.user.email || email,
+      userId: cred.user.uid,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function () {});
 
     currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;

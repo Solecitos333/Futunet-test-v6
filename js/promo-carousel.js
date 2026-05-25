@@ -86,6 +86,7 @@
   const AUTO_INTERVAL = 6000;
   let startX = 0;
   let isDragging = false;
+  let isSearching = false;
 
   // Build Dots dynamically based on the final slides count
   dotsContainer.innerHTML = '';
@@ -138,6 +139,7 @@
 
   function startAutoPlay() {
     stopAutoPlay();
+    if (isSearching) return;
     autoTimer = setInterval(next, AUTO_INTERVAL);
   }
 
@@ -171,6 +173,20 @@
     }
     startAutoPlay();
   }, { passive: true });
+
+  document.addEventListener('focusin', (e) => {
+    if (e.target && e.target.type === 'search') {
+      isSearching = true;
+      stopAutoPlay();
+    }
+  });
+
+  document.addEventListener('focusout', (e) => {
+    if (e.target && e.target.type === 'search') {
+      isSearching = false;
+      startAutoPlay();
+    }
+  });
 
   goTo(0);
   startAutoPlay();

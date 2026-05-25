@@ -6,6 +6,7 @@
   'use strict';
 
   var db, storage, currentUserData;
+  var currentHistoryUserId = null;
   var currentPageInventory = 1;
   var currentPageUsers = 1;
   var currentPageOrders = 1;
@@ -134,15 +135,19 @@
   // ═══════════════════════════════════
   // AUDIT LOGS LOGGER
   // ═══════════════════════════════════
-  async function writeAuditLog(action, details) {
+  async function writeAuditLog(action, details, metadata) {
     try {
-      await db.collection('audit_logs').add({
+      var logData = {
         action: action,
         details: details,
         userEmail: currentUserData.email || 'Anónimo',
         userId: currentUserData.uid || '',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      };
+      if (metadata) {
+        logData.metadata = metadata;
+      }
+      await db.collection('audit_logs').add(logData);
       loadAuditLogs();
     } catch (e) {
       console.warn('Error writing audit log:', e);
@@ -356,14 +361,27 @@
       data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
       data.updatedBy = currentUserData.uid || '';
       if (productId) {
+        var prevSnap = await db.collection('products').doc(productId).get();
+        var prevData = prevSnap.exists ? prevSnap.data() : null;
         await db.collection('products').doc(productId).update(data);
-        writeAuditLog('Editar Producto', data.title);
+        writeAuditLog('Editar Producto', data.title, {
+          collection: 'products',
+          docId: productId,
+          type: 'update',
+          previousData: prevData,
+          newData: data
+        });
         showToast('Producto actualizado', 'success');
       } else {
         data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
         data.isActive = true;
-        await db.collection('products').add(data);
-        writeAuditLog('Crear Producto', data.title);
+        var docRef = await db.collection('products').add(data);
+        writeAuditLog('Crear Producto', data.title, {
+          collection: 'products',
+          docId: docRef.id,
+          type: 'create',
+          newData: data
+        });
         showToast('Producto creado', 'success');
       }
       closeModal('product-modal');
@@ -473,9 +491,15 @@
   async function deleteProduct(id) {
     if (!(await showConfirmModal('Eliminar producto', '¿Eliminar este producto? Esta acción no se puede deshacer.'))) return;
     try {
-      var product = allProducts.find(function (p) { return p.id === id; });
+      var prevSnap = await db.collection('products').doc(id).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
       await db.collection('products').doc(id).delete();
-      writeAuditLog('Eliminar Producto', product ? product.title : id);
+      writeAuditLog('Eliminar Producto', prevData ? prevData.title : id, {
+        collection: 'products',
+        docId: id,
+        type: 'delete',
+        previousData: prevData
+      });
       showToast('Producto eliminado', 'success');
       loadInventory();
       loadDashboardStats();
@@ -486,12 +510,22 @@
 
   async function toggleProductActive(id, currentStatus) {
     try {
-      await db.collection('products').doc(id).update({
+      var prevSnap = await db.collection('products').doc(id).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+      var updatedFields = {
         isActive: !currentStatus,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      await db.collection('products').doc(id).update(updatedFields);
+      var p = prevData || {};
+      var nextData = { ...p, ...updatedFields };
+      writeAuditLog(!currentStatus ? 'Mostrar Producto' : 'Ocultar Producto', p.title || id, {
+        collection: 'products',
+        docId: id,
+        type: 'update',
+        previousData: p,
+        newData: nextData
       });
-      var p = allProducts.find(function (prod) { return prod.id === id; });
-      writeAuditLog(!currentStatus ? 'Mostrar Producto' : 'Ocultar Producto', p ? p.title : id);
       showToast(!currentStatus ? 'Producto visible en la tienda' : 'Producto ocultado de la tienda', 'success');
       loadInventory();
       loadDashboardStats();
@@ -609,6 +643,10 @@
     var html = '';
     users.forEach(function (u) {
       var canEdit = currentUserData.role === 'superadmin' || (u.role !== 'superadmin' && u.role !== 'admin');
+      var historyBtn = '';
+      if (currentUserData && currentUserData.role === 'superadmin') {
+        historyBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showUserHistory(\'' + u.id + '\')" title="Ver historial" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>';
+      }
       html += '<tr>' +
         '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(u.displayName || 'Sin nombre') + '</strong></td>' +
         '<td data-label="Email">' + escapeHtml(u.email || '') + '</td>' +
@@ -616,8 +654,8 @@
         '<td data-label="Estado"><span class="admin-status-badge status-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td>' +
         '<td data-label="Acciones">' +
         (canEdit
-          ? '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editUser(\'' + u.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>'
-          : '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>') +
+          ? '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editUser(\'' + u.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' + historyBtn
+          : historyBtn || '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>') +
         '</td>' +
         '</tr>';
     });
@@ -661,13 +699,23 @@
     if (!userId) return;
 
     try {
-      await db.collection('users').doc(userId).update({
+      var prevSnap = await db.collection('users').doc(userId).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+      var updatedFields = {
         displayName: displayName,
         role: role,
         status: status
+      };
+      await db.collection('users').doc(userId).update(updatedFields);
+      var u = prevData || {};
+      var nextData = { ...u, ...updatedFields };
+      writeAuditLog('Editar Usuario', (u.email || userId) + ' (Rol: ' + role + ', Estado: ' + status + ')', {
+        collection: 'users',
+        docId: userId,
+        type: 'update',
+        previousData: u,
+        newData: nextData
       });
-      var u = allUsers.find(function (usr) { return usr.id === userId; });
-      writeAuditLog('Editar Usuario', (u ? u.email : userId) + ' (Rol: ' + role + ', Estado: ' + status + ')');
       showToast('Usuario actualizado', 'success');
       closeModal('user-modal');
       loadUsers();
@@ -765,18 +813,35 @@
     var typeLabel = type === 'percent' ? value + '%' : 'RD$' + value;
 
     try {
-      await db.collection('discounts').doc(code).set({
+      var prevSnap = await db.collection('discounts').doc(code).get();
+      var isUpdate = prevSnap.exists;
+      var prevData = isUpdate ? prevSnap.data() : null;
+
+      var data = {
         type: type,
         value: value,
         minPurchase: minPurchase,
         maxUses: maxUses,
-        usageCount: 0,
+        usageCount: isUpdate ? (prevData.usageCount || 0) : 0,
         expiresAt: expiry ? firebase.firestore.Timestamp.fromDate(new Date(expiry)) : null,
-        isActive: true,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      writeAuditLog('Crear Descuento', code + ' (' + typeLabel + ')');
-      showToast('Código de descuento creado', 'success');
+        isActive: isUpdate ? (prevData.isActive !== false) : true,
+        createdAt: isUpdate ? (prevData.createdAt || firebase.firestore.FieldValue.serverTimestamp()) : firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection('discounts').doc(code).set(data);
+      writeAuditLog(
+        isUpdate ? 'Editar Descuento' : 'Crear Descuento',
+        code + ' (' + typeLabel + ')',
+        {
+          collection: 'discounts',
+          docId: code,
+          type: isUpdate ? 'update' : 'create',
+          previousData: prevData,
+          newData: data
+        }
+      );
+      showToast(isUpdate ? 'Código de descuento actualizado' : 'Código de descuento creado', 'success');
       closeModal('discount-modal');
       loadDiscounts();
       loadDashboardStats();
@@ -787,8 +852,18 @@
 
   async function toggleDiscount(code, newState) {
     try {
-      await db.collection('discounts').doc(code).update({ isActive: newState });
-      writeAuditLog(newState ? 'Activar Descuento' : 'Desactivar Descuento', code);
+      var prevSnap = await db.collection('discounts').doc(code).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+      var updatedFields = { isActive: newState };
+      await db.collection('discounts').doc(code).update(updatedFields);
+      var nextData = prevData ? { ...prevData, ...updatedFields } : null;
+      writeAuditLog(newState ? 'Activar Descuento' : 'Desactivar Descuento', code, {
+        collection: 'discounts',
+        docId: code,
+        type: 'update',
+        previousData: prevData,
+        newData: nextData
+      });
       showToast(newState ? 'Descuento activado' : 'Descuento desactivado', 'success');
       loadDiscounts();
     } catch (e) { showToast('Error: ' + e.message, 'error'); }
@@ -797,8 +872,15 @@
   async function deleteDiscount(code) {
     if (!(await showConfirmModal('Eliminar descuento', '¿Estás seguro de que deseas eliminar el código de descuento "' + code + '"?'))) return;
     try {
+      var prevSnap = await db.collection('discounts').doc(code).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
       await db.collection('discounts').doc(code).delete();
-      writeAuditLog('Eliminar Descuento', code);
+      writeAuditLog('Eliminar Descuento', code, {
+        collection: 'discounts',
+        docId: code,
+        type: 'delete',
+        previousData: prevData
+      });
       showToast('Descuento eliminado', 'success');
       loadDiscounts();
       loadDashboardStats();
@@ -895,11 +977,21 @@
 
   async function updateOrderStatus(orderId, newStatus) {
     try {
-      await db.collection('orders').doc(orderId).update({
+      var prevSnap = await db.collection('orders').doc(orderId).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+      var updatedFields = {
         status: newStatus,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      await db.collection('orders').doc(orderId).update(updatedFields);
+      var nextData = prevData ? { ...prevData, ...updatedFields } : null;
+      writeAuditLog('Cambiar Estado de Pedido', orderId.substring(0, 8) + ' → ' + newStatus, {
+        collection: 'orders',
+        docId: orderId,
+        type: 'update',
+        previousData: prevData,
+        newData: nextData
       });
-      writeAuditLog('Cambiar Estado de Pedido', orderId.substring(0, 8) + ' → ' + newStatus);
       showToast('Estado actualizado', 'success');
     } catch (e) { showToast('Error: ' + e.message, 'error'); }
   }
@@ -1048,7 +1140,10 @@
     var maintenanceMode = maint ? maint.checked : false;
 
     try {
-      await db.collection('config').doc('site').set({
+      var prevSnap = await db.collection('config').doc('site').get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+
+      var data = {
         whatsappNumber: whatsapp,
         siteName: siteName,
         advisorName: advisor,
@@ -1059,8 +1154,16 @@
         maintenanceMessage: maintMsg,
         maintenanceMode: maintenanceMode,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      }, { merge: true });
-      writeAuditLog('Actualizar Configuración', 'Se modificaron los ajustes del sitio');
+      };
+
+      await db.collection('config').doc('site').set(data, { merge: true });
+      writeAuditLog('Actualizar Configuración', 'Se modificaron los ajustes del sitio', {
+        collection: 'config',
+        docId: 'site',
+        type: 'update',
+        previousData: prevData,
+        newData: data
+      });
       showToast('Configuración guardada', 'success');
     } catch (e) {
       showToast('Error: ' + e.message, 'error');
@@ -1102,6 +1205,7 @@
       { id: 'equipa-oficina', name: 'Equipa tu Oficina', visible: true, title: 'Equipa tu oficina', subtitle: 'Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.' },
       { id: 'marcas', name: 'Logos de Marcas', visible: true, title: 'Marcas con las que trabajamos', subtitle: 'Pasa el cursor sobre una marca para descubrir sus productos destacados.' },
       { id: 'nosotros', name: 'Quiénes Somos', visible: true, title: 'Tecnología con criterio, servicio con respaldo', subtitle: '' },
+      { id: 'proyecto-cta', name: 'Llamado a la Acción (Proyecto)', visible: true, title: '¿Tienes un proyecto en mente?', subtitle: 'Cuéntanos lo que necesitas y te ayudamos a aterrizar una solución realista, clara y lista para cotizar.' },
       { id: 'contacto', name: 'Contacto / Mensaje', visible: true, title: 'Conversemos sobre lo que necesitas', subtitle: 'Escríbenos y recibe una orientación clara para tu compra, tu instalación o tu próximo proyecto.' }
     ];
   }
@@ -1176,11 +1280,22 @@
 
   async function saveLayoutConfig() {
     try {
-      await db.collection('config').doc('layout').set({
+      var prevSnap = await db.collection('config').doc('layout').get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
+
+      var data = {
         sections: layoutSections,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await db.collection('config').doc('layout').set(data);
+      writeAuditLog('Actualizar Portada', 'Se modificó el diseño y reordenamiento de secciones de la portada', {
+        collection: 'config',
+        docId: 'layout',
+        type: 'update',
+        previousData: prevData,
+        newData: data
       });
-      writeAuditLog('Actualizar Portada', 'Se modificó el diseño y reordenamiento de secciones de la portada');
       showToast('Diseño de portada guardado exitosamente', 'success');
       updateLivePreview();
     } catch (e) {
@@ -1352,12 +1467,25 @@
       };
       
       if (id) {
+        var prevSnap = await db.collection('banners').doc(id).get();
+        var prevData = prevSnap.exists ? prevSnap.data() : null;
         await db.collection('banners').doc(id).update(data);
-        writeAuditLog('Editar Banner', title);
+        writeAuditLog('Editar Banner', title, {
+          collection: 'banners',
+          docId: id,
+          type: 'update',
+          previousData: prevData,
+          newData: data
+        });
         showToast('Banner actualizado', 'success');
       } else {
-        await db.collection('banners').add(data);
-        writeAuditLog('Crear Banner', title);
+        var docRef = await db.collection('banners').add(data);
+        writeAuditLog('Crear Banner', title, {
+          collection: 'banners',
+          docId: docRef.id,
+          type: 'create',
+          newData: data
+        });
         showToast('Banner creado', 'success');
       }
       closeModal('banner-modal');
@@ -1374,8 +1502,15 @@
     if (!banner) return;
     if (!(await showConfirmModal('Eliminar banner', '¿Eliminar el banner "' + banner.title + '"?'))) return;
     try {
+      var prevSnap = await db.collection('banners').doc(id).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
       await db.collection('banners').doc(id).delete();
-      writeAuditLog('Eliminar Banner', banner.title);
+      writeAuditLog('Eliminar Banner', banner.title, {
+        collection: 'banners',
+        docId: id,
+        type: 'delete',
+        previousData: prevData
+      });
       showToast('Banner eliminado', 'success');
       loadBanners();
     } catch (e) {
@@ -1480,12 +1615,25 @@
     try {
       var data = { name: name, icon: icon };
       if (id) {
+        var prevSnap = await db.collection('categories').doc(id).get();
+        var prevData = prevSnap.exists ? prevSnap.data() : null;
         await db.collection('categories').doc(id).update(data);
-        writeAuditLog('Editar Categoría', name);
+        writeAuditLog('Editar Categoría', name, {
+          collection: 'categories',
+          docId: id,
+          type: 'update',
+          previousData: prevData,
+          newData: data
+        });
         showToast('Categoría actualizada', 'success');
       } else {
-        await db.collection('categories').add(data);
-        writeAuditLog('Crear Categoría', name);
+        var docRef = await db.collection('categories').add(data);
+        writeAuditLog('Crear Categoría', name, {
+          collection: 'categories',
+          docId: docRef.id,
+          type: 'create',
+          newData: data
+        });
         showToast('Categoría creada', 'success');
       }
       closeModal('category-modal');
@@ -1500,8 +1648,15 @@
     if (!cat) return;
     if (!(await showConfirmModal('Eliminar categoría', '¿Eliminar la categoría "' + cat.name + '"?'))) return;
     try {
+      var prevSnap = await db.collection('categories').doc(id).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
       await db.collection('categories').doc(id).delete();
-      writeAuditLog('Eliminar Categoría', cat.name);
+      writeAuditLog('Eliminar Categoría', cat.name, {
+        collection: 'categories',
+        docId: id,
+        type: 'delete',
+        previousData: prevData
+      });
       showToast('Categoría eliminada', 'success');
       loadCategories();
     } catch (e) {
@@ -1585,12 +1740,25 @@
       
       var data = { name: name, logo: logoUrl };
       if (id) {
+        var prevSnap = await db.collection('brands').doc(id).get();
+        var prevData = prevSnap.exists ? prevSnap.data() : null;
         await db.collection('brands').doc(id).update(data);
-        writeAuditLog('Editar Marca', name);
+        writeAuditLog('Editar Marca', name, {
+          collection: 'brands',
+          docId: id,
+          type: 'update',
+          previousData: prevData,
+          newData: data
+        });
         showToast('Marca actualizada', 'success');
       } else {
-        await db.collection('brands').add(data);
-        writeAuditLog('Crear Marca', name);
+        var docRef = await db.collection('brands').add(data);
+        writeAuditLog('Crear Marca', name, {
+          collection: 'brands',
+          docId: docRef.id,
+          type: 'create',
+          newData: data
+        });
         showToast('Marca creada', 'success');
       }
       closeModal('brand-modal');
@@ -1607,8 +1775,15 @@
     if (!brand) return;
     if (!(await showConfirmModal('Eliminar marca', '¿Eliminar la marca "' + brand.name + '"?'))) return;
     try {
+      var prevSnap = await db.collection('brands').doc(id).get();
+      var prevData = prevSnap.exists ? prevSnap.data() : null;
       await db.collection('brands').doc(id).delete();
-      writeAuditLog('Eliminar Marca', brand.name);
+      writeAuditLog('Eliminar Marca', brand.name, {
+        collection: 'brands',
+        docId: id,
+        type: 'delete',
+        previousData: prevData
+      });
       showToast('Marca eliminada', 'success');
       loadBrands();
     } catch (e) {
@@ -1681,7 +1856,7 @@
   async function loadAuditLogs() {
     var tbody = document.getElementById('audit-table-body');
     if (!tbody) return;
-    tbody.innerHTML = getTableSkeletonHtml(4, 5);
+    tbody.innerHTML = getTableSkeletonHtml(5, 5);
     try {
       var snapshot = await db.collection('audit_logs').orderBy('timestamp', 'desc').limit(1000).get();
       allAuditLogs = [];
@@ -1724,21 +1899,184 @@
     if (!tbody) return;
 
     if (logs.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">No hay registros de auditoría que coincidan.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#76889e;">No hay registros de auditoría que coincidan.</td></tr>';
       return;
     }
 
     var html = '';
     logs.forEach(function (log) {
       var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
+      var revertBtn = '';
+      if (currentUserData.role === 'superadmin' && log.metadata && log.metadata.collection && log.metadata.type) {
+        revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + log.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
+      } else {
+        revertBtn = '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>';
+      }
+
       html += '<tr>' +
         '<td data-label="Fecha/Hora" style="font-size:0.8rem;color:#76889e;">' + time + '</td>' +
         '<td data-label="Usuario"><strong style="color:#394c60;">' + escapeHtml(log.userEmail) + '</strong></td>' +
         '<td data-label="Acción"><span class="admin-role-badge role-admin" style="text-transform:none;">' + escapeHtml(log.action) + '</span></td>' +
         '<td data-label="Detalles">' + escapeHtml(log.details) + '</td>' +
+        '<td data-label="Acciones" style="text-align:right;">' + revertBtn + '</td>' +
         '</tr>';
     });
     tbody.innerHTML = html;
+  }
+
+  async function showUserHistory(userId) {
+    currentHistoryUserId = userId;
+    var u = allUsers.find(function (usr) { return usr.id === userId; });
+    var name = u ? (u.displayName || 'Sin nombre') : 'Usuario desconocido';
+    var email = u ? (u.email || '') : '';
+
+    var nameEl = document.getElementById('history-user-name');
+    var emailEl = document.getElementById('history-user-email');
+    if (nameEl) nameEl.textContent = name;
+    if (emailEl) emailEl.textContent = email;
+
+    var tbody = document.getElementById('user-history-table-body');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">Cargando historial...</td></tr>';
+
+    openModal('user-history-modal');
+
+    try {
+      var snapshot = await db.collection('audit_logs').where('userId', '==', userId).get();
+      var logs = [];
+      snapshot.forEach(function (doc) {
+        logs.push({ id: doc.id, ...doc.data() });
+      });
+
+      // Sort by timestamp desc (in-memory)
+      logs.sort(function (a, b) {
+        var tA = a.timestamp ? (a.timestamp.seconds || 0) : 0;
+        var tB = b.timestamp ? (b.timestamp.seconds || 0) : 0;
+        return tB - tA;
+      });
+
+      if (tbody) {
+        if (logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">No hay acciones registradas para este usuario.</td></tr>';
+          return;
+        }
+
+        var html = '';
+        logs.forEach(function (log) {
+          var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
+          var revertBtn = '';
+          if (currentUserData.role === 'superadmin' && log.metadata && log.metadata.collection && log.metadata.type) {
+            revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + log.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
+          } else {
+            revertBtn = '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>';
+          }
+
+          html += '<tr>' +
+            '<td data-label="Fecha/Hora" style="font-size:0.8rem;color:#76889e;">' + time + '</td>' +
+            '<td data-label="Acción"><span class="admin-role-badge role-admin" style="text-transform:none;">' + escapeHtml(log.action) + '</span></td>' +
+            '<td data-label="Detalles">' + escapeHtml(log.details) + '</td>' +
+            '<td data-label="Acciones" style="text-align:right;">' + revertBtn + '</td>' +
+            '</tr>';
+        });
+        tbody.innerHTML = html;
+      }
+    } catch (e) {
+      console.error('Error loading user history:', e);
+      if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar historial: ' + e.message + '</td></tr>';
+    }
+  }
+
+  async function revertAction(logId) {
+    if (currentUserData.role !== 'superadmin') {
+      showToast('Acceso denegado: solo el superadmin puede realizar esta acción.', 'error');
+      return;
+    }
+
+    try {
+      var logSnap = await db.collection('audit_logs').doc(logId).get();
+      if (!logSnap.exists) {
+        showToast('El registro de auditoría no existe.', 'error');
+        return;
+      }
+
+      var logData = logSnap.data();
+      var metadata = logData.metadata;
+      if (!metadata || !metadata.collection || !metadata.docId || !metadata.type) {
+        showToast('Este registro no contiene metadatos válidos para ser revertido.', 'error');
+        return;
+      }
+
+      var collection = metadata.collection;
+      var docId = metadata.docId;
+      var type = metadata.type;
+      var previousData = metadata.previousData || null;
+
+      var confirmMsg = '¿Estás seguro de que deseas deshacer la acción "' + logData.action + '" (' + logData.details + ')?';
+      if (!(await showConfirmModal('Revertir Acción', confirmMsg))) return;
+
+      showToast('Revirtiendo acción...', 'info');
+
+      if (type === 'create') {
+        await db.collection(collection).doc(docId).delete();
+      } else if (type === 'update') {
+        if (!previousData) {
+          throw new Error('No se encontraron los datos previos para realizar la restauración.');
+        }
+        await db.collection(collection).doc(docId).set(previousData);
+      } else if (type === 'delete') {
+        if (!previousData) {
+          throw new Error('No se encontraron los datos previos para recrear el documento.');
+        }
+        await db.collection(collection).doc(docId).set(previousData);
+      } else {
+        throw new Error('Tipo de cambio no compatible para reversión.');
+      }
+
+      var revertDetails = 'Revertido log ID: ' + logId + ' (' + logData.action + ' en ' + collection + '/' + docId + ')';
+      await writeAuditLog('Revertir Acción', revertDetails, {
+        collection: collection,
+        docId: docId,
+        type: 'revert',
+        revertedLogId: logId,
+        userId: currentUserData.uid
+      });
+
+      showToast('Acción revertida con éxito', 'success');
+
+      if (collection === 'products') {
+        loadInventory();
+        loadDashboardStats();
+      } else if (collection === 'users') {
+        loadUsers();
+        loadDashboardStats();
+      } else if (collection === 'discounts') {
+        loadDiscounts();
+        loadDashboardStats();
+      } else if (collection === 'banners') {
+        loadBanners();
+      } else if (collection === 'categories') {
+        loadCategories();
+      } else if (collection === 'brands') {
+        loadBrands();
+      } else if (collection === 'orders') {
+        loadOrders();
+      } else if (collection === 'config') {
+        if (docId === 'site') {
+          loadConfig();
+        } else if (docId === 'layout') {
+          loadLayout();
+        }
+      }
+
+      loadAuditLogs();
+
+      if (currentHistoryUserId) {
+        showUserHistory(currentHistoryUserId);
+      }
+
+    } catch (err) {
+      console.error('Reversion error:', err);
+      showToast('Error al revertir: ' + err.message, 'error');
+    }
   }
 
   // ═══════════════════════════════════
@@ -2249,7 +2587,9 @@
     toggleSectionVisibility: toggleSectionVisibility,
     updateSectionTitle: updateSectionTitle,
     updateSectionSubtitle: updateSectionSubtitle,
-    updateLivePreview: updateLivePreview
+    updateLivePreview: updateLivePreview,
+    showUserHistory: showUserHistory,
+    revertAction: revertAction
   };
 })();
 

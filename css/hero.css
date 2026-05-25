@@ -46,10 +46,9 @@
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
-  align-items: flex-start;
-  background:
-    radial-gradient(circle at top center, rgba(11, 126, 181, 0.12), transparent 30%),
-    linear-gradient(180deg, #f9fbff 0%, #eef4fb 55%, #eaf2fb 100%);
+  align-items: center;
+  justify-content: center;
+  background: #f9fbff;
 }
 
 /* Banner slides — cinematic background + text overlay */
@@ -358,8 +357,23 @@
 .hero-bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 60% 60% at 82% 20%, rgba(11,126,181,0.12) 0%, transparent 62%),
-    radial-gradient(ellipse 35% 40% at 8% 76%, rgba(0,214,143,0.08) 0%, transparent 62%);
+    radial-gradient(ellipse 60% 60% at 82% 20%, rgba(11, 126, 181, 0.14), transparent 62%),
+    radial-gradient(ellipse 35% 40% at 8% 76%, rgba(0, 214, 143, 0.1) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(249, 251, 255, 0.85) 0%, rgba(238, 244, 251, 0.88) 55%, rgba(234, 242, 251, 0.92) 100%);
+  z-index: 1;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.08);
+  transition: transform 7s ease-out;
+  z-index: 0;
+}
+.hero-carousel-slide--hero.active .hero-bg-img {
+  transform: scale(1);
 }
 .hero-dots {
   position: absolute; inset: 0;
@@ -409,7 +423,7 @@
 /* ── Contenido (Mobile-First) ── */
 .hero-content {
   position: relative; z-index: 2;
-  padding: 102px 0 62px;
+  padding: 60px 0 30px;
   max-width: 100%;
   display: flex;
   flex-direction: column;
@@ -587,7 +601,7 @@
 /* ── TABLET (≥768px) ── */
 @media (min-width: 768px) {
   .hero-content {
-    padding: 118px 0 92px;
+    padding: 60px 0 40px;
     max-width: 720px;
     align-items: center;
     text-align: center;
@@ -619,7 +633,7 @@
   }
 
   .hero-content {
-    padding: 94px 0 44px;
+    padding: 50px 0 30px;
     max-width: 680px;
   }
 
@@ -705,7 +719,7 @@
 /* ── DESKTOP (≥1024px) ── */
 @media (min-width: 1024px) {
   .hero-content {
-    padding: 128px 0 112px;
+    padding: 70px 0 50px;
     max-width: 780px;
   }
   .hero-logo-anchor {
@@ -742,7 +756,7 @@
   }
 
   .hero-content {
-    padding: 84px 0 28px;
+    padding: 50px 0 25px;
     gap: 0;
   }
 
