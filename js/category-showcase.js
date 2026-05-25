@@ -126,7 +126,10 @@
       return;
     }
     section.removeAttribute('hidden');
-    renderProducts(currentTab);
+
+    // Seleccionar dinámicamente la primera pestaña que tenga productos activos
+    const defaultTab = TABS.find(tab => getProductsByDepartment(tab.department).length > 0) || TABS[0];
+    setActiveTab(defaultTab.key);
   }
 
   function tryInit() {

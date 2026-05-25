@@ -1,3 +1,4 @@
+window.inventoryDataLoaded = true;
 window.mockDatabase = [];
 window.FutunetData = { products: [], readyPromise: null };
 window.FutunetData.readyPromise = new Promise(async (resolve, reject) => {
