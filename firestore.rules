@@ -137,8 +137,37 @@ service cloud.firestore {
       // Anyone can read config (site settings are public)
       allow read: if true;
       
-      // Only superadmin can change config
-      allow write: if isSuperAdmin();
+      // Only admin or above can change config
+      allow write: if isAdminOrAbove();
+    }
+
+    // ─── BANNERS Collection ───
+    match /banners/{bannerId} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── CATEGORIES Collection ───
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── BRANDS Collection ───
+    match /brands/{brandId} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── SEARCH QUERIES Collection ───
+    match /search_queries/{queryId} {
+      allow create: if true;
+      allow read, delete: if isAdminOrAbove();
+    }
+
+    // ─── AUDIT LOGS Collection ───
+    match /audit_logs/{logId} {
+      allow read, create: if isEditorOrAbove();
     }
 
     // ─── DENY EVERYTHING ELSE ───

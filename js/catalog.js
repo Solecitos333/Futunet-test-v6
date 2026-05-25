@@ -1461,9 +1461,28 @@ function initSmartSearch(inputId, dropdownId) {
   });
 }
 
+async function logSearchQuery(query) {
+  const clean = String(query || '').trim().toLowerCase();
+  if (!clean || clean.length < 2) return;
+  try {
+    const db = window.FutunetFirebase?.db;
+    if (db) {
+      await db.collection('search_queries').add({
+        query: clean,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+  } catch (e) {
+    console.warn('Error saving search query:', e);
+  }
+}
+
 function executeSearch(query) {
   const normalizedQuery = String(query || '').trim();
   if (!normalizedQuery) return;
+
+  // Log to Firestore
+  logSearchQuery(normalizedQuery);
 
   // Check if we are in Catalog Page
   const path = window.location.pathname.toLowerCase();
@@ -1528,6 +1547,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (q) {
       state.searchQuery = q;
+      logSearchQuery(q);
       syncFilterButtons('all');
       const initialInput = document.getElementById('search-catalog-page');
       if (initialInput) initialInput.value = q;
@@ -1535,6 +1555,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else if (brand) {
       // Filtrar por marca desde los logos del Index
       state.searchQuery = brand;
+      logSearchQuery(brand);
       syncFilterButtons('all');
       const initialInput = document.getElementById('search-catalog-page');
       if (initialInput) initialInput.value = brand;

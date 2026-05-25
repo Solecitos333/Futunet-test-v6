@@ -58,6 +58,22 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
           Pedidos
         </button>
+        <button class="admin-nav-item" data-admin-nav="banners">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          Banners
+        </button>
+        <button class="admin-nav-item" data-admin-nav="categories-brands">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-10 9h3v8h14v-8h3L12 3z"/></svg>
+          Categorías / Marcas
+        </button>
+        <button class="admin-nav-item" data-admin-nav="searches">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Búsquedas
+        </button>
+        <button class="admin-nav-item" data-admin-nav="audit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Auditoría
+        </button>
 
         <div class="admin-nav-label">Sistema</div>
         <button class="admin-nav-item" data-admin-nav="config">
@@ -109,6 +125,30 @@
             <div class="admin-stat-icon stat-icon-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5"/></svg></div>
             <div class="admin-stat-label">Descuentos activos</div>
             <div class="admin-stat-value" id="stat-discounts">—</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px;">
+          <!-- Alertas de Stock -->
+          <div class="admin-table-card" style="padding:20px;">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Alertas de Stock Crítico
+            </h3>
+            <div id="dashboard-stock-alerts" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
+              <div style="color:#76889e; text-align:center; padding:16px;">Cargando alertas...</div>
+            </div>
+          </div>
+          
+          <!-- Actividad Reciente -->
+          <div class="admin-table-card" style="padding:20px;">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a75d3" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Actividad Reciente
+            </h3>
+            <div id="dashboard-audit-activity" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
+              <div style="color:#76889e; text-align:center; padding:16px;">Cargando actividad...</div>
+            </div>
           </div>
         </div>
       </div>
@@ -253,27 +293,213 @@
         </div>
       </div>
 
+      <!-- ═══ BANNERS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="banners">
+        <div class="admin-topbar">
+          <h1>Banners Promocionales</h1>
+          <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openNewBanner()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Agregar Banner
+          </button>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Banners Activos</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Título</th>
+                  <th>Subtítulo</th>
+                  <th>Enlace</th>
+                  <th>Orden</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="banners-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CATEGORIES & BRANDS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="categories-brands">
+        <div class="admin-topbar">
+          <h1>Categorías y Marcas</h1>
+        </div>
+        
+        <div style="display:flex; gap:16px; margin-bottom:20px; border-bottom:1.5px solid #e5eef8; padding-bottom:12px;">
+          <button class="admin-btn admin-btn-primary" id="btn-tab-categories" onclick="AdminPanel.switchCatBrandsTab('categories')">Gestionar Categorías</button>
+          <button class="admin-btn admin-btn-ghost" id="btn-tab-brands" onclick="AdminPanel.switchCatBrandsTab('brands')">Gestionar Marcas</button>
+        </div>
+
+        <!-- Tab Categorías -->
+        <div id="tab-content-categories" class="tab-content">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3>Categorías de Productos</h3>
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openNewCategory()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar Categoría
+            </button>
+          </div>
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Icono / Lucide</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="categories-table-body">
+                <tr><td colspan="3" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab Marcas -->
+        <div id="tab-content-brands" class="tab-content" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h3>Logos de Marcas</h3>
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openNewBrand()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar Marca
+            </button>
+          </div>
+          <div class="admin-table-card">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Nombre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="brands-table-body">
+                <tr><td colspan="3" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SEARCH ANALYTICS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="searches">
+        <div class="admin-topbar">
+          <h1>Analíticas de Búsqueda</h1>
+          <button class="admin-btn admin-btn-danger" onclick="AdminPanel.clearSearchQueries()">
+            Limpiar Historial
+          </button>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Términos más buscados</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Término</th>
+                  <th>Frecuencia (Búsquedas)</th>
+                </tr>
+              </thead>
+              <tbody id="searches-table-body">
+                <tr><td colspan="2" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ AUDIT LOGS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="audit">
+        <div class="admin-topbar">
+          <h1>Registro de Auditoría</h1>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Historial de Acciones</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Fecha/Hora</th>
+                  <th>Usuario</th>
+                  <th>Acción</th>
+                  <th>Detalles</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body">
+                <tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ═══ CONFIG PANEL ═══ -->
       <div class="admin-panel" data-admin-panel="config">
         <div class="admin-topbar">
           <h1>Configuración</h1>
         </div>
-        <div class="admin-table-card" style="max-width:600px;">
+        <div class="admin-table-card" style="max-width:650px;">
           <div style="padding:28px;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:#0a101d;margin:0 0 20px;">Ajustes del sitio</h3>
             <form id="config-form">
-              <div class="auth-form-group">
-                <label class="auth-label" for="config-whatsapp">Número WhatsApp</label>
-                <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" />
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-whatsapp">Número WhatsApp</label>
+                  <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" />
+                </div>
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-sitename">Nombre del sitio</label>
+                  <input class="auth-input" type="text" id="config-sitename" placeholder="Futunet" />
+                </div>
               </div>
-              <div class="auth-form-group">
-                <label class="auth-label" for="config-sitename">Nombre del sitio</label>
-                <input class="auth-input" type="text" id="config-sitename" placeholder="Futunet" />
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-advisor">Nombre del Asesor</label>
+                  <input class="auth-input" type="text" id="config-advisor" placeholder="Orbis Espinal" />
+                </div>
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-address">Dirección Física</label>
+                  <input class="auth-input" type="text" id="config-address" placeholder="Santiago, República Dominicana" />
+                </div>
               </div>
-              <div class="auth-form-group" style="display:flex;align-items:center;gap:12px;">
+
+              <div class="auth-form-group">
+                <label class="auth-label" for="config-map-url">URL de Google Maps (Iframe Src)</label>
+                <input class="auth-input" type="text" id="config-map-url" placeholder="https://www.google.com/maps/embed?pb=..." />
+              </div>
+
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-instagram">Instagram URL</label>
+                  <input class="auth-input" type="text" id="config-instagram" placeholder="https://instagram.com/..." />
+                </div>
+                <div class="auth-form-group">
+                  <label class="auth-label" for="config-facebook">Facebook URL</label>
+                  <input class="auth-input" type="text" id="config-facebook" placeholder="https://facebook.com/..." />
+                </div>
+              </div>
+
+              <div class="auth-form-group" style="display:flex;align-items:center;gap:12px; margin-bottom:8px;">
                 <input type="checkbox" id="config-maintenance" style="width:20px;height:20px;accent-color:#0A70A2;" />
-                <label for="config-maintenance" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Modo mantenimiento</label>
+                <label for="config-maintenance" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Modo mantenimiento activo</label>
               </div>
+
+              <div class="auth-form-group">
+                <label class="auth-label" for="config-maintenance-msg">Mensaje de Mantenimiento</label>
+                <textarea class="auth-input" id="config-maintenance-msg" rows="3" placeholder="Estamos realizando mejoras en nuestra tienda online. Por favor, vuelve más tarde o contáctanos por WhatsApp."></textarea>
+              </div>
+
               <button type="submit" class="admin-btn admin-btn-primary" style="margin-top:16px;">Guardar configuración</button>
             </form>
           </div>
@@ -283,6 +509,137 @@
   </div>
 
   <!-- ═══ MODALS ═══ -->
+
+  <!-- Banner Modal -->
+  <div class="admin-modal-overlay" id="banner-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Agregar Banner</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="banner-form">
+          <input type="hidden" id="banner-id" />
+          
+          <div class="auth-form-group">
+            <label class="auth-label">Imagen de Banner (Recomendado 1920x600 o similar)</label>
+            <div class="image-upload-zone" id="banner-upload-zone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Arrastra la imagen aquí o <strong>haz clic para buscar</strong></span>
+              <input type="file" id="banner-image" accept="image/*" style="display:none;" />
+            </div>
+            <div class="image-preview-container" id="banner-preview-container"></div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="banner-title">Título del Banner (HTML permitido)</label>
+            <input class="auth-input" type="text" id="banner-title" placeholder="Ej. Soluciones en <strong>Energía Solar</strong>" required />
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="banner-subtitle">Subtítulo o Descripción</label>
+            <input class="auth-input" type="text" id="banner-subtitle" placeholder="Ej. Equipos de alta eficiencia con garantía" />
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="banner-link">Enlace / Botón URL</label>
+              <input class="auth-input" type="text" id="banner-link" placeholder="Ej. #contacto, catalogo.html?cat=energia" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="banner-order">Orden de Visualización</label>
+              <input class="auth-input" type="number" id="banner-order" min="1" value="1" required />
+            </div>
+          </div>
+
+          <div class="auth-form-group" style="display:flex; align-items:center; gap:12px;">
+            <input type="checkbox" id="banner-active" checked style="width:20px;height:20px;accent-color:#0A70A2;" />
+            <label for="banner-active" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Banner Activo</label>
+          </div>
+
+          <div class="admin-modal-footer" style="padding:20px 0 0; border-top:1px solid #e5eef8;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-banner">Guardar Banner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Modal -->
+  <div class="admin-modal-overlay" id="category-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Agregar Categoría</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="category-form">
+          <input type="hidden" id="category-id" />
+          <div class="auth-form-group">
+            <label class="auth-label" for="category-name">Nombre de la Categoría</label>
+            <input class="auth-input" type="text" id="category-name" placeholder="Ej. Laptops Corporativas" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="category-icon">Nombre de Icono Lucide (Opcional)</label>
+            <input class="auth-input" type="text" id="category-icon" placeholder="Ej. monitor, shield, battery-charging" />
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary">Guardar Categoría</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Modal -->
+  <div class="admin-modal-overlay" id="brand-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Agregar Marca</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="brand-form">
+          <input type="hidden" id="brand-id" />
+          
+          <div class="auth-form-group">
+            <label class="auth-label">Logo de la Marca</label>
+            <div class="image-upload-zone" id="brand-upload-zone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Arrastra el logo aquí o <strong>haz clic para buscar</strong></span>
+              <input type="file" id="brand-logo" accept="image/*" style="display:none;" />
+            </div>
+            <div class="image-preview-container" id="brand-preview-container"></div>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="brand-name">Nombre de la Marca</label>
+            <input class="auth-input" type="text" id="brand-name" placeholder="Ej. Dell, Hikvision, Epson" required />
+          </div>
+
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-brand">Guardar Marca</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Detail Modal -->
+  <div class="admin-modal-overlay" id="order-detail-modal">
+    <div class="admin-modal" style="max-width: 650px;">
+      <div class="admin-modal-header">
+        <h3>Detalle del Pedido</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body" id="order-detail-content" style="max-height: 70vh; overflow-y: auto;">
+        <!-- Contenido dinámico del pedido -->
+      </div>
+    </div>
+  </div>
 
   <!-- Product Modal -->
   <div class="admin-modal-overlay" id="product-modal">
@@ -341,7 +698,9 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
             <div class="auth-form-group">
               <label class="auth-label" for="product-category">Categoría</label>
-              <input class="auth-input" type="text" id="product-category" placeholder="Ej. Mobiliario" />
+              <select class="auth-input" id="product-category" style="appearance:none; background-color:#f3f7fc;" required>
+                <option value="">Selecciona categoría</option>
+              </select>
             </div>
             <div class="auth-form-group">
               <label class="auth-label" for="product-condition">Condición</label>
