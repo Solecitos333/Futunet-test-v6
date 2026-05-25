@@ -521,3 +521,118 @@
 .admin-slider:before { position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .admin-switch input:checked + .admin-slider { background-color: #2a75d3; }
 .admin-switch input:checked + .admin-slider:before { transform: translateX(20px); }
+
+/* --- Skeleton Loaders --- */
+.admin-skeleton {
+  background: linear-gradient(90deg, #e5eef8 25%, #f3f7fc 50%, #e5eef8 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  display: inline-block;
+  height: 14px;
+  width: 100%;
+}
+.admin-skeleton-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #e5eef8;
+  animation: skeleton-loading 1.5s infinite;
+}
+.admin-skeleton-text {
+  height: 12px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: #e5eef8;
+  animation: skeleton-loading 1.5s infinite;
+}
+.admin-skeleton-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: inline-block;
+  background: #e5eef8;
+  animation: skeleton-loading 1.5s infinite;
+}
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* --- Paginator UI --- */
+.admin-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #fdfdfd;
+  border-top: 1px solid #e5eef8;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  color: #5d6f88;
+}
+.admin-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+.admin-pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: 1.5px solid #e5eef8;
+  background: #fff;
+  color: #394c60;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.admin-pagination-btn:hover:not(:disabled) {
+  background: #f3f7fc;
+  border-color: #2a75d3;
+  color: #2a75d3;
+}
+.admin-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+.admin-pagination-info {
+  font-weight: 600;
+}
+
+/* --- Confirm Modal Specific Styling --- */
+.confirm-modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* --- Tablet Responsive Adjustment (768px to 1024px) --- */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .admin-sidebar {
+    width: 80px;
+    padding: 16px 8px;
+  }
+  .admin-sidebar .admin-logo h2,
+  .admin-sidebar .admin-nav-label,
+  .admin-sidebar .admin-user-info {
+    display: none;
+  }
+  .admin-sidebar .admin-nav-item {
+    justify-content: center;
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+  .admin-sidebar .admin-nav-item svg {
+    margin-right: 0;
+  }
+  .admin-main {
+    margin-left: 80px;
+  }
+}
+

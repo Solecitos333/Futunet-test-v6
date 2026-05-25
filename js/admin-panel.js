@@ -6,6 +6,22 @@
   'use strict';
 
   var db, storage, currentUserData;
+  var currentPageInventory = 1;
+  var currentPageUsers = 1;
+  var currentPageOrders = 1;
+  var currentPageDiscounts = 1;
+  var currentPageAudit = 1;
+  var itemsPerPage = 20;
+
+  var allOrders = [];
+  var currentOrdersSearchQuery = '';
+  var currentOrdersStatusFilter = 'all';
+
+  var allDiscounts = [];
+  var currentDiscountSearchQuery = '';
+
+  var allAuditLogs = [];
+  var currentAuditSearchQuery = '';
 
   function init() {
     db = window.FutunetFirebase.db;
@@ -29,6 +45,22 @@
     loadSearchQueries();
     loadAuditLogs();
     loadLayout();
+
+    // Setup logout button listener
+    var logoutBtn = document.getElementById('btn-logout');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async function () {
+        if (await showConfirmModal('Cerrar sesión', '¿Estás seguro de que deseas salir del panel de administración?')) {
+          try {
+            await window.FutunetFirebase.auth.signOut();
+            showToast('Sesión cerrada con éxito', 'success');
+            setTimeout(function () { window.location.href = 'login.html'; }, 1000);
+          } catch (err) {
+            showToast('Error al cerrar sesión: ' + err.message, 'error');
+          }
+        }
+      });
+    }
 
     setupModals();
     initImageUploader();
@@ -190,7 +222,7 @@
 
     var tbody = document.getElementById('inventory-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(6, 6);
 
     try {
       var snapshot = await db.collection('products').orderBy('title').get();
@@ -276,7 +308,16 @@
       });
     }
     
-    renderInventoryTable(filtered);
+    var totalItems = filtered.length;
+    var startIndex = (currentPageInventory - 1) * itemsPerPage;
+    var pagedProducts = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    renderInventoryTable(pagedProducts);
+
+    renderPagination('inventory-pagination', totalItems, itemsPerPage, currentPageInventory, function (newPage) {
+      currentPageInventory = newPage;
+      filterAndRenderInventory();
+    });
   }
 
   function populateCategoryFilter(products) {
@@ -354,7 +395,7 @@
       return;
     }
 
-    if (!confirm('¿Deseas restaurar los ' + totalItemsToSync + ' artículos del inventario anterior? Las computadoras Selektronic y escritorios se configurarán como VISIBLES por defecto, mientras que el resto estará OCULTO. Se conservará el estado actual de los que ya existan en la base de datos.')) {
+    if (!(await showConfirmModal('Restaurar Inventario', '¿Deseas restaurar los ' + totalItemsToSync + ' artículos del inventario anterior? Las computadoras Selektronic y escritorios se configurarán como VISIBLES por defecto, mientras que el resto estará OCULTO. Se conservará el estado actual de los que ya existan en la base de datos.'))) {
       return;
     }
 
@@ -430,7 +471,7 @@
   }
 
   async function deleteProduct(id) {
-    if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
+    if (!(await showConfirmModal('Eliminar producto', '¿Eliminar este producto? Esta acción no se puede deshacer.'))) return;
     try {
       var product = allProducts.find(function (p) { return p.id === id; });
       await db.collection('products').doc(id).delete();
@@ -517,24 +558,33 @@
 
   function filterAndRenderUsers() {
     var query = (currentUserSearchQuery || '').toLowerCase().trim();
-    if (!query) {
-      renderUsersTable(allUsers);
-      return;
+    var filtered = allUsers;
+    if (query) {
+      filtered = allUsers.filter(function (u) {
+        var name = (u.displayName || '').toLowerCase();
+        var email = (u.email || '').toLowerCase();
+        var role = (u.role || '').toLowerCase();
+        var status = (u.status || '').toLowerCase();
+        return name.indexOf(query) !== -1 || email.indexOf(query) !== -1 || role.indexOf(query) !== -1 || status.indexOf(query) !== -1;
+      });
     }
-    var filtered = allUsers.filter(function (u) {
-      var name = (u.displayName || '').toLowerCase();
-      var email = (u.email || '').toLowerCase();
-      var role = (u.role || '').toLowerCase();
-      var status = (u.status || '').toLowerCase();
-      return name.indexOf(query) !== -1 || email.indexOf(query) !== -1 || role.indexOf(query) !== -1 || status.indexOf(query) !== -1;
+
+    var totalItems = filtered.length;
+    var startIndex = (currentPageUsers - 1) * itemsPerPage;
+    var pagedUsers = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    renderUsersTable(pagedUsers);
+
+    renderPagination('users-pagination', totalItems, itemsPerPage, currentPageUsers, function (newPage) {
+      currentPageUsers = newPage;
+      filterAndRenderUsers();
     });
-    renderUsersTable(filtered);
   }
 
   async function loadUsers() {
     var tbody = document.getElementById('users-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(5, 5);
 
     try {
       var snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
@@ -633,39 +683,72 @@
   async function loadDiscounts() {
     var tbody = document.getElementById('discounts-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(6, 5);
 
     try {
       var snapshot = await db.collection('discounts').get();
-      if (snapshot.empty) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay códigos de descuento creados.</td></tr>';
-        return;
-      }
-
-      var html = '';
+      allDiscounts = [];
       snapshot.forEach(function (doc) {
-        var d = doc.data();
-        var typeLabel = d.type === 'percent' ? d.value + '%' : 'RD$' + d.value;
-        var statusClass = d.isActive ? 'status-active' : 'status-disabled';
-        var statusLabel = d.isActive ? 'Activo' : 'Inactivo';
-
-        html += '<tr>' +
-          '<td data-label="Código"><strong style="color:#0a101d;font-family:monospace;">' + escapeHtml(doc.id) + '</strong></td>' +
-          '<td data-label="Tipo">' + (d.type === 'percent' ? 'Porcentaje' : 'Monto fijo') + '</td>' +
-          '<td data-label="Valor">' + typeLabel + '</td>' +
-          '<td data-label="Uso">' + (d.usageCount || 0) + '/' + (d.maxUses || '∞') + '</td>' +
-          '<td data-label="Estado"><span class="admin-status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
-          '<td data-label="Acciones">' +
-          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleDiscount(\'' + doc.id + '\', ' + !d.isActive + ')" title="' + (d.isActive ? 'Desactivar' : 'Activar') + '">' + (d.isActive ? '⏸' : '▶') + '</button>' +
-          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteDiscount(\'' + doc.id + '\')" title="Eliminar">✕</button>' +
-          '</td>' +
-          '</tr>';
+        allDiscounts.push({ id: doc.id, ...doc.data() });
       });
-      tbody.innerHTML = html;
+      filterAndRenderDiscounts();
     } catch (e) {
       console.error('Discounts load error:', e);
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar descuentos</td></tr>';
     }
+  }
+
+  function filterAndRenderDiscounts() {
+    var query = (currentDiscountSearchQuery || '').toLowerCase().trim();
+    var filtered = allDiscounts;
+    if (query) {
+      filtered = allDiscounts.filter(function (d) {
+        var code = (d.id || '').toLowerCase();
+        var type = (d.type || '').toLowerCase();
+        return code.indexOf(query) !== -1 || type.indexOf(query) !== -1;
+      });
+    }
+
+    var totalItems = filtered.length;
+    var startIndex = (currentPageDiscounts - 1) * itemsPerPage;
+    var pagedDiscounts = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    renderDiscountsTable(pagedDiscounts);
+
+    renderPagination('discounts-pagination', totalItems, itemsPerPage, currentPageDiscounts, function (newPage) {
+      currentPageDiscounts = newPage;
+      filterAndRenderDiscounts();
+    });
+  }
+
+  function renderDiscountsTable(discounts) {
+    var tbody = document.getElementById('discounts-table-body');
+    if (!tbody) return;
+
+    if (discounts.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay códigos de descuento que coincidan.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    discounts.forEach(function (d) {
+      var typeLabel = d.type === 'percent' ? d.value + '%' : 'RD$' + d.value;
+      var statusClass = d.isActive ? 'status-active' : 'status-disabled';
+      var statusLabel = d.isActive ? 'Activo' : 'Inactivo';
+
+      html += '<tr>' +
+        '<td data-label="Código"><strong style="color:#0a101d;font-family:monospace;">' + escapeHtml(d.id) + '</strong></td>' +
+        '<td data-label="Tipo">' + (d.type === 'percent' ? 'Porcentaje' : 'Monto fijo') + '</td>' +
+        '<td data-label="Valor">' + typeLabel + '</td>' +
+        '<td data-label="Uso">' + (d.usageCount || 0) + '/' + (d.maxUses || '∞') + '</td>' +
+        '<td data-label="Estado"><span class="admin-status-badge ' + statusClass + '">' + statusLabel + '</span></td>' +
+        '<td data-label="Acciones">' +
+        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleDiscount(\'' + d.id + '\', ' + !d.isActive + ')" title="' + (d.isActive ? 'Desactivar' : 'Activar') + '">' + (d.isActive ? '⏸' : '▶') + '</button>' +
+        '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteDiscount(\'' + d.id + '\')" title="Eliminar">✕</button>' +
+        '</td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
   }
 
   async function saveDiscount() {
@@ -712,7 +795,7 @@
   }
 
   async function deleteDiscount(code) {
-    if (!confirm('¿Eliminar el código "' + code + '"?')) return;
+    if (!(await showConfirmModal('Eliminar descuento', '¿Estás seguro de que deseas eliminar el código de descuento "' + code + '"?'))) return;
     try {
       await db.collection('discounts').doc(code).delete();
       writeAuditLog('Eliminar Descuento', code);
@@ -728,44 +811,86 @@
   async function loadOrders() {
     var tbody = document.getElementById('orders-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(6, 5);
 
     try {
-      var snapshot = await db.collection('orders').orderBy('createdAt', 'desc').limit(50).get();
-      if (snapshot.empty) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay pedidos registrados.</td></tr>';
-        return;
-      }
-
-      var html = '';
+      var snapshot = await db.collection('orders').orderBy('createdAt', 'desc').limit(1000).get();
+      allOrders = [];
       snapshot.forEach(function (doc) {
-        var o = doc.data();
-        var date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
-        var statusMap = { pending: 'Pendiente', processing: 'Procesando', shipped: 'Enviado', delivered: 'Entregado' };
-        var statusLabel = statusMap[o.status] || o.status || 'Pendiente';
-
-        html += '<tr>' +
-          '<td data-label="ID" style="font-family:monospace;font-size:0.78rem;">' + doc.id.substring(0, 8) + '...</td>' +
-          '<td data-label="Cliente">' + escapeHtml(o.userName || '—') + '</td>' +
-          '<td data-label="Total"><strong>' + formatPrice(o.total) + '</strong></td>' +
-          '<td data-label="Estado"><span class="admin-role-badge role-' + (o.status === 'delivered' ? 'editor' : o.status === 'processing' ? 'admin' : 'user') + '">' + statusLabel + '</span></td>' +
-          '<td data-label="Fecha" class="col-hide-mobile">' + date + '</td>' +
-          '<td data-label="Acciones">' +
-          '  <select onchange="AdminPanel.updateOrderStatus(\'' + doc.id + '\', this.value)" style="padding:4px 8px;border:1px solid #e5eef8;border-radius:8px;font-size:0.78rem;font-family:Outfit;">' +
-          '    <option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pendiente</option>' +
-          '    <option value="processing"' + (o.status === 'processing' ? ' selected' : '') + '>Procesando</option>' +
-          '    <option value="shipped"' + (o.status === 'shipped' ? ' selected' : '') + '>Enviado</option>' +
-          '    <option value="delivered"' + (o.status === 'delivered' ? ' selected' : '') + '>Entregado</option>' +
-          '  </select>' +
-          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showOrderDetail(\'' + doc.id + '\')" title="Ver detalles" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
-          '</td>' +
-          '</tr>';
+        allOrders.push({ id: doc.id, ...doc.data() });
       });
-      tbody.innerHTML = html;
+      filterAndRenderOrders();
     } catch (e) {
       console.error('Orders load error:', e);
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar pedidos</td></tr>';
     }
+  }
+
+  function filterAndRenderOrders() {
+    var query = (currentOrdersSearchQuery || '').toLowerCase().trim();
+    var statusFilter = currentOrdersStatusFilter || 'all';
+
+    var filtered = allOrders;
+
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(function (o) {
+        return o.status === statusFilter;
+      });
+    }
+
+    if (query) {
+      filtered = filtered.filter(function (o) {
+        var id = (o.id || '').toLowerCase();
+        var clientName = (o.userName || '').toLowerCase();
+        return id.indexOf(query) !== -1 || clientName.indexOf(query) !== -1;
+      });
+    }
+
+    var totalItems = filtered.length;
+    var startIndex = (currentPageOrders - 1) * itemsPerPage;
+    var pagedOrders = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    renderOrdersTable(pagedOrders);
+
+    renderPagination('orders-pagination', totalItems, itemsPerPage, currentPageOrders, function (newPage) {
+      currentPageOrders = newPage;
+      filterAndRenderOrders();
+    });
+  }
+
+  function renderOrdersTable(orders) {
+    var tbody = document.getElementById('orders-table-body');
+    if (!tbody) return;
+
+    if (orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay pedidos que coincidan.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    orders.forEach(function (o) {
+      var date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
+      var statusMap = { pending: 'Pendiente', processing: 'Procesando', shipped: 'Enviado', delivered: 'Entregado' };
+      var statusLabel = statusMap[o.status] || o.status || 'Pendiente';
+
+      html += '<tr>' +
+        '<td data-label="ID" style="font-family:monospace;font-size:0.78rem;">' + o.id.substring(0, 8) + '...</td>' +
+        '<td data-label="Cliente">' + escapeHtml(o.userName || '—') + '</td>' +
+        '<td data-label="Total"><strong>' + formatPrice(o.total) + '</strong></td>' +
+        '<td data-label="Estado"><span class="admin-role-badge role-' + (o.status === 'delivered' ? 'editor' : o.status === 'processing' ? 'admin' : 'user') + '">' + statusLabel + '</span></td>' +
+        '<td data-label="Fecha" class="col-hide-mobile">' + date + '</td>' +
+        '<td data-label="Acciones">' +
+        '  <select onchange="AdminPanel.updateOrderStatus(\'' + o.id + '\', this.value)" style="padding:4px 8px;border:1px solid #e5eef8;border-radius:8px;font-size:0.78rem;font-family:Outfit;">' +
+        '    <option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pendiente</option>' +
+        '    <option value="processing"' + (o.status === 'processing' ? ' selected' : '') + '>Procesando</option>' +
+        '    <option value="shipped"' + (o.status === 'shipped' ? ' selected' : '') + '>Enviado</option>' +
+        '    <option value="delivered"' + (o.status === 'delivered' ? ' selected' : '') + '>Entregado</option>' +
+        '  </select>' +
+        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showOrderDetail(\'' + o.id + '\')" title="Ver detalles" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+        '</td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
   }
 
   async function updateOrderStatus(orderId, newStatus) {
@@ -1064,7 +1189,7 @@
   }
 
   async function resetDefaultLayout() {
-    if (confirm('¿Está seguro de que desea restaurar el diseño original de la portada? Esto restablecerá el orden, visibilidad y títulos de fábrica.')) {
+    if (await showConfirmModal('Restaurar diseño de portada', '¿Está seguro de que desea restaurar el diseño original de la portada? Esto restablecerá el orden, visibilidad y títulos de fábrica.')) {
       layoutSections = getDefaultLayout();
       renderLayoutControls();
       updateLivePreview();
@@ -1126,7 +1251,7 @@
   async function loadBanners() {
     var tbody = document.getElementById('banners-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(6, 4);
     try {
       var snapshot = await db.collection('banners').orderBy('order').get();
       allBanners = [];
@@ -1144,12 +1269,12 @@
           '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Inactivo</span>';
 
         html += '<tr>' +
-          '<td><img src="' + escapeAttr(img) + '" style="width:120px;height:48px;object-fit:cover;border-radius:6px;"></td>' +
-          '<td><strong style="color:#0a101d;">' + escapeHtml(b.title) + '</strong> ' + statusBadge + '</td>' +
-          '<td>' + escapeHtml(b.subtitle || '—') + '</td>' +
-          '<td>' + escapeHtml(b.link || '—') + '</td>' +
-          '<td>' + (b.order || 1) + '</td>' +
-          '<td>' +
+          '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:120px;height:48px;object-fit:cover;border-radius:6px;"></td>' +
+          '<td data-label="Título"><strong style="color:#0a101d;">' + escapeHtml(b.title) + '</strong> ' + statusBadge + '</td>' +
+          '<td data-label="Subtítulo">' + escapeHtml(b.subtitle || '—') + '</td>' +
+          '<td data-label="Enlace">' + escapeHtml(b.link || '—') + '</td>' +
+          '<td data-label="Orden">' + (b.order || 1) + '</td>' +
+          '<td data-label="Acciones">' +
           '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBanner(\'' + doc.id + '\')">Editar</button>' +
           '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBanner(\'' + doc.id + '\')">Eliminar</button>' +
           '</td>' +
@@ -1247,7 +1372,7 @@
   async function deleteBanner(id) {
     var banner = allBanners.find(function (b) { return b.id === id; });
     if (!banner) return;
-    if (!confirm('¿Eliminar el banner "' + banner.title + '"?')) return;
+    if (!(await showConfirmModal('Eliminar banner', '¿Eliminar el banner "' + banner.title + '"?'))) return;
     try {
       await db.collection('banners').doc(id).delete();
       writeAuditLog('Eliminar Banner', banner.title);
@@ -1292,7 +1417,7 @@
   async function loadCategories() {
     var tbody = document.getElementById('categories-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(3, 4);
     try {
       var snapshot = await db.collection('categories').orderBy('name').get();
       allCategories = [];
@@ -1305,9 +1430,9 @@
         var c = doc.data();
         allCategories.push({ id: doc.id, ...c });
         html += '<tr>' +
-          '<td><strong style="color:#0a101d;">' + escapeHtml(c.name) + '</strong></td>' +
-          '<td>' + escapeHtml(c.icon || '—') + '</td>' +
-          '<td>' +
+          '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(c.name) + '</strong></td>' +
+          '<td data-label="Icono / Lucide">' + escapeHtml(c.icon || '—') + '</td>' +
+          '<td data-label="Acciones">' +
           '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCategory(\'' + doc.id + '\')">Editar</button>' +
           '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCategory(\'' + doc.id + '\')">Eliminar</button>' +
           '</td>' +
@@ -1373,7 +1498,7 @@
   async function deleteCategory(id) {
     var cat = allCategories.find(function (c) { return c.id === id; });
     if (!cat) return;
-    if (!confirm('¿Eliminar la categoría "' + cat.name + '"?')) return;
+    if (!(await showConfirmModal('Eliminar categoría', '¿Eliminar la categoría "' + cat.name + '"?'))) return;
     try {
       await db.collection('categories').doc(id).delete();
       writeAuditLog('Eliminar Categoría', cat.name);
@@ -1389,7 +1514,7 @@
   async function loadBrands() {
     var tbody = document.getElementById('brands-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(3, 4);
     try {
       var snapshot = await db.collection('brands').orderBy('name').get();
       allBrands = [];
@@ -1403,9 +1528,9 @@
         allBrands.push({ id: doc.id, ...b });
         var logo = b.logo || 'img/logo.png';
         html += '<tr>' +
-          '<td><img src="' + escapeAttr(logo) + '" style="width:48px;height:48px;object-fit:contain;background:#f8f9fa;padding:4px;border-radius:8px;"></td>' +
-          '<td><strong style="color:#0a101d;">' + escapeHtml(b.name) + '</strong></td>' +
-          '<td>' +
+          '<td data-label="Logo"><img src="' + escapeAttr(logo) + '" style="width:48px;height:48px;object-fit:contain;background:#f8f9fa;padding:4px;border-radius:8px;"></td>' +
+          '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(b.name) + '</strong></td>' +
+          '<td data-label="Acciones">' +
           '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBrand(\'' + doc.id + '\')">Editar</button>' +
           '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBrand(\'' + doc.id + '\')">Eliminar</button>' +
           '</td>' +
@@ -1480,7 +1605,7 @@
   async function deleteBrand(id) {
     var brand = allBrands.find(function (b) { return b.id === id; });
     if (!brand) return;
-    if (!confirm('¿Eliminar la marca "' + brand.name + '"?')) return;
+    if (!(await showConfirmModal('Eliminar marca', '¿Eliminar la marca "' + brand.name + '"?'))) return;
     try {
       await db.collection('brands').doc(id).delete();
       writeAuditLog('Eliminar Marca', brand.name);
@@ -1534,7 +1659,7 @@
   }
 
   async function clearSearchQueries() {
-    if (!confirm('¿Deseas vaciar todas las analíticas de búsqueda? Esto eliminará todos los registros de búsqueda.')) return;
+    if (!(await showConfirmModal('Limpiar búsquedas', '¿Deseas vaciar todas las analíticas de búsqueda? Esto eliminará todos los registros de búsqueda.'))) return;
     try {
       var snapshot = await db.collection('search_queries').get();
       var batch = db.batch();
@@ -1556,28 +1681,64 @@
   async function loadAuditLogs() {
     var tbody = document.getElementById('audit-table-body');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
+    tbody.innerHTML = getTableSkeletonHtml(4, 5);
     try {
-      var snapshot = await db.collection('audit_logs').orderBy('timestamp', 'desc').limit(100).get();
-      if (snapshot.empty) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">No hay registros de auditoría.</td></tr>';
-        return;
-      }
-      var html = '';
+      var snapshot = await db.collection('audit_logs').orderBy('timestamp', 'desc').limit(1000).get();
+      allAuditLogs = [];
       snapshot.forEach(function (doc) {
-        var log = doc.data();
-        var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
-        html += '<tr>' +
-          '<td style="font-size:0.8rem;color:#76889e;">' + time + '</td>' +
-          '<td><strong style="color:#394c60;">' + escapeHtml(log.userEmail) + '</strong></td>' +
-          '<td><span class="admin-role-badge role-admin" style="text-transform:none;">' + escapeHtml(log.action) + '</span></td>' +
-          '<td>' + escapeHtml(log.details) + '</td>' +
-          '</tr>';
+        allAuditLogs.push({ id: doc.id, ...doc.data() });
       });
-      tbody.innerHTML = html;
+      filterAndRenderAuditLogs();
     } catch (e) {
+      console.error('Audit logs load error:', e);
       tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar auditoría</td></tr>';
     }
+  }
+
+  function filterAndRenderAuditLogs() {
+    var query = (currentAuditSearchQuery || '').toLowerCase().trim();
+    var filtered = allAuditLogs;
+    if (query) {
+      filtered = allAuditLogs.filter(function (log) {
+        var userEmail = (log.userEmail || '').toLowerCase();
+        var action = (log.action || '').toLowerCase();
+        var details = (log.details || '').toLowerCase();
+        return userEmail.indexOf(query) !== -1 || action.indexOf(query) !== -1 || details.indexOf(query) !== -1;
+      });
+    }
+
+    var totalItems = filtered.length;
+    var startIndex = (currentPageAudit - 1) * itemsPerPage;
+    var pagedAudit = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    renderAuditTable(pagedAudit);
+
+    renderPagination('audit-pagination', totalItems, itemsPerPage, currentPageAudit, function (newPage) {
+      currentPageAudit = newPage;
+      filterAndRenderAuditLogs();
+    });
+  }
+
+  function renderAuditTable(logs) {
+    var tbody = document.getElementById('audit-table-body');
+    if (!tbody) return;
+
+    if (logs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#76889e;">No hay registros de auditoría que coincidan.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    logs.forEach(function (log) {
+      var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
+      html += '<tr>' +
+        '<td data-label="Fecha/Hora" style="font-size:0.8rem;color:#76889e;">' + time + '</td>' +
+        '<td data-label="Usuario"><strong style="color:#394c60;">' + escapeHtml(log.userEmail) + '</strong></td>' +
+        '<td data-label="Acción"><span class="admin-role-badge role-admin" style="text-transform:none;">' + escapeHtml(log.action) + '</span></td>' +
+        '<td data-label="Detalles">' + escapeHtml(log.details) + '</td>' +
+        '</tr>';
+    });
+    tbody.innerHTML = html;
   }
 
   // ═══════════════════════════════════
@@ -1704,6 +1865,7 @@
         var q = this.value;
         debounceTimer = setTimeout(function () {
           currentSearchQuery = q;
+          currentPageInventory = 1;
           filterAndRenderInventory();
         }, 300);
       });
@@ -1714,6 +1876,7 @@
     if (categoryFilter) {
       categoryFilter.addEventListener('change', function () {
         currentCategoryFilter = this.value;
+        currentPageInventory = 1;
         filterAndRenderInventory();
       });
     }
@@ -1727,8 +1890,60 @@
         var q = this.value;
         userDebounceTimer = setTimeout(function () {
           currentUserSearchQuery = q;
+          currentPageUsers = 1;
           filterAndRenderUsers();
         }, 300);
+      });
+    }
+
+    // Password reset click listener
+    var resetPwdBtn = document.getElementById('btn-reset-password');
+    if (resetPwdBtn) {
+      resetPwdBtn.addEventListener('click', function() {
+        var email = getVal('user-email-input').trim();
+        if (email) {
+          sendUserPasswordReset(email);
+        } else {
+          showToast('No hay email seleccionado', 'error');
+        }
+      });
+    }
+
+    // Orders search & filter
+    var ordersSearch = document.getElementById('orders-search');
+    if (ordersSearch) {
+      ordersSearch.addEventListener('input', function() {
+        currentOrdersSearchQuery = this.value;
+        currentPageOrders = 1;
+        filterAndRenderOrders();
+      });
+    }
+    var ordersStatusFilter = document.getElementById('orders-status-filter');
+    if (ordersStatusFilter) {
+      ordersStatusFilter.addEventListener('change', function() {
+        currentOrdersStatusFilter = this.value;
+        currentPageOrders = 1;
+        filterAndRenderOrders();
+      });
+    }
+
+    // Discounts search
+    var discountsSearch = document.getElementById('discounts-search');
+    if (discountsSearch) {
+      discountsSearch.addEventListener('input', function() {
+        currentDiscountSearchQuery = this.value;
+        currentPageDiscounts = 1;
+        filterAndRenderDiscounts();
+      });
+    }
+
+    // Audit search
+    var auditSearch = document.getElementById('audit-search');
+    if (auditSearch) {
+      auditSearch.addEventListener('input', function() {
+        currentAuditSearchQuery = this.value;
+        currentPageAudit = 1;
+        filterAndRenderAuditLogs();
       });
     }
   }
@@ -1768,6 +1983,214 @@
     setTimeout(function () { t.classList.remove('is-visible'); setTimeout(function () { t.remove(); }, 300); }, 3000);
   }
 
+  function showConfirmModal(title, message) {
+    return new Promise(function (resolve) {
+      var modal = document.getElementById('confirm-modal');
+      var titleEl = document.getElementById('confirm-title');
+      var msgEl = document.getElementById('confirm-message');
+      var btnAccept = document.getElementById('confirm-btn-accept');
+      var btnCancel = document.getElementById('confirm-btn-cancel');
+      var btnClose = document.getElementById('confirm-close');
+
+      if (!modal) {
+        resolve(confirm(message));
+        return;
+      }
+
+      titleEl.textContent = title;
+      msgEl.textContent = message;
+      modal.classList.add('is-open');
+
+      function cleanup(result) {
+        modal.classList.remove('is-open');
+        btnAccept.removeEventListener('click', onAccept);
+        btnCancel.removeEventListener('click', onCancel);
+        if (btnClose) btnClose.removeEventListener('click', onCancel);
+        resolve(result);
+      }
+
+      function onAccept() { cleanup(true); }
+      function onCancel() { cleanup(false); }
+
+      btnAccept.addEventListener('click', onAccept);
+      btnCancel.addEventListener('click', onCancel);
+      if (btnClose) btnClose.addEventListener('click', onCancel);
+    });
+  }
+
+  function getTableSkeletonHtml(cols, rows) {
+    var html = '';
+    for (var r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (var c = 0; c < cols; c++) {
+        if (c === 0) {
+          html += '<td><div class="admin-skeleton-img"></div></td>';
+        } else if (c === cols - 1) {
+          html += '<td style="display:flex; gap:6px; align-items:center;"><div class="admin-skeleton-btn"></div><div class="admin-skeleton-btn"></div></td>';
+        } else {
+          html += '<td><div class="admin-skeleton"></div></td>';
+        }
+      }
+      html += '</tr>';
+    }
+    return html;
+  }
+
+  function renderPagination(containerId, totalItems, itemsPerPage, currentPage, onPageChange) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+
+    var totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+    
+    if (totalItems === 0) {
+      container.innerHTML = '';
+      return;
+    }
+
+    var startItem = (currentPage - 1) * itemsPerPage + 1;
+    var endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+    var html = '<div class="admin-pagination">' +
+      '<div class="admin-pagination-info">Mostrando ' + startItem + ' - ' + endItem + ' de ' + totalItems + ' elementos</div>' +
+      '<div class="admin-pagination-buttons">' +
+      '  <button class="admin-pagination-btn" id="' + containerId + '-prev" ' + (currentPage === 1 ? 'disabled' : '') + '>Anterior</button>' +
+      '  <span style="display:flex; align-items:center; padding: 0 8px; font-weight:600; font-size:0.82rem;">Pág. ' + currentPage + ' de ' + totalPages + '</span>' +
+      '  <button class="admin-pagination-btn" id="' + containerId + '-next" ' + (currentPage === totalPages ? 'disabled' : '') + '>Siguiente</button>' +
+      '</div>' +
+      '</div>';
+
+    container.innerHTML = html;
+
+    var prevBtn = document.getElementById(containerId + '-prev');
+    var nextBtn = document.getElementById(containerId + '-next');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        if (currentPage > 1) {
+          onPageChange(currentPage - 1);
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        if (currentPage < totalPages) {
+          onPageChange(currentPage + 1);
+        }
+      });
+    }
+  }
+
+  async function sendUserPasswordReset(email) {
+    try {
+      await window.FutunetFirebase.auth.sendPasswordResetEmail(email);
+      showToast('Correo de restablecimiento enviado a ' + email, 'success');
+      writeAuditLog('Restablecer Contraseña', 'Se envió correo de restablecimiento a ' + email);
+    } catch (e) {
+      showToast('Error al enviar correo: ' + e.message, 'error');
+    }
+  }
+
+  function exportToCSV(headers, dataKeys, filename, dataArray) {
+    if (!dataArray || !dataArray.length) {
+      showToast('No hay datos para exportar', 'error');
+      return;
+    }
+
+    var csvRows = [];
+    
+    // Add header row
+    csvRows.push(headers.map(function (h) {
+      return '"' + String(h).replace(/"/g, '""') + '"';
+    }).join(','));
+
+    // Add data rows
+    dataArray.forEach(function (item) {
+      var row = dataKeys.map(function (key) {
+        var val = '';
+        if (typeof key === 'function') {
+          val = key(item);
+        } else {
+          val = item[key];
+        }
+        if (val == null) val = '';
+        return '"' + String(val).replace(/"/g, '""') + '"';
+      });
+      csvRows.push(row.join(','));
+    });
+
+    var csvContent = '\uFEFF' + csvRows.join('\n');
+    var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    
+    if (navigator.msSaveBlob) { // IE 10+
+      navigator.msSaveBlob(blob, filename);
+    } else {
+      var link = document.createElement('a');
+      if (link.download !== undefined) {
+        var url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+    showToast('Exportación completada', 'success');
+  }
+
+  function exportInventoryToCSV() {
+    var headers = ['Nombre', 'Precio', 'Stock', 'Categoría', 'Marca', 'Condición', 'Estado'];
+    var keys = [
+      'title',
+      'price',
+      'stock',
+      function(p) { return p.category || p.department || ''; },
+      'brand',
+      'condition',
+      function(p) { return p.isActive !== false ? 'Visible' : 'Oculto'; }
+    ];
+    exportToCSV(headers, keys, 'inventario_futunet.csv', allProducts);
+  }
+
+  function exportUsersToCSV() {
+    var headers = ['Nombre', 'Email', 'Rol', 'Estado', 'Fecha de Registro'];
+    var keys = [
+      'displayName',
+      'email',
+      'role',
+      'status',
+      function(u) { return u.createdAt ? new Date(u.createdAt.seconds * 1000).toLocaleString('es-DO') : ''; }
+    ];
+    exportToCSV(headers, keys, 'usuarios_futunet.csv', allUsers);
+  }
+
+  function exportOrdersToCSV() {
+    var headers = ['Pedido ID', 'Cliente', 'Email', 'Teléfono', 'Dirección', 'Artículos', 'Subtotal', 'Descuento Código', 'Descuento Monto', 'Total', 'Estado', 'Fecha'];
+    var keys = [
+      'id',
+      'userName',
+      'userEmail',
+      'userPhone',
+      'shippingAddress',
+      function(o) {
+        var items = o.items || [];
+        return items.map(function(it) { return it.title + ' (' + (it.qty || 1) + 'x RD$' + it.price + ')'; }).join(' | ');
+      },
+      function(o) {
+        var sub = 0;
+        (o.items || []).forEach(function(it) { sub += (parseFloat(it.price) || 0) * (parseInt(it.qty) || 1); });
+        return sub;
+      },
+      function(o) { return o.discount ? o.discount.code : ''; },
+      function(o) { return o.discount ? o.discount.amount : 0; },
+      'total',
+      'status',
+      function(o) { return o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleString('es-DO') : ''; }
+    ];
+    exportToCSV(headers, keys, 'pedidos_futunet.csv', allOrders);
+  }
+
   // ─── Public API ───
   window.AdminPanel = {
     init: init,
@@ -1789,6 +2212,9 @@
     loadOrders: loadOrders,
     searchInventory: searchInventory,
     syncToFirebase: syncToFirebase,
+    exportInventoryToCSV: exportInventoryToCSV,
+    exportUsersToCSV: exportUsersToCSV,
+    exportOrdersToCSV: exportOrdersToCSV,
     
     // Banners CRUD
     openNewBanner: openNewBanner,
