@@ -591,42 +591,6 @@ function sortEntriesBySize(groupedItems) {
   });
 }
 
-function renderMobileStackBrowser({ title, description, items }) {
-  const container = document.getElementById('catalog-grid-container');
-  if (!container || !items.length) return;
-
-  const section = document.createElement('section');
-  section.className = 'catalog-mobile-stack-browser reveal in';
-  section.innerHTML = `
-    <div class="catalog-mobile-stack-browser__header">
-      <h3>${escapeHTML(title)}</h3>
-      <p>${escapeHTML(description)}</p>
-    </div>
-  `;
-
-  const grid = document.createElement('div');
-  grid.className = 'catalog-stack-grid';
-
-  items.forEach((item, index) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'catalog-stack-card';
-    button.style.animationDelay = `${index * 35}ms`;
-    button.setAttribute('aria-label', item.ariaLabel || item.title);
-    button.innerHTML = `
-      <span class="catalog-stack-card__icon"><i data-lucide="${escapeHTML(item.icon)}"></i></span>
-      <span class="catalog-stack-card__title">${escapeHTML(item.title)}</span>
-      <span class="catalog-stack-card__meta">${escapeHTML(item.meta)}</span>
-    `;
-    button.addEventListener('click', item.onSelect);
-    grid.appendChild(button);
-  });
-
-  section.appendChild(grid);
-  container.appendChild(section);
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-}
-
 function renderMobilePreviewSection({ eyebrow, title, actionLabel, onAction, products }) {
   const container = document.getElementById('catalog-grid-container');
   if (!container || !products.length) return;
