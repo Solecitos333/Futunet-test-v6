@@ -147,6 +147,9 @@
       showToast('No se encontró window.backupDatabase local.', 'error');
       return;
     }
+    if (!confirm('¿Deseas restaurar los ' + window.backupDatabase.length + ' artículos del inventario anterior? Se guardarán en la base de datos como OCULTOS por defecto.')) {
+      return;
+    }
     try {
       var batch = db.batch();
       var count = 0;
