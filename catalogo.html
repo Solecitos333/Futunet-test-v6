@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/navbar.css?v=1.1" />
   <link rel="stylesheet" href="css/catalog.css?v=1.1" />
   <link rel="stylesheet" href="css/sections.css?v=1.1" />
+  <link rel="stylesheet" href="css/auth.css?v=2.3" />
   <link rel="icon" type="image/png" href="img/logo.png" />
   <meta name="theme-color" content="#0B7EB5" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -64,6 +65,9 @@
             <svg width="15" height="15"><use href="#wa-icon"/></svg>
             829-741-1041
           </a>
+        </li>
+        <li class="nav-auth-wrapper" style="position:relative;">
+          <div id="navbar-auth"></div>
         </li>
       </ul>
       <button
@@ -321,5 +325,12 @@
       if (window.lucide) lucide.createIcons();
     });
   </script>
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>
