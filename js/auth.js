@@ -251,56 +251,70 @@
 
   // ─── Navbar Auth UI ───
   function renderNavbarAuth() {
-    var container = document.getElementById('navbar-auth');
-    if (!container) return;
+    var containers = document.querySelectorAll('.navbar-auth-container');
+    if (containers.length === 0) return;
 
     var user = getAuth().currentUser;
+    var initials = '?';
+    var name = 'Invitado';
+    var isAdminUser = false;
+    
     if (user && currentUserData) {
-      var initials = (currentUserData.displayName || user.email || '?').charAt(0).toUpperCase();
-      var name = currentUserData.displayName || user.email;
-      var isAdminUser = hasRole(ROLES.EDITOR);
+      initials = (currentUserData.displayName || user.email || '?').charAt(0).toUpperCase();
+      name = currentUserData.displayName || user.email;
+      isAdminUser = hasRole(ROLES.EDITOR);
+    }
 
-      container.innerHTML =
-        '<div class="nav-auth-user" id="nav-auth-toggle">' +
-        '  <div class="nav-auth-avatar">' + initials + '</div>' +
-        '  <span class="nav-auth-name">' + name + '</span>' +
-        '  <i data-lucide="chevron-down" class="nav-auth-chevron"></i>' +
-        '</div>' +
-        '<div class="nav-auth-dropdown" id="nav-auth-dropdown">' +
-        (isAdminUser ? '<a href="admin.html" class="nav-auth-dropdown-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>' : '') +
-        '  <a href="mi-cuenta.html" class="nav-auth-dropdown-item"><i data-lucide="user"></i> Mi cuenta</a>' +
-        '  <div class="nav-auth-dropdown-divider"></div>' +
-        '  <button class="nav-auth-dropdown-item nav-auth-logout" id="nav-auth-logout"><i data-lucide="log-out"></i> Cerrar sesión</button>' +
-        '</div>';
+    containers.forEach(function(container, index) {
+      var idSuffix = '-' + index;
+      if (user && currentUserData) {
+        container.innerHTML =
+          '<div class="nav-auth-user" id="nav-auth-toggle' + idSuffix + '">' +
+          '  <div class="nav-auth-avatar">' + initials + '</div>' +
+          '  <span class="nav-auth-name">' + name + '</span>' +
+          '  <i data-lucide="chevron-down" class="nav-auth-chevron"></i>' +
+          '</div>' +
+          '<div class="nav-auth-dropdown" id="nav-auth-dropdown' + idSuffix + '">' +
+          (isAdminUser ? '<a href="admin.html" class="nav-auth-dropdown-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>' : '') +
+          '  <a href="mi-cuenta.html" class="nav-auth-dropdown-item"><i data-lucide="user"></i> Mi cuenta</a>' +
+          '  <div class="nav-auth-dropdown-divider"></div>' +
+          '  <button class="nav-auth-dropdown-item nav-auth-logout" id="nav-auth-logout' + idSuffix + '"><i data-lucide="log-out"></i> Cerrar sesión</button>' +
+          '</div>';
 
-      var toggle = document.getElementById('nav-auth-toggle');
-      var dropdown = document.getElementById('nav-auth-dropdown');
-      var logoutBtn = document.getElementById('nav-auth-logout');
+        var toggle = document.getElementById('nav-auth-toggle' + idSuffix);
+        var dropdown = document.getElementById('nav-auth-dropdown' + idSuffix);
+        var logoutBtn = document.getElementById('nav-auth-logout' + idSuffix);
 
-      if (toggle && dropdown) {
-        toggle.addEventListener('click', function (e) {
-          e.stopPropagation();
-          dropdown.classList.toggle('is-open');
-        });
-        document.addEventListener('click', function () {
-          dropdown.classList.remove('is-open');
-        });
+        if (toggle && dropdown) {
+          toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isActive = dropdown.classList.contains('active');
+            document.querySelectorAll('.nav-auth-dropdown.active').forEach(function(d){ d.classList.remove('active'); });
+            if (!isActive) dropdown.classList.add('active');
+          });
+          document.addEventListener('click', function (e) {
+            if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+              dropdown.classList.remove('active');
+            }
+          });
+        }
+
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', async function () {
+            await signOut();
+            window.location.href = 'index.html';
+          });
+        }
+      } else {
+        container.innerHTML =
+          '<a href="login.html" class="nav-auth-btn-login">' +
+          '  <i data-lucide="log-in"></i> Iniciar sesión' +
+          '</a>';
       }
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', async function () {
-          await signOut();
-          window.location.href = 'index.html';
-        });
-      }
+    });
 
-      if (window.lucide) window.lucide.createIcons();
-    } else {
-      container.innerHTML =
-        '<a href="login.html" class="nav-auth-login">' +
-        '  <i data-lucide="log-in"></i>' +
-        '  <span>Iniciar sesión</span>' +
-        '</a>';
-      if (window.lucide) window.lucide.createIcons();
+    if (window.lucide) {
+      window.lucide.createIcons();
     }
   }
 

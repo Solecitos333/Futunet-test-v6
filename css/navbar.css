@@ -287,6 +287,14 @@
 
 /* ── 10. RESPONSIVE — MOBILE (≤767px) ── */
 @media (max-width: 767px) {
+  .nav-search-compact {
+    flex: 1 1 50px !important;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+  .mobile-menu {
+    padding-bottom: 24px;
+  }
   #navbar {
     height: 64px;
   }
