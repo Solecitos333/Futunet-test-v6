@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
   const INFO = {
     whatsapp: '18297411041',
-    horario: 'Nuestro horario es de lunes a sabado de 8:00 AM a 6:00 PM.',
-    ubicacion: 'Estamos en Avenida Cuesta Colorada, sector Las Colinas, Santiago de los Caballeros, Republica Dominicana.',
-    envios: 'Podemos orientarte con entregas y envios segun el producto y tu zona.',
-    intro: 'Hola. Soy el asistente virtual de Futunet. Elige una opcion y te ayudo a llegar mas rapido a lo que necesitas.'
+    horario: 'Nuestro horario es de lunes a sábado de 8:00 AM a 6:00 PM.',
+    ubicacion: 'Estamos en Avenida Cuesta Colorada, sector Las Colinas, Santiago de los Caballeros, República Dominicana.',
+    envios: 'Podemos orientarte con entregas y envíos según el producto y tu zona.',
+    intro: 'Hola. Soy el asistente virtual de Futunet. ¿En qué te puedo ayudar hoy? Puedes elegir una de las opciones rápidas o escribirme directamente lo que buscas.'
   };
 
   const CONFIG = {
@@ -14,15 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const QUICK_ACTIONS = {
     main: [
       { label: 'Horario', key: 'horario' },
-      { label: 'Ubicacion', key: 'ubicacion' },
-      { label: 'Envios', key: 'envios' },
+      { label: 'Ubicación', key: 'ubicacion' },
+      { label: 'Envíos', key: 'envios' },
       { label: 'Proyectores', key: 'proyectores' },
       { label: 'Impresoras Epson', key: 'impresoras-epson' },
-      { label: 'Camaras', key: 'camaras' },
+      { label: 'Cámaras', key: 'camaras' },
       { label: 'Servicios', key: 'servicios' }
     ],
     catalogo: [
-      { label: 'Catalogo completo', key: 'catalogo' },
+      { label: 'Catálogo completo', key: 'catalogo' },
       { label: 'Hablar con un agente', key: 'agente' }
     ]
   };
@@ -55,12 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
     .cb-action:hover{background:#e6f1ff}
     .cb-action--wa{background:#25d366;border-color:#25d366;color:#fff}
     .cb-action--wa:hover{background:#20bf5b}
-    .chatbot-footer{padding:14px 14px 16px;background:#fff;border-top:1px solid #e1eaf5;display:flex;flex-direction:column;gap:14px}
+    .chatbot-footer{padding:14px 14px 16px;background:#fff;border-top:1px solid #e1eaf5;display:flex;flex-direction:column;gap:12px}
     .chatbot-chips{display:flex;gap:10px;overflow:auto;padding-bottom:2px}
     .chatbot-chip{min-height:42px;padding:0 16px;border-radius:999px;border:1px solid #cfe0fb;background:#f5f9ff;color:#0d5abf;white-space:nowrap;font:600 14px/1 'Outfit',sans-serif;cursor:pointer}
     .chatbot-chip:hover{background:#edf5ff}
-    .chatbot-divider{height:4px;border-radius:999px;background:linear-gradient(90deg,#c6dafb 0%,#c6dafb 72%,transparent 72%)}
-    .chatbot-wa{min-height:56px;border:0;border-radius:18px;background:#25d366;color:#fff;font:700 16px/1 'Outfit',sans-serif;cursor:pointer;box-shadow:0 12px 24px rgba(37,211,102,.18)}
+    .chatbot-divider{height:1px;background:#e1eaf5}
+    .chatbot-wa{min-height:56px;border:0;border-radius:18px;background:#25d366;color:#fff;font:700 16px/1 'Outfit',sans-serif;cursor:pointer;box-shadow:0 12px 24px rgba(37,211,102,.18);width:100%}
+    
+    /* AI Input Styles */
+    .cb-input-container{display:flex;gap:8px;align-items:center;background:#f0f4f9;border-radius:16px;padding:6px 14px;border:1px solid #cfe0fb;transition:all 0.2s}
+    .cb-input-container:focus-within{border-color:#0b5fc6;background:#fff;box-shadow:0 0 0 3px rgba(11,95,198,0.12)}
+    .cb-input-text{flex:1;border:0;background:transparent;outline:none;font:500 14px/1.5 'Outfit',sans-serif;color:#233246;padding:6px 0}
+    .cb-send-btn{border:0;background:#0b5fc6;color:#fff;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+    .cb-send-btn:hover{background:#084896;transform:scale(1.04)}
+    .cb-send-btn:disabled{background:#a0b0c4;cursor:not-allowed;transform:none}
+    
+    @keyframes cb-bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+    
     @media (max-width:767px){
       .chatbot-window{left:16px;right:16px;bottom:calc(var(--mobile-bottom-bar-height) + 20px + var(--mobile-safe-bottom) + var(--chatbot-keyboard-inset, 0px));width:auto;max-width:none;height:min(calc(var(--chatbot-viewport-height, 100svh) - var(--mobile-bottom-bar-height) - 34px - var(--mobile-safe-bottom) - var(--chatbot-keyboard-inset, 0px)),680px);border-radius:24px}
       .chatbot-header{padding:16px 18px}
@@ -85,24 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .cb-bubble{max-width:100%;padding:12px 14px;font-size:14px;line-height:1.5}
       .chatbot-footer{padding:10px 10px 12px;gap:8px}
       .chatbot-chip{min-height:36px;padding:8px 10px;font-size:12px}
-      .chatbot-divider{display:none}
       .chatbot-wa{min-height:46px;font-size:14px;border-radius:14px}
-    }
-    .chatbot-window.chatbot-window--compact .chatbot-header{padding:12px 14px}
-    .chatbot-window.chatbot-window--compact .chatbot-avatar{width:40px;height:40px}
-    .chatbot-window.chatbot-window--compact .chatbot-title{font-size:16px}
-    .chatbot-window.chatbot-window--compact .chatbot-status{margin-top:3px;font-size:11px}
-    .chatbot-window.chatbot-window--compact .chatbot-messages{padding:10px 10px 8px;gap:8px}
-    .chatbot-window.chatbot-window--compact .cb-row{gap:8px}
-    .chatbot-window.chatbot-window--compact .cb-mini-avatar{width:24px;height:24px;flex:0 0 24px}
-    .chatbot-window.chatbot-window--compact .cb-bubble{padding:10px 12px;font-size:13px;line-height:1.42}
-    .chatbot-window.chatbot-window--compact .chatbot-footer{padding:8px 8px 10px;gap:6px}
-    .chatbot-window.chatbot-window--compact .chatbot-chip{min-height:34px;padding:7px 8px;font-size:11px;border-radius:12px}
-    .chatbot-window.chatbot-window--compact .chatbot-divider{display:none}
-    .chatbot-window.chatbot-window--compact .chatbot-wa{min-height:42px;font-size:13px;border-radius:13px}
-    @media (max-width:420px){
-      .chatbot-chips{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .chatbot-window.chatbot-window--compact .chatbot-chips{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
   `;
   document.head.appendChild(style);
@@ -117,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="chatbot-title">Asistente Futunet</div>
             <div class="chatbot-status">
               <span class="chatbot-status-dot"></span>
-              <span>En linea 24/7</span>
+              <span>Inteligencia Artificial activa</span>
             </div>
           </div>
         </div>
@@ -126,6 +123,15 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="chatbot-messages" id="cb-messages" aria-live="polite"></div>
       <div class="chatbot-footer">
         <div class="chatbot-chips" id="cb-chips"></div>
+        
+        <!-- Input para la IA -->
+        <div class="cb-input-container">
+          <input type="text" id="cb-input" class="cb-input-text" placeholder="Pregúntame algo..." autocomplete="off" />
+          <button type="button" id="cb-send" class="cb-send-btn" aria-label="Enviar mensaje">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        
         <div class="chatbot-divider"></div>
         <button class="chatbot-wa" id="cb-wa" type="button">Hablar con un Agente (WhatsApp)</button>
       </div>
@@ -144,8 +150,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const messages = document.getElementById('cb-messages');
   const chips = document.getElementById('cb-chips');
   const waBtn = document.getElementById('cb-wa');
+  const inputEl = document.getElementById('cb-input');
+  const sendBtn = document.getElementById('cb-send');
 
   let initialized = false;
+  let productsContext = '';
+  let chatHistory = [];
+
+  // Background context loaders
+  async function loadProductsContext() {
+    try {
+      // Wait for Firebase to load
+      var count = 0;
+      var interval = setInterval(async function () {
+        if (window.FutunetFirebase && window.FutunetFirebase.db) {
+          clearInterval(interval);
+          try {
+            var snap = await window.FutunetFirebase.db.collection('products').where('isActive', '==', true).get();
+            var arr = [];
+            snap.forEach(function (doc) {
+              var p = doc.data();
+              arr.push(`* ${p.title} - Marca: ${p.brand || 'Genérico'}, Categoría: ${p.category}, Precio: RD$ ${p.price}, Stock: ${p.stock || 0}`);
+            });
+            productsContext = arr.join('\n');
+          } catch (err) {
+            console.warn('Failed loading products context for AI:', err);
+          }
+        } else {
+          count++;
+          if (count > 40) clearInterval(interval); // 2 second timeout
+        }
+      }, 50);
+    } catch (e) {
+      console.warn('Config checker error in chatbot:', e);
+    }
+  }
+
+  loadProductsContext();
 
   function syncChatViewportState() {
     const viewport = window.visualViewport;
@@ -171,7 +212,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function waLink(message) {
-    return `https://wa.me/${INFO.whatsapp}?text=${encodeURIComponent(message)}`;
+    var waNum = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || INFO.whatsapp;
+    return `https://wa.me/${waNum}?text=${encodeURIComponent(message)}`;
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  function formatBotResponse(text) {
+    let safeText = escapeHtml(text);
+    // Bold formats
+    safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Bullet lists
+    safeText = safeText.replace(/^\*\s(.*)/gm, '• $1');
+    // Newlines to breaks
+    safeText = safeText.replace(/\n/g, '<br>');
+    return safeText;
   }
 
   function addRow(sender, html, includeAvatar = false) {
@@ -195,10 +254,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addUserMessage(text) {
-    addRow('user', text);
+    addRow('user', escapeHtml(text));
   }
 
-  function addBotMessage(text, actions = []) {
+  function addBotMessage(text, actions = [], isHtml = false) {
     const wrapper = document.createElement('div');
     wrapper.className = 'cb-row cb-row--bot';
 
@@ -209,11 +268,15 @@ document.addEventListener('DOMContentLoaded', () => {
     wrapper.appendChild(avatar);
 
     const bubble = document.createElement('div');
-    bubble.className = 'cb-bubble cb-bubble--bot';
+    bubble.className = `cb-bubble cb-bubble--bot`;
 
     const textBlock = document.createElement('div');
     textBlock.className = 'cb-part';
-    textBlock.textContent = text;
+    if (isHtml) {
+      textBlock.innerHTML = text;
+    } else {
+      textBlock.textContent = text;
+    }
     bubble.appendChild(textBlock);
 
     if (actions.length) {
@@ -273,28 +336,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function getResponseByKey(key) {
     const responses = {
       horario: {
-        text: INFO.horario,
+        text: (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.HORARIO) || INFO.horario,
         actions: [
-          { kind: 'wa', label: 'Confirmar por WhatsApp', message: 'Hola Futunet, quisiera confirmar su horario de atencion.' }
+          { kind: 'wa', label: 'Confirmar por WhatsApp', message: 'Hola Futunet, quisiera confirmar su horario de atención.' }
         ],
         chips: QUICK_ACTIONS.main
       },
       ubicacion: {
-        text: `${INFO.ubicacion} Si quieres, te paso con un asesor para darte la ubicacion exacta.`,
+        text: `${(window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.ADDRESS) || INFO.ubicacion} Si quieres, te paso con un asesor para darte la ubicación exacta.`,
         actions: [
-          { kind: 'wa', label: 'Pedir ubicacion', message: 'Hola Futunet, quisiera su ubicacion exacta.' }
+          { kind: 'wa', label: 'Pedir ubicación exacta', message: 'Hola Futunet, quisiera su ubicación exacta.' }
         ],
         chips: QUICK_ACTIONS.main
       },
       envios: {
         text: `${INFO.envios} Si quieres, te paso con un asesor para validar disponibilidad y entrega.`,
         actions: [
-          { kind: 'wa', label: 'Consultar envio', message: 'Hola Futunet, quisiera consultar opciones de envio.' }
+          { kind: 'wa', label: 'Consultar envío', message: 'Hola Futunet, quisiera consultar opciones de envío.' }
         ],
         chips: QUICK_ACTIONS.main
       },
       proyectores: {
-        text: 'Puedo llevarte directo a los proyectores disponibles en el catalogo y tambien ayudarte a cotizar uno por WhatsApp.',
+        text: 'Puedo llevarte directo a los proyectores disponibles en el catálogo y también ayudarte a cotizar uno por WhatsApp.',
         actions: [
           { kind: 'catalog', label: 'Ver proyectores', query: 'proyector' },
           { kind: 'wa', label: 'Cotizar proyector', message: 'Hola Futunet, estoy interesado en un proyector.' }
@@ -302,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.catalogo
       },
       'impresoras-epson': {
-        text: 'Si buscas una impresora Epson, te llevo directo a esa busqueda para que revises opciones y precio.',
+        text: 'Si buscas una impresora Epson, te llevo directo a esa búsqueda para que revises opciones y precios.',
         actions: [
           { kind: 'catalog', label: 'Ver impresoras Epson', query: 'impresora Epson' },
           { kind: 'wa', label: 'Cotizar Epson', message: 'Hola Futunet, estoy buscando una impresora Epson.' }
@@ -310,15 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.catalogo
       },
       camaras: {
-        text: 'Puedo llevarte a camaras de seguridad o pasarte con un asesor para orientarte segun tu necesidad.',
+        text: 'Puedo llevarte a cámaras de seguridad o pasarte con un asesor para orientarte según tu necesidad.',
         actions: [
-          { kind: 'catalog', label: 'Ver camaras', query: 'camara' },
-          { kind: 'wa', label: 'Asesoria de camaras', message: 'Hola Futunet, quiero asesoria para camaras de seguridad.' }
+          { kind: 'catalog', label: 'Ver cámaras', query: 'camara' },
+          { kind: 'wa', label: 'Asesoría de cámaras', message: 'Hola Futunet, quiero asesoría para cámaras de seguridad.' }
         ],
         chips: QUICK_ACTIONS.catalogo
       },
       servicios: {
-        text: 'Futunet tambien ofrece servicios. Si quieres, te llevo al catalogo o te paso directo con un asesor para cotizar.',
+        text: 'Futunet también ofrece servicios. Si quieres, te llevo al catálogo o te paso directo con un asesor para cotizar.',
         actions: [
           { kind: 'catalog', label: 'Ver servicios', query: 'servicios' },
           { kind: 'wa', label: 'Cotizar servicio', message: 'Hola Futunet, quiero cotizar un servicio.' }
@@ -326,9 +389,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.catalogo
       },
       catalogo: {
-        text: 'Te llevo al catalogo completo para que explores todo con calma.',
+        text: 'Te llevo al catálogo completo para que explores todo con calma.',
         actions: [
-          { kind: 'catalog', label: 'Abrir catalogo', query: '' }
+          { kind: 'catalog', label: 'Abrir catálogo', query: '' }
         ],
         chips: QUICK_ACTIONS.main
       },
@@ -397,6 +460,120 @@ document.addEventListener('DOMContentLoaded', () => {
     else openChat();
   }
 
+  // Google Gemini integration
+  async function callGeminiChat(userText) {
+    const apiKey = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.GEMINI_API_KEY) || '';
+    if (!apiKey) {
+      return "Lo siento, la tienda no tiene configurada la clave de IA todavía. Puedes contactar a un asesor mediante el botón de WhatsApp abajo.";
+    }
+
+    chatHistory.push({ role: 'user', parts: [{ text: userText }] });
+
+    // Limit history memory size
+    if (chatHistory.length > 12) {
+      chatHistory = chatHistory.slice(chatHistory.length - 12);
+    }
+
+    const whatsappNum = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || INFO.whatsapp;
+    const siteName = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.SITE_NAME) || 'Futunet';
+    const address = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.ADDRESS) || INFO.ubicacion;
+    const advisor = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.ADVISOR_NAME) || 'Orbis Espinal';
+
+    const systemPrompt = `Eres un Asistente Virtual experto en ventas para la tienda ${siteName} (República Dominicana).
+Tu objetivo es ayudar a los clientes a encontrar productos, responder preguntas y dar asesoría amigable en español.
+
+Información sobre la tienda ${siteName}:
+- WhatsApp de contacto: ${whatsappNum}
+- Dirección física: ${address}
+- Horario de atención: Lunes a Sábado de 8:00 AM a 6:00 PM.
+- Asesor Comercial a cargo: ${advisor}
+- Envíos: Se realizan envíos a nivel nacional coordinando con el asesor.
+
+Nuestros Productos Disponibles en Catálogo:
+${productsContext || 'Cargando catálogo...'}
+
+Instrucciones de Respuesta:
+- Sé extremadamente amable, servicial y profesional.
+- Utiliza un tono cálido y respetuoso.
+- Si un cliente te pregunta por un producto que tenemos en la lista anterior, recomiéndaselo, indícale el precio (RD$) y confírmale el stock.
+- Si el cliente quiere hablar con un agente o finalizar la compra, indícale amablemente que puede hacer clic en el botón de WhatsApp de abajo para hablar con ${advisor}.
+- No inventes productos ni des precios de cosas que no estén en la lista anterior. Si no lo tenemos, sugiérele contactar al asesor por si se puede ordenar.
+- Intenta que tus respuestas sean cortas, estructuradas y fáciles de leer en un chat de móvil (máximo 2-3 párrafos cortos).`;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: chatHistory,
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 600
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error en el servicio de IA');
+      }
+
+      const resData = await response.json();
+      if (resData.candidates && resData.candidates[0] && resData.candidates[0].content && resData.candidates[0].content.parts[0]) {
+        const botResponse = resData.candidates[0].content.parts[0].text.trim();
+        chatHistory.push({ role: 'model', parts: [{ text: botResponse }] });
+        return botResponse;
+      } else {
+        throw new Error('Respuesta vacía del servidor');
+      }
+    } catch (err) {
+      console.error('Gemini call error:', err);
+      chatHistory.pop(); // remove user text from failed state
+      return "Disculpa, he tenido un inconveniente de conexión. ¿Podrías volver a intentarlo o presionar el botón inferior de WhatsApp?";
+    }
+  }
+
+  // Handle Dynamic User Inputs
+  async function handleSend() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    addUserMessage(text);
+    inputEl.value = '';
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+
+    // Show typing indicator
+    const typingId = 'cb-typing-indicator';
+    const typingRow = document.createElement('div');
+    typingRow.className = 'cb-row cb-row--bot';
+    typingRow.id = typingId;
+    typingRow.innerHTML = `
+      <img class="cb-mini-avatar" src="${CONFIG.avatar}" alt="Asistente Futunet">
+      <div class="cb-bubble cb-bubble--bot" style="display:flex; align-items:center; gap:4px; padding:12px 16px;">
+        <span class="dot" style="width:6px; height:6px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both;"></span>
+        <span class="dot" style="width:6px; height:6px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both; animation-delay: .2s;"></span>
+        <span class="dot" style="width:6px; height:6px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both; animation-delay: .4s;"></span>
+      </div>
+    `;
+    messages.appendChild(typingRow);
+    messages.scrollTop = messages.scrollHeight;
+
+    const rawResponse = await callGeminiChat(text);
+
+    // Remove typing indicator
+    const indicator = document.getElementById(typingId);
+    if (indicator) indicator.remove();
+
+    addBotMessage(formatBotResponse(rawResponse), [], true);
+
+    inputEl.disabled = false;
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+
   setFabIcon(false);
   syncChatViewportState();
 
@@ -411,7 +588,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   waBtn.addEventListener('click', () => {
-    window.open(waLink('Hola Futunet, quiero hablar con un asesor.'), '_blank', 'noopener');
+    var advisor = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.ADVISOR_NAME) || 'Orbis Espinal';
+    window.open(waLink(`Hola Futunet, quiero hablar con un asesor (${advisor}).`), '_blank', 'noopener');
   });
 
   chips.addEventListener('click', (event) => {
@@ -432,6 +610,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (kind === 'wa') {
       window.open(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'), '_blank', 'noopener');
+    }
+  });
+
+  sendBtn.addEventListener('click', handleSend);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      handleSend();
     }
   });
 

@@ -612,6 +612,11 @@
                 </div>
               </div>
 
+              <div class="auth-form-group">
+                <label class="auth-label" for="config-gemini-key">Google Gemini API Key (para Asistente IA)</label>
+                <input class="auth-input" type="password" id="config-gemini-key" placeholder="AIzaSy..." />
+              </div>
+
               <div class="auth-form-group" style="display:flex;align-items:center;gap:12px; margin-bottom:8px;">
                 <input type="checkbox" id="config-maintenance" style="width:20px;height:20px;accent-color:#0A70A2;" />
                 <label for="config-maintenance" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Modo mantenimiento activo</label>
@@ -841,8 +846,14 @@
           </div>
 
           <div class="auth-form-group">
-            <label class="auth-label" for="product-desc">Descripción</label>
-            <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical;" placeholder="Describe el estado, medidas, material, etc."></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label class="auth-label" for="product-desc" style="margin-bottom:0;">Descripción</label>
+              <button type="button" id="btn-generate-desc-ai" class="admin-btn" style="min-height:28px; padding:3px 10px; font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; border:1px dashed #0b5fc6; color:#0b5fc6; background:rgba(11,95,198,0.06); border-radius:6px; font-family:'Outfit',sans-serif; font-weight:600; cursor:pointer; transition:all 0.2s;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                Generar con IA
+              </button>
+            </div>
+            <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical; margin-top:6px;" placeholder="Describe el estado, medidas, material, etc."></textarea>
           </div>
 
           <div class="auth-form-group">

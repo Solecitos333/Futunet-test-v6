@@ -12,7 +12,8 @@ var FUTUNET_CONFIG = {
   INSTAGRAM_URL: '',
   FACEBOOK_URL: '',
   MAINTENANCE_MODE: false,
-  MAINTENANCE_MESSAGE: 'Estamos realizando mejoras en nuestra tienda online. Por favor, vuelve más tarde o contáctanos por WhatsApp.'
+  MAINTENANCE_MESSAGE: 'Estamos realizando mejoras en nuestra tienda online. Por favor, vuelve más tarde o contáctanos por WhatsApp.',
+  GEMINI_API_KEY: 'AIzaSyA9ei4VUYIE7hk-M8dpBD3awjdWEpgrmLA'
 };
 
 (function () {
@@ -59,6 +60,7 @@ var FUTUNET_CONFIG = {
           if (data.facebookUrl) FUTUNET_CONFIG.FACEBOOK_URL = data.facebookUrl;
           if (data.maintenanceMessage) FUTUNET_CONFIG.MAINTENANCE_MESSAGE = data.maintenanceMessage;
           if (data.maintenanceMode !== undefined) FUTUNET_CONFIG.MAINTENANCE_MODE = data.maintenanceMode;
+          if (data.geminiApiKey) FUTUNET_CONFIG.GEMINI_API_KEY = data.geminiApiKey;
         }
       }
     } catch (e) {

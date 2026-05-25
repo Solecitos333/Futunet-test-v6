@@ -1309,6 +1309,7 @@
         setVal('config-instagram', data.instagramUrl || '');
         setVal('config-facebook', data.facebookUrl || '');
         setVal('config-maintenance-msg', data.maintenanceMessage || '');
+        setVal('config-gemini-key', data.geminiApiKey || '');
         
         var maint = document.getElementById('config-maintenance');
         if (maint) maint.checked = data.maintenanceMode || false;
@@ -1326,6 +1327,7 @@
     var instagram = getVal('config-instagram');
     var facebook = getVal('config-facebook');
     var maintMsg = getVal('config-maintenance-msg');
+    var geminiKey = getVal('config-gemini-key');
     
     var maint = document.getElementById('config-maintenance');
     var maintenanceMode = maint ? maint.checked : false;
@@ -1344,6 +1346,7 @@
         facebookUrl: facebook,
         maintenanceMessage: maintMsg,
         maintenanceMode: maintenanceMode,
+        geminiApiKey: geminiKey,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
@@ -2274,6 +2277,70 @@
   // MODALS & EVENT HANDLERS
   // ═══════════════════════════════════
   function setupModals() {
+    // AI Description generator
+    var genDescBtn = document.getElementById('btn-generate-desc-ai');
+    if (genDescBtn) {
+      genDescBtn.addEventListener('click', async function () {
+        var title = getVal('product-title');
+        var category = getVal('product-category');
+        var brand = getVal('product-brand');
+        var specs = getVal('product-specs');
+
+        if (!title) {
+          showToast('Por favor, introduce al menos el título del producto.', 'warning');
+          return;
+        }
+
+        var apiKey = FUTUNET_CONFIG.GEMINI_API_KEY || '';
+        if (!apiKey) {
+          showToast('No se ha configurado la API Key de Gemini. Configúrala en Ajustes.', 'error');
+          return;
+        }
+
+        var originalText = genDescBtn.innerHTML;
+        genDescBtn.disabled = true;
+        genDescBtn.textContent = 'Generando...';
+
+        try {
+          var prompt = `Escribe una descripción comercial y profesional para una tienda en línea llamada Futunet.\nEl producto es:\n- Título: ${title}\n- Categoría: ${category || 'Varios'}\n- Marca: ${brand || 'Genérico'}\n${specs ? `- Características: \n${specs}` : ''}\n\nRequisitos:\n- Redacta en español de República Dominicana de manera persuasiva.\n- Detalla los beneficios clave de forma atractiva.\n- Mantén la respuesta concisa y profesional (entre 2 y 3 párrafos cortos).\n- No uses rodeos como "Aquí tienes la descripción:" ni introducciones, responde directamente con la descripción.`;
+
+          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.7, maxOutputTokens: 600 }
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error en la llamada a la API de Gemini (Código: ' + response.status + ')');
+          }
+
+          var resData = await response.json();
+          if (resData.candidates && resData.candidates[0] && resData.candidates[0].content && resData.candidates[0].content.parts[0]) {
+            var generatedText = resData.candidates[0].content.parts[0].text.trim();
+            // Quitar formato markdown de asteriscos si la IA los incluye
+            generatedText = generatedText.replace(/[\*\_]/g, '');
+            var descArea = document.getElementById('product-desc');
+            if (descArea) {
+              descArea.value = generatedText;
+              descArea.dispatchEvent(new Event('input'));
+            }
+            showToast('Descripción generada con éxito por la IA.', 'success');
+          } else {
+            throw new Error('Respuesta inválida de la IA');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Error al generar descripción: ' + err.message, 'error');
+        } finally {
+          genDescBtn.disabled = false;
+          genDescBtn.innerHTML = originalText;
+        }
+      });
+    }
+
     // Product form
     var productForm = document.getElementById('product-form');
     if (productForm) {
