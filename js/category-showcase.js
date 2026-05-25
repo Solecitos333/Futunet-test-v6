@@ -138,8 +138,18 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', tryInit);
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+      tryInit();
+    });
   } else {
-    tryInit();
+    (async () => {
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+      tryInit();
+    })();
   }
 })();

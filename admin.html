@@ -285,41 +285,84 @@
       <div class="admin-modal-body">
         <form id="product-form">
           <input type="hidden" id="product-id" />
-          <div class="auth-form-group">
-            <label class="auth-label" for="product-title">Nombre del producto</label>
-            <input class="auth-input" type="text" id="product-title" required />
+          
+          <!-- Estado / Visibilidad -->
+          <div class="auth-form-group" style="display:flex; align-items:center; justify-content:space-between; background:#f9fafc; padding:12px; border-radius:12px; border:1px solid #e5eef8;">
+            <div>
+              <strong style="display:block; color:#0a101d;">Visibilidad del producto</strong>
+              <span style="font-size:0.8rem; color:#76889e;">Si está apagado, solo tú podrás verlo en el dashboard.</span>
+            </div>
+            <label class="admin-switch">
+              <input type="checkbox" id="product-active" checked>
+              <span class="admin-slider"></span>
+            </label>
           </div>
+
+          <!-- Zona de Subida de Imágenes -->
           <div class="auth-form-group">
-            <label class="auth-label" for="product-desc">Descripción</label>
-            <textarea class="auth-input" id="product-desc" rows="3" style="resize:vertical;"></textarea>
+            <label class="auth-label">Fotos del producto</label>
+            <div class="image-upload-zone" id="image-upload-zone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Arrastra tus fotos aquí o <strong>haz clic para buscar</strong></span>
+              <span style="font-size:0.75rem; color:#76889e; margin-top:4px;">En celular, toca para abrir la galería o cámara.</span>
+              <input type="file" id="product-images" accept="image/*" multiple style="display:none;" />
+            </div>
+            <div class="image-preview-container" id="image-preview-container">
+              <!-- Miniaturas dinámicas -->
+            </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+          <!-- Información Básica -->
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-title">Título del producto</label>
+            <input class="auth-input" type="text" id="product-title" placeholder="Ej. Escritorio Ejecutivo en L" required />
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
             <div class="auth-form-group">
               <label class="auth-label" for="product-price">Precio (RD$)</label>
-              <input class="auth-input" type="number" id="product-price" step="0.01" min="0" />
+              <input class="auth-input" type="number" id="product-price" step="0.01" min="0" placeholder="0.00" />
             </div>
             <div class="auth-form-group">
-              <label class="auth-label" for="product-stock">Stock</label>
-              <input class="auth-input" type="number" id="product-stock" min="0" />
+              <label class="auth-label" for="product-stock">Inventario (Stock)</label>
+              <input class="auth-input" type="number" id="product-stock" min="0" placeholder="0" />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
             <div class="auth-form-group">
               <label class="auth-label" for="product-category">Categoría</label>
-              <input class="auth-input" type="text" id="product-category" />
+              <input class="auth-input" type="text" id="product-category" placeholder="Ej. Mobiliario" />
             </div>
             <div class="auth-form-group">
-              <label class="auth-label" for="product-brand">Marca</label>
-              <input class="auth-input" type="text" id="product-brand" />
+              <label class="auth-label" for="product-condition">Condición</label>
+              <select class="auth-input" id="product-condition" style="appearance:none; background-color:#f3f7fc;">
+                <option value="Nuevo">Nuevo</option>
+                <option value="Usado - Como nuevo">Usado - Como nuevo</option>
+                <option value="Usado - Buen estado">Usado - Buen estado</option>
+                <option value="Reacondicionado">Reacondicionado</option>
+              </select>
             </div>
           </div>
+
           <div class="auth-form-group">
-            <label class="auth-label" for="product-img">URL de imagen</label>
-            <input class="auth-input" type="url" id="product-img" placeholder="https://..." />
+            <label class="auth-label" for="product-brand">Marca</label>
+            <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." />
           </div>
-          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-desc">Descripción</label>
+            <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical;" placeholder="Describe el estado, medidas, material, etc."></textarea>
+          </div>
+
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-specs">Características principales (Una por línea)</label>
+            <textarea class="auth-input" id="product-specs" rows="3" style="resize:vertical;" placeholder="Color negro&#10;Garantía de 1 año&#10;Incluye instalación"></textarea>
+          </div>
+
+          <div class="admin-modal-footer" style="padding:20px 0 0; border-top:1px solid #e5eef8;">
             <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
-            <button type="submit" class="admin-btn admin-btn-primary">Guardar producto</button>
+            <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-product">Publicar producto</button>
           </div>
         </form>
       </div>
@@ -423,6 +466,8 @@
   <script src="js/firebase-config.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/auth-guard.js"></script>
+  <script src="js/backup_data.js"></script>
+  <script src="js/inventory_data.js"></script>
   <script src="js/admin-panel.js"></script>
 
   <script>

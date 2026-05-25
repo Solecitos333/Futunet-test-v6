@@ -1494,7 +1494,10 @@ function executeSearch(query) {
    8. BOOTSTRAPPING
    ------------------------------------------------------------- */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.FutunetData && window.FutunetData.readyPromise) {
+    await window.FutunetData.readyPromise;
+  }
   bindCatalogInterface();
   const mobileFilterTrigger = document.getElementById('catalog-mobile-filter-trigger');
   const mobileFilterBarTrigger = document.getElementById('catalog-mobile-filter-bar-trigger');

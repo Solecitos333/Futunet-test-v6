@@ -19,6 +19,13 @@
     loadOrders();
     loadConfig();
     setupModals();
+    initImageUploader(); // Ensure image uploader starts
+
+    // Auto-migrate hidden items ONCE without user intervention
+    if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated')) {
+      localStorage.setItem('futunet_auto_migrated', 'true');
+      syncToFirebase();
+    }
   }
 
   // ═══════════════════════════════════
@@ -46,6 +53,11 @@
   var allProducts = [];
 
   async function loadInventory() {
+    if (currentUserData.role === 'superadmin') {
+      var syncBtn = document.getElementById('btn-sync-firebase');
+      if (syncBtn) syncBtn.style.display = 'inline-flex';
+    }
+
     var tbody = document.getElementById('inventory-table-body');
     if (!tbody) return;
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>';
@@ -72,14 +84,23 @@
 
     var html = '';
     products.forEach(function (p) {
-      var img = p.img || p.gallery?.[0] || 'img/logo.png';
+      var img = p.img || (p.gallery && p.gallery[0]) || 'img/logo.png';
+      var statusBadge = (p.isActive !== false) ? 
+        '<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; margin-left:8px;">Visible</span>' : 
+        '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; margin-left:8px;">Oculto</span>';
+      
+      var eyeIcon = (p.isActive !== false) ? 
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' : 
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
+
       html += '<tr>' +
         '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.png\'"></td>' +
-        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong></td>' +
+        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + statusBadge + '</td>' +
         '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
         '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
         '<td data-label="Stock" class="col-hide-mobile">' + (p.stock != null ? p.stock : '-') + '</td>' +
         '<td data-label="Acciones">' +
+        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>' +
         '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editProduct(\'' + p.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
         '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteProduct(\'' + p.id + '\')" title="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>' +
         '</td>' +
@@ -121,6 +142,26 @@
     }
   }
 
+  async function syncToFirebase() {
+    if (typeof window.mockDatabase === 'undefined' || !window.mockDatabase.length) {
+      showToast('No se encontró window.mockDatabase local.', 'error');
+      return;
+    }
+    if (!confirm('¿Restaurar ' + window.mockDatabase.length + ' productos como OCULTOS a Firebase?')) return;
+    try {
+      for (var i = 0; i < window.mockDatabase.length; i++) {
+        var p = window.mockDatabase[i];
+        p.isActive = false; // Set default active status to HIDDEN
+        await db.collection('products').doc(p.id).set(p);
+      }
+      showToast('Sincronización completada', 'success');
+      loadInventory();
+      loadDashboardStats();
+    } catch (e) {
+      showToast('Error en sincronización: ' + e.message, 'error');
+    }
+  }
+
   async function deleteProduct(id) {
     if (!confirm('¿Eliminar este producto? Esta acción no se puede deshacer.')) return;
     try {
@@ -130,6 +171,20 @@
       loadDashboardStats();
     } catch (e) {
       showToast('Error al eliminar: ' + e.message, 'error');
+    }
+  }
+
+  async function toggleProductActive(id, currentStatus) {
+    try {
+      await db.collection('products').doc(id).update({
+        isActive: !currentStatus,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showToast(!currentStatus ? 'Producto visible en la tienda' : 'Producto ocultado de la tienda', 'success');
+      loadInventory();
+      loadDashboardStats();
+    } catch (e) {
+      showToast('Error al actualizar estado: ' + e.message, 'error');
     }
   }
 
@@ -144,7 +199,22 @@
     setVal('product-category', product.category || product.department || '');
     setVal('product-brand', product.brand || '');
     setVal('product-stock', product.stock != null ? product.stock : '');
-    setVal('product-img', product.img || '');
+    setVal('product-condition', product.condition || 'Nuevo');
+    
+    var cb = document.getElementById('product-active');
+    if(cb) cb.checked = product.isActive !== false;
+
+    var specsStr = Array.isArray(product.specs) ? product.specs.join('\n') : (product.specs || '');
+    setVal('product-specs', specsStr);
+
+    existingGallery = [];
+    uploadFiles = [];
+    if(product.gallery && product.gallery.length) {
+      existingGallery = [...product.gallery];
+    } else if (product.img) {
+      existingGallery = [product.img];
+    }
+    renderPreview();
 
     var modalTitle = document.querySelector('#product-modal .admin-modal-header h3');
     if (modalTitle) modalTitle.textContent = 'Editar producto';
@@ -154,6 +224,13 @@
   function openNewProduct() {
     document.getElementById('product-form').reset();
     setVal('product-id', '');
+    existingGallery = [];
+    uploadFiles = [];
+    renderPreview();
+    
+    var cb = document.getElementById('product-active');
+    if(cb) cb.checked = true;
+
     var modalTitle = document.querySelector('#product-modal .admin-modal-header h3');
     if (modalTitle) modalTitle.textContent = 'Agregar producto';
     openModal('product-modal');
@@ -446,19 +523,51 @@
     // Product form
     var productForm = document.getElementById('product-form');
     if (productForm) {
-      productForm.addEventListener('submit', function (e) {
+      productForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        var data = {
-          title: getVal('product-title'),
-          desc: getVal('product-desc'),
-          price: parseFloat(getVal('product-price')) || 0,
-          category: getVal('product-category'),
-          brand: getVal('product-brand'),
-          stock: parseInt(getVal('product-stock')) || 0,
-          img: getVal('product-img')
-        };
-        var id = getVal('product-id');
-        saveProduct(data, id || null);
+        var btn = document.getElementById('btn-save-product');
+        if(btn) { btn.disabled = true; btn.textContent = 'Subiendo...'; }
+
+        try {
+          var specsRaw = getVal('product-specs');
+          var specsArr = specsRaw ? specsRaw.split('\n').filter(function(s){return s.trim()!==''}) : [];
+          var activeCb = document.getElementById('product-active');
+
+          var finalGallery = [...existingGallery];
+
+          // Upload new files
+          for(var i=0; i<uploadFiles.length; i++) {
+            var file = uploadFiles[i];
+            var ext = file.name.split('.').pop();
+            var fileName = 'product_' + Date.now() + '_' + Math.floor(Math.random()*1000) + '.' + ext;
+            var ref = storage.ref('products/' + fileName);
+            await ref.put(file);
+            var url = await ref.getDownloadURL();
+            finalGallery.push(url);
+          }
+
+          var data = {
+            title: getVal('product-title'),
+            desc: getVal('product-desc'),
+            price: parseFloat(getVal('product-price')) || 0,
+            category: getVal('product-category'),
+            department: getVal('product-category') ? getVal('product-category').toLowerCase() : 'otros',
+            brand: getVal('product-brand'),
+            stock: parseInt(getVal('product-stock')) || 0,
+            condition: getVal('product-condition'),
+            isActive: activeCb ? activeCb.checked : true,
+            specs: specsArr,
+            gallery: finalGallery,
+            img: finalGallery.length > 0 ? finalGallery[0] : ''
+          };
+
+          var id = getVal('product-id');
+          await saveProduct(data, id || null);
+        } catch(err) {
+          showToast('Error al subir: ' + err.message, 'error');
+        } finally {
+          if(btn) { btn.disabled = false; btn.textContent = 'Publicar producto'; }
+        }
       });
     }
 
@@ -549,6 +658,7 @@
     init: init,
     editProduct: editProduct,
     deleteProduct: deleteProduct,
+    toggleProductActive: toggleProductActive,
     openNewProduct: openNewProduct,
     editUser: editUser,
     saveUser: saveUser,
@@ -562,6 +672,49 @@
     loadUsers: loadUsers,
     loadDiscounts: loadDiscounts,
     loadOrders: loadOrders,
-    searchInventory: searchInventory
+    searchInventory: searchInventory,
+    syncToFirebase: syncToFirebase
   };
 })();
+
+// ======= IMAGE UPLOADER LOGIC =======
+var uploadFiles = [];
+var existingGallery = [];
+
+function initImageUploader() {
+  var zone = document.getElementById('image-upload-zone');
+  var input = document.getElementById('product-images');
+  if(!zone || !input) return;
+  zone.addEventListener('click', function() { input.click(); });
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault(); zone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+  input.addEventListener('change', function(e) { handleFiles(e.target.files); });
+}
+
+function handleFiles(files) {
+  for (var i=0; i<files.length; i++) {
+    uploadFiles.push(files[i]);
+  }
+  renderPreview();
+}
+
+function renderPreview() {
+  var container = document.getElementById('image-preview-container');
+  if(!container) return;
+  container.innerHTML = '';
+  existingGallery.forEach(function(url, idx) {
+    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+url+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeExistingImage('+idx+')\">X</button></div>';
+  });
+  uploadFiles.forEach(function(file, idx) {
+    var objectUrl = URL.createObjectURL(file);
+    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+objectUrl+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeUploadFile('+idx+')\">X</button></div>';
+  });
+}
+
+window.removeExistingImage = function(idx) { existingGallery.splice(idx, 1); renderPreview(); };
+window.removeUploadFile = function(idx) { uploadFiles.splice(idx, 1); renderPreview(); };
+

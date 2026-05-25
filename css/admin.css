@@ -505,3 +505,19 @@
   .admin-topbar { flex-direction: column; align-items: flex-start; gap: 12px; }
   .admin-search { min-width: 100%; }
 }
+
+/* --- Facebook Marketplace Style Uploads --- */
+.image-upload-zone { border: 2px dashed #c1d5ed; border-radius: 12px; padding: 32px 16px; text-align: center; cursor: pointer; background: #f9fafc; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.image-upload-zone:hover, .image-upload-zone.dragover { background: #eff4fb; border-color: #2a75d3; }
+.image-preview-container { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.image-thumb-wrapper { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid #e5eef8; }
+.image-thumb-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+.image-thumb-remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.image-thumb-remove:hover { background: #e74c3c; }
+/* --- Visibility Toggle Switch --- */
+.admin-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.admin-switch input { opacity: 0; width: 0; height: 0; }
+.admin-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+.admin-slider:before { position: absolute; content: ''; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.admin-switch input:checked + .admin-slider { background-color: #2a75d3; }
+.admin-switch input:checked + .admin-slider:before { transform: translateX(20px); }

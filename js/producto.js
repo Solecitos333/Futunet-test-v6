@@ -346,5 +346,10 @@
     renderProductDetail(detail);
   }
 
-  document.addEventListener('DOMContentLoaded', initProductPage);
+  document.addEventListener('DOMContentLoaded', async () => {
+    if (window.FutunetData && window.FutunetData.readyPromise) {
+      await window.FutunetData.readyPromise;
+    }
+    initProductPage();
+  });
 })();

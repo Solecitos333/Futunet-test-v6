@@ -221,8 +221,18 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', queueShowcaseInit);
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+      queueShowcaseInit();
+    });
   } else {
-    queueShowcaseInit();
+    (async () => {
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+      queueShowcaseInit();
+    })();
   }
 })();
