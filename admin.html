@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin — Futunet</title>
+  <meta name="description" content="Panel de administración Futunet: inventario, usuarios, descuentos y configuración." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css?v=3.0" />
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="icon" type="image/png" href="img/logo.png" />
+  <meta name="theme-color" content="#0f1923" />
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- Mobile Toggle -->
+  <button class="admin-mobile-toggle" id="admin-mobile-toggle" aria-label="Abrir menú">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+  <div class="admin-overlay" id="admin-overlay"></div>
+
+  <div class="admin-layout" id="admin-layout">
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <button class="admin-sidebar-close" id="admin-sidebar-close" aria-label="Cerrar menú">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="admin-sidebar-logo">
+        <img src="img/logo-navbar.png" alt="Futunet" />
+        <span>Panel de administración</span>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-label">Principal</div>
+        <button class="admin-nav-item is-active" data-admin-nav="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="admin-nav-item" data-admin-nav="inventory">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg>
+          Inventario
+        </button>
+
+        <div class="admin-nav-label">Gestión</div>
+        <button class="admin-nav-item" data-admin-nav="users">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Usuarios
+        </button>
+        <button class="admin-nav-item" data-admin-nav="discounts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Descuentos
+        </button>
+        <button class="admin-nav-item" data-admin-nav="orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+          Pedidos
+        </button>
+
+        <div class="admin-nav-label">Sistema</div>
+        <button class="admin-nav-item" data-admin-nav="config">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          Configuración
+        </button>
+        <a href="index.html" class="admin-nav-item" style="margin-top:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
+          Volver al sitio
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-info">
+          <div class="admin-user-avatar" id="admin-avatar">?</div>
+          <div>
+            <div class="admin-user-name" id="admin-name">Cargando...</div>
+            <div class="admin-user-role" id="admin-role"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <main class="admin-main">
+
+      <!-- ═══ DASHBOARD PANEL ═══ -->
+      <div class="admin-panel is-active" data-admin-panel="dashboard">
+        <div class="admin-topbar">
+          <h1>Dashboard</h1>
+        </div>
+        <div class="admin-stats">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+            <div class="admin-stat-label">Productos</div>
+            <div class="admin-stat-value" id="stat-products">—</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <div class="admin-stat-label">Usuarios</div>
+            <div class="admin-stat-value" id="stat-users">—</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg></div>
+            <div class="admin-stat-label">Pedidos</div>
+            <div class="admin-stat-value" id="stat-orders">—</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5"/></svg></div>
+            <div class="admin-stat-label">Descuentos activos</div>
+            <div class="admin-stat-value" id="stat-discounts">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INVENTORY PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="inventory">
+        <div class="admin-topbar">
+          <h1>Inventario</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openNewProduct()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar producto
+            </button>
+          </div>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Productos</h3>
+            <div class="admin-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="inventory-search" placeholder="Buscar productos..." />
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Imagen</th>
+                  <th>Nombre</th>
+                  <th class="col-hide-mobile">Categoría</th>
+                  <th>Precio</th>
+                  <th class="col-hide-mobile">Stock</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ USERS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="users">
+        <div class="admin-topbar">
+          <h1>Usuarios</h1>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Usuarios registrados</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <tr><td colspan="5" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ DISCOUNTS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="discounts">
+        <div class="admin-topbar">
+          <h1>Descuentos</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openModal('discount-modal')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Crear código
+            </button>
+          </div>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Códigos de descuento</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Tipo</th>
+                  <th>Valor</th>
+                  <th>Uso</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="discounts-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ORDERS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="orders">
+        <div class="admin-topbar">
+          <h1>Pedidos</h1>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Historial de pedidos</h3>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th class="col-hide-mobile">Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ CONFIG PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="config">
+        <div class="admin-topbar">
+          <h1>Configuración</h1>
+        </div>
+        <div class="admin-table-card" style="max-width:600px;">
+          <div style="padding:28px;">
+            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:#0a101d;margin:0 0 20px;">Ajustes del sitio</h3>
+            <form id="config-form">
+              <div class="auth-form-group">
+                <label class="auth-label" for="config-whatsapp">Número WhatsApp</label>
+                <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" />
+              </div>
+              <div class="auth-form-group">
+                <label class="auth-label" for="config-sitename">Nombre del sitio</label>
+                <input class="auth-input" type="text" id="config-sitename" placeholder="Futunet" />
+              </div>
+              <div class="auth-form-group" style="display:flex;align-items:center;gap:12px;">
+                <input type="checkbox" id="config-maintenance" style="width:20px;height:20px;accent-color:#0A70A2;" />
+                <label for="config-maintenance" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Modo mantenimiento</label>
+              </div>
+              <button type="submit" class="admin-btn admin-btn-primary" style="margin-top:16px;">Guardar configuración</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ MODALS ═══ -->
+
+  <!-- Product Modal -->
+  <div class="admin-modal-overlay" id="product-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Agregar producto</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="product-form">
+          <input type="hidden" id="product-id" />
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-title">Nombre del producto</label>
+            <input class="auth-input" type="text" id="product-title" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-desc">Descripción</label>
+            <textarea class="auth-input" id="product-desc" rows="3" style="resize:vertical;"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-price">Precio (RD$)</label>
+              <input class="auth-input" type="number" id="product-price" step="0.01" min="0" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-stock">Stock</label>
+              <input class="auth-input" type="number" id="product-stock" min="0" />
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-category">Categoría</label>
+              <input class="auth-input" type="text" id="product-category" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-brand">Marca</label>
+              <input class="auth-input" type="text" id="product-brand" />
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="product-img">URL de imagen</label>
+            <input class="auth-input" type="url" id="product-img" placeholder="https://..." />
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary">Guardar producto</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Modal -->
+  <div class="admin-modal-overlay" id="user-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Editar usuario</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="user-form">
+          <input type="hidden" id="user-id" />
+          <div class="auth-form-group">
+            <label class="auth-label" for="user-name-input">Nombre</label>
+            <input class="auth-input" type="text" id="user-name-input" />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="user-email-input">Email</label>
+            <input class="auth-input" type="email" id="user-email-input" readonly />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="user-role-select">Rol</label>
+            <select class="auth-input" id="user-role-select">
+              <option value="user">Usuario</option>
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+              <option value="superadmin">Superadmin</option>
+            </select>
+          </div>
+          <div class="auth-form-group" style="display:flex;align-items:center;gap:12px;">
+            <input type="checkbox" id="user-status-check" checked style="width:20px;height:20px;accent-color:#0A70A2;" />
+            <label for="user-status-check" style="font-size:0.88rem;color:#394c60;font-weight:500;cursor:pointer;">Cuenta activa</label>
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discount Modal -->
+  <div class="admin-modal-overlay" id="discount-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Crear código de descuento</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="discount-form">
+          <div class="auth-form-group">
+            <label class="auth-label" for="discount-code">Código</label>
+            <input class="auth-input" type="text" id="discount-code" placeholder="FUTUNET20" required style="text-transform:uppercase;" />
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="discount-type">Tipo</label>
+              <select class="auth-input" id="discount-type">
+                <option value="percent">Porcentaje (%)</option>
+                <option value="fixed">Monto fijo (RD$)</option>
+              </select>
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="discount-value">Valor</label>
+              <input class="auth-input" type="number" id="discount-value" min="0" step="0.01" required />
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="discount-min">Compra mínima (RD$)</label>
+              <input class="auth-input" type="number" id="discount-min" min="0" value="0" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="discount-max-uses">Usos máximos</label>
+              <input class="auth-input" type="number" id="discount-max-uses" min="0" placeholder="0 = ilimitado" />
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="discount-expiry">Fecha de expiración</label>
+            <input class="auth-input" type="date" id="discount-expiry" />
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary">Crear descuento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/admin-panel.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.lucide) lucide.createIcons();
+
+      // ─── Protect route ───
+      FutunetGuard.requireEditor(function (user, userData) {
+        // Show admin layout
+        var layout = document.getElementById('admin-layout');
+        if (layout) layout.classList.add('is-loaded');
+
+        // Set sidebar user info
+        var avatar = document.getElementById('admin-avatar');
+        var name = document.getElementById('admin-name');
+        var role = document.getElementById('admin-role');
+        if (avatar) avatar.textContent = (userData.displayName || '?').charAt(0).toUpperCase();
+        if (name) name.textContent = userData.displayName || userData.email || '';
+        if (role) role.textContent = (userData.role || 'user').toUpperCase();
+
+        // Init admin panel
+        AdminPanel.init();
+      });
+
+      // ─── Sidebar navigation ───
+      var navItems = document.querySelectorAll('[data-admin-nav]');
+      var panels = document.querySelectorAll('[data-admin-panel]');
+
+      navItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          var target = this.getAttribute('data-admin-nav');
+          navItems.forEach(function (i) { i.classList.remove('is-active'); });
+          panels.forEach(function (p) { p.classList.remove('is-active'); });
+          this.classList.add('is-active');
+          var panel = document.querySelector('[data-admin-panel="' + target + '"]');
+          if (panel) panel.classList.add('is-active');
+
+          // Close mobile sidebar
+          var sidebar = document.getElementById('admin-sidebar');
+          var overlay = document.getElementById('admin-overlay');
+          if (sidebar) sidebar.classList.remove('is-open');
+          if (overlay) overlay.classList.remove('is-open');
+        });
+      });
+
+      // ─── Mobile sidebar toggle ───
+      var toggleBtn = document.getElementById('admin-mobile-toggle');
+      var closeBtn = document.getElementById('admin-sidebar-close');
+      var sidebar = document.getElementById('admin-sidebar');
+      var overlay = document.getElementById('admin-overlay');
+
+      function openSidebar() {
+        if (sidebar) sidebar.classList.add('is-open');
+        if (overlay) overlay.classList.add('is-open');
+      }
+      function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('is-open');
+        if (overlay) overlay.classList.remove('is-open');
+      }
+
+      if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+      if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+      if (overlay) overlay.addEventListener('click', closeSidebar);
+    });
+  </script>
+</body>
+</html>
