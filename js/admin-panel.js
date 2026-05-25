@@ -122,6 +122,7 @@
     initImageUploader();
     initBannerUploader();
     initBrandUploader();
+    initAdminAIChat();
 
     // Auto-migrate hidden items ONCE without user intervention
     if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated_v2')) {
@@ -1365,6 +1366,188 @@
   }
 
   // ═══════════════════════════════════
+  // AI BUSINESS ASSISTANT
+  // ═══════════════════════════════════
+  var adminChatHistory = [];
+
+  function initAdminAIChat() {
+    var chatInput = document.getElementById('admin-ai-chat-input');
+    var sendBtn = document.getElementById('admin-ai-chat-send');
+    if (!chatInput || !sendBtn) return;
+
+    async function handleSend() {
+      var query = chatInput.value.trim();
+      if (!query) return;
+
+      addAdminChatMessage('user', query);
+      chatInput.value = '';
+      chatInput.disabled = true;
+      sendBtn.disabled = true;
+
+      var messagesContainer = document.getElementById('admin-ai-chat-messages');
+      var typingId = 'admin-ai-typing-indicator';
+      var typingDiv = document.createElement('div');
+      typingDiv.id = typingId;
+      typingDiv.style.cssText = 'background:#fff; color:#8a9bb4; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; max-width:85%; align-self:flex-start; display:flex; align-items:center; gap:4px; box-shadow:0 8px 16px rgba(12,35,64,0.04); border:1px solid #e5eef8;';
+      typingDiv.innerHTML = `
+        <span style="width:5px; height:5px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both;"></span>
+        <span style="width:5px; height:5px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both; animation-delay: .2s;"></span>
+        <span style="width:5px; height:5px; background:#8a9bb4; border-radius:50%; animation: cb-bounce 1.4s infinite both; animation-delay: .4s;"></span>
+      `;
+      messagesContainer.appendChild(typingDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      try {
+        var apiKey = FUTUNET_CONFIG.GEMINI_API_KEY || '';
+        if (!apiKey) {
+          throw new Error('No se ha configurado la API Key de Gemini. Ve a Ajustes para guardarla.');
+        }
+
+        var snapshotText = await buildBusinessSnapshot();
+
+        adminChatHistory.push({ role: 'user', parts: [{ text: query }] });
+        if (adminChatHistory.length > 10) {
+          adminChatHistory = adminChatHistory.slice(adminChatHistory.length - 10);
+        }
+
+        var systemPrompt = `Eres un Analista de Negocios de Inteligencia Artificial para el panel administrativo de Futunet.\nTu tarea es responder preguntas sobre el rendimiento de la tienda, stock de productos, ingresos y pedidos utilizando el Snapshot de datos actual que te proporcionamos.\n\nSnapshot de Datos Actual del Negocio:\n${snapshotText}\n\nRequisitos:\n- Sé sumamente profesional, analítico y directo en tu respuesta.\n- Habla en español de República Dominicana.\n- Si te piden un reporte de ventas o ingresos, menciona las cifras de pedidos y el acumulado (RD$).\n- Si te preguntan por productos agotados o bajo stock, enuméralos según el Snapshot.\n- Sugiere ideas prácticas y recomendaciones de reabastecimiento o marketing.\n- Utiliza etiquetas HTML básicas (como <strong>, <ul>, <li>, <br>) para estructurar tu respuesta de forma visual y elegante. No utilices markdown (* o #).`;
+
+        var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: adminChatHistory,
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            },
+            generationConfig: {
+              temperature: 0.6,
+              maxOutputTokens: 800
+            }
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Error en el servicio de IA (Gemini)');
+        }
+
+        var resData = await response.json();
+        if (resData.candidates && resData.candidates[0] && resData.candidates[0].content && resData.candidates[0].content.parts[0]) {
+          var botText = resData.candidates[0].content.parts[0].text.trim();
+          adminChatHistory.push({ role: 'model', parts: [{ text: botText }] });
+          
+          var indicator = document.getElementById(typingId);
+          if (indicator) indicator.remove();
+
+          addAdminChatMessage('bot', botText);
+        } else {
+          throw new Error('Respuesta vacía de la IA');
+        }
+      } catch (err) {
+        console.error(err);
+        var indicator = document.getElementById(typingId);
+        if (indicator) indicator.remove();
+        addAdminChatMessage('bot', `<span style="color:#ef4444;">Error: ${err.message}</span>`);
+        adminChatHistory.pop();
+      } finally {
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+        chatInput.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+    chatInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        handleSend();
+      }
+    });
+  }
+
+  function addAdminChatMessage(sender, text) {
+    var container = document.getElementById('admin-ai-chat-messages');
+    if (!container) return;
+
+    var div = document.createElement('div');
+    if (sender === 'user') {
+      div.style.cssText = 'background:linear-gradient(135deg,#9b59b6,#8e44ad); color:#fff; padding:10px 14px; border-radius:12px; border-bottom-right-radius:4px; max-width:85%; align-self:flex-end; line-height:1.5; box-shadow:0 8px 16px rgba(155,89,182,0.1);';
+      div.textContent = text;
+    } else {
+      div.style.cssText = 'background:#fff; color:#233246; padding:10px 14px; border-radius:12px; border-bottom-left-radius:4px; max-width:85%; align-self:flex-start; line-height:1.5; box-shadow:0 8px 16px rgba(12,35,64,0.04); border:1px solid #e5eef8;';
+      div.innerHTML = text;
+    }
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  async function buildBusinessSnapshot() {
+    try {
+      var prodSnap = await db.collection('products').get();
+      var totalProd = prodSnap.size;
+      var outOfStock = 0;
+      var lowStock = 0;
+      var productsList = [];
+      
+      prodSnap.forEach(function (doc) {
+        var p = doc.data();
+        var stock = parseInt(p.stock) || 0;
+        if (stock === 0) outOfStock++;
+        else if (stock <= 5) lowStock++;
+        productsList.push(`- ${p.title} (${p.brand || 'Genérico'}, Precio: RD$ ${p.price || 0}, Stock: ${stock})`);
+      });
+
+      var ordSnap = await db.collection('orders').get();
+      var totalOrders = ordSnap.size;
+      var pending = 0, processing = 0, sent = 0, delivered = 0;
+      var totalRevenue = 0;
+      var recentOrders = [];
+      
+      var ordersArr = [];
+      ordSnap.forEach(function (doc) {
+        ordersArr.push({ id: doc.id, ...doc.data() });
+      });
+      ordersArr.sort(function (a, b) {
+        var tA = a.createdAt ? (a.createdAt.seconds || 0) : 0;
+        var tB = b.createdAt ? (b.createdAt.seconds || 0) : 0;
+        return tB - tA;
+      });
+
+      ordersArr.forEach(function (o, idx) {
+        var tot = parseFloat(o.total) || 0;
+        totalRevenue += tot;
+        if (o.status === 'pendiente') pending++;
+        else if (o.status === 'procesando') processing++;
+        else if (o.status === 'enviado') sent++;
+        else if (o.status === 'entregado') delivered++;
+
+        if (idx < 5) {
+          recentOrders.push(`* ID: ${o.id.substring(0,6)}... | Cliente: ${o.userName || o.customerName || 'Invitado'} | Total: RD$ ${tot} | Estado: ${o.status}`);
+        }
+      });
+
+      var uSnap = await db.collection('users').get();
+      var totalUsers = uSnap.size;
+
+      return `DATOS DEL NEGOCIO FUTUNET (ESTADO ACTUAL):
+- Total Productos: ${totalProd} (Agotados: ${outOfStock}, Bajo Stock: ${lowStock})
+- Total Usuarios Registrados: ${totalUsers}
+- Total Pedidos Registrados: ${totalOrders} (Ingresos totales acumulados: RD$ ${totalRevenue.toFixed(2)})
+- Desglose de Pedidos por Estado: Pendientes: ${pending}, Procesando: ${processing}, Enviados: ${sent}, Entregados: ${delivered}
+
+Listado de Productos en Catálogo:
+${productsList.slice(0, 80).join('\n')}
+
+Últimos 5 Pedidos Recibidos:
+${recentOrders.join('\n')}`;
+    } catch (e) {
+      console.error(e);
+      return 'Error al construir el snapshot del negocio.';
+    }
+  }
+
+  // ═══════════════════════════════════
+
+  // ═══════════════════════════════════
   // VISUAL EDITOR / LAYOUT
   // ═══════════════════════════════════
   var layoutSections = [];
@@ -2337,6 +2520,69 @@
         } finally {
           genDescBtn.disabled = false;
           genDescBtn.innerHTML = originalText;
+        }
+      });
+    }
+
+    // AI Specs generator
+    var genSpecsBtn = document.getElementById('btn-generate-specs-ai');
+    if (genSpecsBtn) {
+      genSpecsBtn.addEventListener('click', async function () {
+        var title = getVal('product-title');
+        var brand = getVal('product-brand');
+        var category = getVal('product-category');
+
+        if (!title) {
+          showToast('Por favor, introduce al menos el título del producto.', 'warning');
+          return;
+        }
+
+        var apiKey = FUTUNET_CONFIG.GEMINI_API_KEY || '';
+        if (!apiKey) {
+          showToast('No se ha configurado la API Key de Gemini. Configúrala en Ajustes.', 'error');
+          return;
+        }
+
+        var originalText = genSpecsBtn.innerHTML;
+        genSpecsBtn.disabled = true;
+        genSpecsBtn.textContent = 'Generando...';
+
+        try {
+          var prompt = `Enumera las especificaciones técnicas y características clave más comunes del siguiente producto para venderlo en una tienda en línea.\nProducto:\n- Título: ${title}\n- Marca: ${brand || 'Genérico'}\n- Categoría: ${category || 'Varios'}\n\nRequisitos:\n- Escribe una característica o especificación por línea.\n- Máximo 5 o 6 líneas en total.\n- Responde únicamente con las especificaciones técnicas una por línea, sin introducciones ni números ni viñetas (* o -).`;
+
+          var response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.5, maxOutputTokens: 200 }
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('Error en la llamada a la API de Gemini (Código: ' + response.status + ')');
+          }
+
+          var resData = await response.json();
+          if (resData.candidates && resData.candidates[0] && resData.candidates[0].content && resData.candidates[0].content.parts[0]) {
+            var generatedText = resData.candidates[0].content.parts[0].text.trim();
+            // Limpiar viñetas o asteriscos de markdown al inicio de cada línea
+            generatedText = generatedText.replace(/^[\s\*\-\•]+/gm, '');
+            var specsArea = document.getElementById('product-specs');
+            if (specsArea) {
+              specsArea.value = generatedText;
+              specsArea.dispatchEvent(new Event('input'));
+            }
+            showToast('Características sugeridas con éxito.', 'success');
+          } else {
+            throw new Error('Respuesta vacía de la IA');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('Error al sugerir características: ' + err.message, 'error');
+        } finally {
+          genSpecsBtn.disabled = false;
+          genSpecsBtn.innerHTML = originalText;
         }
       });
     }
