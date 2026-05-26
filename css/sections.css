@@ -118,12 +118,14 @@
   top: -50%; left: -50%;
   width: 200%; height: 200%;
   background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.04) 50%, transparent 60%);
+  transform: translate3d(-80%, 0, 0) rotate(15deg);
   animation: ctaShine 6s ease-in-out infinite;
   pointer-events: none;
+  will-change: transform;
 }
 @keyframes ctaShine {
-  0%, 100% { transform: translateX(-80%) rotate(15deg); }
-  50% { transform: translateX(80%) rotate(15deg); }
+  0%, 100% { transform: translate3d(-80%, 0, 0) rotate(15deg); }
+  50% { transform: translate3d(80%, 0, 0) rotate(15deg); }
 }
 .cta-banner-inner {
   position: relative; z-index: 1; padding: 0 8px;
