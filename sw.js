@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v1';
+const CACHE_NAME = 'futunet-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -13,17 +13,31 @@ const ASSETS_TO_CACHE = [
   './css/sections.css',
   './css/auth.css',
   './css/producto.css',
-  './img/logo.png',
-  './img/logo-navbar.png',
+  './css/chatbot.css',
+  './img/logo.webp',
+  './img/logo-navbar.webp',
   './img/placeholder.svg',
   './js/firebase-config.js',
   './js/auth.js',
+  './js/auth-guard.js',
   './js/cart.js',
   './js/main.js',
   './js/config.js',
   './js/inventory_data.js',
+  './js/supplier_inventory.js',
+  './js/image_fixes.js',
   './js/catalog.js',
-  './js/producto.js'
+  './js/home_showcase.js',
+  './js/promo-carousel.js',
+  './js/category-showcase.js',
+  './js/brands-preview.js',
+  './js/form.js',
+  './js/product_detail_shared.js',
+  './js/product_detail_overrides.js',
+  './js/producto.js',
+  './js/user-panel.js',
+  './js/chatbot.js',
+  './js/layout-manager.js'
 ];
 
 // Install Event

@@ -59,7 +59,7 @@
       const waUrl = `https://wa.me/${FUTUNET_CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(cleanWaMsg)}`;
 
       slideDiv.innerHTML = `
-        <div class="hb-bg" style="background-image:url('${banner.image || 'img/logo.png'}')"></div>
+        <div class="hb-bg" style="background-image:url('${banner.image || 'img/logo.webp'}')"></div>
         <div class="hb-overlay"></div>
         <div class="hb-body">
           <span class="hb-label"><i data-lucide="tag"></i> Promoción</span>

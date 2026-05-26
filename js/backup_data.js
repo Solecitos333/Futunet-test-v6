@@ -687,9 +687,9 @@ const mockDatabase = [
     "title": "CLAVOS DE PARED P/ FULMINANTE",
     "desc": "Calidad Premium. CLAVOS DE PARED P/ FULMINANTE. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 4.00",
-    "img": "img/productos/catalogo/clavos-fulminante.png",
+    "img": "img/productos/catalogo/clavos-fulminante.webp",
     "gallery": [
-      "img/productos/catalogo/clavos-fulminante.png"
+      "img/productos/catalogo/clavos-fulminante.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -745,9 +745,9 @@ const mockDatabase = [
     "title": "CONECTOR EMT DE 1/2",
     "desc": "Calidad Premium. CONECTOR EMT DE 1/2. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 37.00",
-    "img": "img/productos/catalogo/conector-emt.png",
+    "img": "img/productos/catalogo/conector-emt.webp",
     "gallery": [
-      "img/productos/catalogo/conector-emt.png"
+      "img/productos/catalogo/conector-emt.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -763,9 +763,9 @@ const mockDatabase = [
     "title": "CONECTOR EMT DE 3/4",
     "desc": "Calidad Premium. CONECTOR EMT DE 3/4. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 45.00",
-    "img": "img/productos/catalogo/conector-emt.png",
+    "img": "img/productos/catalogo/conector-emt.webp",
     "gallery": [
-      "img/productos/catalogo/conector-emt.png"
+      "img/productos/catalogo/conector-emt.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -931,9 +931,9 @@ const mockDatabase = [
     "title": "Camara UNV 2 MP",
     "desc": "Cámara Uniview de 2 MP con línea ColorHunter para escenarios donde se requiere mejor desempeño nocturno y captura de color en baja iluminación. Es una alternativa atractiva para residencias, comercios y proyectos que buscan más detalle visual fuera del horario diurno.",
     "price": "RD$ 2,385.00",
-    "img": "img/productos/unv-2mp-bullet.png",
+    "img": "img/productos/unv-2mp-bullet.webp",
     "gallery": [
-      "img/productos/unv-2mp-bullet.png",
+      "img/productos/unv-2mp-bullet.webp",
       "img/camaras.jpg"
     ],
     "specs": [
@@ -951,9 +951,9 @@ const mockDatabase = [
     "title": "Camara UNV 2MP COLOR VU",
     "desc": "Cámara IP Uniview de 2 megapíxeles diseñada para proyectos de videovigilancia residencial y comercial. Ofrece resolución Full HD, compresión de video eficiente y una presentación profesional para instalaciones con grabación por NVR.",
     "price": "RD$ 4,500.00",
-    "img": "img/productos/unv-2mp-bullet.png",
+    "img": "img/productos/unv-2mp-bullet.webp",
     "gallery": [
-      "img/productos/unv-2mp-bullet.png",
+      "img/productos/unv-2mp-bullet.webp",
       "img/camaras.jpg"
     ],
     "specs": [
@@ -1619,7 +1619,7 @@ const mockDatabase = [
     "img": "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000061727%2FiDS-8116HQHI-M8S%E6%B8%B2%E6%9F%93%E5%9B%BE.png&w=720&output=webp&q=72",
     "gallery": [
       "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000061727%2FiDS-8116HQHI-M8S%E6%B8%B2%E6%9F%93%E5%9B%BE.png&w=720&output=webp&q=72",
-      "img/productos/hikvision-dvr-8ch.png"
+      "img/productos/hikvision-dvr-8ch.webp"
     ],
     "specs": [
       "Modelo sugerido por la línea: DS-7108HGHI-K1",
@@ -1891,9 +1891,9 @@ const mockDatabase = [
     "title": "FULMINANTE P/ PISTOLA CLAVO",
     "desc": "Calidad Premium. FULMINANTE P/ PISTOLA CLAVO. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 3.00",
-    "img": "img/productos/catalogo/fulminante.png",
+    "img": "img/productos/catalogo/fulminante.webp",
     "gallery": [
-      "img/productos/catalogo/fulminante.png"
+      "img/productos/catalogo/fulminante.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -2491,9 +2491,9 @@ const mockDatabase = [
     "title": "LAMINADOR POINTER",
     "desc": "Calidad Premium. LAMINADOR POINTER. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 8,775.00",
-    "img": "img/productos/catalogo/laminador.png",
+    "img": "img/productos/catalogo/laminador.webp",
     "gallery": [
-      "img/productos/catalogo/laminador.png"
+      "img/productos/catalogo/laminador.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -2581,9 +2581,9 @@ const mockDatabase = [
     "title": "Laminados para cristales",
     "desc": "Calidad Premium. Laminados para cristales. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 9,000.00",
-    "img": "img/productos/catalogo/laminados-cristales.png",
+    "img": "img/productos/catalogo/laminados-cristales.webp",
     "gallery": [
-      "img/productos/catalogo/laminados-cristales.png"
+      "img/productos/catalogo/laminados-cristales.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -2821,9 +2821,9 @@ const mockDatabase = [
     "title": "Materiales ferreteros",
     "desc": "Calidad Premium. Materiales ferreteros. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 45,000.00",
-    "img": "img/productos/catalogo/materiales-ferreteros.png",
+    "img": "img/productos/catalogo/materiales-ferreteros.webp",
     "gallery": [
-      "img/productos/catalogo/materiales-ferreteros.png"
+      "img/productos/catalogo/materiales-ferreteros.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -3102,9 +3102,9 @@ const mockDatabase = [
     "title": "PISTOLA PEGAMENTO HJ 014. 60W",
     "desc": "Calidad Premium. PISTOLA PEGAMENTO HJ 014. 60W. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 405.00",
-    "img": "img/productos/catalogo/pistola-pegamento.png",
+    "img": "img/productos/catalogo/pistola-pegamento.webp",
     "gallery": [
-      "img/productos/catalogo/pistola-pegamento.png"
+      "img/productos/catalogo/pistola-pegamento.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -3120,9 +3120,9 @@ const mockDatabase = [
     "title": "PISTOLA SILICON FINA HJ 007",
     "desc": "Calidad Premium. PISTOLA SILICON FINA HJ 007. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 270.00",
-    "img": "img/productos/catalogo/pistola-pegamento.png",
+    "img": "img/productos/catalogo/pistola-pegamento.webp",
     "gallery": [
-      "img/productos/catalogo/pistola-pegamento.png"
+      "img/productos/catalogo/pistola-pegamento.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4171,9 +4171,9 @@ const mockDatabase = [
     "title": "REGISTRO METAL 8X10X10",
     "desc": "Calidad Premium. REGISTRO METAL 8X10X10. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 850.00",
-    "img": "img/productos/catalogo/registro-metal-8x10.png",
+    "img": "img/productos/catalogo/registro-metal-8x10.webp",
     "gallery": [
-      "img/productos/catalogo/registro-metal-8x10.png"
+      "img/productos/catalogo/registro-metal-8x10.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4189,9 +4189,9 @@ const mockDatabase = [
     "title": "REGISTRO OCTAGONAL",
     "desc": "Calidad Premium. REGISTRO OCTAGONAL. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 120.00",
-    "img": "img/productos/catalogo/registro-octagonal.png",
+    "img": "img/productos/catalogo/registro-octagonal.webp",
     "gallery": [
-      "img/productos/catalogo/registro-octagonal.png"
+      "img/productos/catalogo/registro-octagonal.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4263,9 +4263,9 @@ const mockDatabase = [
     "title": "Registro P/ Camaras",
     "desc": "Calidad Premium. Registro P/ Camaras. Diseñado para ofrecer máxima seguridad con tecnología de vanguardia. Ideal para instalaciones profesionales, garantizando monitoreo prolongado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 337.50",
-    "img": "img/productos/catalogo/registro-camaras.png",
+    "img": "img/productos/catalogo/registro-camaras.webp",
     "gallery": [
-      "img/productos/catalogo/registro-camaras.png"
+      "img/productos/catalogo/registro-camaras.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4428,7 +4428,7 @@ const mockDatabase = [
     "img": "img/redes.jpg",
     "gallery": [
       "img/redes.jpg",
-      "img/productos/hikvision-switch-poe-8-2.png"
+      "img/productos/hikvision-switch-poe-8-2.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4592,9 +4592,9 @@ const mockDatabase = [
     "title": "SWICHT POE 4 PORT + 2 10/100",
     "desc": "Calidad Premium. SWICHT POE 4 PORT + 2 10/100. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 1,380.00",
-    "img": "img/productos/hikvision-switch-poe-8-2.png",
+    "img": "img/productos/hikvision-switch-poe-8-2.webp",
     "gallery": [
-      "img/productos/hikvision-switch-poe-8-2.png"
+      "img/productos/hikvision-switch-poe-8-2.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4784,9 +4784,9 @@ const mockDatabase = [
     "title": "Silicon Liquido 250 ml",
     "desc": "Calidad Premium. Silicon Liquido 250 ml. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 189.00",
-    "img": "img/productos/catalogo/silicon-liquido.png",
+    "img": "img/productos/catalogo/silicon-liquido.webp",
     "gallery": [
-      "img/productos/catalogo/silicon-liquido.png"
+      "img/productos/catalogo/silicon-liquido.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -4932,7 +4932,7 @@ const mockDatabase = [
     "img": "https://wsrv.nl/?url=www.hikvision.com%2Fcontent%2Fdam%2Fhikvision%2Fproducts%2Fasset%2FM000001164%2Fimages%2Fdarkfighter-X_1.png%3Ff%3Dwebp&w=720&output=webp&q=72",
     "gallery": [
       "https://wsrv.nl/?url=www.hikvision.com%2Fcontent%2Fdam%2Fhikvision%2Fproducts%2Fasset%2FM000001164%2Fimages%2Fdarkfighter-X_1.png%3Ff%3Dwebp&w=720&output=webp&q=72",
-      "img/productos/hikvision-switch-poe-8-2.png"
+      "img/productos/hikvision-switch-poe-8-2.webp"
     ],
     "specs": [
       "8 puertos PoE para dispositivos compatibles",
@@ -4949,9 +4949,9 @@ const mockDatabase = [
     "title": "TAPA P/ REGISTRO OCTAGONAL",
     "desc": "Calidad Premium. TAPA P/ REGISTRO OCTAGONAL. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 75.00",
-    "img": "img/productos/catalogo/tapa-registro.png",
+    "img": "img/productos/catalogo/tapa-registro.webp",
     "gallery": [
-      "img/productos/catalogo/tapa-registro.png"
+      "img/productos/catalogo/tapa-registro.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5042,9 +5042,9 @@ const mockDatabase = [
     "title": "Tabla 1X4 de 16 Pulgadas Bruta",
     "desc": "Calidad Premium. Tabla 1X4 de 16 Pulgadas Bruta. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 487.50",
-    "img": "img/productos/catalogo/tabla-bruta.png",
+    "img": "img/productos/catalogo/tabla-bruta.webp",
     "gallery": [
-      "img/productos/catalogo/tabla-bruta.png"
+      "img/productos/catalogo/tabla-bruta.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5060,9 +5060,9 @@ const mockDatabase = [
     "title": "Tabla acrilica clipboard",
     "desc": "Calidad Premium. Tabla acrilica clipboard. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 155.25",
-    "img": "img/productos/catalogo/tabla-acrilica.png",
+    "img": "img/productos/catalogo/tabla-acrilica.webp",
     "gallery": [
-      "img/productos/catalogo/tabla-acrilica.png"
+      "img/productos/catalogo/tabla-acrilica.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5169,9 +5169,9 @@ const mockDatabase = [
     "title": "Timbre Campana",
     "desc": "Calidad Premium. Timbre Campana. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 255.00",
-    "img": "img/productos/catalogo/materiales-ferreteros.png",
+    "img": "img/productos/catalogo/materiales-ferreteros.webp",
     "gallery": [
-      "img/productos/catalogo/materiales-ferreteros.png"
+      "img/productos/catalogo/materiales-ferreteros.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5280,9 +5280,9 @@ const mockDatabase = [
     "title": "Tuberia Flexible VX",
     "desc": "Calidad Premium. Tuberia Flexible VX. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 75.00",
-    "img": "img/productos/catalogo/tuberia-flexible.png",
+    "img": "img/productos/catalogo/tuberia-flexible.webp",
     "gallery": [
-      "img/productos/catalogo/tuberia-flexible.png"
+      "img/productos/catalogo/tuberia-flexible.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5298,9 +5298,9 @@ const mockDatabase = [
     "title": "UNION COUPLING EMT DE 1/2",
     "desc": "Calidad Premium. UNION COUPLING EMT DE 1/2. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 37.00",
-    "img": "img/productos/catalogo/union-coupling.png",
+    "img": "img/productos/catalogo/union-coupling.webp",
     "gallery": [
-      "img/productos/catalogo/union-coupling.png"
+      "img/productos/catalogo/union-coupling.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5316,9 +5316,9 @@ const mockDatabase = [
     "title": "UNION COUPLING EMT DE 3/4",
     "desc": "Calidad Premium. UNION COUPLING EMT DE 3/4. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 45.00",
-    "img": "img/productos/catalogo/union-coupling.png",
+    "img": "img/productos/catalogo/union-coupling.webp",
     "gallery": [
-      "img/productos/catalogo/union-coupling.png"
+      "img/productos/catalogo/union-coupling.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5374,9 +5374,9 @@ const mockDatabase = [
     "title": "VELA SILICON FINA #12 FINA",
     "desc": "Calidad Premium. VELA SILICON FINA #12 FINA. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 40.50",
-    "img": "img/productos/catalogo/velas-silicon.png",
+    "img": "img/productos/catalogo/velas-silicon.webp",
     "gallery": [
-      "img/productos/catalogo/velas-silicon.png"
+      "img/productos/catalogo/velas-silicon.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5392,9 +5392,9 @@ const mockDatabase = [
     "title": "VELA SILICON GRUESA",
     "desc": "Calidad Premium. VELA SILICON GRUESA. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 33.75",
-    "img": "img/productos/catalogo/velas-silicon.png",
+    "img": "img/productos/catalogo/velas-silicon.webp",
     "gallery": [
-      "img/productos/catalogo/velas-silicon.png"
+      "img/productos/catalogo/velas-silicon.webp"
     ],
     "specs": [
       "Garantía premium directa: Genérico",

@@ -163,8 +163,10 @@ function updateInlineCartButtons() {
     const productId = container.dataset.productAdd;
     const variant = container.dataset.productAddVariant || 'default';
     container.innerHTML = renderInlineAddButtonHTML(productId, variant);
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons({ root: container });
+    }
   });
-  if (typeof lucide !== 'undefined') lucide.createIcons();
 }
 
 function buildVisualTileGrid(items, compact = false) {
@@ -626,7 +628,7 @@ function renderMobileStackBrowser({ title, description, items }) {
 
   section.appendChild(grid);
   container.appendChild(section);
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons({ root: section });
 }
 
 function renderMobilePreviewSection({ eyebrow, title, actionLabel, onAction, products }) {
@@ -909,7 +911,7 @@ function renderHeader(title, desc, showBack = false, backAction = null) {
     const btn = wrapper.querySelector('#temp-back-btn');
     if (btn) btn.addEventListener('click', backAction);
   }
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons({ root: wrapper });
 }
 
 
@@ -936,7 +938,7 @@ function renderEmptyState(title, description) {
   container.appendChild(div);
   const resetButton = div.querySelector('.empty-state-reset-btn');
   if (resetButton) resetButton.addEventListener('click', clearSearch);
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons({ root: div });
 }
 
 
@@ -1050,7 +1052,7 @@ function renderLoadMoreButton(shown, total) {
     }
   });
 
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') lucide.createIcons({ root: div });
 }
 
 
@@ -1058,65 +1060,7 @@ function renderLoadMoreButton(shown, total) {
    4. RENDERIZADO DE PRODUCTOS (Cards)
    ------------------------------------------------------------- */
 
-function renderProductsGridLegacy(productsList, options = {}) {
-  const fragment = document.createDocumentFragment();
-  const target = options.target || null;
-  const compactCard = typeof options.compactMobile === 'boolean' ? options.compactMobile : isCompactMobileViewport();
-
-  productsList.forEach((product, idx) => {
-    const serviceItem = isServiceItem(product);
-    const badgeText = serviceItem ? 'SERVICIO' : product.brand;
-    const actionText = serviceItem ? 'Ver Detalles del Servicio' : 'Ver Ficha Técnica';
-    const metaText = serviceItem
-      ? `${getDeptDisplayName(product.department)} · Servicio`
-      : `${product.brand} · ${product.category}`;
-    const card = document.createElement('div');
-    card.className = `product-card reveal in${serviceItem ? ' product-card--service' : ''}`;
-    card.style.animationDelay = `${idx * 40}ms`;
-    card.style.cursor = 'pointer';
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
-    card.setAttribute('aria-label', `Ver detalles de ${product.title}`);
-
-    // Click handler — using addEventListener instead of inline onclick
-    bindProductCardActivation(card, product.id);
-
-    card.innerHTML = `
-      <div class="product-img-wrapper">
-        <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300" onerror="handleImageError(this, '${escapeHTML(product.id)}', 0)">
-        <span class="product-badge">${escapeHTML(badgeText)}</span>
-        <span class="product-available">Disponible</span>
-      </div>
-      <div class="product-info">
-        <h4 class="product-title">${escapeHTML(product.title)}</h4>
-        <div class="product-meta">${escapeHTML(metaText)}</div>
-        <div class="product-price">${escapeHTML(product.price)}</div>
-        <p class="product-desc">${escapeHTML(product.desc)}</p>
-        <div class="product-actions">
-          <button class="product-view-btn" type="button">
-            <i data-lucide="eye"></i> ${actionText}
-          </button>
-          <div class="product-add-container" data-product-add="${escapeHTML(product.id)}">
-            ${renderInlineAddButtonHTML(product.id)}
-          </div>
-        </div>
-      </div>
-    `;
-
-    const actionButton = card.querySelector('.product-view-btn');
-    if (actionButton) {
-      actionButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        window.location.href = 'producto.html?id=' + product.id;
-      });
-    }
-
-    fragment.appendChild(card);
-  });
-
-  appendCatalogContent(fragment);
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-}
+// renderProductsGridLegacy removed to optimize code size.
 
 function shouldIgnoreProductCardActivation(event, card) {
   const interactiveTarget = event.target.closest(
@@ -1210,7 +1154,9 @@ function renderProductsGrid(productsList, options = {}) {
   } else {
     appendCatalogContent(fragment);
   }
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons({ root: target || document.getElementById('catalog-grid-container') });
+  }
 }
 
 
@@ -1344,7 +1290,9 @@ function openProductModal(id) {
     btnAddCart.setAttribute('aria-label', `Agregar ${product.title} al carrito`);
   }
 
-  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof lucide !== 'undefined') {
+    lucide.createIcons({ root: document.getElementById('product-modal') });
+  }
 
   const modal = document.getElementById('product-modal');
   const modalContent = modal.querySelector('.modal-content');
@@ -1502,7 +1450,7 @@ function initSmartSearch(inputId, dropdownId) {
       });
     });
 
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+    if (typeof lucide !== 'undefined') lucide.createIcons({ root: drop });
     drop.classList.add('active');
   }, 250); // 250ms debounce
 

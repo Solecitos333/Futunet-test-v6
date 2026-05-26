@@ -88,7 +88,7 @@ var FUTUNET_CONFIG = {
 
       if (!bypass) {
         document.body.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:#0f1923; color:white; font-family:\'Outfit\', sans-serif; text-align:center; padding:20px; box-sizing:border-box;">' +
-          '<img src="img/logo-navbar.png" style="max-height:80px; margin-bottom:32px;">' +
+          '<img src="img/logo-navbar.webp" style="max-height:80px; margin-bottom:32px;">' +
           '<h1 style="font-family:\'Space Grotesk\', sans-serif; font-size:2rem; font-weight:700; margin-bottom:16px;">Sitio en Mantenimiento</h1>' +
           '<p style="color:#a0b0c4; max-width:500px; font-size:1rem; line-height:1.6; margin-bottom:32px;">' + escapeHtml(FUTUNET_CONFIG.MAINTENANCE_MESSAGE) + '</p>' +
           '<a href="https://wa.me/' + FUTUNET_CONFIG.WHATSAPP_NUMBER + '" style="display:inline-flex; align-items:center; gap:8px; background:#0A70A2; color:white; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:600; transition: background 0.2s;">' +

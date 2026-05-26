@@ -107,10 +107,18 @@ function initHomeHeroLogoSync() {
   observer.observe(heroBrandMark);
 }
 
+let cachedLogoImg = null;
+let cachedNavbar = null;
+let cachedMobileMenu = null;
+let cachedBackToTop = null;
+
 function applyLogoFlip(currentScrollY) {
   if (!logoAnimState.active) return;
   
-  const logoImg = document.querySelector('.nav-logo img');
+  if (!cachedLogoImg) {
+    cachedLogoImg = document.querySelector('.nav-logo img');
+  }
+  const logoImg = cachedLogoImg;
   if (!logoImg) return;
   
   const scrollPos = (currentScrollY !== undefined) ? currentScrollY : window.scrollY;
@@ -162,8 +170,12 @@ window.addEventListener('scroll', () => {
   if (!ticking) {
     window.requestAnimationFrame(() => {
       const currentScrollY = window.scrollY;
-      const navbar = document.getElementById('navbar');
-      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if (!cachedNavbar) cachedNavbar = document.getElementById('navbar');
+      if (!cachedMobileMenu) cachedMobileMenu = document.getElementById('mobileMenu');
+      
+      const navbar = cachedNavbar;
+      const mobileMenu = cachedMobileMenu;
       
       if (navbar) {
         // Scrolled class for opacity and shadow
@@ -187,7 +199,8 @@ window.addEventListener('scroll', () => {
       applyLogoFlip(currentScrollY);
 
       // Back to top button visibility
-      const backToTop = document.getElementById('back-to-top');
+      if (!cachedBackToTop) cachedBackToTop = document.getElementById('back-to-top');
+      const backToTop = cachedBackToTop;
       if (backToTop) {
         backToTop.classList.toggle('visible', currentScrollY > 400);
       }
@@ -558,7 +571,7 @@ function injectLocalBusinessSchema() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Futunet",
-    "image": window.location.origin + "/img/logo.png",
+    "image": window.location.origin + "/img/logo.webp",
     "@id": window.location.origin + "/#localbusiness",
     "url": window.location.origin,
     "telephone": phone,

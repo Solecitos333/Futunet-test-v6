@@ -39,7 +39,7 @@
       itemLink.setAttribute('title', `Ver productos ${b.name}`);
       itemLink.setAttribute('aria-label', `Ver productos ${b.name}`);
       
-      const logoUrl = b.logo || 'img/logo.png';
+      const logoUrl = b.logo || 'img/logo.webp';
       itemLink.innerHTML = `
         <img src="${logoUrl}" alt="${escapeHtml(b.name)}" loading="lazy" />
         <div class="brand-preview-popup">

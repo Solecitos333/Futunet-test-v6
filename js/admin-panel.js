@@ -168,11 +168,11 @@
       var brandsSnapshot = await db.collection('brands').get();
       if (brandsSnapshot.empty) {
         var defaultBrands = [
-          { name: 'Dell', logo: 'img/marcas/dell.png' },
-          { name: 'HP', logo: 'img/marcas/hp.png' },
-          { name: 'Hikvision', logo: 'img/marcas/hikvision.png' },
-          { name: 'Epson', logo: 'img/marcas/epson.png' },
-          { name: 'Intel', logo: 'img/marcas/intel.png' }
+          { name: 'Dell', logo: 'img/marcas/dell.webp' },
+          { name: 'HP', logo: 'img/marcas/hp.webp' },
+          { name: 'Hikvision', logo: 'img/marcas/hikvision.webp' },
+          { name: 'Epson', logo: 'img/marcas/epson.webp' },
+          { name: 'Intel', logo: 'img/marcas/intel.webp' }
         ];
         var batch = db.batch();
         defaultBrands.forEach(function (b) {
@@ -443,7 +443,7 @@
 
     var html = '';
     products.forEach(function (p) {
-      var img = p.img || (p.gallery && p.gallery[0]) || 'img/logo.png';
+      var img = p.img || (p.gallery && p.gallery[0]) || 'img/logo.webp';
       var statusBadge = (p.isActive !== false) ? 
         '<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; margin-left:8px;">Visible</span>' : 
         '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600; margin-left:8px;">Oculto</span>';
@@ -453,7 +453,7 @@
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
 
       html += '<tr>' +
-        '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.png\'"></td>' +
+        '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.webp\'"></td>' +
         '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + statusBadge + '</td>' +
         '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
         '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
@@ -1203,9 +1203,9 @@
         var totalItem = price * qty;
         subtotal += totalItem;
         
-        var img = item.img || 'img/logo.png';
+        var img = item.img || 'img/logo.webp';
         itemsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #e5eef8;">' +
-          '<img src="' + escapeAttr(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.png\'">' +
+          '<img src="' + escapeAttr(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.webp\'">' +
           '<div style="flex-grow:1;">' +
           '<div style="font-weight:600; color:#0a101d; font-size:0.88rem;">' + escapeHtml(item.title) + '</div>' +
           '<div style="font-size:0.78rem; color:#76889e;">' + formatPrice(price) + ' x ' + qty + '</div>' +
@@ -1571,7 +1571,7 @@
       snapshot.forEach(function (doc) {
         var b = doc.data();
         allBanners.push({ id: doc.id, ...b });
-        var img = b.image || 'img/logo.png';
+        var img = b.image || 'img/logo.webp';
         var statusBadge = (b.isActive !== false) ? 
           '<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Activo</span>' : 
           '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Inactivo</span>';
@@ -1874,7 +1874,7 @@
       snapshot.forEach(function (doc) {
         var b = doc.data();
         allBrands.push({ id: doc.id, ...b });
-        var logo = b.logo || 'img/logo.png';
+        var logo = b.logo || 'img/logo.webp';
         html += '<tr>' +
           '<td data-label="Logo"><img src="' + escapeAttr(logo) + '" style="width:48px;height:48px;object-fit:contain;background:#f8f9fa;padding:4px;border-radius:8px;"></td>' +
           '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(b.name) + '</strong></td>' +
