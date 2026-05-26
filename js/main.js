@@ -186,7 +186,7 @@ window.addEventListener('scroll', () => {
           navbar.classList.remove('nav-hidden');
         } else if (mobileMenu && mobileMenu.classList.contains('open')) {
           navbar.classList.remove('nav-hidden');
-        } else if (currentScrollY > (window.innerWidth < 768 ? 220 : window.innerWidth < 1024 ? 210 : 150) && currentScrollY > lastScrollY) {
+        } else if (currentScrollY > (window.innerWidth < 1024 ? 210 : 150) && currentScrollY > lastScrollY) {
           navbar.classList.add('nav-hidden');
         } else {
           navbar.classList.remove('nav-hidden');

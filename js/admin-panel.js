@@ -1429,7 +1429,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <label class="admin-switch">
-              <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="AdminPanel.toggleSectionVisibility('${sec.id}', this.checked)">
+              <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="AdminPanel.toggleSectionVisibility('${sec.id}', this.checked)" aria-label="Visibilidad de la sección ${escapeAttr(sec.name)}">
               <span class="admin-slider"></span>
             </label>
           </div>
@@ -1438,12 +1438,12 @@
         <div style="display: flex; flex-direction: column; gap: 8px; ${sec.visible ? '' : 'display: none;'}">
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Título</label>
-            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;">
+            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;" aria-label="Título de la sección ${escapeAttr(sec.name)}">
           </div>
           ${sec.id !== 'inicio' && sec.id !== 'nosotros' ? `
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Subtítulo</label>
-            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;">${sec.subtitle || ''}</textarea>
+            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;" aria-label="Subtítulo de la sección ${escapeAttr(sec.name)}">${sec.subtitle || ''}</textarea>
           </div>
           ` : ''}
         </div>
@@ -2016,8 +2016,8 @@
       var html = '';
       sorted.forEach(function ([term, count]) {
         html += '<tr>' +
-          '<td><strong style="color:#0a101d;">' + escapeHtml(term) + '</strong></td>' +
-          '<td>' + count + '</td>' +
+          '<td data-label="Término"><strong style="color:#0a101d;">' + escapeHtml(term) + '</strong></td>' +
+          '<td data-label="Frecuencia (Búsquedas)">' + count + '</td>' +
           '</tr>';
       });
       tbody.innerHTML = html || '<tr><td colspan="2" style="text-align:center;padding:32px;color:#76889e;">No hay búsquedas válidas.</td></tr>';

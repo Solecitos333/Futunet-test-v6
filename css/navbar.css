@@ -258,8 +258,8 @@
   border-color: rgba(11, 126, 181, 0.12);
 }
 
-/* ── 8. RESPONSIVE — TABLET (≥768px) ── */
-@media (min-width: 768px) {
+/* ── 8. RESPONSIVE — DESKTOP (≥1024px) ── */
+@media (min-width: 1024px) {
   #navbar { height: 82px; }
   #navbar.scrolled { height: 68px; }
   .nav-inner { padding: 0 clamp(22px, 3vw, 42px); }
@@ -285,8 +285,8 @@
   }
 }
 
-/* ── 10. RESPONSIVE — MOBILE (≤767px) ── */
-@media (max-width: 767px) {
+/* ── 10. RESPONSIVE — MOBILE & TABLET (≤1023px) ── */
+@media (max-width: 1023px) {
   .nav-search-compact {
     flex: 1 1 auto !important;
     margin-left: 6px;
