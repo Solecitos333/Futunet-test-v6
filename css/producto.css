@@ -561,3 +561,29 @@
     border-radius: 22px;
   }
 }
+
+/* ── Estilos Restaurados desde catalog.css (badge y availability pill) ── */
+.product-badge {
+  background: var(--brand-light); color: var(--brand);
+  padding: 4px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(11,126,181,0.08); transition: 0.2s;
+}
+.modal-availability-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(0, 214, 143, 0.14);
+  color: #0e9f6e;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.modal-availability-pill--service {
+  background: rgba(11, 126, 181, 0.1);
+  color: var(--brand);
+}
