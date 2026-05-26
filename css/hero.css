@@ -947,60 +947,6 @@
   .chip-icon { flex-shrink: 0; }
 }
 
-/* ── Scroll Indicator ── */
-.hero-scroll-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 28px;
-  animation: fadeUp .7s .9s both;
-}
-
-.hero-scroll-indicator__mouse {
-  width: 24px;
-  height: 38px;
-  border: 2px solid rgba(11, 126, 181, 0.35);
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  padding-top: 6px;
-}
-
-.hero-scroll-indicator__wheel {
-  width: 4px;
-  height: 8px;
-  background: var(--brand);
-  border-radius: 4px;
-  animation: scrollWheel 2s ease-in-out infinite;
-}
-
-@keyframes scrollWheel {
-  0% { opacity: 1; transform: translateY(0); }
-  100% { opacity: 0; transform: translateY(10px); }
-}
-
-.hero-scroll-indicator__text {
-  font-size: .65rem;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(11, 126, 181, 0.5);
-}
-
-@media (max-width: 767px) {
-  .hero-scroll-indicator {
-    margin-top: 14px;
-  }
-  .hero-scroll-indicator__mouse {
-    width: 20px;
-    height: 32px;
-  }
-  .hero-scroll-indicator__text {
-    font-size: .58rem;
-  }
-}
-
 /* ── Back-to-Top Button ── */
 .back-to-top {
   position: fixed;
