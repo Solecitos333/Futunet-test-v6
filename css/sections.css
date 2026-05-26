@@ -1401,3 +1401,11 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 @media (min-width: 768px) and (max-width: 1023px) {
   .brand-preview-popup { width: 260px; }
 }
+
+/* ── PERFORMANCE: content-visibility for off-screen sections (Desktop only) ── */
+@media (min-width: 768px) {
+  #servicios, #nosotros, #contacto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+}
