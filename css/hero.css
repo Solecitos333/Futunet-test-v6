@@ -63,18 +63,29 @@
   overflow: hidden;
 }
 
-/* ── Background image with Ken Burns effect ── */
+/* ── Background image with Ken Burns effect (Hybrid) ── */
 .hb-bg {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  transform: scale(1.08) translateZ(0);
-  transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
 }
-.hero-carousel-slide--banner.active .hb-bg {
-  transform: scale(1) translateZ(0);
+@media (min-width: 768px) {
+  .hb-bg {
+    transform: scale(1.08) translateZ(0);
+    transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .hero-carousel-slide--banner.active .hb-bg {
+    transform: scale(1) translateZ(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hb-bg {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
 }
 
 /* ── Cinematic gradient overlay ── */
@@ -366,13 +377,24 @@
   inset: 0;
   background-size: cover;
   background-position: center;
-  transform: scale(1.08) translateZ(0);
-  transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 0;
-  will-change: transform;
 }
-.hero-carousel-slide--hero.active .hero-bg-img {
-  transform: scale(1) translateZ(0);
+@media (min-width: 768px) {
+  .hero-bg-img {
+    transform: scale(1.08) translateZ(0);
+    transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .hero-carousel-slide--hero.active .hero-bg-img {
+    transform: scale(1) translateZ(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
 }
 .hero-dots {
   position: absolute; inset: 0;
