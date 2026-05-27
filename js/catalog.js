@@ -631,59 +631,6 @@ function renderMobileStackBrowser({ title, description, items }) {
   if (typeof lucide !== 'undefined') lucide.createIcons({ root: section });
 }
 
-function renderMobilePreviewSection({ eyebrow, title, actionLabel, onAction, products }) {
-  const container = document.getElementById('catalog-grid-container');
-  if (!container || !products.length) return;
-
-  const section = document.createElement('section');
-  section.className = 'catalog-mobile-product-section reveal in';
-
-  const header = document.createElement('div');
-  header.className = 'catalog-mobile-product-section__header';
-
-  const heading = document.createElement('div');
-  heading.className = 'catalog-mobile-product-section__heading';
-  heading.innerHTML = `
-    <span class="catalog-mobile-product-section__eyebrow">${escapeHTML(eyebrow)}</span>
-    <h3>${escapeHTML(title)}</h3>
-  `;
-  header.appendChild(heading);
-
-  if (typeof onAction === 'function') {
-    const actionButton = document.createElement('button');
-    actionButton.type = 'button';
-    actionButton.className = 'catalog-mobile-product-section__action';
-    actionButton.textContent = actionLabel;
-    actionButton.addEventListener('click', onAction);
-    header.appendChild(actionButton);
-  }
-
-  section.appendChild(header);
-
-  const grid = document.createElement('div');
-  grid.className = 'products-grid products-grid--compact-mobile';
-  section.appendChild(grid);
-  container.appendChild(section);
-
-  renderProductsGrid(products.slice(0, MOBILE_PREVIEW_LIMIT), {
-    target: grid,
-    compactMobile: true,
-    previewMobile: true
-  });
-
-  if (products.length > MOBILE_PREVIEW_LIMIT && typeof onAction === 'function') {
-    const footer = document.createElement('div');
-    footer.className = 'catalog-mobile-product-section__footer';
-    const footerButton = document.createElement('button');
-    footerButton.type = 'button';
-    footerButton.className = 'catalog-mobile-product-section__more';
-    footerButton.textContent = `Ver ${products.length} resultados`;
-    footerButton.addEventListener('click', onAction);
-    footer.appendChild(footerButton);
-    section.appendChild(footer);
-  }
-}
-
 function getCatalogResetLabel() {
   if (state.searchQuery) return 'Limpiar búsqueda';
   if (state.category !== 'all') return 'Volver a categorías';
