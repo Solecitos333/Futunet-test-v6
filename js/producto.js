@@ -5,9 +5,13 @@
   let selectedQuantity = 1;
 
   function escapeHTML(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
+    if (!value) return '';
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function refreshIcons() {
