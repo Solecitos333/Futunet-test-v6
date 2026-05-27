@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redes y Datos — Futunet</title>
+  <meta name="description" content="Cableado estructurado, redes de datos, fibra óptica y soluciones de conectividad inalámbrica WiFi para oficinas y corporaciones en Santiago, República Dominicana." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css?v=3.0" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/sections.css?v=3.0" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
+  <link rel="icon" type="image/png" href="img/logo.webp" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.json" />
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Estilos Premium de la Página de Servicio */
+    .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
+    
+    .service-hero {
+      position: relative; height: 380px; display: flex; align-items: center;
+      background-size: cover; background-position: center; color: #fff; overflow: hidden;
+    }
+    .service-hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(9,16,24,0.4) 0%, rgba(9,16,24,0.85) 100%);
+      z-index: 1;
+    }
+    .service-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
+    .service-hero-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+    .service-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
+
+    .service-section { padding: 60px 0; }
+    .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+    
+    @media (max-width: 768px) {
+      .service-hero { height: 280px; }
+      .service-hero-title { font-size: 1.8rem; }
+      .service-hero-desc { font-size: 0.9rem; }
+      .service-grid-info { grid-template-columns: 1fr; gap: 30px; }
+    }
+
+    .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
+    .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
+    
+    .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
+    @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
+    .feature-item {
+      display: flex; gap: 12px; padding: 16px; border: 1px solid rgba(10,112,162,0.06);
+      border-radius: 16px; background: #fdfefe; box-shadow: 0 4px 12px rgba(10,112,162,0.02);
+    }
+    .feature-icon-wrapper {
+      width: 36px; height: 36px; border-radius: 50%; background: rgba(10,112,162,0.06);
+      display: flex; align-items: center; justify-content: center; color: #0A70A2; flex-shrink: 0;
+    }
+    .feature-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 700; color: #0a101d; margin: 0 0 4px; }
+    .feature-text p { font-size: 0.8rem; color: #76889e; margin: 0; line-height: 1.4; }
+
+    /* Formulario de Solicitud */
+    .request-card {
+      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
+      padding: 30px; box-shadow: 0 10px 30px rgba(10,112,162,0.04); position: sticky; top: 100px;
+    }
+    .request-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
+    .request-card p { font-size: 0.85rem; color: #76889e; margin: 0 0 20px; }
+    .request-form-group { margin-bottom: 14px; }
+    .request-form-label { display: block; font-size: 0.72rem; font-weight: 600; color: #394c60; margin-bottom: 4px; text-transform: uppercase; }
+    .request-form-input {
+      width: 100%; padding: 11px 14px; background: #f3f7fc; border: 1.5px solid #e5eef8;
+      border-radius: 12px; color: #0a101d; font-family: 'Outfit', sans-serif; font-size: 0.86rem;
+      transition: all 0.3s; outline: none; box-sizing: border-box;
+    }
+    .request-form-input:focus { border-color: #0A70A2; background: #fff; box-shadow: 0 0 0 3px rgba(10,112,162,0.08); }
+    .request-btn-submit {
+      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, #0a7ab0, #22a4e0); box-shadow: 0 4px 14px rgba(10,112,162,0.18);
+      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .request-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,112,162,0.26); }
+    .request-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* Productos Asignados */
+    .service-products-section { background: #fdfefe; border-top: 1px solid rgba(10,112,162,0.03); padding: 60px 0; }
+    .service-products-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
+    .service-products-section p { font-size: 0.9rem; color: #76889e; margin: 0 0 30px; }
+    .products-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  </style>
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
+    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" role="banner">
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+          <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#servicios" class="active">Servicios</a></li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li><a href="index.html#nosotros">Nosotros</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+          <li>
+            <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+              <svg width="15" height="15"><use href="#wa-icon"/></svg>
+              829-741-1041
+            </a>
+          </li>
+          <li class="nav-auth-wrapper" style="position:relative;">
+            <div class="navbar-auth-container"></div>
+          </li>
+        </ul>
+        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+      <a href="index.html#servicios" data-close-mobile-menu>Servicios</a>
+      <a href="catalogo.html" data-close-mobile-menu>Catálogo</a>
+      <a href="index.html#nosotros" data-close-mobile-menu>Nosotros</a>
+      <a href="index.html#contacto" data-close-mobile-menu>Contacto</a>
+      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+        829-741-1041
+      </a>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 16px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center;"></div>
+    </div>
+  </header>
+
+  <main id="service-page-container" class="service-page" data-service-id="redes">
+    <!-- Hero Banner -->
+    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/redes.jpg');">
+      <div class="container">
+        <div class="service-hero-content">
+          <h1 class="service-hero-title" id="service-title">Redes y Datos</h1>
+          <p class="service-hero-desc" id="service-subtitle">Conectividad estable y de alto rendimiento para oficinas, comercios e industrias.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <section class="service-section">
+      <div class="container">
+        <div class="service-grid-info">
+          <!-- Text and Specs -->
+          <div class="service-details">
+            <h3>Diseño e infraestructura de red profesional</h3>
+            <p id="service-long-description">
+              Desplegamos sistemas de cableado estructurado, redes de fibra óptica interna, enlaces inalámbricos de largo alcance y redes WiFi corporativas gestionadas en la nube. Te ayudamos a eliminar las caídas de internet y asegurar que todos los dispositivos de tu empresa funcionen a máxima velocidad de forma segura.
+            </p>
+
+            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
+            <div class="features-list" id="service-features-list">
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="cable"></i></div>
+                <div class="feature-text">
+                  <h4>Cableado Estructurado</h4>
+                  <p>Certificación en Cat6 y Cat6A para máxima velocidad local.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="wifi"></i></div>
+                <div class="feature-text">
+                  <h4>WiFi Corporativo</h4>
+                  <p>Acceso inalámbrico continuo y portal cautivo de invitados.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="server"></i></div>
+                <div class="feature-text">
+                  <h4>Gabinete & Racks</h4>
+                  <p>Organización, rotulado y montaje de servidores y switches.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="router"></i></div>
+                <div class="feature-text">
+                  <h4>Enlaces Inalámbricos</h4>
+                  <p>Conexión inalámbrica punto a punto para sucursales lejanas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Lead Form -->
+          <div>
+            <div class="request-card">
+              <h3>Solicitar Cotización</h3>
+              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
+              
+              <form id="service-request-form">
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-name">Nombre Completo</label>
+                  <input type="text" id="req-name" class="request-form-input" required />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-email">Correo Electrónico</label>
+                  <input type="email" id="req-email" class="request-form-input" required />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
+                  <input type="text" id="req-company" class="request-form-input" />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
+                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: cableado estructurado para 12 cubículos en oficina)..."></textarea>
+                </div>
+                
+                <button type="submit" class="request-btn-submit" id="req-submit-btn">
+                  <i data-lucide="send"></i> Enviar Solicitud
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Linked Products Section -->
+    <section class="service-products-section" id="related-products-section" style="display:none;">
+      <div class="container">
+        <h3>Equipos relacionados de nuestro catálogo</h3>
+        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
+        <div class="products-grid-wrapper" id="service-products-grid">
+          <!-- Dynamically filled by script -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col brand-col">
+          <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo" width="1009" height="207" />
+          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Compañía</h4>
+          <ul>
+            <li><a href="index.html#nosotros">Nosotros</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/auth-guard.js"></script>
+  <script src="js/main.js"></script>
+  <script defer src="js/service-page.js"></script>
+</body>
+</html>

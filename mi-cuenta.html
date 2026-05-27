@@ -249,6 +249,35 @@
       .up-btn-save { width: 100%; }
       .up-btn-save-cart { width: 100%; justify-content: center; }
     }
+
+    /* ─── Orders Section ─── */
+    .up-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .up-badge-pending { background: rgba(241,196,15,0.08); color: #b7950b; }
+    .up-badge-processing { background: rgba(52,152,219,0.08); color: #2980b9; }
+    .up-badge-shipped { background: rgba(155,89,182,0.08); color: #8e44ad; }
+    .up-badge-delivered { background: rgba(46,204,113,0.08); color: #27ae60; }
+
+    .up-table-row {
+      border-bottom: 1px solid #e5eef8;
+      transition: background-color 0.2s;
+    }
+    .up-table-row:hover { background-color: #fcfdfe; }
+    .up-table-cell {
+      padding: 14px 10px;
+      color: #394c60;
+    }
+    .up-order-id {
+      font-family: monospace;
+      font-weight: 600;
+      color: #0a101d;
+    }
   </style>
 </head>
 <body>
@@ -318,6 +347,9 @@
         <button class="up-tab is-active" data-up-tab="profile">
           <i data-lucide="user"></i> Perfil
         </button>
+        <button class="up-tab" data-up-tab="orders">
+          <i data-lucide="package"></i> Mis Pedidos
+        </button>
         <button class="up-tab" data-up-tab="carts">
           <i data-lucide="shopping-cart"></i> Carritos
         </button>
@@ -378,6 +410,30 @@
         </div>
       </div>
 
+      <!-- Panel: Orders -->
+      <div class="up-panel" data-up-panel="orders">
+        <div class="up-card">
+          <h3>Mis pedidos realizados</h3>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem; font-family:Outfit, sans-serif;">
+              <thead>
+                <tr style="border-bottom:2px solid #e5eef8; color:#76889e;">
+                  <th style="padding:12px 10px;">Pedido</th>
+                  <th style="padding:12px 10px;">Fecha</th>
+                  <th style="padding:12px 10px;">Total</th>
+                  <th style="padding:12px 10px;">Método</th>
+                  <th style="padding:12px 10px;">Estado</th>
+                  <th style="padding:12px 10px; text-align:right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="user-orders-list-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando tus pedidos...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- Panel: Settings -->
       <div class="up-panel" data-up-panel="settings">
         <div class="up-card">
@@ -390,6 +446,27 @@
       </div>
     </div>
   </main>
+
+  <!-- Modal de Detalle de Pedido (Cliente) -->
+  <div class="admin-modal" id="user-order-detail-modal" style="position:fixed; inset:0; background:rgba(10,16,29,0.5); backdrop-filter:blur(6px); z-index:100000; display:none; align-items:center; justify-content:center; padding:16px;">
+    <div class="admin-modal-overlay" style="position:absolute; inset:0;" onclick="closeUserOrderModal()"></div>
+    <div class="admin-modal-card" style="position:relative; background:#fff; width:100%; max-width:540px; border-radius:20px; box-shadow:0 24px 64px rgba(10,112,162,0.12); display:flex; flex-direction:column; overflow:hidden; z-index:100001; animation: modalScaleUp 0.28s ease;">
+      <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e5eef8;">
+        <h3 style="font-family:Space Grotesk, sans-serif; font-size:1.15rem; font-weight:700; color:#0a101d; margin:0;">Detalles de Pedido</h3>
+        <button onclick="closeUserOrderModal()" style="background:none; border:none; font-size:1.5rem; color:#76889e; cursor:pointer;">&times;</button>
+      </div>
+      <div id="user-order-detail-content" style="padding:20px; overflow-y:auto; max-height:70vh; font-family:Outfit, sans-serif;">
+        <!-- Dinámico -->
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes modalScaleUp {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
 
   <!-- Firebase SDK -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

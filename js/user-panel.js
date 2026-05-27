@@ -17,6 +17,7 @@
     renderProfile();
     loadSavedCarts();
     renderFavorites();
+    loadUserOrders();
     setupProfileForm();
   }
 
@@ -191,6 +192,127 @@
     }
     container.innerHTML = '<div class="up-empty"><p>' + favs.length + ' favorito(s) guardados. Ve al catálogo para verlos.</p></div>';
   }
+
+  // ─── Orders Section ───
+  var allUserOrders = [];
+
+  async function loadUserOrders() {
+    var tbody = document.getElementById('user-orders-list-body');
+    if (!tbody) return;
+
+    try {
+      var snapshot = await db.collection('orders')
+        .where('userId', '==', currentUser.uid)
+        .orderBy('createdAt', 'desc')
+        .get();
+
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No has realizado ningún pedido aún.</td></tr>';
+        return;
+      }
+
+      allUserOrders = [];
+      var html = '';
+
+      snapshot.forEach(function (doc) {
+        var o = doc.data();
+        o.id = doc.id;
+        allUserOrders.push(o);
+
+        var date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
+        var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(o.total);
+        
+        var methodMap = { whatsapp: 'WhatsApp', bank_transfer: 'Transferencia' };
+        var method = methodMap[o.paymentMethod] || o.paymentMethod || 'WhatsApp';
+
+        var statusMap = { pending: 'Pendiente', processing: 'Procesando', shipped: 'Enviado', delivered: 'Entregado' };
+        var statusLabel = statusMap[o.status] || o.status || 'Pendiente';
+        var statusClass = 'up-badge up-badge-' + (o.status || 'pending');
+
+        html += '<tr class="up-table-row">' +
+          '  <td class="up-table-cell up-order-id">#' + o.id.substring(0, 8) + '</td>' +
+          '  <td class="up-table-cell">' + date + '</td>' +
+          '  <td class="up-table-cell" style="font-weight:700;">' + totalFormatted + '</td>' +
+          '  <td class="up-table-cell">' + method + '</td>' +
+          '  <td class="up-table-cell"><span class="' + statusClass + '">' + statusLabel + '</span></td>' +
+          '  <td class="up-table-cell" style="text-align:right;">' +
+          '    <button class="up-btn-sm up-btn-load" onclick="window.showUserOrderDetail(\'' + o.id + '\')">Ver</button>' +
+          '  </td>' +
+          '</tr>';
+      });
+
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error loading orders:', err);
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar tus pedidos.</td></tr>';
+    }
+  }
+
+  window.showUserOrderDetail = function (orderId) {
+    var order = allUserOrders.find(o => o.id === orderId);
+    if (!order) return;
+
+    var itemsHtml = '';
+    var items = order.items || [];
+    items.forEach(function (item) {
+      var priceFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(item.price);
+      var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(item.price * item.qty);
+      var img = item.img || 'img/logo.webp';
+      
+      itemsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #e5eef8;">' +
+        '  <img src="' + img + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.webp\'">' +
+        '  <div style="flex-grow:1;">' +
+        '    <div style="font-weight:600; color:#0a101d; font-size:0.85rem;">' + item.title + '</div>' +
+        '    <div style="font-size:0.75rem; color:#76889e;">' + priceFormatted + ' x ' + item.qty + '</div>' +
+        '  </div>' +
+        '  <div style="font-weight:600; color:#0a101d; font-size:0.85rem;">' + totalFormatted + '</div>' +
+        '</div>';
+    });
+
+    var subtotalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(order.total);
+
+    var voucherHtml = '';
+    if (order.paymentMethod === 'bank_transfer' && order.paymentVoucherUrl) {
+      voucherHtml = '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #e5eef8;">' +
+        '  <div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Pago</div>' +
+        '  <a href="' + order.paymentVoucherUrl + '" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#0A70A2; font-weight:600; font-size:0.82rem; text-decoration:underline;">' +
+        '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' +
+        '    Ver Comprobante Adjunto' +
+        '  </a>' +
+        '</div>';
+    }
+
+    var contentHtml = '<div>' +
+      '  <div style="background:#f3f7fc; padding:12px; border-radius:12px; border:1px solid #e5eef8; margin-bottom:16px; font-size:0.8rem; color:#394c60; display:grid; grid-template-columns:1fr 1fr; gap:12px;">' +
+      '    <div>' +
+      '      <strong>Contacto:</strong> ' + (order.userName || '—') + '<br>' +
+      '      <strong>Teléfono:</strong> ' + (order.userPhone || '—') +
+      '    </div>' +
+      '    <div>' +
+      '      <strong>Envío:</strong> ' + (order.shippingAddress || '—') +
+      '    </div>' +
+      '  </div>' +
+      '  <div style="margin-bottom:16px;">' +
+      '    <div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Artículos</div>' +
+      '    ' + itemsHtml +
+      '  </div>' +
+      '  <div style="background:#f9fafc; padding:12px; border-radius:12px; border:1px solid #e5eef8; display:flex; justify-content:space-between; font-weight:700; color:#0a101d; font-size:0.95rem;">' +
+      '    <span>Total:</span>' +
+      '    <span>' + subtotalFormatted + '</span>' +
+      '  </div>' +
+      '  ' + voucherHtml +
+      '</div>';
+
+    var container = document.getElementById('user-order-detail-content');
+    if (container) container.innerHTML = contentHtml;
+    var modal = document.getElementById('user-order-detail-modal');
+    if (modal) modal.style.display = 'flex';
+  };
+
+  window.closeUserOrderModal = function () {
+    var modal = document.getElementById('user-order-detail-modal');
+    if (modal) modal.style.display = 'none';
+  };
 
   // ─── Tab Navigation ───
   function setupTabs() {

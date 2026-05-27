@@ -170,6 +170,36 @@ service cloud.firestore {
       allow read, create: if isEditorOrAbove();
     }
 
+    // ─── SERVICES CONFIG Collection ───
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if isEditorOrAbove();
+    }
+
+    // ─── SERVICE REQUESTS Collection ───
+    match /service_requests/{requestId} {
+      allow create: if true; // Guests can submit service inquiries
+      allow read, update: if isAdminOrAbove();
+      allow delete: if isSuperAdmin();
+    }
+
+    // ─── INTERNET PAYMENTS Collection ───
+    match /internet_payments/{paymentId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdminOrAbove());
+      allow update: if isAdminOrAbove();
+      allow delete: if isSuperAdmin();
+    }
+
+    // ─── INTERNET TICKETS Collection ───
+    match /internet_tickets/{ticketId} {
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdminOrAbove());
+      allow update: if isAdminOrAbove();
+      allow delete: if isSuperAdmin();
+    }
+
+
     // ─── DENY EVERYTHING ELSE ───
     match /{document=**} {
       allow read, write: if false;

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seguridad Electrónica — Futunet</title>
+  <meta name="description" content="Sistemas avanzados de seguridad electrónica para hogares y empresas en Santiago, RD. Cámaras de seguridad CCTV, control de accesos, cercos eléctricos y alarmas.">
+  
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Seguridad Electrónica Integral — Futunet" />
+  <meta property="og:description" content="Protección premium para hogares y empresas. Cámaras CCTV 24/7, video porteros, control de accesos biométrico, cercos y alarmas inteligentes en Santiago, RD." />
+  <meta property="og:image" content="https://futunet.com.do/images/seguridad/hero_security.webp" />
+  <meta property="og:url" content="https://futunet.com.do/seguridad-electronica.html" />
+  <meta property="og:locale" content="es_DO" />
+  <meta property="og:site_name" content="Futunet" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Seguridad Electrónica Integral — Futunet" />
+  <meta name="twitter:description" content="Protección premium para hogares y empresas. Cámaras CCTV 24/7, video porteros, control de accesos biométrico, cercos y alarmas inteligentes." />
+  <meta name="twitter:image" content="https://futunet.com.do/images/seguridad/hero_security.webp" />
+  
+  <!-- CSS Globales -->
+  <link rel="stylesheet" href="css/main.css?v=3.0" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/hero.css?v=3.0" />
+  <link rel="stylesheet" href="css/sections.css?v=3.0" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
+  
+  <!-- CSS Específico de Seguridad -->
+  <link rel="stylesheet" href="css/seguridad-electronica.css">
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Elemento SVG para Sprite de íconos -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
+    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </symbol>
+  </svg>
+
+  <!-- Header (Navbar exacto de la home) -->
+  <header class="site-header" role="banner">
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Ir al inicio de Futunet">
+          <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html">Volver a Inicio</a></li>
+          <li><a href="#cctv">CCTV</a></li>
+          <li><a href="#video-porteros">Accesos</a></li>
+          <li><a href="#cercos">Cercos</a></li>
+          <li><a href="#alarmas">Alarmas</a></li>
+          <li><a href="#productos-listado">Catálogo</a></li>
+          <li>
+            <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+              <svg width="15" height="15"><use href="#wa-icon"/></svg>
+              Cotizar
+            </a>
+          </li>
+          <li class="nav-auth-wrapper" style="position:relative;">
+            <div class="navbar-auth-container"></div>
+          </li>
+        </ul>
+        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html" data-close-mobile-menu>Volver a Inicio</a>
+      <a href="#cctv" data-close-mobile-menu>CCTV</a>
+      <a href="#video-porteros" data-close-mobile-menu>Accesos</a>
+      <a href="#cercos" data-close-mobile-menu>Cercos</a>
+      <a href="#alarmas" data-close-mobile-menu>Alarmas</a>
+      <a href="#productos-listado" data-close-mobile-menu>Catálogo</a>
+    </div>
+  </header>
+
+  <!-- Hero Section (Estilo Cinemático Banner) -->
+  <section id="inicio" class="hero-carousel-slide hero-carousel-slide--banner active" style="min-height: 520px; height: auto; display: flex; align-items: center;">
+    <div class="hb-bg" style="background-image: url('images/seguridad/hero_security.webp');"></div>
+    <div class="hb-overlay"></div>
+    <div class="container" style="position: relative; z-index: 10; width: 100%;">
+      <div class="hb-body" style="padding: 100px 0; max-width: 800px; text-align: left;">
+        <span class="hb-label" style="opacity: 1; transform: none;"><i data-lucide="shield"></i> Soluciones Profesionales</span>
+        <h1 class="hb-title" style="opacity: 1; transform: none; font-size: clamp(2.2rem, 5.5vw, 3.5rem); margin-bottom: 20px; text-shadow: 0 4px 18px rgba(0,0,0,0.6);">Seguridad Electrónica <span>Integral</span></h1>
+        <p class="hb-desc" style="opacity: 1; transform: none; font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 30px;">
+          Protegemos lo que más valoras con tecnología de punta. Desde sistemas de videovigilancia avanzados hasta control de accesos corporativo, diseñamos soluciones a medida para residencias y empresas.
+        </p>
+        <div class="hb-actions" style="opacity: 1; transform: none;">
+          <a href="#cctv" class="btn btn-primary" style="border-radius: 50px; padding: 14px 32px; font-weight: 700;">Explorar Servicios</a>
+          <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20cotizar%20un%20servicio%20de%20seguridad%20electr%C3%B3nica." target="_blank" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700;">
+            <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Cotizar Ahora
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
+  <div class="service-subnav">
+    <div class="subnav-container">
+      <ul class="subnav-links">
+        <li><a href="#cctv" class="active">Cámaras CCTV</a></li>
+        <li><a href="#video-porteros">Video Porteros</a></li>
+        <li><a href="#cercos">Cercos Eléctricos</a></li>
+        <li><a href="#motores">Motores de Portón</a></li>
+        <li><a href="#accesos">Control de Accesos</a></li>
+        <li><a href="#alarmas">Alarmas</a></li>
+        <li><a href="#productos-listado" class="highlight-link"><i class="fas fa-store"></i> Ver Catálogo</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Carrusel de Marcas (Brands slider) -->
+  <section class="brands-section" style="background: white; border-bottom: 1px solid #eaeaea; padding: 40px 0; text-align: center;">
+    <div class="container">
+      <p class="brands-title" style="color: #64748b; font-weight: 600; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.8rem;">Trabajamos con las mejores marcas del mercado</p>
+      <div class="brands-slider">
+        <div class="brand-track">
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Hikvision_logo.svg" alt="Hikvision"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Dahua_Technology_logo.svg" alt="Dahua"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Uniview_logo.svg" alt="UNV"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/TP-Link_logo_2016.svg" alt="TP-Link"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/ZKTECO_LOGO.svg" alt="ZKTeco"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Paradox_logo.svg" alt="Paradox"></div>
+          <!-- Duplicado para efecto sin fin -->
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Hikvision_logo.svg" alt="Hikvision"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/4/43/Dahua_Technology_logo.svg" alt="Dahua"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Uniview_logo.svg" alt="UNV"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/TP-Link_logo_2016.svg" alt="TP-Link"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/ZKTECO_LOGO.svg" alt="ZKTeco"></div>
+          <div class="brand-item"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Paradox_logo.svg" alt="Paradox"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección CCTV (Cámaras de Seguridad) -->
+  <section id="cctv" class="section">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Vigilancia Inteligente</span>
+        <h2 class="section-title">Cámaras de Seguridad (CCTV)</h2>
+        <p class="section-sub">Sistemas avanzados de videovigilancia de alta definición para residencias y comercios. Monitoree su propiedad en tiempo real desde su dispositivo móvil.</p>
+      </div>
+
+      <!-- Reutilizando la cuadrícula y tarjetas de nosotros/oficina de la home -->
+      <div class="about-grid reveal" style="margin-top: 40px;">
+        <div class="about-card" style="padding: 30px;">
+          <h3 class="about-card-title" style="font-size: 1.4rem;">Tecnologías Disponibles</h3>
+          <p class="about-card-desc" style="font-size: 0.9rem; line-height: 1.6;">Nos adaptamos a sus requerimientos técnicos específicos con equipamiento de última generación:</p>
+          <div class="about-info-grid" style="margin-top: 20px;">
+            <div class="about-info-item">
+              <label><i class="fas fa-network-wired" style="color:var(--brand); margin-right:6px;"></i> Cámaras IP</label>
+              <span>Máxima resolución 4K y analíticas de IA para lectura de placas e intrusión.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-camera" style="color:var(--brand); margin-right:6px;"></i> Analógicas HD</label>
+              <span>Migración y actualización rentable sobre cableado coaxial tradicional.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-wifi" style="color:var(--brand); margin-right:6px;"></i> Cámaras Wi-Fi</label>
+              <span>Ideal para despliegues rápidos en hogares y comercios pequeños sin obras.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-moon" style="color:var(--brand); margin-right:6px;"></i> ColorVu / Full Color</label>
+              <span>Vigilancia con imágenes a todo color las 24 horas, incluso de noche.</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bloque de Instalación Profesional -->
+        <div class="about-card" style="background: linear-gradient(135deg, #0a192f 0%, #172e48 100%); color: white; padding: 40px 30px; display: flex; flex-direction: column; justify-content: center; border: none;">
+          <h3 class="about-card-title" style="color: white; font-size: 1.8rem; line-height: 1.25; margin-bottom: 15px;">¿Requieres instalación técnica?</h3>
+          <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px;">
+            Contamos con personal altamente calificado para el diseño del sistema, canalización e instalación estética. Garantizamos cero cables visibles y configuración completa en sus dispositivos.
+          </p>
+          <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20necesito%20un%20levantamiento%20t%C3%A9cnico%20para%20c%C3%A1maras." target="_blank" class="btn btn-primary" style="align-self: flex-start; border-radius: 50px; font-weight: 700; background: var(--brand); box-shadow: 0 8px 24px rgba(11,126,181,0.3);">
+            Solicitar Levantamiento Técnico
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Video Porteros (Split Layout con about-grid) -->
+  <section id="video-porteros" class="section bg-light">
+    <div class="container">
+      <div class="about-grid reveal" style="align-items: center;">
+        <div class="about-text-column">
+          <span class="section-label">Control Perimetral</span>
+          <h2 class="section-title" style="margin-top: 10px;">Video Porteros Inteligentes</h2>
+          <p class="section-sub" style="margin-left: 0; text-align: left; max-width: 100%;">
+            Conteste el timbre de su hogar o condominio y visualice a sus visitas directamente en su celular desde cualquier parte del mundo. Controle cerraduras eléctricas de forma remota.
+          </p>
+          <ul class="values-list" style="margin-top: 20px;">
+            <li class="value-item">
+              <div class="value-icon-box" style="color:#10b981;"><i class="fas fa-check"></i></div>
+              <div class="value-text">
+                <h4>Comunicación Bidireccional</h4>
+                <p>Hable con sus visitantes con audio de alta claridad y video HD.</p>
+              </div>
+            </li>
+            <li class="value-item">
+              <div class="value-icon-box" style="color:#10b981;"><i class="fas fa-check"></i></div>
+              <div class="value-text">
+                <h4>Apertura Remota</h4>
+                <p>Libere cerraduras magnéticas o portones desde la aplicación móvil.</p>
+              </div>
+            </li>
+          </ul>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('seguridad_video_porteros')" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 700; text-decoration: none;">
+            Ver Equipos Disponibles <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="about-card" style="padding: 0; border-radius: 24px; overflow: hidden; border: none; box-shadow: 0 16px 36px rgba(0,0,0,0.06);">
+          <img src="images/seguridad/video_intercom.webp" alt="Sistema de video portero inteligente digital Hikvision instalado en fachada" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Control de Accesos -->
+  <section id="accesos" class="section">
+    <div class="container">
+      <div class="about-grid reveal" style="align-items: center; grid-template-columns: 1.1fr 1fr;">
+        <!-- Card de imagen al inicio en desktop -->
+        <div class="about-card" style="padding: 0; border-radius: 24px; overflow: hidden; border: none; box-shadow: 0 16px 36px rgba(0,0,0,0.06);">
+          <img src="images/seguridad/access_terminal.webp" alt="Terminal biométrico de control de accesos con reconocimiento facial y huella dactilar de ZKTeco" loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/3;">
+        </div>
+        <div class="about-text-column">
+          <span class="section-label">Gestión de Personal</span>
+          <h2 class="section-title" style="margin-top: 10px;">Control de Accesos y Asistencia</h2>
+          <p class="section-sub" style="margin-left: 0; text-align: left; max-width: 100%;">
+            Restrinja el acceso de personas no autorizadas a áreas críticas y automatice el reporte de asistencia de sus empleados mediante tecnologías biométricas y RFID.
+          </p>
+          <ul class="values-list" style="margin-top: 20px;">
+            <li class="value-item">
+              <div class="value-icon-box" style="color:#10b981;"><i class="fas fa-check"></i></div>
+              <div class="value-text">
+                <h4>Biometría Avanzada</h4>
+                <p>Reconocimiento facial en 3D, huella dactilar y tarjetas de proximidad.</p>
+              </div>
+            </li>
+            <li class="value-item">
+              <div class="value-icon-box" style="color:#10b981;"><i class="fas fa-check"></i></div>
+              <div class="value-text">
+                <h4>Reportería Completa</h4>
+                <p>Gestión centralizada de horarios, retardos, horas extra y ausencias.</p>
+              </div>
+            </li>
+          </ul>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('seguridad_control_accesos')" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 700; text-decoration: none;">
+            Ver Equipos Disponibles <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Cercos Eléctricos y Motores -->
+  <section id="cercos" class="section bg-light">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Barrera Física y Acceso Vehicular</span>
+        <h2 class="section-title">Perímetro y Portones</h2>
+        <p class="section-sub">Proteja el perímetro exterior de su propiedad y automatice el ingreso vehicular para su comodidad y protección.</p>
+      </div>
+      
+      <div class="about-grid reveal" style="margin-top: 40px; grid-template-columns: 1fr 1fr; gap: 30px;">
+        <div class="about-card" style="padding: 30px; display: flex; flex-direction: column;">
+          <div class="value-icon-box" style="color:var(--brand); margin-bottom: 20px; width: 50px; height: 50px;"><i class="fas fa-bolt"></i></div>
+          <h3 class="about-card-title" style="margin-bottom: 12px; font-size: 1.4rem;">Cercos Eléctricos</h3>
+          <p class="about-card-desc" style="flex-grow: 1; line-height: 1.6; font-size: 0.92rem; color: #64748b;">
+            Sistema disuasivo perimetral activo. Emite descargas eléctricas de alto voltaje no letales y activa alertas sonoras o llamadas inmediatas al ser manipulado o cortado.
+          </p>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('seguridad_cercos')" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 700; text-decoration: none;">
+            Ver Equipos <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        
+        <div class="about-card" style="padding: 30px; display: flex; flex-direction: column;" id="motores">
+          <div class="value-icon-box" style="color:var(--brand); margin-bottom: 20px; width: 50px; height: 50px;"><i class="fas fa-warehouse"></i></div>
+          <h3 class="about-card-title" style="margin-bottom: 12px; font-size: 1.4rem;">Motores de Portón</h3>
+          <p class="about-card-desc" style="flex-grow: 1; line-height: 1.6; font-size: 0.92rem; color: #64748b;">
+            Automatización de portones corredizos, batientes y de proyección. Motores rápidos de alto tráfico con control remoto, sensores de seguridad y apertura por smartphone.
+          </p>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('seguridad_motores')" style="margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; color: var(--brand); font-weight: 700; text-decoration: none;">
+            Ver Equipos <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Alarmas (Estilo Banner CTA Cinemático) -->
+  <section id="alarmas" class="cta-banner">
+    <div class="cta-banner-inner reveal">
+      <span class="section-label" style="background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.3); color: white; margin-bottom: 15px; display: inline-flex; align-self: center;">Detección Preventiva</span>
+      <h2 style="font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 15px; color: white;">Sistemas de Alarma Inteligentes</h2>
+      <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.6; margin-bottom: 25px; max-width: 600px; margin-inline: auto;">
+        Mantenga su inmueble vigilado frente a intrusiones. Sensores de movimiento, contactos magnéticos para puertas/ventanas y botones de pánico inalámbricos con notificaciones en tiempo real en su móvil.
+      </p>
+      <button class="btn btn-primary" onclick="filterBySubcategory('seguridad_alarmas')" style="border-radius: 50px; padding: 14px 32px; background: white; color: #0a1928; font-weight: 700; border: none; box-shadow: 0 8px 24px rgba(255,255,255,0.1);">
+        Explorar Equipos de Alarma
+      </button>
+    </div>
+  </section>
+
+  <!-- Sección Catálogo de Productos y Filtros -->
+  <section class="section" id="productos-listado">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Equipos en Stock</span>
+        <h2 class="section-title">Catálogo de Equipos</h2>
+        <p class="section-sub">Explore nuestro inventario de equipos de seguridad. Seleccione una categoría para filtrar.</p>
+      </div>
+
+      <!-- Filtros de Subcategoría (Pills estilo catálogo) -->
+      <div class="subcategory-filters" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 30px; margin-bottom: 40px;">
+        <button class="filter-btn active" data-filter="all" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Todos</button>
+        <button class="filter-btn" data-filter="seguridad_cctv" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">CCTV</button>
+        <button class="filter-btn" data-filter="seguridad_video_porteros" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Video Porteros</button>
+        <button class="filter-btn" data-filter="seguridad_control_accesos" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Control de Accesos</button>
+        <button class="filter-btn" data-filter="seguridad_cercos" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Cercos Eléctricos</button>
+        <button class="filter-btn" data-filter="seguridad_motores" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Motores de Portón</button>
+        <button class="filter-btn" data-filter="seguridad_alarmas" style="padding: 10px 24px; border-radius: 50px; border: 1.5px solid #eaeaea; background: white; font-family: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; color: #394c60;">Alarmas</button>
+      </div>
+
+      <!-- Grid de Productos (Alimentado por service-page.js) -->
+      <div class="service-products-grid" id="service-products-grid">
+        <div class="loading-products" style="grid-column: 1/-1; text-align: center; padding: 50px 0; color: var(--brand);">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i> Cargando catálogo de seguridad...
+        </div>
+      </div>
+      
+      <!-- Mensaje cuando la categoría está vacía -->
+      <div id="no-products-msg" class="no-products-msg" style="display: none; text-align: center; padding: 60px 0; border: 1px dashed #eaeaea; border-radius: 16px; margin-top: 20px;">
+        <i class="fas fa-box-open" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px; display: block;"></i>
+        <p style="font-weight: 600; color: #64748b;">No hay equipos disponibles en esta categoría por el momento.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner de Call to Action Final -->
+  <section class="cta-banner" style="background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%); padding: 80px 0;">
+    <div class="cta-banner-inner reveal">
+      <h2 style="font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 15px; color: white;">¿Listo para asegurar tu tranquilidad?</h2>
+      <p style="color: rgba(255,255,255,0.85); font-size: 1.05rem; line-height: 1.6; margin-bottom: 30px; max-width: 600px; margin-inline: auto;">
+        Póngase en contacto con nuestro equipo de ingeniería hoy mismo para recibir una consultoría y presupuesto personalizado sin costo.
+      </p>
+      <div class="cta-buttons" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://wa.me/18297411041" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; background: #25d366; box-shadow: 0 10px 24px rgba(37,211,102,0.25);">
+          <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Chat en WhatsApp
+        </a>
+        <a href="tel:+18297411041" class="btn btn-outline" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; border: 2px solid white; color: white; background: transparent;">
+          <i class="fas fa-phone"></i> Llámanos: (829) 741-1041
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Copia fiel del de index.html) -->
+  <footer>
+    <div class="footer-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px;">
+      <div class="footer-col footer-brand">
+        <img src="img/logo-navbar.webp" alt="Futunet SRL Logo" class="footer-logo" width="1009" height="207" style="max-width: 180px; height: auto;">
+        <p style="color: rgba(255,255,255,0.5); font-size: .88rem; margin-top: 12px; line-height: 1.75;">Conectando el futuro y asegurando tu tranquilidad con soluciones tecnológicas de vanguardia.</p>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Enlaces Rápidos</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
+          <li><a href="index.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Inicio</a></li>
+          <li><a href="index.html#servicios" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Servicios</a></li>
+          <li><a href="index.html#nosotros" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Nosotros</a></li>
+          <li><a href="index.html#contacto" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Servicios</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
+          <li><a href="redes-datos.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Redes y Datos</a></li>
+          <li><a href="seguridad-electronica.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Seguridad Electrónica</a></li>
+          <li><a href="energia-climatizacion.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Energía y Clima</a></li>
+          <li><a href="equipos-oficina.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Equipos de Oficina</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Contacto</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0; color: rgba(255,255,255,0.5); font-size: 0.86rem;">
+          <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Av. Cuesta Colorada, Las Colinas, Santiago</li>
+          <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +1 (829) 741-1041</li>
+          <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@futunet.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="max-width: 1200px; margin: 20px auto 0; padding: 20px 20px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.3);">
+      <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+      <span>Santiago, República Dominicana</span>
+    </div>
+  </footer>
+
+  <!-- Sistema de Notificaciones Toast -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts Base -->
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/config.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/main.js"></script>
+  <script type="module" src="js/service-page.js"></script>
+
+  <!-- Script Inline para Desplazamientos y Activación de Filtros -->
+  <script>
+    window.currentServiceCategory = 'seguridad_electronica';
+    
+    // Función para manejar el filtrado
+    window.filterBySubcategory = function(subcategory) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if(btn.getAttribute('data-filter') === subcategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      const event = new CustomEvent('filterSubcategory', { detail: subcategory });
+      document.dispatchEvent(event);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Activar clics en botones pills de filtrado
+      document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filterValue = btn.getAttribute('data-filter');
+          window.filterBySubcategory(filterValue);
+        });
+      });
+
+      // Efecto pegajoso (sticky) y sincronización con el navbar principal
+      const subnav = document.querySelector('.service-subnav');
+      const navbar = document.getElementById('navbar');
+      const headerOffset = 70; 
+      
+      if(subnav && navbar) {
+        window.addEventListener('scroll', () => {
+          // Comportamiento Sticky
+          if (window.scrollY > 300) {
+            subnav.classList.add('sticky');
+          } else {
+            subnav.classList.remove('sticky');
+          }
+          
+          // Sincronizar visibilidad con el navbar principal
+          if (navbar.classList.contains('nav-hidden')) {
+            subnav.classList.add('nav-hidden');
+          } else {
+            subnav.classList.remove('nav-hidden');
+          }
+        });
+      }
+
+      // Resaltar sección activa en la barra subnav
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.subnav-links a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= (sectionTop - headerOffset - 60)) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Desplazamiento suave para enlaces ancla
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if(this.getAttribute('href') === '#') return;
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const yOffset = -120; // Ajuste para header y subnav sticky
+            const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

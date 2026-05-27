@@ -285,12 +285,433 @@
     return lines.join('\n');
   }
 
-  function checkoutCart() {
+  var selectedCheckoutFile = null;
+
+  function showCartToast(msg, type = 'info') {
+    const existing = document.querySelector('.cart-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `cart-toast cart-toast-${type}`;
+    toast.textContent = msg;
+    
+    toast.style.position = 'fixed';
+    toast.style.bottom = '24px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+    toast.style.padding = '12px 24px';
+    toast.style.borderRadius = '14px';
+    toast.style.fontFamily = 'Outfit, sans-serif';
+    toast.style.fontSize = '0.85rem';
+    toast.style.fontWeight = '600';
+    toast.style.zIndex = '99999';
+    toast.style.opacity = '0';
+    toast.style.transition = 'all 0.3s ease';
+    toast.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+    toast.style.backgroundColor = type === 'success' ? '#0e8a5f' : type === 'error' ? '#c0392b' : '#0A70A2';
+    toast.style.color = '#ffffff';
+
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+    });
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  }
+
+  function injectCheckoutModal() {
+    if (document.getElementById('cart-checkout-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'cart-checkout-modal';
+    modal.className = 'cart-checkout-modal-overlay';
+    modal.innerHTML = `
+      <div class="cart-checkout-modal-card">
+        <div class="cart-checkout-modal-header">
+          <h3>Detalles de Entrega y Pago</h3>
+          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal">&times;</button>
+        </div>
+        <form id="cart-checkout-form" class="cart-checkout-modal-body">
+          <div class="checkout-step">
+            <h4>1. Información de Envío</h4>
+            <div class="checkout-form-grid">
+              <div class="checkout-form-group">
+                <label for="chk-name">Nombre de Contacto *</label>
+                <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" required>
+              </div>
+              <div class="checkout-form-group">
+                <label for="chk-phone">Teléfono de Contacto *</label>
+                <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" required>
+              </div>
+              <div class="checkout-form-group full-width">
+                <label for="chk-address">Dirección de Entrega *</label>
+                <textarea id="chk-address" placeholder="Calle, Número, Sector, Ciudad..." rows="2" required></textarea>
+              </div>
+              <div class="checkout-form-group full-width">
+                <label for="chk-notes">Notas / Referencias (Opcional)</label>
+                <textarea id="chk-notes" placeholder="Ej. Casa de dos niveles frente al parque..." rows="1"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-step">
+            <h4>2. Método de Pago</h4>
+            <div class="checkout-methods">
+              <label class="checkout-method-option">
+                <input type="radio" name="chk-payment-method" value="whatsapp" checked>
+                <div class="method-card">
+                  <div class="method-icon"><i data-lucide="message-square"></i></div>
+                  <div class="method-text">
+                    <strong>WhatsApp (Pedido Rápido)</strong>
+                    <span>Envía tu pedido y coordina el pago con un asesor.</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="checkout-method-option" id="transfer-option-label">
+                <input type="radio" name="chk-payment-method" value="bank_transfer">
+                <div class="method-card">
+                  <div class="method-icon"><i data-lucide="landmark"></i></div>
+                  <div class="method-text">
+                    <strong>Transferencia Bancaria Directa</strong>
+                    <span>Paga por transferencia y sube tu comprobante aquí.</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+            
+            <div id="checkout-guest-warning" class="checkout-warning-box" style="display:none; margin-top:12px;">
+              <p>⚠️ Para pagar mediante transferencia y subir tu comprobante directamente en la web, debes <a href="login.html" style="text-decoration:underline; font-weight:600; color:#0A70A2;">iniciar sesión</a> o registrarte. De lo contrario, puedes solicitar tu pedido por WhatsApp y acordar el pago allí.</p>
+            </div>
+
+            <!-- Sección de transferencia -->
+            <div id="checkout-bank-details" class="checkout-subpanel" style="display:none; margin-top:12px;">
+              <div class="bank-accounts-info">
+                <h5>Datos de Cuenta Oficial Futunet SRL:</h5>
+                <div class="bank-account-card">
+                  <div><strong>Titular:</strong> <span class="copyable" onclick="FutunetCart.copyText('FUTUNET.SRL')">FUTUNET.SRL</span></div>
+                  <div><strong>Tipo:</strong> Corriente</div>
+                  <div><strong>Banco:</strong> Banreservas</div>
+                  <div><strong>Cuenta:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('9605759674')">9605759674</span></div>
+                  <div><strong>RNC:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('132702077')">132702077</span></div>
+                </div>
+                <small class="click-to-copy-hint">💡 Toca el titular, cuenta o RNC para copiarlos al portapapeles.</small>
+              </div>
+
+              <div class="checkout-upload-area">
+                <label>Sube tu comprobante de pago *</label>
+                <div class="checkout-dropzone" id="checkout-voucher-dropzone">
+                  <i data-lucide="upload-cloud"></i>
+                  <p>Arrastra o haz clic para subir tu comprobante de pago (Imagen o PDF, máx. 5MB)</p>
+                  <input type="file" id="chk-voucher-file" accept="image/*,application/pdf" style="display:none;">
+                </div>
+                
+                <div class="checkout-preview-box" id="checkout-voucher-preview-box" style="display:none;">
+                  <span id="checkout-voucher-filename">archivo.jpg</span>
+                  <button type="button" class="btn-remove-file" id="btn-remove-chk-file">&times; Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-checkout-modal-footer">
+            <button type="button" class="btn btn-ghost" id="btn-cancel-checkout">Cancelar</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-checkout">
+              Confirmar y Enviar Pedido
+            </button>
+          </div>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Bind events
+    document.getElementById('close-checkout-modal').addEventListener('click', closeCheckoutModal);
+    document.getElementById('btn-cancel-checkout').addEventListener('click', closeCheckoutModal);
+
+    // Payment method toggle
+    const methods = modal.querySelectorAll('input[name="chk-payment-method"]');
+    methods.forEach(m => {
+      m.addEventListener('change', function () {
+        togglePaymentSubpanels(this.value);
+      });
+    });
+
+    // File Dropzone events
+    const dropzone = document.getElementById('checkout-voucher-dropzone');
+    const fileInput = document.getElementById('chk-voucher-file');
+    const removeBtn = document.getElementById('btn-remove-chk-file');
+
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) handleCheckoutFile(this.files[0]);
+      });
+
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('is-dragover');
+      });
+      ['dragleave', 'drop'].forEach(evt => {
+        dropzone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('is-dragover');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleCheckoutFile(e.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    if (removeBtn) {
+      removeBtn.addEventListener('click', removeCheckoutFile);
+    }
+
+    // Submit handler
+    const form = document.getElementById('cart-checkout-form');
+    form.addEventListener('submit', handleCheckoutSubmit);
+
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  function togglePaymentSubpanels(method) {
+    const bankDetails = document.getElementById('checkout-bank-details');
+    const warningBox = document.getElementById('checkout-guest-warning');
+    const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+
+    if (method === 'bank_transfer') {
+      if (user) {
+        bankDetails.style.display = 'block';
+        warningBox.style.display = 'none';
+        const submitBtn = document.getElementById('btn-submit-checkout');
+        if (submitBtn) submitBtn.disabled = !selectedCheckoutFile;
+      } else {
+        bankDetails.style.display = 'none';
+        warningBox.style.display = 'block';
+        const submitBtn = document.getElementById('btn-submit-checkout');
+        if (submitBtn) submitBtn.disabled = true;
+      }
+    } else {
+      bankDetails.style.display = 'none';
+      warningBox.style.display = 'none';
+      const submitBtn = document.getElementById('btn-submit-checkout');
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  }
+
+  function handleCheckoutFile(file) {
+    if (file.size > 5 * 1024 * 1024) {
+      showCartToast('El archivo supera los 5MB permitidos.', 'error');
+      return;
+    }
+    selectedCheckoutFile = file;
+    document.getElementById('checkout-voucher-filename').textContent = file.name;
+    document.getElementById('checkout-voucher-preview-box').style.display = 'flex';
+    document.getElementById('checkout-voucher-dropzone').style.display = 'none';
+    
+    // Enable submit button
+    const submitBtn = document.getElementById('btn-submit-checkout');
+    if (submitBtn) submitBtn.disabled = false;
+  }
+
+  function removeCheckoutFile() {
+    selectedCheckoutFile = null;
+    const fileInput = document.getElementById('chk-voucher-file');
+    if (fileInput) fileInput.value = '';
+    document.getElementById('checkout-voucher-preview-box').style.display = 'none';
+    document.getElementById('checkout-voucher-dropzone').style.display = 'block';
+    
+    // If bank transfer selected, disable submit until file is re-selected
+    const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked')?.value;
+    if (paymentMethod === 'bank_transfer') {
+      const submitBtn = document.getElementById('btn-submit-checkout');
+      if (submitBtn) submitBtn.disabled = true;
+    }
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCartToast('Copiado al portapapeles', 'success');
+    }).catch(() => {
+      showCartToast('Error al copiar', 'error');
+    });
+  }
+
+  async function openCheckoutModal() {
     const items = getCartItems();
     if (!items.length) return;
-    const message = buildCheckoutMessage(items);
-    const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
-    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+    
+    injectCheckoutModal();
+    
+    const modal = document.getElementById('cart-checkout-modal');
+    modal.classList.add('is-active');
+    
+    // Reset form
+    document.getElementById('cart-checkout-form').reset();
+    removeCheckoutFile();
+    
+    // Check if user is logged in and autofill
+    const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+    const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
+    
+    const transferOption = document.getElementById('transfer-option-label');
+    if (!user) {
+      if (transferOption) transferOption.style.opacity = '0.5';
+    } else {
+      if (transferOption) transferOption.style.opacity = '1';
+      
+      // Load user profile details from Firestore
+      if (db) {
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const data = userDoc.data();
+            document.getElementById('chk-name').value = data.displayName || '';
+            document.getElementById('chk-phone').value = data.phone || '';
+            document.getElementById('chk-address').value = data.address || '';
+          }
+        } catch (e) {
+          console.warn('Error autofilling checkout fields:', e);
+        }
+      }
+    }
+    
+    // Reset radio selection
+    const radioWhatsApp = document.querySelector('input[name="chk-payment-method"][value="whatsapp"]');
+    if (radioWhatsApp) radioWhatsApp.checked = true;
+    
+    togglePaymentSubpanels('whatsapp'); // default option
+    closeCartDrawer();
+  }
+
+  function closeCheckoutModal() {
+    const modal = document.getElementById('cart-checkout-modal');
+    if (modal) {
+      modal.classList.remove('is-active');
+    }
+  }
+
+  async function handleCheckoutSubmit(e) {
+    e.preventDefault();
+    
+    const items = getCartItems();
+    if (!items.length) return;
+    
+    const submitBtn = document.getElementById('btn-submit-checkout');
+    if (submitBtn) submitBtn.disabled = true;
+    
+    const name = document.getElementById('chk-name').value.trim();
+    const phone = document.getElementById('chk-phone').value.trim();
+    const address = document.getElementById('chk-address').value.trim();
+    const notes = document.getElementById('chk-notes').value.trim();
+    const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
+    
+    const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+    const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
+    const storage = window.FutunetFirebase && window.FutunetFirebase.storage ? window.FutunetFirebase.storage : null;
+    
+    const totalValue = items.reduce((sum, p) => sum + parsePriceToNumber(p.price) * (cartState.items[p.id]?.qty || 0), 0);
+    
+    const orderData = {
+      userId: user ? user.uid : 'guest',
+      userName: name,
+      userPhone: phone,
+      shippingAddress: address,
+      shippingNotes: notes,
+      items: items.map(p => ({
+        id: p.id,
+        title: p.title,
+        price: parsePriceToNumber(p.price),
+        qty: cartState.items[p.id].qty,
+        img: p.img || '',
+        brand: p.brand || '',
+        category: p.category || ''
+      })),
+      total: totalValue,
+      status: 'pending',
+      paymentMethod: paymentMethod,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+      if (paymentMethod === 'bank_transfer') {
+        if (!user || !db || !storage) {
+          showCartToast('Error de autenticación o base de datos.', 'error');
+          if (submitBtn) submitBtn.disabled = false;
+          return;
+        }
+        
+        if (!selectedCheckoutFile) {
+          showCartToast('Por favor, sube tu comprobante de pago.', 'error');
+          if (submitBtn) submitBtn.disabled = false;
+          return;
+        }
+        
+        showCartToast('Subiendo comprobante...', 'info');
+        
+        const fileExt = selectedCheckoutFile.name.split('.').pop();
+        const randomId = Math.random().toString(36).substring(2, 10);
+        const storagePath = 'vouchers/' + user.uid + '/order_' + randomId + '_' + Date.now() + '.' + fileExt;
+        
+        const fileRef = storage.ref().child(storagePath);
+        const uploadTask = await fileRef.put(selectedCheckoutFile);
+        const downloadUrl = await uploadTask.ref.getDownloadURL();
+        
+        orderData.paymentVoucherUrl = downloadUrl;
+        orderData.paymentStoragePath = storagePath;
+        orderData.paymentStatus = 'pending_review';
+        
+        const docRef = await db.collection('orders').add(orderData);
+        
+        // Registrar log de auditoría
+        await db.collection('audit_logs').add({
+          action: 'Pedido por Transferencia',
+          details: 'Cliente realizó pedido ID: ' + docRef.id + ' por valor de RD$ ' + totalValue,
+          userId: user.uid,
+          userEmail: user.email,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        showCartToast('Pedido y comprobante registrados con éxito.', 'success');
+        
+        // Vaciar carrito
+        cartState.items = {};
+        saveCartState();
+        updateCartCount();
+        closeCheckoutModal();
+        
+      } else {
+        // WhatsApp method
+        if (user && db) {
+          try {
+            await db.collection('orders').add(orderData);
+          } catch (e) {
+            console.warn('Error saving WhatsApp order to Firestore:', e);
+          }
+        }
+        
+        const message = buildCheckoutMessage(items);
+        const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
+        window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank');
+        
+        cartState.items = {};
+        saveCartState();
+        updateCartCount();
+        closeCheckoutModal();
+      }
+    } catch (err) {
+      console.error('Error during checkout processing:', err);
+      showCartToast('Error al procesar el pedido. Intenta nuevamente.', 'error');
+    }
+    
+    if (submitBtn) submitBtn.disabled = false;
   }
 
   function renderCartDrawer() {
@@ -337,7 +758,7 @@
       
       summary.textContent = `${formatCartQuantity(totalCount)} · Total ${formatCurrency(totalValue)}`;
       checkoutBtn.disabled = false;
-      checkoutBtn.innerHTML = '<i data-lucide="credit-card"></i> Solicitar carrito por WhatsApp';
+      checkoutBtn.innerHTML = '<i data-lucide="shopping-bag"></i> Tramitar pedido';
     }
     
     if (window.lucide) window.lucide.createIcons();
@@ -346,15 +767,14 @@
   function bindCartUI() {
     loadCartState();
     
-    // Bind global listeners
     const cartFab = document.getElementById('cart-fab');
-    const cartLink = document.getElementById('product-cart-link'); // from producto.html
+    const cartLink = document.getElementById('product-cart-link'); 
     const drawer = document.getElementById('cart-drawer');
     const checkoutBtn = document.getElementById('cart-checkout-btn');
 
     if (cartFab) cartFab.addEventListener('click', toggleCartDrawer);
     if (cartLink) cartLink.addEventListener('click', toggleCartDrawer);
-    if (checkoutBtn) checkoutBtn.addEventListener('click', checkoutCart);
+    if (checkoutBtn) checkoutBtn.addEventListener('click', openCheckoutModal);
 
     if (drawer) {
       drawer.addEventListener('click', (event) => {
@@ -377,7 +797,10 @@
     }
 
     document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') closeCartDrawer();
+      if (event.key === 'Escape') {
+        closeCartDrawer();
+        closeCheckoutModal();
+      }
     });
   }
 
@@ -392,7 +815,8 @@
     openDrawer: openCartDrawer,
     closeDrawer: closeCartDrawer,
     bindUI: bindCartUI,
-    getItemQty: (id) => cartState.items[id]?.qty || 0
+    getItemQty: (id) => cartState.items[id]?.qty || 0,
+    copyText: copyText
   };
 
   // Inicialización automática

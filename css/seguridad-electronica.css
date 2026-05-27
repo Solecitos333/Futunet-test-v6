@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Estilos Locales: Seguridad Electrónica (Futunet SRL)
+   Estilos específicos que no colisionan con css/main.css o css/navbar.css
+   ========================================================================== */
+
+/* 1. BARRA DE NAVEGACIÓN SECUNDARIA (Sticky Subnav) */
+.service-subnav {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(15, 25, 35, 0.08);
+  padding: 0 5%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 99;
+  box-shadow: 0 4px 12px rgba(15, 25, 35, 0.03);
+}
+
+.service-subnav.sticky {
+  position: fixed;
+  top: 70px; /* Altura estimada del header principal */
+  left: 0;
+  width: 100%;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s ease;
+  transform: translateY(0);
+}
+
+/* Ocultado sincronizado cuando el navbar principal se esconde al hacer scroll down */
+.service-subnav.sticky.nav-hidden {
+  transform: translateY(-140px); /* Se desliza hacia arriba fuera del viewport */
+}
+
+@keyframes slideSubnavDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.subnav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.subnav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.subnav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  padding: 1rem 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.subnav-links a {
+  text-decoration: none;
+  color: var(--text-muted, #76889e);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding-bottom: 1rem;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.subnav-links a:hover, .subnav-links a.active {
+  color: var(--brand, #0B7EB5);
+}
+
+.subnav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--brand, #0B7EB5);
+  border-radius: 3px 3px 0 0;
+}
+
+.subnav-links a.highlight-link {
+  color: var(--brand, #0B7EB5);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* 2. CARRUSEL INFINITO DE MARCAS (Brands Slider) */
+.brands-slider {
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.brands-slider::before,
+.brands-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  z-index: 2;
+}
+
+.brands-slider::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 100%);
+}
+
+.brands-slider::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff 0%, rgba(255,255,255,0) 100%);
+}
+
+.brand-track {
+  display: flex;
+  width: calc(200px * 12);
+  animation: scrollBrands 25s linear infinite;
+  align-items: center;
+}
+
+.brand-item {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.65;
+  transition: all 0.3s ease;
+  filter: grayscale(100%);
+}
+
+.brand-item:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+  transform: scale(1.08);
+}
+
+.brand-item img {
+  max-width: 100%;
+  height: auto;
+  max-height: 40px;
+  object-fit: contain;
+}
+
+@keyframes scrollBrands {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-200px * 6)); }
+}
+
+/* 3. GRILLA DE PRODUCTOS Y ESTADOS (Catalog States) */
+.service-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+}
+
+.loading-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--brand, #0B7EB5);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.no-products-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 5rem 2rem;
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 1.5px dashed var(--border, #eaeaea);
+  color: var(--text-muted, #76889e);
+  box-shadow: 0 10px 30px rgba(15, 25, 35, 0.03);
+  margin-top: 2rem;
+}
+
+/* 4. COMPORTAMIENTO DE FILTROS (Pill Buttons) */
+.filter-btn:hover {
+  border-color: var(--brand, #0B7EB5) !important;
+  color: var(--brand, #0B7EB5) !important;
+  background-color: rgba(11, 126, 181, 0.03) !important;
+}
+
+.filter-btn.active {
+  background-color: var(--brand, #0B7EB5) !important;
+  color: #ffffff !important;
+  border-color: var(--brand, #0B7EB5) !important;
+  box-shadow: 0 8px 20px rgba(11, 126, 181, 0.22) !important;
+}
+
+/* Ajustes de responsividad */
+@media (max-width: 992px) {
+  .service-subnav.sticky {
+    top: 60px; /* Ajuste para header colapsado móvil */
+  }
+}
+@media (max-width: 768px) {
+  .subnav-links {
+    gap: 1.2rem;
+    padding: 0.8rem 0;
+  }
+  .subnav-links a {
+    font-size: 0.85rem;
+  }
+  .brands-slider::before,
+  .brands-slider::after {
+    width: 60px;
+  }
+}
+
+/* 5. MICRO-INTERACCIONES PREMIUM */
+.about-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 42px rgba(15, 25, 35, 0.08) !important;
+}

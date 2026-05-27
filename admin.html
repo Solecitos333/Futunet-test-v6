@@ -15,6 +15,9 @@
   <link rel="manifest" href="manifest.json" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <!-- Leaflet Map CSS/JS (CDN) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 
@@ -47,7 +50,25 @@
           Inventario
         </button>
 
-        <div class="admin-nav-label">Gestión</div>
+        <div class="admin-nav-label">Operaciones</div>
+        <button class="admin-nav-item" data-admin-nav="orders">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
+          Pedidos <span class="admin-nav-badge" id="badge-orders" style="display:none;"></span>
+        </button>
+        <button class="admin-nav-item" data-admin-nav="service-requests">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Solicitudes <span class="admin-nav-badge" id="badge-requests" style="display:none;"></span>
+        </button>
+        <button class="admin-nav-item" data-admin-nav="internet-management">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.58 16.14a6 6 0 0 1 6.84 0"/><circle cx="12" cy="20" r="1"/></svg>
+          Internet Fibra <span class="admin-nav-badge" id="badge-internet" style="display:none;"></span>
+        </button>
+        <button class="admin-nav-item" data-admin-nav="clients-map">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
+          Mapa Técnico
+        </button>
+
+        <div class="admin-nav-label">Administración</div>
         <button class="admin-nav-item" data-admin-nav="users">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Usuarios
@@ -55,10 +76,6 @@
         <button class="admin-nav-item" data-admin-nav="discounts">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           Descuentos
-        </button>
-        <button class="admin-nav-item" data-admin-nav="orders">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
-          Pedidos
         </button>
         <button class="admin-nav-item" data-admin-nav="banners">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
@@ -332,6 +349,22 @@
             </button>
           </div>
         </div>
+        <!-- Resumen de Pedidos -->
+        <div class="admin-stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;">
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Pendientes</span>
+            <h2 id="orders-count-pending" style="font-size:1.8rem; margin:8px 0 0; color:#e74c3c;">0</h2>
+          </div>
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Procesando</span>
+            <h2 id="orders-count-processing" style="font-size:1.8rem; margin:8px 0 0; color:#0A70A2;">0</h2>
+          </div>
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Entregados</span>
+            <h2 id="orders-count-delivered" style="font-size:1.8rem; margin:8px 0 0; color:#0e8a5f;">0</h2>
+          </div>
+        </div>
+
         <div class="admin-table-card">
           <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
             <h3>Historial de pedidos</h3>
@@ -523,6 +556,196 @@
             </table>
           </div>
           <div id="audit-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ═══ SERVICE REQUESTS PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="service-requests">
+        <div class="admin-topbar">
+          <h1>Solicitudes de Servicios</h1>
+        </div>
+        
+        <!-- Resumen de Solicitudes -->
+        <div class="admin-stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;">
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Pendientes</span>
+            <h2 id="solicitudes-count-pending" style="font-size:1.8rem; margin:8px 0 0; color:#e74c3c;">0</h2>
+          </div>
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Completadas</span>
+            <h2 id="solicitudes-count-completed" style="font-size:1.8rem; margin:8px 0 0; color:#0e8a5f;">0</h2>
+          </div>
+        </div>
+
+        <div class="admin-table-card">
+          <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <h3>Solicitudes recibidas (Cotizaciones e instalaciones)</h3>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <select id="requests-status-filter" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadServiceRequests()">
+                <option value="all">Todos los estados</option>
+                <option value="pending">Pendiente</option>
+                <option value="completed">Completado</option>
+              </select>
+              <div class="admin-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="requests-search" placeholder="Buscar solicitud..." aria-label="Buscar solicitudes de servicio" onkeyup="AdminPanel.filterRequestsTable()" />
+              </div>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Teléfono</th>
+                  <th>Servicio</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th style="text-align:right;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="requests-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando solicitudes...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INTERNET MANAGEMENT PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="internet-management">
+        <div class="admin-topbar">
+          <h1>Gestión de Internet Fibra</h1>
+        </div>
+        
+        <!-- Resumen de Internet -->
+        <div class="admin-stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;">
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Pagos Pendientes</span>
+            <h2 id="internet-payments-count-pending" style="font-size:1.8rem; margin:8px 0 0; color:#e74c3c;">0</h2>
+          </div>
+          <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Averías Técnicas</span>
+            <h2 id="internet-tickets-count-pending" style="font-size:1.8rem; margin:8px 0 0; color:#e74c3c;">0</h2>
+          </div>
+        </div>
+
+        <!-- Sub-Tabs para Internet -->
+        <div class="admin-subtabs" style="display:flex; gap:8px; margin-bottom:20px; border-bottom:1px solid #e5eef8; padding-bottom:8px;">
+          <button class="admin-btn admin-btn-primary" id="subtab-internet-clients" onclick="AdminPanel.switchInternetTab('clients')" style="padding: 8px 16px; font-size:0.8rem;">Clientes de Internet</button>
+          <button class="admin-btn admin-btn-ghost" id="subtab-internet-payments" onclick="AdminPanel.switchInternetTab('payments')" style="padding: 8px 16px; font-size:0.8rem;">Vouchers de Pago</button>
+        </div>
+
+        <!-- Sub-Panel 1: Clientes de Internet -->
+        <div id="internet-clients-subpanel" style="display:block;">
+          <div class="admin-table-card">
+            <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <h3>Clientes Asociados</h3>
+              <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openInternetClientModal()" style="display:flex; align-items:center; gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                Asociar Cliente
+              </button>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Plan</th>
+                    <th>Estado</th>
+                    <th>Última Actividad</th>
+                    <th style="text-align:right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="internet-clients-table-body">
+                  <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando clientes de internet...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-Panel 2: Vouchers de Pago -->
+        <div id="internet-payments-subpanel" style="display:none;">
+          <div class="admin-table-card">
+            <div class="admin-table-header">
+              <h3>Pagos Reportados por Transferencia</h3>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Banco</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th style="text-align:right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="internet-payments-table-body">
+                  <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando pagos...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ CLIENTS MAP PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="clients-map">
+        <div class="admin-topbar">
+          <h1>Mapa Técnico de Clientes</h1>
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr; gap:20px; margin-bottom:20px;">
+          <!-- Mapa -->
+          <div class="admin-table-card" style="padding:16px;">
+            <div id="admin-map" style="height: 480px; width:100%; border-radius:12px; border:1px solid #e5eef8; z-index:1;"></div>
+          </div>
+          
+          <!-- Controles GPS (Formulario de georreferenciación) -->
+          <div class="admin-table-card" style="padding:20px;">
+            <h3 style="margin-bottom:16px;">Registrar o Actualizar Ubicación</h3>
+            <form id="tech-map-form" onsubmit="event.preventDefault(); AdminPanel.saveClientLocation();" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:16px; align-items: end;">
+              
+              <div class="auth-form-group" style="margin-bottom:0;">
+                <label class="auth-label" for="map-client-select">Seleccionar Cliente de Internet</label>
+                <select id="map-client-select" class="auth-input" style="height:45px; outline:none;" required onchange="AdminPanel.loadMapClientCoordinates(this.value)">
+                  <option value="">Cargando clientes...</option>
+                </select>
+              </div>
+              
+              <div class="auth-form-group" style="margin-bottom:0;">
+                <label class="auth-label">Coordenadas del Dispositivo</label>
+                <div style="background:#f3f7fc; border:1.5px solid #e5eef8; border-radius:12px; padding:10px 14px; font-size:0.82rem; height:45px; display:flex; align-items:center; justify-content:space-between;">
+                  <span>Lat: <strong id="map-lat">-</strong></span>
+                  <span>Lng: <strong id="map-lng">-</strong></span>
+                  <span style="color:#76889e;">(Precisión: <span id="map-accuracy">-</span>m)</span>
+                </div>
+              </div>
+              
+              <div class="auth-form-group" style="margin-bottom:0; grid-column: span 2;">
+                <label class="auth-label" for="map-install-notes">Notas de Instalación ( splitter, poste, caja... )</label>
+                <input type="text" id="map-install-notes" class="auth-input" placeholder="Ej. Caja de distribución #3, poste #12, segundo piso..." />
+              </div>
+              
+              <div style="display:flex; gap:10px; grid-column: span 2; justify-content: flex-end; margin-top:10px;">
+                <button type="button" class="admin-btn admin-btn-ghost" onclick="AdminPanel.locateTechnician()" style="display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" x2="12" y1="2" y2="4"/><line x1="12" x2="12" y1="20" y2="22"/><line x1="2" x2="4" y1="12" y2="12"/><line x1="20" x2="22" y1="12" y2="12"/></svg>
+                  Capturar GPS
+                </button>
+                <button type="button" class="admin-btn admin-btn-ghost" onclick="AdminPanel.clearClientLocation()" style="color:#e74c3c; border-color:rgba(231,76,60,0.2);">
+                  Limpiar Ubicación
+                </button>
+                <button type="submit" id="map-save-btn" class="admin-btn admin-btn-primary" disabled>
+                  Guardar Ubicación
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -837,10 +1060,55 @@
               </select>
             </div>
           </div>
-
-          <div class="auth-form-group">
-            <label class="auth-label" for="product-brand">Marca</label>
-            <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." />
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-brand">Marca</label>
+              <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-service-sub">Clasificación de Servicio (Opcional)</label>
+              <select class="auth-input" id="product-service-sub" style="appearance:none; background-color:#f3f7fc;">
+                <option value="">Ninguno (Solo Catálogo)</option>
+                <optgroup label="Seguridad Electrónica">
+                  <option value="seguridad_cctv">Cámaras de seguridad (CCTV)</option>
+                  <option value="seguridad_control_accesos">Control de accesos</option>
+                  <option value="seguridad_alarmas">Alarmas inteligentes</option>
+                  <option value="seguridad_cercos">Cercos eléctricos</option>
+                  <option value="seguridad_video_porteros">Video porteros</option>
+                  <option value="seguridad_motores_puerta">Motores de puerta</option>
+                </optgroup>
+                <optgroup label="Redes y Datos">
+                  <option value="redes_wifi">Puntos de acceso Wi-Fi y Antenas</option>
+                  <option value="redes_cableado">Cableado estructurado y Accesorios</option>
+                  <option value="redes_switches">Switches y Routers</option>
+                  <option value="redes_racks">Racks y Gabinetes</option>
+                </optgroup>
+                <optgroup label="Energía y Climatización">
+                  <option value="energia_ups">UPS y Respaldo de Energía</option>
+                  <option value="energia_inversores">Inversores y Baterías</option>
+                  <option value="energia_solares">Paneles y Energía Solar</option>
+                  <option value="energia_clima">Climatización y Aires</option>
+                </optgroup>
+                <optgroup label="Equipos de Oficina">
+                  <option value="equipos_laptops">Laptops y Computadoras</option>
+                  <option value="equipos_impresoras">Impresoras y Escáneres</option>
+                  <option value="equipos_monitores">Monitores y Pantallas</option>
+                  <option value="equipos_accesorios">Periféricos y Accesorios</option>
+                </optgroup>
+                <optgroup label="Mobiliario y Suministros">
+                  <option value="mobiliario_escritorios">Escritorios y Mesas</option>
+                  <option value="mobiliario_sillas">Sillas de Oficina</option>
+                  <option value="mobiliario_archivos">Organizadores y Archivos</option>
+                  <option value="mobiliario_papeleria">Suministros de Papelería</option>
+                </optgroup>
+                <optgroup label="Infraestructura y Remozamiento">
+                  <option value="infra_pintura">Remozamiento y Pintura</option>
+                  <option value="infra_obra">Obra Civil y Drywall</option>
+                  <option value="infra_electrica">Instalaciones Eléctricas</option>
+                </optgroup>
+              </select>
+            </div>
           </div>
 
           <div class="auth-form-group">
@@ -1004,6 +1272,142 @@
           </table>
         </div>
       </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: DETALLE DE SOLICITUD DE SERVICIO ═══ -->
+  <div class="admin-modal" id="service-request-detail-modal">
+    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('service-request-detail-modal')"></div>
+    <div class="admin-modal-card" style="max-width:550px;">
+      <div class="admin-modal-header">
+        <h3 id="sr-modal-title">Detalle de Solicitud</h3>
+        <button class="admin-modal-close" onclick="AdminPanel.closeModal('service-request-detail-modal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body" style="padding:24px;">
+        <div style="background:#f3f7fc; padding:16px; border-radius:14px; border:1px solid #e5eef8; margin-bottom:20px;">
+          <h4 id="sr-client-name" style="font-family:'Space Grotesk',sans-serif; margin:0 0 4px; color:#0a101d; font-size:1.1rem; font-weight:700;">Nombre del Cliente</h4>
+          <span id="sr-client-email" style="font-size:0.85rem; color:#76889e; font-family:'Outfit',sans-serif; font-weight:500; display:block;">correo@domain.com</span>
+          <span id="sr-client-phone" style="font-size:0.85rem; color:#76889e; font-family:'Outfit',sans-serif; font-weight:500; display:block; margin-top:2px;">Teléfono: 809-000-0000</span>
+          <span id="sr-client-company" style="font-size:0.85rem; color:#0A70A2; font-family:'Outfit',sans-serif; font-weight:600; display:block; margin-top:2px;">Empresa: Futunet SRL</span>
+        </div>
+        
+        <div style="margin-bottom:20px;">
+          <label style="display:block; font-size:0.75rem; font-weight:700; color:#394c60; text-transform:uppercase; margin-bottom:6px;">Detalles de la Solicitud / Proyecto</label>
+          <div id="sr-client-message" style="background:#fdfefe; border:1.5px solid #e5eef8; border-radius:12px; padding:16px; font-size:0.88rem; color:#0a101d; min-height:100px; line-height:1.5; white-space:pre-wrap;">Detalles del mensaje...</div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <span style="font-size:0.75rem; color:#76889e; display:block;">Fecha de creación</span>
+            <strong id="sr-created-date" style="font-size:0.85rem; color:#0a101d;">20/05/2026</strong>
+          </div>
+          <div>
+            <span style="font-size:0.75rem; color:#76889e; display:block;">Servicio Vinculado</span>
+            <strong id="sr-service-name" style="font-size:0.85rem; color:#0A70A2;">Seguridad Electrónica</strong>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:24px; justify-content:flex-end;">
+          <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('service-request-detail-modal')">Cerrar</button>
+          <button class="admin-btn admin-btn-primary" id="btn-complete-request" onclick="AdminPanel.markRequestCompleted()">Marcar como Completado</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: ASOCIAR CLIENTE DE INTERNET ═══ -->
+  <div class="admin-modal" id="internet-client-modal">
+    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('internet-client-modal')"></div>
+    <div class="admin-modal-card" style="max-width:480px;">
+      <div class="admin-modal-header">
+        <h3>Asociar Cliente de Internet</h3>
+        <button class="admin-modal-close" onclick="AdminPanel.closeModal('internet-client-modal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="internet-client-form" style="padding:24px;" onsubmit="AdminPanel.saveInternetClient(event)">
+        <div class="auth-form-group">
+          <label class="auth-label" for="ic-user-select">Seleccionar Usuario Registrado</label>
+          <select id="ic-user-select" class="auth-input" style="height:45px; outline:none;" required>
+            <option value="">Cargando usuarios...</option>
+          </select>
+        </div>
+        
+        <div class="auth-form-group">
+          <label class="auth-label" for="ic-client-code">Código Interno de Cliente</label>
+          <input type="text" id="ic-client-code" class="auth-input" placeholder="FT-INTERNET-101" required />
+        </div>
+
+        <div class="auth-form-group">
+          <label class="auth-label" for="ic-plan-select">Plan de Internet</label>
+          <select id="ic-plan-select" class="auth-input" style="height:45px; outline:none;" required>
+            <option value="30mb">Plan Lite 30 Mbps (RD$ 1,495/mes)</option>
+            <option value="50mb">Plan Blaze 50 Mbps (RD$ 1,995/mes)</option>
+            <option value="100mb">Plan Extreme 100 Mbps (RD$ 2,995/mes)</option>
+          </select>
+        </div>
+
+        <div class="auth-form-group">
+          <label class="auth-label" for="ic-status-select">Estado del Servicio</label>
+          <select id="ic-status-select" class="auth-input" style="height:45px; outline:none;" required>
+            <option value="active">Activo</option>
+            <option value="suspended">Suspendido</option>
+            <option value="inactive">Inactivo</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:24px; justify-content:flex-end;">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('internet-client-modal')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Guardar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: DETALLE Y VERIFICACIÓN DE VOUCHER ═══ -->
+  <div class="admin-modal" id="internet-voucher-detail-modal">
+    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('internet-voucher-detail-modal')"></div>
+    <div class="admin-modal-card" style="max-width:580px;">
+      <div class="admin-modal-header">
+        <h3>Verificar Pago (Voucher)</h3>
+        <button class="admin-modal-close" onclick="AdminPanel.closeModal('internet-voucher-detail-modal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body" style="padding:24px;">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+          <div style="background:#f3f7fc; padding:12px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; display:block;">Cliente</span>
+            <strong id="iv-client-name" style="font-size:0.9rem; color:#0a101d;">Cargando...</strong>
+            <span id="iv-client-email" style="font-size:0.75rem; color:#76889e; display:block;">correo@domain.com</span>
+          </div>
+          <div style="background:#f3f7fc; padding:12px; border-radius:12px; border:1px solid #e5eef8;">
+            <span style="font-size:0.75rem; color:#76889e; display:block;">Monto & Banco</span>
+            <strong id="iv-amount" style="font-size:0.95rem; color:#0e8a5f;">RD$ 1,995.00</strong>
+            <span id="iv-bank" style="font-size:0.75rem; color:#76889e; display:block;">Vía Banreservas</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px; text-align:center; background:#0f1923; border-radius:16px; padding:12px; border:1px solid rgba(255,255,255,0.05);">
+          <span style="display:block; font-size:0.75rem; font-weight:700; color:#a0b0c4; text-transform:uppercase; margin-bottom:8px; text-align:left;">Comprobante Adjunto</span>
+          <div style="max-height:300px; overflow-y:auto; border-radius:8px; background:#000;">
+            <img id="iv-voucher-img" src="img/placeholder.svg" alt="Capture del voucher" style="max-width:100%; height:auto; display:block; margin:0 auto;" />
+            <iframe id="iv-voucher-pdf" src="" style="width:100%; height:300px; display:none; border:none;"></iframe>
+          </div>
+          <a id="iv-download-link" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#22a4e0; font-size:0.78rem; font-weight:600; text-decoration:none; margin-top:8px;">
+            <i data-lucide="external-link" style="width:12px;"></i> Abrir comprobante en nueva pestaña
+          </a>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('internet-voucher-detail-modal')">Cerrar</button>
+          <button class="admin-btn admin-btn-danger" id="btn-reject-voucher" onclick="AdminPanel.rejectVoucherPayment()" style="background:#e74c3c; color:#fff;">Rechazar Pago</button>
+          <button class="admin-btn admin-btn-primary" id="btn-approve-voucher" onclick="AdminPanel.approveVoucherPayment()" style="background:#2ecc71; color:#fff;">Aprobar Pago</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1055,6 +1459,12 @@
           this.classList.add('is-active');
           var panel = document.querySelector('[data-admin-panel="' + target + '"]');
           if (panel) panel.classList.add('is-active');
+
+          if (target === 'clients-map') {
+            if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.initClientsMap === 'function') {
+              AdminPanel.initClientsMap();
+            }
+          }
 
           // Close mobile sidebar
           var sidebar = document.getElementById('admin-sidebar');

@@ -101,6 +101,11 @@
     loadSearchQueries();
     loadAuditLogs();
     loadLayout();
+    
+    // Portal & Requests Loaders
+    loadServiceRequests();
+    loadInternetClients();
+    loadInternetPayments();
 
     // Setup logout button listener
     var logoutBtn = document.getElementById('btn-logout');
@@ -122,6 +127,7 @@
     initImageUploader();
     initBannerUploader();
     initBrandUploader();
+    initRealTimeBadges();
 
     // Auto-migrate hidden items ONCE without user intervention
     if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated_v2')) {
@@ -740,6 +746,7 @@
     // Auto-select category
     populateProductCategorySelect();
     setVal('product-category', product.category || product.department || '');
+    setVal('product-service-sub', product.serviceSubcategory || '');
     
     var cb = document.getElementById('product-active');
     if(cb) cb.checked = product.isActive !== false;
@@ -767,6 +774,7 @@
     existingGallery = [];
     uploadFiles = [];
     populateProductCategorySelect();
+    setVal('product-service-sub', '');
     renderPreview();
     
     var cb = document.getElementById('product-active');
@@ -1253,6 +1261,33 @@
         
       var waUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(whatsappText);
       
+      var voucherHtml = '';
+      if (o.paymentMethod === 'bank_transfer' || o.paymentVoucherUrl) {
+        voucherHtml += '<div style="margin-bottom:20px; padding:16px; background:#f3f7fc; border-radius:12px; border:1px solid #e5eef8;">' +
+          '<div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Transferencia Bancaria</div>';
+        if (o.paymentVoucherUrl) {
+          if (o.paymentVoucherUrl.indexOf('.pdf') > -1) {
+            voucherHtml += '<div style="border-radius:8px; overflow:hidden; border:1px solid #e5eef8; height:250px;">' +
+              '<iframe src="' + o.paymentVoucherUrl + '" style="width:100%; height:100%; border:none;"></iframe>' +
+              '</div>';
+          } else {
+            voucherHtml += '<div style="text-align:center; background:#fff; border:1px solid #e5eef8; border-radius:8px; padding:8px;">' +
+              '<a href="' + o.paymentVoucherUrl + '" target="_blank">' +
+              '<img src="' + o.paymentVoucherUrl + '" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px;">' +
+              '</a>' +
+              '</div>';
+          }
+          voucherHtml += '<div style="margin-top:10px; text-align:right;">' +
+            '<a href="' + o.paymentVoucherUrl + '" target="_blank" class="admin-btn admin-btn-ghost admin-btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>' +
+            'Descargar Comprobante</a>' +
+            '</div>';
+        } else {
+          voucherHtml += '<div style="color:#e74c3c; font-size:0.85rem; font-weight:600;">No se ha cargado comprobante de pago aún.</div>';
+        }
+        voucherHtml += '</div>';
+      }
+      
       var contentHtml = '<div style="font-family:Outfit, sans-serif;">' +
         '<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; background:#f3f7fc; padding:16px; border-radius:12px; border:1px solid #e5eef8;">' +
         '<div>' +
@@ -1278,6 +1313,8 @@
         '<div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.88rem; color:#394c60;"><span>Código de Descuento:</span><span>' + discountLabel + '</span></div>' +
         '<div style="display:flex; justify-content:space-between; font-weight:700; color:#0a101d; font-size:1.05rem; padding-top:8px; border-top:1px dashed #e5eef8;"><span>Total General:</span><span>' + formatPrice(o.total) + '</span></div>' +
         '</div>' +
+        
+        voucherHtml +
         
         '<div style="display:flex; gap:12px; justify-content:flex-end;">' +
         '<button class="admin-btn admin-btn-ghost" data-close-modal onclick="AdminPanel.closeModal(\'order-detail-modal\')">Cerrar</button>' +
@@ -2312,6 +2349,7 @@
             category: selectedCategory,
             department: selectedCategory ? selectedCategory.toLowerCase() : 'otros',
             brand: getVal('product-brand'),
+            serviceSubcategory: getVal('product-service-sub') || '',
             stock: parseInt(getVal('product-stock')) || 0,
             condition: getVal('product-condition'),
             isActive: activeCb ? activeCb.checked : true,
@@ -2724,6 +2762,979 @@
     exportToCSV(headers, keys, 'pedidos_futunet.csv', allOrders);
   }
 
+  // ─── SERVICES & INTERNET MANAGEMENT CODE ───
+  var currentSelectedRequestId = null;
+  var currentSelectedPaymentId = null;
+  var currentSelectedPaymentData = null;
+  var activeInternetTab = 'clients';
+
+  // 1. Cargar Solicitudes de Servicio
+  async function loadServiceRequests() {
+    var tbody = document.getElementById('requests-table-body');
+    if (!tbody) return;
+
+    try {
+      var filterStatus = document.getElementById('requests-status-filter').value;
+      var query = db.collection('service_requests');
+      
+      if (filterStatus !== 'all') {
+        query = query.where('status', '==', filterStatus);
+      }
+      
+      var snapshot = await query.get();
+      var html = '';
+      
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay solicitudes registradas.</td></tr>';
+        return;
+      }
+
+      var requestsArray = [];
+      snapshot.forEach(function(doc) {
+        var d = doc.data();
+        d.id = doc.id;
+        requestsArray.push(d);
+      });
+
+      // Ordenar manualmente por fecha descendente
+      requestsArray.sort(function(a, b) {
+        var secA = a.createdAt ? a.createdAt.seconds : 0;
+        var secB = b.createdAt ? b.createdAt.seconds : 0;
+        return secB - secA;
+      });
+
+      requestsArray.forEach(function (req) {
+        var date = req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
+        var statusClass = req.status === 'completed' ? 'badge-in-stock' : 'badge-out-of-stock';
+        var statusLabel = req.status === 'completed' ? 'Completado' : 'Pendiente';
+        
+        html += '<tr data-search-req="' + (req.name + ' ' + (req.serviceTitle || '') + ' ' + (req.email || '')).toLowerCase() + '">' +
+          '  <td><strong>' + escapeHtml(req.name) + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(req.email || '') + '</span></td>' +
+          '  <td>' + escapeHtml(req.phone || '') + '</td>' +
+          '  <td><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(req.serviceTitle || 'General') + '</span></td>' +
+          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td>' + date + '</td>' +
+          '  <td style="text-align:right;">' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openRequestModal(\'' + req.id + '\')">Ver detalle</button>' +
+          '  </td>' +
+          '</tr>';
+      });
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error al cargar solicitudes de servicio:', err);
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar datos.</td></tr>';
+    }
+  }
+
+  // Filtrar solicitudes
+  function filterRequestsTable() {
+    var query = document.getElementById('requests-search').value.toLowerCase().trim();
+    var rows = document.querySelectorAll('#requests-table-body tr');
+    
+    rows.forEach(function (row) {
+      var searchAttr = row.getAttribute('data-search-req');
+      if (!searchAttr) return;
+      if (searchAttr.indexOf(query) > -1) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // Abrir Modal de Solicitud
+  async function openRequestModal(id) {
+    currentSelectedRequestId = id;
+    try {
+      var doc = await db.collection('service_requests').doc(id).get();
+      if (!doc.exists) return;
+      var req = doc.data();
+
+      document.getElementById('sr-client-name').textContent = req.name || 'Cliente';
+      document.getElementById('sr-client-email').textContent = req.email || 'correo@domain.com';
+      document.getElementById('sr-client-phone').textContent = 'Teléfono: ' + (req.phone || '—');
+      document.getElementById('sr-client-company').textContent = req.company ? 'Empresa: ' + req.company : 'Empresa: No especificada';
+      document.getElementById('sr-client-message').textContent = req.message || 'Sin mensaje.';
+      document.getElementById('sr-service-name').textContent = req.serviceTitle || 'General';
+      document.getElementById('sr-created-date').textContent = req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleString('es-DO') : '—';
+
+      var btnComplete = document.getElementById('btn-complete-request');
+      if (req.status === 'completed') {
+        if (btnComplete) btnComplete.style.display = 'none';
+      } else {
+        if (btnComplete) btnComplete.style.display = 'block';
+      }
+
+      openModal('service-request-detail-modal');
+    } catch (err) {
+      showToast('Error al abrir solicitud', 'error');
+    }
+  }
+
+  // Completar Solicitud
+  async function markRequestCompleted() {
+    if (!currentSelectedRequestId) return;
+    try {
+      await db.collection('service_requests').doc(currentSelectedRequestId).update({
+        status: 'completed'
+      });
+      showToast('Solicitud marcada como completada', 'success');
+      closeModal('service-request-detail-modal');
+      loadServiceRequests();
+    } catch (err) {
+      showToast('Error al completar solicitud', 'error');
+    }
+  }
+
+  // Alternar Sub-pestañas de Internet
+  function switchInternetTab(tab) {
+    activeInternetTab = tab;
+    var btnClients = document.getElementById('subtab-internet-clients');
+    var btnPayments = document.getElementById('subtab-internet-payments');
+    var panelClients = document.getElementById('internet-clients-subpanel');
+    var panelPayments = document.getElementById('internet-payments-subpanel');
+
+    if (tab === 'clients') {
+      btnClients.className = 'admin-btn admin-btn-primary';
+      btnPayments.className = 'admin-btn admin-btn-ghost';
+      panelClients.style.display = 'block';
+      panelPayments.style.display = 'none';
+      loadInternetClients();
+    } else {
+      btnClients.className = 'admin-btn admin-btn-ghost';
+      btnPayments.className = 'admin-btn admin-btn-primary';
+      panelClients.style.display = 'none';
+      panelPayments.style.display = 'block';
+      loadInternetPayments();
+    }
+  }
+
+  // Cargar Clientes de Internet
+  async function loadInternetClients() {
+    var tbody = document.getElementById('internet-clients-table-body');
+    if (!tbody) return;
+
+    try {
+      var snapshot = await db.collection('users').where('isInternetClient', '==', true).get();
+      var html = '';
+
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay clientes de internet registrados.</td></tr>';
+        return;
+      }
+
+      var plans = { '30mb': 'Plan Lite 30M', '50mb': 'Plan Blaze 50M', '100mb': 'Plan Extreme 100M' };
+
+      snapshot.forEach(function (doc) {
+        var client = doc.data();
+        var id = doc.id;
+        var statusLabel = 'Activo';
+        var statusClass = 'badge-in-stock';
+        
+        if (client.internetStatus === 'suspended') {
+          statusLabel = 'Suspendido';
+          statusClass = 'badge-out-of-stock';
+        } else if (client.internetStatus === 'inactive') {
+          statusLabel = 'Inactivo';
+          statusClass = 'badge-out-of-stock';
+        }
+
+        html += '<tr>' +
+          '  <td><strong>' + escapeHtml(client.clientCode || 'S/C') + '</strong></td>' +
+          '  <td><strong>' + escapeHtml(client.displayName || 'Sin nombre') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(client.email || '') + '</span></td>' +
+          '  <td>' + (plans[client.internetPlan] || client.internetPlan || '—') + '</td>' +
+          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td>' + (client.phone || '—') + '</td>' +
+          '  <td style="text-align:right;">' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openInternetEdit(\'' + id + '\')">Editar plan</button>' +
+          '  </td>' +
+          '</tr>';
+      });
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error al cargar clientes:', err);
+    }
+  }
+
+  // Cargar lista de usuarios registrados en el select del modal
+  async function openInternetClientModal() {
+    var select = document.getElementById('ic-user-select');
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Cargando usuarios...</option>';
+    openModal('internet-client-modal');
+
+    try {
+      var snapshot = await db.collection('users').get();
+      var html = '<option value="">Selecciona un usuario</option>';
+      snapshot.forEach(function (doc) {
+        var user = doc.data();
+        html += '<option value="' + doc.id + '">' + escapeHtml(user.displayName || user.email) + ' (' + user.email + ')</option>';
+      });
+      select.innerHTML = html;
+      
+      // Limpiar campos
+      document.getElementById('ic-client-code').value = '';
+      document.getElementById('ic-plan-select').value = '50mb';
+      document.getElementById('ic-status-select').value = 'active';
+    } catch (err) {
+      select.innerHTML = '<option value="">Error al cargar usuarios</option>';
+    }
+  }
+
+  // Guardar datos de cliente de internet en el documento de usuario
+  async function saveInternetClient(e) {
+    e.preventDefault();
+    var userId = document.getElementById('ic-user-select').value;
+    var clientCode = document.getElementById('ic-client-code').value.trim();
+    var internetPlan = document.getElementById('ic-plan-select').value;
+    var internetStatus = document.getElementById('ic-status-select').value;
+
+    if (!userId) {
+      showToast('Selecciona un usuario', 'error');
+      return;
+    }
+
+    try {
+      await db.collection('users').doc(userId).update({
+        isInternetClient: true,
+        clientCode: clientCode,
+        internetPlan: internetPlan,
+        internetStatus: internetStatus
+      });
+
+      showToast('Cliente de internet guardado', 'success');
+      closeModal('internet-client-modal');
+      loadInternetClients();
+    } catch (err) {
+      showToast('Error al guardar cliente', 'error');
+    }
+  }
+
+  // Cargar edición rápida para cliente existente
+  window.openInternetEdit = async function (userId) {
+    await openInternetClientModal(); // Llena el select primero
+    
+    try {
+      var doc = await db.collection('users').doc(userId).get();
+      if (!doc.exists) return;
+      var client = doc.data();
+
+      document.getElementById('ic-user-select').value = userId;
+      document.getElementById('ic-client-code').value = client.clientCode || '';
+      document.getElementById('ic-plan-select').value = client.internetPlan || '50mb';
+      document.getElementById('ic-status-select').value = client.internetStatus || 'active';
+    } catch (err) {
+      showToast('Error al editar cliente', 'error');
+    }
+  };
+
+  // Cargar pagos por transferencia reportados
+  async function loadInternetPayments() {
+    var tbody = document.getElementById('internet-payments-table-body');
+    if (!tbody) return;
+
+    try {
+      var snapshot = await db.collection('internet_payments').get();
+      var html = '';
+
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">No hay pagos reportados.</td></tr>';
+        return;
+      }
+
+      var paymentsArray = [];
+      snapshot.forEach(function(doc) {
+        var d = doc.data();
+        d.id = doc.id;
+        paymentsArray.push(d);
+      });
+
+      // Ordenar por fecha descendente
+      paymentsArray.sort(function(a, b) {
+        var secA = a.timestamp ? a.timestamp.seconds : 0;
+        var secB = b.timestamp ? b.timestamp.seconds : 0;
+        return secB - secA;
+      });
+
+      paymentsArray.forEach(function (pay) {
+        var date = pay.timestamp ? new Date(pay.timestamp.seconds * 1000).toLocaleDateString('es-DO') : '—';
+        
+        var statusLabel = 'Pendiente';
+        var statusClass = 'badge-out-of-stock';
+        if (pay.status === 'approved') {
+          statusLabel = 'Aprobado';
+          statusClass = 'badge-in-stock';
+        } else if (pay.status === 'rejected') {
+          statusLabel = 'Rechazado';
+          statusClass = 'badge-out-of-stock';
+        }
+
+        html += '<tr>' +
+          '  <td><strong>' + escapeHtml(pay.userName || '') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(pay.userEmail || '') + '</span></td>' +
+          '  <td><strong>RD$ ' + pay.amount.toLocaleString('es-DO') + '</strong></td>' +
+          '  <td>' + escapeHtml(pay.bank || '') + '</td>' +
+          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td>' + date + '</td>' +
+          '  <td style="text-align:right;">' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openVoucherModal(\'' + pay.id + '\')">Ver comprobante</button>' +
+          '  </td>' +
+          '</tr>';
+      });
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error al cargar pagos:', err);
+    }
+  }
+
+  // Abrir Modal de Voucher
+  async function openVoucherModal(id) {
+    currentSelectedPaymentId = id;
+    try {
+      var doc = await db.collection('internet_payments').doc(id).get();
+      if (!doc.exists) return;
+      currentSelectedPaymentData = doc.data();
+
+      document.getElementById('iv-client-name').textContent = currentSelectedPaymentData.userName || 'Cliente';
+      document.getElementById('iv-client-email').textContent = currentSelectedPaymentData.userEmail || '';
+      document.getElementById('iv-amount').textContent = 'RD$ ' + currentSelectedPaymentData.amount.toLocaleString('es-DO', { minimumFractionDigits: 2 });
+      document.getElementById('iv-bank').textContent = 'Vía ' + currentSelectedPaymentData.bank;
+
+      var imgEl = document.getElementById('iv-voucher-img');
+      var pdfEl = document.getElementById('iv-voucher-pdf');
+      var downloadLink = document.getElementById('iv-download-link');
+
+      downloadLink.href = currentSelectedPaymentData.voucherUrl;
+
+      // Detectar si es PDF
+      if (currentSelectedPaymentData.voucherUrl.indexOf('.pdf') > -1) {
+        imgEl.style.display = 'none';
+        pdfEl.style.display = 'block';
+        pdfEl.src = currentSelectedPaymentData.voucherUrl;
+      } else {
+        pdfEl.style.display = 'none';
+        imgEl.style.display = 'block';
+        imgEl.src = currentSelectedPaymentData.voucherUrl;
+      }
+
+      var btnApprove = document.getElementById('btn-approve-voucher');
+      var btnReject = document.getElementById('btn-reject-voucher');
+
+      if (currentSelectedPaymentData.status !== 'pending') {
+        if (btnApprove) btnApprove.style.display = 'none';
+        if (btnReject) btnReject.style.display = 'none';
+      } else {
+        if (btnApprove) btnApprove.style.display = 'inline-block';
+        if (btnReject) btnReject.style.display = 'inline-block';
+      }
+
+      openModal('internet-voucher-detail-modal');
+    } catch (err) {
+      showToast('Error al abrir comprobante', 'error');
+    }
+  }
+
+  // Aprobar Pago
+  async function approveVoucherPayment() {
+    if (!currentSelectedPaymentId) return;
+    try {
+      // 1. Actualizar estado del pago a Aprobado
+      await db.collection('internet_payments').doc(currentSelectedPaymentId).update({
+        status: 'approved',
+        approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // 2. Si el servicio de internet del cliente estaba suspendido, reactivarlo
+      var clientRef = db.collection('users').doc(currentSelectedPaymentData.userId);
+      var clientDoc = await clientRef.get();
+      if (clientDoc.exists) {
+        var clientData = clientDoc.data();
+        if (clientData.internetStatus === 'suspended') {
+          await clientRef.update({
+            internetStatus: 'active'
+          });
+        }
+      }
+
+      // 3. Registrar log de auditoría
+      await db.collection('audit_logs').add({
+        action: 'Aprobación de pago',
+        details: 'Aprobado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
+        userId: currentUserData.id,
+        userEmail: currentUserData.email,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      showToast('Pago verificado y aprobado con éxito', 'success');
+      closeModal('internet-voucher-detail-modal');
+      loadInternetPayments();
+    } catch (err) {
+      showToast('Error al aprobar pago', 'error');
+    }
+  }
+
+  // Rechazar Pago
+  async function rejectVoucherPayment() {
+    if (!currentSelectedPaymentId) return;
+    try {
+      await db.collection('internet_payments').doc(currentSelectedPaymentId).update({
+        status: 'rejected',
+        rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // Registrar log de auditoría
+      await db.collection('audit_logs').add({
+        action: 'Rechazo de pago',
+        details: 'Rechazado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
+        userId: currentUserData.id,
+        userEmail: currentUserData.email,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      showToast('Pago rechazado correctamente', 'info');
+      closeModal('internet-voucher-detail-modal');
+      loadInternetPayments();
+    } catch (err) {
+      showToast('Error al rechazar pago', 'error');
+    }
+  }
+
+  // ─── LEAFLET MAP & REALTIME BADGES CODE ───
+  var techMap = null;
+  var mapMarkersGroup = null;
+  var tempMarker = null;
+  var techLocationMarker = null;
+  var pendingPaymentsCount = 0;
+  var pendingTicketsCount = 0;
+
+  function updateInternetBadge() {
+    var total = pendingPaymentsCount + pendingTicketsCount;
+    var sidebarBadge = document.getElementById('badge-internet');
+    if (sidebarBadge) {
+      if (total > 0) {
+        sidebarBadge.textContent = total;
+        sidebarBadge.style.display = 'inline-block';
+      } else {
+        sidebarBadge.style.display = 'none';
+      }
+    }
+  }
+
+  function initRealTimeBadges() {
+    // 1. Orders Real-time badge & stats
+    db.collection('orders').onSnapshot(function (snapshot) {
+      var pending = 0;
+      var processing = 0;
+      var delivered = 0;
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        if (data.status === 'pending') pending++;
+        else if (data.status === 'processing') processing++;
+        else if (data.status === 'delivered') delivered++;
+      });
+
+      var elPending = document.getElementById('orders-count-pending');
+      if (elPending) elPending.textContent = pending;
+      var elProcessing = document.getElementById('orders-count-processing');
+      if (elProcessing) elProcessing.textContent = processing;
+      var elDelivered = document.getElementById('orders-count-delivered');
+      if (elDelivered) elDelivered.textContent = delivered;
+
+      var sidebarBadge = document.getElementById('badge-orders');
+      if (sidebarBadge) {
+        if (pending > 0) {
+          sidebarBadge.textContent = pending;
+          sidebarBadge.style.display = 'inline-block';
+        } else {
+          sidebarBadge.style.display = 'none';
+        }
+      }
+    }, function (err) {
+      console.warn('Real-time orders badge error:', err);
+    });
+
+    // 2. Service Requests Real-time badge & stats
+    db.collection('service_requests').onSnapshot(function (snapshot) {
+      var pending = 0;
+      var completed = 0;
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        if (data.status === 'pending' || !data.status) pending++;
+        else if (data.status === 'completed') completed++;
+      });
+
+      var elPending = document.getElementById('solicitudes-count-pending');
+      if (elPending) elPending.textContent = pending;
+      var elCompleted = document.getElementById('solicitudes-count-completed');
+      if (elCompleted) elCompleted.textContent = completed;
+
+      var sidebarBadge = document.getElementById('badge-requests');
+      if (sidebarBadge) {
+        if (pending > 0) {
+          sidebarBadge.textContent = pending;
+          sidebarBadge.style.display = 'inline-block';
+        } else {
+          sidebarBadge.style.display = 'none';
+        }
+      }
+    }, function (err) {
+      console.warn('Real-time requests badge error:', err);
+    });
+
+    // 3. Internet Payments Real-time stats & badge
+    db.collection('internet_payments').onSnapshot(function (snapshot) {
+      var pending = 0;
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        if (data.status === 'pending') pending++;
+      });
+      pendingPaymentsCount = pending;
+      var elPending = document.getElementById('internet-payments-count-pending');
+      if (elPending) elPending.textContent = pending;
+      updateInternetBadge();
+    }, function (err) {
+      console.warn('Real-time internet payments badge error:', err);
+    });
+
+    // 4. Internet Tickets Real-time stats & badge
+    db.collection('internet_tickets').onSnapshot(function (snapshot) {
+      var pending = 0;
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        if (data.status === 'pending' || !data.status) pending++;
+      });
+      pendingTicketsCount = pending;
+      var elPending = document.getElementById('internet-tickets-count-pending');
+      if (elPending) elPending.textContent = pending;
+      updateInternetBadge();
+    }, function (err) {
+      console.warn('Real-time internet tickets badge error:', err);
+    });
+  }
+
+  // Initialize Leaflet Map
+  async function initClientsMap() {
+    var mapContainer = document.getElementById('admin-map');
+    if (!mapContainer) return;
+
+    if (typeof L === 'undefined') {
+      showToast('Error: Leaflet.js no se ha cargado correctamente.', 'error');
+      return;
+    }
+
+    // Initialize map if it doesn't exist
+    if (!techMap) {
+      techMap = L.map('admin-map').setView([19.4517, -70.6970], 13); // Santiago de los Caballeros
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(techMap);
+
+      // Event listener for clicking on the map
+      techMap.on('click', onMapClick);
+      
+      // Marker group to handle clean redraws
+      mapMarkersGroup = L.layerGroup().addTo(techMap);
+    } else {
+      setTimeout(function() {
+        techMap.invalidateSize();
+      }, 100);
+    }
+
+    // Populate client selector select element
+    var select = document.getElementById('map-client-select');
+    if (select) {
+      select.innerHTML = '<option value="">Cargando clientes de internet...</option>';
+    }
+
+    try {
+      var snapshot = await db.collection('users').where('isInternetClient', '==', true).get();
+      
+      // Populate dropdown list
+      if (select) {
+        var dropdownHtml = '<option value="">Selecciona un cliente de internet</option>';
+        snapshot.forEach(function (doc) {
+          var user = doc.data();
+          var hasLoc = (user.latitude && user.longitude) ? '📍 ' : '⚪ ';
+          dropdownHtml += '<option value="' + doc.id + '">' + hasLoc + escapeHtml(user.displayName || user.email) + ' (' + escapeHtml(user.clientCode || 'S/C') + ')</option>';
+        });
+        select.innerHTML = dropdownHtml;
+      }
+
+      // Clear existing markers
+      if (mapMarkersGroup) {
+        mapMarkersGroup.clearLayers();
+      }
+
+      // Render markers for users with geolocations
+      snapshot.forEach(function (doc) {
+        var client = doc.data();
+        if (client.latitude && client.longitude) {
+          var status = client.internetStatus || 'active';
+          
+          var color = '#2ecc71'; // Green
+          var statusLabel = 'Activo';
+          var statusClass = 'badge-in-stock';
+          
+          if (status === 'suspended') {
+            color = '#f39c12'; // Yellow/Orange
+            statusLabel = 'Suspendido';
+            statusClass = 'badge-out-of-stock';
+          } else if (status === 'inactive') {
+            color = '#e74c3c'; // Red
+            statusLabel = 'Inactivo';
+            statusClass = 'badge-out-of-stock';
+          }
+
+          var markerIcon = L.divIcon({
+            className: 'custom-map-marker',
+            html: '<svg width="28" height="36" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+              '<path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12zm0 17c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z" fill="' + color + '"/>' +
+              '</svg>',
+            iconSize: [28, 36],
+            iconAnchor: [14, 36],
+            popupAnchor: [0, -32]
+          });
+
+          // Create WhatsApp URL
+          var waPhone = client.phone || '';
+          var cleanWaPhone = waPhone.replace(/[^0-9]/g, '');
+          if (cleanWaPhone && !cleanWaPhone.startsWith('1') && cleanWaPhone.length === 10) {
+            cleanWaPhone = '1' + cleanWaPhone;
+          }
+          var waBtnHtml = cleanWaPhone ? '<a href="https://wa.me/' + cleanWaPhone + '" target="_blank" class="admin-btn admin-btn-sm" style="background:#25d366; color:white; border-color:#25d366; display:inline-flex; align-items:center; gap:4px; padding:4px 8px; margin-top:8px; font-size:0.75rem; text-decoration:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.734-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436 0 9.851-4.388 9.854-9.782.002-2.613-1.013-5.07-2.861-6.92C16.371 2.05 13.915.825 12.009.825 6.613.825 2.225 5.216 2.221 10.61c0 1.54.437 3.047 1.266 4.386L2.52 19.3l4.127-1.08c1.6.953 3.19 1.45 4.62 1.451z"/></svg> WhatsApp</a>' : '';
+
+          var editLocBtnHtml = '<button onclick="AdminPanel.editClientLocationFromMap(\'' + doc.id + '\')" class="admin-btn admin-btn-ghost admin-btn-sm" style="padding:4px 8px; font-size:0.75rem; margin-top:8px; margin-left:6px;">Editar Ubicación</button>';
+
+          var notesText = client.locationNotes ? '<div style="margin-top:6px; font-size:0.78rem; background:#f3f7fc; padding:4px 8px; border-radius:6px; border:1px solid #e5eef8; color:#394c60;"><strong>Notas:</strong> ' + escapeHtml(client.locationNotes) + '</div>' : '';
+
+          var popupContent = '<div style="font-family:\'Outfit\', sans-serif; min-width: 180px; line-height: 1.4;">' +
+            '<strong style="font-size:0.95rem; color:#0a101d;">' + escapeHtml(client.displayName || 'Cliente') + '</strong><br>' +
+            '<span style="font-size:0.75rem; color:#76889e;">Cód: ' + escapeHtml(client.clientCode || 'S/C') + '</span><br>' +
+            '<div style="margin-top:6px; font-size:0.8rem; color:#394c60;">' +
+            '<strong>Plan:</strong> ' + (client.internetPlan === '30mb' ? 'Plan Lite 30M' : client.internetPlan === '50mb' ? 'Plan Blaze 50M' : client.internetPlan === '100mb' ? 'Plan Extreme 100M' : client.internetPlan || '—') + '<br>' +
+            '<strong>Estado:</strong> <span class="product-card-badge ' + statusClass + '" style="position:static; display:inline-block; padding:2px 6px; font-size:0.68rem; margin-top:2px;">' + statusLabel + '</span>' +
+            '</div>' +
+            notesText +
+            '<div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center; margin-top:8px;">' +
+            waBtnHtml +
+            editLocBtnHtml +
+            '</div>' +
+            '</div>';
+
+          L.marker([client.latitude, client.longitude], { icon: markerIcon })
+            .bindPopup(popupContent)
+            .addTo(mapMarkersGroup);
+        }
+      });
+    } catch (err) {
+      console.error('Error initializing clients map:', err);
+      showToast('Error al cargar mapa de clientes.', 'error');
+    }
+  }
+
+  function onMapClick(e) {
+    var userId = document.getElementById('map-client-select').value;
+    if (!userId) {
+      showToast('Por favor, selecciona un cliente en el formulario antes de marcar su ubicación.', 'info');
+      return;
+    }
+    
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    
+    document.getElementById('map-lat').textContent = lat.toFixed(6);
+    document.getElementById('map-lng').textContent = lng.toFixed(6);
+    document.getElementById('map-accuracy').textContent = 'Click Mapa';
+    document.getElementById('map-save-btn').disabled = false;
+    
+    if (tempMarker) {
+      tempMarker.setLatLng(e.latlng);
+    } else {
+      tempMarker = L.marker(e.latlng, {
+        draggable: true,
+        icon: L.divIcon({
+          className: 'custom-map-marker',
+          html: '<svg width="28" height="36" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+            '<path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12zm0 17c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z" fill="#3498db"/>' +
+            '</svg>',
+          iconSize: [28, 36],
+          iconAnchor: [14, 36]
+        })
+      }).addTo(techMap);
+      
+      tempMarker.on('dragend', function(event) {
+        var marker = event.target;
+        var pos = marker.getLatLng();
+        document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
+        document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
+        document.getElementById('map-accuracy').textContent = 'Arrastre';
+      });
+    }
+  }
+
+  async function loadMapClientCoordinates(userId) {
+    if (!userId) {
+      document.getElementById('map-lat').textContent = '-';
+      document.getElementById('map-lng').textContent = '-';
+      document.getElementById('map-accuracy').textContent = '-';
+      document.getElementById('map-install-notes').value = '';
+      document.getElementById('map-save-btn').disabled = true;
+      if (tempMarker && techMap) {
+        techMap.removeLayer(tempMarker);
+        tempMarker = null;
+      }
+      return;
+    }
+    
+    try {
+      var doc = await db.collection('users').doc(userId).get();
+      if (!doc.exists) return;
+      var client = doc.data();
+      
+      document.getElementById('map-install-notes').value = client.locationNotes || '';
+      
+      if (client.latitude && client.longitude) {
+        var lat = parseFloat(client.latitude);
+        var lng = parseFloat(client.longitude);
+        
+        document.getElementById('map-lat').textContent = lat.toFixed(6);
+        document.getElementById('map-lng').textContent = lng.toFixed(6);
+        document.getElementById('map-accuracy').textContent = client.locationAccuracy || 'Guardada';
+        document.getElementById('map-save-btn').disabled = false;
+        
+        var latlng = [lat, lng];
+        if (techMap) {
+          techMap.setView(latlng, 16);
+          
+          if (tempMarker) {
+            tempMarker.setLatLng(latlng);
+          } else {
+            tempMarker = L.marker(latlng, {
+              draggable: true,
+              icon: L.divIcon({
+                className: 'custom-map-marker',
+                html: '<svg width="28" height="36" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                  '<path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12zm0 17c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z" fill="#3498db"/>' +
+                  '</svg>',
+                iconSize: [28, 36],
+                iconAnchor: [14, 36]
+              })
+            }).addTo(techMap);
+            
+            tempMarker.on('dragend', function(event) {
+              var marker = event.target;
+              var pos = marker.getLatLng();
+              document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
+              document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
+              document.getElementById('map-accuracy').textContent = 'Arrastre';
+            });
+          }
+        }
+      } else {
+        document.getElementById('map-lat').textContent = '-';
+        document.getElementById('map-lng').textContent = '-';
+        document.getElementById('map-accuracy').textContent = '-';
+        document.getElementById('map-save-btn').disabled = true;
+        if (tempMarker && techMap) {
+          techMap.removeLayer(tempMarker);
+          tempMarker = null;
+        }
+      }
+    } catch (err) {
+      console.error('Error al cargar coordenadas del cliente:', err);
+    }
+  }
+
+  function editClientLocationFromMap(userId) {
+    var select = document.getElementById('map-client-select');
+    if (select) {
+      select.value = userId;
+      loadMapClientCoordinates(userId);
+    }
+  }
+
+  function locateTechnician() {
+    var selectedClientId = document.getElementById('map-client-select').value;
+    if (!selectedClientId) {
+      showToast('Por favor, selecciona un cliente primero.', 'error');
+      return;
+    }
+    
+    if (!navigator.geolocation) {
+      showToast('La geolocalización no está soportada por tu navegador.', 'error');
+      return;
+    }
+    
+    showToast('Capturando señal de GPS...', 'info');
+    
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var accuracy = position.coords.accuracy;
+        
+        var formattedLat = lat.toFixed(6);
+        var formattedLng = lng.toFixed(6);
+        
+        document.getElementById('map-lat').textContent = formattedLat;
+        document.getElementById('map-lng').textContent = formattedLng;
+        document.getElementById('map-accuracy').textContent = Math.round(accuracy);
+        
+        document.getElementById('map-save-btn').disabled = false;
+        
+        var latlng = [lat, lng];
+        
+        if (techMap) {
+          techMap.setView(latlng, 16);
+          
+          if (techLocationMarker) {
+            techMap.removeLayer(techLocationMarker);
+          }
+          
+          techLocationMarker = L.circle(latlng, {
+            radius: accuracy,
+            color: '#3498db',
+            fillColor: '#3498db',
+            fillOpacity: 0.15
+          }).addTo(techMap);
+          
+          var blueDotIcon = L.divIcon({
+            className: 'gps-blue-dot',
+            html: '<div style="width:14px; height:14px; background:#3498db; border:2px solid white; border-radius:50%; box-shadow:0 0 6px rgba(0,0,0,0.3); animation: pulse 1.5s infinite;"></div>',
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+          });
+          
+          L.marker(latlng, { icon: blueDotIcon }).addTo(techMap);
+          
+          if (tempMarker) {
+            tempMarker.setLatLng(latlng);
+          } else {
+            tempMarker = L.marker(latlng, {
+              draggable: true,
+              icon: L.divIcon({
+                className: 'custom-map-marker',
+                html: '<svg width="28" height="36" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                  '<path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12zm0 17c-2.761 0-5-2.239-5-5s2.239-5 5-5 5 2.239 5 5-2.239 5-5 5z" fill="#3498db"/>' +
+                  '</svg>',
+                iconSize: [28, 36],
+                iconAnchor: [14, 36]
+              })
+            }).addTo(techMap);
+            
+            tempMarker.on('dragend', function(event) {
+              var marker = event.target;
+              var pos = marker.getLatLng();
+              document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
+              document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
+              document.getElementById('map-accuracy').textContent = 'Arrastre';
+            });
+          }
+        }
+        
+        showToast('Ubicación capturada con éxito (precisión: ' + Math.round(accuracy) + 'm)', 'success');
+      },
+      function (error) {
+        var msg = 'Error de GPS: ';
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg += 'Permiso de ubicación denegado.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg += 'Información de ubicación no disponible.';
+            break;
+          case error.TIMEOUT:
+            msg += 'Tiempo de espera agotado.';
+            break;
+          default:
+            msg += error.message;
+        }
+        showToast(msg, 'error');
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  }
+
+  async function saveClientLocation() {
+    var userId = document.getElementById('map-client-select').value;
+    var latText = document.getElementById('map-lat').textContent;
+    var lngText = document.getElementById('map-lng').textContent;
+    var accuracyText = document.getElementById('map-accuracy').textContent;
+    var notes = document.getElementById('map-install-notes').value.trim();
+    
+    if (!userId || latText === '-' || lngText === '-') {
+      showToast('Por favor, selecciona un cliente y captura o marca una ubicación en el mapa.', 'error');
+      return;
+    }
+    
+    var lat = parseFloat(latText);
+    var lng = parseFloat(lngText);
+    
+    try {
+      await db.collection('users').doc(userId).update({
+        latitude: lat,
+        longitude: lng,
+        locationAccuracy: accuracyText,
+        locationNotes: notes,
+        locatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      await db.collection('audit_logs').add({
+        action: 'Georreferenciación de Cliente',
+        details: 'Actualizada ubicación del cliente ID ' + userId + ' (Lat: ' + lat + ', Lng: ' + lng + ')',
+        userId: currentUserData.uid || '',
+        userEmail: currentUserData.email || 'Admin',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      showToast('Ubicación del cliente guardada con éxito', 'success');
+      initClientsMap();
+    } catch (err) {
+      showToast('Error al guardar ubicación: ' + err.message, 'error');
+    }
+  }
+
+  async function clearClientLocation() {
+    var userId = document.getElementById('map-client-select').value;
+    if (!userId) {
+      showToast('Por favor, selecciona un cliente primero.', 'error');
+      return;
+    }
+    
+    if (!(await showConfirmModal('Limpiar ubicación', '¿Estás seguro de que deseas eliminar la ubicación guardada de este cliente?'))) {
+      return;
+    }
+    
+    try {
+      await db.collection('users').doc(userId).update({
+        latitude: firebase.firestore.FieldValue.delete(),
+        longitude: firebase.firestore.FieldValue.delete(),
+        locationAccuracy: firebase.firestore.FieldValue.delete(),
+        locationNotes: firebase.firestore.FieldValue.delete(),
+        locatedAt: firebase.firestore.FieldValue.delete()
+      });
+      
+      await db.collection('audit_logs').add({
+        action: 'Eliminar Georreferenciación',
+        details: 'Eliminada ubicación del cliente ID ' + userId,
+        userId: currentUserData.uid || '',
+        userEmail: currentUserData.email || 'Admin',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      showToast('Ubicación eliminada con éxito', 'success');
+      loadMapClientCoordinates(userId);
+      initClientsMap();
+    } catch (err) {
+      showToast('Error al eliminar ubicación: ' + err.message, 'error');
+    }
+  }
+
   // ─── Public API ───
   window.AdminPanel = {
     init: init,
@@ -2784,7 +3795,30 @@
     updateSectionSubtitle: updateSectionSubtitle,
     updateLivePreview: updateLivePreview,
     showUserHistory: showUserHistory,
-    revertAction: revertAction
+    revertAction: revertAction,
+    
+    // Portal & Requests Exports
+    loadServiceRequests: loadServiceRequests,
+    filterRequestsTable: filterRequestsTable,
+    openRequestModal: openRequestModal,
+    markRequestCompleted: markRequestCompleted,
+    switchInternetTab: switchInternetTab,
+    loadInternetClients: loadInternetClients,
+    openInternetClientModal: openInternetClientModal,
+    saveInternetClient: saveInternetClient,
+    loadInternetPayments: loadInternetPayments,
+    openVoucherModal: openVoucherModal,
+    approveVoucherPayment: approveVoucherPayment,
+    rejectVoucherPayment: rejectVoucherPayment,
+    
+    // Leaflet map and realtime badges
+    initRealTimeBadges: initRealTimeBadges,
+    initClientsMap: initClientsMap,
+    loadMapClientCoordinates: loadMapClientCoordinates,
+    editClientLocationFromMap: editClientLocationFromMap,
+    locateTechnician: locateTechnician,
+    saveClientLocation: saveClientLocation,
+    clearClientLocation: clearClientLocation
   };
 })();
 

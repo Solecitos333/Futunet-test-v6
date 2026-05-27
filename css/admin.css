@@ -636,3 +636,44 @@
   }
 }
 
+/* ─── Sidebar Notification Badge ─── */
+.admin-nav-badge {
+  background-color: #e74c3c;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 20px;
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+}
+.admin-nav-item:hover .admin-nav-badge {
+  background-color: #ff6b6b;
+}
+
+/* ─── Leaflet Map Pins Custom Styles ─── */
+.custom-map-marker {
+  background: transparent;
+  border: none;
+}
+.custom-map-marker svg {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
+  transition: transform 0.2s;
+}
+.custom-map-marker:hover svg {
+  transform: scale(1.15) translateY(-2px);
+}
+.gps-blue-dot {
+  background: transparent;
+  border: none;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}

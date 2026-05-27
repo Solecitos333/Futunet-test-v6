@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internet Fibra Óptica — Futunet</title>
+  <meta name="description" content="Internet de fibra óptica simétrica de alta velocidad en Santiago, República Dominicana. Planes residenciales y corporativos con soporte técnico inmediato." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css?v=3.0" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="icon" type="image/png" href="img/logo.webp" />
+  <meta name="theme-color" content="#09101d" />
+  <link rel="manifest" href="manifest.json" />
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Estilos Premium del Portal de Internet */
+    .internet-page { padding-top: 80px; min-height: 100vh; background: #f3f7fc; }
+    
+    /* ─── VISTA PÚBLICA: LANDING DE PLANES ─── */
+    #internet-public-view { display: none; padding: 40px 0 80px; }
+    
+    .internet-hero {
+      text-align: center; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;
+      padding: 0 20px;
+    }
+    .internet-hero h1 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.6rem; font-weight: 700; color: #0a101d;
+      margin: 0 0 12px; letter-spacing: -0.03em;
+    }
+    .internet-hero p { font-size: 1.05rem; color: #50647a; line-height: 1.5; margin: 0; }
+
+    /* Planes Grid */
+    .plans-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;
+      margin-bottom: 50px;
+    }
+    .plan-card {
+      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
+      padding: 32px 24px; text-align: center; box-shadow: 0 8px 30px rgba(15, 25, 35, 0.03);
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .plan-card.popular {
+      border-color: #0A70A2; box-shadow: 0 12px 40px rgba(10,112,162,0.08);
+      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+    .plan-popular-badge {
+      position: absolute; top: 12px; right: -32px; background: #0A70A2; color: #fff;
+      font-size: 0.65rem; font-weight: 700; padding: 4px 32px; transform: rotate(45deg);
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .plan-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(15, 25, 35, 0.08); }
+    
+    .plan-icon {
+      width: 48px; height: 48px; border-radius: 50%; background: rgba(10,112,162,0.06);
+      display: flex; align-items: center; justify-content: center; color: #0A70A2; margin: 0 auto 18px;
+    }
+    .plan-card.popular .plan-icon { background: #0A70A2; color: #fff; }
+    
+    .plan-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; color: #0a101d; margin: 0 0 6px; }
+    .plan-speed { font-size: 2.2rem; font-weight: 800; color: #0A70A2; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px; }
+    .plan-speed span { font-size: 0.95rem; font-weight: 500; color: #76889e; }
+    
+    .plan-features { list-style: none; padding: 0; margin: 20px 0 28px; text-align: left; }
+    .plan-features li { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #50647a; margin-bottom: 8px; }
+    .plan-features li svg { color: #2ecc71; flex-shrink: 0; }
+
+    .plan-price { font-size: 1.45rem; font-weight: 700; color: #0a101d; font-family: 'Outfit', sans-serif; margin-bottom: 20px; }
+    .plan-price span { font-size: 0.78rem; color: #76889e; font-weight: 500; }
+
+    .plan-btn {
+      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+      background: #f3f7fc; color: #394c60;
+    }
+    .plan-card.popular .plan-btn {
+      background: linear-gradient(135deg, #0a7ab0, #22a4e0); color: #fff;
+      box-shadow: 0 6px 16px rgba(10,112,162,0.2);
+    }
+    .plan-card.popular .plan-btn:hover { box-shadow: 0 10px 24px rgba(10,112,162,0.3); }
+    .plan-card:not(.popular) .plan-btn:hover { background: #e5eef8; color: #0A70A2; }
+
+    /* Habilitar login banner */
+    .login-teaser {
+      background: #0f1923; border-radius: 24px; padding: 32px; color: #fff;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      box-shadow: 0 12px 36px rgba(9,16,24,0.12);
+    }
+    .login-teaser-text h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0 0 6px; }
+    .login-teaser-text p { font-size: 0.85rem; color: #a0b0c4; margin: 0; }
+    .login-teaser-btn {
+      padding: 12px 28px; background: #fff; color: #0f1923; border: none; border-radius: 12px;
+      font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .login-teaser-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,255,255,0.2); }
+
+    @media (max-width: 640px) {
+      .login-teaser { flex-direction: column; text-align: center; padding: 24px 18px; }
+      .login-teaser-btn { width: 100%; }
+    }
+
+    /* ─── VISTA PRIVADA: PORTAL WEB APP (PWA) ─── */
+    #internet-portal-view { display: none; padding: 24px 0 60px; }
+    
+    .portal-container { max-width: 580px; margin: 0 auto; padding: 0 16px; }
+    
+    /* App Card Principal */
+    .app-card {
+      background: #09101d; border-radius: 28px; padding: 28px; color: #fff;
+      box-shadow: 0 20px 50px rgba(9, 16, 24, 0.28); border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 20px;
+    }
+
+    /* Header del Cliente */
+    .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .app-client-info h2 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0 0 3px;
+      color: #ffffff;
+    }
+    .app-client-info p { font-size: 0.78rem; color: #76889e; margin: 0; }
+    
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2px; text-transform: uppercase;
+    }
+    .status-active { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
+    .status-suspended { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.2); }
+    .status-inactive { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.2); }
+
+    /* Tarjeta del Plan Contratado */
+    .plan-detail-card {
+      background: linear-gradient(135deg, #0A70A2 0%, #154575 100%);
+      border-radius: 20px; padding: 22px; margin-bottom: 24px; position: relative; overflow: hidden;
+      box-shadow: 0 10px 24px rgba(10,112,162,0.15);
+    }
+    .plan-detail-card::before {
+      content: ''; position: absolute; top: -50%; right: -30%; width: 220px; height: 220px;
+      background: rgba(255,255,255,0.03); border-radius: 50%;
+    }
+    .pd-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); }
+    .pd-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 800; margin: 4px 0 12px; }
+    
+    .pd-footer { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
+    .pd-footer-item span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.70); }
+    .pd-footer-item strong { font-size: 0.95rem; font-weight: 700; }
+
+    /* Sección de Pagos y Cuentas */
+    .payments-section { background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.04); padding: 20px; margin-bottom: 24px; }
+    .payments-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: #a0b0c4; display: flex; align-items: center; gap: 8px; }
+    .payments-section h3 svg { color: #0A70A2; }
+
+    .bank-details { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); }
+    .bank-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .bank-row:last-child { border-bottom: none; }
+    .bank-row span { font-size: 0.78rem; color: #76889e; }
+    .bank-row strong { font-size: 0.85rem; color: #fff; font-family: monospace; display: flex; align-items: center; gap: 6px; }
+    .btn-copy { border: none; background: transparent; color: #0A70A2; cursor: pointer; padding: 2px; display: inline-flex; align-items: center; }
+    .btn-copy:hover { color: #22a4e0; }
+
+    .payment-options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .btn-portal-action {
+      width: 100%; padding: 12px; border-radius: 12px; border: none;
+      font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
+    }
+    .btn-action-primary { background: #0A70A2; color: #fff; }
+    .btn-action-primary:hover { background: #22a4e0; }
+    .btn-action-disabled { background: rgba(255,255,255,0.05); color: #50647a; cursor: not-allowed; }
+
+    /* Menú de Soporte/Ajustes */
+    .support-menu { display: flex; flex-direction: column; gap: 10px; }
+    .support-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 14px; cursor: pointer; transition: all 0.2s;
+    }
+    .support-item:hover { background: rgba(255,255,255,0.04); border-color: rgba(10,112,162,0.3); }
+    .support-item-left { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .support-item-left svg { color: #76889e; width: 18px; }
+    .support-item svg.arrow { color: #394c60; width: 16px; }
+
+    /* PWA Instructions Banner */
+    .pwa-install-banner {
+      background: #0f1923; border-radius: 20px; padding: 18px; border: 1px dashed rgba(10,112,162,0.4);
+      display: none; align-items: center; gap: 14px; margin-top: 24px;
+    }
+    .pwa-icon-box {
+      width: 42px; height: 42px; border-radius: 12px; background: #0A70A2; color: #fff;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .pwa-text-box h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.86rem; font-weight: 700; margin: 0 0 2px; }
+    .pwa-text-box p { font-size: 0.72rem; color: #a0b0c4; margin: 0; line-height: 1.35; }
+    .pwa-close-btn { border: none; background: transparent; color: #50647a; cursor: pointer; margin-left: auto; }
+
+    /* Modal de Reporte de Pago */
+    .portal-modal {
+      position: fixed; inset: 0; background: rgba(9,16,24,0.85); backdrop-filter: blur(5px);
+      z-index: 10000; display: none; align-items: center; justify-content: center; padding: 16px;
+    }
+    .portal-modal.is-active { display: flex; }
+    .portal-modal-card {
+      background: #09101d; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px;
+      width: 100%; max-width: 440px; padding: 24px; color: #fff; box-shadow: 0 20px 48px rgba(0,0,0,0.4);
+      animation: modalFadeIn 0.3s ease;
+    }
+    @keyframes modalFadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    
+    .portal-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .portal-modal-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0; }
+    .portal-modal-close { border: none; background: transparent; color: #76889e; cursor: pointer; }
+    .portal-modal-close:hover { color: #fff; }
+
+    /* Carga de Comprobante / Arrastrar archivo */
+    .voucher-dropzone {
+      border: 2px dashed rgba(255,255,255,0.12); border-radius: 14px; padding: 24px;
+      text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 16px;
+      background: rgba(255,255,255,0.01);
+    }
+    .voucher-dropzone:hover { border-color: #0A70A2; background: rgba(10,112,162,0.03); }
+    .voucher-dropzone svg { color: #76889e; margin-bottom: 8px; }
+    .voucher-dropzone p { font-size: 0.8rem; color: #a0b0c4; margin: 0 0 4px; }
+    .voucher-dropzone span { font-size: 0.7rem; color: #50647a; }
+    .voucher-preview-box { display: none; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); padding: 8px 12px; border-radius: 10px; margin-bottom: 16px; }
+    .voucher-preview-box span { font-size: 0.78rem; color: #2ecc71; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; }
+    .voucher-preview-remove { border: none; background: transparent; color: #e74c3c; cursor: pointer; }
+
+    /* Vista de no cliente */
+    .no-client-card {
+      background: #09101d; border-radius: 28px; padding: 36px 28px; text-align: center; color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 48px rgba(0,0,0,0.25);
+    }
+    .no-client-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; margin: 16px 0 8px; }
+    .no-client-card p { font-size: 0.86rem; color: #76889e; margin: 0 0 24px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
+    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" role="banner">
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+          <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
+        </a>
+        <ul class="nav-menu">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#servicios">Servicios</a></li>
+          <li><a href="catalogo.html">Catálogo</a></li>
+          <li><a href="index.html#nosotros">Nosotros</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+          <li>
+            <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+              <svg width="15" height="15"><use href="#wa-icon"/></svg>
+              829-741-1041
+            </a>
+          </li>
+          <li class="nav-auth-wrapper" style="position:relative;">
+            <div class="navbar-auth-container"></div>
+          </li>
+        </ul>
+        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+      <a href="index.html#servicios" data-close-mobile-menu>Servicios</a>
+      <a href="catalogo.html" data-close-mobile-menu>Catálogo</a>
+      <a href="index.html#nosotros" data-close-mobile-menu>Nosotros</a>
+      <a href="index.html#contacto" data-close-mobile-menu>Contacto</a>
+      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+        829-741-1041
+      </a>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 16px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center;"></div>
+    </div>
+  </header>
+
+  <main class="internet-page">
+    
+    <!-- ─── 1. VISTA PÚBLICA (Invitados / Landing de Planes) ─── -->
+    <div id="internet-public-view">
+      <div class="container">
+        <div class="internet-hero">
+          <span class="section-label">Fibra Óptica Real</span>
+          <h1>Internet Simétrico de Alta Velocidad</h1>
+          <p>Conectividad sin límites para Santiago. Navega, trabaja y juega con fibra óptica de máxima estabilidad y latencia mínima.</p>
+        </div>
+
+        <div class="plans-grid">
+          <!-- Plan 30M -->
+          <div class="plan-card">
+            <div class="plan-icon"><i data-lucide="zap"></i></div>
+            <h3 class="plan-name">Plan Lite</h3>
+            <div class="plan-speed">30 <span>Mbps</span></div>
+            <ul class="plan-features">
+              <li><i data-lucide="check"></i> 30 Mbps Subida / Bajada</li>
+              <li><i data-lucide="check"></i> Fibra óptica directa (FTTH)</li>
+              <li><i data-lucide="check"></i> Ideal para teletrabajo básico</li>
+              <li><i data-lucide="check"></i> Soporte 24/7</li>
+            </ul>
+            <div class="plan-price">RD$ 1,495 <span>/ mes</span></div>
+            <button class="plan-btn" onclick="openHiringForm('Plan Lite 30 Mbps')">Solicitar plan</button>
+          </div>
+
+          <!-- Plan 50M -->
+          <div class="plan-card popular">
+            <div class="plan-popular-badge">Recomendado</div>
+            <div class="plan-icon"><i data-lucide="flame"></i></div>
+            <h3 class="plan-name">Plan Blaze</h3>
+            <div class="plan-speed">50 <span>Mbps</span></div>
+            <ul class="plan-features">
+              <li><i data-lucide="check"></i> 50 Mbps Subida / Bajada</li>
+              <li><i data-lucide="check"></i> Fibra óptica simétrica</li>
+              <li><i data-lucide="check"></i> Streaming Ultra HD y gaming</li>
+              <li><i data-lucide="check"></i> Router WiFi de doble banda</li>
+              <li><i data-lucide="check"></i> Soporte prioritario</li>
+            </ul>
+            <div class="plan-price">RD$ 1,995 <span>/ mes</span></div>
+            <button class="plan-btn" onclick="openHiringForm('Plan Blaze 50 Mbps')">Solicitar plan</button>
+          </div>
+
+          <!-- Plan 100M -->
+          <div class="plan-card">
+            <div class="plan-icon"><i data-lucide="rocket"></i></div>
+            <h3 class="plan-name">Plan Extreme</h3>
+            <div class="plan-speed">100 <span>Mbps</span></div>
+            <ul class="plan-features">
+              <li><i data-lucide="check"></i> 100 Mbps Subida / Bajada</li>
+              <li><i data-lucide="check"></i> Simetría premium</li>
+              <li><i data-lucide="check"></i> Múltiples dispositivos en simultáneo</li>
+              <li><i data-lucide="check"></i> Ideal para creadores y oficinas</li>
+              <li><i data-lucide="check"></i> IP Pública (Opcional)</li>
+            </ul>
+            <div class="plan-price">RD$ 2,995 <span>/ mes</span></div>
+            <button class="plan-btn" onclick="openHiringForm('Plan Extreme 100 Mbps')">Solicitar plan</button>
+          </div>
+        </div>
+
+        <div class="login-teaser">
+          <div class="login-teaser-text">
+            <h3>¿Ya eres cliente de nuestro servicio de Internet?</h3>
+            <p>Inicia sesión con tu cuenta para pagar tu factura, solicitar cambio de megas, o reportar averías.</p>
+          </div>
+          <button class="login-teaser-btn" onclick="window.location.href='login.html?redirect=internet.html'">Acceder al portal de clientes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── 2. VISTA PRIVADA (Autogestión Web App / PWA) ─── -->
+    <div id="internet-portal-view">
+      <div class="portal-container">
+        
+        <!-- App Card Principal -->
+        <div class="app-card" id="portal-app-card" style="display:none;">
+          <!-- Header -->
+          <div class="app-header">
+            <div class="app-client-info">
+              <h2 id="client-name">Hola...</h2>
+              <p id="client-code">Cargando código de cliente...</p>
+            </div>
+            <span class="status-badge" id="client-status">...</span>
+          </div>
+
+          <!-- Detalle del Plan -->
+          <div class="plan-detail-card">
+            <span class="pd-label">Plan Activo</span>
+            <div class="pd-title" id="portal-plan-name">...</div>
+            <div class="pd-footer">
+              <div class="pd-footer-item">
+                <span>Mensualidad</span>
+                <strong id="portal-plan-price">...</strong>
+              </div>
+              <div class="pd-footer-item" style="text-align: right;">
+                <span>Vencimiento</span>
+                <strong id="portal-payment-due">Cada fin de mes</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuentas Bancarias / Botones de Pago -->
+          <div class="payments-section">
+            <h3><i data-lucide="wallet"></i> Pago de Mensualidad</h3>
+            <p style="font-size:0.78rem; color:#76889e; margin: 0 0 12px; line-height: 1.4;">Realiza tu pago vía transferencia bancaria utilizando los datos oficiales de Futunet:</p>
+            
+            <div class="bank-details">
+              <div class="bank-row">
+                <span>Titular</span>
+                <strong>FUTUNET.SRL <button class="btn-copy" onclick="copyText('FUTUNET.SRL')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+              </div>
+              <div class="bank-row">
+                <span>Banco</span>
+                <strong>Banreservas</strong>
+              </div>
+              <div class="bank-row">
+                <span>Tipo de cuenta</span>
+                <strong>Corriente</strong>
+              </div>
+              <div class="bank-row">
+                <span>Cuenta</span>
+                <strong>9605759674 <button class="btn-copy" onclick="copyText('9605759674')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+              </div>
+              <div class="bank-row">
+                <span>RNC</span>
+                <strong>132702077 <button class="btn-copy" onclick="copyText('132702077')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+              </div>
+            </div>
+
+            <div class="payment-options-grid">
+              <button class="btn-portal-action btn-action-primary" onclick="openPaymentReportModal()">
+                <i data-lucide="upload-cloud"></i> Reportar transferencia (Voucher)
+              </button>
+              <button class="btn-portal-action btn-action-disabled" disabled>
+                <i data-lucide="credit-card"></i> Pagar con tarjeta (Próximamente)
+              </button>
+            </div>
+          </div>
+
+          <!-- Opciones de Soporte y Solicitudes -->
+          <div class="support-menu">
+            <div class="support-item" onclick="openSupportModal('change_plan')">
+              <div class="support-item-left">
+                <i data-lucide="arrow-up-circle"></i>
+                <span>Solicitar aumento de megas</span>
+              </div>
+              <i data-lucide="chevron-right" class="arrow"></i>
+            </div>
+            <div class="support-item" onclick="openSupportModal('tech_support')">
+              <div class="support-item-left">
+                <i data-lucide="wrench"></i>
+                <span>Reportar avería técnica</span>
+              </div>
+              <i data-lucide="chevron-right" class="arrow"></i>
+            </div>
+          </div>
+
+          <!-- Botón de Salida -->
+          <button class="up-logout-btn" id="portal-logout-btn" style="width:100%; margin-top:24px; border-color:rgba(255,255,255,0.06); justify-content:center;">
+            <i data-lucide="log-out"></i> Salir del portal
+          </button>
+        </div>
+
+        <!-- Vista de no cliente registrado de internet -->
+        <div class="no-client-card" id="portal-no-client" style="display:none;">
+          <div style="width:50px; height:50px; border-radius:50%; background:rgba(10,112,162,0.1); display:flex; align-items:center; justify-content:center; color:#0A70A2; margin:0 auto 16px;">
+            <i data-lucide="wifi-off" style="width:24px; height:24px;"></i>
+          </div>
+          <h3>Cuenta sin servicio de Internet</h3>
+          <p>Tu cuenta no tiene ningún servicio de Internet de fibra óptica activo asociado en este momento.</p>
+          <button class="btn-portal-action btn-action-primary" style="width:100%; margin-bottom:12px;" onclick="window.location.reload();">
+            Recargar página
+          </button>
+          <button class="up-logout-btn" id="no-client-logout-btn" style="width:100%; border-color:rgba(255,255,255,0.06); justify-content:center;">
+            Cerrar sesión
+          </button>
+        </div>
+
+        <!-- Cartel PWA (Añadir a pantalla de inicio) -->
+        <div class="pwa-install-banner" id="pwa-banner">
+          <div class="pwa-icon-box"><i data-lucide="smartphone"></i></div>
+          <div class="pwa-text-box">
+            <h4>Instalar App de Clientes</h4>
+            <p id="pwa-instructions">Pulsa el botón Compartir y selecciona "Añadir a pantalla de inicio" para instalar.</p>
+          </div>
+          <button class="pwa-close-btn" onclick="hidePwaBanner()"><i data-lucide="x" style="width:14px;"></i></button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL 1: REPORTAR PAGO -->
+    <div class="portal-modal" id="payment-report-modal">
+      <div class="portal-modal-card">
+        <div class="portal-modal-header">
+          <h3>Reportar Transferencia</h3>
+          <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+        </div>
+        
+        <form id="payment-report-form">
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="pay-amount">Monto pagado (RD$)</label>
+            <input type="number" id="pay-amount" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required placeholder="1995" />
+          </div>
+          
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="pay-bank">Banco de Origen</label>
+            <select id="pay-bank" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); outline:none; height:45px;" required>
+              <option value="" style="background:#09101d; color:#76889e;">Selecciona tu banco</option>
+              <option value="Banreservas" style="background:#09101d;">Banreservas</option>
+              <option value="Banco Popular" style="background:#09101d;">Banco Popular</option>
+              <option value="BHD" style="background:#09101d;">BHD León</option>
+              <option value="Asociación Popular" style="background:#09101d;">APAP</option>
+              <option value="Otro" style="background:#09101d;">Otro banco</option>
+            </select>
+          </div>
+
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;">Comprobante de Pago (Voucher / Capture)</label>
+            <div class="voucher-dropzone" id="voucher-dropzone">
+              <i data-lucide="image" style="width:24px; height:24px;"></i>
+              <p>Haz clic para subir comprobante</p>
+              <span>Formatos permitidos: JPG, PNG, PDF (Max 5MB)</span>
+              <input type="file" id="pay-voucher-file" style="display:none;" accept="image/*,application/pdf" />
+            </div>
+            <div class="voucher-preview-box" id="voucher-preview-box">
+              <i data-lucide="check-circle" style="color:#2ecc71; width:16px;"></i>
+              <span id="voucher-filename">archivo.jpg</span>
+              <button type="button" class="voucher-preview-remove" onclick="removeVoucherFile()"><i data-lucide="trash-2" style="width:14px;"></i></button>
+            </div>
+          </div>
+
+          <button type="submit" class="request-btn-submit" id="pay-submit-btn" style="margin-top:16px;">
+            Enviar Reporte
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 2: SOLICITUDES DE SOPORTE O CAMBIOS -->
+    <div class="portal-modal" id="support-modal">
+      <div class="portal-modal-card">
+        <div class="portal-modal-header">
+          <h3 id="support-modal-title">Solicitud de Soporte</h3>
+          <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+        </div>
+        
+        <form id="support-form">
+          <input type="hidden" id="support-type" value="tech_support" />
+          
+          <div class="request-form-group" id="support-speed-selection" style="display:none;">
+            <label class="request-form-label" style="color:#a0b0c4;" for="support-new-speed">Seleccionar Velocidad Deseada</label>
+            <select id="support-new-speed" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); outline:none; height:45px;">
+              <option value="50mb" style="background:#09101d;">Plan Blaze 50 Megas (RD$ 1,995/mes)</option>
+              <option value="100mb" style="background:#09101d;">Plan Extreme 100 Megas (RD$ 2,995/mes)</option>
+            </select>
+          </div>
+
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="support-details" id="support-details-label">Detalles del reporte o avería</label>
+            <textarea id="support-details" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="4" required placeholder="Describe tu problema con detalle..."></textarea>
+          </div>
+
+          <button type="submit" class="request-btn-submit" id="support-submit-btn" style="margin-top:16px;">
+            Enviar Solicitud
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 3: CONTRATAR PLAN (INVITADO) -->
+    <div class="portal-modal" id="hiring-modal">
+      <div class="portal-modal-card">
+        <div class="portal-modal-header">
+          <h3>Contratar Internet</h3>
+          <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+        </div>
+        
+        <form id="hiring-form">
+          <input type="hidden" id="hiring-plan-name" value="" />
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;">Plan seleccionado</label>
+            <strong id="hiring-plan-label" style="color:#0A70A2; font-size:1.1rem; display:block; margin: 4px 0 12px;">Plan Blaze 50 Mbps</strong>
+          </div>
+          
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="hir-name">Nombre Completo</label>
+            <input type="text" id="hir-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
+          </div>
+          
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="hir-phone">Teléfono / WhatsApp</label>
+            <input type="tel" id="hir-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required placeholder="809-000-0000" />
+          </div>
+
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="hir-email">Correo Electrónico</label>
+            <input type="email" id="hir-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
+          </div>
+
+          <div class="request-form-group">
+            <label class="request-form-label" style="color:#a0b0c4;" for="hir-address">Dirección de Instalación</label>
+            <textarea id="hir-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="3" required placeholder="Indica calle, sector y referencias de tu ubicación en Santiago..."></textarea>
+          </div>
+
+          <button type="submit" class="request-btn-submit" id="hir-submit-btn" style="margin-top:16px;">
+            Enviar Solicitud de Contrato
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col brand-col">
+          <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo" width="1009" height="207" />
+          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Servicios</h4>
+          <ul>
+            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Compañía</h4>
+          <ul>
+            <li><a href="index.html#nosotros">Nosotros</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="index.html#contacto">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/auth-guard.js"></script>
+  <script src="js/main.js"></script>
+  <script defer src="js/internet-portal.js"></script>
+</body>
+</html>
