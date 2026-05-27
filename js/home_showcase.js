@@ -12,6 +12,15 @@
   let hasInitialized = false;
   let hasQueuedInit = false;
 
+  function escapeHTML(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function normalizeText(value) {
     return String(value || '')
       .replace(/Ã¡/g, 'á')
@@ -74,14 +83,14 @@
   }
 
   function buildCard(item) {
-    const title = normalizeText(item.title);
-    const meta = normalizeText(item.brand || item.category || 'Catálogo');
-    const price = normalizeText(item.price || 'Cotizar');
+    const title = escapeHTML(normalizeText(item.title));
+    const meta = escapeHTML(normalizeText(item.brand || item.category || 'Catálogo'));
+    const price = escapeHTML(normalizeText(item.price || 'Cotizar'));
 
     return `
       <a class="showcase-card" href="catalogo.html?q=${encodeURIComponent(item.title)}" aria-label="Ver ${title} en el catálogo">
         <div class="showcase-card__media">
-          <img src="${item.img}" alt="${title}" loading="lazy" decoding="async" />
+          <img src="${escapeHTML(item.img)}" alt="${title}" loading="lazy" decoding="async" />
         </div>
         <div class="showcase-card__body">
           <span class="showcase-card__meta">${meta}</span>
