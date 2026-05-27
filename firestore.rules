@@ -176,6 +176,11 @@ service cloud.firestore {
       allow write: if isEditorOrAbove();
     }
 
+    // ─── COMPETITORS Collection ───
+    match /competitors/{competitorId} {
+      allow read, write: if isEditorOrAbove();
+    }
+
     // ─── SERVICE REQUESTS Collection ───
     match /service_requests/{requestId} {
       allow create: if true; // Guests can submit service inquiries

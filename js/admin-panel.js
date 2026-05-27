@@ -106,6 +106,7 @@
     loadServiceRequests();
     loadInternetClients();
     loadInternetPayments();
+    loadCompetitors();
 
     // Setup logout button listener
     var logoutBtn = document.getElementById('btn-logout');
@@ -2419,6 +2420,15 @@
       });
     }
 
+    // Competitor form
+    var competitorForm = document.getElementById('competitor-form');
+    if (competitorForm) {
+      competitorForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        saveCompetitor();
+      });
+    }
+
     // Close buttons
     document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -3735,6 +3745,663 @@
     }
   }
 
+  // ═══════════════════════════════════
+  // COMPETITORS MARKETING ANALYSIS
+  // ═══════════════════════════════════
+  var competitorsList = [];
+  var chartCompetitorsRadar = null;
+  var chartCompetitorsBars = null;
+
+  async function loadCompetitors() {
+    try {
+      await seedDefaultCompetitors();
+      var snapshot = await db.collection('competitors').get();
+      competitorsList = [];
+      snapshot.forEach(function (doc) {
+        var data = doc.data();
+        data.id = doc.id;
+        competitorsList.push(data);
+      });
+
+      // Sort by rank/threat (rank 1 is top threat, ascending)
+      competitorsList.sort(function (a, b) {
+        return (parseInt(a.rank) || 99) - (parseInt(b.rank) || 99);
+      });
+
+      renderCompetitorsUI();
+      renderCompetitorCharts();
+    } catch (err) {
+      console.error("Error al cargar competidores: ", err);
+      showToast("Error al cargar análisis de competencia: " + err.message, "error");
+    }
+  }
+
+  function renderCompetitorsUI() {
+    var totalCard = document.getElementById('comp-stat-total');
+    var maxThreatCard = document.getElementById('comp-stat-max-threat');
+    var shareCard = document.getElementById('comp-stat-market-share');
+    var container = document.getElementById('competitors-list-container');
+
+    if (!container) return;
+
+    if (totalCard) totalCard.textContent = competitorsList.length;
+
+    var maxThreatName = "Ninguno";
+    var maxThreatVal = -1;
+    var totalCompetitorShare = 0;
+
+    competitorsList.forEach(function (c) {
+      var threatScore = c.relevance === "Crítica" ? 100 : c.relevance === "Alta" ? 80 : c.relevance === "Media" ? 50 : 25;
+      if (threatScore > maxThreatVal) {
+        maxThreatVal = threatScore;
+        maxThreatName = c.name;
+      }
+      totalCompetitorShare += parseFloat(c.marketShare) || 0;
+    });
+
+    if (maxThreatCard) maxThreatCard.textContent = maxThreatName;
+    if (shareCard) shareCard.textContent = totalCompetitorShare + "%";
+
+    if (competitorsList.length === 0) {
+      container.innerHTML = '<div class="admin-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><h4>No hay competidores registrados</h4><p>Usa el botón "Agregar Competidor" para iniciar el análisis.</p></div>';
+      return;
+    }
+
+    var html = '';
+    competitorsList.forEach(function (c) {
+      var badgeClass = '';
+      if (c.relevance === "Crítica") badgeClass = "role-superadmin";
+      else if (c.relevance === "Alta") badgeClass = "role-admin";
+      else if (c.relevance === "Media") badgeClass = "role-editor";
+      else badgeClass = "role-user";
+
+      var strengthsList = (c.strengths || '').split('\n').filter(Boolean).map(function(s){ return '<li>' + s + '</li>'; }).join('');
+      var weaknessesList = (c.weaknesses || '').split('\n').filter(Boolean).map(function(w){ return '<li>' + w + '</li>'; }).join('');
+
+      var logoHtml = c.logo 
+        ? '<img src="' + c.logo + '" alt="' + c.name + '" style="max-height: 40px; max-width: 120px; object-fit: contain;">'
+        : '<div style="width:40px; height:40px; border-radius:8px; background:#f3f7fc; border:1px solid #e5eef8; display:flex; align-items:center; justify-content:center; font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700; color:#0A70A2;">' + c.name.charAt(0).toUpperCase() + '</div>';
+
+      html += '<div class="admin-table-card" style="padding: 24px; margin-bottom: 20px; border-left: 5px solid ' + 
+              (c.relevance === "Crítica" ? "#e74c3c" : c.relevance === "Alta" ? "#e67e22" : c.relevance === "Media" ? "#f1c40f" : "#2ecc71") + ';">';
+      
+      // Card Header
+      html += '<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px; margin-bottom: 20px;">' +
+                '<div style="display:flex; align-items:center; gap:16px;">' +
+                  logoHtml +
+                  '<div>' +
+                    '<h3 style="font-family:\'Space Grotesk\',sans-serif; font-size:1.15rem; font-weight:700; margin:0; color:#0a101d;">' + c.name + '</h3>' +
+                    '<div style="display:flex; gap:8px; align-items:center; margin-top:4px;">' +
+                      '<span class="admin-role-badge ' + badgeClass + '" style="font-size:0.65rem; padding: 2px 8px;">Amenaza: ' + c.relevance + '</span>' +
+                      '<span style="font-size:0.75rem; color:#76889e; font-weight:600;">Rango: #' + c.rank + '</span>' +
+                    '</div>' +
+                  '</div>' +
+                '</div>' +
+                '<div style="display:flex; gap:8px;">' +
+                  '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCompetitor(\'' + c.id + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Editar</button>' +
+                  '<button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCompetitor(\'' + c.id + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Eliminar</button>' +
+                '</div>' +
+              '</div>';
+
+      // Competitor Metrics
+      html += '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom: 20px; background:#f9fbff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">' +
+                '<div>' +
+                  '<span style="font-size:0.72rem; color:#76889e; font-weight:700; text-transform:uppercase;">Cuota de Mercado</span>' +
+                  '<div style="display:flex; align-items:center; gap:8px; margin-top:4px;">' +
+                    '<div style="flex:1; background:#e5eef8; height:8px; border-radius:4px; overflow:hidden;"><div style="background:#0a7ab0; width:' + c.marketShare + '%; height:100%;"></div></div>' +
+                    '<strong style="font-size:0.85rem; color:#0a101d;">' + c.marketShare + '%</strong>' +
+                  '</div>' +
+                '</div>' +
+                '<div>' +
+                  '<span style="font-size:0.72rem; color:#76889e; font-weight:700; text-transform:uppercase;">Índice Precios</span>' +
+                  '<div style="display:flex; align-items:center; gap:8px; margin-top:4px;">' +
+                    '<div style="flex:1; background:#e5eef8; height:8px; border-radius:4px; overflow:hidden;"><div style="background:#e17055; width:' + c.priceIndex + '%; height:100%;"></div></div>' +
+                    '<strong style="font-size:0.85rem; color:#0a101d;">' + c.priceIndex + '/100</strong>' +
+                  '</div>' +
+                '</div>' +
+                '<div>' +
+                  '<span style="font-size:0.72rem; color:#76889e; font-weight:700; text-transform:uppercase;">Nivel Tecnológico</span>' +
+                  '<div style="display:flex; align-items:center; gap:8px; margin-top:4px;">' +
+                    '<div style="flex:1; background:#e5eef8; height:8px; border-radius:4px; overflow:hidden;"><div style="background:#6c5ce7; width:' + c.techIndex + '%; height:100%;"></div></div>' +
+                    '<strong style="font-size:0.85rem; color:#0a101d;">' + c.techIndex + '/100</strong>' +
+                  '</div>' +
+                '</div>' +
+                '<div>' +
+                  '<span style="font-size:0.72rem; color:#76889e; font-weight:700; text-transform:uppercase;">Calidad de Servicio</span>' +
+                  '<div style="display:flex; align-items:center; gap:8px; margin-top:4px;">' +
+                    '<div style="flex:1; background:#e5eef8; height:8px; border-radius:4px; overflow:hidden;"><div style="background:#00c281; width:' + c.serviceIndex + '%; height:100%;"></div></div>' +
+                    '<strong style="font-size:0.85rem; color:#0a101d;">' + c.serviceIndex + '/100</strong>' +
+                  '</div>' +
+                '</div>' +
+              '</div>';
+
+      // SWOT & Details
+      html += '<div style="margin-bottom: 16px;">' +
+                '<strong style="display:block; font-size:0.8rem; color:#394c60; text-transform:uppercase; font-weight:700; margin-bottom:4px;">¿Qué los diferencia?</strong>' +
+                '<p style="margin:0; font-size:0.88rem; color:#0a101d; line-height:1.5;">' + c.differentiator + '</p>' +
+              '</div>';
+
+      html += '<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;" class="swot-grid-wrapper">' +
+                '<div style="background:#f4fbf7; border: 1px solid rgba(0,194,129,0.15); padding:16px; border-radius:12px;">' +
+                  '<strong style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:#0e8a5f; text-transform:uppercase; font-weight:700; margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Fortalezas (FODA)</strong>' +
+                  '<ul style="margin:0; padding-left:20px; font-size:0.82rem; color:#2c3e50; line-height:1.5;">' + strengthsList + '</ul>' +
+                '</div>' +
+                '<div style="background:#fff5f5; border: 1px solid rgba(231,76,60,0.12); padding:16px; border-radius:12px;">' +
+                  '<strong style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:#c0392b; text-transform:uppercase; font-weight:700; margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0M12 2v10"/></svg> Debilidades (FODA)</strong>' +
+                  '<ul style="margin:0; padding-left:20px; font-size:0.82rem; color:#2c3e50; line-height:1.5;">' + weaknessesList + '</ul>' +
+                '</div>' +
+              '</div>';
+
+      html += '<div style="background:#eaf2fb; border: 1px solid rgba(10,112,162,0.15); padding:16px; border-radius:12px;">' +
+                '<strong style="display:flex; align-items:center; gap:6px; font-size:0.82rem; color:#0A70A2; text-transform:uppercase; font-weight:700; margin-bottom:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Brecha de Mejora para Futunet</strong>' +
+                '<p style="margin:0; font-size:0.85rem; color:#394c60; line-height:1.5;">' + c.improvements + '</p>' +
+              '</div>';
+
+      html += '</div>'; // End Card
+    });
+
+    container.innerHTML = html;
+  }
+
+  function renderCompetitorCharts() {
+    var ctxRadar = document.getElementById('chart-competitors-radar');
+    var ctxBars = document.getElementById('chart-competitors-bars');
+
+    if (!ctxRadar || !ctxBars) return;
+
+    if (chartCompetitorsRadar) chartCompetitorsRadar.destroy();
+    if (chartCompetitorsBars) chartCompetitorsBars.destroy();
+
+    var datasets = [];
+
+    // FUTUNET baseline
+    datasets.push({
+      label: "FUTUNET (Nuestra Posición)",
+      data: [75, 85, 95, 90, 60],
+      backgroundColor: 'rgba(10, 122, 176, 0.15)',
+      borderColor: '#0a7ab0',
+      borderWidth: 3,
+      pointBackgroundColor: '#0a7ab0',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '#0a7ab0'
+    });
+
+    var colors = [
+      'rgba(231, 76, 60, 1)',   // Claro - Red
+      'rgba(230, 126, 34, 1)',  // Selektronic - Orange
+      'rgba(155, 89, 182, 1)',  // Cecom - Purple
+      'rgba(241, 196, 15, 1)'   // Ochoa - Yellow
+    ];
+    var bgColors = [
+      'rgba(231, 76, 60, 0.05)',
+      'rgba(230, 126, 34, 0.05)',
+      'rgba(155, 89, 182, 0.05)',
+      'rgba(241, 196, 15, 0.05)'
+    ];
+
+    competitorsList.slice(0, 4).forEach(function (c, idx) {
+      var economicIndex = 100 - (c.priceIndex || 50);
+      datasets.push({
+        label: c.name,
+        data: [
+          economicIndex,
+          c.techIndex || 50,
+          c.serviceIndex || 50,
+          c.relevance === "Crítica" ? 85 : c.relevance === "Alta" ? 70 : c.relevance === "Media" ? 50 : 35,
+          c.marketShare || 20
+        ],
+        backgroundColor: bgColors[idx % bgColors.length],
+        borderColor: colors[idx % colors.length],
+        borderWidth: 2,
+        pointBackgroundColor: colors[idx % colors.length],
+        pointBorderColor: '#fff'
+      });
+    });
+
+    chartCompetitorsRadar = new Chart(ctxRadar, {
+      type: 'radar',
+      data: {
+        labels: ['Precio Competitivo', 'Tecnología', 'Servicio al Cliente', 'Soporte Técnico', 'Cuota de Mercado'],
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Outfit', size: 10 } } }
+        },
+        scales: {
+          r: {
+            angleLines: { color: 'rgba(118, 136, 158, 0.15)' },
+            grid: { color: 'rgba(118, 136, 158, 0.15)' },
+            pointLabels: { font: { family: 'Outfit', size: 10, weight: 600 }, color: '#394c60' },
+            ticks: { display: false },
+            suggestedMin: 0,
+            suggestedMax: 100
+          }
+        }
+      }
+    });
+
+    // Bar chart: Market Share vs Threat
+    var labels = [];
+    var marketShares = [];
+    var threatScores = [];
+
+    competitorsList.forEach(function (c) {
+      labels.push(c.name);
+      marketShares.push(c.marketShare || 0);
+      var threatScore = c.relevance === "Crítica" ? 100 : c.relevance === "Alta" ? 80 : c.relevance === "Media" ? 50 : 25;
+      threatScores.push(threatScore);
+    });
+
+    chartCompetitorsBars = new Chart(ctxBars, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Cuota de Mercado (%)',
+            data: marketShares,
+            backgroundColor: '#0a7ab0',
+            borderRadius: 8
+          },
+          {
+            label: 'Nivel de Amenaza (Índice)',
+            data: threatScores,
+            backgroundColor: '#e17055',
+            borderRadius: 8
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Outfit', size: 10 } } }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: { color: 'rgba(118, 136, 158, 0.08)' },
+            ticks: { font: { family: 'Outfit', size: 10 } }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { family: 'Outfit', size: 10, weight: 600 } }
+          }
+        }
+      }
+    });
+  }
+
+  function openNewCompetitor() {
+    var form = document.getElementById('competitor-form');
+    if (!form) return;
+    form.reset();
+    document.getElementById('competitor-id').value = '';
+    document.getElementById('competitor-modal-title').textContent = 'Agregar Competidor';
+    openModal('competitor-modal');
+  }
+
+  async function editCompetitor(id) {
+    try {
+      var doc = await db.collection('competitors').doc(id).get();
+      if (!doc.exists) {
+        showToast('El competidor no existe.', 'error');
+        return;
+      }
+      var c = doc.data();
+
+      document.getElementById('competitor-id').value = id;
+      document.getElementById('competitor-name').value = c.name || '';
+      document.getElementById('competitor-rank').value = c.rank || '1';
+      document.getElementById('competitor-relevance').value = c.relevance || 'Media';
+      document.getElementById('competitor-market-share').value = c.marketShare || 0;
+      document.getElementById('competitor-price-idx').value = c.priceIndex || 50;
+      document.getElementById('competitor-tech-idx').value = c.techIndex || 50;
+      document.getElementById('competitor-service-idx').value = c.serviceIndex || 50;
+      document.getElementById('competitor-differentiator').value = c.differentiator || '';
+      document.getElementById('competitor-strengths').value = c.strengths || '';
+      document.getElementById('competitor-weaknesses').value = c.weaknesses || '';
+      document.getElementById('competitor-improvements').value = c.improvements || '';
+      document.getElementById('competitor-logo').value = c.logo || '';
+
+      document.getElementById('competitor-modal-title').textContent = 'Editar Competidor';
+      openModal('competitor-modal');
+    } catch (err) {
+      showToast('Error al cargar competidor: ' + err.message, 'error');
+    }
+  }
+
+  async function saveCompetitor() {
+    var id = document.getElementById('competitor-id').value;
+    var name = document.getElementById('competitor-name').value;
+    var rank = parseInt(document.getElementById('competitor-rank').value) || 1;
+    var relevance = document.getElementById('competitor-relevance').value;
+    var marketShare = parseInt(document.getElementById('competitor-market-share').value) || 0;
+    var priceIndex = parseInt(document.getElementById('competitor-price-idx').value) || 50;
+    var techIndex = parseInt(document.getElementById('competitor-tech-idx').value) || 50;
+    var serviceIndex = parseInt(document.getElementById('competitor-service-idx').value) || 50;
+    var differentiator = document.getElementById('competitor-differentiator').value;
+    var strengths = document.getElementById('competitor-strengths').value;
+    var weaknesses = document.getElementById('competitor-weaknesses').value;
+    var improvements = document.getElementById('competitor-improvements').value;
+    var logo = document.getElementById('competitor-logo').value;
+
+    var data = {
+      name: name,
+      rank: rank,
+      relevance: relevance,
+      marketShare: marketShare,
+      priceIndex: priceIndex,
+      techIndex: techIndex,
+      serviceIndex: serviceIndex,
+      differentiator: differentiator,
+      strengths: strengths,
+      weaknesses: weaknesses,
+      improvements: improvements,
+      logo: logo,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    try {
+      if (id) {
+        await db.collection('competitors').doc(id).update(data);
+        showToast('Competidor actualizado con éxito', 'success');
+
+        await db.collection('audit_logs').add({
+          action: 'Editar Competidor',
+          details: 'Se actualizó el análisis de: ' + name,
+          userId: currentUserData.uid || '',
+          userEmail: currentUserData.email || 'Admin',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } else {
+        await db.collection('competitors').add(data);
+        showToast('Competidor agregado con éxito', 'success');
+
+        await db.collection('audit_logs').add({
+          action: 'Crear Competidor',
+          details: 'Se creó un nuevo competidor: ' + name,
+          userId: currentUserData.uid || '',
+          userEmail: currentUserData.email || 'Admin',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+
+      closeModal('competitor-modal');
+      loadCompetitors();
+    } catch (err) {
+      showToast('Error al guardar competidor: ' + err.message, 'error');
+    }
+  }
+
+  async function deleteCompetitor(id) {
+    if (!(await showConfirmModal('Eliminar Competidor', '¿Estás seguro de que deseas eliminar este competidor? Esta acción no se puede deshacer.'))) {
+      return;
+    }
+
+    try {
+      var doc = await db.collection('competitors').doc(id).get();
+      var name = doc.exists ? doc.data().name : 'Desconocido';
+
+      await db.collection('competitors').doc(id).delete();
+      showToast('Competidor eliminado con éxito', 'success');
+
+      await db.collection('audit_logs').add({
+        action: 'Eliminar Competidor',
+        details: 'Se eliminó el competidor: ' + name,
+        userId: currentUserData.uid || '',
+        userEmail: currentUserData.email || 'Admin',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      loadCompetitors();
+    } catch (err) {
+      showToast('Error al eliminar competidor: ' + err.message, 'error');
+    }
+  }
+
+  async function seedDefaultCompetitors() {
+    try {
+      var snapshot = await db.collection('competitors').get();
+      if (snapshot.empty) {
+        var defaultComps = [
+          {
+            name: "Claro Dominicana",
+            rank: 1,
+            relevance: "Crítica",
+            marketShare: 45,
+            priceIndex: 85,
+            techIndex: 95,
+            serviceIndex: 70,
+            differentiator: "Líder corporativo de telecomunicaciones e internet de fibra óptica con red de distribución masiva y solvencia de marca establecida.",
+            strengths: "Red de fibra de amplio alcance\nCapacidad de financiamiento y contratos premium\nSoporte corporativo técnico masivo",
+            weaknesses: "Atención al cliente retail altamente burocrática\nTiempos de instalación tardíos\nPrecios de suscripción e infraestructura elevados",
+            improvements: "Futunet puede superar a Claro ofreciendo agilidad técnica extrema (soporte/instalación en menos de 24h), tarifas sin contratos de permanencia leoninos, y asesoría de TI local cercana.",
+            logo: ""
+          },
+          {
+            name: "Selektronic",
+            rank: 2,
+            relevance: "Alta",
+            marketShare: 25,
+            priceIndex: 30,
+            techIndex: 65,
+            serviceIndex: 60,
+            differentiator: "Mayorista comercializador de hardware informático y tecnología reacondicionada importada de bajo coste.",
+            strengths: "Precios agresivos en hardware de oficina\nRotación rápida de inventario de ordenadores usados\nAcceso fácil para revendedores",
+            weaknesses: "Equipos sin garantías extensas (30-90 días máximo)\nNulo servicio de integración, tendido de cableado estructurado u obra civil\nServicio al cliente post-venta muy básico",
+            improvements: "Futunet destaca por vender equipos corporativos nuevos con garantía de fábrica directa (12 a 36 meses) y ofrecer la consultoría e instalación de redes empresariales integrales.",
+            logo: ""
+          },
+          {
+            name: "Cecom Seguridad",
+            rank: 3,
+            relevance: "Alta",
+            marketShare: 20,
+            priceIndex: 80,
+            techIndex: 90,
+            serviceIndex: 75,
+            differentiator: "Integrador corporativo especializado en sistemas de seguridad electrónica avanzados, cercos eléctricos, videovigilancia IP y control de acceso industrial en la región norte.",
+            strengths: "Ingeniería de proyectos robusta y normativas internacionales\nCatálogo de marcas premium especializadas\nCapacidad de ejecución industrial",
+            weaknesses: "Precios sumamente costosos para pymes y particulares\nTiempos de respuesta lentos para servicios de mantenimiento menores\nPoca flexibilidad contractual",
+            improvements: "Futunet puede competir con Cecom ofreciendo soluciones avanzadas para medianas empresas con márgenes más justos (precios un 20% más económicos) y un soporte directo de ingeniería más ágil.",
+            logo: ""
+          },
+          {
+            name: "Ferretería Ochoa",
+            rank: 4,
+            relevance: "Media",
+            marketShare: 10,
+            priceIndex: 65,
+            techIndex: 55,
+            serviceIndex: 65,
+            differentiator: "Distribuidor ferretero masivo que vende cerraduras inteligentes básicas y de consumo (DIY) para instalar uno mismo.",
+            strengths: "Presencia de marca icónica y alta afluencia de compradores\nFacilidad de autoservicio y stock inmediato en salas de exhibición\nPromociones de retail constantes",
+            weaknesses: "Falta de consultoría personalizada para integración de sistemas complejos\nNo ofrecen servicios de cableado, configuración IP centralizada ni mantenimiento de redes\nEquipos limitados a líneas domésticas (no empresariales)",
+            improvements: "Futunet proporciona el servicio integral: desde el diseño y cableado hasta la configuración centralizada y soporte in-situ continuo, algo que una tienda retail ferretera jamás realiza.",
+            logo: ""
+          }
+        ];
+
+        for (var i = 0; i < defaultComps.length; i++) {
+          await db.collection('competitors').add({
+            ...defaultComps[i],
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Error al sembrar competidores por defecto: ", err);
+    }
+  }
+
+  function exportCompetitorsToExcel() {
+    if (competitorsList.length === 0) {
+      showToast('No hay competidores cargados para exportar.', 'error');
+      return;
+    }
+
+    try {
+      var rows = [];
+      competitorsList.forEach(function (c) {
+        rows.push({
+          "Rango de Amenaza": c.rank,
+          "Competidor": c.name,
+          "Nivel de Amenaza": c.relevance,
+          "Cuota de Mercado (%)": c.marketShare + "%",
+          "Índice Precios (0-100)": c.priceIndex,
+          "Índice Tecnología (0-100)": c.techIndex,
+          "Índice Servicio (0-100)": c.serviceIndex,
+          "Diferenciadores Clave": c.differentiator,
+          "Fortalezas (FODA)": c.strengths,
+          "Debilidades (FODA)": c.weaknesses,
+          "Oportunidades de Mejora Futunet": c.improvements
+        });
+      });
+
+      var worksheet = XLSX.utils.json_to_sheet(rows);
+      var workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Análisis de Competencia");
+      XLSX.writeFile(workbook, "Futunet_Analisis_Competencia_" + new Date().toISOString().slice(0, 10) + ".xlsx");
+      showToast('Archivo Excel exportado con éxito', 'success');
+    } catch (err) {
+      showToast('Error al exportar Excel: ' + err.message, 'error');
+    }
+  }
+
+  function exportCompetitorsToWord() {
+    if (competitorsList.length === 0) {
+      showToast('No hay competidores cargados para exportar.', 'error');
+      return;
+    }
+
+    try {
+      var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">';
+      html += '<head><meta charset="utf-8"><title>Análisis de Competencia - Futunet</title>';
+      html += '<style>';
+      html += 'body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 20px; }';
+      html += 'h1 { color: #0b7eb5; border-bottom: 2px solid #0b7eb5; padding-bottom: 8px; font-size: 24px; }';
+      html += 'h2 { color: #2c3e50; font-size: 18px; margin-top: 24px; }';
+      html += 'table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 20px; }';
+      html += 'th { background-color: #f2f2f2; border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; color: #555; }';
+      html += 'td { border: 1px solid #ddd; padding: 8px; font-size: 12px; vertical-align: top; }';
+      html += 'ul { margin: 0; padding-left: 20px; }';
+      html += '.badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: #fff; }';
+      html += '.badge-critical { background-color: #e74c3c; }';
+      html += '.badge-high { background-color: #e67e22; }';
+      html += '.badge-medium { background-color: #f1c40f; color: #333; }';
+      html += '.badge-low { background-color: #2ecc71; }';
+      html += '</style></head><body>';
+
+      html += '<h1>REPORTE DE ANÁLISIS DE MERCADOTECNIA Y COMPETENCIA</h1>';
+      html += '<p><strong>Fecha del reporte:</strong> ' + new Date().toLocaleDateString('es-ES') + '</p>';
+      html += '<p>Este informe detalla las características competitivas del mercado tecnológico, internet y seguridad en República Dominicana. Contiene las dimensiones de posicionamiento de cada competidor clave y las estrategias recomendadas para Futunet.</p>';
+
+      html += '<h2>1. Resumen Tabular de Competencia</h2>';
+      html += '<table>';
+      html += '<thead><tr><th>Amenaza</th><th>Competidor</th><th>Criticidad</th><th>Mercado %</th><th>Precio Index</th><th>Tech Index</th><th>Servicio Index</th></tr></thead>';
+      html += '<tbody>';
+      
+      competitorsList.forEach(function (c) {
+        html += '<tr>' +
+                  '<td>#' + c.rank + '</td>' +
+                  '<td><strong>' + c.name + '</strong></td>' +
+                  '<td>' + c.relevance + '</td>' +
+                  '<td>' + c.marketShare + '%</td>' +
+                  '<td>' + c.priceIndex + '/100</td>' +
+                  '<td>' + c.techIndex + '/100</td>' +
+                  '<td>' + c.serviceIndex + '/100</td>' +
+                '</tr>';
+      });
+      html += '</tbody></table>';
+
+      html += '<h2>2. Análisis Detallado por Competidor (SWOT y Differentiators)</h2>';
+
+      competitorsList.forEach(function (c) {
+        var badgeColor = 'badge-medium';
+        if (c.relevance === "Crítica") badgeColor = 'badge-critical';
+        else if (c.relevance === "Alta") badgeColor = 'badge-high';
+        else if (c.relevance === "Baja") badgeColor = 'badge-low';
+
+        html += '<div style="border-bottom: 1px solid #ccc; padding-bottom: 16px; margin-bottom: 16px;">';
+        html += '<h3>' + c.name + ' (Rango #' + c.rank + ' - <span class="badge ' + badgeColor + '">' + c.relevance + '</span>)</h3>';
+        html += '<p><strong>Diferenciador Clave:</strong> ' + c.differentiator + '</p>';
+        
+        html += '<table>';
+        html += '<tr>';
+        html += '<td style="width:50%; background-color:#f4fbf7;">';
+        html += '<strong>Fortalezas:</strong><ul>' + (c.strengths || '').split('\n').filter(Boolean).map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ul>';
+        html += '</td>';
+        html += '<td style="width:50%; background-color:#fff5f5;">';
+        html += '<strong>Debilidades:</strong><ul>' + (c.weaknesses || '').split('\n').filter(Boolean).map(function(w){ return '<li>' + w + '</li>'; }).join('') + '</ul>';
+        html += '</td>';
+        html += '</tr>';
+        html += '</table>';
+
+        html += '<p style="background-color:#eaf2fb; padding: 10px; border-left: 4px solid #0b7eb5; border-radius: 4px;">';
+        html += '<strong>Estrategia de Mejora Futunet:</strong> ' + c.improvements;
+        html += '</p>';
+        html += '</div>';
+      });
+
+      html += '</body></html>';
+
+      var blob = new Blob(['\ufeff' + html], { type: 'application/msword' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = "Futunet_Analisis_Competencia_" + new Date().toISOString().slice(0, 10) + ".doc";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('Archivo Word exportado con éxito', 'success');
+    } catch (err) {
+      showToast('Error al exportar Word: ' + err.message, 'error');
+    }
+  }
+
+  function exportCompetitorsToPDF() {
+    var element = document.getElementById('competitors-report-area');
+    if (!element) {
+      showToast('No se encontró el área de impresión del reporte.', 'error');
+      return;
+    }
+
+    var printTitle = document.createElement('div');
+    printTitle.id = "temp-pdf-header";
+    printTitle.style.cssText = "margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #0a7ab0; display: flex; justify-content: space-between; align-items: center;";
+    printTitle.innerHTML = '<div><img src="img/logo-navbar.webp" style="height: 36px; filter: brightness(0) invert(0.1);"><h1 style="font-family:\'Space Grotesk\', sans-serif; font-size: 1.5rem; color: #0a101d; margin: 4px 0 0 0;">Reporte Ejecutivo: Posicionamiento y Competencia</h1></div><div style="text-align: right;"><span style="font-size:0.75rem; color:#76889e; font-weight:700; font-family:\'Outfit\';">FUTUNET SRL</span><br><span style="font-size:0.75rem; color:#76889e; font-family:\'Outfit\';">Fecha: ' + new Date().toLocaleDateString('es-ES') + '</span></div>';
+    element.insertBefore(printTitle, element.firstChild);
+
+    var opt = {
+      margin:       10,
+      filename:     'Futunet_Analisis_Competitivo_' + new Date().toISOString().slice(0, 10) + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    showToast('Generando PDF corporativo...', 'info');
+
+    html2pdf().from(element).set(opt).save().then(function() {
+      var tempHeader = document.getElementById('temp-pdf-header');
+      if (tempHeader) tempHeader.remove();
+      showToast('Reporte PDF descargado con éxito', 'success');
+    }).catch(function(err) {
+      var tempHeader = document.getElementById('temp-pdf-header');
+      if (tempHeader) tempHeader.remove();
+      showToast('Error al exportar PDF: ' + err.message, 'error');
+    });
+  }
+
   // ─── Public API ───
   window.AdminPanel = {
     init: init,
@@ -3818,7 +4485,17 @@
     editClientLocationFromMap: editClientLocationFromMap,
     locateTechnician: locateTechnician,
     saveClientLocation: saveClientLocation,
-    clearClientLocation: clearClientLocation
+    clearClientLocation: clearClientLocation,
+
+    // Competitors CRUD & exports
+    loadCompetitors: loadCompetitors,
+    openNewCompetitor: openNewCompetitor,
+    editCompetitor: editCompetitor,
+    saveCompetitor: saveCompetitor,
+    deleteCompetitor: deleteCompetitor,
+    exportCompetitorsToExcel: exportCompetitorsToExcel,
+    exportCompetitorsToWord: exportCompetitorsToWord,
+    exportCompetitorsToPDF: exportCompetitorsToPDF
   };
 })();
 

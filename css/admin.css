@@ -677,3 +677,51 @@
   50% { transform: scale(1.4); opacity: 0.5; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+/* ─── Competitor Marketing Analysis Styles ─── */
+.competitor-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.competitor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(10,112,162,0.08);
+}
+.competitor-logo-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f3f7fc;
+  border: 1px solid #e5eef8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0A70A2;
+}
+.competitor-logo-img {
+  max-height: 40px;
+  max-width: 120px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #f9fbff;
+  padding: 4px;
+  border: 1px solid #e5eef8;
+}
+
+/* SWOT styling inside competitors */
+.swot-grid-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .competitors-charts-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+  .swot-grid-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+}
