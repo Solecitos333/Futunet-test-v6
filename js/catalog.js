@@ -382,15 +382,6 @@ function initCartUI() {
   }
 }
 
-function setModalCartHandler(productId) {
-  const btnAddCart = document.getElementById('modal-add-cart-btn');
-  if (!btnAddCart) return;
-  btnAddCart.onclick = (event) => {
-    event.stopPropagation();
-    addToCart(productId);
-  };
-}
-
 function initModalCartButton() {
   const cartBtn = document.getElementById('modal-add-cart-btn');
   if (cartBtn) {
