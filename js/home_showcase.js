@@ -176,9 +176,17 @@
     if (hasInitialized) return;
     hasInitialized = true;
 
-    const items = uniqueById(getCatalogData())
-      .filter(isCandidate)
-      .sort((a, b) => scoreProduct(b) - scoreProduct(a) || normalizeText(a.title).localeCompare(normalizeText(b.title)));
+    // ⚡ Bolt: Optimize sorting using Schwartzian transform to avoid O(N log N) regex operations
+    const candidates = uniqueById(getCatalogData()).filter(isCandidate);
+
+    const items = candidates
+      .map(item => ({
+        item,
+        score: scoreProduct(item),
+        normalizedTitle: normalizeText(item.title)
+      }))
+      .sort((a, b) => b.score - a.score || a.normalizedTitle.localeCompare(b.normalizedTitle))
+      .map(decorated => decorated.item);
 
     if (items.length < 8) {
       if (!window.inventoryDataLoaded && typeof window.loadInventoryDataScript === 'function') {
