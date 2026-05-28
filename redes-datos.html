@@ -1,112 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redes y Datos — Futunet</title>
-  <meta name="description" content="Cableado estructurado, redes de datos, fibra óptica y soluciones de conectividad inalámbrica WiFi para oficinas y corporaciones en Santiago, República Dominicana." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redes y Conectividad de Datos — Futunet</title>
+  <meta name="description" content="Sistemas de cableado estructurado, redes de fibra óptica y redes WiFi gestionadas en la nube para oficinas y naves comerciales en Santiago, RD.">
+  
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Redes y Datos Profesionales — Futunet" />
+  <meta property="og:description" content="Conectividad de alto rendimiento. Cableado estructurado Cat6, fibra óptica, gabinetes, switches y WiFi Mesh administrado para empresas y locales comerciales en Santiago, RD." />
+  <meta property="og:image" content="https://futunet.com.do/img/redes.jpg" />
+  <meta property="og:url" content="https://futunet.com.do/redes-datos.html" />
+  <meta property="og:locale" content="es_DO" />
+  <meta property="og:site_name" content="Futunet" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Redes y Datos Profesionales — Futunet" />
+  <meta name="twitter:description" content="Conectividad de alto rendimiento. Cableado estructurado Cat6, fibra óptica, gabinetes, switches y WiFi Mesh administrado para empresas en Santiago." />
+  <meta name="twitter:image" content="https://futunet.com.do/img/redes.jpg" />
+  
+  <!-- CSS Globales -->
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.0" />
   <link rel="stylesheet" href="css/catalog.css?v=3.0" />
-  <link rel="icon" type="image/png" href="img/logo.webp" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json" />
-  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <style>
-    /* Estilos Premium de la Página de Servicio */
-    .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-    
-    .service-hero {
-      position: relative; height: 380px; display: flex; align-items: center;
-      background-size: cover; background-position: center; color: #fff; overflow: hidden;
-    }
-    .service-hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(9,16,24,0.4) 0%, rgba(9,16,24,0.85) 100%);
-      z-index: 1;
-    }
-    .service-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
-    .service-hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
-      letter-spacing: -0.03em;
-    }
-    .service-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
-
-    .service-section { padding: 60px 0; }
-    .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
-    
-    @media (max-width: 768px) {
-      .service-hero { height: 280px; }
-      .service-hero-title { font-size: 1.8rem; }
-      .service-hero-desc { font-size: 0.9rem; }
-      .service-grid-info { grid-template-columns: 1fr; gap: 30px; }
-    }
-
-    .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
-    .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
-    
-    .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
-    @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
-    .feature-item {
-      display: flex; gap: 12px; padding: 16px; border: 1px solid rgba(10,112,162,0.06);
-      border-radius: 16px; background: #fdfefe; box-shadow: 0 4px 12px rgba(10,112,162,0.02);
-    }
-    .feature-icon-wrapper {
-      width: 36px; height: 36px; border-radius: 50%; background: rgba(10,112,162,0.06);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2; flex-shrink: 0;
-    }
-    .feature-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 700; color: #0a101d; margin: 0 0 4px; }
-    .feature-text p { font-size: 0.8rem; color: #76889e; margin: 0; line-height: 1.4; }
-
-    /* Formulario de Solicitud */
-    .request-card {
-      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
-      padding: 30px; box-shadow: 0 10px 30px rgba(10,112,162,0.04); position: sticky; top: 100px;
-    }
-    .request-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .request-card p { font-size: 0.85rem; color: #76889e; margin: 0 0 20px; }
-    .request-form-group { margin-bottom: 14px; }
-    .request-form-label { display: block; font-size: 0.72rem; font-weight: 600; color: #394c60; margin-bottom: 4px; text-transform: uppercase; }
-    .request-form-input {
-      width: 100%; padding: 11px 14px; background: #f3f7fc; border: 1.5px solid #e5eef8;
-      border-radius: 12px; color: #0a101d; font-family: 'Outfit', sans-serif; font-size: 0.86rem;
-      transition: all 0.3s; outline: none; box-sizing: border-box;
-    }
-    .request-form-input:focus { border-color: #0A70A2; background: #fff; box-shadow: 0 0 0 3px rgba(10,112,162,0.08); }
-    .request-btn-submit {
-      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
-      font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, #0a7ab0, #22a4e0); box-shadow: 0 4px 14px rgba(10,112,162,0.18);
-      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .request-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,112,162,0.26); }
-    .request-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    /* Productos Asignados */
-    .service-products-section { background: #fdfefe; border-top: 1px solid rgba(10,112,162,0.03); padding: 60px 0; }
-    .service-products-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .service-products-section p { font-size: 0.9rem; color: #76889e; margin: 0 0 30px; }
-    .products-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-  </style>
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
+  
+  <!-- CSS Específico de Redes y Datos -->
+  <link rel="stylesheet" href="css/redes-datos.css">
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="is-loading">
 
+  <!-- Elemento Preloader -->
+  <div id="page-preloader" class="page-preloader" aria-hidden="true">
+    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="180" height="37" />
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+  <!-- Elemento SVG para Sprite de íconos -->
   <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
     <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </symbol>
   </svg>
 
+  <!-- Header (Navbar principal) -->
   <header class="site-header" role="banner">
     <nav id="navbar">
       <div class="nav-inner">
-        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+        <a href="index.html" class="nav-logo" aria-label="Ir al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
         </a>
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios" class="active">Servicios</a></li>
@@ -143,151 +102,1148 @@
     </div>
   </header>
 
-  <main id="service-page-container" class="service-page" data-service-id="redes">
-    <!-- Hero Banner -->
-    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/redes.jpg');">
-      <div class="container">
-        <div class="service-hero-content">
-          <h1 class="service-hero-title" id="service-title">Redes y Datos</h1>
-          <p class="service-hero-desc" id="service-subtitle">Conectividad estable y de alto rendimiento para oficinas, comercios e industrias.</p>
+  <!-- Hero Section (Estilo Cinemático Banner) -->
+  <section id="inicio" class="hero-carousel-slide hero-carousel-slide--banner active" style="min-height: 520px; height: auto; display: flex; align-items: center;">
+    <div class="hb-bg" style="background-image: url('img/redes.jpg');"></div>
+    <div class="hb-overlay"></div>
+    <div class="container" style="position: relative; z-index: 10; width: 100%;">
+      <div class="hb-body">
+        <span class="tech-corner tl"></span>
+        <span class="tech-corner tr"></span>
+        <span class="tech-corner bl"></span>
+        <span class="tech-corner br"></span>
+        <span class="hb-label" style="opacity: 1; transform: none;"><i data-lucide="network"></i> Infraestructura Crítica</span>
+        <h1 class="hb-title" id="service-title" style="opacity: 1; transform: none; font-size: clamp(2.2rem, 5.5vw, 3.5rem); margin-bottom: 20px; text-shadow: 0 4px 18px rgba(0,0,0,0.6);">Redes y Datos <span>Corporativos</span></h1>
+        <p class="hb-desc" style="opacity: 1; transform: none; font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 30px;">
+          Diseñamos y desplegamos infraestructuras de telecomunicaciones robustas y estables. Cableado estructurado Cat6/Cat6A, redes inalámbricas corporativas WiFi, enlaces punto a punto y racks de servidores organizados profesionalmente.
+        </p>
+        <div class="hb-actions" style="opacity: 1; transform: none;">
+          <a href="#cableado" class="btn btn-primary" style="border-radius: 50px; padding: 14px 32px; font-weight: 700;">Explorar Servicios</a>
+          <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20cotizar%20un%20servicio%20de%20redes%20y%20datos%20cableados." target="_blank" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700;">
+            <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Cotizar Ahora
+          </a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Main Content Grid -->
-    <section class="service-section">
-      <div class="container">
-        <div class="service-grid-info">
-          <!-- Text and Specs -->
-          <div class="service-details">
-            <h3>Diseño e infraestructura de red profesional</h3>
-            <p id="service-long-description">
-              Desplegamos sistemas de cableado estructurado, redes de fibra óptica interna, enlaces inalámbricos de largo alcance y redes WiFi corporativas gestionadas en la nube. Te ayudamos a eliminar las caídas de internet y asegurar que todos los dispositivos de tu empresa funcionen a máxima velocidad de forma segura.
-            </p>
+  <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
+  <div class="service-subnav">
+    <div class="subnav-container">
+      <ul class="subnav-links">
+        <li><a href="#cableado" class="active">Cableado Estructurado</a></li>
+        <li><a href="#wifi">WiFi Corporativo</a></li>
+        <li><a href="#racks">Racks y Gabinetes</a></li>
+        <li><a href="#fibra-enlaces">Fibra y Enlaces</a></li>
+        <li><a href="#cotizador">Estimador de Red</a></li>
+        <li><a href="#productos-listado" class="highlight-link"><i class="fas fa-store"></i> Ver Catálogo</a></li>
+      </ul>
+    </div>
+  </div>
 
-            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
-            <div class="features-list" id="service-features-list">
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="cable"></i></div>
-                <div class="feature-text">
-                  <h4>Cableado Estructurado</h4>
-                  <p>Certificación en Cat6 y Cat6A para máxima velocidad local.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="wifi"></i></div>
-                <div class="feature-text">
-                  <h4>WiFi Corporativo</h4>
-                  <p>Acceso inalámbrico continuo y portal cautivo de invitados.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="server"></i></div>
-                <div class="feature-text">
-                  <h4>Gabinete & Racks</h4>
-                  <p>Organización, rotulado y montaje de servidores y switches.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="router"></i></div>
-                <div class="feature-text">
-                  <h4>Enlaces Inalámbricos</h4>
-                  <p>Conexión inalámbrica punto a punto para sucursales lejanas.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sticky Lead Form -->
-          <div>
-            <div class="request-card">
-              <h3>Solicitar Cotización</h3>
-              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
-              
-              <form id="service-request-form">
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-name">Nombre Completo</label>
-                  <input type="text" id="req-name" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-email">Correo Electrónico</label>
-                  <input type="email" id="req-email" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
-                  <input type="text" id="req-company" class="request-form-input" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
-                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: cableado estructurado para 12 cubículos en oficina)..."></textarea>
-                </div>
-                
-                <button type="submit" class="request-btn-submit" id="req-submit-btn">
-                  <i data-lucide="send"></i> Enviar Solicitud
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Linked Products Section -->
-    <section class="service-products-section" id="related-products-section" style="display:none;">
-      <div class="container">
-        <h3>Equipos relacionados de nuestro catálogo</h3>
-        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
-        <div class="products-grid-wrapper" id="service-products-grid">
-          <!-- Dynamically filled by script -->
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer" role="contentinfo">
+  <!-- Carrusel de Marcas (Brands slider) -->
+  <section class="brands-section">
     <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col brand-col">
-          <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo" width="1009" height="207" />
-          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Servicios</h4>
-          <ul>
-            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
-            <li><a href="redes-datos.html">Redes y datos</a></li>
-            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
-            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Compañía</h4>
-          <ul>
-            <li><a href="index.html#nosotros">Nosotros</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
-          </ul>
+      <p class="brands-title-top">Trabajamos con tecnologías y marcas líderes globales</p>
+      <div class="brands-slider">
+        <div class="brand-track">
+          <!-- Marcas de Redes -->
+          <a href="catalogo.html?brand=Ubiquiti" class="brand-item" title="Ubiquiti Networks"><img src="img/marcas/ubiquiti.svg" alt="Ubiquiti Networks" loading="lazy"></a>
+          <a href="catalogo.html?brand=MikroTik" class="brand-item" title="MikroTik"><img src="img/marcas/mikrotik.svg" alt="MikroTik" loading="lazy"></a>
+          <a href="catalogo.html?brand=Cisco" class="brand-item" title="Cisco Systems"><img src="img/marcas/cisco.svg" alt="Cisco Systems" loading="lazy"></a>
+          <a href="catalogo.html?brand=TP-Link" class="brand-item" title="TP-Link"><img src="img/marcas/tp-link.svg" alt="TP-Link" loading="lazy"></a>
+          <a href="catalogo.html?brand=Netgear" class="brand-item" title="Netgear"><img src="img/marcas/netgear.svg" alt="Netgear" loading="lazy"></a>
+          <a href="catalogo.html?brand=Linksys" class="brand-item" title="Linksys"><img src="img/marcas/linksys.svg" alt="Linksys" loading="lazy"></a>
+          <a href="catalogo.html?brand=Juniper" class="brand-item" title="Juniper Networks"><img src="img/marcas/juniper.svg" alt="Juniper Networks" loading="lazy"></a>
+          <!-- Duplicado para efecto sin fin -->
+          <a href="catalogo.html?brand=Ubiquiti" class="brand-item" title="Ubiquiti Networks"><img src="img/marcas/ubiquiti.svg" alt="Ubiquiti Networks" loading="lazy"></a>
+          <a href="catalogo.html?brand=MikroTik" class="brand-item" title="MikroTik"><img src="img/marcas/mikrotik.svg" alt="MikroTik" loading="lazy"></a>
+          <a href="catalogo.html?brand=Cisco" class="brand-item" title="Cisco Systems"><img src="img/marcas/cisco.svg" alt="Cisco Systems" loading="lazy"></a>
+          <a href="catalogo.html?brand=TP-Link" class="brand-item" title="TP-Link"><img src="img/marcas/tp-link.svg" alt="TP-Link" loading="lazy"></a>
+          <a href="catalogo.html?brand=Netgear" class="brand-item" title="Netgear"><img src="img/marcas/netgear.svg" alt="Netgear" loading="lazy"></a>
+          <a href="catalogo.html?brand=Linksys" class="brand-item" title="Linksys"><img src="img/marcas/linksys.svg" alt="Linksys" loading="lazy"></a>
+          <a href="catalogo.html?brand=Juniper" class="brand-item" title="Juniper Networks"><img src="img/marcas/juniper.svg" alt="Juniper Networks" loading="lazy"></a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
+    </div>
+  </section>
+
+  <!-- Sección Cableado Estructurado -->
+  <section id="cableado" class="section">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Conexión Física de Alto Nivel</span>
+        <h2 class="section-title">Cableado Estructurado Profesional</h2>
+        <p class="section-sub">Diseñamos la autopista digital interna de su empresa con cableado certificado, garantizando velocidad Gigabit y minimizando las caídas.</p>
       </div>
+
+      <div class="about-grid reveal" style="margin-top: 40px;">
+        <div class="about-card" style="padding: 40px 30px;">
+          <h3 class="about-card-title" style="font-family:'Space Grotesk', sans-serif; font-weight:700; color:#0f172a; font-size:1.35rem; margin-bottom:15px;">Estándares de Calidad</h3>
+          <p class="about-card-desc" style="color:#475569; font-size:0.9rem; margin-bottom:25px;">Instalaciones estéticas y normadas siguiendo los estándares internacionales ANSI/TIA/EIA:</p>
+          <div class="about-info-grid">
+            <div class="about-info-item">
+              <label><i class="fas fa-microchip"></i> Certificación Cat6 / Cat6A</label>
+              <span>Velocidades de hasta 10 Gbps para transferencia interna de archivos pesados y servidores.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-tools"></i> Canalización Profesional</label>
+              <span>Tubería EMT, canaletas de PVC de alto impacto o bandejas tipo malla según el entorno corporativo.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-tag"></i> Etiquetado Normado</label>
+              <span>Rotulación en ambos extremos (patch panels y rosetas de pared) para facilitar mantenimientos futuros.</span>
+            </div>
+            <div class="about-info-item">
+              <label><i class="fas fa-tasks"></i> Peinado e Hilado de Cables</label>
+              <span>Cero marañas. Peinado estricto de cables con organizadores de velcro para evitar interferencias.</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="about-card card-img-container">
+          <img src="images/redes/structured_cabling.png" alt="Instalación profesional de cableado estructurado Cat6 peinado e identificado en patch panel" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección WiFi Corporativo -->
+  <section id="wifi" class="section bg-light">
+    <div class="container">
+      <div class="about-grid reveal" style="grid-template-columns: 0.9fr 1.1fr;">
+        <div class="about-card card-img-container">
+          <img src="images/redes/wifi_ap.png" alt="Punto de acceso WiFi corporativo montado en el techo con luz led azul" loading="lazy" decoding="async">
+        </div>
+        <div class="about-text-column" style="display:flex; flex-direction:column; justify-content:center;">
+          <span class="section-label">Cobertura Inalámbrica Sin Interrupciones</span>
+          <h2 class="section-title">WiFi Corporativo Gestionado</h2>
+          <p class="section-sub">
+            Elimine los puntos muertos y las reconexiones constantes. Desplegamos sistemas WiFi Mesh con administración centralizada en la nube, optimizados para soportar alta densidad de dispositivos móviles y laptops.
+          </p>
+          <ul class="values-list" style="list-style:none; padding:0; display:flex; flex-direction:column; gap:16px; margin: 24px 0;">
+            <li class="value-item" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="value-icon-box" style="color:#0ea5e9; font-size:1.1rem; padding-top:2px;"><i class="fas fa-check-circle"></i></div>
+              <div class="value-text">
+                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; font-weight:700; color:#0f172a; margin:0 0 4px;">Seamless Roaming</h4>
+                <p style="color:#475569; font-size:0.86rem; margin:0; line-height:1.4;">Camine por toda su oficina sin perder la conexión ni la llamada VoIP activa al pasar de un Access Point a otro.</p>
+              </div>
+            </li>
+            <li class="value-item" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="value-icon-box" style="color:#0ea5e9; font-size:1.1rem; padding-top:2px;"><i class="fas fa-check-circle"></i></div>
+              <div class="value-text">
+                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; font-weight:700; color:#0f172a; margin:0 0 4px;">Portal Cautivo de Invitados</h4>
+                <p style="color:#475569; font-size:0.86rem; margin:0; line-height:1.4;">Aisle su red interna y proporcione internet seguro a visitas a través de páginas de bienvenida personalizadas.</p>
+              </div>
+            </li>
+          </ul>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('redes_wifi')" style="color:var(--brand); font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+            Ver Puntos de Acceso <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Racks y Gabinetes -->
+  <section id="racks" class="section">
+    <div class="container">
+      <div class="about-grid reveal" style="grid-template-columns: 1.15fr 0.85fr;">
+        <div class="about-text-column" style="display:flex; flex-direction:column; justify-content:center;">
+          <span class="section-label">Organización Centralizada</span>
+          <h2 class="section-title">Gabinete de Telecomunicaciones (Racks)</h2>
+          <p class="section-sub">
+            El corazón de su red debe estar protegido y ordenado. Diseñamos e instalamos racks de piso y gabinetes murales para albergar de forma segura switches, servidores, DVRs y sistemas de respaldo energético.
+          </p>
+          <ul class="values-list" style="list-style:none; padding:0; display:flex; flex-direction:column; gap:16px; margin: 24px 0;">
+            <li class="value-item" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="value-icon-box" style="color:#0ea5e9; font-size:1.1rem; padding-top:2px;"><i class="fas fa-check-circle"></i></div>
+              <div class="value-text">
+                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; font-weight:700; color:#0f172a; margin:0 0 4px;">Optimización Térmica</h4>
+                <p style="color:#475569; font-size:0.86rem; margin:0; line-height:1.4;">Integramos bandejas de ventilación inteligente para extraer el calor residual y prolongar la vida de sus switches.</p>
+              </div>
+            </li>
+            <li class="value-item" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="value-icon-box" style="color:#0ea5e9; font-size:1.1rem; padding-top:2px;"><i class="fas fa-check-circle"></i></div>
+              <div class="value-text">
+                <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; font-weight:700; color:#0f172a; margin:0 0 4px;">Seguridad Física</h4>
+                <p style="color:#475569; font-size:0.86rem; margin:0; line-height:1.4;">Gabinetes cerrados con llave y puertas de vidrio templado para evitar manipulación de personal no autorizado.</p>
+              </div>
+            </li>
+          </ul>
+          <a href="#productos-listado" class="btn-link" onclick="filterBySubcategory('redes_racks')" style="color:var(--brand); font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+            Ver Gabinetes y Accesorios <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="about-card card-img-container">
+          <img src="images/redes/network_rack.png" alt="Rack de servidores y redes organizado profesionalmente con switches POE en funcionamiento" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Enlaces y Fibra Óptica (Estilo Banner CTA Cinemático) -->
+  <section id="fibra-enlaces" class="cta-banner cyber-banner">
+    <div class="cta-banner-grid-overlay"></div>
+    <div class="cta-banner-inner reveal">
+      <span class="section-label badge-alert">Alta Velocidad y Larga Distancia</span>
+      <h2 class="cta-banner-title">Enlaces Inalámbricos y Fibra Óptica</h2>
+      <p class="cta-banner-desc">
+        Interconecte oficinas, naves o sucursales a kilómetros de distancia con enlaces de radio de alta estabilidad. Desplegamos anillos de fibra óptica monomodo interna para comunicación inmediata libre de pérdidas.
+      </p>
+      <div class="cyber-status-panel">
+        <span class="cyber-pulse"></span>
+        <span class="cyber-status-text">ANCHO DE BANDA DE ENLACE: 10 Gbps (ACTIVO EN LÍNEA)</span>
+      </div>
+      <br>
+      <a href="#productos-listado" class="btn btn-light" onclick="filterBySubcategory('redes_fibra')">
+        Explorar Equipos de Fibra
+      </a>
+    </div>
+  </section>
+
+  <!-- Banner de Venta Cruzada (Redes + Climatización y Energía) -->
+  <div class="cross-selling-banner reveal" style="max-width: 1200px; margin: -20px auto 60px; padding: 0 20px;">
+    <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 24px; padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; gap: 30px; flex-wrap: wrap; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+      <div style="display: flex; gap: 20px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.5rem; flex-shrink: 0;">
+          <i class="fas fa-wind"></i>
+        </div>
+        <div>
+          <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; color: white; margin: 0 0 6px;">¿Tus equipos de red están expuestos a sobrecalentamiento?</h4>
+          <p style="color: #94a3b8; font-size: 0.88rem; margin: 0; line-height: 1.5;">Los switches core y servidores requieren climatización continua para evitar bloqueos y fallos de hardware. Protege tu rack con sistemas de aire acondicionado eficientes.</p>
+        </div>
+      </div>
+      <a href="energia-climatizacion.html" class="btn btn-outline" style="border-radius: 50px; padding: 12px 28px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.88rem; text-decoration: none;">
+        Ver Soluciones de Climatización
+      </a>
+    </div>
+  </div>
+
+  <!-- Cotizador Interactivo de Redes -->
+  <section id="cotizador" class="section">
+    <div class="container">
+      <div class="estimator-header" style="text-align: center; margin-bottom: 45px;">
+        <span class="section-label">Cotizador Inteligente</span>
+        <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-top: 10px; letter-spacing: -0.5px;">Estima tu Infraestructura de Red al Instante</h3>
+        <p style="color: #64748b; font-size: 0.98rem; max-width: 600px; margin: 10px auto 0; line-height: 1.5;">Elige las características físicas y requerimientos técnicos del espacio a conectar para calcular tu cotización de instalación y equipos.</p>
+      </div>
+
+      <!-- Consola del Cotizador Premium -->
+      <div class="estimator-console reveal">
+        <!-- Barra Superior Estilo Terminal -->
+        <div class="estimator-top-bar">
+          <div class="top-bar-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="top-bar-title">
+            <i class="fas fa-network-wired" style="color: var(--brand); margin-right: 6px;"></i>
+            FUTUNET NETWORK ARCHITECT v2.0 — SIMULATION PANEL
+          </div>
+          <div class="top-bar-status">
+            <span class="status-indicator"></span> CONECTADO
+          </div>
+        </div>
+
+        <div class="estimator-wizard">
+          <!-- Nodos de Progreso (Roadmap) -->
+          <div class="estimator-progress-container">
+            <div class="progress-track">
+              <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div class="estimator-steps">
+              <div class="step-indicator active" data-step="1">
+                <div class="node-circle">
+                  <span class="node-number">1</span>
+                  <i class="fas fa-check node-check"></i>
+                </div>
+                <span class="node-label">Entorno</span>
+              </div>
+              <div class="step-indicator" data-step="2">
+                <div class="node-circle">
+                  <span class="node-number">2</span>
+                  <i class="fas fa-check node-check"></i>
+                </div>
+                <span class="node-label">Cableado</span>
+              </div>
+              <div class="step-indicator" data-step="3">
+                <div class="node-circle">
+                  <span class="node-number">3</span>
+                  <i class="fas fa-check node-check"></i>
+                </div>
+                <span class="node-label">Gabinete</span>
+              </div>
+              <div class="step-indicator" data-step="4">
+                <div class="node-circle">
+                  <span class="node-number">4</span>
+                  <i class="fas fa-check node-check"></i>
+                </div>
+                <span class="node-label">WiFi</span>
+              </div>
+              <div class="step-indicator" data-step="5">
+                <div class="node-circle">
+                  <span class="node-number">5</span>
+                  <i class="fas fa-check node-check"></i>
+                </div>
+                <span class="node-label">Presupuesto</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paso 1: Tipo de Entorno -->
+          <div class="estimator-step-content active" data-step="1">
+            <h4 class="step-question">¿Qué tipo de entorno requiere la instalación de red?</h4>
+            <div class="estimator-options env-options">
+              <label class="option-card">
+                <input type="radio" name="est-net-env" value="hogar_pyme" checked>
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-home"></i>
+                  </div>
+                  <strong class="option-title">Hogar / Pyme</strong>
+                  <span class="option-desc">Casas de varios pisos o locales comerciales pequeños con baja densidad de tráfico.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-env" value="oficina_mediana">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-building"></i>
+                  </div>
+                  <strong class="option-title">Oficina Mediana</strong>
+                  <span class="option-desc">Instalación en oficinas con múltiples cubículos, impresoras de red y telefonía VoIP.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-env" value="nave_comercio">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-warehouse"></i>
+                  </div>
+                  <strong class="option-title">Nave / Fábrica</strong>
+                  <span class="option-desc">Ambiente industrial que requiere canalizaciones EMT rígidas y enlaces de larga distancia.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-env" value="edificio_corp">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-hotel"></i>
+                  </div>
+                  <strong class="option-title">Corporativo / Edificio</strong>
+                  <span class="option-desc">Múltiples pisos conectados por fibra óptica interna (Backbone) y redundancia de datos.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Paso 2: Puntos de Cableado -->
+          <div class="estimator-step-content" data-step="2" style="display: none;">
+            <h4 class="step-question">¿Cuántos puntos de red cableados (Drops) estimas instalar?</h4>
+            <div class="estimator-options">
+              <label class="option-card">
+                <input type="radio" name="est-net-drops" value="10" checked>
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-plug"></i>
+                  </div>
+                  <strong class="option-title">Hasta 10 Puntos</strong>
+                  <span class="option-desc">Ideal para oficinas pequeñas con computadoras y cámaras clave cableadas.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-drops" value="30">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-network-wired"></i>
+                  </div>
+                  <strong class="option-title">10 a 30 Puntos</strong>
+                  <span class="option-desc">Estándar para empresas en crecimiento con necesidades de VoIP y servidores locales.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-drops" value="70">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-project-diagram"></i>
+                  </div>
+                  <strong class="option-title">30 a 70 Puntos</strong>
+                  <span class="option-desc">Despliegue mediano-alto con switches PoE administrables y racks centralizados.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-drops" value="150">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-server"></i>
+                  </div>
+                  <strong class="option-title">Más de 70 Puntos</strong>
+                  <span class="option-desc">Infraestructura a gran escala que requiere múltiples switches core redundantes.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Paso 3: Gabinete & Racks -->
+          <div class="estimator-step-content" data-step="3" style="display: none;">
+            <h4 class="step-question">¿Dónde alojará los equipos centrales de red?</h4>
+            <div class="estimator-options">
+              <label class="option-card">
+                <input type="radio" name="est-net-rack" value="mesa" checked>
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-desktop"></i>
+                  </div>
+                  <strong class="option-title">Switch de Escritorio</strong>
+                  <span class="option-desc">Sin gabinete cerrado. Equipos instalados en un escritorio o repisa abierta básica.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-rack" value="mural">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-border-all"></i>
+                  </div>
+                  <strong class="option-title">Gabinete de Pared (Mural)</strong>
+                  <span class="option-desc">Gabinete de pared (6U a 12U) con puerta de vidrio templado y llave de seguridad.</span>
+                </div>
+              </label>
+              <label class="option-card">
+                <input type="radio" name="est-net-rack" value="piso">
+                <div class="check-badge"><i class="fas fa-check"></i></div>
+                <div class="option-card-content">
+                  <div class="option-icon-wrapper">
+                    <i class="fas fa-server"></i>
+                  </div>
+                  <strong class="option-title">Rack de Piso Autoportante</strong>
+                  <span class="option-desc">Gabinete de piso completo (22U a 42U) para alojar múltiples servidores y UPS pesadas.</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Paso 4: WiFi & Simulador HUD -->
+          <div class="estimator-step-content" data-step="4" style="display: none;">
+            <h4 class="step-question">¿Qué nivel de cobertura inalámbrica WiFi requiere?</h4>
+            <div class="quality-step-grid">
+              <!-- Opciones WiFi -->
+              <div class="estimator-options vertical-options">
+                <label class="option-card">
+                  <input type="radio" name="est-net-wifi" value="ninguno" checked>
+                  <div class="check-badge"><i class="fas fa-check"></i></div>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper standard-icon">
+                      <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="option-text-group">
+                      <strong class="option-title">Sin WiFi Adicional</strong>
+                      <span class="option-desc">Conexión WiFi provista únicamente por el router básico del proveedor de internet.</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="est-net-wifi" value="basica">
+                  <div class="check-badge"><i class="fas fa-check"></i></div>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper colorvu-icon">
+                      <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="option-text-group">
+                      <strong class="option-title">Cobertura Básica (1 AP)</strong>
+                      <span class="option-desc">Instalación de 1 Access Point corporativo para cobertura en zona crítica sin cortes.</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="est-net-wifi" value="total">
+                  <div class="check-badge"><i class="fas fa-check"></i></div>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper premium-icon">
+                      <i class="fas fa-cubes"></i>
+                    </div>
+                    <div class="option-text-group">
+                      <strong class="option-title">Red Mesh Total (2-4 APs)</strong>
+                      <span class="option-desc">Múltiples Access Points interconectados con Roaming fluido para oficinas medianas.</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="est-net-wifi" value="alta">
+                  <div class="check-badge"><i class="fas fa-check"></i></div>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper premium-icon">
+                      <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div class="option-text-group">
+                      <strong class="option-title">Alta Densidad (5+ APs)</strong>
+                      <span class="option-desc">Múltiples APs de alta ganancia controlados por software, listos para cientos de conexiones.</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+              
+              <!-- Simulador HUD de Red -->
+              <div class="quality-simulator-preview">
+                <div class="simulator-hud-header">
+                  <span class="hud-tag"><i class="fas fa-circle-notch fa-spin text-info" style="margin-right: 6px;"></i> DIAGNÓSTICO EN TIEMPO REAL</span>
+                  <span class="hud-timestamp" id="simulator-time">SYS_OK</span>
+                </div>
+                <div class="simulator-screen">
+                  <img id="simulator-image" src="images/redes/sim_network_normal.png" alt="Simulación de panel de diagnóstico de red" class="simulator-img">
+                  <div class="screen-overlay">
+                    <div class="osd-corner top-left"></div>
+                    <div class="osd-corner top-right"></div>
+                    <div class="osd-corner bottom-left"></div>
+                    <div class="osd-corner bottom-right"></div>
+                    <div class="osd-cam-name">FUTUNET NETWORK ANALYZER</div>
+                    <div class="osd-cam-specs" id="osd-specs">BANDWIDTH: 100 Mbps | RTD: 12ms</div>
+                  </div>
+                </div>
+                <div class="simulator-hud-footer">
+                  <p class="simulator-desc" id="simulator-desc">Red básica doméstica y comercial ligera. Conectada directamente a través del módem de fibra del proveedor local.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Paso 5: Resumen y Presupuesto -->
+          <div class="estimator-step-content" data-step="5" style="display: none;">
+            <h4 class="step-question">Resumen de Configuración de Infraestructura de Red:</h4>
+            
+            <div class="summary-box">
+              <div class="summary-details">
+                <div class="console-summary-header">
+                  <span class="status-indicator"></span> TOPOLOGÍA Y EQUIPAMIENTO PREVIAMENTE ESTIMADO
+                </div>
+                <ul class="summary-list">
+                  <li><i class="fas fa-check-circle"></i> Entorno de Red: <strong id="sum-net-env">Hogar / Pyme</strong></li>
+                  <li><i class="fas fa-check-circle"></i> Puntos de Red: <strong id="sum-net-drops">10 Puntos</strong></li>
+                  <li><i class="fas fa-check-circle"></i> Gabinete y Armado: <strong id="sum-net-rack">Switch de Escritorio</strong></li>
+                  <li><i class="fas fa-check-circle"></i> Sistema Inalámbrico: <strong id="sum-net-wifi">Sin WiFi Adicional</strong></li>
+                  <li><i class="fas fa-check-circle"></i> Instalación certificada con rotulado de cables y patch cords incluidos</li>
+                </ul>
+              </div>
+              <div class="price-indicator">
+                <span class="price-label">Inversión Estimada</span>
+                <h3 id="sum-price">RD$ 15,000*</h3>
+                <small class="price-disclaimer">*Precio de referencia para Santiago, RD. Incluye equipamiento sugerido e instalación profesional certificada.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones de Navegación -->
+          <div class="estimator-actions">
+            <button type="button" class="btn btn-outline" id="est-prev-btn" style="display: none;">Anterior</button>
+            <button type="button" class="btn btn-primary" id="est-next-btn">Siguiente</button>
+            <a href="#" target="_blank" class="btn btn-wa" id="est-wa-btn" style="display: none;">
+              <svg width="16" height="16" fill="white" style="margin-right: 6px;"><use href="#wa-icon"/></svg> Solicitar Presupuesto por WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <!-- Sellos de Confianza y Garantías -->
+        <div class="estimator-trust-seals">
+          <div class="trust-seal-item">
+            <div class="seal-icon-box"><i class="fas fa-shield-alt"></i></div>
+            <div class="seal-text-group">
+              <span class="seal-title">Garantía Certificada</span>
+              <span class="seal-subtitle">Pruebas Fluke y reportes técnicos</span>
+            </div>
+          </div>
+          <div class="trust-seal-item">
+            <div class="seal-icon-box"><i class="fas fa-user-shield"></i></div>
+            <div class="seal-text-group">
+              <span class="seal-title">Ingeniería Certificada</span>
+              <span class="seal-subtitle">Instaladores y diseñadores certificados</span>
+            </div>
+          </div>
+          <div class="trust-seal-item">
+            <div class="seal-icon-box"><i class="fas fa-clipboard-check"></i></div>
+            <div class="seal-text-group">
+              <span class="seal-title">Levantamiento Sin Costo</span>
+              <span class="seal-subtitle">Evaluación física en Santiago, RD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- Sección Catálogo de Productos y Filtros -->
+  <section class="section" id="productos-listado">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Equipos e Infraestructura en Stock</span>
+        <h2 class="section-title">Catálogo de Equipos de Red</h2>
+        <p class="section-sub">Consulte nuestro inventario de componentes y hardware de red. Filtre por subcategoría para agregar al carrito de cotización.</p>
+      </div>
+
+      <!-- Filtros de Subcategoría (Pills estilo catálogo) -->
+      <div class="subcategory-filters-wrapper">
+        <div class="subcategory-filters">
+          <button type="button" class="filter-btn active" data-filter="all">Todos</button>
+          <button type="button" class="filter-btn" data-filter="redes_cableado">Cableado</button>
+          <button type="button" class="filter-btn" data-filter="redes_wifi">WiFi & APs</button>
+          <button type="button" class="filter-btn" data-filter="redes_switches">Switches</button>
+          <button type="button" class="filter-btn" data-filter="redes_racks">Racks & Gabinetes</button>
+          <button type="button" class="filter-btn" data-filter="redes_fibra">Fibra Óptica</button>
+          <button type="button" class="filter-btn" data-filter="redes_herramientas">Herramientas</button>
+        </div>
+      </div>
+
+      <!-- Grid de Productos (Alimentado por service-page.js) -->
+      <div class="service-products-grid" id="service-products-grid">
+        <div class="loading-products" style="grid-column: 1/-1; text-align: center; padding: 50px 0; color: var(--brand);">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i> Cargando catálogo de redes...
+        </div>
+      </div>
+      
+      <!-- Mensaje cuando la categoría está vacía -->
+      <div id="no-products-msg" class="no-products-msg" style="display: none; text-align: center; padding: 60px 0; border: 1px dashed #eaeaea; border-radius: 16px; margin-top: 20px;">
+        <i class="fas fa-box-open" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px; display: block;"></i>
+        <p style="font-weight: 600; color: #64748b;">No hay equipos disponibles en esta categoría por el momento.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección Preguntas Frecuentes (FAQs) -->
+  <section id="faqs" class="section bg-light" style="padding: 80px 0;">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Respuestas Rápidas</span>
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <p class="section-sub">Dudas comunes sobre cableado estructurado, redes de datos y cobertura de internet WiFi.</p>
+      </div>
+      
+      <div class="faqs-container reveal" style="max-width: 800px; margin: 40px auto 0; display: flex; flex-direction: column; gap: 16px;">
+        <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+          <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+            <span>¿Cuál es la diferencia entre cableado Cat6 y Cat6A?</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+          </button>
+          <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+            <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+              El cable Cat6 soporta velocidades de hasta 1 Gbps a distancias de 100 metros (y 10 Gbps hasta 37-55 metros en condiciones ideales). El cable Cat6A está completamente blindado contra interferencias electromagnéticas y soporta tasas de 10 Gbps a lo largo de los 100 metros completos. Cat6 es ideal para oficinas generales y terminales de trabajo, mientras que Cat6A se recomienda para troncales (Backbones), salas de servidores y cableado industrial.
+            </p>
+          </div>
+        </div>
+        
+        <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+          <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+            <span>¿Por qué mi WiFi comercial se cae o es lento si tengo contratada alta velocidad?</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+          </button>
+          <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+            <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+              Normalmente esto no se debe a la velocidad del proveedor de internet, sino a la saturación del router doméstico instalado por la compañía telefónica, el cual no está diseñado para manejar múltiples conexiones concurrentes (más de 15 dispositivos). Al instalar Access Points gestionados profesionalmente, distribuimos el tráfico y el balanceo de carga para que la red funcione de forma fluida y sin cortes.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+          <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+            <span>¿Qué es la certificación de red y por qué es importante?</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+          </button>
+          <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+            <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+              La certificación de red consiste en someter a cada punto de cableado a rigurosas pruebas de transmisión con un equipo analizador (como Fluke Networks). Este proceso valida que el cableado cumpla estrictamente con la normativa y velocidades de transmisión (cero atenuación, pérdida de paquetes o cortocircuito). Entregamos un reporte de certificación detallado por puerto para la garantía de su infraestructura corporativa.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+          <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+            <span>¿Tiene costo el levantamiento técnico para cotización?</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+          </button>
+          <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+            <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+              No. Ofrecemos visitas técnicas y levantamientos físicos sin costo alguno dentro de Santiago, República Dominicana. Un ingeniero especializado visitará sus instalaciones para evaluar la estructura física, los puntos de red requeridos y proponer el mejor trazado y equipamiento de forma gratuita.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Banner de Call to Action Final con Formulario Integrado -->
+  <section class="cta-banner" style="background: linear-gradient(135deg, var(--brand-dark, #020617) 0%, #0d1e36 100%); padding: 80px 0; position: relative;">
+    <div class="cta-banner-grid-overlay"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <div class="cta-grid reveal">
+        <!-- Columna de contacto rápido -->
+        <div class="cta-info-column" style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
+          <span class="section-label">Contacto de Ingeniería</span>
+          <h2 style="font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.2; margin-bottom: 20px; color: white;">¿Listo para optimizar la red de tu negocio?</h2>
+          <p style="color: #94a3b8; font-size: 1.05rem; line-height: 1.6; margin-bottom: 35px; max-width: 500px;">
+            Hable con uno de nuestros especialistas en redes hoy mismo para agendar un levantamiento técnico presencial o recibir una propuesta económica formal sin costo.
+          </p>
+          <div class="cta-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20para%20un%20proyecto%20de%20redes%20de%20datos." target="_blank" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; background: #25d366; box-shadow: 0 10px 24px rgba(37,211,102,0.25); text-decoration: none;">
+              <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Chat en WhatsApp
+            </a>
+            <a href="tel:+18297411041" class="btn btn-outline" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; border: 2px solid rgba(255,255,255,0.4); color: white; background: transparent; text-decoration: none;">
+              <i class="fas fa-phone" style="margin-right: 8px;"></i> Llámanos: (829) 741-1041
+            </a>
+          </div>
+        </div>
+
+        <!-- Columna del Formulario de Solicitud -->
+        <div class="cta-form-column">
+          <div class="about-card dark-highlight" style="padding: 40px; margin: 0; background: rgba(10, 25, 47, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(11, 126, 181, 0.25) !important;">
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 8px; text-align: left;">Solicitar Propuesta</h3>
+            <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 24px; text-align: left;">Rellene los datos básicos de su necesidad técnica y le contactaremos a la brevedad.</p>
+            
+            <form id="service-request-form" style="display: flex; flex-direction: column; gap: 16px;">
+              <div class="request-form-group" style="text-align: left; margin: 0;">
+                <label class="request-form-label" for="req-name" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Nombre Completo</label>
+                <input type="text" id="req-name" class="request-form-input" required placeholder="Ej: Francisco Gómez" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+              </div>
+              <div class="request-form-group" style="text-align: left; margin: 0;">
+                <label class="request-form-label" for="req-phone" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Teléfono / WhatsApp</label>
+                <input type="tel" id="req-phone" class="request-form-input" required placeholder="Ej: 829-741-1041" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+              </div>
+              <div class="request-form-group" style="text-align: left; margin: 0;">
+                <label class="request-form-label" for="req-email" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Correo Electrónico</label>
+                <input type="email" id="req-email" class="request-form-input" required placeholder="Ej: gerente@empresa.com" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+              </div>
+              <div class="request-form-group" style="text-align: left; margin: 0;">
+                <label class="request-form-label" for="req-company" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Empresa (Opcional)</label>
+                <input type="text" id="req-company" class="request-form-input" placeholder="Ej: Constructora Santiago" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+              </div>
+              <div class="request-form-group" style="text-align: left; margin: 0;">
+                <label class="request-form-label" for="req-message" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Detalles del Proyecto</label>
+                <textarea id="req-message" class="request-form-input" rows="3" required placeholder="Ej: Requerimos instalación de red inalámbrica y cableado estructurado Cat6 para una oficina de 15 puestos..." style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; resize: vertical; transition: all 0.3s; outline: none;"></textarea>
+              </div>
+              
+              <button type="submit" class="request-btn-submit" id="req-submit-btn" style="background: linear-gradient(135deg, var(--brand) 0%, #0ea5e9 100%); color: white; border: none; border-radius: 50px; padding: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 14px rgba(11, 126, 181, 0.3); font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fas fa-paper-plane"></i> Enviar Propuesta
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Copia exacta del de seguridad-electronica.html) -->
+  <footer>
+    <div class="footer-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px;">
+      <div class="footer-col footer-brand">
+        <img src="img/logo-navbar.webp" alt="Futunet SRL Logo" class="footer-logo" width="1009" height="207" style="max-width: 180px; height: auto;">
+        <p style="color: rgba(255,255,255,0.5); font-size: .88rem; margin-top: 12px; line-height: 1.75;">Conectando el futuro y asegurando tu tranquilidad con soluciones tecnológicas de vanguardia.</p>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Enlaces Rápidos</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
+          <li><a href="index.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Inicio</a></li>
+          <li><a href="index.html#servicios" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Servicios</a></li>
+          <li><a href="index.html#nosotros" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Nosotros</a></li>
+          <li><a href="index.html#contacto" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Servicios</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
+          <li><a href="redes-datos.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Redes y Datos</a></li>
+          <li><a href="seguridad-electronica.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Seguridad Electrónica</a></li>
+          <li><a href="energia-climatizacion.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Energía y Clima</a></li>
+          <li><a href="equipos-oficina.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Equipos de Oficina</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Contacto</h5>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0; color: rgba(255,255,255,0.5); font-size: 0.86rem;">
+          <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Av. Cuesta Colorada, Las Colinas, Santiago</li>
+          <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +1 (829) 741-1041</li>
+          <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@futunet.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" style="max-width: 1200px; margin: 20px auto 0; padding: 20px 20px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.3);">
+      <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+      <span>Santiago, República Dominicana</span>
     </div>
   </footer>
 
-  <!-- Firebase SDK -->
+  <!-- Sistema de Notificaciones Toast -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Carrito de Compras Drawer -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__backdrop" data-close-cart></div>
+    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title">
+      <div class="cart-drawer__header">
+        <div>
+          <span class="section-label">Carrito</span>
+          <h2 id="cart-drawer-title">Tu carrito de compra</h2>
+        </div>
+        <button type="button" class="cart-drawer__close" data-close-cart aria-label="Cerrar carrito">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div id="cart-items-list" class="cart-drawer__items"></div>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__summary"><span id="cart-summary-count">0 artículos</span></div>
+        <button type="button" class="btn btn-primary cart-drawer__checkout" id="cart-checkout-btn">
+          <i data-lucide="credit-card"></i>
+          Solicitar carrito por WhatsApp
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Botón Carrito Flotante (FAB) -->
+  <button id="cart-fab" class="cart-fab is-empty" type="button" aria-label="Abrir carrito de compra" aria-controls="cart-drawer" aria-expanded="false">
+    <span class="cart-fab__label" id="cart-fab-label" aria-hidden="true" hidden>
+      <span class="cart-fab__label-count" id="cart-fab-label-count">0</span>
+      <span class="cart-fab__label-copy" id="cart-fab-label-copy">artículos</span>
+    </span>
+    <span class="cart-fab__icon"><i data-lucide="shopping-cart"></i></span>
+    <span class="cart-fab__count" id="cart-count">0</span>
+  </button>
+
+  <!-- Barra de Navegación Sticky Móvil -->
+  <div class="mobile-bottom-bar mobile-bottom-bar--home" aria-label="Accesos rápidos móviles">
+    <a href="catalogo.html" class="mobile-bottom-bar__action">
+      <i data-lucide="layout-grid"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n%20sobre%20redes%20y%20datos%20cableados." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Firebase Compat SDK -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script defer src="js/firebase-config.js"></script>
   <script defer src="js/auth.js"></script>
-  <script defer src="js/auth-guard.js"></script>
-  <script src="js/main.js"></script>
-  <script defer src="js/service-page.js"></script>
+
+  <!-- Scripts Base & Utilities -->
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script defer src="js/config.js"></script>
+  <script defer src="js/cart.js"></script>
+  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/main.js"></script>
+  <script defer src="js/inventory_data.js"></script>
+  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/image_fixes.js?v=v9"></script>
+  <script defer src="js/catalog.js"></script>
+  <script type="module" src="js/service-page.js"></script>
+
+  <!-- Script Inline para Desplazamientos y Estimador de Red -->
+  <script>
+    window.currentServiceCategory = 'redes_datos';
+    
+    // Función para filtrar subcategorías
+    window.filterBySubcategory = function(subcategory) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if(btn.getAttribute('data-filter') === subcategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      const event = new CustomEvent('filterSubcategory', { detail: subcategory });
+      document.dispatchEvent(event);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Activar clics en botones pills de filtrado
+      document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filterValue = btn.getAttribute('data-filter');
+          window.filterBySubcategory(filterValue);
+        });
+      });
+
+      // Efecto pegajoso (sticky) y sincronización con el navbar principal
+      const subnav = document.querySelector('.service-subnav');
+      const navbar = document.getElementById('navbar');
+      const headerOffset = 70;
+      
+      if(subnav && navbar) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            subnav.classList.add('sticky');
+          } else {
+            subnav.classList.remove('sticky');
+          }
+          
+          if (navbar.classList.contains('nav-hidden')) {
+            subnav.classList.add('nav-hidden');
+          } else {
+            subnav.classList.remove('nav-hidden');
+          }
+        });
+      }
+
+      // Resaltar sección activa en la barra subnav
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.subnav-links a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= (sectionTop - headerOffset - 60)) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Desplazamiento suave para enlaces ancla
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if(this.getAttribute('href') === '#') return;
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const yOffset = -120;
+            const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+          }
+        });
+      });
+
+      // LÓGICA DEL ESTIMADOR DE RED
+      const steps = document.querySelectorAll('.estimator-step-content');
+      const indicators = document.querySelectorAll('.step-indicator');
+      const prevBtn = document.getElementById('est-prev-btn');
+      const nextBtn = document.getElementById('est-next-btn');
+      const waBtn = document.getElementById('est-wa-btn');
+      
+      let currentStep = 1;
+      const totalSteps = 5;
+      
+      const pricing = {
+        dropsBase: { '10': 15000, '30': 38000, '70': 75000, '150': 150000 },
+        envMultiplier: { 'hogar_pyme': 1.0, 'oficina_mediana': 1.15, 'nave_comercio': 1.30, 'edificio_corp': 1.50 },
+        rackAddon: { 'mesa': 0, 'mural': 8500, 'piso': 32000 },
+        wifiAddon: { 'ninguno': 0, 'basica': 4500, 'total': 16000, 'alta': 45000 }
+      };
+      
+      function updateStep() {
+        steps.forEach(step => step.style.display = 'none');
+        
+        indicators.forEach((ind, index) => {
+          const stepNum = index + 1;
+          ind.classList.remove('active', 'completed');
+          if (stepNum < currentStep) {
+            ind.classList.add('completed');
+          } else if (stepNum === currentStep) {
+            ind.classList.add('active');
+          }
+        });
+        
+        const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        const fillBar = document.getElementById('progress-bar-fill');
+        if (fillBar) fillBar.style.width = `${progressPercent}%`;
+        
+        const activeStep = document.querySelector(`.estimator-step-content[data-step="${currentStep}"]`);
+        if (activeStep) activeStep.style.display = 'block';
+        
+        if (currentStep === 4) {
+          updateNetworkSimulator();
+        }
+        
+        if (currentStep === 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        } else if (currentStep === totalSteps) {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'none';
+          waBtn.style.display = 'inline-flex';
+          calculateSummary();
+        } else {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        }
+      }
+      
+      function updateNetworkSimulator() {
+        const wifiType = document.querySelector('input[name="est-net-wifi"]:checked').value;
+        const simImg = document.getElementById('simulator-image');
+        const osdSpecs = document.getElementById('osd-specs');
+        const simDesc = document.getElementById('simulator-desc');
+        const simTimeEl = document.getElementById('simulator-time');
+        
+        if (simTimeEl) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          simTimeEl.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        
+        if (!simImg || !osdSpecs || !simDesc) return;
+        
+        simImg.style.opacity = '0.4';
+        
+        setTimeout(() => {
+          if (wifiType === 'ninguno' || wifiType === 'basica') {
+            simImg.src = 'images/redes/sim_network_normal.png';
+            osdSpecs.textContent = 'BANDWIDTH: 100 Mbps | RTD: 12ms | SYNC: OK';
+            simDesc.textContent = 'Red básica para necesidades esenciales. Adecuada para navegación general y streaming básico. Un solo punto de acceso activo.';
+          } else if (wifiType === 'total') {
+            simImg.src = 'images/redes/sim_network_pro.png';
+            osdSpecs.textContent = 'BANDWIDTH: 1 Gbps | RTD: 4ms | ROAMING: ACTIVE';
+            simDesc.textContent = 'Sistema WiFi Mesh profesional gestionado. Roaming fluido habilitado entre múltiples nodos, proporcionando señal completa e ininterrumpida.';
+          } else if (wifiType === 'alta') {
+            simImg.src = 'images/redes/sim_network_enterprise.png';
+            osdSpecs.textContent = 'BANDWIDTH: 10 Gbps CORE | RTD: 1ms | CLOUD CONNECTED';
+            simDesc.textContent = 'Infraestructura de alta densidad y alto rendimiento. Optimizado para entornos corporativos con cientos de conexiones concurrentes y análisis de seguridad en tiempo real.';
+          }
+          simImg.style.opacity = '1';
+        }, 150);
+      }
+      
+      document.querySelectorAll('input[name="est-net-wifi"]').forEach(radio => {
+        radio.addEventListener('change', updateNetworkSimulator);
+      });
+      
+      function calculateSummary() {
+        const envVal = document.querySelector('input[name="est-net-env"]:checked').value;
+        const dropsVal = document.querySelector('input[name="est-net-drops"]:checked').value;
+        const rackVal = document.querySelector('input[name="est-net-rack"]:checked').value;
+        const wifiVal = document.querySelector('input[name="est-net-wifi"]:checked').value;
+        
+        // Mapear textos
+        let envText = 'Hogar / Pyme';
+        if (envVal === 'oficina_mediana') envText = 'Oficina Mediana';
+        else if (envVal === 'nave_comercio') envText = 'Nave / Fábrica';
+        else if (envVal === 'edificio_corp') envText = 'Corporativo / Edificio';
+        document.getElementById('sum-net-env').textContent = envText;
+        
+        let dropsText = 'Hasta 10 Puntos';
+        if (dropsVal === '30') dropsText = '10 a 30 Puntos';
+        else if (dropsVal === '70') dropsText = '30 a 70 Puntos';
+        else if (dropsVal === '150') dropsText = 'Más de 70 Puntos';
+        document.getElementById('sum-net-drops').textContent = dropsText;
+        
+        let rackText = 'Switch de Escritorio';
+        if (rackVal === 'mural') rackText = 'Gabinete Mural (6U-12U)';
+        else if (rackVal === 'piso') rackText = 'Rack de Piso Autoportante';
+        document.getElementById('sum-net-rack').textContent = rackText;
+        
+        let wifiText = 'Sin WiFi Adicional';
+        if (wifiVal === 'basica') wifiText = 'Cobertura Básica (1 AP)';
+        else if (wifiVal === 'total') wifiText = 'Red Mesh Total (2-4 APs)';
+        else if (wifiVal === 'alta') wifiText = 'Alta Densidad (5+ APs)';
+        document.getElementById('sum-net-wifi').textContent = wifiText;
+        
+        // Calcular Precio
+        const basePrice = pricing.dropsBase[dropsVal];
+        const multiplier = pricing.envMultiplier[envVal];
+        const rackAddon = pricing.rackAddon[rackVal];
+        const wifiAddon = pricing.wifiAddon[wifiVal];
+        
+        const finalPrice = Math.round((basePrice * multiplier) + rackAddon + wifiAddon);
+        document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+        
+        const waText = `Hola Futunet, usé el Cotizador Rápido de Redes y me interesa este sistema:
+- Entorno: ${envText}
+- Puntos de Red: ${dropsText}
+- Alojamiento Equipos: ${rackText}
+- WiFi Inalámbrico: ${wifiText}
+- Estimación aproximada: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos + Instalación)
+Me gustaría recibir una asesoría y agendar una visita técnica.`;
+        
+        waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+      }
+      
+      nextBtn.addEventListener('click', () => {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateStep();
+        }
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+          currentStep--;
+          updateStep();
+        }
+      });
+      
+      indicators.forEach(ind => {
+        ind.addEventListener('click', () => {
+          const stepNum = parseInt(ind.getAttribute('data-step'));
+          if (stepNum < currentStep || currentStep === totalSteps) {
+            currentStep = stepNum;
+            updateStep();
+          }
+        });
+      });
+
+      // Inicializar el primer paso
+      updateStep();
+      
+      // Lógica de Acordeón FAQ
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        const answer = item.querySelector('.faq-answer');
+        
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          
+          faqItems.forEach(i => {
+            i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            const ans = i.querySelector('.faq-answer');
+            ans.style.maxHeight = null;
+            ans.setAttribute('aria-hidden', 'true');
+            i.classList.remove('open');
+          });
+          
+          if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            answer.setAttribute('aria-hidden', 'false');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            item.classList.add('open');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

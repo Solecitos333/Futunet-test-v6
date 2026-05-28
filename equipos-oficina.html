@@ -1,112 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Equipos de Oficina — Futunet</title>
-  <meta name="description" content="Laptops corporativas, computadoras de escritorio, servidores e impresoras en Santiago, República Dominicana. Equipamiento tecnológico llave en mano para empresas." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipos de Oficina y Cómputo Corporativo — Futunet</title>
+  <meta name="description" content="Laptops de grado corporativo, computadoras de escritorio, servidores NAS e impresoras de alto volumen en Santiago, RD. Garantía y soporte técnico especializado.">
+  
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Equipos de Oficina y Cómputo Corporativo — Futunet" />
+  <meta property="og:description" content="Equipamiento tecnológico llave en mano para empresas. Laptops Dell, HP y Lenovo con garantía, servidores locales e impresoras de alta velocidad en Santiago." />
+  <meta property="og:image" content="https://futunet.com.do/img/laptops.jpg" />
+  <meta property="og:url" content="https://futunet.com.do/equipos-oficina.html" />
+  <meta property="og:locale" content="es_DO" />
+  <meta property="og:site_name" content="Futunet" />
+  <meta name="twitter:card" content="summary_large_image" />
+  
+  <!-- CSS Globales -->
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.0" />
   <link rel="stylesheet" href="css/catalog.css?v=3.0" />
-  <link rel="icon" type="image/png" href="img/logo.webp" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json" />
-  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <style>
-    /* Estilos Premium de la Página de Servicio */
-    .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-    
-    .service-hero {
-      position: relative; height: 380px; display: flex; align-items: center;
-      background-size: cover; background-position: center; color: #fff; overflow: hidden;
-    }
-    .service-hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(9,16,24,0.4) 0%, rgba(9,16,24,0.85) 100%);
-      z-index: 1;
-    }
-    .service-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
-    .service-hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
-      letter-spacing: -0.03em;
-    }
-    .service-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
-
-    .service-section { padding: 60px 0; }
-    .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
-    
-    @media (max-width: 768px) {
-      .service-hero { height: 280px; }
-      .service-hero-title { font-size: 1.8rem; }
-      .service-hero-desc { font-size: 0.9rem; }
-      .service-grid-info { grid-template-columns: 1fr; gap: 30px; }
-    }
-
-    .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
-    .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
-    
-    .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
-    @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
-    .feature-item {
-      display: flex; gap: 12px; padding: 16px; border: 1px solid rgba(10,112,162,0.06);
-      border-radius: 16px; background: #fdfefe; box-shadow: 0 4px 12px rgba(10,112,162,0.02);
-    }
-    .feature-icon-wrapper {
-      width: 36px; height: 36px; border-radius: 50%; background: rgba(10,112,162,0.06);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2; flex-shrink: 0;
-    }
-    .feature-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 700; color: #0a101d; margin: 0 0 4px; }
-    .feature-text p { font-size: 0.8rem; color: #76889e; margin: 0; line-height: 1.4; }
-
-    /* Formulario de Solicitud */
-    .request-card {
-      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
-      padding: 30px; box-shadow: 0 10px 30px rgba(10,112,162,0.04); position: sticky; top: 100px;
-    }
-    .request-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .request-card p { font-size: 0.85rem; color: #76889e; margin: 0 0 20px; }
-    .request-form-group { margin-bottom: 14px; }
-    .request-form-label { display: block; font-size: 0.72rem; font-weight: 600; color: #394c60; margin-bottom: 4px; text-transform: uppercase; }
-    .request-form-input {
-      width: 100%; padding: 11px 14px; background: #f3f7fc; border: 1.5px solid #e5eef8;
-      border-radius: 12px; color: #0a101d; font-family: 'Outfit', sans-serif; font-size: 0.86rem;
-      transition: all 0.3s; outline: none; box-sizing: border-box;
-    }
-    .request-form-input:focus { border-color: #0A70A2; background: #fff; box-shadow: 0 0 0 3px rgba(10,112,162,0.08); }
-    .request-btn-submit {
-      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
-      font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, #0a7ab0, #22a4e0); box-shadow: 0 4px 14px rgba(10,112,162,0.18);
-      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .request-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,112,162,0.26); }
-    .request-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    /* Productos Asignados */
-    .service-products-section { background: #fdfefe; border-top: 1px solid rgba(10,112,162,0.03); padding: 60px 0; }
-    .service-products-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .service-products-section p { font-size: 0.9rem; color: #76889e; margin: 0 0 30px; }
-    .products-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-  </style>
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
+  
+  <!-- CSS Específico de Equipos de Oficina -->
+  <link rel="stylesheet" href="css/equipos-oficina.css?v=3.0" />
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="is-loading">
 
+  <!-- Elemento Preloader -->
+  <div id="page-preloader" class="page-preloader" aria-hidden="true">
+    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="180" height="37" />
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+  <!-- Elemento SVG para Sprite de íconos -->
   <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
     <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </symbol>
   </svg>
 
+  <!-- Header (Navbar principal) -->
   <header class="site-header" role="banner">
     <nav id="navbar">
       <div class="nav-inner">
-        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+        <a href="index.html" class="nav-logo" aria-label="Ir al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
         </a>
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar equipos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios" class="active">Servicios</a></li>
@@ -143,91 +99,685 @@
     </div>
   </header>
 
-  <main id="service-page-container" class="service-page" data-service-id="equipos">
-    <!-- Hero Banner -->
-    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/laptops.jpg');">
-      <div class="container">
-        <div class="service-hero-content">
-          <h1 class="service-hero-title" id="service-title">Equipos de Oficina</h1>
-          <p class="service-hero-desc" id="service-subtitle">Laptops, computadoras y equipamiento de oficina de alto rendimiento corporativo.</p>
+  <!-- Hero Section (Estilo Cinemático Banner) -->
+  <main id="main-content" class="service-page-wrapper">
+    <section id="inicio" class="hero-carousel-slide hero-carousel-slide--banner active" style="min-height: 520px; height: auto; display: flex; align-items: center;">
+      <div class="hb-bg" style="background-image: url('img/laptops.jpg');"></div>
+      <div class="hb-overlay"></div>
+      <div class="container" style="position: relative; z-index: 10; width: 100%;">
+        <div class="hb-body">
+          <span class="tech-corner tl"></span>
+          <span class="tech-corner tr"></span>
+          <span class="tech-corner bl"></span>
+          <span class="tech-corner br"></span>
+          
+          <div class="cyber-status-panel">
+            <span class="cyber-pulse"></span> INFRAESTRUCTURA DE CÓMPUTO: EN LÍNEA
+          </div>
+          
+          <h1 class="hb-title" id="service-title">Equipos de Oficina y Cómputo</h1>
+          <p class="hb-desc" id="service-subtitle">Productividad y rendimiento asegurados. Suministro llave en mano de laptops de grado corporativo, estaciones de trabajo, almacenamiento centralizado NAS y centros de impresión.</p>
+          
+          <div class="hb-actions">
+            <a href="#configurador" class="btn btn-primary" role="button">Configurar Oficina</a>
+            <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20necesito%20cotizar%20equipos%20de%20c%C3%B3mputo%20y%20oficina." target="_blank" rel="noopener noreferrer" class="btn btn-wa">
+              <svg width="16" height="16"><use href="#wa-icon"/></svg> Cotizar por WhatsApp
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Main Content Grid -->
-    <section class="service-section">
-      <div class="container">
-        <div class="service-grid-info">
-          <!-- Text and Specs -->
-          <div class="service-details">
-            <h3>Soluciones de computación y equipamiento llave en mano</h3>
-            <p id="service-long-description">
-              Ofrecemos el suministro de laptops de grado corporativo, computadoras de escritorio, servidores de almacenamiento local e impresoras de alto volumen. Proveemos equipamiento de las marcas líderes del mercado (Dell, HP, Lenovo) con soporte técnico directo, garantía real y configuraciones a la medida de tu equipo de trabajo.
-            </p>
+    <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
+    <div class="service-subnav">
+      <div class="subnav-container">
+        <ul class="subnav-links">
+          <li><a href="#inicio" class="active"><i data-lucide="home" style="width:14px; height:14px; margin-right:4px;"></i>Inicio</a></li>
+          <li><a href="#computo">Cómputo</a></li>
+          <li><a href="#impresion">Impresión</a></li>
+          <li><a href="#almacenamiento">Servidores NAS</a></li>
+          <li><a href="#licenciamiento">Software</a></li>
+          <li><a href="#mobiliario">Mobiliario</a></li>
+          <li><a href="#configurador" class="highlight-link"><i data-lucide="monitor" style="width:14px; height:14px; margin-right:4px;"></i>Configurador Tech</a></li>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+          <li><a href="#solicitud">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
 
-            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
-            <div class="features-list" id="service-features-list">
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="laptop"></i></div>
-                <div class="feature-text">
-                  <h4>Laptops Corporativas</h4>
-                  <p>Equipos Dell, HP y Lenovo configurados para el trabajo diario.</p>
-                </div>
+    <!-- Carrusel Infinito de Marcas Líderes -->
+    <section class="brands-section" aria-label="Marcas de equipos de oficina">
+      <div class="container">
+        <div class="brands-title-top">Equipamiento tecnológico de fabricantes oficiales</div>
+        <div class="brands-slider-container">
+          <div class="brands-marquee">
+            <!-- Bloque 1 -->
+            <a href="catalogo.html?brand=Dell" class="brand-slide"><img src="img/marcas/dell.svg" alt="Dell Technologies" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=HP" class="brand-slide"><img src="img/marcas/hp.svg" alt="HP Inc." width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Lenovo" class="brand-slide"><img src="img/marcas/lenovo.svg" alt="Lenovo" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Epson" class="brand-slide"><img src="img/marcas/epson.svg" alt="Epson" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Logitech" class="brand-slide"><img src="img/marcas/logitech.svg" alt="Logitech" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Cisco" class="brand-slide"><img src="img/marcas/cisco.svg" alt="Cisco Systems" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=APC" class="brand-slide"><img src="img/marcas/schneiderelectric.svg" alt="APC by Schneider Electric" width="120" height="40" loading="lazy" /></a>
+            <!-- Bloque duplicado para bucle infinito -->
+            <a href="catalogo.html?brand=Dell" class="brand-slide"><img src="img/marcas/dell.svg" alt="Dell Technologies" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=HP" class="brand-slide"><img src="img/marcas/hp.svg" alt="HP Inc." width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Lenovo" class="brand-slide"><img src="img/marcas/lenovo.svg" alt="Lenovo" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Epson" class="brand-slide"><img src="img/marcas/epson.svg" alt="Epson" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Logitech" class="brand-slide"><img src="img/marcas/logitech.svg" alt="Logitech" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=Cisco" class="brand-slide"><img src="img/marcas/cisco.svg" alt="Cisco Systems" width="120" height="40" loading="lazy" /></a>
+            <a href="catalogo.html?brand=APC" class="brand-slide"><img src="img/marcas/schneiderelectric.svg" alt="APC by Schneider Electric" width="120" height="40" loading="lazy" /></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+     <!-- Sección 1: Computación Corporativa -->
+    <section class="section reveal" id="computo" style="padding: 75px 0;">
+      <div class="container">
+        <div class="about-grid" style="margin-top: 0;">
+          <div class="about-card card-img-container">
+            <img src="img/laptops.jpg" alt="Estaciones de Trabajo y Laptops Corporativas" loading="lazy" />
+          </div>
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0e1e33 0%, #050d18 100%); border-color: rgba(10,112,162,0.25);">
+            <span class="section-label" style="color: var(--brand-office-light); border-color: rgba(10,112,162,0.25);">Cómputo de Negocio</span>
+            <h2 class="about-card-title" style="color: white; font-size: 1.8rem;">Estaciones de trabajo de alto rendimiento</h2>
+            <p class="about-card-desc" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+              Suministramos computadoras portátiles y de escritorio configuradas específicamente para optimizar las actividades diarias de tu empresa. Desde laptops corporativas ligeras y duraderas con procesadores Intel Core e Intel vPro, hasta potentes estaciones de trabajo gráficas y de desarrollo con almacenamiento SSD NVMe ultrarrápido.
+            </p>
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-laptop"></i> Laptops Premium</label>
+                <span>Líneas Latitude de Dell y ThinkPad de Lenovo. Chasis reforzados y batería de larga duración.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="printer"></i></div>
-                <div class="feature-text">
-                  <h4>Impresión de Volumen</h4>
-                  <p>Impresoras multifuncionales y consumibles originales en stock.</p>
-                </div>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-desktop"></i> Desktops & AIO</label>
+                <span>Equipos compactos Dell Optiplex y Lenovo ThinkCentre, configurados para máxima durabilidad.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="database"></i></div>
-                <div class="feature-text">
-                  <h4>Servidores Locales</h4>
-                  <p>Configuración de almacenamiento NAS y copias de seguridad locales.</p>
-                </div>
+            </div>
+            <a href="#catalogo" onclick="window.filterBySubcategory('equipos_laptops')" class="btn-glow" style="margin-top: 30px;">Ver Laptops en Stock <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <!-- Showcase de Productos Destacados -->
+        <div class="section-featured-products" data-subcategory="equipos_laptops"></div>
+      </div>
+    </section>
+
+    <!-- Sección 2: Impresión de Volumen -->
+    <section class="section bg-light reveal" id="impresion" style="padding: 75px 0;">
+      <div class="container">
+        <div class="about-grid" style="margin-top: 0;">
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0e1e33 0%, #050d18 100%); border-color: rgba(10,112,162,0.25);">
+            <span class="section-label" style="color: var(--brand-office-light); border-color: rgba(10,112,162,0.25);">Centros de Documentos</span>
+            <h2 class="about-card-title" style="color: white; font-size: 1.8rem;">Impresión láser y tinta continua corporativa</h2>
+            <p class="about-card-desc" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+              Trabajamos con las marcas líderes del mercado para garantizar equipos robustos y de larga vida útil. Configuramos tus impresoras en la red estructurada para que cualquier colaborador pueda imprimir de manera alámbrica o por WiFi desde computadoras o teléfonos móviles, con control de acceso y contraseñas de seguridad.
+            </p>
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-print"></i> Multifuncionales Láser</label>
+                <span>Impresión veloz en B/N y color en red con control de accesos y contraseñas de seguridad.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="lock"></i></div>
-                <div class="feature-text">
-                  <h4>Licenciamiento Oficial</h4>
-                  <p>Soporte de instalación para Windows Pro y Microsoft 365.</p>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-droplet"></i> Tinta Continua</label>
+                <span>Sistemas Epson EcoTank para un costo por página mínimo en impresiones a color.</span>
+              </div>
+            </div>
+            <a href="#catalogo" onclick="window.filterBySubcategory('equipos_impresoras')" class="btn-glow" style="margin-top: 30px;">Ver Impresoras en Stock <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="about-card card-img-container">
+            <img src="img/impresoras.jpg" alt="Centros de Impresión y Copiado Multifuncional" loading="lazy" />
+          </div>
+        </div>
+        <!-- Showcase de Productos Destacados -->
+        <div class="section-featured-products" data-subcategory="equipos_impresoras"></div>
+      </div>
+    </section>
+
+    <!-- Sección 3: Servidores y Almacenamiento NAS -->
+    <section class="section reveal" id="almacenamiento" style="padding: 75px 0;">
+      <div class="container">
+        <div class="about-grid" style="margin-top: 0;">
+          <div class="about-card card-img-container">
+            <img src="images/oficina/server_nas.png" alt="Servidores de Almacenamiento NAS Synology" loading="lazy" />
+          </div>
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0e1e33 0%, #050d18 100%); border-color: rgba(10,112,162,0.25);">
+            <span class="section-label" style="color: var(--brand-office-light); border-color: rgba(10,112,162,0.25);">Seguridad de Datos</span>
+            <h2 class="about-card-title" style="color: white; font-size: 1.8rem;">Servidores locales NAS de respaldo automático</h2>
+            <p class="about-card-desc" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+              No arriesgues la información más valiosa de tu empresa. Diseñamos e instalamos servidores de almacenamiento en red local (NAS) de la marca Synology. Estos equipos centralizan los archivos de tu oficina, permiten asignar permisos de acceso personalizados a cada departamento y realizan copias de seguridad automáticas diarias de las computadoras de los colaboradores sin interrumpir su trabajo.
+            </p>
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-database"></i> Redundancia RAID</label>
+                <span>Protección activa de datos: la información se mantiene intacta aunque falle un disco físico.</span>
+              </div>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-shield-halved"></i> Acceso Privado VPN</label>
+                <span>Accede a tus archivos desde internet de forma segura mediante redes privadas virtuales.</span>
+              </div>
+            </div>
+            <a href="#catalogo" onclick="window.filterBySubcategory('equipos_servidores')" class="btn-glow" style="margin-top: 30px;">Ver Servidores en Stock <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <!-- Showcase de Productos Destacados -->
+        <div class="section-featured-products" data-subcategory="equipos_servidores"></div>
+      </div>
+    </section>
+
+    <!-- Sección 4: Licenciamiento y Software -->
+    <section class="section bg-light reveal" id="licenciamiento" style="padding: 75px 0;">
+      <div class="container">
+        <div class="about-grid" style="margin-top: 0;">
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0e1e33 0%, #050d18 100%); border-color: rgba(10,112,162,0.25);">
+            <span class="section-label" style="color: var(--brand-office-light); border-color: rgba(10,112,162,0.25);">Licenciamiento Oficial</span>
+            <h2 class="about-card-title" style="color: white; font-size: 1.8rem;">Microsoft 365 y Windows 11 Pro</h2>
+            <p class="about-card-desc" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+              Evita sanciones legales e infecciones de malware por software pirateado. Suministramos licencias originales de sistemas operativos Windows 11 Pro, paquetes de oficina Microsoft 365 Business Standard (con Word, Excel, Teams y correos corporativos Exchange de 50GB), y licencias centralizadas de antivirus corporativos (Kaspersky, Bitdefender, ESET) administrables desde consolas en la nube para proteger la red de tu oficina.
+            </p>
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-envelope"></i> Correos Profesionales</label>
+                <span>Configuramos la infraestructura de Outlook de Microsoft 365 con dominio profesional de tu empresa.</span>
+              </div>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-shield-virus"></i> Antivirus Endpoint</label>
+                <span>Protección contra ransomware administrada desde la nube para todos los equipos en red.</span>
+              </div>
+            </div>
+            <a href="#catalogo" onclick="window.filterBySubcategory('equipos_accesorios')" class="btn-glow" style="margin-top: 30px;">Ver Software y Accesorios <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="about-card card-img-container">
+            <img src="images/oficina/software_licensing.png" alt="Licenciamiento y Software de Oficina" loading="lazy" />
+          </div>
+        </div>
+        <!-- Showcase de Productos Destacados -->
+        <div class="section-featured-products" data-subcategory="equipos_accesorios"></div>
+      </div>
+    </section>
+
+    <!-- Sección 5: Mobiliario Ergónomico y Suministros -->
+    <section class="section reveal" id="mobiliario" style="padding: 75px 0;">
+      <div class="container">
+        <div class="about-grid" style="margin-top: 0;">
+          <div class="about-card card-img-container">
+            <img src="img/mobiliario.jpg" alt="Mobiliario de Oficina Ergónomico" loading="lazy" />
+          </div>
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0e1e33 0%, #050d18 100%); border-color: rgba(10,112,162,0.25);">
+            <span class="section-label" style="color: var(--brand-office-light); border-color: rgba(10,112,162,0.25);">Mobiliario y Confort</span>
+            <h2 class="about-card-title" style="color: white; font-size: 1.8rem;">Mobiliario ergonómico y suministros de oficina</h2>
+            <p class="about-card-desc" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+              Una estación de trabajo de alta productividad necesita confort. Proveemos escritorios ejecutivos, modulares de oficina y sillas ergonómicas con soporte lumbar y ajuste neumático que protegen la salud de tus colaboradores, optimizando el espacio físico de tu negocio.
+            </p>
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-chair"></i> Sillas Ergonómicas</label>
+                <span>Ajuste lumbar, brazos 3D y base de alta resistencia para uso laboral intensivo.</span>
+              </div>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-table"></i> Escritorios Modulares</label>
+                <span>Escritorios modernos de madera y metal, cajoneras de archivo y pasacables limpios.</span>
+              </div>
+            </div>
+            <a href="#catalogo" onclick="window.filterBySubcategory('oficina_mobiliario')" class="btn-glow" style="margin-top: 30px;">Ver Mobiliario en Stock <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+        <!-- Showcase de Productos Destacados -->
+        <div class="section-featured-products" data-subcategory="oficina_mobiliario"></div>
+      </div>
+    </section>
+
+    <!-- Sección de Venta Cruzada (Cross-selling Banner) -->
+    <section class="section" style="padding: 40px 0; background: #0A70A2; color: white;">
+      <div class="container">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="max-width: 700px;">
+            <h4 style="font-family:'Space Grotesk',sans-serif; font-size: 1.35rem; font-weight: 700; margin-bottom: 6px; color: white;">¿Tu oficina requiere climatización y respaldo eléctrico constante?</h4>
+            <p style="font-size: 0.88rem; color: rgba(255,255,255,0.85); margin: 0; line-height: 1.5;">Tus computadoras, servidores locales y UPS funcionan mejor en climas estables y libres de cortes eléctricos. Conoce nuestras soluciones eco-eficientes de paneles solares y aire acondicionado inverter.</p>
+          </div>
+          <a href="energia-climatizacion.html" class="btn btn-outline" style="background: white; border-color: white; color: #0A70A2; border-radius: 50px; font-weight: 700; min-height: 48px;">Ver Energía y Clima</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN INTERACTIVA: ESTIMADOR DE OFICINA TECH -->
+    <section id="configurador" class="estimator-section">
+      <div class="container">
+        <div class="text-center reveal">
+          <span class="section-label">Configurador Inteligente</span>
+          <h2 class="section-title">Estimador de Equipamiento</h2>
+          <p class="section-sub">Configura las estaciones de trabajo, almacenamiento y licencias de software para tu oficina y recibe un presupuesto estimado al instante.</p>
+        </div>
+        
+        <div class="estimator-grid reveal">
+          <!-- Wizard Form Card -->
+          <div class="estimator-card">
+            <!-- Progress Bar -->
+            <div class="estimator-progress">
+              <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+              </div>
+              <div class="step-indicators">
+                <button class="step-indicator active" data-step="1" aria-label="Paso 1: Computadoras">1</button>
+                <button class="step-indicator" data-step="2" aria-label="Paso 2: Servidores">2</button>
+                <button class="step-indicator" data-step="3" aria-label="Paso 3: Impresión">3</button>
+                <button class="step-indicator" data-step="4" aria-label="Paso 4: Mobiliario">4</button>
+                <button class="step-indicator" data-step="5" aria-label="Paso 5: Software">5</button>
+                <button class="step-indicator" data-step="6" aria-label="Paso 6: Resumen">6</button>
+              </div>
+            </div>
+
+            <!-- Paso 1: Computadoras -->
+            <div class="estimator-step-content active" data-step="1">
+              <h3 class="step-title">Paso 1: Tipo de Estación de Trabajo</h3>
+              <p class="step-subtitle">Selecciona el perfil informático principal de tus colaboradores de oficina.</p>
+              
+              <div class="workstation-options">
+                <div class="workstation-card selected">
+                  <input type="radio" name="est-computo" value="basico" checked style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="laptop"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Administrativa / Recepción</h4>
+                    <p class="workstation-card-desc">Laptops/Desktops Dell/HP i3 o Ryzen 3, 8GB RAM, 256GB SSD, accesorios básicos.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-computo" value="pro" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="monitor"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Profesional / Programación</h4>
+                    <p class="workstation-card-desc">Dell Latitude/ThinkPad i5 o Ryzen 5, 16GB RAM, 512GB SSD, Monitor IPS 24" y periféricos ergonómicos.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card" style="grid-column: span 2;">
+                  <input type="radio" name="est-computo" value="creative" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="cpu"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Creativa / Diseño / Servidores Gráficos</h4>
+                    <p class="workstation-card-desc">HP ZBook/Dell Precision i7/Xeon, 32GB RAM, 1TB SSD NVMe, GPU dedicada, Monitor IPS 4K 27" y ratón de precisión.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
                 </div>
               </div>
             </div>
+
+            <!-- Paso 2: Servidores y Copia de Seguridad -->
+            <div class="estimator-step-content" data-step="2">
+              <h3 class="step-title">Paso 2: Servidores y Respaldo de Datos</h3>
+              <p class="step-subtitle">Determina cómo se centralizarán y respaldarán los archivos compartidos de la red local.</p>
+              
+              <div class="workstation-options">
+                <div class="workstation-card selected">
+                  <input type="radio" name="est-backup" value="no" checked style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="cloud"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Sin Servidor Local</h4>
+                    <p class="workstation-card-desc">Cada colaborador administra sus archivos de forma individual en su equipo o nube personal.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-backup" value="nas_basic" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="database"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Servidor NAS Básico 4TB</h4>
+                    <p class="workstation-card-desc">Synology DS223 con 2 bahías de disco en espejo (RAID 1), agentes de copia automáticos locales.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card" style="grid-column: span 2;">
+                  <input type="radio" name="est-backup" value="nas_pro" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="server"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Servidor NAS Corporativo 16TB</h4>
+                    <p class="workstation-card-desc">Synology DS423+ con 4 bahías de disco redundantes (RAID 5), control central de permisos en red local, UPS inteligente de respaldo.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paso 3: Impresión y Escaneo -->
+            <div class="estimator-step-content" data-step="3">
+              <h3 class="step-title">Paso 3: Impresión y Digitalización</h3>
+              <p class="step-subtitle">Selecciona el tipo de centro de copiado e impresión en red según el volumen requerido.</p>
+              
+              <div class="workstation-options">
+                <div class="workstation-card selected">
+                  <input type="radio" name="est-impresion" value="no" checked style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="x-circle"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Sin Equipo de Impresión</h4>
+                    <p class="workstation-card-desc">No se requiere suministro de impresoras en este momento.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-impresion" value="inkjet" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="droplet"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">EcoTank Color (Bajo Volumen)</h4>
+                    <p class="workstation-card-desc">Epson L3250 multifuncional con sistema original de botellas de tinta a bajísimo costo por hoja.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-impresion" value="laser" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="printer"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Láser Monocromática (Medio)</h4>
+                    <p class="workstation-card-desc">HP LaserJet Pro MFP con conexión de red Ethernet, escáner plano y velocidad de hasta 30 PPM en B/N.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-impresion" value="laser_color" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="palette"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Láser Color Corporativa (Alto)</h4>
+                    <p class="workstation-card-desc">Impresora láser a color de alta capacidad, fotocopiadora doble cara automática y panel digital touch.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paso 4: Mobiliario de Oficina -->
+            <div class="estimator-step-content" data-step="4">
+              <h3 class="step-title">Paso 4: Mobiliario de Oficina</h3>
+              <p class="step-subtitle">Elige el equipamiento de soporte y confort físico para tus estaciones de trabajo.</p>
+              
+              <div class="workstation-options">
+                <div class="workstation-card selected">
+                  <input type="radio" name="est-mobiliario" value="no" checked style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="ban"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Sin Mobiliario Adicional</h4>
+                    <p class="workstation-card-desc">No se requiere suministro de mobiliario (sillas o escritorios) en este momento.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-mobiliario" value="basico" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="chair"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Kit Ergonómico Operativo</h4>
+                    <p class="workstation-card-desc">Silla ergonómica ajustable con soporte lumbar + Escritorio moderno de madera y metal.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card" style="grid-column: span 2;">
+                  <input type="radio" name="est-mobiliario" value="premium" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="table"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Kit Ejecutivo de Alta Gama</h4>
+                    <p class="workstation-card-desc">Sillón reclinable premium + Escritorio gerencial amplio en L con archivador metálico de 3 gavetas.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paso 5: Licenciamiento de Software -->
+            <div class="estimator-step-content" data-step="5">
+              <h3 class="step-title">Paso 5: Licenciamiento de Software</h3>
+              <p class="step-subtitle">Elige el paquete de software oficial y seguridad endpoint para los colaboradores.</p>
+              
+              <div class="workstation-options">
+                <div class="workstation-card selected">
+                  <input type="radio" name="est-software" value="free" checked style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="ban"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Sin Licenciamiento Adicional</h4>
+                    <p class="workstation-card-desc">El cliente ya cuenta con licencias propias o usará software libre.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card">
+                  <input type="radio" name="est-software" value="office_basic" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="key"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Paquete Productividad Esencial</h4>
+                    <p class="workstation-card-desc">Activación de Windows 11 Pro OEM original + Suscripción anual Microsoft 365 Personal.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+                <div class="workstation-card" style="grid-column: span 2;">
+                  <input type="radio" name="est-software" value="office_business" style="display:none;" />
+                  <div class="workstation-card-icon"><i data-lucide="shield-check"></i></div>
+                  <div class="workstation-card-info">
+                    <h4 class="workstation-card-title">Paquete Corporativo Protegido</h4>
+                    <p class="workstation-card-desc">Windows 11 Pro + Microsoft 365 Business Standard (dominios de correo corporativo de 50GB, Teams, Office) + Antivirus Kaspersky/Bitdefender Endpoint con consola de seguridad en la nube.</p>
+                  </div>
+                  <div class="workstation-card-checkbox"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paso 6: Resumen de Configuración -->
+            <div class="estimator-step-content" data-step="6">
+              <h3 class="step-title">Resumen de Configuración y Solicitud</h3>
+              <p class="step-subtitle">Verifica los componentes sugeridos y envía la configuración técnica a nuestros asesores.</p>
+              
+              <div class="simulator-details-box" style="margin-top:0; background:transparent; padding:0; border:none;">
+                <table class="osd-specs-table" style="color:#0a101d;">
+                  <tr style="border-bottom-color:#e5eef8;"><td class="spec-name">Estación Elegida:</td><td class="spec-val" id="sum-computo" style="color:var(--brand-office);">Administrativa</td></tr>
+                  <tr style="border-bottom-color:#e5eef8;"><td class="spec-name">Servidores / Respaldo:</td><td class="spec-val" id="sum-backup" style="color:var(--brand-office);">Sin servidor</td></tr>
+                  <tr style="border-bottom-color:#e5eef8;"><td class="spec-name">Impresión en Red:</td><td class="spec-val" id="sum-impresion" style="color:var(--brand-office);">Sin impresión</td></tr>
+                  <tr style="border-bottom-color:#e5eef8;"><td class="spec-name">Mobiliario / Confort:</td><td class="spec-val" id="sum-mobiliario" style="color:var(--brand-office);">Sin mobiliario</td></tr>
+                  <tr style="border-bottom-color:#e5eef8;"><td class="spec-name">Software / Licencias:</td><td class="spec-val" id="sum-software" style="color:var(--brand-office);">Sin licenciamiento</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="estimator-actions">
+              <button class="btn btn-ghost" id="est-prev-btn" type="button">Atrás</button>
+              <button class="btn btn-primary" id="est-next-btn" type="button">Siguiente Paso</button>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="est-wa-btn" style="display:none; border-radius:14px; text-decoration:none; justify-content:center; align-items:center;">
+                <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Solicitar Cotización
+              </a>
+            </div>
           </div>
 
-          <!-- Sticky Lead Form -->
-          <div>
-            <div class="request-card">
-              <h3>Solicitar Cotización</h3>
-              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
+          <!-- Simulator Panel HUD -->
+          <div class="simulator-panel">
+            <div class="simulator-header">
+              <span class="simulator-title">
+                <span class="simulator-pulse"></span> TERMINAL DE SIMULACIÓN HOLOGRÁFICA
+              </span>
+              <span class="simulator-time-osd" id="simulator-time">2026-05-28 13:24:00</span>
+            </div>
+            
+            <div class="simulator-screen">
+              <div class="simulator-image-container">
+                <img src="images/oficina/sim_office_basic.png" alt="Pantalla OSD del simulador de cómputo" class="simulator-image" id="simulator-image" />
+                <div class="simulator-hud-overlay">
+                  <span class="osd-tag-mode" id="osd-mode-label">ESTACIÓN BÁSICA</span>
+                  <div class="osd-hud-specs" id="osd-specs">
+                    SYS INIT: OPTIMAL | WORKSPACE: BASIC | RAM: 8GB | SER: LOCAL BKP
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
+              <p class="simulator-desc" id="simulator-desc">
+                Configuración recomendada para personal de atención al cliente y facturación. El equipo cuenta con rendimiento estable para cargas de trabajo cotidianas y ofimática general.
+              </p>
               
-              <form id="service-request-form">
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-name">Nombre Completo</label>
-                  <input type="text" id="req-name" class="request-form-input" required />
+              <div class="simulator-details-box">
+                <table class="osd-specs-table">
+                  <tr><td class="spec-name">Procesador (CPU)</td><td class="spec-val" id="osd-cpu-val">Intel Core i3 / vPro</td></tr>
+                  <tr><td class="spec-name">Memoria RAM</td><td class="spec-val" id="osd-ram-val">8 GB DDR4</td></tr>
+                  <tr><td class="spec-name">Almacenamiento Total</td><td class="spec-val" id="osd-storage-val">256 GB SSD NVMe</td></tr>
+                  <tr><td class="spec-name">Tasa de Impresión</td><td class="spec-val" id="osd-print-val">N/A</td></tr>
+                  <tr><td class="spec-name">Mobiliario / Soporte</td><td class="spec-val" id="osd-mobiliario-val">Sin mobiliario</td></tr>
+                  <tr><td class="spec-name">Licencia OS/Suite</td><td class="spec-val" id="osd-soft-val">Windows Home base</td></tr>
+                </table>
+              </div>
+              
+              <div class="budget-total-box">
+                <span class="budget-label">Inversión Estimada (Equipos)</span>
+                <span class="budget-price" id="sum-price">RD$ 26,000*</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Catálogo con Filtros pills (Alimentado dinámicamente) -->
+    <section id="catalogo" class="service-products-section" style="background:#ffffff; border-top: 1px solid rgba(10,112,162,0.05); padding: 80px 0;">
+      <div class="container">
+        <div class="text-center reveal">
+          <span class="section-label">Equipos Disponibles</span>
+          <h2 class="section-title">Equipos de Cómputo</h2>
+          <p class="section-sub">Explora nuestro stock de computadoras, impresoras y almacenamiento corporativo. Añádelos a tu carrito para cotizar.</p>
+        </div>
+        
+        <!-- Filtros pills -->
+        <div class="subcategory-filters reveal" style="margin-top: 35px;">
+          <button class="filter-btn active" data-filter="all">Todos los Equipos</button>
+          <button class="filter-btn" data-filter="equipos_laptops">Laptops</button>
+          <button class="filter-btn" data-filter="equipos_desktops">Desktops</button>
+          <button class="filter-btn" data-filter="equipos_impresoras">Impresoras</button>
+          <button class="filter-btn" data-filter="equipos_servidores">Servidores NAS</button>
+          <button class="filter-btn" data-filter="equipos_accesorios">Accesorios</button>
+          <button class="filter-btn" data-filter="oficina_mobiliario">Mobiliario</button>
+        </div>
+        
+        <!-- Grid de Productos (Alimentado por service-page.js) -->
+        <div class="products-grid-wrapper reveal" id="service-products-grid">
+          <div class="loading-products" style="grid-column: 1/-1; text-align: center; padding: 50px 0; color: var(--brand-office);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 15px; display: block;"></i> Cargando catálogo de oficina...
+          </div>
+        </div>
+        
+        <!-- Mensaje cuando la categoría está vacía -->
+        <div id="no-products-msg" class="no-products-msg" style="display: none; text-align: center; padding: 60px 0; border: 1px dashed #eaeaea; border-radius: 16px; margin-top: 20px;">
+          <i class="fas fa-box-open" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 15px; display: block;"></i>
+          <p style="font-weight: 600; color: #64748b;">No hay equipos disponibles en esta categoría por el momento.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Preguntas Frecuentes (FAQs) -->
+    <section id="faq" class="section bg-light" style="padding: 80px 0;">
+      <div class="container">
+        <div class="text-center reveal">
+          <span class="section-label">Respuestas Rápidas</span>
+          <h2 class="section-title">Preguntas Frecuentes</h2>
+          <p class="section-sub">Dudas comunes sobre licenciamiento, servidores locales NAS y garantías de hardware corporativo.</p>
+        </div>
+        
+        <div class="faqs-container reveal" style="max-width: 800px; margin: 40px auto 0; display: flex; flex-direction: column; gap: 16px;">
+          <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+            <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+              <span>¿Cuál es la diferencia entre laptops corporativas y laptops de consumo comercial?</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+              <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+                Las laptops corporativas (Dell Latitude, Lenovo ThinkPad) están diseñadas para durar en entornos de trabajo intensos. Cuentan con materiales de chasis metálicos o de fibra de carbono, teclados resistentes a derrames accidentales de líquidos, pantallas antirreflejo y componentes internos testeados para uso continuo. Además, incorporan sistemas avanzados de seguridad (TPM 2.0, lectores de huella) y sistemas operativos Windows Pro ideales para redes empresariales.
+              </p>
+            </div>
+          </div>
+          
+          <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+            <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+              <span>¿Por qué es mejor instalar un servidor NAS local en lugar de usar solo Google Drive o Dropbox?</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+              <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+                Un servidor NAS local (Synology) permite transferir archivos grandes (videos, bases de datos, planos) a velocidades gigabit locales de forma casi instantánea, algo imposible con la nube comercial. Además, elimina el pago mensual de suscripción por almacenamiento masivo. Es excelente para centralizar copias de seguridad de todas las computadoras en red local de forma automática y transparente, protegiendo los datos contra pérdidas accidentales o secuestro por Ransomware.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+            <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+              <span>¿Qué cobertura de garantía tienen los equipos de cómputo y servidores?</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+              <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+                Todos los equipos de cómputo (Dell, HP, Lenovo) y servidores NAS cuentan con 1 año de garantía oficial del fabricante por defectos de fábrica. Adicionalmente, en Futunet brindamos soporte directo y asistencia técnica autorizada para realizar el diagnóstico y la canalización de los repuestos de forma ágil, minimizando el tiempo de inactividad de tu oficina.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item" style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: all 0.3s;">
+            <button class="faq-trigger" type="button" aria-expanded="false" style="width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left; display: flex; justify-content: space-between; align-items: center; font-family: inherit; font-size: 1.05rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;">
+              <span>¿Tiene algún costo la configuración inicial del software al comprar los equipos?</span>
+              <i class="fas fa-chevron-down" style="font-size: 0.88rem; color: #64748b; transition: transform 0.3s;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px;">
+              <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px;">
+                Al adquirir los equipos y software en conjunto con Futunet, la instalación de las licencias de Windows Pro, las suites de Microsoft 365, los agentes antivirus y la configuración básica de usuario están incluidas en la propuesta comercial del hardware sin costo adicional, asegurando que tus equipos estén listos para encenderse y trabajar ("plug and play").
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Call to Action Final con Formulario Glassmorphism -->
+    <section id="solicitud" class="cta-banner" style="background: linear-gradient(135deg, var(--brand-dark, #020617) 0%, #0d1e36 100%); padding: 80px 0; position: relative;">
+      <div class="cta-banner-grid-overlay"></div>
+      <div class="container" style="position: relative; z-index: 2;">
+        <div class="cta-grid reveal">
+          <!-- Columna de contacto rápido -->
+          <div class="cta-info-column" style="text-align: left; display: flex; flex-direction: column; justify-content: center;">
+            <span class="section-label">Cotizaciones Corporativas</span>
+            <h2 style="font-size: clamp(2rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.2; margin-bottom: 20px; color: white;">¿Listo para equipar tu oficina?</h2>
+            <p style="color: #94a3b8; font-size: 1.05rem; line-height: 1.6; margin-bottom: 35px; max-width: 500px;">
+              Contáctanos hoy mismo para recibir asesoría personalizada en hardware, servidores locales, volumen de copiado o licenciamiento para tu empresa sin costo alguno.
+            </p>
+            <div class="cta-buttons" style="display: flex; gap: 15px; flex-wrap: wrap;">
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20cotizar%20equipamiento%20tecnol%C3%B3gico%20para%20mi%20oficina." target="_blank" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; background: #25d366; box-shadow: 0 10px 24px rgba(37,211,102,0.25); text-decoration: none;">
+                <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Chat en WhatsApp
+              </a>
+              <a href="tel:+18297411041" class="btn btn-outline" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; border: 2px solid rgba(255,255,255,0.4); color: white; background: transparent; text-decoration: none;">
+                <i class="fas fa-phone" style="margin-right: 8px;"></i> Llámanos: (829) 741-1041
+              </a>
+            </div>
+          </div>
+
+          <!-- Columna del Formulario de Solicitud -->
+          <div class="cta-form-column">
+            <div class="about-card dark-highlight" style="padding: 40px; margin: 0; background: rgba(10, 25, 47, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(11, 126, 181, 0.25) !important;">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: white; margin-bottom: 8px; text-align: left;">Solicitar Propuesta</h3>
+              <p style="font-size: 0.88rem; color: #94a3b8; margin-bottom: 24px; text-align: left;">Completa el formulario y un especialista corporativo te contactará en menos de 24 horas.</p>
+              
+              <form id="service-request-form" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="request-form-group" style="text-align: left; margin: 0;">
+                  <label class="request-form-label" for="req-name" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Nombre Completo</label>
+                  <input type="text" id="req-name" class="request-form-input" required placeholder="Ej: Francisco Gómez" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
                 </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
+                <div class="request-form-group" style="text-align: left; margin: 0;">
+                  <label class="request-form-label" for="req-phone" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Teléfono / WhatsApp</label>
+                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="Ej: 829-741-1041" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
                 </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-email">Correo Electrónico</label>
-                  <input type="email" id="req-email" class="request-form-input" required />
+                <div class="request-form-group" style="text-align: left; margin: 0;">
+                  <label class="request-form-label" for="req-email" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Correo Electrónico</label>
+                  <input type="email" id="req-email" class="request-form-input" required placeholder="Ej: gerente@empresa.com" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
                 </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
-                  <input type="text" id="req-company" class="request-form-input" />
+                <div class="request-form-group" style="text-align: left; margin: 0;">
+                  <label class="request-form-label" for="req-company" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Empresa (Opcional)</label>
+                  <input type="text" id="req-company" class="request-form-input" placeholder="Ej: Constructora Santiago" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
                 </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
-                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: cotización de 5 laptops Dell i5 de 16GB de RAM)..."></textarea>
+                <div class="request-form-group" style="text-align: left; margin: 0;">
+                  <label class="request-form-label" for="req-message" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Detalles del Requerimiento</label>
+                  <textarea id="req-message" class="request-form-input" rows="3" required placeholder="Ej: Requerimos cotización de 10 laptops corporativas con Windows Pro e instalación de software corporativo..." style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; resize: vertical; transition: all 0.3s; outline: none;"></textarea>
                 </div>
                 
-                <button type="submit" class="request-btn-submit" id="req-submit-btn">
-                  <i data-lucide="send"></i> Enviar Solicitud
+                <button type="submit" class="request-btn-submit" id="req-submit-btn" style="background: linear-gradient(135deg, var(--brand) 0%, #0ea5e9 100%); color: white; border: none; border-radius: 50px; padding: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 14px rgba(11, 126, 181, 0.3); font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                  <i class="fas fa-paper-plane"></i> Enviar Solicitud
                 </button>
               </form>
             </div>
@@ -235,59 +785,620 @@
         </div>
       </div>
     </section>
-
-    <!-- Linked Products Section -->
-    <section class="service-products-section" id="related-products-section" style="display:none;">
-      <div class="container">
-        <h3>Equipos relacionados de nuestro catálogo</h3>
-        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
-        <div class="products-grid-wrapper" id="service-products-grid">
-          <!-- Dynamically filled by script -->
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="site-footer" role="contentinfo">
+  <!-- Pie de Página Personalizado (Footer) -->
+  <footer role="contentinfo">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-col brand-col">
-          <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo" width="1009" height="207" />
-          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        <div class="footer-brand">
+          <a href="#inicio" class="footer-logo-link">
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="1009" height="207" loading="lazy" decoding="async" />
+          </a>
+          <p>La Tecnología del Futuro. Suministro oficial de computadoras, servidores corporativos de almacenamiento e impresoras en Santiago, República Dominicana.</p>
         </div>
         <div class="footer-col">
-          <h4>Servicios</h4>
+          <h5>Equipos y Cómputo</h5>
           <ul>
-            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
-            <li><a href="redes-datos.html">Redes y datos</a></li>
-            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
-            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+            <li><a href="#computo">Laptops y Desktops</a></li>
+            <li><a href="#impresion">Centros de Impresión</a></li>
+            <li><a href="#almacenamiento">Servidores NAS locales</a></li>
+            <li><a href="#licenciamiento">Software y Licencias</a></li>
+            <li><a href="#catalogo">Catálogo en stock</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Compañía</h4>
+          <h5>Contacto</h5>
           <ul>
-            <li><a href="index.html#nosotros">Nosotros</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
+            <li><a href="https://maps.google.com/maps?q=19.476061,-70.715163" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Av. Cuesta Colorada, Las Colinas, Santiago</a></li>
+            <li><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20comercial%20de%20equipos." target="_blank" rel="noopener noreferrer"><i data-lucide="user" class="footer-icon"></i> Orbis Espinal</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
+        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>Santiago, República Dominicana</span>
       </div>
     </div>
   </footer>
 
-  <!-- Firebase SDK -->
+  <!-- Floating Shopping Cart (FAB) y Drawer del Carrito -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__backdrop" data-close-cart></div>
+    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title">
+      <div class="cart-drawer__header">
+        <div>
+          <span class="section-label">Carrito</span>
+          <h2 id="cart-drawer-title">Tu carrito de compra</h2>
+        </div>
+        <button type="button" class="cart-drawer__close" data-close-cart aria-label="Cerrar carrito">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div id="cart-items-list" class="cart-drawer__items"></div>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__summary"><span id="cart-summary-count">0 artículos</span></div>
+        <button type="button" class="btn btn-primary cart-drawer__checkout" id="cart-checkout-btn">
+          <i data-lucide="credit-card"></i>
+          Solicitar carrito por WhatsApp
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <button id="cart-fab" class="cart-fab is-empty" type="button" aria-label="Abrir carrito de compra" aria-controls="cart-drawer" aria-expanded="false">
+    <span class="cart-fab__label" id="cart-fab-label" aria-hidden="true" hidden>
+      <span class="cart-fab__label-count" id="cart-fab-label-count">0</span>
+      <span class="cart-fab__label-copy" id="cart-fab-label-copy">artículos</span>
+    </span>
+    <span class="cart-fab__icon"><i data-lucide="shopping-cart"></i></span>
+    <span class="cart-fab__count" id="cart-count">0</span>
+  </button>
+
+  <!-- Barra de Navegación Sticky Móvil -->
+  <div class="mobile-bottom-bar mobile-bottom-bar--home" aria-label="Accesos rápidos móviles">
+    <a href="catalogo.html" class="mobile-bottom-bar__action">
+      <i data-lucide="layout-grid"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20conocer%20m%C3%A1s%20detalles%20de%20sus%20equipos%20de%20c%C3%B3mputo%20y%20oficina." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Firebase Compat SDK -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script defer src="js/firebase-config.js"></script>
   <script defer src="js/auth.js"></script>
-  <script defer src="js/auth-guard.js"></script>
-  <script src="js/main.js"></script>
-  <script defer src="js/service-page.js"></script>
+
+  <!-- Scripts Base & Utilities -->
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script defer src="js/config.js"></script>
+  <script defer src="js/cart.js"></script>
+  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/main.js"></script>
+  <script defer src="js/inventory_data.js"></script>
+  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/image_fixes.js?v=v9"></script>
+  <script defer src="js/catalog.js"></script>
+  <script type="module" src="js/service-page.js"></script>
+
+  <!-- Script Inline para Desplazamientos y Cotizador/Simulador de Oficina -->
+  <script>
+    window.currentServiceCategory = 'equipos_oficina';
+    
+    // Función global para filtrar subcategorías de catálogo
+    window.filterBySubcategory = function(subcategory) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if(btn.getAttribute('data-filter') === subcategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      const event = new CustomEvent('filterSubcategory', { detail: subcategory });
+      document.dispatchEvent(event);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // Activar clics en botones de filtrado de subcategoría
+      document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filterValue = btn.getAttribute('data-filter');
+          window.filterBySubcategory(filterValue);
+        });
+      });
+
+      // Efecto pegajoso (sticky) del subnav y sincronización con el navbar principal
+      const subnav = document.querySelector('.service-subnav');
+      const navbar = document.getElementById('navbar');
+      const headerOffset = 70;
+      
+      if(subnav && navbar) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            subnav.classList.add('sticky');
+          } else {
+            subnav.classList.remove('sticky');
+          }
+          
+          if (navbar.classList.contains('nav-hidden')) {
+            subnav.classList.add('nav-hidden');
+          } else {
+            subnav.classList.remove('nav-hidden');
+          }
+        });
+      }
+
+      // Resaltar enlace de sección activa en la barra subnav
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.subnav-links a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= (sectionTop - headerOffset - 60)) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Desplazamiento suave para enlaces ancla
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if(this.getAttribute('href') === '#') return;
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const yOffset = -120;
+            const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+          }
+        });
+      });
+
+      // LÓGICA DEL ESTIMADOR DE COMPUTO Y OFICINA (Wizard)
+      const steps = document.querySelectorAll('.estimator-step-content');
+      const indicators = document.querySelectorAll('.step-indicator');
+      const prevBtn = document.getElementById('est-prev-btn');
+      const nextBtn = document.getElementById('est-next-btn');
+      const waBtn = document.getElementById('est-wa-btn');
+      
+      let currentStep = 1;
+      const totalSteps = 6;
+      
+      // Esquema de Precios de Equipos en RD$
+      const pricing = {
+        computo: {
+          'basico': 26000,     // Computadora Administrativa
+          'pro': 48000,        // Estación de Programación
+          'creative': 89000    // Estación de Diseño/Creative
+        },
+        backup: {
+          'no': 0,
+          'nas_basic': 34000,  // NAS DS223 4TB
+          'nas_pro': 76000     // NAS DS423+ 16TB + UPS
+        },
+        impresion: {
+          'no': 0,
+          'inkjet': 14500,     // Epson L3250 EcoTank
+          'laser': 22000,      // HP LaserJet Pro MFP B/N
+          'laser_color': 68000 // Centro Láser Color
+        },
+        mobiliario: {
+          'no': 0,
+          'basico': 12000,     // Kit Ergonómico Operativo
+          'premium': 28000     // Kit Ejecutivo de Alta Gama
+        },
+        software: {
+          'free': 0,
+          'office_basic': 6500,    // Windows Pro + M365 Personal
+          'office_business': 11500  // Windows Pro + M365 Business + Antivirus Endpoint
+        }
+      };
+      
+      function updateStep() {
+        // Ocultar todos los pasos
+        steps.forEach(step => step.style.display = 'none');
+        
+        // Actualizar roadmap de indicadores
+        indicators.forEach((ind, index) => {
+          const stepNum = index + 1;
+          ind.classList.remove('active', 'completed');
+          if (stepNum < currentStep) {
+            ind.classList.add('completed');
+          } else if (stepNum === currentStep) {
+            ind.classList.add('active');
+          }
+        });
+        
+        // Actualizar porcentaje de barra de progreso
+        const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        const fillBar = document.getElementById('progress-bar-fill');
+        if (fillBar) fillBar.style.width = `${progressPercent}%`;
+        
+        // Mostrar contenido del paso activo
+        const activeStep = document.querySelector(`.estimator-step-content[data-step="${currentStep}"]`);
+        if (activeStep) activeStep.style.display = 'block';
+        
+        // Visibilidad de los botones de navegación
+        if (currentStep === 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        } else if (currentStep === totalSteps) {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'none';
+          waBtn.style.display = 'inline-flex';
+          calculateSummary();
+        } else {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        }
+
+        // Siempre refrescar el simulador HUD al cambiar de opciones
+        updateOfficeSimulator();
+      }
+      
+      // Manejar la selección de opciones (Toggle de clases y radios)
+      document.querySelectorAll('.workstation-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const container = card.closest('.workstation-options');
+          const isRadio = card.querySelector('input[type="radio"]');
+          
+          if (isRadio) {
+            container.querySelectorAll('.workstation-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            isRadio.checked = true;
+          }
+          
+          updateOfficeSimulator();
+        });
+      });
+ 
+      // Lógica de simulación HUD OSD
+      function updateOfficeSimulator() {
+        const computoMode = document.querySelector('input[name="est-computo"]:checked').value;
+        const backupMode = document.querySelector('input[name="est-backup"]:checked').value;
+        const printMode = document.querySelector('input[name="est-impresion"]:checked').value;
+        const mobiliarioMode = document.querySelector('input[name="est-mobiliario"]:checked').value;
+        const softMode = document.querySelector('input[name="est-software"]:checked').value;
+        
+        const simImg = document.getElementById('simulator-image');
+        const osdModeLabel = document.getElementById('osd-mode-label');
+        const osdSpecs = document.getElementById('osd-specs');
+        const simDesc = document.getElementById('simulator-desc');
+        const simTimeEl = document.getElementById('simulator-time');
+        
+        // Valores de OSD en la tabla
+        const osdCpu = document.getElementById('osd-cpu-val');
+        const osdRam = document.getElementById('osd-ram-val');
+        const osdStorage = document.getElementById('osd-storage-val');
+        const osdPrint = document.getElementById('osd-print-val');
+        const osdMob = document.getElementById('osd-mobiliario-val');
+        const osdSoft = document.getElementById('osd-soft-val');
+        
+        if (simTimeEl) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          simTimeEl.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        
+        if (!simImg || !osdModeLabel || !osdSpecs || !simDesc) return;
+        
+        // Determinar nivel general (Basic, Pro, Enterprise) en base al cómputo y servidores
+        let level = 'basic';
+        if (computoMode === 'creative' || backupMode === 'nas_pro' || printMode === 'laser_color' || mobiliarioMode === 'premium') {
+          level = 'enterprise';
+        } else if (computoMode === 'pro' || backupMode === 'nas_basic' || printMode === 'laser' || mobiliarioMode === 'basico') {
+          level = 'pro';
+        }
+        
+        // Micro-animación de parpadeo de pantalla al cambiar
+        simImg.style.opacity = '0.35';
+        
+        setTimeout(() => {
+          if (level === 'basic') {
+            simImg.src = 'images/oficina/sim_office_basic.png';
+            osdModeLabel.textContent = 'ESTACIÓN BÁSICA';
+            osdModeLabel.style.color = '#38bdf8'; // Celeste
+            osdSpecs.textContent = 'SYS INIT: OPTIMAL | WORKSPACE: BASIC | RAM: 8GB | SER: LOCAL BKP';
+            simDesc.textContent = 'Configuración optimizada para personal de atención al cliente y facturación. El equipo cuenta con rendimiento estable para cargas de trabajo cotidianas y ofimática general.';
+            
+            osdCpu.textContent = 'Intel Core i3 / vPro';
+            osdRam.textContent = '8 GB DDR4';
+            osdStorage.textContent = '256 GB SSD NVMe';
+          } else if (level === 'pro') {
+            simImg.src = 'images/oficina/sim_office_pro.png';
+            osdModeLabel.textContent = 'ESTACIÓN PROFESSIONAL';
+            osdModeLabel.style.color = '#f59e0b'; // Ámbar
+            osdSpecs.textContent = 'SYS INIT: SECURE | WORKSPACE: DEV/PRO | RAM: 16GB | SER: NAS CENTRAL';
+            simDesc.textContent = 'Ideal para programadores, analistas y diseñadores. Incorpora pantalla extendida IPS, mayor velocidad de procesamiento y acceso centralizado al servidor NAS local de la red de oficina.';
+            
+            osdCpu.textContent = 'Intel Core i5 / Ryzen 5';
+            osdRam.textContent = '16 GB DDR4';
+            osdStorage.textContent = '512 GB SSD + 4TB NAS';
+          } else if (level === 'enterprise') {
+            simImg.src = 'images/oficina/sim_office_enterprise.png';
+            osdModeLabel.textContent = 'SOPORTE ENTERPRISE';
+            osdModeLabel.style.color = '#00c281'; // Eco-Verde
+            osdSpecs.textContent = 'SYS INIT: REDUNDANT | WORKSPACE: HIGH-PERF | RAM: 32GB | SER: CLOUD + NAS';
+            simDesc.textContent = 'Infraestructura robusta para departamentos creativos avanzados, edición de video o servidores. Soporta copias RAID espejo, protección perimetral endpoint contra malware y alto volumen de impresión.';
+            
+            osdCpu.textContent = 'Intel Core i7 / Xeon';
+            osdRam.textContent = '32 GB DDR5';
+            osdStorage.textContent = '1 TB SSD + 16TB NAS';
+          }
+          
+          // Actualizaciones en cascada de impresión, mobiliario y software en OSD
+          if (printMode === 'no') {
+            osdPrint.textContent = 'N/A';
+          } else if (printMode === 'inkjet') {
+            osdPrint.textContent = 'Epson EcoTank (15 PPM)';
+          } else if (printMode === 'laser') {
+            osdPrint.textContent = 'LaserJet MFP (29 PPM)';
+          } else if (printMode === 'laser_color') {
+            osdPrint.textContent = 'Láser Color MFP (40 PPM)';
+          }
+          
+          if (osdMob) {
+            if (mobiliarioMode === 'no') {
+              osdMob.textContent = 'N/A';
+            } else if (mobiliarioMode === 'basico') {
+              osdMob.textContent = 'Silla + Escritorio Base';
+            } else if (mobiliarioMode === 'premium') {
+              osdMob.textContent = 'Silla + Escritorio Gerencial';
+            }
+          }
+          
+          if (softMode === 'free') {
+            osdSoft.textContent = 'Sistemas Base';
+          } else if (softMode === 'office_basic') {
+            osdSoft.textContent = 'Win Pro + Office 365';
+          } else if (softMode === 'office_business') {
+            osdSoft.textContent = 'Win Pro + 365 Biz + Antivirus';
+          }
+          
+          simImg.style.opacity = '1';
+        }, 150);
+        
+        // Sumar precios provisionales
+        const priceComputo = pricing.computo[computoMode];
+        const priceBackup = pricing.backup[backupMode];
+        const pricePrint = pricing.impresion[printMode];
+        const priceMobiliario = pricing.mobiliario[mobiliarioMode];
+        const priceSoft = pricing.software[softMode];
+        
+        const finalPrice = priceComputo + priceBackup + pricePrint + priceMobiliario + priceSoft;
+        document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+      }
+      
+      // Cálculo del presupuesto definitivo en paso final (Resumen)
+      function calculateSummary() {
+        const computoMode = document.querySelector('input[name="est-computo"]:checked').value;
+        const backupMode = document.querySelector('input[name="est-backup"]:checked').value;
+        const printMode = document.querySelector('input[name="est-impresion"]:checked').value;
+        const mobiliarioMode = document.querySelector('input[name="est-mobiliario"]:checked').value;
+        const softMode = document.querySelector('input[name="est-software"]:checked').value;
+        
+        // Mapear Textos
+        let compText = 'Administrativa / Recepción';
+        if (computoMode === 'pro') compText = 'Profesional (Programación/Analistas)';
+        else if (computoMode === 'creative') compText = 'Creativa (Diseño/Servidores Gráficos)';
+        document.getElementById('sum-computo').textContent = compText;
+        
+        let backupText = 'Sin Servidor Local';
+        if (backupMode === 'nas_basic') backupText = 'Synology NAS DS223 4TB (RAID 1)';
+        else if (backupMode === 'nas_pro') backupText = 'Synology NAS DS423+ 16TB (RAID 5) + UPS';
+        document.getElementById('sum-backup').textContent = backupText;
+        
+        let printText = 'Sin Equipo de Impresión';
+        if (printMode === 'inkjet') printText = 'Epson EcoTank Color (Tinta continua)';
+        else if (printMode === 'laser') printText = 'HP LaserJet Pro MFP B/N';
+        else if (printMode === 'laser_color') printText = 'Multifuncional Láser Color Corporativa';
+        document.getElementById('sum-impresion').textContent = printText;
+        
+        let mobText = 'Sin Mobiliario Adicional';
+        if (mobiliarioMode === 'basico') mobText = 'Kit Ergonómico Operativo (Silla + Escritorio)';
+        else if (mobiliarioMode === 'premium') mobText = 'Kit Ejecutivo de Alta Gama (Sillón + Escritorio en L)';
+        document.getElementById('sum-mobiliario').textContent = mobText;
+        
+        let softText = 'Sin Licenciamiento Adicional';
+        if (softMode === 'office_basic') softText = 'Windows 11 Pro + Microsoft 365 Personal';
+        else if (softMode === 'office_business') softText = 'Windows Pro + 365 Biz + Antivirus Endpoint';
+        document.getElementById('sum-software').textContent = softText;
+        
+        // Calcular sumas
+        const priceComputo = pricing.computo[computoMode];
+        const priceBackup = pricing.backup[backupMode];
+        const pricePrint = pricing.impresion[printMode];
+        const priceMobiliario = pricing.mobiliario[mobiliarioMode];
+        const priceSoft = pricing.software[softMode];
+        
+        const finalPrice = priceComputo + priceBackup + pricePrint + priceMobiliario + priceSoft;
+        
+        // Construir mensaje de WhatsApp
+        const waText = `Hola Futunet, utilicé la Calculadora de Equipos de Oficina y deseo cotizar:
+- Estación de Trabajo: ${compText}
+- Almacenamiento NAS: ${backupText}
+- Centro de Impresión: ${printText}
+- Mobiliario / Confort: ${mobText}
+- Licencias y Software: ${softText}
+- Presupuesto estimado: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos configurados)
+Me gustaría programar una llamada para afinar detalles de volumen y cantidades.`;
+        
+        waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+      }
+      
+      // Control de clicks de botones de wizard
+      nextBtn.addEventListener('click', () => {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateStep();
+        }
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+          currentStep--;
+          updateStep();
+        }
+      });
+      
+      indicators.forEach(ind => {
+        ind.addEventListener('click', () => {
+          const stepNum = parseInt(ind.getAttribute('data-step'));
+          if (stepNum < currentStep || currentStep === totalSteps) {
+            currentStep = stepNum;
+            updateStep();
+          }
+        });
+      });
+
+      // Inicializar el primer paso
+      updateStep();
+      
+      // Lógica de Acordeón FAQ
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        const answer = item.querySelector('.faq-answer');
+        
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          
+          // Cerrar todos los demás acordeones
+          faqItems.forEach(i => {
+            i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            const ans = i.querySelector('.faq-answer');
+            ans.style.maxHeight = null;
+            ans.setAttribute('aria-hidden', 'true');
+            i.classList.remove('open');
+          });
+          
+          // Si el acordeón clickeado no estaba abierto, abrirlo
+          if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            answer.setAttribute('aria-hidden', 'false');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            item.classList.add('open');
+          }
+        });
+      });
+
+      // Cargar escaparates dinámicos de productos destacados
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        window.FutunetData.readyPromise.then(() => {
+          populateFeaturedProducts();
+        });
+      } else {
+        setTimeout(populateFeaturedProducts, 1000);
+      }
+
+      function populateFeaturedProducts() {
+        const containers = document.querySelectorAll('.section-featured-products');
+        const db = (window.supplierInventory && window.supplierInventory.getMergedCatalog) 
+          ? window.supplierInventory.getMergedCatalog() 
+          : (window.mockDatabase || []);
+        
+        containers.forEach(container => {
+          const subcategory = container.getAttribute('data-subcategory');
+          let products = [];
+          
+          db.forEach(prod => {
+            const catLower = String(prod.category || '').toLowerCase().trim();
+            const subCatLower = String(prod.serviceSubcategory || '').toLowerCase().trim();
+            const titleLower = String(prod.title || '').toLowerCase();
+            
+            if (subcategory === 'equipos_laptops') {
+              if (subCatLower === 'equipos_laptops' || catLower === 'laptops corporativas' || catLower === 'laptops' || titleLower.includes('laptop') || titleLower.includes('notebook')) {
+                products.push(prod);
+              }
+            } else if (subcategory === 'equipos_impresoras') {
+              if (subCatLower === 'equipos_impresoras' || catLower === 'impresoras y consumibles' || catLower === 'impresoras' || titleLower.includes('impresora') || titleLower.includes('multifuncional') || titleLower.includes('epson') || titleLower.includes('laserjet')) {
+                products.push(prod);
+              }
+            } else if (subcategory === 'equipos_servidores') {
+              if (subCatLower === 'equipos_servidores' || titleLower.includes('servidor') || titleLower.includes('nas') || titleLower.includes('synology')) {
+                products.push(prod);
+              }
+            } else if (subcategory === 'equipos_accesorios') {
+              if (subCatLower === 'equipos_accesorios' || catLower === 'periféricos y partes' || catLower === 'perifericos' || titleLower.includes('teclado') || titleLower.includes('mouse') || titleLower.includes('monitor') || titleLower.includes('logitech') || titleLower.includes('licencia') || titleLower.includes('office 365') || titleLower.includes('windows 11')) {
+                products.push(prod);
+              }
+            } else if (subcategory === 'oficina_mobiliario') {
+              if (subCatLower === 'oficina_mobiliario' || catLower === 'mobiliario' || catLower === 'papelería y suministros' || catLower === 'papeleria' || titleLower.includes('escritorio') || titleLower.includes('silla') || titleLower.includes('sillon') || titleLower.includes('archivador')) {
+                products.push(prod);
+              }
+            }
+          });
+          
+          const featured = products.slice(0, 3);
+          if (featured.length === 0) {
+            container.style.display = 'none';
+            return;
+          }
+          
+          container.style.display = 'block';
+          container.innerHTML = `
+            <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:#0f172a; margin-top:35px; margin-bottom:18px; display:flex; align-items:center; gap:8px;">
+              <i class="fas fa-store" style="color:var(--brand-office); font-size:0.95rem;"></i> Equipos Relacionados en Stock
+            </h4>
+            <div class="featured-grid">
+              ${featured.map(p => `
+                <div class="product-mini-card">
+                  <div class="mini-card-img">
+                    <img src="${p.img}" alt="${p.title}" loading="lazy" />
+                  </div>
+                  <div class="mini-card-body" style="display:flex; flex-direction:column; flex:1;">
+                    <span class="mini-card-brand">${p.brand || 'FUTUNET'}</span>
+                    <h5 class="mini-card-title" title="${p.title}">${p.title}</h5>
+                    <div class="mini-card-footer">
+                      <span class="mini-card-price">${p.price}</span>
+                      <button class="btn-add-mini" onclick="window.addToCartFromMini('${p.id}')" title="Añadir al carrito" aria-label="Añadir al carrito">
+                        <i class="fas fa-shopping-cart"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        });
+      }
+
+      window.addToCartFromMini = function(productId) {
+        if (window.FutunetCart && typeof window.FutunetCart.add === 'function') {
+          window.FutunetCart.add(productId);
+        } else {
+          console.error('El módulo del carrito (FutunetCart) no está listo.');
+        }
+      };
+    });
+  </script>
 </body>
 </html>
+

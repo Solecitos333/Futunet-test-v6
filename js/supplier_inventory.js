@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const SUPPLIER_POLICIES = {
     cecomsa: {
       label: 'Mayorista de tecnología',
@@ -551,7 +551,164 @@
     },
 ],
 
-    improoficinas: []
+    improoficinas: [
+      {
+        id: 'mob_oficina_1',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Silla Ergonómica Ejecutiva',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-1.jpeg',
+        gallery: ['img/productos/mobiliario/mob-1.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_2',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Escritorio de Oficina Moderno',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-2.jpeg',
+        gallery: ['img/productos/mobiliario/mob-2.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_3',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Archivador Metálico de 3 Gavetas',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-3.jpeg',
+        gallery: ['img/productos/mobiliario/mob-3.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_4',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Mesa de Reuniones Circular',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-4.jpeg',
+        gallery: ['img/productos/mobiliario/mob-4.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_5',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Sillón de Visita Reclinable',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-5.jpeg',
+        gallery: ['img/productos/mobiliario/mob-5.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_6',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Estación de Trabajo Modular',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-6.jpeg',
+        gallery: ['img/productos/mobiliario/mob-6.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_7',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Librero de Madera',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-7.jpeg',
+        gallery: ['img/productos/mobiliario/mob-7.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_8',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Silla Secretarial Ajustable',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-8.jpeg',
+        gallery: ['img/productos/mobiliario/mob-8.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_9',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Mesa de Centro para Recepción',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-9.jpeg',
+        gallery: ['img/productos/mobiliario/mob-9.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_10',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Escritorio Gerencial en L',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-10.jpeg',
+        gallery: ['img/productos/mobiliario/mob-10.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_11',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Sofá de Espera 2 Cuerpos',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-11.jpeg',
+        gallery: ['img/productos/mobiliario/mob-11.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_12',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Gabinete de Almacenamiento',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-12.jpeg',
+        gallery: ['img/productos/mobiliario/mob-12.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      },
+      {
+        id: 'mob_oficina_13',
+        department: 'oficina',
+        category: 'Mobiliario',
+        brand: 'Futunet Mobiliario',
+        title: 'Silla Alta para Mostrador',
+        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        price: 'Cotizar',
+        img: 'img/productos/mobiliario/mob-13.jpeg',
+        gallery: ['img/productos/mobiliario/mob-13.jpeg'],
+        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+      }
+    ]
   };
 
   function slugify(value) {
@@ -727,7 +884,13 @@
   }
 
   const initialProducts = buildSupplierProducts();
-  mergeIntoCatalog(initialProducts);
+  if (window.FutunetData && window.FutunetData.readyPromise) {
+    window.FutunetData.readyPromise.then(() => {
+      mergeIntoCatalog(initialProducts);
+    });
+  } else {
+    mergeIntoCatalog(initialProducts);
+  }
 
   window.supplierInventory = {
     policies: SUPPLIER_POLICIES,

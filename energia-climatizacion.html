@@ -1,112 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Energía y Climatización — Futunet</title>
-  <meta name="description" content="Sistemas de energía ininterrumpida, inversores, UPS y climatización de alta eficiencia. Instalaciones solares y aire acondicionado en Santiago, República Dominicana." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energía Solar y Climatización Eficiente — Futunet</title>
+  <meta name="description" content="Sistemas de energía solar fotovoltaica, inversores híbridos, bancos de baterías de litio y aire acondicionado inverter de alta eficiencia en Santiago, RD.">
+  
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Energía Solar y Climatización Eficiente — Futunet" />
+  <meta property="og:description" content="Ahorro garantizado y autonomía eléctrica. Sistemas solares de medición neta, inversores inteligentes de litio y climatización de bajo consumo en Santiago, RD." />
+  <meta property="og:image" content="https://futunet.com.do/images/energia/solar_panels.png" />
+  <meta property="og:url" content="https://futunet.com.do/energia-climatizacion.html" />
+  <meta property="og:locale" content="es_DO" />
+  <meta property="og:site_name" content="Futunet" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Energía Solar y Climatización Eficiente — Futunet" />
+  <meta name="twitter:description" content="Respaldo inteligente y climatización inverter de alto rendimiento para hogares y empresas en República Dominicana." />
+  <meta name="twitter:image" content="https://futunet.com.do/images/energia/solar_panels.png" />
+  
+  <!-- CSS Globales -->
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.0" />
   <link rel="stylesheet" href="css/catalog.css?v=3.0" />
-  <link rel="icon" type="image/png" href="img/logo.webp" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json" />
-  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <style>
-    /* Estilos Premium de la Página de Servicio */
-    .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-    
-    .service-hero {
-      position: relative; height: 380px; display: flex; align-items: center;
-      background-size: cover; background-position: center; color: #fff; overflow: hidden;
-    }
-    .service-hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(9,16,24,0.4) 0%, rgba(9,16,24,0.85) 100%);
-      z-index: 1;
-    }
-    .service-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
-    .service-hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
-      letter-spacing: -0.03em;
-    }
-    .service-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
-
-    .service-section { padding: 60px 0; }
-    .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
-    
-    @media (max-width: 768px) {
-      .service-hero { height: 280px; }
-      .service-hero-title { font-size: 1.8rem; }
-      .service-hero-desc { font-size: 0.9rem; }
-      .service-grid-info { grid-template-columns: 1fr; gap: 30px; }
-    }
-
-    .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
-    .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
-    
-    .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
-    @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
-    .feature-item {
-      display: flex; gap: 12px; padding: 16px; border: 1px solid rgba(10,112,162,0.06);
-      border-radius: 16px; background: #fdfefe; box-shadow: 0 4px 12px rgba(10,112,162,0.02);
-    }
-    .feature-icon-wrapper {
-      width: 36px; height: 36px; border-radius: 50%; background: rgba(10,112,162,0.06);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2; flex-shrink: 0;
-    }
-    .feature-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 700; color: #0a101d; margin: 0 0 4px; }
-    .feature-text p { font-size: 0.8rem; color: #76889e; margin: 0; line-height: 1.4; }
-
-    /* Formulario de Solicitud */
-    .request-card {
-      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
-      padding: 30px; box-shadow: 0 10px 30px rgba(10,112,162,0.04); position: sticky; top: 100px;
-    }
-    .request-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .request-card p { font-size: 0.85rem; color: #76889e; margin: 0 0 20px; }
-    .request-form-group { margin-bottom: 14px; }
-    .request-form-label { display: block; font-size: 0.72rem; font-weight: 600; color: #394c60; margin-bottom: 4px; text-transform: uppercase; }
-    .request-form-input {
-      width: 100%; padding: 11px 14px; background: #f3f7fc; border: 1.5px solid #e5eef8;
-      border-radius: 12px; color: #0a101d; font-family: 'Outfit', sans-serif; font-size: 0.86rem;
-      transition: all 0.3s; outline: none; box-sizing: border-box;
-    }
-    .request-form-input:focus { border-color: #0A70A2; background: #fff; box-shadow: 0 0 0 3px rgba(10,112,162,0.08); }
-    .request-btn-submit {
-      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
-      font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, #0a7ab0, #22a4e0); box-shadow: 0 4px 14px rgba(10,112,162,0.18);
-      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .request-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,112,162,0.26); }
-    .request-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    /* Productos Asignados */
-    .service-products-section { background: #fdfefe; border-top: 1px solid rgba(10,112,162,0.03); padding: 60px 0; }
-    .service-products-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
-    .service-products-section p { font-size: 0.9rem; color: #76889e; margin: 0 0 30px; }
-    .products-grid-wrapper { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-  </style>
+  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
+  
+  <!-- CSS Específico de Energía y Climatización -->
+  <link rel="stylesheet" href="css/energia-climatizacion.css?v=3.0" />
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="is-loading">
 
+  <!-- Elemento Preloader -->
+  <div id="page-preloader" class="page-preloader" aria-hidden="true">
+    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="180" height="37" />
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+  <!-- Elemento SVG para Sprite de íconos -->
   <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
     <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448{1.01}h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </symbol>
   </svg>
 
+  <!-- Header (Navbar principal) -->
   <header class="site-header" role="banner">
     <nav id="navbar">
       <div class="nav-inner">
-        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+        <a href="index.html" class="nav-logo" aria-label="Ir al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="1009" height="207" />
         </a>
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
           <li><a href="index.html#servicios" class="active">Servicios</a></li>
@@ -143,71 +102,644 @@
     </div>
   </header>
 
-  <main id="service-page-container" class="service-page" data-service-id="energia">
-    <!-- Hero Banner -->
-    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/solar.jpg');">
-      <div class="container">
-        <div class="service-hero-content">
-          <h1 class="service-hero-title" id="service-title">Energía y Climatización</h1>
-          <p class="service-hero-desc" id="service-subtitle">Respaldo de energía inteligente y climatización de alta eficiencia para tu confort.</p>
+  <!-- Hero Section (Estilo Cinemático Banner) -->
+  <main id="main-content" class="service-page-wrapper">
+    <section id="inicio" class="hero-carousel-slide hero-carousel-slide--banner active" style="min-height: 520px; height: auto; display: flex; align-items: center;">
+      <div class="hb-bg" style="background-image: url('images/energia/solar_panels.png');"></div>
+      <div class="hb-overlay"></div>
+      <div class="container" style="position: relative; z-index: 10; width: 100%;">
+        <div class="hb-body">
+          <span class="tech-corner tl"></span>
+          <span class="tech-corner tr"></span>
+          <span class="tech-corner bl"></span>
+          <span class="tech-corner br"></span>
+          
+          <div class="cyber-status-panel">
+            <span class="cyber-pulse"></span> SISTEMA ECO-INTELLIGENT: OPERATIVO
+          </div>
+          
+          <h1 class="hb-title" id="service-title">Energía Solar y Climatización</h1>
+          <p class="hb-desc" id="service-subtitle">Independencia energética para tu hogar o empresa. Sistemas solares fotovoltaicos de última generación, respaldo inteligente de litio y aire acondicionado inverter de alta eficiencia.</p>
+          
+          <div class="hb-actions">
+            <a href="#cotizador" class="btn btn-primary" role="button">Cotizar Sistema</a>
+            <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20necesito%20asesor%C3%ADa%20en%20energ%C3%ADa%20y%20climatizaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="btn btn-wa">
+              <svg width="16" height="16"><use href="#wa-icon"/></svg> Asesoría Técnica
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Main Content Grid -->
-    <section class="service-section">
-      <div class="container">
-        <div class="service-grid-info">
-          <!-- Text and Specs -->
-          <div class="service-details">
-            <h3>Autonomía eléctrica y confort térmico</h3>
-            <p id="service-long-description">
-              Ofrecemos consultoría, instalación y soporte técnico para sistemas de energía solar fotovoltaica, bancos de baterías con inversores inteligentes, sistemas UPS para protección de equipos informáticos, y aire acondicionado inverter de alta eficiencia. Te ayudamos a independizarte de los apagones y a reducir sustancialmente tu factura eléctrica.
-            </p>
+    <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
+    <div class="service-subnav">
+      <div class="subnav-container">
+        <ul class="subnav-links">
+          <li><a href="#inicio" class="active"><i data-lucide="home" style="width:14px; height:14px; margin-right:4px;"></i>Inicio</a></li>
+          <li><a href="#solar">Energía Solar</a></li>
+          <li><a href="#inversores">Inversores y Respaldo</a></li>
+          <li><a href="#climatizacion">Climatización</a></li>
+          <li><a href="#proteccion">Protecciones</a></li>
+          <li><a href="#cotizador" class="highlight-link"><i data-lucide="calculator" style="width:14px; height:14px; margin-right:4px;"></i>Calculadora Solar</a></li>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#faq">Preguntas</a></li>
+          <li><a href="#solicitud">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
 
-            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
-            <div class="features-list" id="service-features-list">
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="sun"></i></div>
-                <div class="feature-text">
-                  <h4>Energía Solar</h4>
-                  <p>Instalación de paneles solares netos para hogares y empresas.</p>
-                </div>
+    <!-- Carrusel Infinito de Marcas Líderes -->
+    <section class="brands-section" aria-label="Marcas asociadas">
+      <div class="brands-title-top">Equipos de Clase Mundial</div>
+      <div class="brands-slider">
+        <div class="brand-track">
+          <!-- Grupo 1 -->
+          <a href="catalogo.html?brand=APC" class="brand-item" title="Schneider Electric"><img src="img/marcas/schneiderelectric.svg" alt="Schneider Electric"></a>
+          <a href="catalogo.html?brand=Tesla" class="brand-item" title="Tesla Powerwall"><img src="img/marcas/tesla.svg" alt="Tesla"></a>
+          <a href="catalogo.html?brand=Victron" class="brand-item" title="Victron Energy"><img src="img/marcas/victronenergy.svg" alt="Victron Energy"></a>
+          <a href="catalogo.html?brand=Mitsubishi" class="brand-item" title="Mitsubishi Electric"><img src="img/marcas/mitsubishi.svg" alt="Mitsubishi"></a>
+          <a href="catalogo.html?brand=Siemens" class="brand-item" title="Siemens"><img src="img/marcas/siemens.svg" alt="Siemens"></a>
+          <a href="catalogo.html?brand=Panasonic" class="brand-item" title="Panasonic Inverter"><img src="img/marcas/panasonic.svg" alt="Panasonic"></a>
+          <a href="catalogo.html?brand=LG" class="brand-item" title="LG Energy"><img src="img/marcas/lg.svg" alt="LG"></a>
+          
+          <!-- Grupo 2 (Duplicado para loop continuo) -->
+          <a href="catalogo.html?brand=APC" class="brand-item" title="Schneider Electric"><img src="img/marcas/schneiderelectric.svg" alt="Schneider Electric"></a>
+          <a href="catalogo.html?brand=Tesla" class="brand-item" title="Tesla Powerwall"><img src="img/marcas/tesla.svg" alt="Tesla"></a>
+          <a href="catalogo.html?brand=Victron" class="brand-item" title="Victron Energy"><img src="img/marcas/victronenergy.svg" alt="Victron Energy"></a>
+          <a href="catalogo.html?brand=Mitsubishi" class="brand-item" title="Mitsubishi Electric"><img src="img/marcas/mitsubishi.svg" alt="Mitsubishi"></a>
+          <a href="catalogo.html?brand=Siemens" class="brand-item" title="Siemens"><img src="img/marcas/siemens.svg" alt="Siemens"></a>
+          <a href="catalogo.html?brand=Panasonic" class="brand-item" title="Panasonic Inverter"><img src="img/marcas/panasonic.svg" alt="Panasonic"></a>
+          <a href="catalogo.html?brand=LG" class="brand-item" title="LG Energy"><img src="img/marcas/lg.svg" alt="LG"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 1: Energía Solar Fotovoltaica -->
+    <section class="service-section" id="solar">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-card card-img-container">
+            <img src="images/energia/solar_panels.png" alt="Instalación de Paneles Solares Futunet" loading="lazy">
+          </div>
+          <div class="about-card dark-highlight">
+            <span class="section-label">Energía Renovable</span>
+            <h2 class="about-card-title">Generación Solar Directa y Medición Neta</h2>
+            <p class="about-card-desc">Reduzca hasta un 95% su facturación eléctrica instalando un sistema solar interconectado a la red (On-Grid) bajo el programa de medición neta de la distribuidora (Edenorte). Producirá su propia energía de día y el excedente será inyectado a la red para recibir créditos en su factura.</p>
+            
+            <div class="about-info-grid">
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-solar-panel"></i> Paneles Tier 1</label>
+                <span>Módulos monocristalinos de alta eficiencia con 25 años de garantía lineal.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="battery-charging"></i></div>
-                <div class="feature-text">
-                  <h4>Inversores & UPS</h4>
-                  <p>Respaldo inmediato libre de ruidos para computadoras y servidores.</p>
-                </div>
+              <div class="about-info-item">
+                <label><i class="fa-solid fa-circle-nodes"></i> Microinversores</label>
+                <span>Optimización individual por panel. Mayor rendimiento y monitoreo móvil por app.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="wind"></i></div>
-                <div class="feature-text">
-                  <h4>Climatización Inverter</h4>
-                  <p>Instalación y mantenimiento de unidades AA de bajo consumo.</p>
-                </div>
+            </div>
+            <a href="#cotizador" class="btn-glow" style="margin-top: 30px;">Calcular Mi Sistema <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 2: Inversores y Bancos de Baterías -->
+    <section class="service-section" id="inversores" style="background-color: #f8fafc;">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #091a14 0%, #06110d 100%) !important;">
+            <span class="section-label badge-alert">Energía de Respaldo</span>
+            <h2 class="about-card-title">Inversores Híbridos y Baterías de Litio</h2>
+            <p class="about-card-desc">Proteja su hogar u oficina frente a apagones e inestabilidades del suministro con inversores inteligentes de onda senoidal pura y almacenamiento de litio (LiFePO4). Cero ruido, cero mantenimiento y una vida útil superior a los 10 años.</p>
+            
+            <div class="about-info-grid">
+              <div class="about-info-item" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08);">
+                <label style="color:#ffffff;"><i class="fa-solid fa-car-battery" style="color:var(--solar-amber);"></i> Baterías de Litio</label>
+                <span style="color:#cbd5e1;">Hasta 6,000 ciclos de descarga profunda sin degradarse, superando por mucho al gel/ácido.</span>
               </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="shield-alert"></i></div>
-                <div class="feature-text">
-                  <h4>Protección Eléctrica</h4>
-                  <p>Supresores de picos y protectores de voltaje industriales.</p>
+              <div class="about-info-item" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08);">
+                <label style="color:#ffffff;"><i class="fa-solid fa-laptop-code" style="color:var(--solar-amber);"></i> UPS Corporativas</label>
+                <span style="color:#cbd5e1;">Sistemas online de doble conversión para servidores, switches y equipos médicos sensibles.</span>
+              </div>
+            </div>
+            <a href="#cotizador" class="btn-glow" style="margin-top: 30px; background: linear-gradient(135deg, var(--solar-amber) 0%, #d97706 100%); box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);">Diseñar Respaldo <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="about-card card-img-container">
+            <img src="images/energia/hybrid_inverter.png" alt="Inversor híbrido inteligente y gabinete de litio" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 3: Climatización de Alta Eficiencia -->
+    <section class="service-section" id="climatizacion">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-card card-img-container">
+            <img src="images/energia/air_conditioner.png" alt="Aire acondicionado split inverter corporativo instalado" loading="lazy">
+          </div>
+          <div class="about-card dark-highlight" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important; border-color: rgba(56, 189, 248, 0.25) !important; box-shadow: 0 20px 50px rgba(15, 23, 42, 0.3);">
+            <span class="section-label" style="background: rgba(56, 189, 248, 0.12) !important; color: #38bdf8 !important; border-color: rgba(56, 189, 248, 0.25) !important;">Clima Inteligente</span>
+            <h2 class="about-card-title" style="color:#ffffff;">Climatización Inverter Premium</h2>
+            <p class="about-card-desc" style="color:#94a3b8;">Instalamos y mantenemos sistemas de aire acondicionado split y centrales con tecnología Inverter y altos índices SEER. Disfrute del confort perfecto con hasta un 65% de ahorro en electricidad comparado con aires tradicionales.</p>
+            
+            <div class="about-info-grid">
+              <div class="about-info-item" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08);">
+                <label style="color:#ffffff;"><i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i> Máximo SEER</label>
+                <span style="color:#cbd5e1;">Unidades de hasta 22+ SEER que consumen la fracción mínima de energía para enfriar.</span>
+              </div>
+              <div class="about-info-item" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.08);">
+                <label style="color:#ffffff;"><i class="fa-solid fa-wrench" style="color:#38bdf8;"></i> Mantenimiento Técnico</label>
+                <span style="color:#cbd5e1;">Limpieza química profunda preventiva y correctiva para alargar la vida del compresor.</span>
+              </div>
+            </div>
+            <a href="#contacto-servicio" class="btn-glow" style="margin-top: 30px; background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); box-shadow: 0 8px 24px rgba(56, 189, 248, 0.3);">Agendar Limpieza <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 4: Protección Eléctrica y Accesorios -->
+    <section class="service-section" id="proteccion" style="background-color: #f8fafc;">
+      <div class="container">
+        <div class="section-header text-center" style="max-width: 700px; margin: 0 auto 50px;">
+          <span class="section-label">Protección Eléctrica</span>
+          <h2 class="section-title">Blindaje Eléctrico Profesional</h2>
+          <p class="section-desc">En República Dominicana las fluctuaciones eléctricas y descargas atmosféricas son recurrentes. Blindamos sus equipos sensibles con sistemas de protección integrales.</p>
+        </div>
+        
+        <div class="about-grid services-grid">
+          <div class="about-card service-card card-clima">
+            <div class="service-icon-box"><i class="fa-solid fa-bolt-lightning"></i></div>
+            <h3 class="about-card-title" style="font-size:1.3rem; margin-bottom:10px;">Supresores de Transientes (SPD)</h3>
+            <p class="about-card-desc" style="font-size:0.88rem; line-height:1.5; color:#475569;">Dispositivos instalados directamente en el panel de distribución principal para desviar descargas y picos de sobrevoltaje extremos a tierra antes de que dañen sus electrodomésticos u ordenadores.</p>
+          </div>
+          
+          <div class="about-card service-card card-proteccion">
+            <div class="service-icon-box"><i class="fa-solid fa-toggle-on"></i></div>
+            <h3 class="about-card-title" style="font-size:1.3rem; margin-bottom:10px;">Protectores de Voltaje y Secuenciadores</h3>
+            <p class="about-card-desc" style="font-size:0.88rem; line-height:1.5; color:#475569;">Monitores digitales inteligentes que desconectan automáticamente el circuito si el voltaje sube o baja de los rangos seguros (ej. 100V-135V), y reconectan con retraso temporizado para proteger motores y compresores.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 5: Cotizador Solar y de Carga con Simulador HUD de Flujo -->
+    <section class="service-section" id="cotizador">
+      <div class="container">
+        <div class="section-header text-center" style="max-width: 750px; margin: 0 auto 50px;">
+          <span class="section-label">Cotizador y Simulador</span>
+          <h2 class="section-title">Calculadora Solar y de Carga Eléctrica</h2>
+          <p class="section-desc">Diseñe el sistema solar o de respaldo de energía a su medida. Configure sus necesidades paso a paso y observe cómo fluye la energía en el simulador digital interactivo.</p>
+        </div>
+        
+        <!-- Consola del Cotizador -->
+        <div class="estimator-console">
+          <!-- Barra superior de estilo consola terminal/HUD -->
+          <div class="estimator-top-bar">
+            <div class="top-bar-dots">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+            <div class="top-bar-title"><i class="fa-solid fa-microchip" style="margin-right:6px;"></i> FUTUNET SOLAR ESTIMATOR V3.2</div>
+            <div class="top-bar-status">
+              <span class="status-indicator"></span> ONLINE
+            </div>
+          </div>
+          
+          <div class="estimator-wizard">
+            <!-- Roadmap de Progreso -->
+            <div class="estimator-progress-container">
+              <div class="progress-track">
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+              </div>
+              <div class="estimator-steps">
+                <div class="step-indicator active" data-step="1">
+                  <div class="node-circle"><span class="node-number">1</span><i class="fa-solid fa-check node-check"></i></div>
+                  <span class="node-label">Solar On-Grid</span>
+                </div>
+                <div class="step-indicator" data-step="2">
+                  <div class="node-circle"><span class="node-number">2</span><i class="fa-solid fa-check node-check"></i></div>
+                  <span class="node-label">Respaldo Inversor</span>
+                </div>
+                <div class="step-indicator" data-step="3">
+                  <div class="node-circle"><span class="node-number">3</span><i class="fa-solid fa-check node-check"></i></div>
+                  <span class="node-label">Climatización</span>
+                </div>
+                <div class="step-indicator" data-step="4">
+                  <div class="node-circle"><span class="node-number">4</span><i class="fa-solid fa-check node-check"></i></div>
+                  <span class="node-label">Simulador HUD</span>
+                </div>
+                <div class="step-indicator" data-step="5">
+                  <div class="node-circle"><span class="node-number">5</span><i class="fa-solid fa-check node-check"></i></div>
+                  <span class="node-label">Resumen</span>
                 </div>
               </div>
             </div>
+            
+            <!-- Contenido Paso 1: Solar -->
+            <div class="estimator-step-content" data-step="1">
+              <h3 class="step-question">Paso 1: ¿Desea incluir un sistema de Paneles Solares para reducir la factura mensual?</h3>
+              <div class="estimator-options">
+                <label class="option-card">
+                  <input type="radio" name="est-solar" value="no" checked>
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-ban"></i></div>
+                    <span class="option-title">No por ahora</span>
+                    <span class="option-desc">Solo me interesa inversor de respaldo o aire acondicionado. Red: Directa.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-solar" value="2kw">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-solar-panel"></i></div>
+                    <span class="option-title">Residencial Bajo</span>
+                    <span class="option-desc">Sistema de 2 kW (Aprox. 4 paneles solares). Recomendado para facturas de RD$ 2,000 a 5,000.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-solar" value="4kw">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-sun"></i></div>
+                    <span class="option-title">Residencial Medio</span>
+                    <span class="option-desc">Sistema de 4 kW (Aprox. 8 paneles solares). Recomendado para facturas de RD$ 5,000 a 15,000.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-solar" value="8kw">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-industry"></i></div>
+                    <span class="option-title">Comercial / Grande</span>
+                    <span class="option-desc">Sistema de 8 kW (Aprox. 16 paneles solares). Recomendado para facturas de RD$ 15,000 a 30,000+.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Contenido Paso 2: Respaldo -->
+            <div class="estimator-step-content" data-step="2" style="display:none;">
+              <h3 class="step-question">Paso 2: ¿Qué tipo de respaldo eléctrico (Inversor/Baterías) requiere contra apagones?</h3>
+              <div class="estimator-options">
+                <label class="option-card">
+                  <input type="radio" name="est-backup" value="no" checked>
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-plug"></i></div>
+                    <span class="option-title">Sin Respaldo</span>
+                    <span class="option-desc">Conexión directa a red. Sin baterías. Los equipos se apagarán al irse la luz.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-backup" value="basico">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-battery-half"></i></div>
+                    <span class="option-title">Respaldo Básico</span>
+                    <span class="option-desc">Inversor de 1.5 kW + 2 baterías AGM (Gel). Cubre luces, abanicos, nevera, WiFi e informática básica.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-backup" value="litio">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-battery-full"></i></div>
+                    <span class="option-title">Híbrido Litio Inteligente</span>
+                    <span class="option-desc">Inversor Híbrido de 3 kW + 1 Batería de Litio de pared de 4.8 kWh. Carga ultra rápida y larga duración.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-backup" value="litio_pro">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+                    <span class="option-title">Híbrido Alto Rendimiento</span>
+                    <span class="option-desc">Inversor Híbrido de 5 kW + 2 Baterías de Litio (9.6 kWh). Respaldo extendido que soporta aires acondicionados.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Contenido Paso 3: Clima -->
+            <div class="estimator-step-content" data-step="3" style="display:none;">
+              <h3 class="step-question">Paso 3: ¿Desea agregar Aires Acondicionados Split Inverter de alto ahorro?</h3>
+              <div class="estimator-options">
+                <label class="option-card">
+                  <input type="radio" name="est-clima" value="no" checked>
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                    <span class="option-title">Sin Climatización</span>
+                    <span class="option-desc">No requiero unidades de aire acondicionado en esta cotización.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-clima" value="1unit">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-snowflake"></i></div>
+                    <span class="option-title">1 Unidad (12k BTU)</span>
+                    <span class="option-desc">Unidad Inverter de 12,000 BTU, ideal para una habitación estándar u oficina pequeña.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-clima" value="2units">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-wind"></i></div>
+                    <span class="option-title">2 Unidades (24k BTU tot.)</span>
+                    <span class="option-desc">Dos unidades Inverter de 12,000 BTU o una de 24,000 BTU para salas u oficinas medianas.</span>
+                  </div>
+                </label>
+                
+                <label class="option-card">
+                  <input type="radio" name="est-clima" value="comercial">
+                  <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                  <div class="option-card-content">
+                    <div class="option-icon-wrapper"><i class="fa-solid fa-fan"></i></div>
+                    <span class="option-title">Área Comercial / Central</span>
+                    <span class="option-desc">Equipos de alta capacidad (36,000 BTU a más) o centrales para oficinas integrales.</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <!-- Contenido Paso 4: Simulador HUD -->
+            <div class="estimator-step-content" data-step="4" style="display:none;">
+              <h3 class="step-question">Paso 4: Simulador de Flujo de Potencia Energética</h3>
+              <div class="quality-step-grid">
+                <!-- Controles del Simulador -->
+                <div class="estimator-options vertical-options">
+                  <p style="font-size:0.88rem; color:#475569; margin: 0 0 10px; line-height: 1.5;">Seleccione un modo para simular en tiempo real cómo interactúa su sistema con la red nacional de distribución eléctrica:</p>
+                  
+                  <label class="option-card">
+                    <input type="radio" name="sim-mode" value="normal" checked>
+                    <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                    <div class="option-card-content">
+                      <div class="option-icon-wrapper"><i class="fa-solid fa-tower-broadcast"></i></div>
+                      <div class="option-text-group">
+                        <span class="option-title">Modo Red (Normal)</span>
+                        <span class="option-desc">El hogar consume directamente de la distribuidora pública. La batería se carga.</span>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="option-card">
+                    <input type="radio" name="sim-mode" value="solar">
+                    <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                    <div class="option-card-content">
+                      <div class="option-icon-wrapper"><i class="fa-solid fa-solar-panel"></i></div>
+                      <div class="option-text-group">
+                        <span class="option-title">Modo Solar (Autogeneración)</span>
+                        <span class="option-desc">Los paneles solares suplen el 100% de la carga y el excedente se vende a la red.</span>
+                      </div>
+                    </div>
+                  </label>
+                  
+                  <label class="option-card">
+                    <input type="radio" name="sim-mode" value="hybrid">
+                    <span class="check-badge"><i class="fa-solid fa-check"></i></span>
+                    <div class="option-card-content">
+                      <div class="option-icon-wrapper"><i class="fa-solid fa-battery-three-quarters"></i></div>
+                      <div class="option-text-group">
+                        <span class="option-title">Modo Híbrido (Corte de Luz)</span>
+                        <span class="option-desc">Apagón detectado. La batería de litio e inversor respaldan la casa instantáneamente.</span>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+                
+                <!-- Pantalla del Simulador HUD -->
+                <div class="quality-simulator-preview">
+                  <div class="simulator-hud-header">
+                    <div class="hud-tag"><span class="cyber-pulse blink-animation"></span> SIMULADOR EN VIVO</div>
+                    <div id="simulator-time">2026-05-28 00:00:00</div>
+                  </div>
+                  
+                  <div class="simulator-screen">
+                    <div class="osd-corner top-left"></div>
+                    <div class="osd-corner top-right"></div>
+                    <div class="osd-corner bottom-left"></div>
+                    <div class="osd-corner bottom-right"></div>
+                    
+                    <span class="osd-cam-name" style="position:absolute; top:18px; left:18px;">POWER FLOW: <span id="osd-mode-label" style="color:var(--eco-green);">NORMAL</span></span>
+                    
+                    <!-- Imagen de flujo intercambiable -->
+                    <img id="simulator-image" class="simulator-img" src="images/energia/sim_energy_normal.png" alt="HUD Diagrama Normal de Flujo Energético">
+                    
+                    <span class="osd-cam-specs" id="osd-specs" style="position:absolute; bottom:18px; right:18px;">GEN: 0.00 kW | LOAD: 1.50 kW | NET: BUY</span>
+                  </div>
+                  
+                  <div class="simulator-hud-footer">
+                    <p class="simulator-desc" id="simulator-desc">El hogar consume directamente de la distribuidora pública (Grid). La batería está siendo cargada y mantenida al 100% de manera automática por el inversor.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Contenido Paso 5: Resumen -->
+            <div class="estimator-step-content" data-step="5" style="display:none;">
+              <h3 class="step-question">Paso 5: Resumen de su Estimación</h3>
+              <div class="summary-box">
+                <div class="summary-details">
+                  <div class="console-summary-header">
+                    <span class="status-indicator"></span> SISTEMA RECOMENDADO
+                  </div>
+                  <ul class="summary-list">
+                    <li><i class="fa-solid fa-solar-panel"></i> <span><strong>Energía Solar:</strong> <span id="sum-solar">Ninguno</span></span></li>
+                    <li><i class="fa-solid fa-car-battery"></i> <span><strong>Respaldo y Baterías:</strong> <span id="sum-backup">Ninguno</span></span></li>
+                    <li><i class="fa-solid fa-snowflake"></i> <span><strong>Climatización:</strong> <span id="sum-clima">Ninguno</span></span></li>
+                    <li><i class="fa-solid fa-shield-halved"></i> <span><strong>Protecciones Incluidas:</strong> <span id="sum-protections">Monitores de Voltaje y Puesta a Tierra</span></span></li>
+                  </ul>
+                </div>
+                <div class="price-indicator">
+                  <span class="price-label">PRESUPUESTO APROXIMADO</span>
+                  <span id="sum-price">RD$ 0.00*</span>
+                  <span class="price-disclaimer">*Incluye equipos básicos, accesorios de cableado y mano de obra de instalación certificada. Sujeto a inspección.</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Botones de Acción del Wizard -->
+            <div class="estimator-actions">
+              <button class="btn" id="est-prev-btn" style="display:none;">Atrás</button>
+              <button class="btn" id="est-next-btn">Siguiente</button>
+              <a href="#" target="_blank" rel="noopener noreferrer" class="btn" id="est-wa-btn" style="display:none;">
+                <svg width="16" height="16"><use href="#wa-icon"/></svg> Solicitar por WhatsApp
+              </a>
+            </div>
           </div>
+          
+          <!-- Sellos de Confianza -->
+          <div class="estimator-trust-seals">
+            <div class="trust-seal-item">
+              <div class="seal-icon-box"><i class="fa-solid fa-certificate"></i></div>
+              <div class="seal-text-group">
+                <span class="seal-title">Garantía Certificada</span>
+                <span class="seal-subtitle">Equipos con hasta 10 años de garantía</span>
+              </div>
+            </div>
+            <div class="trust-seal-item">
+              <div class="seal-icon-box"><i class="fa-solid fa-user-shield"></i></div>
+              <div class="seal-text-group">
+                <span class="seal-title">Ingenieros Certificados</span>
+                <span class="seal-subtitle">Instalación bajo normas IEEE y NEC</span>
+              </div>
+            </div>
+            <div class="trust-seal-item">
+              <div class="seal-icon-box"><i class="fa-solid fa-leaf"></i></div>
+              <div class="seal-text-group">
+                <span class="seal-title">Eco-Eficiente</span>
+                <span class="seal-subtitle">Reduce tu huella de carbono al 100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- Sticky Lead Form -->
+    <!-- Sección 6: Catálogo de Productos y Filtros -->
+    <section class="service-products-section" id="catalogo">
+      <div class="container">
+        <div class="section-header text-center" style="max-width: 700px; margin: 0 auto 30px;">
+          <span class="section-label">Catálogo Integrado</span>
+          <h2 class="section-title">Equipos de Energía y Clima Disponibles</h2>
+          <p class="section-desc">Explore los equipos en inventario. Filtre por subcategoría para cotizar inversores, paneles, baterías, UPS y unidades de climatización.</p>
+        </div>
+        
+        <!-- Filtros de Subcategoría (Pills) -->
+        <div class="subcategory-filters-wrapper">
+          <div class="subcategory-filters">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="energia_solar">Energía Solar</button>
+            <button class="filter-btn" data-filter="energia_inversores">Inversores</button>
+            <button class="filter-btn" data-filter="energia_baterias">Baterías</button>
+            <button class="filter-btn" data-filter="energia_ups">Sistemas UPS</button>
+            <button class="filter-btn" data-filter="energia_clima">Aire Acondicionado</button>
+            <button class="filter-btn" data-filter="energia_accesorios">Protección y Accesorios</button>
+          </div>
+        </div>
+        
+        <!-- Grilla Dinámica de Productos -->
+        <div class="service-products-grid" id="service-products-grid">
+          <!-- Inyectado dinámicamente por js/service-page.js -->
+        </div>
+        
+        <!-- Mensaje de no productos -->
+        <div id="no-products-msg" style="display:none; text-align:center; padding: 40px 20px; background:#f8fafc; border-radius: 16px; border:1px dashed #cbd5e1; color:#64748b; margin-top:20px;">
+          <i class="fa-solid fa-box-open" style="font-size:2rem; margin-bottom:12px; color:#cbd5e1;"></i>
+          <p style="margin:0; font-size:0.92rem; font-weight:500;">No encontramos equipos listados en esta subcategoría actualmente.</p>
+          <p style="margin:4px 0 0; font-size:0.8rem; color:#94a3b8;">Ofrecemos importación bajo pedido y marcas especializadas. Por favor contáctenos directamente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 7: FAQ Accordions -->
+    <section class="service-section" id="faq" style="background-color: #f8fafc;">
+      <div class="container">
+        <div class="section-header text-center" style="max-width: 700px; margin: 0 auto 50px;">
+          <span class="section-label">Resolviendo Dudas</span>
+          <h2 class="section-title">Preguntas Frecuentes sobre Energía y Climatización</h2>
+          <p class="section-desc">Entendemos que los proyectos solares y de climatización requieren decisiones informadas. Aquí respondemos a las consultas más habituales de nuestros clientes.</p>
+        </div>
+        
+        <div class="faq-container" style="max-width:800px; margin:0 auto; display:flex; flex-direction:column; gap:16px;">
+          <div class="faq-item" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:24px; transition:all 0.3s ease;">
+            <button class="faq-trigger" aria-expanded="false" style="width:100%; background:none; border:none; text-align:left; font-family:'Space Grotesk',sans-serif; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0;">
+              ¿Cómo funciona la medición neta con Edenorte?
+              <i class="fa-solid fa-chevron-down" style="font-size:0.88rem; transition:transform 0.3s ease; color:#64748b;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height:0; overflow:hidden; transition:max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+              <p style="margin: 16px 0 0; font-size: 0.9rem; line-height: 1.6; color: #475569;">Al instalar paneles solares interconectados de medición neta, se instala un medidor bidireccional. Este medidor registra la energía que usted consume de la red y la energía sobrante que inyecta a ella. Al final del mes, la distribuidora le cobra solo el "neto" consumido. Si inyectó más de lo que consumió, recibirá créditos que se acumulan para los meses siguientes.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:24px; transition:all 0.3s ease;">
+            <button class="faq-trigger" aria-expanded="false" style="width:100%; background:none; border:none; text-align:left; font-family:'Space Grotesk',sans-serif; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0;">
+              ¿Cuál es la diferencia real entre baterías de Litio y de Gel (AGM)?
+              <i class="fa-solid fa-chevron-down" style="font-size:0.88rem; transition:transform 0.3s ease; color:#64748b;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height:0; overflow:hidden; transition:max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+              <p style="margin: 16px 0 0; font-size: 0.9rem; line-height: 1.6; color: #475569;">Las baterías de Gel tienen una vida útil promedio de 2 a 3 años (aprox. 500-800 ciclos de descarga al 50%) y tardan de 8 a 10 horas en recargarse por completo. Las baterías de Litio (LiFePO4) ofrecen más de 6,000 ciclos al 90% de descarga (más de 10 años de vida), se recargan al 100% en solo 2 horas, no emiten gases y ocupan un 70% menos espacio físico.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:24px; transition:all 0.3s ease;">
+            <button class="faq-trigger" aria-expanded="false" style="width:100%; background:none; border:none; text-align:left; font-family:'Space Grotesk',sans-serif; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0;">
+              ¿Qué significa el índice SEER en los aires acondicionados inverter?
+              <i class="fa-solid fa-chevron-down" style="font-size:0.88rem; transition:transform 0.3s ease; color:#64748b;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height:0; overflow:hidden; transition:max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+              <p style="margin: 16px 0 0; font-size: 0.9rem; line-height: 1.6; color: #475569;">SEER (Seasonal Energy Efficiency Ratio) mide la eficiencia energética estacional de la unidad. A mayor número SEER, más eficiente es el aire y menos energía consumirá para enfriar el mismo espacio. Un aire con SEER 20 o superior puede ahorrar más de un 60% en electricidad en comparación con un aire tradicional no-inverter de SEER 10.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:24px; transition:all 0.3s ease;">
+            <button class="faq-trigger" aria-expanded="false" style="width:100%; background:none; border:none; text-align:left; font-family:'Space Grotesk',sans-serif; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0;">
+              ¿Los paneles solares siguen funcionando en días nublados o lluviosos?
+              <i class="fa-solid fa-chevron-down" style="font-size:0.88rem; transition:transform 0.3s ease; color:#64748b;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height:0; overflow:hidden; transition:max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+              <p style="margin: 16px 0 0; font-size: 0.9rem; line-height: 1.6; color: #475569;">Sí, los paneles solares siguen captando radiación difusa y produciendo electricidad, aunque su rendimiento se reduce a un 10% - 25% de su capacidad máxima. Por la noche la generación es nula. Por eso los sistemas interconectados usan la red eléctrica pública como amortiguador y los sistemas aislados dependen de las baterías acumuladoras.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" style="background:#ffffff; border:1.5px solid #e2e8f0; border-radius:18px; padding:24px; transition:all 0.3s ease;">
+            <button class="faq-trigger" aria-expanded="false" style="width:100%; background:none; border:none; text-align:left; font-family:'Space Grotesk',sans-serif; font-size:1.08rem; font-weight:700; color:#0f172a; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0;">
+              ¿Qué mantenimiento requiere un sistema solar?
+              <i class="fa-solid fa-chevron-down" style="font-size:0.88rem; transition:transform 0.3s ease; color:#64748b;"></i>
+            </button>
+            <div class="faq-answer" aria-hidden="true" style="max-height:0; overflow:hidden; transition:max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);">
+              <p style="margin: 16px 0 0; font-size: 0.9rem; line-height: 1.6; color: #475569;">El mantenimiento es mínimo debido a que no tiene partes móviles. Consiste básicamente en limpiar con agua los paneles solares de 2 a 4 veces al año para eliminar el polvo u hojas que reduzcan el paso de la luz, e inspeccionar visualmente que las conexiones y estructuras de aluminio no presenten anomalías.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección 8: Formulario de Solicitud de Cotización -->
+    <section class="service-section" id="solicitud" style="background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);">
+      <div class="container">
+        <div class="cta-grid">
+          <!-- Columna Info -->
+          <div class="cta-info-column" style="display:flex; flex-direction:column; justify-content:center; text-align:left;">
+            <span class="section-label">Estudio de Carga</span>
+            <h2 class="section-title" style="font-size:2rem; margin-bottom:18px;">¿Listo para independizarse de los apagones y el alto costo de la luz?</h2>
+            <p class="section-desc" style="font-size:0.96rem; line-height:1.6; color:#475569; margin-bottom:24px;">Complete el formulario. Un ingeniero especialista de Futunet se pondrá en contacto para agendar un levantamiento técnico presencial gratuito en Santiago y diseñar el presupuesto definitivo ajustado a sus consumos reales.</p>
+            
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:rgba(16, 185, 129, 0.1); color:var(--eco-green); display:flex; align-items:center; justify-content:center; font-size:0.9rem;"><i class="fa-solid fa-phone"></i></div>
+                <span style="font-size:0.9rem; font-weight:600; color:#334155;">Línea Directa: 829-741-1041</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:rgba(16, 185, 129, 0.1); color:var(--eco-green); display:flex; align-items:center; justify-content:center; font-size:0.9rem;"><i class="fa-solid fa-envelope"></i></div>
+                <span style="font-size:0.9rem; font-weight:600; color:#334155;">Correo Oficial: ventas@futunet.com.do</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Columna Formulario -->
           <div>
             <div class="request-card">
-              <h3>Solicitar Cotización</h3>
-              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
+              <h3>Solicitar Estudio de Levantamiento</h3>
+              <p>Reciba asesoría y cotización formal formalizada en menos de 24 horas.</p>
               
               <form id="service-request-form">
                 <div class="request-form-group">
-                  <label class="request-form-label" for="req-name">Nombre Completo</label>
-                  <input type="text" id="req-name" class="request-form-input" required />
+                  <label class="request-form-label" for="req-name">Nombre y Apellidos</label>
+                  <input type="text" id="req-name" class="request-form-input" required placeholder="Ej. Juan Pérez" />
                 </div>
                 <div class="request-form-group">
                   <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
@@ -215,19 +747,19 @@
                 </div>
                 <div class="request-form-group">
                   <label class="request-form-label" for="req-email">Correo Electrónico</label>
-                  <input type="email" id="req-email" class="request-form-input" required />
+                  <input type="email" id="req-email" class="request-form-input" required placeholder="juan@correo.com" />
                 </div>
                 <div class="request-form-group">
-                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
-                  <input type="text" id="req-company" class="request-form-input" />
+                  <label class="request-form-label" for="req-company">Empresa u Organización (Opcional)</label>
+                  <input type="text" id="req-company" class="request-form-input" placeholder="Ej. Minera Nacional" />
                 </div>
                 <div class="request-form-group">
-                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
-                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: instalación de inversor de 3kW con 4 baterías o paneles solares)..."></textarea>
+                  <label class="request-form-label" for="req-message">Especificaciones de su Requerimiento</label>
+                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Detalle qué equipos necesita respaldar o su consumo promedio en RD$..."></textarea>
                 </div>
                 
                 <button type="submit" class="request-btn-submit" id="req-submit-btn">
-                  <i data-lucide="send"></i> Enviar Solicitud
+                  <i class="fa-solid fa-paper-plane" style="font-size:0.85rem; margin-right:4px;"></i> Enviar Levantamiento
                 </button>
               </form>
             </div>
@@ -235,59 +767,426 @@
         </div>
       </div>
     </section>
-
-    <!-- Linked Products Section -->
-    <section class="service-products-section" id="related-products-section" style="display:none;">
-      <div class="container">
-        <h3>Equipos relacionados de nuestro catálogo</h3>
-        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
-        <div class="products-grid-wrapper" id="service-products-grid">
-          <!-- Dynamically filled by script -->
-        </div>
-      </div>
-    </section>
   </main>
 
-  <footer class="site-footer" role="contentinfo">
+  <footer role="contentinfo">
     <div class="container">
       <div class="footer-grid">
-        <div class="footer-col brand-col">
-          <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo" width="1009" height="207" />
-          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        <div class="footer-brand">
+          <a href="#inicio" class="footer-logo-link">
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="1009" height="207" loading="lazy" decoding="async" />
+          </a>
+          <p>La Tecnología del Futuro. Soluciones avanzadas de energía solar, inversores inteligentes de litio y climatización inverter de alta eficiencia para hogares y empresas.</p>
         </div>
         <div class="footer-col">
-          <h4>Servicios</h4>
+          <h5>Energía y Clima</h5>
           <ul>
-            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
-            <li><a href="redes-datos.html">Redes y datos</a></li>
-            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
-            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+            <li><a href="#solar">Energía Solar</a></li>
+            <li><a href="#inversores">Inversores y Respaldo</a></li>
+            <li><a href="#climatizacion">Climatización Eficiente</a></li>
+            <li><a href="#cotizador">Calculadora Solar</a></li>
+            <li><a href="#catalogo">Catálogo de Equipos</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Compañía</h4>
+          <h5>Contacto</h5>
           <ul>
-            <li><a href="index.html#nosotros">Nosotros</a></li>
-            <li><a href="catalogo.html">Catálogo</a></li>
-            <li><a href="index.html#contacto">Contacto</a></li>
+            <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
+            <li><a href="https://maps.google.com/maps?q=19.476061,-70.715163" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Av. Cuesta Colorada, Las Colinas, Santiago</a></li>
+            <li><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20comercial." target="_blank" rel="noopener noreferrer"><i data-lucide="user" class="footer-icon"></i> Orbis Espinal</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
+        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>Santiago, República Dominicana</span>
       </div>
     </div>
   </footer>
 
-  <!-- Firebase SDK -->
+  <!-- Floating Shopping Cart (FAB) y Drawer del Carrito -->
+  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
+    <div class="cart-drawer__backdrop" data-close-cart></div>
+    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title">
+      <div class="cart-drawer__header">
+        <div>
+          <span class="section-label">Carrito</span>
+          <h2 id="cart-drawer-title">Tu carrito de compra</h2>
+        </div>
+        <button type="button" class="cart-drawer__close" data-close-cart aria-label="Cerrar carrito">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div id="cart-items-list" class="cart-drawer__items"></div>
+      <div class="cart-drawer__footer">
+        <div class="cart-drawer__summary"><span id="cart-summary-count">0 artículos</span></div>
+        <button type="button" class="btn btn-primary cart-drawer__checkout" id="cart-checkout-btn">
+          <i data-lucide="credit-card"></i>
+          Solicitar carrito por WhatsApp
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  <button id="cart-fab" class="cart-fab is-empty" type="button" aria-label="Abrir carrito de compra" aria-controls="cart-drawer" aria-expanded="false">
+    <span class="cart-fab__label" id="cart-fab-label" aria-hidden="true" hidden>
+      <span class="cart-fab__label-count" id="cart-fab-label-count">0</span>
+      <span class="cart-fab__label-copy" id="cart-fab-label-copy">artículos</span>
+    </span>
+    <span class="cart-fab__icon"><i data-lucide="shopping-cart"></i></span>
+    <span class="cart-fab__count" id="cart-count">0</span>
+  </button>
+
+  <!-- Barra de Navegación Sticky Móvil -->
+  <div class="mobile-bottom-bar mobile-bottom-bar--home" aria-label="Accesos rápidos móviles">
+    <a href="catalogo.html" class="mobile-bottom-bar__action">
+      <i data-lucide="layout-grid"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20conocer%20m%C3%A1s%20detalles%20de%20sus%20sistemas%20de%20energ%C3%ADa%20y%20clima." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Firebase Compat SDK -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script defer src="js/firebase-config.js"></script>
   <script defer src="js/auth.js"></script>
-  <script defer src="js/auth-guard.js"></script>
-  <script src="js/main.js"></script>
-  <script defer src="js/service-page.js"></script>
+
+  <!-- Scripts Base & Utilities -->
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script defer src="js/config.js"></script>
+  <script defer src="js/cart.js"></script>
+  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/main.js"></script>
+  <script defer src="js/inventory_data.js"></script>
+  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/image_fixes.js?v=v9"></script>
+  <script defer src="js/catalog.js"></script>
+  <script type="module" src="js/service-page.js"></script>
+
+  <!-- Script Inline para Desplazamientos y Cotizador/Simulador de Energía -->
+  <script>
+    window.currentServiceCategory = 'energia_climatizacion';
+    
+    // Función global para filtrar subcategorías de catálogo
+    window.filterBySubcategory = function(subcategory) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if(btn.getAttribute('data-filter') === subcategory) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      const event = new CustomEvent('filterSubcategory', { detail: subcategory });
+      document.dispatchEvent(event);
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // Activar clics en botones de filtrado de subcategoría
+      document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const filterValue = btn.getAttribute('data-filter');
+          window.filterBySubcategory(filterValue);
+        });
+      });
+
+      // Efecto pegajoso (sticky) del subnav y sincronización con el navbar principal
+      const subnav = document.querySelector('.service-subnav');
+      const navbar = document.getElementById('navbar');
+      const headerOffset = 70;
+      
+      if(subnav && navbar) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            subnav.classList.add('sticky');
+          } else {
+            subnav.classList.remove('sticky');
+          }
+          
+          if (navbar.classList.contains('nav-hidden')) {
+            subnav.classList.add('nav-hidden');
+          } else {
+            subnav.classList.remove('nav-hidden');
+          }
+        });
+      }
+
+      // Resaltar enlace de sección activa en la barra subnav
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.subnav-links a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (pageYOffset >= (sectionTop - headerOffset - 60)) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Desplazamiento suave para enlaces ancla
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          if(this.getAttribute('href') === '#') return;
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            const yOffset = -120;
+            const y = targetElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+          }
+        });
+      });
+
+      // LÓGICA DEL COTIZADOR DE ENERGÍA Y CLIMATIZACIÓN
+      const steps = document.querySelectorAll('.estimator-step-content');
+      const indicators = document.querySelectorAll('.step-indicator');
+      const prevBtn = document.getElementById('est-prev-btn');
+      const nextBtn = document.getElementById('est-next-btn');
+      const waBtn = document.getElementById('est-wa-btn');
+      
+      let currentStep = 1;
+      const totalSteps = 5;
+      
+      // Esquema de Precios en RD$
+      const pricing = {
+        solar: {
+          'no': 0,
+          '2kw': 110000, // 2 kW On-Grid
+          '4kw': 210000, // 4 kW On-Grid
+          '8kw': 390000  // 8 kW On-Grid
+        },
+        backup: {
+          'no': 0,
+          'basico': 42000,      // Inversor 1.5kW + 2 Baterías Gel
+          'litio': 115000,     // Inversor Híbrido 3kW + Litio 4.8kWh
+          'litio_pro': 220000  // Inversor Híbrido 5kW + 2x Litio 9.6kWh
+        },
+        clima: {
+          'no': 0,
+          '1unit': 28500,     // 1 Split Inverter 12k BTU
+          '2units': 56000,    // 2 Split Inverter 12k BTU
+          'comercial': 125000 // Split Comercial/Central de alta cap.
+        }
+      };
+      
+      function updateStep() {
+        // Ocultar todos los pasos
+        steps.forEach(step => step.style.display = 'none');
+        
+        // Actualizar roadmap de indicadores
+        indicators.forEach((ind, index) => {
+          const stepNum = index + 1;
+          ind.classList.remove('active', 'completed');
+          if (stepNum < currentStep) {
+            ind.classList.add('completed');
+          } else if (stepNum === currentStep) {
+            ind.classList.add('active');
+          }
+        });
+        
+        // Actualizar porcentaje de barra de progreso
+        const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+        const fillBar = document.getElementById('progress-bar-fill');
+        if (fillBar) fillBar.style.width = `${progressPercent}%`;
+        
+        // Mostrar contenido del paso activo
+        const activeStep = document.querySelector(`.estimator-step-content[data-step="${currentStep}"]`);
+        if (activeStep) activeStep.style.display = 'block';
+        
+        // Actualizar simulador si entramos al paso 4
+        if (currentStep === 4) {
+          updateEnergySimulator();
+        }
+        
+        // Visibilidad de los botones de navegación
+        if (currentStep === 1) {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        } else if (currentStep === totalSteps) {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'none';
+          waBtn.style.display = 'inline-flex';
+          calculateSummary();
+        } else {
+          prevBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'inline-block';
+          waBtn.style.display = 'none';
+        }
+      }
+      
+      // Lógica de simulación OSD HUD
+      function updateEnergySimulator() {
+        const simMode = document.querySelector('input[name="sim-mode"]:checked').value;
+        const simImg = document.getElementById('simulator-image');
+        const osdModeLabel = document.getElementById('osd-mode-label');
+        const osdSpecs = document.getElementById('osd-specs');
+        const simDesc = document.getElementById('simulator-desc');
+        const simTimeEl = document.getElementById('simulator-time');
+        
+        if (simTimeEl) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          simTimeEl.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        
+        if (!simImg || !osdModeLabel || !osdSpecs || !simDesc) return;
+        
+        // Micro-animación de parpadeo de pantalla
+        simImg.style.opacity = '0.3';
+        
+        setTimeout(() => {
+          if (simMode === 'normal') {
+            simImg.src = 'images/energia/sim_energy_normal.png';
+            osdModeLabel.textContent = 'RED ELÉCTRICA';
+            osdModeLabel.style.color = '#38bdf8'; // Celeste
+            osdSpecs.textContent = 'SOLAR GEN: 0.00 kW | LOAD: 1.50 kW | NET: BUYING';
+            simDesc.textContent = 'El hogar consume directamente de la distribuidora pública (Grid). La batería está siendo cargada y mantenida al 100% de manera automática por el inversor.';
+          } else if (simMode === 'solar') {
+            simImg.src = 'images/energia/sim_energy_solar.png';
+            osdModeLabel.textContent = 'GENERACIÓN SOLAR';
+            osdModeLabel.style.color = '#F59E0B'; // Ámbar
+            osdSpecs.textContent = 'SOLAR GEN: 4.80 kW | LOAD: 1.20 kW | NET: SELLING (+3.60kW)';
+            simDesc.textContent = 'Los paneles solares están produciendo a máxima potencia de día. Cubren la totalidad de los consumos del hogar e inyectan el excedente de 3.6 kW de vuelta a la red pública (Medición Neta).';
+          } else if (simMode === 'hybrid') {
+            simImg.src = 'images/energia/sim_energy_hybrid.png';
+            osdModeLabel.textContent = 'RESPALDO BATERÍA';
+            osdModeLabel.style.color = '#10B981'; // Eco-Verde
+            osdSpecs.textContent = 'SOLAR GEN: 0.00 kW | LOAD: 1.40 kW | BATT SoC: 87% (DISCHARGING)';
+            simDesc.textContent = '¡Apagón de red detectado! El sistema conmuta en 10 milisegundos. La casa sigue operando sin interrupción alimentada en su totalidad por la batería de litio e inversor híbrido.';
+          }
+          simImg.style.opacity = '1';
+        }, 150);
+      }
+      
+      document.querySelectorAll('input[name="sim-mode"]').forEach(radio => {
+        radio.addEventListener('change', updateEnergySimulator);
+      });
+      
+      // Cálculo del presupuesto definitivo
+      function calculateSummary() {
+        const solarVal = document.querySelector('input[name="est-solar"]:checked').value;
+        const backupVal = document.querySelector('input[name="est-backup"]:checked').value;
+        const climaVal = document.querySelector('input[name="est-clima"]:checked').value;
+        
+        // Mapear Textos
+        let solarText = 'Sin Paneles Solares';
+        if (solarVal === '2kw') solarText = 'Sistema Solar 2 kW (Aprox. 4 paneles)';
+        else if (solarVal === '4kw') solarText = 'Sistema Solar 4 kW (Aprox. 8 paneles)';
+        else if (solarVal === '8kw') solarText = 'Sistema Solar 8 kW (Aprox. 16 paneles)';
+        document.getElementById('sum-solar').textContent = solarText;
+        
+        let backupText = 'Sin Respaldo Eléctrico';
+        if (backupVal === 'basico') backupText = 'Inversor 1.5 kW + 2 Baterías Gel (AGM)';
+        else if (backupVal === 'litio') backupText = 'Inversor Híbrido 3 kW + Batería Litio 4.8 kWh';
+        else if (backupVal === 'litio_pro') backupText = 'Inversor Híbrido 5 kW + 2 Baterías Litio (9.6 kWh)';
+        document.getElementById('sum-backup').textContent = backupText;
+        
+        let climaText = 'Sin Aires Inverter';
+        if (climaVal === '1unit') climaText = '1 Split Inverter 12,000 BTU';
+        else if (climaVal === '2units') climaText = '2 Splits Inverter 12,000 BTU';
+        else if (climaVal === 'comercial') climaText = 'Aire Split Comercial / Central Alta Capacidad';
+        document.getElementById('sum-clima').textContent = climaText;
+        
+        // Calcular sumas
+        const solarPrice = pricing.solar[solarVal];
+        const backupPrice = pricing.backup[backupVal];
+        const climaPrice = pricing.clima[climaVal];
+        
+        const finalPrice = solarPrice + backupPrice + climaPrice;
+        document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+        
+        // Construir mensaje de WhatsApp
+        const waText = `Hola Futunet, utilicé la Calculadora de Energía y Clima y deseo cotizar:
+- Paneles Solares: ${solarText}
+- Respaldo: ${backupText}
+- Climatización: ${climaText}
+- Presupuesto estimado: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos e instalación básica)
+Me interesa programar una visita para realizar el levantamiento oficial.`;
+        
+        waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+      }
+      
+      // Control de clicks de botones de wizard
+      nextBtn.addEventListener('click', () => {
+        if (currentStep < totalSteps) {
+          currentStep++;
+          updateStep();
+        }
+      });
+      
+      prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+          currentStep--;
+          updateStep();
+        }
+      });
+      
+      indicators.forEach(ind => {
+        ind.addEventListener('click', () => {
+          const stepNum = parseInt(ind.getAttribute('data-step'));
+          // Permitir hacer click hacia atrás, o click a cualquier lado si ya llegamos al final
+          if (stepNum < currentStep || currentStep === totalSteps) {
+            currentStep = stepNum;
+            updateStep();
+          }
+        });
+      });
+
+      // Inicializar el primer paso del wizard
+      updateStep();
+      
+      // Lógica de Acordeón FAQ
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const trigger = item.querySelector('.faq-trigger');
+        const answer = item.querySelector('.faq-answer');
+        
+        trigger.addEventListener('click', () => {
+          const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+          
+          // Cerrar todos los demás acordeones
+          faqItems.forEach(i => {
+            i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            const ans = i.querySelector('.faq-answer');
+            ans.style.maxHeight = null;
+            ans.setAttribute('aria-hidden', 'true');
+            i.classList.remove('open');
+          });
+          
+          // Si el acordeón clickeado no estaba abierto, abrirlo
+          if (!isOpen) {
+            trigger.setAttribute('aria-expanded', 'true');
+            answer.setAttribute('aria-hidden', 'false');
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            item.classList.add('open');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

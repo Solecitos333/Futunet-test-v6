@@ -10,12 +10,14 @@
 
   // Inicialización de la Página de Servicio
   async function init() {
-    // Si estamos en la página de seguridad electrónica, inicializar y disparar la carga inicial
-    if (window.currentServiceCategory === 'seguridad_electronica') {
+    // Si estamos en la página de seguridad electrónica, redes y datos, energía y clima, o equipos de oficina, inicializar y disparar la carga inicial
+    if (window.currentServiceCategory === 'seguridad_electronica' || window.currentServiceCategory === 'redes_datos' || window.currentServiceCategory === 'energia_climatizacion' || window.currentServiceCategory === 'equipos_oficina') {
       if (window.FutunetFirebase && window.FutunetFirebase.db) {
         db = window.FutunetFirebase.db;
       }
-      serviceId = 'seguridad';
+      serviceId = window.currentServiceCategory === 'seguridad_electronica' ? 'seguridad' : 
+                  (window.currentServiceCategory === 'redes_datos' ? 'redes' : 
+                  (window.currentServiceCategory === 'energia_climatizacion' ? 'energia' : 'equipos'));
       setupRequestForm();
       var event = new CustomEvent('filterSubcategory', { detail: 'all' });
       document.dispatchEvent(event);
@@ -109,8 +111,8 @@
       console.error('Error al sincronizar contenidos de servicio:', err);
     }
 
-    // Carga inicial para la página de seguridad electrónica
-    if (window.currentServiceCategory === 'seguridad_electronica') {
+    // Carga inicial para la página de seguridad electrónica, redes y datos, energía y clima, o equipos de oficina
+    if (window.currentServiceCategory === 'seguridad_electronica' || window.currentServiceCategory === 'redes_datos' || window.currentServiceCategory === 'energia_climatizacion' || window.currentServiceCategory === 'equipos_oficina') {
       var event = new CustomEvent('filterSubcategory', { detail: 'all' });
       document.dispatchEvent(event);
     }
@@ -400,45 +402,182 @@
       localProducts.forEach(function (prod) {
         var catLower = String(prod.category || '').toLowerCase().trim();
         var subCatLower = String(prod.serviceSubcategory || '').toLowerCase().trim();
+        var titleLower = String(prod.title || '').toLowerCase();
         
-        if (subcategory === 'seguridad_cctv') {
-          if (subCatLower === 'seguridad_cctv' || catLower === 'cámaras de seguridad' || catLower === 'cámara de seguridad' || catLower === 'cctv') {
-            products.push(prod);
+        if (window.currentServiceCategory === 'seguridad_electronica') {
+          if (subcategory === 'seguridad_cctv') {
+            if (subCatLower === 'seguridad_cctv' || catLower === 'cámaras de seguridad' || catLower === 'cámara de seguridad' || catLower === 'cctv') {
+              products.push(prod);
+            }
+          } else if (subcategory === 'seguridad_control_accesos') {
+            if (subCatLower === 'seguridad_control_accesos' || catLower === 'control de accesos' || catLower === 'acceso' || catLower === 'accesos') {
+              products.push(prod);
+            }
+          } else if (subcategory === 'seguridad_video_porteros') {
+            if (subCatLower === 'seguridad_video_porteros' || catLower === 'video portero' || catLower === 'video porteros' || catLower === 'video porteros inteligentes') {
+              products.push(prod);
+            }
+          } else if (subcategory === 'seguridad_cercos') {
+            if (subCatLower === 'seguridad_cercos' || catLower === 'cercos eléctricos' || catLower === 'cercos') {
+              products.push(prod);
+            }
+          } else if (subcategory === 'seguridad_motores') {
+            if (subCatLower === 'seguridad_motores' || catLower === 'motores' || catLower === 'motores de portón') {
+              products.push(prod);
+            }
+          } else if (subcategory === 'seguridad_alarmas') {
+            if (subCatLower === 'seguridad_alarmas' || catLower === 'alarmas' || catLower === 'sistemas de alarma' || catLower === 'alarmas inteligentes') {
+              products.push(prod);
+            }
+          } else {
+            // 'all': Mostrar cualquier producto de seguridad
+            var isSecurity = 
+              subCatLower.indexOf('seguridad_') === 0 ||
+              catLower === 'cámaras de seguridad' ||
+              catLower === 'cámara de seguridad' ||
+              catLower === 'cctv' ||
+              catLower === 'control de accesos' ||
+              catLower === 'cerraduras' ||
+              catLower === 'seguridad electrónica' ||
+              catLower === 'seguridad electronica';
+            
+            if (isSecurity) {
+              products.push(prod);
+            }
           }
-        } else if (subcategory === 'seguridad_control_accesos') {
-          if (subCatLower === 'seguridad_control_accesos' || catLower === 'control de accesos' || catLower === 'acceso' || catLower === 'accesos') {
-            products.push(prod);
+        } else if (window.currentServiceCategory === 'redes_datos') {
+          if (subcategory === 'redes_cableado') {
+            if (subCatLower === 'redes_cableado' || catLower === 'componentes de red' && (titleLower.includes('cable') || titleLower.includes('rj45') || titleLower.includes('plug') || titleLower.includes('terminal') || titleLower.includes('patch panel') || titleLower.includes('faceplate') || titleLower.includes('keystone') || titleLower.includes('jack') || titleLower.includes('cat 6') || titleLower.includes('cat 5'))) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'redes_wifi') {
+            if (subCatLower === 'redes_wifi' || catLower === 'componentes de red' && (titleLower.includes('wifi') || titleLower.includes('access point') || titleLower.includes('ap ') || titleLower.includes('router') || titleLower.includes('unifi') || titleLower.includes('omada') || titleLower.includes('deco') || titleLower.includes('tapo'))) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'redes_switches') {
+            if (subCatLower === 'redes_switches' || catLower === 'componentes de red' && (titleLower.includes('switch') || titleLower.includes('hub') || titleLower.includes('poe'))) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'redes_racks') {
+            if (subCatLower === 'redes_racks' || catLower === 'componentes de red' && (titleLower.includes('rack') || titleLower.includes('gabinete') || titleLower.includes('organizador') || titleLower.includes('bandeja'))) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'redes_fibra') {
+            if (subCatLower === 'redes_fibra' || catLower === 'componentes de red' && (titleLower.includes('fibra') || titleLower.includes('optical') || titleLower.includes('gpon') || titleLower.includes('sfp') || titleLower.includes('gbic') || titleLower.includes('patch cord fibra'))) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'redes_herramientas') {
+            if (subCatLower === 'redes_herramientas' || catLower === 'componentes de red' && (titleLower.includes('ponchadora') || titleLower.includes('crimpeadora') || titleLower.includes('crimpadora') || titleLower.includes('tester') || titleLower.includes('pelacables') || titleLower.includes('herramienta'))) {
+              products.push(prod);
+            }
+          } else {
+            // 'all': Mostrar cualquier producto de redes
+            var isNetwork = 
+              subCatLower.indexOf('redes_') === 0 ||
+              catLower === 'componentes de red' ||
+              catLower === 'componentes de red wifi' ||
+              catLower === 'redes' ||
+              catLower === 'redes y datos' ||
+              titleLower.includes('switch') ||
+              titleLower.includes('router') ||
+              titleLower.includes('cable utp') ||
+              titleLower.includes('access point') ||
+              titleLower.includes('rj45') ||
+              titleLower.includes('rack') ||
+              titleLower.includes('gabinete');
+            
+            if (isNetwork) {
+              products.push(prod);
+            }
           }
-        } else if (subcategory === 'seguridad_video_porteros') {
-          if (subCatLower === 'seguridad_video_porteros' || catLower === 'video portero' || catLower === 'video porteros' || catLower === 'video porteros inteligentes') {
-            products.push(prod);
+        } else if (window.currentServiceCategory === 'energia_climatizacion') {
+          if (subcategory === 'energia_solar') {
+            if (subCatLower === 'energia_solar' || catLower === 'energía solar' || catLower === 'paneles solares' || catLower === 'inversores solares' || titleLower.includes('solar') || titleLower.includes('panel') || titleLower.includes('growatt')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'energia_inversores') {
+            if (subCatLower === 'energia_inversores' || catLower === 'inversores' || titleLower.includes('inversor') || titleLower.includes('growatt') || titleLower.includes('must') || titleLower.includes('tristar')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'energia_baterias') {
+            if (subCatLower === 'energia_baterias' || catLower === 'baterias' || catLower === 'baterías' || titleLower.includes('bater') || titleLower.includes('litio') || titleLower.includes('gel') || titleLower.includes('ciclo profundo')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'energia_ups') {
+            if (subCatLower === 'energia_ups' || catLower === 'ups' || titleLower.includes('ups') || titleLower.includes('apc') || titleLower.includes('tripplite') || titleLower.includes('respaldo')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'energia_clima') {
+            if (subCatLower === 'energia_clima' || catLower === 'climatizacion' || catLower === 'aire acondicionado' || catLower === 'aires acondicionados' || titleLower.includes('aire') || titleLower.includes('split') || titleLower.includes('clima') || titleLower.includes('lennox') || titleLower.includes('carrier') || titleLower.includes('inverter')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'energia_accesorios') {
+            if (subCatLower === 'energia_accesorios' || catLower === 'proteccion' || catLower === 'accesorios de energia' || titleLower.includes('breaker') || titleLower.includes('fusible') || titleLower.includes('protector') || titleLower.includes('supresor') || titleLower.includes('gabinete') || titleLower.includes('corte')) {
+              products.push(prod);
+            }
+          } else {
+            // 'all': Mostrar cualquier producto de energía y climatización
+            var isEnergy = 
+              subCatLower.indexOf('energia_') === 0 ||
+              catLower === 'energía y respaldo' ||
+              catLower === 'energia y respaldo' ||
+              prod.department === 'energia' ||
+              titleLower.includes('inversor') ||
+              titleLower.includes('bateria') ||
+              titleLower.includes('batería') ||
+              titleLower.includes('ups') ||
+              titleLower.includes('solar') ||
+              titleLower.includes('panel') ||
+              titleLower.includes('aire') ||
+              titleLower.includes('clima') ||
+              titleLower.includes('inverter');
+            
+            if (isEnergy) {
+              products.push(prod);
+            }
           }
-        } else if (subcategory === 'seguridad_cercos') {
-          if (subCatLower === 'seguridad_cercos' || catLower === 'cercos eléctricos' || catLower === 'cercos') {
-            products.push(prod);
-          }
-        } else if (subcategory === 'seguridad_motores') {
-          if (subCatLower === 'seguridad_motores' || catLower === 'motores' || catLower === 'motores de portón') {
-            products.push(prod);
-          }
-        } else if (subcategory === 'seguridad_alarmas') {
-          if (subCatLower === 'seguridad_alarmas' || catLower === 'alarmas' || catLower === 'sistemas de alarma' || catLower === 'alarmas inteligentes') {
-            products.push(prod);
-          }
-        } else {
-          // 'all': Mostrar cualquier producto de seguridad
-          var isSecurity = 
-            subCatLower.indexOf('seguridad_') === 0 ||
-            catLower === 'cámaras de seguridad' ||
-            catLower === 'cámara de seguridad' ||
-            catLower === 'cctv' ||
-            catLower === 'control de accesos' ||
-            catLower === 'cerraduras' ||
-            catLower === 'seguridad electrónica' ||
-            catLower === 'seguridad electronica';
-          
-          if (isSecurity) {
-            products.push(prod);
+        } else if (window.currentServiceCategory === 'equipos_oficina') {
+          if (subcategory === 'equipos_laptops') {
+            if (subCatLower === 'equipos_laptops' || catLower === 'laptops corporativas' || catLower === 'laptops' || titleLower.includes('laptop') || titleLower.includes('notebook') || titleLower.includes('dell latitude') || titleLower.includes('thinkpad') || titleLower.includes('macbook') || titleLower.includes('computadora port')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'equipos_desktops') {
+            if (subCatLower === 'equipos_desktops' || catLower === 'computadoras' || catLower === 'desktop' || catLower === 'computadoras de escritorio' || titleLower.includes('desktop') || titleLower.includes('all in one') || titleLower.includes('optiplex') || titleLower.includes('workstation') || titleLower.includes('computadora de escritorio')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'equipos_impresoras') {
+            if (subCatLower === 'equipos_impresoras' || catLower === 'impresoras y consumibles' || catLower === 'impresoras' || catLower === 'consumibles y tinta' || titleLower.includes('impresora') || titleLower.includes('multifuncional') || titleLower.includes('tinta') || titleLower.includes('toner') || titleLower.includes('epson') || titleLower.includes('laserjet')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'equipos_servidores') {
+            if (subCatLower === 'equipos_servidores' || catLower === 'energía y respaldo' || catLower === 'ups' || titleLower.includes('servidor') || titleLower.includes('nas') || titleLower.includes('synology') || titleLower.includes('rack') || titleLower.includes('ups') || titleLower.includes('apc') || titleLower.includes('back-ups')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'equipos_accesorios') {
+            if (subCatLower === 'equipos_accesorios' || catLower === 'periféricos y partes' || catLower === 'perifericos' || titleLower.includes('teclado') || titleLower.includes('mouse') || titleLower.includes('monitor') || titleLower.includes('logitech') || titleLower.includes('licencia') || titleLower.includes('office 365') || titleLower.includes('windows 11')) {
+              products.push(prod);
+            }
+          } else if (subcategory === 'oficina_mobiliario') {
+            if (subCatLower === 'oficina_mobiliario' || catLower === 'mobiliario' || catLower === 'papelería y suministros' || catLower === 'papeleria' || titleLower.includes('escritorio') || titleLower.includes('silla') || titleLower.includes('sillon') || titleLower.includes('estante') || titleLower.includes('archivador') || titleLower.includes('papel')) {
+              products.push(prod);
+            }
+          } else {
+            // 'all': Mostrar cualquier producto de cómputo o papelería/mobiliario de oficina
+            var isOffice = 
+              subCatLower.indexOf('equipos_') === 0 ||
+              subCatLower.indexOf('oficina_') === 0 ||
+              prod.department === 'equipos' ||
+              prod.department === 'oficina' ||
+              catLower === 'laptops corporativas' ||
+              catLower === 'computadoras' ||
+              catLower === 'impresoras y consumibles' ||
+              catLower === 'periféricos y partes' ||
+              catLower === 'mobiliario' ||
+              catLower === 'papelería y suministros';
+            
+            if (isOffice) {
+              products.push(prod);
+            }
           }
         }
       });
