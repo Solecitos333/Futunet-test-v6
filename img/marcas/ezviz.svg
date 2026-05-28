@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 100" width="320" height="100">
+  <!-- EZVIZ flower/swirl icon -->
+  <g transform="translate(30, 50)">
+    <!-- Petal 1 - top -->
+    <ellipse cx="0" cy="-18" rx="9" ry="18" fill="#ffffff" fill-opacity="0.9" transform="rotate(0)"/>
+    <!-- Petal 2 -->
+    <ellipse cx="0" cy="-18" rx="9" ry="18" fill="#ffffff" fill-opacity="0.9" transform="rotate(72)"/>
+    <!-- Petal 3 -->
+    <ellipse cx="0" cy="-18" rx="9" ry="18" fill="#ffffff" fill-opacity="0.9" transform="rotate(144)"/>
+    <!-- Petal 4 -->
+    <ellipse cx="0" cy="-18" rx="9" ry="18" fill="#ffffff" fill-opacity="0.9" transform="rotate(216)"/>
+    <!-- Petal 5 -->
+    <ellipse cx="0" cy="-18" rx="9" ry="18" fill="#ffffff" fill-opacity="0.9" transform="rotate(288)"/>
+  </g>
+  <!-- EZVIZ text -->
+  <text x="175" y="65" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="52" fill="#ffffff" text-anchor="middle" letter-spacing="-1">EZVIZ</text>
+  <!-- TM mark -->
+  <text x="308" y="38" font-family="Arial, sans-serif" font-size="13" fill="#ffffff" text-anchor="middle">™</text>
+</svg>

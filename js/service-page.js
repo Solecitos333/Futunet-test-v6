@@ -15,6 +15,8 @@
       if (window.FutunetFirebase && window.FutunetFirebase.db) {
         db = window.FutunetFirebase.db;
       }
+      serviceId = 'seguridad';
+      setupRequestForm();
       var event = new CustomEvent('filterSubcategory', { detail: 'all' });
       document.dispatchEvent(event);
       return;
@@ -362,26 +364,40 @@
     var container = document.getElementById('service-products-grid');
     var noProductsMsg = document.getElementById('no-products-msg');
     
-    if (!db && window.FutunetFirebase && window.FutunetFirebase.db) {
-      db = window.FutunetFirebase.db;
-    }
-    
-    if (!container || !db) return;
+    if (!container) return;
     
     container.innerHTML = '<div class="loading-products" style="grid-column: 1/-1; text-align:center; padding: 2rem;"><i class="fas fa-spinner fa-spin"></i> Cargando catálogo...</div>';
     container.style.display = 'grid';
     if(noProductsMsg) noProductsMsg.style.display = 'none';
 
     try {
-      var snapshot = await db.collection('products')
-        .where('isActive', '==', true)
-        .get();
+      // Esperar a que la base de datos en memoria cargue desde inventory_data.js
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+
+      var localProducts = [];
+      if (window.mockDatabase && window.mockDatabase.length > 0) {
+        localProducts = window.mockDatabase;
+      } else if (window.FutunetData && window.FutunetData.products && window.FutunetData.products.length > 0) {
+        localProducts = window.FutunetData.products;
+      }
+
+      // Fallback si no hay productos cargados en memoria aún, intentar recuperarlos de firestore
+      if (localProducts.length === 0 && window.FutunetFirebase && window.FutunetFirebase.db) {
+        if (!db) db = window.FutunetFirebase.db;
+        var snapshot = await db.collection('products')
+          .where('isActive', '==', true)
+          .get();
+        snapshot.forEach(function (doc) {
+          var prod = doc.data();
+          prod.id = doc.id;
+          localProducts.push(prod);
+        });
+      }
 
       var products = [];
-      snapshot.forEach(function (doc) {
-        var prod = doc.data();
-        prod.id = doc.id;
-        
+      localProducts.forEach(function (prod) {
         var catLower = String(prod.category || '').toLowerCase().trim();
         var subCatLower = String(prod.serviceSubcategory || '').toLowerCase().trim();
         
@@ -411,8 +427,8 @@
           }
         } else {
           // 'all': Mostrar cualquier producto de seguridad
-          const isSecurity = 
-            subCatLower.startsWith('seguridad_') ||
+          var isSecurity = 
+            subCatLower.indexOf('seguridad_') === 0 ||
             catLower === 'cámaras de seguridad' ||
             catLower === 'cámara de seguridad' ||
             catLower === 'cctv' ||
@@ -428,7 +444,15 @@
       });
 
       if (products.length > 0) {
-        renderProductsGrid(products, container);
+        if (typeof window.renderProductsGrid === 'function') {
+          container.innerHTML = '';
+          window.renderProductsGrid(products, { target: container });
+          if (typeof window.updateInlineCartButtons === 'function') {
+            window.updateInlineCartButtons();
+          }
+        } else {
+          renderProductsGrid(products, container);
+        }
         container.style.display = 'grid';
       } else {
         container.innerHTML = '';
