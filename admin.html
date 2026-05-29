@@ -235,7 +235,7 @@
           <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
             <h3>Productos</h3>
             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <select id="inventory-category-filter" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; transition: border-color 0.2s; cursor:pointer;">
+              <select id="inventory-category-filter" aria-label="Filtrar por categoría" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; transition: border-color 0.2s; cursor:pointer;">
                 <option value="all">Todas las categorías</option>
               </select>
               <div class="admin-search">
@@ -375,7 +375,7 @@
           <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
             <h3>Historial de pedidos</h3>
             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <select id="orders-status-filter" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;">
+              <select id="orders-status-filter" aria-label="Filtrar por estado del pedido" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;">
                 <option value="all">Todos los estados</option>
                 <option value="pending">Pendiente</option>
                 <option value="processing">Procesando</option>
@@ -587,7 +587,7 @@
           <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
             <h3>Solicitudes recibidas (Cotizaciones e instalaciones)</h3>
             <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-              <select id="requests-status-filter" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadServiceRequests()">
+              <select id="requests-status-filter" aria-label="Filtrar por estado de la solicitud" style="padding: 9px 16px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadServiceRequests()">
                 <option value="all">Todos los estados</option>
                 <option value="pending">Pendiente</option>
                 <option value="completed">Completado</option>
@@ -660,7 +660,7 @@
                     <th>Nombre</th>
                     <th>Plan</th>
                     <th>Estado</th>
-                    <th>Última Actividad</th>
+                    <th>Teléfono</th>
                     <th style="text-align:right;">Acciones</th>
                   </tr>
                 </thead>
@@ -961,7 +961,7 @@
             <div class="image-upload-zone" id="banner-upload-zone">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               <span>Arrastra la imagen aquí o <strong>haz clic para buscar</strong></span>
-              <input type="file" id="banner-image" accept="image/*" style="display:none;" />
+              <input type="file" id="banner-image" accept="image/*" style="display:none;" aria-label="Subir imagen de banner" />
             </div>
             <div class="image-preview-container" id="banner-preview-container"></div>
           </div>
@@ -1044,7 +1044,7 @@
             <div class="image-upload-zone" id="brand-upload-zone">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               <span>Arrastra el logo aquí o <strong>haz clic para buscar</strong></span>
-              <input type="file" id="brand-logo" accept="image/*" style="display:none;" />
+              <input type="file" id="brand-logo" accept="image/*" style="display:none;" aria-label="Subir logo de la marca" />
             </div>
             <div class="image-preview-container" id="brand-preview-container"></div>
           </div>
@@ -1094,7 +1094,7 @@
               <span style="font-size:0.8rem; color:#76889e;">Si está apagado, solo tú podrás verlo en el dashboard.</span>
             </div>
             <label class="admin-switch">
-              <input type="checkbox" id="product-active" checked>
+              <input type="checkbox" id="product-active" checked aria-label="Producto activo">
               <span class="admin-slider"></span>
             </label>
           </div>
@@ -1106,7 +1106,7 @@
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#2a75d3; margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               <span>Arrastra tus fotos aquí o <strong>haz clic para buscar</strong></span>
               <span style="font-size:0.75rem; color:#76889e; margin-top:4px;">En celular, toca para abrir la galería o cámara.</span>
-              <input type="file" id="product-images" accept="image/*" multiple style="display:none;" />
+              <input type="file" id="product-images" accept="image/*" multiple style="display:none;" aria-label="Subir fotos del producto" />
             </div>
             <div class="image-preview-container" id="image-preview-container">
               <!-- Miniaturas dinámicas -->
@@ -1364,9 +1364,8 @@
   </div>
 
   <!-- ═══ MODAL: DETALLE DE SOLICITUD DE SERVICIO ═══ -->
-  <div class="admin-modal" id="service-request-detail-modal">
-    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('service-request-detail-modal')"></div>
-    <div class="admin-modal-card" style="max-width:550px;">
+  <div class="admin-modal-overlay" id="service-request-detail-modal" onclick="if (event.target === this) AdminPanel.closeModal('service-request-detail-modal')">
+    <div class="admin-modal" style="max-width:550px;">
       <div class="admin-modal-header">
         <h3 id="sr-modal-title">Detalle de Solicitud</h3>
         <button class="admin-modal-close" onclick="AdminPanel.closeModal('service-request-detail-modal')">
@@ -1406,9 +1405,8 @@
   </div>
 
   <!-- ═══ MODAL: ASOCIAR CLIENTE DE INTERNET ═══ -->
-  <div class="admin-modal" id="internet-client-modal">
-    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('internet-client-modal')"></div>
-    <div class="admin-modal-card" style="max-width:480px;">
+  <div class="admin-modal-overlay" id="internet-client-modal" onclick="if (event.target === this) AdminPanel.closeModal('internet-client-modal')">
+    <div class="admin-modal" style="max-width:480px;">
       <div class="admin-modal-header">
         <h3>Asociar Cliente de Internet</h3>
         <button class="admin-modal-close" onclick="AdminPanel.closeModal('internet-client-modal')">
@@ -1455,9 +1453,8 @@
   </div>
 
   <!-- ═══ MODAL: DETALLE Y VERIFICACIÓN DE VOUCHER ═══ -->
-  <div class="admin-modal" id="internet-voucher-detail-modal">
-    <div class="admin-modal-overlay" onclick="AdminPanel.closeModal('internet-voucher-detail-modal')"></div>
-    <div class="admin-modal-card" style="max-width:580px;">
+  <div class="admin-modal-overlay" id="internet-voucher-detail-modal" onclick="if (event.target === this) AdminPanel.closeModal('internet-voucher-detail-modal')">
+    <div class="admin-modal" style="max-width:580px;">
       <div class="admin-modal-header">
         <h3>Verificar Pago (Voucher)</h3>
         <button class="admin-modal-close" onclick="AdminPanel.closeModal('internet-voucher-detail-modal')">

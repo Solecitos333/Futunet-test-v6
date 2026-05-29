@@ -282,7 +282,7 @@
               <h4 class="step-question">¿Cuántas cámaras de seguridad necesitas instalar?</h4>
               <div class="estimator-options">
                 <label class="option-card">
-                  <input type="radio" name="est-cameras" value="2" checked>
+                  <input type="radio" name="est-cameras" value="2" checked aria-label="Kit de 2 Cámaras">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -293,7 +293,7 @@
                   </div>
                 </label>
                 <label class="option-card">
-                  <input type="radio" name="est-cameras" value="4">
+                  <input type="radio" name="est-cameras" value="4" aria-label="Kit de 4 Cámaras">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -304,7 +304,7 @@
                   </div>
                 </label>
                 <label class="option-card">
-                  <input type="radio" name="est-cameras" value="8">
+                  <input type="radio" name="est-cameras" value="8" aria-label="Kit de 8 Cámaras">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -315,7 +315,7 @@
                   </div>
                 </label>
                 <label class="option-card">
-                  <input type="radio" name="est-cameras" value="16">
+                  <input type="radio" name="est-cameras" value="16" aria-label="Kit de 16 Cámaras">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -333,7 +333,7 @@
               <h4 class="step-question">¿Dónde van instaladas las cámaras principalmente?</h4>
               <div class="estimator-options env-options">
                 <label class="option-card">
-                  <input type="radio" name="est-env" value="indoor" checked>
+                  <input type="radio" name="est-env" value="indoor" checked aria-label="Solo Interior">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -344,7 +344,7 @@
                   </div>
                 </label>
                 <label class="option-card">
-                  <input type="radio" name="est-env" value="outdoor">
+                  <input type="radio" name="est-env" value="outdoor" aria-label="Solo Exterior">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -355,7 +355,7 @@
                   </div>
                 </label>
                 <label class="option-card">
-                  <input type="radio" name="est-env" value="mixed">
+                  <input type="radio" name="est-env" value="mixed" aria-label="Instalación Mixta">
                   <div class="check-badge"><i class="fas fa-check"></i></div>
                   <div class="option-card-content">
                     <div class="option-icon-wrapper">
@@ -375,7 +375,7 @@
                 <!-- Opciones -->
                 <div class="estimator-options vertical-options">
                   <label class="option-card">
-                    <input type="radio" name="est-quality" value="standard" checked>
+                    <input type="radio" name="est-quality" value="standard" checked aria-label="HD 1080p Estándar">
                     <div class="check-badge"><i class="fas fa-check"></i></div>
                     <div class="option-card-content">
                       <div class="option-icon-wrapper standard-icon">
@@ -388,7 +388,7 @@
                     </div>
                   </label>
                   <label class="option-card">
-                    <input type="radio" name="est-quality" value="colorvu">
+                    <input type="radio" name="est-quality" value="colorvu" aria-label="2K ColorVu (Color 24/7)">
                     <div class="check-badge"><i class="fas fa-check"></i></div>
                     <div class="option-card-content">
                       <div class="option-icon-wrapper colorvu-icon">
@@ -401,7 +401,7 @@
                     </div>
                   </label>
                   <label class="option-card">
-                    <input type="radio" name="est-quality" value="4k">
+                    <input type="radio" name="est-quality" value="4k" aria-label="Ultra HD 4K Premium">
                     <div class="check-badge"><i class="fas fa-check"></i></div>
                     <div class="option-card-content">
                       <div class="option-icon-wrapper premium-icon">
@@ -817,42 +817,40 @@
   </section>
 
   <!-- Footer (Copia fiel del de index.html) -->
-  <footer>
-    <div class="footer-container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 40px;">
-      <div class="footer-col footer-brand">
-        <img src="img/logo-navbar.webp" alt="Futunet SRL Logo" class="footer-logo" width="1009" height="207" style="max-width: 180px; height: auto;">
-        <p style="color: rgba(255,255,255,0.5); font-size: .88rem; margin-top: 12px; line-height: 1.75;">Conectando el futuro y asegurando tu tranquilidad con soluciones tecnológicas de vanguardia.</p>
+    <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html#inicio" class="footer-logo-link">
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="1009" height="207" loading="lazy" decoding="async" />
+          </a>
+          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Soluciones</h5>
+          <ul>
+            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+            <li><a href="infraestructura-remozamiento.html">Infraestructura</a></li>
+            <li><a href="catalogo.html">Ver catálogo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contacto</h5>
+          <ul>
+            <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
+            <li><a href="https://maps.google.com/maps?q=19.476061,-70.715163" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Av. Cuesta Colorada, Las Colinas, Santiago</a></li>
+            <li><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20comercial." target="_blank" rel="noopener noreferrer"><i data-lucide="user" class="footer-icon"></i> Orbis Espinal</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-col">
-        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Enlaces Rápidos</h5>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
-          <li><a href="index.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Inicio</a></li>
-          <li><a href="index.html#servicios" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Servicios</a></li>
-          <li><a href="index.html#nosotros" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Nosotros</a></li>
-          <li><a href="index.html#contacto" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Contacto</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>Santiago, República Dominicana</span>
       </div>
-      <div class="footer-col">
-        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Servicios</h5>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0;">
-          <li><a href="redes-datos.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Redes y Datos</a></li>
-          <li><a href="seguridad-electronica.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Seguridad Electrónica</a></li>
-          <li><a href="energia-climatizacion.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Energía y Clima</a></li>
-          <li><a href="equipos-oficina.html" style="font-size: .86rem; color: rgba(255,255,255,0.5); text-decoration: none;">Equipos de Oficina</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5 style="font-family: 'Space Grotesk', sans-serif; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.9); margin-bottom: 14px;">Contacto</h5>
-        <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; padding: 0; color: rgba(255,255,255,0.5); font-size: 0.86rem;">
-          <li><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Av. Cuesta Colorada, Las Colinas, Santiago</li>
-          <li><i class="fas fa-phone" style="margin-right: 8px;"></i> +1 (829) 741-1041</li>
-          <li><i class="fas fa-envelope" style="margin-right: 8px;"></i> info@futunet.com</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom" style="max-width: 1200px; margin: 20px auto 0; padding: 20px 20px 0; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; font-size: 0.78rem; color: rgba(255,255,255,0.3);">
-      <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
-      <span>Santiago, República Dominicana</span>
     </div>
   </footer>
 

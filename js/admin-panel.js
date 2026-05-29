@@ -2819,12 +2819,12 @@
         var statusLabel = req.status === 'completed' ? 'Completado' : 'Pendiente';
         
         html += '<tr data-search-req="' + (req.name + ' ' + (req.serviceTitle || '') + ' ' + (req.email || '')).toLowerCase() + '">' +
-          '  <td><strong>' + escapeHtml(req.name) + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(req.email || '') + '</span></td>' +
-          '  <td>' + escapeHtml(req.phone || '') + '</td>' +
-          '  <td><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(req.serviceTitle || 'General') + '</span></td>' +
-          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
-          '  <td>' + date + '</td>' +
-          '  <td style="text-align:right;">' +
+          '  <td data-label="Cliente"><strong>' + escapeHtml(req.name) + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(req.email || '') + '</span></td>' +
+          '  <td data-label="Teléfono">' + escapeHtml(req.phone || '') + '</td>' +
+          '  <td data-label="Servicio"><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(req.serviceTitle || 'General') + '</span></td>' +
+          '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td data-label="Fecha">' + date + '</td>' +
+          '  <td data-label="Acciones" style="text-align:right;">' +
           '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openRequestModal(\'' + req.id + '\')">Ver detalle</button>' +
           '  </td>' +
           '</tr>';
@@ -2950,12 +2950,12 @@
         }
 
         html += '<tr>' +
-          '  <td><strong>' + escapeHtml(client.clientCode || 'S/C') + '</strong></td>' +
-          '  <td><strong>' + escapeHtml(client.displayName || 'Sin nombre') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(client.email || '') + '</span></td>' +
-          '  <td>' + (plans[client.internetPlan] || client.internetPlan || '—') + '</td>' +
-          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
-          '  <td>' + (client.phone || '—') + '</td>' +
-          '  <td style="text-align:right;">' +
+          '  <td data-label="Código"><strong>' + escapeHtml(client.clientCode || 'S/C') + '</strong></td>' +
+          '  <td data-label="Nombre"><strong>' + escapeHtml(client.displayName || 'Sin nombre') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(client.email || '') + '</span></td>' +
+          '  <td data-label="Plan">' + (plans[client.internetPlan] || client.internetPlan || '—') + '</td>' +
+          '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td data-label="Teléfono">' + (client.phone || '—') + '</td>' +
+          '  <td data-label="Acciones" style="text-align:right;">' +
           '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openInternetEdit(\'' + id + '\')">Editar plan</button>' +
           '  </td>' +
           '</tr>';
@@ -3081,12 +3081,12 @@
         }
 
         html += '<tr>' +
-          '  <td><strong>' + escapeHtml(pay.userName || '') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(pay.userEmail || '') + '</span></td>' +
-          '  <td><strong>RD$ ' + pay.amount.toLocaleString('es-DO') + '</strong></td>' +
-          '  <td>' + escapeHtml(pay.bank || '') + '</td>' +
-          '  <td><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
-          '  <td>' + date + '</td>' +
-          '  <td style="text-align:right;">' +
+          '  <td data-label="Cliente"><strong>' + escapeHtml(pay.userName || '') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(pay.userEmail || '') + '</span></td>' +
+          '  <td data-label="Monto"><strong>RD$ ' + pay.amount.toLocaleString('es-DO') + '</strong></td>' +
+          '  <td data-label="Banco">' + escapeHtml(pay.bank || '') + '</td>' +
+          '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
+          '  <td data-label="Fecha">' + date + '</td>' +
+          '  <td data-label="Acciones" style="text-align:right;">' +
           '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openVoucherModal(\'' + pay.id + '\')">Ver comprobante</button>' +
           '  </td>' +
           '</tr>';

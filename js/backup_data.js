@@ -978,7 +978,7 @@ const mockDatabase = [
       "https://wsrv.nl/?url=static.tp-link.com%2Fupload%2Fimage-header%2FD230_normal_20241101063325n.png&w=720&output=webp&q=72"
     ],
     "specs": [
-      "Video 2K 3 MP (2304 Ã— 1296)",
+      "Video 2K 3 MP (2304 × 1296)",
       "Paneo horizontal amplio y movimiento vertical motorizado",
       "Visión nocturna de hasta 30 ft",
       "Audio bidireccional y almacenamiento microSD hasta 512 GB"
