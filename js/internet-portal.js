@@ -65,6 +65,8 @@
   function showPublicView() {
     document.getElementById('internet-public-view').style.display = 'block';
     document.getElementById('internet-portal-view').style.display = 'none';
+    var container = document.querySelector('.portal-container');
+    if (container) container.classList.remove('wide');
   }
 
   // Muestra Web App de autogestión
@@ -73,6 +75,8 @@
     document.getElementById('internet-portal-view').style.display = 'block';
     document.getElementById('portal-app-card').style.display = 'block';
     document.getElementById('portal-no-client').style.display = 'none';
+    var container = document.querySelector('.portal-container');
+    if (container) container.classList.remove('wide');
 
     // Rellenar datos
     setText('client-name', 'Hola, ' + (userData.displayName || 'Cliente'));
@@ -117,6 +121,11 @@
     document.getElementById('internet-portal-view').style.display = 'block';
     document.getElementById('portal-app-card').style.display = 'none';
     document.getElementById('portal-no-client').style.display = 'block';
+    var container = document.querySelector('.portal-container');
+    if (container) container.classList.add('wide');
+
+    // Inicializar al primer paso del stepper
+    goToHiringStep(1);
 
     var logoutBtn = document.getElementById('no-client-logout-btn');
     if (logoutBtn) {
@@ -411,6 +420,143 @@
         }
         if (btn) btn.disabled = false;
       });
+    }
+
+    // 4. Formulario de Contrato (Usuario Logueado sin Servicio desde Portal)
+    var portalHiringForm = document.getElementById('portal-hiring-form');
+    if (portalHiringForm) {
+      portalHiringForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var btn = document.getElementById('p-hir-submit-btn');
+        if (btn) btn.disabled = true;
+
+        var name = document.getElementById('p-hir-name').value.trim();
+        var email = document.getElementById('p-hir-email').value.trim();
+        var phone = document.getElementById('p-hir-phone').value.trim();
+        var date = document.getElementById('p-hir-date').value;
+        var schedule = document.getElementById('p-hir-schedule').value;
+        var address = document.getElementById('p-hir-address').value.trim();
+        var notes = document.getElementById('p-hir-notes').value.trim();
+        var planName = document.getElementById('p-hir-plan-name').value;
+        var planId = document.getElementById('p-hir-plan-id').value;
+
+        try {
+          // Dar formato a la dirección, fecha y comentarios en la propiedad message requerida por las reglas de Firestore
+          var messageText = 'Solicitud de contratación de Internet (Usuario Registrado): ' + planName + '.\n' +
+                            'Dirección: ' + address + '\n' +
+                            'Fecha Preferida: ' + date + '\n' +
+                            'Horario: ' + schedule;
+          if (notes) {
+            messageText += '\nComentarios: ' + notes;
+          }
+
+          // Registrar en Firestore cumpliendo estrictamente con la regla de campos permitidos
+          await db.collection('service_requests').add({
+            name: name,
+            phone: phone,
+            email: email,
+            message: messageText,
+            serviceId: 'internet',
+            serviceTitle: 'Internet Fibra Óptica',
+            planRequested: planName,
+            status: 'pending',
+            type: 'internet_hiring',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          // Rellenar datos en la pantalla de éxito
+          setText('success-plan-label', planName);
+          setText('success-phone-label', phone);
+          
+          // Formatear fecha para mostrarla amigable
+          var dateParts = date.split('-');
+          var formattedDate = date;
+          if (dateParts.length === 3) {
+            var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            formattedDate = jsDate.toLocaleDateString('es-ES', options);
+            // Capitalizar primer letra
+            formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+          }
+          setText('success-date-label', formattedDate);
+          setText('success-schedule-label', schedule);
+
+          goToHiringStep(3);
+          portalHiringForm.reset();
+          
+          // Reiniciar iconos de Lucide en la pantalla de éxito
+          if (window.lucide) {
+            window.lucide.createIcons();
+          }
+        } catch (err) {
+          console.error('Error al registrar solicitud de internet:', err);
+          showToast('Error al registrar solicitud. Intenta de nuevo.', 'error');
+        }
+        if (btn) btn.disabled = false;
+      });
+    }
+  }
+
+  // Stepper para contratación
+  window.selectHiringPlan = function (planName, planId, price) {
+    document.getElementById('p-hir-plan-name').value = planName;
+    document.getElementById('p-hir-plan-id').value = planId;
+    document.getElementById('p-hir-selected-label').textContent = planName + ' (RD$ ' + price.toLocaleString() + '/mes)';
+    
+    // Rellenar datos del usuario si están disponibles
+    if (currentUser && userData) {
+      var nameEl = document.getElementById('p-hir-name');
+      var emailEl = document.getElementById('p-hir-email');
+      if (nameEl) nameEl.value = userData.displayName || currentUser.displayName || '';
+      if (emailEl) emailEl.value = currentUser.email || '';
+    }
+
+    // Establecer fecha mínima como mañana
+    var dateEl = document.getElementById('p-hir-date');
+    if (dateEl) {
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      var dd = String(tomorrow.getDate()).padStart(2, '0');
+      var mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      var yyyy = tomorrow.getFullYear();
+      dateEl.min = yyyy + '-' + mm + '-' + dd;
+    }
+
+    goToHiringStep(2);
+  };
+
+  window.prevHiringStep = function (stepNum) {
+    goToHiringStep(stepNum);
+  };
+
+  function goToHiringStep(stepNum) {
+    // Esconder todos los paneles
+    document.querySelectorAll('.hiring-step-panel').forEach(function (panel) {
+      panel.classList.remove('active');
+    });
+    // Mostrar el panel actual
+    var panel = document.getElementById('hiring-step-' + stepNum);
+    if (panel) panel.classList.add('active');
+
+    // Actualizar stepper indicators
+    for (var i = 1; i <= 3; i++) {
+      var indicator = document.getElementById('step-ind-' + i);
+      var line = document.getElementById('step-line-' + (i - 1));
+      
+      if (indicator) {
+        indicator.classList.remove('active', 'completed');
+        if (i === stepNum) {
+          indicator.classList.add('active');
+        } else if (i < stepNum) {
+          indicator.classList.add('completed');
+        }
+      }
+      if (line) {
+        line.classList.remove('active');
+        if (i - 1 < stepNum) {
+          line.classList.add('active');
+        }
+      }
     }
   }
 

@@ -23,14 +23,16 @@
   function getDB() { return window.FutunetFirebase.db; }
 
   // ─── Determine role for new user (first user = superadmin) ───
+  // Fallback seguro: lee /config/setup para verificar si la BD requiere inicialización,
+  // evitando el listado global de usuarios que ahora está denegado por reglas de seguridad.
   async function determineNewUserRole() {
     try {
-      var snapshot = await getDB().collection('users').limit(1).get();
-      if (snapshot.empty) {
-        return ROLES.SUPERADMIN; // First user ever → superadmin
+      var doc = await getDB().collection('config').doc('setup').get();
+      if (!doc.exists) {
+        return ROLES.SUPERADMIN; // El documento centinela no existe → primer usuario = superadmin
       }
     } catch (e) {
-      console.warn('Could not check user count, defaulting to user role:', e);
+      console.warn('No se pudo comprobar el estado de instalación, usando rol estándar:', e);
     }
     return ROLES.USER;
   }
@@ -51,6 +53,18 @@
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
       });
       console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
+
+      // Si el rol creado fue superadmin, inicializamos el centinela
+      if (role === ROLES.SUPERADMIN) {
+        await getDB().collection('config').doc('setup').set({
+          initialized: true,
+          initializedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          initializedBy: uid
+        }).catch(function (e) {
+          console.warn('No se pudo inicializar el documento centinela /config/setup:', e);
+        });
+      }
+
       return role;
     } catch (err) {
       console.error('Firestore write failed:', err);

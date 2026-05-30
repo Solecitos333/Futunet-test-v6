@@ -45,19 +45,25 @@ service cloud.firestore {
 
     // ─── USERS Collection ───
     match /users/{userId} {
-      // Anyone can read users to check if collection is empty (for first-user setup)
-      // Logged-in users can read their own data
-      // Admins can read all users
-      allow read: if isSignedIn() && (isOwner(userId) || isAdminOrAbove());
+      // Logged-in users can read their own data, admins/editors can read all
+      allow read: if isSignedIn() && (isOwner(userId) || isEditorOrAbove());
+      
+      // Allow list access only to admins and above (mitigates global users disclosure)
+      allow list: if isAdminOrAbove();
       
       // Allow creating own user document (registration)
+      // Fallback for first-user setup: allows superadmin if /config/setup does not exist
       allow create: if isSignedIn() && isOwner(userId) && (
-        request.resource.data.role == 'user'
+        request.resource.data.role == 'user' ||
+        (!exists(/databases/$(database)/documents/config/setup) && request.resource.data.role == 'superadmin')
       );
       
-      // Users can update their own profile (but NOT their role or status)
+      // Users can update their own profile (only basic non-sensitive fields)
       allow update: if isSignedIn() && isOwner(userId) && (
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'status'])
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          'role', 'status', 'isInternetClient', 'clientCode', 'internetPlan', 
+          'internetStatus', 'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
+        ])
       );
       
       // Admins can update any user (change roles, status, etc.)
@@ -68,11 +74,6 @@ service cloud.firestore {
       
       // Only superadmin can delete users
       allow delete: if isSuperAdmin();
-    }
-    
-    // Allow reading users collection (to check if empty for first-user setup)
-    match /users/{userId} {
-      allow list: if isSignedIn();
     }
 
     // ─── PRODUCTS Collection ───
@@ -89,9 +90,9 @@ service cloud.firestore {
 
     // ─── CARTS Collection ───
     match /carts/{cartId} {
-      // Users can read their own carts, admins can read all
+      // Users can read their own carts, admins/editors can read all
       allow read: if isSignedIn() && (
-        resource.data.userId == request.auth.uid || isAdminOrAbove()
+        resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
       
       // Users can create their own carts
@@ -100,24 +101,22 @@ service cloud.firestore {
       // Users can update/delete their own carts
       allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
-    
-    // Allow shared cart access via shareToken
-    match /carts/{cartId} {
-      allow read: if true; // Shared carts are public via token
-    }
 
     // ─── ORDERS Collection ───
     match /orders/{orderId} {
-      // Users can read their own orders, admins can read all
+      // Users can read their own orders, admins/editors can read all
       allow read: if isSignedIn() && (
-        resource.data.userId == request.auth.uid || isAdminOrAbove()
+        resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
       
-      // Users can create their own orders
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      // Users can create their own orders with status 'pending'
+      allow create: if isSignedIn() && 
+                    request.resource.data.userId == request.auth.uid && 
+                    request.resource.data.status == 'pending' &&
+                    (!('paymentStatus' in request.resource.data.keys()) || request.resource.data.paymentStatus == 'pending_review');
       
-      // Only admins can update order status
-      allow update: if isAdminOrAbove();
+      // Only admins/editors can update order status
+      allow update: if isEditorOrAbove();
       
       // Only superadmin can delete orders
       allow delete: if isSuperAdmin();
@@ -161,13 +160,28 @@ service cloud.firestore {
 
     // ─── SEARCH QUERIES Collection ───
     match /search_queries/{queryId} {
-      allow create: if true;
+      // Validate queries limits to protect database from bloat/DoS
+      allow create: if request.resource.data.keys().hasOnly(['query', 'timestamp']) &&
+                    request.resource.data.query is string &&
+                    request.resource.data.query.size() <= 100 &&
+                    request.resource.data.timestamp == request.time;
       allow read, delete: if isAdminOrAbove();
     }
 
     // ─── AUDIT LOGS Collection ───
     match /audit_logs/{logId} {
-      allow read, create: if isEditorOrAbove();
+      // Admins/editors can read and write all logs
+      allow read: if isEditorOrAbove();
+      
+      // Signed-in users can create audit logs representing their own actions
+      allow create: if isSignedIn() && (
+        isEditorOrAbove() || (
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
+          request.resource.data.action in ['Inicio de sesión', 'Reporte de pago', 'Pedido por Transferencia'] &&
+          request.resource.data.timestamp == request.time
+        )
+      );
     }
 
     // ─── SERVICES CONFIG Collection ───
@@ -183,27 +197,49 @@ service cloud.firestore {
 
     // ─── SERVICE REQUESTS Collection ───
     match /service_requests/{requestId} {
-      allow create: if true; // Guests can submit service inquiries
-      allow read, update: if isAdminOrAbove();
+      // Whitelist fields, enforce status 'pending', validate types and limit lengths
+      allow create: if request.resource.data.keys().hasAll(['name', 'phone', 'email', 'message', 'serviceId', 'serviceTitle', 'status', 'type', 'createdAt']) &&
+                    request.resource.data.keys().hasOnly(['name', 'phone', 'email', 'message', 'serviceId', 'serviceTitle', 'status', 'type', 'createdAt', 'company', 'planRequested']) &&
+                    request.resource.data.name is string && request.resource.data.name.size() <= 100 &&
+                    request.resource.data.phone is string && request.resource.data.phone.size() <= 50 &&
+                    request.resource.data.email is string && request.resource.data.email.size() <= 100 &&
+                    request.resource.data.message is string && request.resource.data.message.size() <= 1500 &&
+                    request.resource.data.serviceId is string && request.resource.data.serviceId.size() <= 50 &&
+                    request.resource.data.serviceTitle is string && request.resource.data.serviceTitle.size() <= 100 &&
+                    request.resource.data.status == 'pending' &&
+                    request.resource.data.type in ['standard_service', 'internet_hiring'] &&
+                    request.resource.data.createdAt == request.time &&
+                    (!('company' in request.resource.data.keys()) || (request.resource.data.company is string && request.resource.data.company.size() <= 100)) &&
+                    (!('planRequested' in request.resource.data.keys()) || (request.resource.data.planRequested is string && request.resource.data.planRequested.size() <= 100));
+      allow read, update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }
 
     // ─── INTERNET PAYMENTS Collection ───
     match /internet_payments/{paymentId} {
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdminOrAbove());
-      allow update: if isAdminOrAbove();
+      // Validate payment submission fields and enforce status pending
+      allow create: if isSignedIn() && 
+                    request.resource.data.userId == request.auth.uid &&
+                    request.resource.data.status == 'pending' &&
+                    request.resource.data.amount is number &&
+                    request.resource.data.amount > 0 &&
+                    request.resource.data.timestamp == request.time;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
+      allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }
 
     // ─── INTERNET TICKETS Collection ───
     match /internet_tickets/{ticketId} {
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdminOrAbove());
-      allow update: if isAdminOrAbove();
+      // Validate technical support ticket fields and enforce status pending
+      allow create: if isSignedIn() && 
+                    request.resource.data.userId == request.auth.uid &&
+                    request.resource.data.status == 'pending' &&
+                    request.resource.data.timestamp == request.time;
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
+      allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }
-
 
     // ─── DENY EVERYTHING ELSE ───
     match /{document=**} {
