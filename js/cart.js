@@ -333,7 +333,7 @@
       <div class="cart-checkout-modal-card">
         <div class="cart-checkout-modal-header">
           <h3>Detalles de Entrega y Pago</h3>
-          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal">&times;</button>
+          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal" aria-label="Cerrar modal de pago">&times;</button>
         </div>
         <form id="cart-checkout-form" class="cart-checkout-modal-body">
           <div class="checkout-step">
@@ -739,9 +739,9 @@
             <div class="cart-item__title">${escapeHTML(product.title)}</div>
             <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
             <div class="cart-item__qty">
-              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Quitar una unidad">-</button>
               <span>${qty}</span>
-              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Agregar una unidad">+</button>
             </div>
             <div class="cart-item__meta">Precio: ${escapeHTML(product.price)}</div>
           </div>
