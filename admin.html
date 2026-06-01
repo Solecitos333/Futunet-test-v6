@@ -87,6 +87,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
           Banners
         </button>
+        <button class="admin-nav-item" data-admin-nav="marketing-calendar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Calendario Comercial
+        </button>
         <button class="admin-nav-item" data-admin-nav="categories-brands">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-10 9h3v8h14v-8h3L12 3z"/></svg>
           Categorías / Marcas
@@ -439,6 +443,306 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+
+      <!-- ═══ MARKETING CALENDAR PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="marketing-calendar">
+        <div class="admin-topbar">
+          <h1>Planificador y Calendario Comercial</h1>
+        </div>
+
+        <!-- Ficha de la Campaña de la Semana -->
+        <div class="admin-card" style="background: linear-gradient(135deg, #0A70A2 0%, #05486a 100%); color: white; padding: 24px; border-radius: 16px; border: none; margin-bottom: 24px; box-shadow: 0 8px 30px rgba(10,112,162,0.15); display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <span style="background: rgba(255,255,255,0.2); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Campaña de la Semana</span>
+              <h2 style="font-size: 1.6rem; font-weight: 700; margin: 8px 0 4px; color: white;">⚡ Temporada de Respaldo Energético</h2>
+              <p style="margin: 0; font-size: 0.92rem; opacity: 0.9; max-width: 750px;">
+                Con el inicio de la Temporada Ciclónica (1 de Junio), las empresas locales en Santiago y todo el país priorizan la protección eléctrica. Esta semana se activa el código promocional para incentivar compras directas de UPS e inversores.
+              </p>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); text-align: center; min-width: 150px;">
+              <span style="display: block; font-size: 0.75rem; opacity: 0.8; text-transform: uppercase;">Cupón Activo</span>
+              <strong style="display: block; font-size: 1.25rem; font-family: monospace; letter-spacing: 1px; margin: 4px 0 0; color: #2ecc71;">RESPALDO2026</strong>
+            </div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 8px 0;">
+
+          <div style="display: flex; flex-wrap: wrap; gap: 16px 32px;">
+            <div>
+              <span style="font-size: 0.78rem; opacity: 0.8; display: block; margin-bottom: 2px;">Foco de Producto</span>
+              <span style="font-weight: 600; font-size: 0.9rem;">UPS Doble Conversión, Inversores, Baterías de Respaldo</span>
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; opacity: 0.8; display: block; margin-bottom: 2px;">Público Objetivo</span>
+              <span style="font-weight: 600; font-size: 0.9rem;">Empresas (B2B), Clínicas y Oficinas con servidores críticos</span>
+            </div>
+            <div>
+              <span style="font-size: 0.78rem; opacity: 0.8; display: block; margin-bottom: 2px;">Vigencia</span>
+              <span style="font-weight: 600; font-size: 0.9rem;">1 de Junio - 15 de Junio, 2026</span>
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 12px; margin-top: 8px;">
+            <button class="admin-btn" style="background: white; color: #0A70A2; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" onclick="AdminPanel.openNewBannerWithPreset('Respaldo Energético')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Programar Banner de Campaña
+            </button>
+            <button class="admin-btn" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); font-weight: 600;" onclick="document.getElementById('marketing-assist-select').value='junio'; updateCopywritingAssistant();">
+              Ver Asistente de Contenidos
+            </button>
+          </div>
+        </div>
+
+        <!-- 2 Columnas: Calendario Anual e Content Assistant -->
+        <div style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px; align-items: start;">
+          
+          <!-- Planificador Mensual -->
+          <div class="admin-table-card" style="padding: 20px;">
+            <div class="admin-table-header" style="margin-bottom: 16px;">
+              <h3>Calendario Comercial 2026</h3>
+              <span style="font-size: 0.82rem; color: #76889e;">Guía anual de campañas estacionales</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
+              
+              <!-- Enero -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Enero</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Año Nuevo, Oficina Nueva</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Foco en cableado, mobiliario y laptops para renovación de inventario de inicio de año.
+                </div>
+              </div>
+
+              <!-- Febrero -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Febrero</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Conectados con Amor</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Planes de Internet Fibra Hogar y combos de Smart Home/Seguridad Residencial.
+                </div>
+              </div>
+
+              <!-- Marzo -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Marzo</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Productividad sin Pausas</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Foco B2B. Computadoras de escritorio, consumibles de impresoras y soporte de red.
+                </div>
+              </div>
+
+              <!-- Abril -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Abril</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Espacios Seguros</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Seguridad electrónica para el hogar y negocio, kits de cámaras y cerrojos digitales.
+                </div>
+              </div>
+
+              <!-- Mayo -->
+              <div style="background: #fff8f8; border: 1.5px solid #fecaca; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #ef4444; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Mayo</span>
+                    <h4 style="margin: 4px 0 0; color: #991b1b; font-size: 0.95rem; font-weight: 700;">Mamá Conectada y Segura</h4>
+                  </div>
+                  <span style="background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Finalizada Hoy</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #7f1d1d; line-height: 1.4;">
+                  Cierre de campaña de regalos tecnológicos y fibra de alta velocidad para el hogar.
+                </div>
+              </div>
+
+              <!-- Junio -->
+              <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(34,197,94,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #15803d; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Junio</span>
+                    <h4 style="margin: 4px 0 0; color: #166534; font-size: 0.95rem; font-weight: 700;">Respaldo Energético</h4>
+                  </div>
+                  <span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Activa</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #14532d; line-height: 1.4;">
+                  Temporada ciclónica. UPS online de doble conversión, inversores y paneles solares.
+                </div>
+              </div>
+
+              <!-- Julio -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Julio</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Papá Smart & Gaming</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Siguiente</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Gadgets de alta gama, routers de última generación y laptops gaming / corporativas.
+                </div>
+              </div>
+
+              <!-- Agosto -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Agosto</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Regreso a Clases</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Laptops, impresoras y planes de Internet estudiantiles de fibra óptica.
+                </div>
+              </div>
+
+              <!-- Septiembre -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Septiembre</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Redes & Infraestructura</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Upgrade de cableado, racks de telecomunicación y remozamientos comerciales.
+                </div>
+              </div>
+
+              <!-- Octubre -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Octubre</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Seguridad Industrial</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  CCTV comercial, biométricos y alarmas contra incendio para naves e industrias.
+                </div>
+              </div>
+
+              <!-- Noviembre -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Noviembre</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Black Friday Futunet</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Descuentos agresivos en todo el catálogo de tecnología y seguridad residencial.
+                </div>
+              </div>
+
+              <!-- Diciembre -->
+              <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; transition: all 0.2s;" onmouseover="this.style.borderColor='#0A70A2'; this.style.boxShadow='0 4px 12px rgba(10,112,162,0.06)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none';">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div>
+                    <span style="color: #76889e; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Diciembre</span>
+                    <h4 style="margin: 4px 0 0; color: #0a101d; font-size: 0.95rem; font-weight: 700;">Navidad y Cierres B2B</h4>
+                  </div>
+                  <span style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">Planificada</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #394c60; line-height: 1.4;">
+                  Liquidación de presupuestos corporativos anuales y regalos tecnológicos de fin de año.
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Asistente de Copywriting (Generador) -->
+          <div class="admin-table-card" style="padding: 20px;">
+            <div class="admin-table-header" style="margin-bottom: 16px;">
+              <h3>Asistente de Redacción Publicitaria (Copywriting)</h3>
+              <span style="font-size: 0.82rem; color: #76889e;">Generador de copies optimizados por campaña para redes sociales, email y WhatsApp</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label class="auth-label" for="marketing-assist-select">Selecciona la Campaña del Calendario</label>
+              <select class="auth-input" id="marketing-assist-select" onchange="AdminPanel.updateCopywritingAssistant()" style="max-width: 100%;">
+                <option value="enero">Enero: Año Nuevo, Oficina Nueva</option>
+                <option value="febrero">Febrero: Conectados con Amor (Internet Residencial)</option>
+                <option value="marzo">Marzo: Productividad sin Pausas (Laptops y Oficina)</option>
+                <option value="abril">Abril: Espacios Seguros (Seguridad Electrónica)</option>
+                <option value="mayo">Mayo: Mamá Conectada (Día de las Madres)</option>
+                <option value="junio" selected>Junio: Respaldo Energético (Temporada Ciclónica)</option>
+                <option value="julio">Julio: Papá Smart & Gaming</option>
+                <option value="agosto">Agosto: Regreso a Clases Tecnológico</option>
+                <option value="septiembre">Septiembre: Redes e Infraestructura Premium</option>
+                <option value="octubre">Octubre: Seguridad Corporativa e Industrial</option>
+                <option value="noviembre">Noviembre: Black Friday / Black Month</option>
+                <option value="diciembre">Diciembre: Navidad y Cierre de Proyectos 2027</option>
+              </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+              <!-- WhatsApp -->
+              <div style="background: #f3fcf7; border: 1.5px solid #d1fae5; border-radius: 12px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="color: #065f46; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.864.002-2.637-1.03-5.115-2.908-6.995-1.878-1.88-4.357-2.912-6.997-2.914-5.443 0-9.878 4.417-9.882 9.861-.002 1.722.453 3.4 1.319 4.873L1.87 21.65l3.87-1.015c1.4.764 2.87 1.155 4.39 1.16zm10.744-7.405c-.293-.146-1.73-.853-1.998-.951-.269-.099-.464-.146-.66.146-.195.293-.757.951-.928 1.146-.17.195-.341.22-.634.073-.293-.146-1.237-.456-2.356-1.455-.87-.777-1.458-1.738-1.63-2.03-.17-.293-.018-.452.129-.597.132-.131.293-.341.44-.512.146-.17.195-.293.293-.488.098-.195.049-.366-.024-.512-.074-.146-.66-1.586-.903-2.17-.238-.574-.479-.496-.66-.505-.171-.007-.366-.008-.561-.008-.195 0-.512.073-.78.366-.269.293-1.025 1.001-1.025 2.44 0 1.439 1.049 2.83 1.195 3.025.146.195 2.064 3.15 5.001 4.417.699.301 1.244.482 1.669.617.702.223 1.341.192 1.847.116.564-.085 1.73-.707 1.974-1.39.244-.683.244-1.268.17-1.39-.073-.122-.269-.195-.561-.341z"/></svg>
+                    WhatsApp de Contacto Directo
+                  </strong>
+                  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('whatsapp-copy-text')">Copiar</button>
+                </div>
+                <textarea id="whatsapp-copy-text" class="auth-input" style="height: 100px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+              </div>
+
+              <!-- Social Media Copy -->
+              <div style="background: #f4f8fd; border: 1.5px solid #d0e1fd; border-radius: 12px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="color: #0b59b3; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    Publicación para Redes Sociales
+                  </strong>
+                  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('social-copy-text')">Copiar</button>
+                </div>
+                <textarea id="social-copy-text" class="auth-input" style="height: 110px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+              </div>
+
+              <!-- Email Subject & Content -->
+              <div style="background: #fafafb; border: 1.5px solid #e4e4e7; border-radius: 12px; padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="color: #27272a; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Boletín de Correo (Newsletter B2B)
+                  </strong>
+                  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('email-copy-text')">Copiar</button>
+                </div>
+                <textarea id="email-copy-text" class="auth-input" style="height: 130px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -984,6 +1288,17 @@
             <div class="auth-form-group">
               <label class="auth-label" for="banner-order">Orden de Visualización</label>
               <input class="auth-input" type="number" id="banner-order" min="1" value="1" required />
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="banner-start-date">Programar Inicio (Opcional)</label>
+              <input class="auth-input" type="date" id="banner-start-date" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="banner-end-date">Programar Fin (Opcional)</label>
+              <input class="auth-input" type="date" id="banner-end-date" />
             </div>
           </div>
 

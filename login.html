@@ -54,6 +54,13 @@
             </div>
           </div>
 
+          <div class="auth-form-group" style="margin-top: 8px; margin-bottom: 16px;">
+            <label class="auth-checkbox-label" style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.85rem; color: #4b5563; user-select: none;">
+              <input type="checkbox" id="login-remember" name="remember" checked style="cursor: pointer; width: 16px; height: 16px; accent-color: #0B7EB5;" />
+              <span>Mantener sesión iniciada</span>
+            </label>
+          </div>
+
           <button type="submit" class="auth-btn auth-btn-primary" id="login-btn">
             <span>Iniciar sesión</span>
           </button>
@@ -92,10 +99,13 @@
           <div class="auth-form-group">
             <label class="auth-label" for="register-password">Contraseña</label>
             <div class="auth-password-wrap">
-              <input class="auth-input" type="password" id="register-password" name="password" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password" />
+              <input class="auth-input" type="password" id="register-password" name="password" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password" />
               <button type="button" class="auth-password-toggle" data-toggle-password="register-password" aria-label="Mostrar contraseña">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
+            </div>
+            <div class="auth-password-requirements" style="font-size: 0.72rem; color: #4b5563; margin-top: 6px; line-height: 1.3; background: #f3f4f6; padding: 6px 10px; border-radius: 6px;">
+              Requisitos: mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial (ej: @$!%*?&).
             </div>
           </div>
 
@@ -237,10 +247,10 @@
         var messages = {
           'auth/email-already-in-use': 'Este correo ya está registrado. Intenta iniciar sesión.',
           'auth/invalid-email': 'El formato del correo no es válido.',
-          'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
-          'auth/user-not-found': 'No existe una cuenta con este correo.',
-          'auth/wrong-password': 'Contraseña incorrecta. Intenta de nuevo.',
-          'auth/invalid-credential': 'Credenciales inválidas. Verifica tu correo y contraseña.',
+          'auth/weak-password': 'La contraseña debe cumplir con los requisitos mínimos de complejidad.',
+          'auth/user-not-found': 'El correo electrónico o la contraseña son incorrectos. Verifica tus credenciales.',
+          'auth/wrong-password': 'El correo electrónico o la contraseña son incorrectos. Verifica tus credenciales.',
+          'auth/invalid-credential': 'El correo electrónico o la contraseña son incorrectos. Verifica tus credenciales.',
           'auth/too-many-requests': 'Demasiados intentos. Espera un momento e intenta de nuevo.',
           'auth/popup-closed-by-user': 'Se cerró la ventana de Google. Intenta de nuevo.',
           'auth/network-request-failed': 'Error de conexión. Verifica tu internet.',
@@ -313,9 +323,10 @@
 
         var email = document.getElementById('login-email').value.trim();
         var password = document.getElementById('login-password').value;
+        var remember = document.getElementById('login-remember').checked;
 
         try {
-          await FutunetAuth.signIn(email, password);
+          await FutunetAuth.signIn(email, password, remember);
           var userData = FutunetAuth.getUserData();
           if (userData && userData.status === 'disabled') {
             await FutunetAuth.signOut();
@@ -367,6 +378,14 @@
 
         if (name.length < 2) {
           showMessage('register-message', 'Ingresa tu nombre completo.', 'error');
+          setLoading('register-btn', false);
+          return;
+        }
+
+        // Validación de fortaleza de contraseña en cliente
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(password)) {
+          showMessage('register-message', 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial (ej: @$!%*?&).', 'error');
           setLoading('register-btn', false);
           return;
         }

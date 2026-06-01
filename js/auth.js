@@ -75,6 +75,12 @@
 
   // ─── Sign Up ───
   async function signUp(email, password, displayName) {
+    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      var err = new Error('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.');
+      err.code = 'auth/weak-password';
+      throw err;
+    }
     var auth = getAuth();
     var cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: displayName });
@@ -95,7 +101,11 @@
   }
 
   // ─── Sign In with Email ───
-  async function signIn(email, password) {
+  async function signIn(email, password, remember = true) {
+    var persistence = remember 
+      ? firebase.auth.Auth.Persistence.LOCAL 
+      : firebase.auth.Auth.Persistence.SESSION;
+    await getAuth().setPersistence(persistence);
     var cred = await getAuth().signInWithEmailAndPassword(email, password);
     
     // Check if email is verified

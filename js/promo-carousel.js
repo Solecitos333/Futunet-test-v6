@@ -30,8 +30,24 @@
       const db = window.FutunetFirebase.db;
       const snapshot = await db.collection('banners').where('isActive', '==', true).orderBy('order').get();
       if (!snapshot.empty) {
+        const now = new Date();
         snapshot.forEach(doc => {
-          dynamicBanners.push({ id: doc.id, ...doc.data() });
+          const data = doc.data();
+          let shouldShow = true;
+          
+          if (data.startDate) {
+            const start = new Date(data.startDate);
+            if (now < start) shouldShow = false;
+          }
+          if (data.endDate) {
+            // If it's a simple YYYY-MM-DD, default to the end of that day (23:59:59)
+            const endLimit = data.endDate.includes('T') ? new Date(data.endDate) : new Date(data.endDate + 'T23:59:59');
+            if (now > endLimit) shouldShow = false;
+          }
+          
+          if (shouldShow) {
+            dynamicBanners.push({ id: doc.id, ...data });
+          }
         });
       }
     }

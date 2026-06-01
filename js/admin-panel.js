@@ -101,6 +101,7 @@
     loadSearchQueries();
     loadAuditLogs();
     loadLayout();
+    updateCopywritingAssistant();
     
     // Portal & Requests Loaders
     loadServiceRequests();
@@ -1610,9 +1611,30 @@
         var b = doc.data();
         allBanners.push({ id: doc.id, ...b });
         var img = b.image || 'img/logo.webp';
-        var statusBadge = (b.isActive !== false) ? 
-          '<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Activo</span>' : 
-          '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Inactivo</span>';
+        var now = new Date();
+        var statusBadge = '';
+        if (b.isActive === false) {
+          statusBadge = '<span style="background:#fee2e2; color:#991b1b; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Inactivo</span>';
+        } else {
+          var isScheduledFuture = false;
+          var isExpired = false;
+          if (b.startDate) {
+            var start = new Date(b.startDate);
+            if (now < start) isScheduledFuture = true;
+          }
+          if (b.endDate) {
+            var endLimit = b.endDate.includes('T') ? new Date(b.endDate) : new Date(b.endDate + 'T23:59:59');
+            if (now > endLimit) isExpired = true;
+          }
+          
+          if (isScheduledFuture) {
+            statusBadge = '<span style="background:#dbeafe; color:#1e40af; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;" title="Comienza: ' + b.startDate + '">Programado</span>';
+          } else if (isExpired) {
+            statusBadge = '<span style="background:#fef3c7; color:#92400e; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;" title="Expiró el: ' + b.endDate + '">Expirado</span>';
+          } else {
+            statusBadge = '<span style="background:#d1fae5; color:#065f46; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:600;">Activo</span>';
+          }
+        }
 
         html += '<tr>' +
           '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:120px;height:48px;object-fit:cover;border-radius:6px;"></td>' +
@@ -1635,6 +1657,8 @@
   function openNewBanner() {
     document.getElementById('banner-form').reset();
     setVal('banner-id', '');
+    setVal('banner-start-date', '');
+    setVal('banner-end-date', '');
     bannerUploadFile = null;
     renderBannerPreview();
     var cb = document.getElementById('banner-active');
@@ -1650,6 +1674,8 @@
     setVal('banner-subtitle', banner.subtitle || '');
     setVal('banner-link', banner.link || '');
     setVal('banner-order', banner.order || 1);
+    setVal('banner-start-date', banner.startDate || '');
+    setVal('banner-end-date', banner.endDate || '');
     
     var cb = document.getElementById('banner-active');
     if (cb) cb.checked = banner.isActive !== false;
@@ -1666,6 +1692,8 @@
     var subtitle = getVal('banner-subtitle').trim();
     var link = getVal('banner-link').trim();
     var order = parseInt(getVal('banner-order')) || 1;
+    var startDate = getVal('banner-start-date') || '';
+    var endDate = getVal('banner-end-date') || '';
     var cb = document.getElementById('banner-active');
     var isActive = cb ? cb.checked : true;
     
@@ -1694,7 +1722,9 @@
         link: link,
         order: order,
         image: imageUrl,
-        isActive: isActive
+        isActive: isActive,
+        startDate: startDate,
+        endDate: endDate
       };
       
       if (id) {
@@ -4402,9 +4432,115 @@
     });
   }
 
+  // ======= COPYWRITING ASSISTANT & MARKETING PLANNERS =======
+  var copywritingData = {
+    enero: {
+      whatsapp: "¡Hola! Comienza el año renovando tu oficina. Pregunta por nuestros escritorios ergonómicos, cableado estructurado e internet de fibra óptica simétrica corporativa.",
+      social: "¿Listo para llevar tu empresa al siguiente nivel en este 2026? 🚀 En Futunet diseñamos y equipamos tu oficina ideal: desde mobiliario ergonómico hasta redes de alta velocidad y cableado de datos. ¡Cotiza hoy mismo y empieza el año con el pie derecho! #FutunetSantiago #OficinaNueva #B2B",
+      email: "Asunto: Diseña tu oficina para el éxito este 2026 con Futunet\n\nEstimado cliente,\n\nQueremos apoyarte en tus metas del nuevo año. Te ofrecemos soluciones completas para renovar tu espacio de trabajo:\n- Mobiliario corporativo\n- Cableado estructurado y redes WiFi 6\n- Laptops empresariales Dell y HP con garantía local.\n\nContáctanos para un levantamiento gratuito."
+    },
+    febrero: {
+      whatsapp: "¡Hola! En el mes del amor, mantente conectado con quienes más quieres. Instala hoy Internet de Fibra Óptica Futunet y recibe el doble de velocidad por 3 meses.",
+      social: "¡El amor se comparte mejor a alta velocidad! 💻❤️ Conecta tu hogar con la estabilidad del Internet de Fibra Óptica simétrica de Futunet en Santiago. Planes residenciales rápidos para streaming, teletrabajo y clases online. ¡Solicita tu instalación hoy! #InternetSantiago #FibraOptica #Futunet",
+      email: "Asunto: Disfruta de la mejor conexión en el mes del amor con Futunet\n\nEstimado(a),\n\nQue la distancia no sea un límite. Descubre nuestros planes residenciales de Fibra Óptica Simétrica. Sin caídas, sin interrupciones. Conecta tu Smart Home con la red más estable del Cibao."
+    },
+    marzo: {
+      whatsapp: "¡Hola! Aumenta el rendimiento de tus colaboradores. Cotiza laptops corporativas Dell, HP y UPS online de doble conversión para evitar interrupciones en tu oficina.",
+      social: "¿Caídas de sistema o laptops lentas afectando tus operaciones? 📉 En Futunet te ayudamos a elevar la productividad de tu equipo con computadoras de alto rendimiento, impresoras eficientes y soporte técnico corporativo. ¡Contáctanos para una cotización formal! #Productividad #LaptopsCorporativas #FutunetB2B",
+      email: "Asunto: Optimiza el rendimiento operativo de tu empresa con Futunet\n\nEstimados señores,\n\nPresentamos nuestra línea premium de laptops Dell Latitude e impresoras de alto volumen, diseñadas para responder a las exigencias operativas actuales de su negocio. Solicite su presupuesto hoy."
+    },
+    abril: {
+      whatsapp: "¡Hola! Protege lo que más importa. Conoce nuestros kits de cámaras de seguridad Hikvision de alta definición y controles de acceso inteligentes.",
+      social: "Mantén la tranquilidad de tu hogar o negocio las 24 horas del día. 🔐 En Futunet te ofrecemos sistemas completos de CCTV Hikvision con monitoreo desde tu móvil, alarmas y cerraduras inteligentes. ¡Cotiza tu auditoría de seguridad gratuita en Santiago! #SeguridadInteligente #CCTV #Futunet",
+      email: "Asunto: Protege tu patrimonio comercial y residencial con Futunet\n\nEstimado cliente,\n\nLa seguridad no se improvisa. Ponemos a tu disposición tecnología avanzada de vigilancia y control de accesos biométricos. Agenda un levantamiento técnico de seguridad sin costo adicional."
+    },
+    mayo: {
+      whatsapp: "¡Hola! Celebra a mamá con el mejor regalo tecnológico. Pregunta por nuestras cerraduras inteligentes, cámaras wifi y laptops de alto rendimiento.",
+      social: "¡Mamá se merece estar siempre conectada y segura! 🌸💻 Sorpréndela con regalos de domótica: cámaras wifi de monitoreo inteligente, cerraduras digitales para su tranquilidad, o una laptop para sus proyectos. ¡Entra a nuestro catálogo Futunet! #DiaDeLasMadres #RegalosTech #Futunet",
+      email: "Asunto: Encuentra el regalo tecnológico ideal para Mamá en Futunet\n\nQuerido cliente,\n\nSorprende a mamá en su mes especial con tecnología que facilita su vida. Desde cámaras wifi interiores para estar en contacto, hasta cerraduras inteligentes de alta seguridad. Conoce los combos especiales de Mayo."
+    },
+    junio: {
+      whatsapp: "¡Hola! Temporada ciclónica activa. Asegura tu negocio con UPS de doble conversión, inversores y paneles solares. Usa el código RESPALDO2026 para un 10% de descuento.",
+      social: "⛈️ Con el inicio de la temporada ciclónica este 1 de Junio, ¿está asegurada la energía de tu oficina o data center? Evita pérdidas de datos y daños en servidores con nuestras UPS Online de Doble Conversión e inversores profesionales. Cotiza con instalación prioritaria. #TemporadaCiclonica #UPS #RespaldoEléctrico #Futunet",
+      email: "Asunto: Temporada de Huracanes 2026: Asegura la continuidad de tu empresa con Futunet\n\nEstimado cliente corporativo,\n\nLas interrupciones eléctricas son la principal causa de fallas en servidores y pérdidas financieras durante el invierno ciclónico. Futunet te ofrece:\n1. UPS de Doble Conversión (1KVA a 10KVA) con bypass automático.\n2. Inversores y baterías de ciclo profundo.\n3. Sistemas de paneles solares híbridos.\n\nContáctanos hoy y asegura continuidad operativa."
+    },
+    julio: {
+      whatsapp: "¡Hola! En el mes de los padres, regala potencia. Conoce nuestras laptops de alto rendimiento, routers WiFi 6 y gadgets inteligentes.",
+      social: "¿Papá trabaja duro o le apasiona el gaming? 🎮💼 Este mes de los padres regálale la potencia y conectividad que se merece: routers de largo alcance WiFi 6, audífonos premium o laptops potentes. Visita nuestro catálogo Futunet en Santiago. #DiaDeLosPadres #PapáSmart #GamingRD",
+      email: "Asunto: Sorprende a Papá con lo mejor de la tecnología Futunet\n\nEstimado cliente,\n\nCelebra el día de los padres con tecnología de punta. Hemos seleccionado los mejores equipos para teletrabajo exigente, entretenimiento y redes estables. Cotiza online hoy."
+    },
+    agosto: {
+      whatsapp: "¡Hola! Prepárate para el regreso a clases. Descubre ofertas en laptops estudiantiles, impresoras con tanques de tinta e internet de fibra óptica Lite.",
+      social: "🎒 ¡Prepárate para el éxito escolar y universitario! Laptops livianas Dell y HP, impresoras de alta eficiencia con tanque de tinta de regalo y el Internet de Fibra Óptica que no los dejará a mitad de una videoclase. Combos escolares listos en Santiago. #RegresoAClases #EstudiantesRD #Futunet",
+      email: "Asunto: Equipados para el Regreso a Clases con Futunet\n\nEstimados padres,\n\nFaciliten el aprendizaje de sus hijos con herramientas tecnológicas confiables. Impresoras Epson EcoTank, laptops de excelente relación calidad-precio y planes de internet rápidos y económicos. Cotiza tu combo aquí."
+    },
+    septiembre: {
+      whatsapp: "¡Hola! Optimiza tu red. Realizamos cableado estructurado categoría 6A, organización de gabinetes/racks y remozamiento de oficinas.",
+      social: "¿Tus cables de red son un caos o tienes zonas muertas de WiFi? 🔌 En Futunet optimizamos tu infraestructura física y de telecomunicaciones con cableado estructurado de alta velocidad y antenas Access Point industriales. ¡Mejora el rendimiento de tu red hoy! #CableadoEstructurado #RedesYDatos #SantiagoRD",
+      email: "Asunto: Auditoría de Red e Infraestructura de Datos para tu negocio\n\nEstimados directores de TI,\n\nUn mal cableado o equipamiento antiguo merma hasta el 30% del rendimiento de sus colaboradores. Futunet provee servicios profesionales de reestructuración de racks de datos, fibra interna y canalizaciones. Solicite levantamiento."
+    },
+    octubre: {
+      whatsapp: "¡Hola! Controla el acceso a tu empresa. Conoce nuestros lectores biométricos de huella/rostro, sistemas de control de asistencia y CCTV industrial.",
+      social: "Optimiza la seguridad y el control operativo de tu negocio. 🏢🔒 Implementa cerraduras electromagnéticas, barreras vehiculares y control de asistencia con biometría facial de Futunet. Seguridad industrial garantizada para almacenes y oficinas. #SeguridadIndustrial #ControlDeAcceso #Futunet",
+      email: "Asunto: Automatiza el control de asistencia y acceso en tu empresa con Futunet\n\nEstimados gerentes de Recursos Humanos y Seguridad,\n\nEviten accesos no autorizados y automaticen el registro de jornadas con nuestros relojes controladores y sistemas biométricos integrados. Ofrecemos asesoría y soporte técnico especializado."
+    },
+    noviembre: {
+      whatsapp: "¡Hola! Llegó el Black Month a Futunet. Descuentos increíbles en todo el catálogo de tecnología, laptops y seguridad. ¡Aprovecha ya!",
+      social: "🔥 ¡Llegó el Black Friday a Futunet! El mes con los descuentos más grandes del año en Santiago en cámaras, UPS, laptops y cableado. Visita nuestro catálogo e-commerce y cotiza antes de que se agoten. #BlackFridayRD #DescuentosTecnologia #Futunet",
+      email: "Asunto: Ofertas Exclusivas de Black Friday Futunet - Solo por esta semana\n\nEstimado cliente,\n\nNo dejes pasar la oportunidad de adquirir equipamiento tecnológico con hasta un 30% de descuento directo en nuestro catálogo online. Cotiza y asegura tu pedido hoy."
+    },
+    diciembre: {
+      whatsapp: "¡Hola! Cierra el año equipando tu negocio. Aprovecha el presupuesto anual y cotiza remozamiento, mobiliario o upgrades de redes con entrega rápida.",
+      social: "🎄 ¡Cierra el año con proyectos completados! Invierte el remanente de tu presupuesto corporativo en modernizar tus servidores, red WiFi o remozamiento físico de tu oficina. Futunet se encarga del diseño e instalación llave en mano antes de fin de año. #NavidadCorporativa #Proyectos2027 #FutunetB2B",
+      email: "Asunto: Ejecuta tu presupuesto de fin de año con Futunet - Remozamiento y Redes\n\nEstimados directores financieros,\n\nOptimicen sus recursos tributarios invirtiendo en infraestructura física y tecnológica depreciable para el nuevo año fiscal. Diseñamos, canalizamos e instalamos sus nuevos sistemas con factura de crédito fiscal (NCF)."
+    }
+  };
+
+  function updateCopywritingAssistant() {
+    var select = document.getElementById('marketing-assist-select');
+    if (!select) return;
+    var val = select.value;
+    var data = copywritingData[val];
+    if (!data) return;
+    
+    setVal('whatsapp-copy-text', data.whatsapp);
+    setVal('social-copy-text', data.social);
+    setVal('email-copy-text', data.email);
+  }
+
+  function copyToClipboard(elementId) {
+    var el = document.getElementById(elementId);
+    if (!el) return;
+    
+    el.select();
+    el.setSelectionRange(0, 99999);
+    
+    try {
+      document.execCommand('copy');
+      showToast('Texto copiado al portapapeles', 'success');
+    } catch (err) {
+      showToast('Error al copiar texto', 'error');
+    }
+  }
+
+  function openNewBannerWithPreset(presetName) {
+    openNewBanner();
+    if (presetName === 'Respaldo Energético') {
+      setVal('banner-title', '⚡ ¿Tu negocio está listo para la <strong>temporada ciclónica</strong>?');
+      setVal('banner-subtitle', 'Garantiza la continuidad de tu empresa con UPS de doble conversión, inversores y paneles solares con instalación prioritaria.');
+      setVal('banner-link', 'catalogo.html?cat=energia');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-06-01');
+      setVal('banner-end-date', '2026-06-30');
+    }
+  }
+
   // ─── Public API ───
   window.AdminPanel = {
     init: init,
+    updateCopywritingAssistant: updateCopywritingAssistant,
+    copyToClipboard: copyToClipboard,
+    openNewBannerWithPreset: openNewBannerWithPreset,
     editProduct: editProduct,
     deleteProduct: deleteProduct,
     toggleProductActive: toggleProductActive,

@@ -22,21 +22,25 @@ service cloud.firestore {
     function isSignedIn() {
       return request.auth != null;
     }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
     
     function getUserRole() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
     }
     
     function isSuperAdmin() {
-      return isSignedIn() && getUserRole() == 'superadmin';
+      return isEmailVerified() && getUserRole() == 'superadmin';
     }
     
     function isAdminOrAbove() {
-      return isSignedIn() && getUserRole() in ['superadmin', 'admin'];
+      return isEmailVerified() && getUserRole() in ['superadmin', 'admin'];
     }
     
     function isEditorOrAbove() {
-      return isSignedIn() && getUserRole() in ['superadmin', 'admin', 'editor'];
+      return isEmailVerified() && getUserRole() in ['superadmin', 'admin', 'editor'];
     }
     
     function isOwner(userId) {
@@ -45,21 +49,22 @@ service cloud.firestore {
 
     // ─── USERS Collection ───
     match /users/{userId} {
-      // Logged-in users can read their own data, admins/editors can read all
-      allow read: if isSignedIn() && (isOwner(userId) || isEditorOrAbove());
+      // Logged-in users can read their own data, admins/editors can read all (if email verified)
+      allow read: if isEmailVerified() && (isOwner(userId) || isEditorOrAbove());
       
       // Allow list access only to admins and above (mitigates global users disclosure)
       allow list: if isAdminOrAbove();
       
       // Allow creating own user document (registration)
       // Fallback for first-user setup: allows superadmin if /config/setup does not exist
+      // Nota: no exige email verificado en creación, ya que al registrarse el email aún no ha sido confirmado.
       allow create: if isSignedIn() && isOwner(userId) && (
         request.resource.data.role == 'user' ||
         (!exists(/databases/$(database)/documents/config/setup) && request.resource.data.role == 'superadmin')
       );
       
-      // Users can update their own profile (only basic non-sensitive fields)
-      allow update: if isSignedIn() && isOwner(userId) && (
+      // Users can update their own profile (only basic non-sensitive fields and if email verified)
+      allow update: if isEmailVerified() && isOwner(userId) && (
         !request.resource.data.diff(resource.data).affectedKeys().hasAny([
           'role', 'status', 'isInternetClient', 'clientCode', 'internetPlan', 
           'internetStatus', 'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
@@ -90,27 +95,27 @@ service cloud.firestore {
 
     // ─── CARTS Collection ───
     match /carts/{cartId} {
-      // Users can read their own carts, admins/editors can read all
-      allow read: if isSignedIn() && (
+      // Users can read their own carts, admins/editors can read all (if email verified)
+      allow read: if isEmailVerified() && (
         resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
       
-      // Users can create their own carts
-      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      // Users can create their own carts (if email verified)
+      allow create: if isEmailVerified() && request.resource.data.userId == request.auth.uid;
       
-      // Users can update/delete their own carts
-      allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      // Users can update/delete their own carts (if email verified)
+      allow update, delete: if isEmailVerified() && resource.data.userId == request.auth.uid;
     }
 
     // ─── ORDERS Collection ───
     match /orders/{orderId} {
-      // Users can read their own orders, admins/editors can read all
-      allow read: if isSignedIn() && (
+      // Users can read their own orders, admins/editors can read all (if email verified)
+      allow read: if isEmailVerified() && (
         resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
       
-      // Users can create their own orders with status 'pending'
-      allow create: if isSignedIn() && 
+      // Users can create their own orders with status 'pending' (if email verified)
+      allow create: if isEmailVerified() && 
                     request.resource.data.userId == request.auth.uid && 
                     request.resource.data.status == 'pending' &&
                     (!('paymentStatus' in request.resource.data.keys()) || request.resource.data.paymentStatus == 'pending_review');
@@ -124,8 +129,8 @@ service cloud.firestore {
 
     // ─── DISCOUNTS Collection ───
     match /discounts/{code} {
-      // Anyone signed in can read discounts (to validate codes)
-      allow read: if isSignedIn();
+      // Anyone signed in with email verified can read discounts (to validate codes)
+      allow read: if isEmailVerified();
       
       // Only admins can manage discounts
       allow create, update, delete: if isAdminOrAbove();
@@ -173,8 +178,8 @@ service cloud.firestore {
       // Admins/editors can read and write all logs
       allow read: if isEditorOrAbove();
       
-      // Signed-in users can create audit logs representing their own actions
-      allow create: if isSignedIn() && (
+      // Signed-in users with email verified can create audit logs representing their own actions
+      allow create: if isEmailVerified() && (
         isEditorOrAbove() || (
           request.resource.data.userId == request.auth.uid &&
           request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
@@ -217,26 +222,26 @@ service cloud.firestore {
 
     // ─── INTERNET PAYMENTS Collection ───
     match /internet_payments/{paymentId} {
-      // Validate payment submission fields and enforce status pending
-      allow create: if isSignedIn() && 
+      // Validate payment submission fields and enforce status pending (if email verified)
+      allow create: if isEmailVerified() && 
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.status == 'pending' &&
                     request.resource.data.amount is number &&
                     request.resource.data.amount > 0 &&
                     request.resource.data.timestamp == request.time;
-      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
+      allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
       allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }
 
     // ─── INTERNET TICKETS Collection ───
     match /internet_tickets/{ticketId} {
-      // Validate technical support ticket fields and enforce status pending
-      allow create: if isSignedIn() && 
+      // Validate technical support ticket fields and enforce status pending (if email verified)
+      allow create: if isEmailVerified() && 
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.status == 'pending' &&
                     request.resource.data.timestamp == request.time;
-      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
+      allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
       allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }
