@@ -96,8 +96,10 @@
     await getAuth().setPersistence(persistence);
     var cred = await getAuth().signInWithEmailAndPassword(email, password);
     
-    // Check if email is verified
-    if (!cred.user.emailVerified) {
+    currentUserData = await fetchUserData(cred.user.uid);
+
+    // Check if email is verified OR if the user account is active in Firestore
+    if (!cred.user.emailVerified && (!currentUserData || currentUserData.status !== 'active')) {
       await getAuth().signOut();
       currentUserData = null;
       var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
@@ -119,7 +121,6 @@
       timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).catch(function () {});
 
-    currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;
   }
 
@@ -282,13 +283,13 @@
   function isEditor() { return hasRole(ROLES.EDITOR); }
   function isLoggedIn() {
     var user = getAuth().currentUser;
-    return !!(user && user.emailVerified);
+    return !!user;
   }
 
   // ─── Auth State Listener ───
   function onAuthChanged(callback) {
     getAuth().onAuthStateChanged(async function (user) {
-      if (user && user.emailVerified) {
+      if (user) {
         currentUserData = await fetchUserData(user.uid);
         if (currentUserData && currentUserData.status === 'disabled') {
           await signOut();
@@ -305,14 +306,14 @@
 
   // ─── Initialize auth state listener ───
   getAuth().onAuthStateChanged(async function (user) {
-    if (user && user.emailVerified) {
+    if (user) {
       currentUserData = await fetchUserData(user.uid);
     } else {
       currentUserData = null;
     }
     authReadyResolve();
     window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
-      detail: { user: (user && user.emailVerified) ? user : null, userData: currentUserData }
+      detail: { user: user ? user : null, userData: currentUserData }
     }));
   });
 

@@ -817,6 +817,11 @@
   }
 
   async function loadUsers() {
+    if (currentUserData && currentUserData.role === 'superadmin') {
+      var btn = document.getElementById('btn-create-user');
+      if (btn) btn.style.display = 'inline-flex';
+    }
+
     var tbody = document.getElementById('users-table-body');
     if (!tbody) return;
     tbody.innerHTML = getTableSkeletonHtml(5, 5);
@@ -923,6 +928,49 @@
       loadDashboardStats();
     } catch (e) {
       showToast('Error: ' + e.message, 'error');
+    }
+  }
+
+  async function createUser(email, password, displayName, role) {
+    var firebaseConfig = window.FutunetFirebase.config;
+    var secondaryAppName = 'SecondaryApp_' + Date.now();
+    var secondaryApp = firebase.initializeApp(firebaseConfig, secondaryAppName);
+
+    try {
+      var cred = await secondaryApp.auth().createUserWithEmailAndPassword(email, password);
+      var uid = cred.user.uid;
+
+      await cred.user.updateProfile({ displayName: displayName });
+
+      var userRef = db.collection('users').doc(uid);
+      await userRef.set({
+        displayName: displayName,
+        email: email,
+        phone: '',
+        address: '',
+        role: role,
+        status: 'active',
+        favorites: [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: null
+      });
+
+      await writeAuditLog('Crear Usuario Directo', displayName + ' (' + email + ', Rol: ' + role + ')', {
+        collection: 'users',
+        docId: uid,
+        type: 'create',
+        newData: {
+          displayName: displayName,
+          email: email,
+          role: role,
+          status: 'active'
+        }
+      });
+
+      await secondaryApp.auth().signOut();
+      return uid;
+    } finally {
+      await secondaryApp.delete();
     }
   }
 
@@ -2557,6 +2605,65 @@
         filterAndRenderAuditLogs();
       });
     }
+
+    // Create user form
+    var createUserForm = document.getElementById('create-user-form');
+    if (createUserForm) {
+      createUserForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var name = document.getElementById('create-user-name').value.trim();
+        var email = document.getElementById('create-user-email').value.trim();
+        var password = document.getElementById('create-user-password').value;
+        var role = document.getElementById('create-user-role').value;
+
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
+        if (!passwordRegex.test(password)) {
+          showToast('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.', 'error');
+          return;
+        }
+
+        var submitBtn = createUserForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Creando usuario...';
+        }
+
+        try {
+          await createUser(email, password, name, role);
+          showToast('Usuario creado con éxito', 'success');
+          createUserForm.reset();
+          closeModal('create-user-modal');
+          loadUsers();
+          loadDashboardStats();
+        } catch (err) {
+          console.error('Error creating user:', err);
+          var errorMsg = err.message;
+          if (err.code === 'auth/email-already-in-use') {
+            errorMsg = 'Este correo ya está registrado.';
+          } else if (err.code === 'auth/invalid-email') {
+            errorMsg = 'El formato del correo no es válido.';
+          }
+          showToast('Error al crear usuario: ' + errorMsg, 'error');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Crear usuario';
+          }
+        }
+      });
+    }
+
+    // Password fields togglers (admin panel general selector)
+    document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var input = document.getElementById(this.getAttribute('data-toggle-password'));
+        if (input) {
+          var isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          this.setAttribute('aria-label', isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña');
+        }
+      });
+    });
   }
 
   function openModal(id) {
@@ -4547,6 +4654,7 @@
     openNewProduct: openNewProduct,
     editUser: editUser,
     saveUser: saveUser,
+    createUser: createUser,
     toggleDiscount: toggleDiscount,
     deleteDiscount: deleteDiscount,
     updateOrderStatus: updateOrderStatus,

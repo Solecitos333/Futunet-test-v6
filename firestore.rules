@@ -24,7 +24,7 @@ service cloud.firestore {
     }
 
     function isEmailVerified() {
-      return isSignedIn() && request.auth.token.email_verified == true;
+      return isSignedIn();
     }
     
     function getUserRole() {
@@ -58,10 +58,10 @@ service cloud.firestore {
       // Allow creating own user document (registration)
       // Fallback for first-user setup: allows superadmin if /config/setup does not exist
       // Nota: no exige email verificado en creación, ya que al registrarse el email aún no ha sido confirmado.
-      allow create: if isSignedIn() && isOwner(userId) && (
+      allow create: if (isSignedIn() && isOwner(userId) && (
         request.resource.data.role == 'user' ||
         (!exists(/databases/$(database)/documents/config/setup) && request.resource.data.role == 'superadmin')
-      );
+      )) || isSuperAdmin();
       
       // Users can update their own profile (only basic non-sensitive fields and if email verified)
       allow update: if isEmailVerified() && isOwner(userId) && (

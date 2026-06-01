@@ -278,6 +278,10 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
               Exportar CSV
             </button>
+            <button class="admin-btn admin-btn-primary" id="btn-create-user" style="display:none; align-items:center; gap:8px;" onclick="AdminPanel.openModal('create-user-modal')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Crear usuario
+            </button>
           </div>
         </div>
         <div class="admin-table-card">
@@ -1569,6 +1573,53 @@
           <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
             <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
             <button type="submit" class="admin-btn admin-btn-primary">Guardar cambios</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create User Modal -->
+  <div class="admin-modal-overlay" id="create-user-modal">
+    <div class="admin-modal">
+      <div class="admin-modal-header">
+        <h3>Crear nuevo usuario</h3>
+        <button class="admin-modal-close" data-close-modal><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="admin-modal-body">
+        <form id="create-user-form">
+          <div class="auth-form-group">
+            <label class="auth-label" for="create-user-name">Nombre completo</label>
+            <input class="auth-input" type="text" id="create-user-name" placeholder="Ej. Juan Pérez" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="create-user-email">Correo electrónico</label>
+            <input class="auth-input" type="email" id="create-user-email" placeholder="tu@email.com" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="create-user-password">Contraseña</label>
+            <div class="auth-password-wrap">
+              <input class="auth-input" type="password" id="create-user-password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+              <button type="button" class="auth-password-toggle" data-toggle-password="create-user-password" aria-label="Mostrar contraseña">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="auth-password-requirements" style="font-size: 0.72rem; color: #4b5563; margin-top: 6px; line-height: 1.3; background: #f3f4f6; padding: 6px 10px; border-radius: 6px;">
+              Requisitos: mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.
+            </div>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="create-user-role">Rol</label>
+            <select class="auth-input" id="create-user-role" required>
+              <option value="user" selected>Usuario</option>
+              <option value="editor">Editor</option>
+              <option value="admin">Admin</option>
+              <option value="superadmin">Superadmin</option>
+            </select>
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
+            <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
+            <button type="submit" class="admin-btn admin-btn-primary">Crear usuario</button>
           </div>
         </form>
       </div>
