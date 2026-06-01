@@ -1,10 +1,9 @@
-const CACHE_NAME = 'futunet-cache-v4';
+const CACHE_NAME = 'futunet-cache-v5';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './catalogo.html',
   './producto.html',
-  './mi-cuenta.html',
   './login.html',
   './internet.html',
   './energia-climatizacion.html',
@@ -13,7 +12,6 @@ const ASSETS_TO_CACHE = [
   './mobiliario-suministros.html',
   './redes-datos.html',
   './seguridad-electronica.html',
-  './admin.html',
   './manifest.json',
   './css/main.css',
   './css/navbar.css',
@@ -27,7 +25,6 @@ const ASSETS_TO_CACHE = [
   './css/equipos-oficina.css',
   './css/redes-datos.css',
   './css/seguridad-electronica.css',
-  './css/admin.css',
   './img/logo.webp',
   './img/logo-navbar.webp',
   './img/placeholder.svg',
@@ -49,11 +46,9 @@ const ASSETS_TO_CACHE = [
   './js/product_detail_shared.js',
   './js/product_detail_overrides.js',
   './js/producto.js',
-  './js/user-panel.js',
   './js/chatbot.js',
   './js/layout-manager.js',
   './js/internet-portal.js',
-  './js/admin-panel.js',
   './js/service-page.js'
 ];
 
@@ -90,7 +85,9 @@ self.addEventListener('fetch', event => {
     event.request.method !== 'GET' ||
     event.request.url.includes('firestore.googleapis.com') ||
     event.request.url.includes('firebaseinstallations.googleapis.com') ||
-    event.request.url.includes('identitytoolkit.googleapis.com')
+    event.request.url.includes('identitytoolkit.googleapis.com') ||
+    event.request.url.includes('admin.html') ||
+    event.request.url.includes('mi-cuenta.html')
   ) {
     return;
   }

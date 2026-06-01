@@ -667,7 +667,7 @@
 
           <div class="contact-map">
             <iframe
-              src="https://maps.google.com/maps?q=19.476061,-70.715163&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              data-src="https://maps.google.com/maps?q=19.476061,-70.715163&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="250"
               class="contact-map-frame"
@@ -765,7 +765,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>© <span id="footer-year">2026</span> Futunet · Todos los derechos reservados</span>
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
@@ -782,9 +782,7 @@
     </a>
   </div>
 
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Volver al inicio" hidden>
-    <i data-lucide="chevron-up"></i>
-  </button>
+  <!-- El botón back-to-top se crea dinámicamente en js/main.js -->
 
 
 
@@ -793,7 +791,6 @@
   <script defer src="js/cart.js"></script>
   <script defer src="js/chatbot.js"></script>
   <script defer src="js/main.js"></script>
-  <script defer src="js/inventory_data.js"></script>
   <script defer src="js/supplier_inventory.js"></script>
   <script defer src="js/image_fixes.js?v=v9"></script>
   <script defer src="js/catalog.js"></script>
@@ -806,26 +803,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
-      // Back-to-top button
-      const btt = document.getElementById('back-to-top');
-      if (btt) {
-        window.addEventListener('scroll', () => {
-          btt.hidden = window.scrollY < 600;
-        }, { passive: true });
-        btt.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-
-      // Lazy-load Google Maps iframe
+      // Lazy-load Google Maps iframe (solo se carga si está cerca del viewport)
       const mapFrame = document.querySelector('.contact-map-frame');
       if (mapFrame && 'IntersectionObserver' in window) {
-        const realSrc = mapFrame.dataset.src || mapFrame.getAttribute('src');
-        mapFrame.removeAttribute('src');
         const obs = new IntersectionObserver((entries) => {
           entries.forEach(e => {
             if (e.isIntersecting) {
-              mapFrame.setAttribute('src', realSrc);
+              mapFrame.setAttribute('src', mapFrame.dataset.src);
               obs.disconnect();
             }
           });

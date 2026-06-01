@@ -701,3 +701,49 @@ if (typeof window.FutunetConfigReady !== 'undefined') {
 } else {
   document.addEventListener('DOMContentLoaded', injectLocalBusinessSchema);
 }
+
+// Inyección dinámica del año actual en el footer
+document.addEventListener('DOMContentLoaded', () => {
+  const footerYear = document.getElementById('footer-year');
+  if (footerYear) {
+    footerYear.textContent = new Date().getFullYear();
+  }
+});
+
+// Función de notificación Toast compartida globalmente
+window.showToast = function(msg, type) {
+  var existing = document.querySelector('.up-toast');
+  if (existing) existing.remove();
+
+  var toast = document.createElement('div');
+  toast.className = 'up-toast up-toast-' + (type || 'info');
+  toast.textContent = msg;
+  
+  toast.style.position = 'fixed';
+  toast.style.bottom = '24px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%) translateY(20px)';
+  toast.style.padding = '12px 24px';
+  toast.style.borderRadius = '14px';
+  toast.style.fontFamily = 'Outfit, sans-serif';
+  toast.style.fontSize = '0.85rem';
+  toast.style.fontWeight = '600';
+  toast.style.zIndex = '9999';
+  toast.style.opacity = '0';
+  toast.style.transition = 'all 0.3s ease';
+  toast.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
+  toast.style.backgroundColor = type === 'success' ? '#0e8a5f' : (type === 'error' ? '#c0392b' : '#0B7EB5');
+  toast.style.color = '#ffffff';
+
+  document.body.appendChild(toast);
+  requestAnimationFrame(function () {
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+  });
+  setTimeout(function () {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 4000);
+};
+

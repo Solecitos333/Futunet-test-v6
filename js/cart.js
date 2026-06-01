@@ -530,6 +530,12 @@
   }
 
   function handleCheckoutFile(file) {
+    // Validar tipo MIME
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    if (!allowedTypes.includes(file.type)) {
+      showCartToast('Solo se permiten imágenes (JPG, PNG, WEBP) o archivos PDF.', 'error');
+      return;
+    }
     if (file.size > 5 * 1024 * 1024) {
       showCartToast('El archivo supera los 5MB permitidos.', 'error');
       return;
@@ -654,10 +660,10 @@
     const submitBtn = document.getElementById('btn-submit-checkout');
     if (submitBtn) submitBtn.disabled = true;
     
-    const name = document.getElementById('chk-name').value.trim();
-    const phone = document.getElementById('chk-phone').value.trim();
-    const address = document.getElementById('chk-address').value.trim();
-    const notes = document.getElementById('chk-notes').value.trim();
+    const name = escapeHTML(document.getElementById('chk-name').value.trim());
+    const phone = escapeHTML(document.getElementById('chk-phone').value.trim());
+    const address = escapeHTML(document.getElementById('chk-address').value.trim());
+    const notes = escapeHTML(document.getElementById('chk-notes').value.trim());
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
     
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;

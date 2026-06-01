@@ -22,60 +22,48 @@
   function getAuth() { return window.FutunetFirebase.auth; }
   function getDB() { return window.FutunetFirebase.db; }
 
-  // ─── Determine role for new user (first user = superadmin) ───
-  // Fallback seguro: lee /config/setup para verificar si la BD requiere inicialización,
-  // evitando el listado global de usuarios que ahora está denegado por reglas de seguridad.
-  async function determineNewUserRole() {
-    try {
-      var doc = await getDB().collection('config').doc('setup').get();
-      if (!doc.exists) {
-        return ROLES.SUPERADMIN; // El documento centinela no existe → primer usuario = superadmin
-      }
-    } catch (e) {
-      console.warn('No se pudo comprobar el estado de instalación, usando rol estándar:', e);
-    }
-    return ROLES.USER;
-  }
-
   // ─── Create/ensure user document in Firestore ───
+  // Usa una transacción para evitar condiciones de carrera al determinar el primer superadmin.
   async function ensureUserDoc(uid, data) {
     try {
-      var role = await determineNewUserRole();
-      await getDB().collection('users').doc(uid).set({
-        displayName: data.displayName || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        address: '',
-        role: role,
-        status: 'active',
-        favorites: [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
+      var userRef = getDB().collection('users').doc(uid);
+      var setupRef = getDB().collection('config').doc('setup');
+      var role = ROLES.USER;
 
-      // Si el rol creado fue superadmin, inicializamos el centinela
-      if (role === ROLES.SUPERADMIN) {
-        await getDB().collection('config').doc('setup').set({
-          initialized: true,
-          initializedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          initializedBy: uid
-        }).catch(function (e) {
-          console.warn('No se pudo inicializar el documento centinela /config/setup:', e);
+      await getDB().runTransaction(async function (tx) {
+        var setupDoc = await tx.get(setupRef);
+        if (!setupDoc.exists) {
+          role = ROLES.SUPERADMIN;
+          tx.set(setupRef, {
+            initialized: true,
+            initializedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            initializedBy: uid
+          });
+        }
+        tx.set(userRef, {
+          displayName: data.displayName || '',
+          email: data.email || '',
+          phone: data.phone || '',
+          address: '',
+          role: role,
+          status: 'active',
+          favorites: [],
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
         });
-      }
+      });
 
+      console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
       return role;
     } catch (err) {
-      console.error('Firestore write failed:', err);
-      // Still allow auth to work even if Firestore fails
+      console.error('Firestore transaction write failed:', err);
       return null;
     }
   }
 
   // ─── Sign Up ───
   async function signUp(email, password, displayName) {
-    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
     if (!passwordRegex.test(password)) {
       var err = new Error('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.');
       err.code = 'auth/weak-password';
@@ -386,7 +374,7 @@
         }
       } else {
         container.innerHTML =
-          '<a href="login.html" class="nav-auth-btn-login">' +
+          '<a href="login.html" class="nav-auth-login">' +
           '  <i data-lucide="log-in"></i> Iniciar sesión' +
           '</a>';
       }

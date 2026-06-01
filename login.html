@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iniciar Sesión — Futunet</title>
   <meta name="description" content="Accede a tu cuenta Futunet para gestionar pedidos, guardar carritos y más." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -183,7 +183,7 @@
   <script defer src="js/auth.js"></script>
 
   <script>
-    (function () {
+    document.addEventListener('DOMContentLoaded', function () {
       'use strict';
 
       // ─── Email Link State Variables ───
@@ -269,6 +269,18 @@
       // ─── Redirect logic ───
       function redirectByRole(userData) {
         if (!userData) { window.location.href = 'index.html'; return; }
+        
+        // Revisar si existe un parámetro de redirección en la URL
+        var params = new URLSearchParams(window.location.search);
+        var redirectUrl = params.get('redirect');
+        if (redirectUrl) {
+          // Evitar Open Redirects: validar que sea una ruta interna/relativa
+          if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://') && !redirectUrl.startsWith('//')) {
+            window.location.href = redirectUrl;
+            return;
+          }
+        }
+        
         var role = userData.role;
         if (role === 'superadmin' || role === 'admin' || role === 'editor') {
           window.location.href = 'admin.html';
@@ -465,7 +477,7 @@
         }
         setLoading('magic-btn', false);
       });
-    })();
+    });
   </script>
 </body>
 </html>

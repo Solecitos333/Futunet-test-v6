@@ -387,7 +387,9 @@ function setModalCartHandler(productId) {
   if (!btnAddCart) return;
   btnAddCart.onclick = (event) => {
     event.stopPropagation();
-    addToCart(productId);
+    if (window.FutunetCart) {
+      window.FutunetCart.add(productId);
+    }
   };
 }
 
@@ -396,7 +398,9 @@ function initModalCartButton() {
   if (cartBtn) {
     cartBtn.addEventListener('click', () => {
       const currentProductId = cartBtn.dataset.productId;
-      if (currentProductId) addToCart(currentProductId);
+      if (currentProductId && window.FutunetCart) {
+        window.FutunetCart.add(currentProductId);
+      }
     });
   }
 }
@@ -410,7 +414,6 @@ function setModalCartProduct(productId) {
 
 function initPageCart() {
   initCartUI();
-  setTimeout(() => renderCartDrawer(), 50);
 }
 
 function isMobileViewport() {
@@ -772,7 +775,7 @@ function renderUI() {
 
     renderHeader(
       'Resultados de búsqueda',
-      `${results.length} coincidencia${results.length !== 1 ? 's' : ''} para "${escapeHTML(state.searchQuery)}"`
+      `${results.length} coincidencia${results.length !== 1 ? 's' : ''} para "${state.searchQuery}"`
     );
 
     if (results.length === 0) {
@@ -857,7 +860,7 @@ function renderUI() {
   });
 
   renderHeader(
-    escapeHTML(state.category),
+    state.category,
     getCategoryHeaderDescription(state.category, catDb.length),
     true,
     () => setCategory('all')
@@ -900,8 +903,8 @@ function renderHeader(title, desc, showBack = false, backAction = null) {
   }
   html += `
     <div class="catalog-inner-header-border">
-      <h2>${title}</h2>
-      <p>${desc}</p>
+      <h2>${escapeHTML(title)}</h2>
+      <p>${escapeHTML(desc)}</p>
     </div>
   `;
   wrapper.innerHTML = html;
@@ -1116,7 +1119,7 @@ function renderProductsGrid(productsList, options = {}) {
 
     card.innerHTML = `
       <div class="product-img-wrapper${previewCard ? ' product-img-wrapper--preview-mobile' : compactCard ? ' product-img-wrapper--compact-mobile' : ''}">
-        <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300" onerror="handleImageError(this, '${escapeHTML(product.id)}', 0)">
+        <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300">
         <span class="product-badge">${escapeHTML(badgeText)}</span>
         ${previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
       </div>
@@ -1137,6 +1140,13 @@ function renderProductsGrid(productsList, options = {}) {
         `}
       </div>
     `;
+
+    const imgEl = card.querySelector('.product-img-wrapper img');
+    if (imgEl) {
+      imgEl.addEventListener('error', function onError() {
+        handleImageError(this, product.id, 0);
+      }, { once: true });
+    }
 
     const actionButton = card.querySelector('.product-view-btn');
     if (actionButton) {
@@ -1474,9 +1484,7 @@ function initSmartSearch(inputId, dropdownId) {
   });
 }
 
-async function logSearchQuery(query) {
-  const clean = String(query || '').trim().toLowerCase();
-  if (!clean || clean.length < 2) return;
+const debouncedLogSearch = debounce(async (clean) => {
   try {
     const db = window.FutunetFirebase?.db;
     if (db) {
@@ -1488,6 +1496,12 @@ async function logSearchQuery(query) {
   } catch (e) {
     console.warn('Error saving search query:', e);
   }
+}, 1500);
+
+async function logSearchQuery(query) {
+  const clean = String(query || '').trim().toLowerCase();
+  if (!clean || clean.length < 2) return;
+  debouncedLogSearch(clean);
 }
 
 function executeSearch(query) {

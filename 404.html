@@ -7,11 +7,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/css/main.css" />
-  <link rel="stylesheet" href="/css/navbar.css" />
-  <link rel="icon" type="image/png" href="/img/logo.webp" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="icon" type="image/png" href="img/logo.webp" />
   <meta name="theme-color" content="#0B7EB5" />
   <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f4f7fc;
+      --brand-pale: #e5eef8;
+      --brand: #0B7EB5;
+      --text-primary: #0a101d;
+      --text-secondary: #394c60;
+    }
+    /* Fallback styles for buttons if main.css fails to load */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: #ffffff;
+      border: 1px solid var(--brand);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid #76889e;
+    }
     .error-page {
       min-height: 100vh;
       display: flex;
@@ -66,17 +98,17 @@
 </head>
 <body>
   <main class="error-page">
-    <a href="/index.html" class="nav-logo" style="margin-bottom: 40px;">
-      <img src="/img/logo-navbar.webp" alt="Futunet" width="200" height="41" />
+    <a href="index.html" class="nav-logo" style="margin-bottom: 40px;">
+      <img src="img/logo-navbar.webp" alt="Futunet" width="200" height="41" />
     </a>
     <div class="error-code">404</div>
     <h1 class="error-title">No pudimos encontrar esa página</h1>
     <p class="error-desc">Parece que el enlace que seguiste está roto o la página ha sido movida. Explora nuestras soluciones o vuelve al inicio.</p>
     <div class="error-actions">
-      <a href="/index.html" class="btn btn-primary">
+      <a href="index.html" class="btn btn-primary">
         <i data-lucide="home"></i> Volver al inicio
       </a>
-      <a href="/catalogo.html" class="btn btn-outline">
+      <a href="catalogo.html" class="btn btn-outline">
         <i data-lucide="layout-grid"></i> Ver catálogo
       </a>
     </div>
