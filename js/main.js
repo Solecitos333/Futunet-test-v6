@@ -211,9 +211,50 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
+/* Focus Trap Utility */
+function setupFocusTrap(container, closeCallback) {
+  const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  
+  function handleKeyDown(e) {
+    if (e.key === 'Tab') {
+      const focusables = Array.from(container.querySelectorAll(focusableSelectors))
+        .filter(el => !el.disabled && el.getAttribute('aria-hidden') !== 'true' && el.offsetParent !== null);
+      if (focusables.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus();
+          e.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          e.preventDefault();
+        }
+      }
+    } else if (e.key === 'Escape' && typeof closeCallback === 'function') {
+      closeCallback();
+    }
+  }
+  
+  container.addEventListener('keydown', handleKeyDown);
+  return function cleanup() {
+    container.removeEventListener('keydown', handleKeyDown);
+  };
+}
+window.FutunetFocusTrap = setupFocusTrap;
+
 /* -------------------------------------------------------------
    2. MENÚ MOBILE — Toggle, cierre y accesibilidad
    ------------------------------------------------------------- */
+
+let mobileMenuCleanup = null;
+let mobileMenuPreviousActiveElement = null;
 
 /**
  * Abre o cierra el menú mobile.
@@ -229,6 +270,27 @@ function setMobileMenuOpen(isOpen) {
     hamburger.setAttribute('aria-expanded', String(isOpen));
     hamburger.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
   }
+
+  if (isOpen) {
+    mobileMenuPreviousActiveElement = document.activeElement;
+    if (mobileMenuCleanup) mobileMenuCleanup();
+    mobileMenuCleanup = setupFocusTrap(menu, () => setMobileMenuOpen(false));
+    // Enfocar el primer elemento
+    setTimeout(() => {
+      const focusables = menu.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusables.length > 0) focusables[0].focus();
+    }, 100);
+  } else {
+    if (mobileMenuCleanup) {
+      mobileMenuCleanup();
+      mobileMenuCleanup = null;
+    }
+    if (mobileMenuPreviousActiveElement && typeof mobileMenuPreviousActiveElement.focus === 'function') {
+      mobileMenuPreviousActiveElement.focus();
+      mobileMenuPreviousActiveElement = null;
+    }
+  }
+
   if (typeof syncCatalogScrollLock === 'function') {
     syncCatalogScrollLock();
   } else {
@@ -429,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* -------------------------------------------------------------
-   6. TYPING ANIMATION — Search placeholder rotator
+   6. TYPING ANIMATION — Search placeholder rotator (Optimized)
    ------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-home');
@@ -448,48 +510,76 @@ document.addEventListener('DOMContentLoaded', () => {
   let charIndex = 0;
   let isDeleting = false;
   let isPaused = false;
+  let lastTime = 0;
+  let delay = 2000; // start delay
+  let isIntersecting = true;
+  let frameId = null;
 
-  function typeLoop() {
-    // Don't animate if input is focused or has user content
-    if (document.activeElement === searchInput || searchInput.value.length > 0) {
-      searchInput.setAttribute('placeholder', phrases[0]);
-      setTimeout(typeLoop, 1000);
-      return;
-    }
-
-    const current = phrases[phraseIndex];
-
-    if (isPaused) {
-      isPaused = false;
-      isDeleting = true;
-      setTimeout(typeLoop, 60);
-      return;
-    }
-
-    if (!isDeleting) {
-      charIndex++;
-      searchInput.setAttribute('placeholder', current.substring(0, charIndex));
-      if (charIndex === current.length) {
-        isPaused = true;
-        setTimeout(typeLoop, 2000); // pause at full text
-        return;
+  // Use Intersection Observer so it only animates when visible
+  const observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    isIntersecting = entry ? entry.isIntersecting : true;
+    if (isIntersecting) {
+      if (!frameId) {
+        lastTime = performance.now();
+        frameId = requestAnimationFrame(tick);
       }
-      setTimeout(typeLoop, 70 + Math.random() * 40);
     } else {
-      charIndex--;
-      searchInput.setAttribute('placeholder', current.substring(0, charIndex));
-      if (charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        setTimeout(typeLoop, 400);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+        frameId = null;
+      }
+    }
+  }, { threshold: 0 });
+  observer.observe(searchInput);
+
+  function tick(timestamp) {
+    if (!isIntersecting) {
+      frameId = null;
+      return;
+    }
+
+    const elapsed = timestamp - lastTime;
+    if (elapsed >= delay) {
+      lastTime = timestamp;
+      
+      // If focused or has content, reset and check later
+      if (document.activeElement === searchInput || searchInput.value.length > 0) {
+        searchInput.setAttribute('placeholder', phrases[0]);
+        delay = 1000;
+        frameId = requestAnimationFrame(tick);
         return;
       }
-      setTimeout(typeLoop, 35);
-    }
-  }
 
-  // Start after a brief delay
-  setTimeout(typeLoop, 2000);
+      const current = phrases[phraseIndex];
+
+      if (isPaused) {
+        isPaused = false;
+        isDeleting = true;
+        delay = 60;
+      } else if (!isDeleting) {
+        charIndex++;
+        searchInput.setAttribute('placeholder', current.substring(0, charIndex));
+        if (charIndex === current.length) {
+          isPaused = true;
+          delay = 2000; // pause at full text
+        } else {
+          delay = 70 + Math.random() * 40;
+        }
+      } else {
+        charIndex--;
+        searchInput.setAttribute('placeholder', current.substring(0, charIndex));
+        if (charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          delay = 400;
+        } else {
+          delay = 35;
+        }
+      }
+    }
+    frameId = requestAnimationFrame(tick);
+  }
 });
 
 

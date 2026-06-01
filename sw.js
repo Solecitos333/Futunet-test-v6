@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v3';
+const CACHE_NAME = 'futunet-cache-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -6,6 +6,14 @@ const ASSETS_TO_CACHE = [
   './producto.html',
   './mi-cuenta.html',
   './login.html',
+  './internet.html',
+  './energia-climatizacion.html',
+  './equipos-oficina.html',
+  './infraestructura-remozamiento.html',
+  './mobiliario-suministros.html',
+  './redes-datos.html',
+  './seguridad-electronica.html',
+  './admin.html',
   './manifest.json',
   './css/main.css',
   './css/navbar.css',
@@ -14,6 +22,12 @@ const ASSETS_TO_CACHE = [
   './css/auth.css',
   './css/producto.css',
   './css/chatbot.css',
+  './css/hero.css',
+  './css/energia-climatizacion.css',
+  './css/equipos-oficina.css',
+  './css/redes-datos.css',
+  './css/seguridad-electronica.css',
+  './css/admin.css',
   './img/logo.webp',
   './img/logo-navbar.webp',
   './img/placeholder.svg',
@@ -37,7 +51,10 @@ const ASSETS_TO_CACHE = [
   './js/producto.js',
   './js/user-panel.js',
   './js/chatbot.js',
-  './js/layout-manager.js'
+  './js/layout-manager.js',
+  './js/internet-portal.js',
+  './js/admin-panel.js',
+  './js/service-page.js'
 ];
 
 // Install Event

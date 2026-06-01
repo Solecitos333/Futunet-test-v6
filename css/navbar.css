@@ -219,7 +219,7 @@
 
 /* ── 7. MENÚ MOBILE ── */
 .mobile-menu {
-  display: none; flex-direction: column;
+  display: flex; flex-direction: column;
   position: fixed;
   top: var(--navbar-height-mobile);
   left: 0; right: 0;
@@ -233,8 +233,20 @@
   overflow-y: auto;
   box-shadow: 0 8px 32px rgba(0,0,0,0.08);
   border-radius: 0 0 22px 22px;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.28s;
+  pointer-events: none;
 }
-.mobile-menu.open { display: flex; }
+.mobile-menu.open {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 .mobile-menu a {
   display: flex;
   align-items: center;

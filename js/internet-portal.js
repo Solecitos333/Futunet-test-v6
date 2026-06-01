@@ -174,8 +174,25 @@
   };
 
   // ─── MODALES DEL PORTAL ───
+  var portalModalCleanup = null;
+  var portalModalPreviousActiveElement = null;
+
+  function activePortalFocusTrap(modalEl) {
+    portalModalPreviousActiveElement = document.activeElement;
+    if (portalModalCleanup) portalModalCleanup();
+    if (window.FutunetFocusTrap) {
+      portalModalCleanup = window.FutunetFocusTrap(modalEl, window.closePortalModals);
+    }
+    setTimeout(function () {
+      var focusables = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusables.length > 0) focusables[0].focus();
+    }, 100);
+  }
+
   window.openPaymentReportModal = function () {
-    document.getElementById('payment-report-modal').classList.add('is-active');
+    var modal = document.getElementById('payment-report-modal');
+    modal.classList.add('is-active');
+    activePortalFocusTrap(modal);
   };
 
   window.openSupportModal = function (type) {
@@ -202,6 +219,7 @@
     }
 
     modal.classList.add('is-active');
+    activePortalFocusTrap(modal);
   };
 
   window.openHiringForm = function (planName) {
@@ -209,6 +227,7 @@
     document.getElementById('hiring-plan-name').value = planName;
     document.getElementById('hiring-plan-label').textContent = planName;
     modal.classList.add('is-active');
+    activePortalFocusTrap(modal);
   };
 
   window.closePortalModals = function () {
@@ -216,6 +235,14 @@
       m.classList.remove('is-active');
     });
     removeVoucherFile();
+    if (portalModalCleanup) {
+      portalModalCleanup();
+      portalModalCleanup = null;
+    }
+    if (portalModalPreviousActiveElement && typeof portalModalPreviousActiveElement.focus === 'function') {
+      portalModalPreviousActiveElement.focus();
+      portalModalPreviousActiveElement = null;
+    }
   };
 
   // ─── DRAG & DROP ZONE (Voucher) ───

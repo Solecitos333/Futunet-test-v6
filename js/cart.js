@@ -228,6 +228,9 @@
   }
 
   // Funciones de UI del Drawer
+  let cartDrawerCleanup = null;
+  let cartDrawerPreviousActiveElement = null;
+
   function openCartDrawer() {
     const drawer = document.getElementById('cart-drawer');
     if (!drawer) return;
@@ -240,6 +243,18 @@
       fab.setAttribute('aria-expanded', 'true');
     }
     document.body.style.overflow = 'hidden';
+    
+    // Focus Trap
+    cartDrawerPreviousActiveElement = document.activeElement;
+    if (cartDrawerCleanup) cartDrawerCleanup();
+    if (window.FutunetFocusTrap) {
+      cartDrawerCleanup = window.FutunetFocusTrap(drawer, closeCartDrawer);
+    }
+    
+    setTimeout(() => {
+      const focusables = drawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusables.length > 0) focusables[0].focus();
+    }, 100);
   }
 
   function closeCartDrawer() {
@@ -253,6 +268,15 @@
       fab.setAttribute('aria-expanded', 'false');
     }
     document.body.style.overflow = '';
+    
+    if (cartDrawerCleanup) {
+      cartDrawerCleanup();
+      cartDrawerCleanup = null;
+    }
+    if (cartDrawerPreviousActiveElement && typeof cartDrawerPreviousActiveElement.focus === 'function') {
+      cartDrawerPreviousActiveElement.focus();
+      cartDrawerPreviousActiveElement = null;
+    }
   }
 
   function toggleCartDrawer() {
@@ -543,6 +567,9 @@
     });
   }
 
+  let checkoutModalCleanup = null;
+  let checkoutModalPreviousActiveElement = null;
+
   async function openCheckoutModal() {
     const items = getCartItems();
     if (!items.length) return;
@@ -588,12 +615,33 @@
     
     togglePaymentSubpanels('whatsapp'); // default option
     closeCartDrawer();
+
+    // Focus Trap
+    checkoutModalPreviousActiveElement = cartDrawerPreviousActiveElement || document.activeElement;
+    if (checkoutModalCleanup) checkoutModalCleanup();
+    if (window.FutunetFocusTrap) {
+      checkoutModalCleanup = window.FutunetFocusTrap(modal, closeCheckoutModal);
+    }
+    
+    setTimeout(() => {
+      const focusables = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusables.length > 0) focusables[0].focus();
+    }, 100);
   }
 
   function closeCheckoutModal() {
     const modal = document.getElementById('cart-checkout-modal');
     if (modal) {
       modal.classList.remove('is-active');
+    }
+
+    if (checkoutModalCleanup) {
+      checkoutModalCleanup();
+      checkoutModalCleanup = null;
+    }
+    if (checkoutModalPreviousActiveElement && typeof checkoutModalPreviousActiveElement.focus === 'function') {
+      checkoutModalPreviousActiveElement.focus();
+      checkoutModalPreviousActiveElement = null;
     }
   }
 
