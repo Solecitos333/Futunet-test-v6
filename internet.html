@@ -10,98 +10,239 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.0" />
+  <link rel="stylesheet" href="css/hero.css?v=3.0" />
+  <link rel="stylesheet" href="css/sections.css?v=3.0" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
   <link rel="icon" type="image/png" href="img/logo.webp" />
   <meta name="theme-color" content="#09101d" />
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Estilos Premium del Portal de Internet */
-    .internet-page { padding-top: 80px; min-height: 100vh; background: #f3f7fc; }
+    /* Estilos Premium del Portal de Internet - Corporativo y Serio */
+    .internet-page { min-height: 100vh; background: #f8fafc; color: #334155; }
+    
+    /* MODO SOLO PLANES */
+    .planes-back-header {
+      display: none;
+      margin-bottom: 30px;
+      padding: 0 15px;
+    }
+    .planes-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #0A70A2;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      padding: 12px 24px;
+      border: 1px solid rgba(10, 112, 162, 0.15);
+      border-radius: 50px;
+      background: rgba(10, 112, 162, 0.03);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .planes-back-btn:hover {
+      background: rgba(10, 112, 162, 0.08);
+      transform: translateX(-3px);
+      color: #22a4e0;
+      box-shadow: 0 4px 12px rgba(10, 112, 162, 0.08);
+    }
+    body.solo-planes-mode .planes-back-header {
+      display: block;
+    }
+    body.solo-planes-mode #inicio,
+    body.solo-planes-mode .service-subnav,
+    body.solo-planes-mode .benefits-grid,
+    body.solo-planes-mode #calculadora,
+    body.solo-planes-mode #speedtest-section,
+    body.solo-planes-mode #cobertura,
+    body.solo-planes-mode #faqs,
+    body.solo-planes-mode .login-teaser {
+      display: none !important;
+    }
+
+    /* Títulos e Identidad */
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      color: #0f172a !important;
+    }
+    .section-label {
+      color: #0A70A2 !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
     
     /* ─── VISTA PÚBLICA: LANDING DE PLANES ─── */
-    #internet-public-view { display: none; padding: 40px 0 80px; }
+    #internet-public-view { display: none; padding: 0 0 80px; }
     
-    .internet-hero {
-      text-align: center; margin-bottom: 48px; max-width: 800px; margin-left: auto; margin-right: auto;
-      padding: 0 20px;
+    /* Barra secundaria Sticky */
+    .service-subnav {
+      position: sticky; top: 70px; background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px); border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+      z-index: 999; margin-bottom: 40px;
     }
-    .internet-hero h1 {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2.6rem; font-weight: 700; color: #0a101d;
-      margin: 0 0 12px; letter-spacing: -0.03em;
+    .subnav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .subnav-links { display: flex; list-style: none; padding: 0; margin: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .subnav-links li a {
+      display: block; padding: 16px 20px; font-family: 'Outfit', sans-serif; font-weight: 600;
+      color: #64748b; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.3s;
+      white-space: nowrap; font-size: 0.9rem;
     }
-    .internet-hero p { font-size: 1.05rem; color: #50647a; line-height: 1.5; margin: 0; }
-
-    /* Planes Grid */
+    .subnav-links li a:hover, .subnav-links li a.active { color: #0A70A2; border-bottom-color: #0A70A2; }
+    
+    /* Toggle Switcher de Categorías */
+    .plan-toggle-wrapper {
+      display: flex; justify-content: center; align-items: center; margin-bottom: 48px; padding: 0 20px;
+    }
+    .plan-toggle-container {
+      display: flex; background: rgba(10, 112, 162, 0.04); padding: 5px; border-radius: 50px;
+      border: 1px solid rgba(10, 112, 162, 0.08); width: 100%; max-width: 440px;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.01);
+    }
+    .plan-toggle-btn {
+      flex: 1; padding: 12px 20px; border: none; border-radius: 50px;
+      font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); background: transparent; color: #475569;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .plan-toggle-btn i { font-size: 0.95rem; }
+    .plan-toggle-btn.active {
+      background: linear-gradient(135deg, #0a7ab0, #22a4e0); color: #fff;
+      box-shadow: 0 4px 14px rgba(10, 112, 162, 0.2);
+    }
+    
+    /* Cards de Planes Claro-Inspired */
     .plans-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px;
-      margin-bottom: 50px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+      margin-bottom: 60px;
     }
     .plan-card {
-      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
-      padding: 32px 24px; text-align: center; box-shadow: 0 8px 30px rgba(15, 25, 35, 0.03);
-      transition: all 0.3s; position: relative; overflow: hidden;
+      background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 24px;
+      padding: 32px 28px; display: flex; flex-direction: column;
+      box-shadow: 0 10px 30px rgba(15, 25, 35, 0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden;
+    }
+    .plan-card-visual {
+      width: calc(100% + 56px);
+      margin: -32px -28px 24px -28px;
+      height: 150px;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      z-index: 1;
+    }
+    .plan-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .plan-card:hover .plan-card-img {
+      transform: scale(1.06);
     }
     .plan-card.popular {
-      border-color: #0A70A2; box-shadow: 0 12px 40px rgba(10,112,162,0.08);
-      background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+      border-color: #0A70A2; box-shadow: 0 16px 40px rgba(10, 112, 162, 0.06);
+      background: linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%);
     }
     .plan-popular-badge {
       position: absolute; top: 12px; right: -32px; background: #0A70A2; color: #fff;
       font-size: 0.65rem; font-weight: 700; padding: 4px 32px; transform: rotate(45deg);
       text-transform: uppercase; letter-spacing: 0.5px;
+      z-index: 2;
     }
-    .plan-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(15, 25, 35, 0.08); }
+    .plan-card:hover { transform: translateY(-5px); box-shadow: 0 18px 36px rgba(15, 25, 35, 0.05); }
     
-    .plan-icon {
-      width: 48px; height: 48px; border-radius: 50%; background: rgba(10,112,162,0.06);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2; margin: 0 auto 18px;
+    .plan-badge-top {
+      align-self: flex-start; background: rgba(15, 23, 42, 0.05); color: #475569;
+      font-size: 0.72rem; font-weight: 700; padding: 4px 12px; border-radius: 50px;
+      text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.3px;
     }
-    .plan-card.popular .plan-icon { background: #0A70A2; color: #fff; }
+    .plan-card.popular .plan-badge-top { background: #0A70A2; color: #fff; }
     
-    .plan-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; color: #0a101d; margin: 0 0 6px; }
-    .plan-speed { font-size: 2.2rem; font-weight: 800; color: #0A70A2; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px; }
-    .plan-speed span { font-size: 0.95rem; font-weight: 500; color: #76889e; }
+    .plan-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; color: #0f172a; margin: 0 0 12px; }
     
-    .plan-features { list-style: none; padding: 0; margin: 20px 0 28px; text-align: left; }
-    .plan-features li { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #50647a; margin-bottom: 8px; }
-    .plan-features li svg { color: #2ecc71; flex-shrink: 0; }
-
-    .plan-price { font-size: 1.45rem; font-weight: 700; color: #0a101d; font-family: 'Outfit', sans-serif; margin-bottom: 20px; }
-    .plan-price span { font-size: 0.78rem; color: #76889e; font-weight: 500; }
-
-    .plan-btn {
-      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
+    .plan-speed-display { margin-bottom: 20px; }
+    .plan-speed-val {
+      font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 800; color: #0A70A2;
+      line-height: 1; letter-spacing: -1px;
+    }
+    .plan-speed-val span { font-size: 1.15rem; font-weight: 600; color: #64748b; letter-spacing: 0; }
+    
+    .plan-speed-detail {
+      display: flex; justify-content: space-around; background: rgba(10, 112, 162, 0.02);
+      border-radius: 16px; padding: 12px; margin-bottom: 24px; border: 1px solid rgba(15, 23, 42, 0.04);
+    }
+    .speed-ind { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #475569; font-weight: 600; }
+    .speed-ind i { font-size: 0.9rem; }
+    .speed-ind.download i { color: #2ecc71; }
+    .speed-ind.upload i { color: #0ea5e9; }
+    
+    .plan-features { list-style: none; padding: 0; margin: 0 0 28px; text-align: left; }
+    .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: #475569; margin-bottom: 10px; }
+    .plan-features li i { color: #2ecc71; font-size: 0.88rem; flex-shrink: 0; }
+    
+    .plan-price-block { margin-top: auto; margin-bottom: 24px; text-align: center; }
+    .plan-price-huge { font-family: 'Outfit', sans-serif; font-size: 1.85rem; font-weight: 800; color: #0f172a; }
+    .plan-price-huge span { font-size: 0.82rem; color: #64748b; font-weight: 500; }
+    
+    .plan-actions-group { display: flex; flex-direction: column; gap: 10px; }
+    .plan-btn-primary {
+      width: 100%; padding: 13px; border: none; border-radius: 14px; font-family: 'Outfit', sans-serif;
       font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
-      background: #f3f7fc; color: #394c60;
-    }
-    .plan-card.popular .plan-btn {
       background: linear-gradient(135deg, #0a7ab0, #22a4e0); color: #fff;
-      box-shadow: 0 6px 16px rgba(10,112,162,0.2);
+      box-shadow: 0 4px 12px rgba(10, 112, 162, 0.12); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      text-decoration: none; border: 1px solid transparent;
     }
-    .plan-card.popular .plan-btn:hover { box-shadow: 0 10px 24px rgba(10,112,162,0.3); }
-    .plan-card:not(.popular) .plan-btn:hover { background: #e5eef8; color: #0A70A2; }
-
-    /* Habilitar login banner */
-    .login-teaser {
-      background: #0f1923; border-radius: 24px; padding: 32px; color: #fff;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
-      box-shadow: 0 12px 36px rgba(9,16,24,0.12);
+    .plan-btn-primary:hover { box-shadow: 0 8px 22px rgba(10, 112, 162, 0.2); transform: translateY(-1px); }
+    
+    .plan-btn-secondary {
+      width: 100%; padding: 12px; border: 1.5px solid #25D366; border-radius: 14px; font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.3s;
+      background: transparent; color: #25D366; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      text-decoration: none;
     }
-    .login-teaser-text h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0 0 6px; }
-    .login-teaser-text p { font-size: 0.85rem; color: #a0b0c4; margin: 0; }
-    .login-teaser-btn {
-      padding: 12px 28px; background: #fff; color: #0f1923; border: none; border-radius: 12px;
-      font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer;
-      transition: all 0.2s; white-space: nowrap;
+    .plan-btn-secondary:hover { background: rgba(37, 211, 102, 0.04); transform: translateY(-1px); }
+    
+    /* Sección Cobertura */
+    .coverage-section { padding: 80px 0; background: #fff; border-top: 1px solid rgba(15, 23, 42, 0.05); }
+    .coverage-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+    .coverage-list-card {
+      background: #f8fafc; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 24px; padding: 40px;
     }
-    .login-teaser-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,255,255,0.2); }
-
-    @media (max-width: 640px) {
-      .login-teaser { flex-direction: column; text-align: center; padding: 24px 18px; }
-      .login-teaser-btn { width: 100%; }
+    .coverage-cities { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+    .coverage-city-item { display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; color: #334155; }
+    .coverage-city-item i { color: #0A70A2; font-size: 0.95rem; }
+    .coverage-map-box { border-radius: 24px; overflow: hidden; box-shadow: 0 12px 36px rgba(0,0,0,0.06); border: 1px solid rgba(15, 23, 42, 0.05); position: relative; }
+    .coverage-map-iframe { width: 100%; height: 100%; display: block; border: none; aspect-ratio: 4/3; min-height: 400px; pointer-events: none; }
+    
+    /* FAQs Accordion */
+    .faqs-container { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+    .faq-item { background: white; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 16px; overflow: hidden; transition: all 0.3s; }
+    .faq-item.active { border-color: #0A70A2; box-shadow: 0 4px 16px rgba(10, 112, 162, 0.04); }
+    .faq-trigger {
+      width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left;
+      display: flex; justify-content: space-between; align-items: center; font-family: 'Outfit', sans-serif;
+      font-size: 1.02rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;
     }
-
+    .faq-trigger:hover { color: #0A70A2; }
+    .faq-trigger i { font-size: 0.88rem; color: #64748b; transition: transform 0.3s; }
+    .faq-item.active .faq-trigger i { transform: rotate(180deg); color: #0A70A2; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px; }
+    .faq-answer p { color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; }
+    
+    @media (max-width: 768px) {
+      .coverage-grid { grid-template-columns: 1fr; }
+      .coverage-list-card { padding: 24px; }
+      .coverage-cities { grid-template-columns: 1fr; }
+    }
+    
     /* ─── VISTA PRIVADA: PORTAL WEB APP (PWA) ─── */
     #internet-portal-view { display: none; padding: 24px 0 60px; }
     
@@ -113,7 +254,7 @@
       box-shadow: 0 20px 50px rgba(9, 16, 24, 0.28); border: 1px solid rgba(255, 255, 255, 0.05);
       margin-bottom: 20px;
     }
-
+    
     /* Header del Cliente */
     .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
     .app-client-info h2 {
@@ -129,7 +270,7 @@
     .status-active { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
     .status-suspended { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.2); }
     .status-inactive { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.2); }
-
+    
     /* Tarjeta del Plan Contratado */
     .plan-detail-card {
       background: linear-gradient(135deg, #0A70A2 0%, #154575 100%);
@@ -146,12 +287,12 @@
     .pd-footer { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px; }
     .pd-footer-item span { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.70); }
     .pd-footer-item strong { font-size: 0.95rem; font-weight: 700; }
-
+    
     /* Sección de Pagos y Cuentas */
     .payments-section { background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px solid rgba(255,255,255,0.04); padding: 20px; margin-bottom: 24px; }
     .payments-section h3 { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; margin: 0 0 12px; color: #a0b0c4; display: flex; align-items: center; gap: 8px; }
     .payments-section h3 svg { color: #0A70A2; }
-
+    
     .bank-details { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.03); }
     .bank-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
     .bank-row:last-child { border-bottom: none; }
@@ -159,7 +300,7 @@
     .bank-row strong { font-size: 0.85rem; color: #fff; font-family: monospace; display: flex; align-items: center; gap: 6px; }
     .btn-copy { border: none; background: transparent; color: #0A70A2; cursor: pointer; padding: 2px; display: inline-flex; align-items: center; }
     .btn-copy:hover { color: #22a4e0; }
-
+    
     .payment-options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
     .btn-portal-action {
       width: 100%; padding: 12px; border-radius: 12px; border: none;
@@ -169,7 +310,7 @@
     .btn-action-primary { background: #0A70A2; color: #fff; }
     .btn-action-primary:hover { background: #22a4e0; }
     .btn-action-disabled { background: rgba(255,255,255,0.05); color: #50647a; cursor: not-allowed; }
-
+    
     /* Menú de Soporte/Ajustes */
     .support-menu { display: flex; flex-direction: column; gap: 10px; }
     .support-item {
@@ -181,7 +322,7 @@
     .support-item-left { display: flex; align-items: center; gap: 12px; font-size: 0.88rem; font-weight: 600; color: #fff; }
     .support-item-left svg { color: #76889e; width: 18px; }
     .support-item svg.arrow { color: #394c60; width: 16px; }
-
+    
     /* PWA Instructions Banner */
     .pwa-install-banner {
       background: #0f1923; border-radius: 20px; padding: 18px; border: 1px dashed rgba(10,112,162,0.4);
@@ -194,7 +335,7 @@
     .pwa-text-box h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.86rem; font-weight: 700; margin: 0 0 2px; }
     .pwa-text-box p { font-size: 0.72rem; color: #a0b0c4; margin: 0; line-height: 1.35; }
     .pwa-close-btn { border: none; background: transparent; color: #50647a; cursor: pointer; margin-left: auto; }
-
+    
     /* Modal de Reporte de Pago */
     .portal-modal {
       position: fixed; inset: 0; background: rgba(9,16,24,0.85); backdrop-filter: blur(5px);
@@ -212,7 +353,7 @@
     .portal-modal-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0; }
     .portal-modal-close { border: none; background: transparent; color: #76889e; cursor: pointer; }
     .portal-modal-close:hover { color: #fff; }
-
+    
     /* Carga de Comprobante / Arrastrar archivo */
     .voucher-dropzone {
       border: 2px dashed rgba(255,255,255,0.12); border-radius: 14px; padding: 24px;
@@ -226,7 +367,7 @@
     .voucher-preview-box { display: none; align-items: center; gap: 10px; background: rgba(255,255,255,0.04); padding: 8px 12px; border-radius: 10px; margin-bottom: 16px; }
     .voucher-preview-box span { font-size: 0.78rem; color: #2ecc71; font-family: monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-grow: 1; }
     .voucher-preview-remove { border: none; background: transparent; color: #e74c3c; cursor: pointer; }
-
+    
     /* Vista de no cliente */
     .no-client-card {
       background: #09101d; border-radius: 28px; padding: 36px 28px; text-align: center; color: #fff;
@@ -234,7 +375,7 @@
     }
     .no-client-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; margin: 16px 0 8px; }
     .no-client-card p { font-size: 0.86rem; color: #76889e; margin: 0 0 24px; line-height: 1.5; }
-
+    
     /* ─── ESTILOS PREMIUM PARA CONTRATACIÓN (NO CLIENTE) ─── */
     .stepper-wrapper {
       display: flex; align-items: center; justify-content: space-between;
@@ -308,6 +449,24 @@
       border-radius: 20px; padding: 24px 20px; text-align: center; cursor: pointer;
       position: relative; transition: all 0.25s; overflow: hidden; display: flex; flex-direction: column;
     }
+    .portal-plan-visual {
+      width: calc(100% + 40px);
+      margin: -24px -20px 16px -20px;
+      height: 95px;
+      overflow: hidden;
+      position: relative;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 1;
+    }
+    .portal-plan-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .portal-plan-item:hover .portal-plan-img {
+      transform: scale(1.06);
+    }
     .portal-plan-item:hover {
       transform: translateY(-3px); border-color: rgba(10,112,162,0.4);
       background: rgba(255,255,255,0.03);
@@ -322,6 +481,7 @@
       position: absolute; top: 10px; right: 10px; font-size: 0.62rem; font-weight: 700;
       padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,0.08); color: #a0b0c4;
       text-transform: uppercase; letter-spacing: 0.5px;
+      z-index: 2;
     }
     .pp-badge.popular {
       background: #0A70A2; color: #fff;
@@ -420,9 +580,212 @@
       .step-line { display: none; }
       .form-row-2 { grid-template-columns: 1fr; gap: 0; }
     }
+
+    /* ─── COBERTURA RADAR SCANNER ─── */
+    .radar-scan-overlay {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle, rgba(10, 112, 162, 0.05) 0%, rgba(9, 16, 29, 0.1) 100%);
+      mix-blend-mode: screen; z-index: 2;
+    }
+    .radar-scan-line {
+      position: absolute; top: -100%; left: 0; width: 100%; height: 100%; pointer-events: none;
+      background: linear-gradient(180deg, rgba(10, 112, 162, 0) 60%, rgba(10, 112, 162, 0.25) 100%);
+      z-index: 2; animation: scanRadarAnim 4s linear infinite;
+    }
+    @keyframes scanRadarAnim {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+    .factibilidad-badge {
+      position: absolute; z-index: 3; background: rgba(9, 16, 29, 0.85);
+      border: 1px solid rgba(10, 112, 162, 0.4); padding: 5px 12px; border-radius: 50px;
+      font-family: 'Outfit', sans-serif; font-size: 0.72rem; font-weight: 700; color: #fff;
+      display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      backdrop-filter: blur(4px);
+    }
+    .factibilidad-badge .badge-pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: #2ecc71;
+      display: inline-block; box-shadow: 0 0 8px #2ecc71; animation: badgePulseAnim 2s infinite;
+    }
+    @keyframes badgePulseAnim {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #2ecc71; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    /* ─── BENEFICIOS PREMIUM (GLASSMORPHISM) ─── */
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;
+    }
+    .benefit-card-premium {
+      background: rgba(255, 255, 255, 0.75); border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 24px; padding: 32px 24px; text-align: center; position: relative;
+      overflow: hidden; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(15, 25, 35, 0.01);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .benefit-card-premium:hover {
+      transform: translateY(-5px); border-color: rgba(10, 112, 162, 0.25);
+      box-shadow: 0 15px 35px rgba(10, 112, 162, 0.08); background: #ffffff;
+    }
+    .benefit-card-premium .b-card-glow {
+      position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; pointer-events: none;
+      background: radial-gradient(circle, rgba(10, 112, 162, 0.03) 0%, transparent 70%);
+      transition: opacity 0.5s; opacity: 0;
+    }
+    .benefit-card-premium:hover .b-card-glow { opacity: 1; }
+    
+    .benefit-card-premium .b-icon-wrapper {
+      width: 50px; height: 50px; border-radius: 50%; background: rgba(10, 112, 162, 0.06);
+      color: #0A70A2; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin: 0 auto 20px; transition: all 0.3s;
+    }
+    .benefit-card-premium:hover .b-icon-wrapper {
+      background: #0A70A2; color: #fff; transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(10, 112, 162, 0.2);
+    }
+    .benefit-card-premium h4 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; font-weight: 700;
+      color: #0f172a; margin: 0 0 10px;
+    }
+    .benefit-card-premium p {
+      font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: #475569;
+      line-height: 1.5; margin: 0;
+    }
+
+    /* ─── CALCULADORA DE MEGAS ─── */
+    .megas-calculator {
+      background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 28px;
+      padding: 40px; box-shadow: 0 15px 40px rgba(15, 25, 35, 0.02);
+    }
+    .calc-header { text-align: center; margin-bottom: 32px; }
+    .calc-main-icon { font-size: 2.2rem; color: #0A70A2; margin-bottom: 12px; }
+    .calc-header h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 0 0 8px; }
+    .calc-header p { font-size: 0.88rem; color: #475569; max-width: 540px; margin: 0 auto; line-height: 1.5; }
+    
+    .calc-body { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .calc-left h4, .calc-right h4 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700;
+      color: #0f172a; margin: 0 0 18px; border-left: 3px solid #0A70A2; padding-left: 10px;
+    }
+    .calc-activities-grid { display: flex; flex-direction: column; gap: 12px; }
+    .calc-activity-card {
+      display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: center;
+      padding: 14px 20px; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 16px;
+      cursor: pointer; transition: all 0.25s; position: relative; background: #fafbfc;
+    }
+    .calc-activity-card:hover {
+      border-color: rgba(10, 112, 162, 0.2); background: rgba(10, 112, 162, 0.01);
+    }
+    .calc-activity-card.active {
+      border-color: #0A70A2; background: rgba(10, 112, 162, 0.04);
+      box-shadow: 0 4px 15px rgba(10, 112, 162, 0.05);
+    }
+    .calc-activity-card i {
+      font-size: 1.15rem; color: #76889e; text-align: center; grid-row: 1 / 3;
+      width: 36px; height: 36px; border-radius: 50%; background: #fff;
+      display: flex; align-items: center; justify-content: center; border: 1px solid rgba(0,0,0,0.03);
+    }
+    .calc-activity-card.active i { color: #fff; background: #0A70A2; }
+    .calc-activity-card span { font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 700; color: #334155; }
+    .calc-activity-card p { font-size: 0.72rem; color: #64748b; margin: 2px 0 0 0; }
+    
+    .calc-slider-wrapper { margin-bottom: 24px; background: #f8fafc; padding: 20px; border-radius: 18px; border: 1px solid rgba(10, 112, 162, 0.04); }
+    .calc-slider-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: #475569; font-weight: 600; margin-bottom: 12px; }
+    .calc-slider-labels #devices-count-label { color: #0A70A2; font-weight: 700; font-size: 0.8rem; }
+    .calc-range-slider {
+      width: 100%; height: 6px; border-radius: 5px; background: #e2e8f0; outline: none;
+      -webkit-appearance: none; appearance: none;
+    }
+    .calc-range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none; width: 20px; height: 20px;
+      border-radius: 50%; background: #0A70A2; cursor: pointer; transition: transform 0.1s;
+      box-shadow: 0 2px 6px rgba(10,112,162,0.3); border: 2px solid #fff;
+    }
+    .calc-range-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    
+    .calc-recommendation-box {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 20px; padding: 24px; text-align: center; color: #fff;
+      border: 1px solid rgba(255,255,255,0.04); box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .rec-pre { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+    .rec-megas {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.8rem; font-weight: 800; color: #0A70A2;
+      margin: 8px 0 16px;
+    }
+    .rec-megas span { font-size: 1.1rem; color: #94a3b8; font-weight: 500; }
+    .rec-plan-card {
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 14px; padding: 18px; text-align: center;
+    }
+    .rec-plan-card h5 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0 0 6px; }
+    .rec-plan-card p { font-size: 0.78rem; color: #cbd5e1; margin: 0 0 12px; line-height: 1.4; }
+    .rec-plan-card strong { font-size: 1.1rem; color: #0A70A2; font-family: 'Outfit', sans-serif; }
+    
+    /* ─── SPEEDTEST REAL (INTEGRACIÓN CON OOKLA) ─── */
+    .speedtest-wrapper { max-width: 820px; margin: 0 auto; }
+    .speedtest-console {
+      background: #09101d; border-radius: 24px; border: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3); overflow: hidden; position: relative;
+    }
+    .speedtest-top-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 20px; background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.05); font-family: monospace; font-size: 0.75rem;
+    }
+    .speedtest-top-bar .top-dots { display: flex; gap: 6px; }
+    .speedtest-top-bar .top-dots .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .speedtest-top-bar .top-dots .dot.red { background: #e74c3c; }
+    .speedtest-top-bar .top-dots .dot.yellow { background: #f1c40f; }
+    .speedtest-top-bar .top-dots .dot.green { background: #2ecc71; }
+    .speedtest-top-bar .top-title { color: #a0b0c4; font-weight: 700; letter-spacing: 0.5px; }
+    .speedtest-top-bar .top-status {
+      display: flex; align-items: center; gap: 6px; color: #2ecc71; font-weight: 700;
+    }
+    .speedtest-top-bar .pulse-indicator {
+      width: 7px; height: 7px; border-radius: 50%; background: #2ecc71;
+      display: inline-block; box-shadow: 0 0 6px #2ecc71;
+    }
+    
+    .speedtest-iframe-wrapper {
+      width: 100%;
+      height: 650px;
+      background: #09101d;
+    }
+    
+    /* ─── FAQ INTERACTIVE SEARCH & FILTER TAGS ─── */
+    .faq-tag-btn {
+      padding: 8px 18px; border: 1.5px solid #cbd5e1; border-radius: 50px; background: #fff;
+      font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 600; color: #475569;
+      cursor: pointer; transition: all 0.25s; outline: none;
+    }
+    .faq-tag-btn:hover { border-color: #0A70A2; color: #0A70A2; }
+    .faq-tag-btn.active {
+      background: #0A70A2; border-color: #0A70A2; color: #fff;
+      box-shadow: 0 4px 12px rgba(10, 112, 162, 0.12);
+    }
+    .faq-item {
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    
+    @media (max-width: 768px) {
+      .calc-body { grid-template-columns: 1fr; gap: 28px; }
+      .megas-calculator { padding: 24px; }
+      .speedtest-iframe-wrapper {
+        height: 500px;
+      }
+    }
   </style>
 </head>
-<body>
+<body class="is-loading">
+
+  <!-- Elemento Preloader -->
+  <div id="page-preloader" class="page-preloader" aria-hidden="true">
+    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="180" height="37" />
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
 
   <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
     <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
@@ -472,68 +835,590 @@
     </div>
   </header>
 
-  <main class="internet-page">
+  <!-- Hero Section (Estilo Cinemático Banner) -->
+  <section id="inicio" class="hero-carousel-slide hero-carousel-slide--banner active" style="min-height: 520px; height: auto; display: flex; align-items: center;">
+    <div class="hb-bg" style="background-image: url('img/hero_internet.png');"></div>
+    <div class="hb-overlay"></div>
+    <div class="container" style="position: relative; z-index: 10; width: 100%;">
+      <div class="hb-body">
+        <span class="tech-corner tl"></span>
+        <span class="tech-corner tr"></span>
+        <span class="tech-corner bl"></span>
+        <span class="tech-corner br"></span>
+        <span class="hb-label" style="opacity: 1; transform: none;"><i data-lucide="wifi"></i> Fibra Óptica Real</span>
+        <h1 class="hb-title" id="service-title" style="opacity: 1; transform: none; font-size: clamp(2.2rem, 5.5vw, 3.5rem); margin-bottom: 20px; text-shadow: 0 4px 18px rgba(0,0,0,0.6);">Internet <span>Fibra Óptica</span></h1>
+        <p class="hb-desc" style="opacity: 1; transform: none; font-size: 1.1rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 30px;">
+          Conectividad simétrica de alta velocidad para Santiago. Navega, trabaja, haz streaming y juega con fibra óptica directa de máxima estabilidad y latencia mínima.
+        </p>
+        <div class="hb-actions" style="opacity: 1; transform: none;">
+          <a href="#planes" class="btn btn-primary" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; text-decoration: none;">Ver Planes de Fibra</a>
+          <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20contratar%20el%20servicio%20de%20Internet%20de%20Fibra%20%C3%93ptica." target="_blank" class="btn btn-wa" style="border-radius: 50px; padding: 14px 32px; font-weight: 700; text-decoration: none;">
+            <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Cotizar por WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
+  <div class="service-subnav">
+    <div class="subnav-container">
+      <ul class="subnav-links">
+        <li><a href="#planes" class="active">Planes de Fibra</a></li>
+        <li><a href="#cobertura">Cobertura</a></li>
+        <li><a href="#faqs">Preguntas Frecuentes</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <main class="internet-page" id="main-content">
     
     <!-- ─── 1. VISTA PÚBLICA (Invitados / Landing de Planes) ─── -->
     <div id="internet-public-view">
-      <div class="container">
-        <div class="internet-hero">
-          <span class="section-label">Fibra Óptica Real</span>
-          <h1>Internet Simétrico de Alta Velocidad</h1>
-          <p>Conectividad sin límites para Santiago. Navega, trabaja y juega con fibra óptica de máxima estabilidad y latencia mínima.</p>
+      <div class="container" id="planes">
+        <!-- Botón de retorno solo visible en modo ?view=planes -->
+        <div class="planes-back-header">
+          <a href="internet.html" class="planes-back-btn">
+            <i class="fas fa-arrow-left"></i> Ver más información (Medidor de velocidad, Cobertura, Preguntas frecuentes)
+          </a>
+        </div>
+
+        <div class="text-center reveal" style="text-align: center; margin-bottom: 40px;">
+          <span class="section-label">Planes Flexibles</span>
+          <h2 class="section-title">Elige tu Velocidad de Fibra</h2>
+          <p class="section-sub" style="max-width: 600px; margin: 0 auto; color: #50647a;">Planes simétricos y asimétricos diseñados para ofrecerte el mejor rendimiento al mejor precio.</p>
+        </div>
+
+        <!-- Sección de Beneficios Premium (Symmetric FTTH Advantages) -->
+        <div class="benefits-grid reveal" style="margin-top: 40px; margin-bottom: 60px;">
+          <div class="benefit-card-premium">
+            <div class="b-card-glow"></div>
+            <div class="b-icon-wrapper"><i class="fas fa-network-wired"></i></div>
+            <h4>100% Fibra Óptica (FTTH)</h4>
+            <p>Conexión directa por cable de fibra óptica desde nuestra central hasta tu router. Sin pérdidas de señal ni interferencias por tramos de cobre.</p>
+          </div>
+          <div class="benefit-card-premium">
+            <div class="b-card-glow"></div>
+            <div class="b-icon-wrapper"><i class="fas fa-exchange-alt"></i></div>
+            <h4>Velocidad Simétrica</h4>
+            <p>Navega con el mismo ancho de banda tanto para descargar archivos como para subirlos. Ideal para streaming, videollamadas y trabajo en la nube.</p>
+          </div>
+          <div class="benefit-card-premium">
+            <div class="b-card-glow"></div>
+            <div class="b-icon-wrapper"><i class="fas fa-gamepad"></i></div>
+            <h4>Latencia de Élite (Bajo Ping)</h4>
+            <p>Latencia mínima de tránsito de datos ideal para gamers y profesionales de la comunicación en tiempo real. Cero delay en videollamadas.</p>
+          </div>
+          <div class="benefit-card-premium">
+            <div class="b-card-glow"></div>
+            <div class="b-icon-wrapper"><i class="fas fa-headset"></i></div>
+            <h4>Soporte Local Prioritario</h4>
+            <p>Asistencia técnica dedicada en Santiago con respuesta inmediata y técnicos calificados listos para resolver cualquier eventualidad en tiempo récord.</p>
+          </div>
+        </div>
+
+        <!-- Calculadora Interactiva de Ancho de Banda -->
+        <div class="megas-calculator reveal" id="calculadora" style="margin-bottom: 70px;">
+          <div class="calc-header">
+            <i class="fas fa-calculator calc-main-icon"></i>
+            <h3>Calcula tu Ancho de Banda Ideal</h3>
+            <p>Selecciona las actividades que realizas en internet y dinos cuántos dispositivos se conectan para recomendarte el plan perfecto.</p>
+          </div>
+          
+          <div class="calc-body">
+            <div class="calc-left">
+              <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: #0a101d; margin: 0 0 18px; border-left: 3px solid #0A70A2; padding-left: 10px;">1. Actividades que realizas:</h4>
+              <div class="calc-activities-grid">
+                <div class="calc-activity-card" data-speed="5" onclick="toggleCalcActivity(this)">
+                  <i class="fas fa-envelope"></i>
+                  <div style="display:flex; flex-direction:column; gap:2px; text-align:left;">
+                    <span>Navegación y Redes</span>
+                    <p>Redes sociales, correos y chat</p>
+                  </div>
+                </div>
+                <div class="calc-activity-card" data-speed="15" onclick="toggleCalcActivity(this)">
+                  <i class="fas fa-tv"></i>
+                  <div style="display:flex; flex-direction:column; gap:2px; text-align:left;">
+                    <span>Streaming HD/4K</span>
+                    <p>Netflix, YouTube y música</p>
+                  </div>
+                </div>
+                <div class="calc-activity-card" data-speed="10" onclick="toggleCalcActivity(this)">
+                  <i class="fas fa-video"></i>
+                  <div style="display:flex; flex-direction:column; gap:2px; text-align:left;">
+                    <span>Videollamadas</span>
+                    <p>Teletrabajo y clases online</p>
+                  </div>
+                </div>
+                <div class="calc-activity-card" data-speed="25" onclick="toggleCalcActivity(this)">
+                  <i class="fas fa-gamepad"></i>
+                  <div style="display:flex; flex-direction:column; gap:2px; text-align:left;">
+                    <span>Gaming Competitivo</span>
+                    <p>Juegos en línea con bajo ping</p>
+                  </div>
+                </div>
+                <div class="calc-activity-card" data-speed="8" onclick="toggleCalcActivity(this)">
+                  <i class="fas fa-laptop-house"></i>
+                  <div style="display:flex; flex-direction:column; gap:2px; text-align:left;">
+                    <span>Smart Home / Domótica</span>
+                    <p>Cámaras, luces e IoT</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="calc-right">
+              <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: #0a101d; margin: 0 0 18px; border-left: 3px solid #0A70A2; padding-left: 10px;">2. Dispositivos conectados:</h4>
+              <div class="calc-slider-wrapper">
+                <div class="calc-slider-labels">
+                  <span>1 Dispositivo</span>
+                  <span id="devices-count-label">5 Dispositivos</span>
+                  <span>25+ Dispositivos</span>
+                </div>
+                <input type="range" id="devices-slider" class="calc-range-slider" min="1" max="25" value="5" oninput="updateMegasCalc()" aria-label="Cantidad de dispositivos conectados" />
+              </div>
+              
+              <div class="calc-recommendation-box" id="calc-rec-box">
+                <span class="rec-pre">Ancho de banda sugerido:</span>
+                <div class="rec-megas" id="calc-sug-megas">10 <span>Mbps</span></div>
+                <div class="rec-plan-card">
+                  <h5 id="calc-plan-name">Plan Inicial</h5>
+                  <p id="calc-plan-desc">Ideal para redes sociales, chat y navegación básica de pocos dispositivos.</p>
+                  <strong id="calc-plan-price">RD$ 900 / mes</strong>
+                  <button type="button" class="plan-btn-primary" onclick="requestSuggestedPlan()" style="margin-top: 15px; border-radius: 12px; width:100%;">
+                    Solicitar este Plan en Línea
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selector Toggle para alternar categorías -->
+        <div class="plan-toggle-wrapper">
+          <div class="plan-toggle-container">
+            <button type="button" class="plan-toggle-btn public-toggle-btn active" data-category="hogar" onclick="togglePlanCategory('hogar', false)">
+              <i class="fas fa-home"></i> Planes Hogar
+            </button>
+            <button type="button" class="plan-toggle-btn public-toggle-btn" data-category="ultra" onclick="togglePlanCategory('ultra', false)">
+              <i class="fas fa-rocket"></i> Planes Ultra
+            </button>
+          </div>
         </div>
 
         <div class="plans-grid">
-          <!-- Plan 30M -->
-          <div class="plan-card">
-            <div class="plan-icon"><i data-lucide="zap"></i></div>
-            <h3 class="plan-name">Plan Lite</h3>
-            <div class="plan-speed">30 <span>Mbps</span></div>
+          <!-- ─── CATEGORÍA: HOGAR ─── -->
+          
+          <!-- Plan 10M -->
+          <div class="plan-card" data-category="hogar">
+            <div class="plan-card-visual">
+              <img src="img/plan_hogar_basic.png" alt="Plan Inicial 10 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Económico</span>
+            <h3 class="plan-name">Plan Inicial</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">10 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 10 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 5 Mbps Subida</span>
+            </div>
             <ul class="plan-features">
-              <li><i data-lucide="check"></i> 30 Mbps Subida / Bajada</li>
-              <li><i data-lucide="check"></i> Fibra óptica directa (FTTH)</li>
-              <li><i data-lucide="check"></i> Ideal para teletrabajo básico</li>
-              <li><i data-lucide="check"></i> Soporte 24/7</li>
+              <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
+              <li><i class="fas fa-check"></i> Ideal para redes sociales y chat</li>
+              <li><i class="fas fa-check"></i> Latencia baja garantizada</li>
+              <li><i class="fas fa-check"></i> Soporte técnico 24/7</li>
             </ul>
-            <div class="plan-price">RD$ 1,495 <span>/ mes</span></div>
-            <button class="plan-btn" onclick="openHiringForm('Plan Lite 30 Mbps')">Solicitar plan</button>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 900 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Inicial%20de%2010%20Megas%20(5%20Mbps%20subida%20%2F%2010%20Mbps%20bajada)%20por%20RD%24%20900%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Plan 20M -->
+          <div class="plan-card" data-category="hogar">
+            <div class="plan-card-visual">
+              <img src="img/plan_hogar_basic.png" alt="Plan Bronce 20 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Familiar</span>
+            <h3 class="plan-name">Plan Bronce</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">20 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 20 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 10 Mbps Subida</span>
+            </div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
+              <li><i class="fas fa-check"></i> Ideal para teletrabajo y clases</li>
+              <li><i class="fas fa-check"></i> Streaming HD y videos fluidos</li>
+              <li><i class="fas fa-check"></i> Soporte técnico 24/7</li>
+            </ul>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 1,000 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Bronce%20de%2020%20Megas%20(10%20Mbps%20subida%20%2F%2020%20Mbps%20bajada)%20por%20RD%24%201%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
           </div>
 
           <!-- Plan 50M -->
-          <div class="plan-card popular">
+          <div class="plan-card popular" data-category="hogar">
             <div class="plan-popular-badge">Recomendado</div>
-            <div class="plan-icon"><i data-lucide="flame"></i></div>
-            <h3 class="plan-name">Plan Blaze</h3>
-            <div class="plan-speed">50 <span>Mbps</span></div>
+            <div class="plan-card-visual">
+              <img src="img/plan_hogar_premium.png" alt="Plan Plata 50 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Más Vendido</span>
+            <h3 class="plan-name">Plan Plata</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">50 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 50 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 25 Mbps Subida</span>
+            </div>
             <ul class="plan-features">
-              <li><i data-lucide="check"></i> 50 Mbps Subida / Bajada</li>
-              <li><i data-lucide="check"></i> Fibra óptica simétrica</li>
-              <li><i data-lucide="check"></i> Streaming Ultra HD y gaming</li>
-              <li><i data-lucide="check"></i> Router WiFi de doble banda</li>
-              <li><i data-lucide="check"></i> Soporte prioritario</li>
+              <li><i class="fas fa-check"></i> Fibra óptica simétrica</li>
+              <li><i class="fas fa-check"></i> Streaming Ultra HD y Gaming</li>
+              <li><i class="fas fa-check"></i> Router WiFi inteligente incluido</li>
+              <li><i class="fas fa-check"></i> Soporte técnico prioritario</li>
             </ul>
-            <div class="plan-price">RD$ 1,995 <span>/ mes</span></div>
-            <button class="plan-btn" onclick="openHiringForm('Plan Blaze 50 Mbps')">Solicitar plan</button>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 1,500 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Plata%20de%2050%20Megas%20(25%20Mbps%20subida%20%2F%2050%20Mbps%20bajada)%20por%20RD%24%201%2C500%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
           </div>
 
           <!-- Plan 100M -->
-          <div class="plan-card">
-            <div class="plan-icon"><i data-lucide="rocket"></i></div>
-            <h3 class="plan-name">Plan Extreme</h3>
-            <div class="plan-speed">100 <span>Mbps</span></div>
+          <div class="plan-card" data-category="hogar">
+            <div class="plan-card-visual">
+              <img src="img/plan_hogar_premium.png" alt="Plan Oro 100 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Avanzado</span>
+            <h3 class="plan-name">Plan Oro</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">100 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 100 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 50 Mbps Subida</span>
+            </div>
             <ul class="plan-features">
-              <li><i data-lucide="check"></i> 100 Mbps Subida / Bajada</li>
-              <li><i data-lucide="check"></i> Simetría premium</li>
-              <li><i data-lucide="check"></i> Múltiples dispositivos en simultáneo</li>
-              <li><i data-lucide="check"></i> Ideal para creadores y oficinas</li>
-              <li><i data-lucide="check"></i> IP Pública (Opcional)</li>
+              <li><i class="fas fa-check"></i> Conexión simétrica premium</li>
+              <li><i class="fas fa-check"></i> Múltiples dispositivos a la vez</li>
+              <li><i class="fas fa-check"></i> Ideal para creadores y oficinas</li>
+              <li><i class="fas fa-check"></i> IP Pública disponible (Opcional)</li>
             </ul>
-            <div class="plan-price">RD$ 2,995 <span>/ mes</span></div>
-            <button class="plan-btn" onclick="openHiringForm('Plan Extreme 100 Mbps')">Solicitar plan</button>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 2,000 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Oro%20de%20100%20Megas%20(50%20Mbps%20subida%20%2F%20100%20Mbps%20bajada)%20por%20RD%24%202%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- ─── CATEGORÍA: ULTRA (Ocultos por defecto) ─── -->
+
+          <!-- Plan 200M -->
+          <div class="plan-card" data-category="ultra" style="display: none;">
+            <div class="plan-card-visual">
+              <img src="img/plan_ultra_pro.png" alt="Plan Platino 200 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Fibra Pro</span>
+            <h3 class="plan-name">Plan Platino</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">200 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 200 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
+            </div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Fibra óptica simétrica premium</li>
+              <li><i class="fas fa-check"></i> Descargas ultrarrápidas y gaming</li>
+              <li><i class="fas fa-check"></i> Router corporativo de alta gama</li>
+              <li><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
+            </ul>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 2,500 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Platino%20de%20200%20Megas%20(100%20Mbps%20subida%20%2F%2020%20Mbps%20bajada)%20por%20RD%24%202%2C500%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Plan 30M -->
+          <div class="plan-card" data-category="ultra" style="display: none;">
+            <div class="plan-card-visual">
+              <img src="img/plan_ultra_pro.png" alt="Plan Ultra 300 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Ancho de Banda</span>
+            <h3 class="plan-name">Plan Ultra</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">300 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 300 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
+            </div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Máxima velocidad residencial</li>
+              <li><i class="fas fa-check"></i> Streaming 4K en múltiples pantallas</li>
+              <li><i class="fas fa-check"></i> Redundancia y estabilidad superior</li>
+              <li><i class="fas fa-check"></i> Soporte VIP técnico inmediato</li>
+            </ul>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 3,000 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Ultra%20de%20300%20Megas%20(100%20Mbps%20subida%20%2F%20300%20Mbps%20bajada)%20por%20RD%24%203%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Plan 400M -->
+          <div class="plan-card" data-category="ultra" style="display: none;">
+            <div class="plan-card-visual">
+              <img src="img/plan_ultra_elite.png" alt="Plan Pro 400 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Profesional</span>
+            <h3 class="plan-name">Plan Pro</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">400 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 400 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
+            </div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Ideal para creadores y streaming</li>
+              <li><i class="fas fa-check"></i> Latencia mínima para videollamadas</li>
+              <li><i class="fas fa-check"></i> IP Pública (Opcional incluida)</li>
+              <li><i class="fas fa-check"></i> Soporte VIP técnico inmediato</li>
+            </ul>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 4,000 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Pro%20de%20400%20Megas%20(100%20Mbps%20subida%20%2F%20400%20Mbps%20bajada)%20por%20RD%24%204%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Plan 500M -->
+          <div class="plan-card" data-category="ultra" style="display: none;">
+            <div class="plan-card-visual">
+              <img src="img/plan_ultra_elite.png" alt="Plan Élite 500 Megas" class="plan-card-img" />
+            </div>
+            <span class="plan-badge-top">Máxima Potencia</span>
+            <h3 class="plan-name">Plan Élite</h3>
+            <div class="plan-speed-display">
+              <div class="plan-speed-val">500 <span>Mega</span></div>
+            </div>
+            <div class="plan-speed-detail">
+              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 500 Mbps Bajada</span>
+              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
+            </div>
+            <ul class="plan-features">
+              <li><i class="fas fa-check"></i> Velocidad empresarial en tu hogar</li>
+              <li><i class="fas fa-check"></i> Cero congestión, máxima capacidad</li>
+              <li><i class="fas fa-check"></i> Router WiFi 6 Premium incluido</li>
+              <li><i class="fas fa-check"></i> Soporte técnico VIP 24/7</li>
+            </ul>
+            <div class="plan-price-block">
+              <div class="plan-price-huge">RD$ 5,000 <span>/ mes</span></div>
+            </div>
+            <div class="plan-actions-group">
+              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
+              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20%C3%89lite%20de%20500%20Megas%20(100%20Mbps%20subida%20%2F%20500%20Mbps%20bajada)%20por%20RD%24%205%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+          </div>
+        </div> <!-- Cierre plans-grid -->
+      </div> <!-- Cierre container -->
+
+      <!-- Sección Speedtest Simulator -->
+      <section id="speedtest-section" class="section bg-light" style="padding: 80px 0; border-top: 1px solid rgba(0,0,0,0.04);">
+        <div class="container">
+          <div class="text-center reveal" style="text-align: center; margin-bottom: 48px;">
+            <span class="section-label">Mide la Velocidad</span>
+            <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: #0a101d; margin: 10px 0 16px;">Mide tu Velocidad Real</h2>
+            <p class="section-sub" style="max-width: 600px; margin: 0 auto; color: #50647a; font-size: 1rem; line-height: 1.5;">Prueba la velocidad de tu conexión a internet actual en tiempo real sin salir de nuestra web.</p>
+          </div>
+
+          <div class="speedtest-wrapper reveal">
+            <div class="speedtest-console">
+              <!-- Top bar -->
+              <div class="speedtest-top-bar">
+                <div class="top-dots">
+                  <div class="dot red"></div>
+                  <div class="dot yellow"></div>
+                  <div class="dot green"></div>
+                </div>
+                <div class="top-title">FUTUNET_SPEEDTEST_REAL</div>
+                <div class="top-status">
+                  <span class="pulse-indicator"></span> CONEXIÓN ACTIVA
+                </div>
+              </div>
+
+              <!-- Speedtest Ookla IFrame -->
+              <div class="speedtest-iframe-wrapper">
+                <iframe src="https://futunet.speedtestcustom.com" width="100%" height="100%" frameborder="0" allow="geolocation" style="border: none; display: block; width: 100%; background: #09101d;" title="Ookla Speedtest"></iframe>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div class="login-teaser">
+      <!-- Sección Cobertura -->
+      <section id="cobertura" class="coverage-section">
+        <div class="container">
+          <div class="text-center reveal" style="text-align: center; margin-bottom: 48px;">
+            <span class="section-label">Disponibilidad Inmediata</span>
+            <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: #0a101d; margin: 10px 0 16px;">Zonas de Cobertura en Santiago</h2>
+            <p class="section-sub" style="max-width: 600px; margin: 0 auto; color: #50647a; font-size: 1rem; line-height: 1.5;">Nuestra red de fibra óptica se expande constantemente para conectar a más hogares y empresas con el internet del futuro.</p>
+          </div>
+          
+          <div class="coverage-grid">
+            <div class="coverage-list-card">
+              <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; color: #0a101d; margin: 0 0 16px;">Sectores Habilitados</h3>
+              <p style="font-size: 0.9rem; color: #50647a; line-height: 1.6; margin-bottom: 20px;">Contamos con infraestructura de fibra óptica en los siguientes sectores de Santiago de los Caballeros:</p>
+              <div class="coverage-cities" style="grid-template-columns: 1fr; max-width: 320px;">
+                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Ensanche Dolores</div>
+                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Pueblo Nuevo</div>
+                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Cuesta Colorada</div>
+              </div>
+              <div style="margin-top: 28px;">
+                <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20solicitar%20cobertura%20de%20internet%20de%20fibra%20%C3%B3ptica%20en%20mi%20zona%20(Sector%3A%20%5BIndica%20tu%20sector%5D%2C%20Santiago)." target="_blank" class="plan-btn-primary" style="display: inline-flex; width: auto; padding: 12px 24px; border-radius: 50px;">
+                  <i class="fas fa-paper-plane"></i> Solicitar cobertura en mi zona
+                </a>
+              </div>
+              <p style="font-size: 0.82rem; color: #76889e; margin-top: 24px; line-height: 1.4;"><i class="fas fa-info-circle"></i> ¿No ves tu sector? Haz clic arriba para reportarlo. Realizamos extensiones de fibra según la demanda.</p>
+            </div>
+            <div class="coverage-map-box" style="position: relative; background: #0b1329;">
+              <div class="radar-scan-overlay"></div>
+              <div class="radar-scan-line"></div>
+              
+              <!-- Badges de Factibilidad sobre el mapa de Santiago -->
+              <!-- Cuesta Colorada -->
+              <div class="factibilidad-badge" style="top: 25%; left: 20%;">
+                <span class="badge-pulse"></span>
+                <span>Cuesta Colorada</span>
+              </div>
+              
+              <!-- Pueblo Nuevo -->
+              <div class="factibilidad-badge" style="top: 55%; left: 70%;">
+                <span class="badge-pulse"></span>
+                <span>Pueblo Nuevo</span>
+              </div>
+              
+              <!-- Ensanche Dolores -->
+              <div class="factibilidad-badge" style="top: 75%; left: 48%;">
+                <span class="badge-pulse"></span>
+                <span>Ensanche Dolores</span>
+              </div>
+              
+              <iframe class="coverage-map-iframe" src="https://maps.google.com/maps?q=19.466,-70.713&t=k&z=14&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border: 0; display: block; pointer-events: none; filter: contrast(1.15) brightness(0.9);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Zonas de cobertura de fibra óptica en Santiago"></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección FAQs -->
+      <section id="faqs" class="section bg-light" style="padding: 80px 0; border-top: 1px solid rgba(0,0,0,0.04);">
+        <div class="container">
+          <div class="text-center reveal" style="text-align: center; margin-bottom: 40px;">
+            <span class="section-label">Respuestas Rápidas</span>
+            <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: #0a101d; margin: 10px 0 16px;">Preguntas Frecuentes</h2>
+            <p class="section-sub" style="max-width: 600px; margin: 0 auto; color: #50647a; font-size: 1rem; line-height: 1.5;">Aclara tus dudas sobre nuestro servicio de internet de fibra óptica simétrica.</p>
+          </div>
+
+          <!-- Buscador y Filtros de FAQs -->
+          <div class="faq-controls reveal" style="max-width: 800px; margin: 0 auto 36px; display: flex; flex-direction: column; gap: 20px;">
+            <!-- Buscador -->
+            <div class="faq-search-wrapper" style="position: relative; width: 100%;">
+              <input type="text" id="faq-search-input" placeholder="Buscar preguntas frecuentes... (ej. instalación, velocidad, soporte)" oninput="filterFaqs()" style="width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #cbd5e1; border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #0a101d; outline: none; transition: all 0.25s;" aria-label="Buscar preguntas frecuentes" />
+              <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #76889e; font-size: 1.1rem;"></i>
+            </div>
+            
+            <!-- Categorías -->
+            <div class="faq-tags-container" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+              <button type="button" class="faq-tag-btn active" data-category="todos" onclick="filterFaqCategory('todos', this)">Todos</button>
+              <button type="button" class="faq-tag-btn" data-category="general" onclick="filterFaqCategory('general', this)">General</button>
+              <button type="button" class="faq-tag-btn" data-category="instalacion" onclick="filterFaqCategory('instalacion', this)">Instalación</button>
+              <button type="button" class="faq-tag-btn" data-category="planes" onclick="filterFaqCategory('planes', this)">Planes y Pagos</button>
+              <button type="button" class="faq-tag-btn" data-category="soporte" onclick="filterFaqCategory('soporte', this)">Soporte Técnico</button>
+            </div>
+          </div>
+
+          <div class="faqs-container" style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item" data-category="general">
+              <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleFaq(this)">
+                <span>¿Qué es el Internet Simétrico?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>El internet simétrico significa que tienes la misma velocidad para descargar información de internet (bajada) que para enviar archivos, videos o transmitir contenido (subida). Esto es ideal para videollamadas, teletrabajo, subir videos a redes sociales y juegos en línea sin latencia.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" data-category="instalacion">
+              <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleFaq(this)">
+                <span>¿Cuánto tiempo toma la instalación del servicio?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Una vez completada y aprobada la solicitud en línea o por WhatsApp, agendamos la visita técnica. El proceso de instalación física de la fibra óptica directa (FTTH) en tu domicilio u oficina suele tardar entre 24 y 72 horas hábiles.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" data-category="instalacion">
+              <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleFaq(this)">
+                <span>¿Hay algún costo de instalación?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>El costo de instalación varía según la distancia de cableado desde nuestra caja de distribución hasta tu propiedad y la ubicación. Te daremos una cotización exacta en la llamada de confirmación de cobertura.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" data-category="planes">
+              <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleFaq(this)">
+                <span>¿Puedo cambiar de plan después de contratado?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>¡Sí, por supuesto! A través de tu cuenta de cliente en esta misma web, puedes ingresar al portal y solicitar un aumento de megas de forma inmediata en la pestaña de soporte sin cargos administrativos adicionales.</p>
+              </div>
+            </div>
+
+            <div class="faq-item" data-category="soporte">
+              <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleFaq(this)">
+                <span>¿Qué hago si mi internet presenta lentitud o se cae?</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer">
+                <p>Si eres cliente activo de Futunet, puedes reportar una avería técnica directamente desde nuestro portal web de autogestión. También puedes comunicarte de inmediato con nuestra línea de soporte técnico local en Santiago vía WhatsApp al 829-741-1041 para asistencia en tiempo real.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Banner de Teaser / Login al final de la landing pública -->
+      <div class="container" style="margin-top: 60px;">
+        <div class="login-teaser" style="margin-bottom: 20px;">
           <div class="login-teaser-text">
             <h3>¿Ya eres cliente de nuestro servicio de Internet?</h3>
             <p>Inicia sesión con tu cuenta para pagar tu factura, solicitar cambio de megas, o reportar averías.</p>
@@ -667,47 +1552,148 @@
                 <p>Navega a la velocidad del futuro con fibra óptica simétrica de máxima estabilidad. Elige el plan que mejor se adapte a tus necesidades e inicia tu solicitud.</p>
               </div>
 
+              <!-- Selector Toggle para alternar categorías en portal -->
+              <div class="plan-toggle-wrapper" style="margin-bottom: 24px;">
+                <div class="plan-toggle-container">
+                  <button type="button" class="plan-toggle-btn portal-toggle-btn active" data-category="hogar" onclick="togglePlanCategory('hogar', true)">
+                    <i class="fas fa-home"></i> Planes Hogar
+                  </button>
+                  <button type="button" class="plan-toggle-btn portal-toggle-btn" data-category="ultra" onclick="togglePlanCategory('ultra', true)">
+                    <i class="fas fa-rocket"></i> Planes Ultra
+                  </button>
+                </div>
+              </div>
+
               <!-- Planes Grid -->
               <div class="portal-plans-grid">
-                <!-- Plan Lite -->
-                <div class="portal-plan-item" onclick="selectHiringPlan('Plan Lite 30 Mbps', '30mb', 1495)">
-                  <div class="pp-badge">Simétrico</div>
-                  <div class="pp-icon"><i data-lucide="zap"></i></div>
-                  <h4 class="pp-name">Plan Lite</h4>
-                  <div class="pp-speed">30 <span>Mbps</span></div>
-                  <div class="pp-price">RD$ 1,495 <span>/ mes</span></div>
+                <!-- ─── CATEGORÍA: HOGAR ─── -->
+                
+                <!-- Plan 10M -->
+                <div class="portal-plan-item" data-category="hogar" onclick="selectHiringPlan('Plan Inicial 10 Megas', '10mb', 900)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_hogar_basic.png" alt="Plan Inicial" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Económico</div>
+                  <h4 class="pp-name">Plan Inicial</h4>
+                  <div class="pp-speed">10 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 900 <span>/ mes</span></div>
                   <ul class="pp-features">
-                    <li><i data-lucide="check"></i> 30 Mbps Bajada / Subida</li>
-                    <li><i data-lucide="check"></i> Fibra óptica directa</li>
-                    <li><i data-lucide="check"></i> Soporte técnico 24/7</li>
+                    <li><i data-lucide="check"></i> 10 Mbps Bajada / 5 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Fibra óptica directa (FTTH)</li>
                   </ul>
                   <button type="button" class="pp-btn">Seleccionar plan</button>
                 </div>
-                <!-- Plan Blaze -->
-                <div class="portal-plan-item popular" onclick="selectHiringPlan('Plan Blaze 50 Mbps', '50mb', 1995)">
-                  <div class="pp-badge popular">Recomendado</div>
-                  <div class="pp-icon"><i data-lucide="flame"></i></div>
-                  <h4 class="pp-name">Plan Blaze</h4>
-                  <div class="pp-speed">50 <span>Mbps</span></div>
-                  <div class="pp-price">RD$ 1,995 <span>/ mes</span></div>
+
+                <!-- Plan 20M -->
+                <div class="portal-plan-item" data-category="hogar" onclick="selectHiringPlan('Plan Bronce 20 Megas', '20mb', 1000)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_hogar_basic.png" alt="Plan Bronce" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Familiar</div>
+                  <h4 class="pp-name">Plan Bronce</h4>
+                  <div class="pp-speed">20 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 1,000 <span>/ mes</span></div>
                   <ul class="pp-features">
-                    <li><i data-lucide="check"></i> 50 Mbps Bajada / Subida</li>
-                    <li><i data-lucide="check"></i> Streaming Ultra HD y gaming</li>
+                    <li><i data-lucide="check"></i> 20 Mbps Bajada / 10 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Ideal para teletrabajo básico</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- Plan 50M -->
+                <div class="portal-plan-item popular" data-category="hogar" onclick="selectHiringPlan('Plan Plata 50 Megas', '50mb', 1500)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_hogar_premium.png" alt="Plan Plata" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge popular">Recomendado</div>
+                  <h4 class="pp-name">Plan Plata</h4>
+                  <div class="pp-speed">50 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 1,500 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 50 Mbps Bajada / 25 Mbps Subida</li>
                     <li><i data-lucide="check"></i> Router WiFi de doble banda</li>
                   </ul>
                   <button type="button" class="pp-btn">Seleccionar plan</button>
                 </div>
-                <!-- Plan Extreme -->
-                <div class="portal-plan-item" onclick="selectHiringPlan('Plan Extreme 100 Mbps', '100mb', 2995)">
-                  <div class="pp-badge">Premium</div>
-                  <div class="pp-icon"><i data-lucide="rocket"></i></div>
-                  <h4 class="pp-name">Plan Extreme</h4>
-                  <div class="pp-speed">100 <span>Mbps</span></div>
-                  <div class="pp-price">RD$ 2,995 <span>/ mes</span></div>
+
+                <!-- Plan 100M -->
+                <div class="portal-plan-item" data-category="hogar" onclick="selectHiringPlan('Plan Oro 100 Megas', '100mb', 2000)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_hogar_premium.png" alt="Plan Oro" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Avanzado</div>
+                  <h4 class="pp-name">Plan Oro</h4>
+                  <div class="pp-speed">100 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 2,000 <span>/ mes</span></div>
                   <ul class="pp-features">
-                    <li><i data-lucide="check"></i> 100 Mbps Bajada / Subida</li>
-                    <li><i data-lucide="check"></i> Múltiples dispositivos en simultáneo</li>
-                    <li><i data-lucide="check"></i> IP Pública (Opcional)</li>
+                    <li><i data-lucide="check"></i> 100 Mbps Bajada / 50 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Múltiples equipos en simultáneo</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- ─── CATEGORÍA: ULTRA ─── -->
+
+                <!-- Plan 200M -->
+                <div class="portal-plan-item" data-category="ultra" style="display: none;" onclick="selectHiringPlan('Plan Platino 200 Megas', '200mb', 2500)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_ultra_pro.png" alt="Plan Platino" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Fibra Pro</div>
+                  <h4 class="pp-name">Plan Platino</h4>
+                  <div class="pp-speed">200 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 2,500 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 200 Mbps Bajada / 100 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Gaming pro y descargas</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- Plan 300M -->
+                <div class="portal-plan-item" data-category="ultra" style="display: none;" onclick="selectHiringPlan('Plan Ultra 300 Megas', '300mb', 3000)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_ultra_pro.png" alt="Plan Ultra" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Ancho Banda</div>
+                  <h4 class="pp-name">Plan Ultra</h4>
+                  <div class="pp-speed">300 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 3,000 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 300 Mbps Bajada / 100 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Streaming 4K en pantallas múltiples</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- Plan 400M -->
+                <div class="portal-plan-item" data-category="ultra" style="display: none;" onclick="selectHiringPlan('Plan Pro 400 Megas', '400mb', 4000)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_ultra_elite.png" alt="Plan Pro" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Profesional</div>
+                  <h4 class="pp-name">Plan Pro</h4>
+                  <div class="pp-speed">400 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 4,000 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 400 Mbps Bajada / 100 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Latencia mínima e IP pública</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- Plan 500M -->
+                <div class="portal-plan-item" data-category="ultra" style="display: none;" onclick="selectHiringPlan('Plan Élite 500 Megas', '500mb', 5000)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_ultra_elite.png" alt="Plan Élite" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Máxima Potencia</div>
+                  <h4 class="pp-name">Plan Élite</h4>
+                  <div class="pp-speed">500 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 5,000 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 500 Mbps Bajada / 100 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Router WiFi 6 Premium</li>
                   </ul>
                   <button type="button" class="pp-btn">Seleccionar plan</button>
                 </div>
@@ -921,8 +1907,14 @@
           <div class="request-form-group" id="support-speed-selection" style="display:none;">
             <label class="request-form-label" style="color:#a0b0c4;" for="support-new-speed">Seleccionar Velocidad Deseada</label>
             <select id="support-new-speed" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); outline:none; height:45px;">
-              <option value="50mb" style="background:#09101d;">Plan Blaze 50 Megas (RD$ 1,995/mes)</option>
-              <option value="100mb" style="background:#09101d;">Plan Extreme 100 Megas (RD$ 2,995/mes)</option>
+              <option value="10mb" style="background:#09101d;">Plan Inicial 10 Megas (RD$ 900/mes)</option>
+              <option value="20mb" style="background:#09101d;">Plan Bronce 20 Megas (RD$ 1,000/mes)</option>
+              <option value="50mb" style="background:#09101d;">Plan Plata 50 Megas (RD$ 1,500/mes)</option>
+              <option value="100mb" style="background:#09101d;">Plan Oro 100 Megas (RD$ 2,000/mes)</option>
+              <option value="200mb" style="background:#09101d;">Plan Platino 200 Megas (RD$ 2,500/mes)</option>
+              <option value="300mb" style="background:#09101d;">Plan Ultra 300 Megas (RD$ 3,000/mes)</option>
+              <option value="400mb" style="background:#09101d;">Plan Pro 400 Megas (RD$ 4,000/mes)</option>
+              <option value="500mb" style="background:#09101d;">Plan Élite 500 Megas (RD$ 5,000/mes)</option>
             </select>
           </div>
 
@@ -933,48 +1925,6 @@
 
           <button type="submit" class="request-btn-submit" id="support-submit-btn" style="margin-top:16px;">
             Enviar Solicitud
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- MODAL 3: CONTRATAR PLAN (INVITADO) -->
-    <div class="portal-modal" id="hiring-modal">
-      <div class="portal-modal-card">
-        <div class="portal-modal-header">
-          <h3>Contratar Internet</h3>
-          <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
-        </div>
-        
-        <form id="hiring-form">
-          <input type="hidden" id="hiring-plan-name" value="" />
-          <div class="request-form-group">
-            <label class="request-form-label" style="color:#a0b0c4;">Plan seleccionado</label>
-            <strong id="hiring-plan-label" style="color:#0A70A2; font-size:1.1rem; display:block; margin: 4px 0 12px;">Plan Blaze 50 Mbps</strong>
-          </div>
-          
-          <div class="request-form-group">
-            <label class="request-form-label" style="color:#a0b0c4;" for="hir-name">Nombre Completo</label>
-            <input type="text" id="hir-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
-          </div>
-          
-          <div class="request-form-group">
-            <label class="request-form-label" style="color:#a0b0c4;" for="hir-phone">Teléfono / WhatsApp</label>
-            <input type="tel" id="hir-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required placeholder="809-000-0000" />
-          </div>
-
-          <div class="request-form-group">
-            <label class="request-form-label" style="color:#a0b0c4;" for="hir-email">Correo Electrónico</label>
-            <input type="email" id="hir-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
-          </div>
-
-          <div class="request-form-group">
-            <label class="request-form-label" style="color:#a0b0c4;" for="hir-address">Dirección de Instalación</label>
-            <textarea id="hir-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="3" required placeholder="Indica calle, sector y referencias de tu ubicación en Santiago..."></textarea>
-          </div>
-
-          <button type="submit" class="request-btn-submit" id="hir-submit-btn" style="margin-top:16px;">
-            Enviar Solicitud de Contrato
           </button>
         </form>
       </div>
@@ -1029,5 +1979,31 @@
   <script defer src="js/auth-guard.js"></script>
   <script src="js/main.js"></script>
   <script defer src="js/internet-portal.js"></script>
+  <script>
+    function toggleFaq(btn) {
+      var item = btn.parentElement;
+      var answer = item.querySelector('.faq-answer');
+      var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      
+      // Cerrar otros
+      document.querySelectorAll('.faq-item').forEach(function(el) {
+        if (el !== item) {
+          el.classList.remove('active');
+          el.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        }
+      });
+      
+      if (isExpanded) {
+        item.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+      }
+    }
+  </script>
 </body>
 </html>

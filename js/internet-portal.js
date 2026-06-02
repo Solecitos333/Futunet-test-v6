@@ -13,6 +13,12 @@
 
   // Inicialización
   function init() {
+    // Modo Solo Planes por query param ?view=planes
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('view') === 'planes') {
+      document.body.classList.add('solo-planes-mode');
+    }
+
     // Seteo de Firebase
     if (window.FutunetFirebase) {
       db = window.FutunetFirebase.db;
@@ -37,6 +43,11 @@
     setupPwaInstructions();
     setupDropzone();
     setupForms();
+
+    // Auto-inicializar estado de la calculadora si existe el slider
+    if (document.getElementById('devices-slider')) {
+      window.updateMegasCalc();
+    }
   }
 
   // Carga datos del cliente de internet
@@ -84,9 +95,14 @@
     
     // Mapeo de planes
     var plans = {
-      '30mb': { name: 'Plan Lite 30 Megas', price: 'RD$ 1,495.00' },
-      '50mb': { name: 'Plan Blaze 50 Megas', price: 'RD$ 1,995.00' },
-      '100mb': { name: 'Plan Extreme 100 Megas', price: 'RD$ 2,995.00' }
+      '10mb': { name: 'Plan Inicial 10 Megas', price: 'RD$ 900.00' },
+      '20mb': { name: 'Plan Bronce 20 Megas', price: 'RD$ 1,000.00' },
+      '50mb': { name: 'Plan Plata 50 Megas', price: 'RD$ 1,500.00' },
+      '100mb': { name: 'Plan Oro 100 Megas', price: 'RD$ 2,000.00' },
+      '200mb': { name: 'Plan Platino 200 Megas', price: 'RD$ 2,500.00' },
+      '300mb': { name: 'Plan Ultra 300 Megas', price: 'RD$ 3,000.00' },
+      '400mb': { name: 'Plan Pro 400 Megas', price: 'RD$ 4,000.00' },
+      '500mb': { name: 'Plan Élite 500 Megas', price: 'RD$ 5,000.00' }
     };
     var planId = userData.internetPlan || '50mb';
     var planInfo = plans[planId] || { name: 'Plan Personalizado ' + planId, price: 'A cotizar' };
@@ -600,6 +616,170 @@
   }
 
   // Se eliminó showToast local en favor de window.showToast global de main.js
+
+  // Lógica del Toggle de Planes (Público y Privado)
+  window.togglePlanCategory = function (category, isPortal) {
+    var prefix = isPortal ? '.portal-plan-item' : '.plan-card';
+    var cards = document.querySelectorAll(prefix);
+    
+    // Cambiar estado activo de los botones de toggle
+    var btnClass = isPortal ? 'portal-toggle-btn' : 'public-toggle-btn';
+    document.querySelectorAll('.' + btnClass).forEach(function (btn) {
+      if (btn.getAttribute('data-category') === category) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    cards.forEach(function (card) {
+      if (card.getAttribute('data-category') === category) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  };
+
+  // ─── FAQ INTERACTIVE SEARCH & CATEGORIES ───
+  var currentFaqCategory = 'todos';
+  
+  window.filterFaqCategory = function (category, btn) {
+    currentFaqCategory = category;
+    
+    // Cambiar estado activo de los botones de categoría
+    document.querySelectorAll('.faq-tag-btn').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    if (btn) btn.classList.add('active');
+    
+    applyFaqFilters();
+  };
+
+  window.filterFaqs = function () {
+    applyFaqFilters();
+  };
+
+  function applyFaqFilters() {
+    var query = document.getElementById('faq-search-input').value.toLowerCase().trim();
+    
+    document.querySelectorAll('.faq-item').forEach(function (item) {
+      var itemCategory = item.getAttribute('data-category');
+      var qText = item.querySelector('.faq-trigger span').textContent.toLowerCase();
+      var aText = item.querySelector('.faq-answer p').textContent.toLowerCase();
+      
+      var matchesCategory = (currentFaqCategory === 'todos' || itemCategory === currentFaqCategory);
+      var matchesSearch = (query === '' || qText.includes(query) || aText.includes(query));
+      
+      if (matchesCategory && matchesSearch) {
+        item.style.display = 'block';
+        item.style.opacity = '1';
+        item.style.transform = 'translateY(0)';
+      } else {
+        item.style.display = 'none';
+        item.classList.remove('active');
+        var trigger = item.querySelector('.faq-trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        var answer = item.querySelector('.faq-answer');
+        if (answer) answer.style.maxHeight = null;
+      }
+    });
+  }
+
+  // ─── CALCULADORA DE MEGAS (ACTIVIDADES Y DISPOSITIVOS) ───
+  var plansList = [
+    { id: '10mb', speed: 10, name: 'Plan Inicial', desc: 'Ideal para redes sociales, chat y navegación básica de pocos dispositivos.', price: 900 },
+    { id: '20mb', speed: 20, name: 'Plan Bronce', desc: 'Ideal para familias pequeñas, streaming de video HD y navegación fluida.', price: 1000 },
+    { id: '50mb', speed: 50, name: 'Plan Plata', desc: 'Perfecto para teletrabajo, múltiples streamings HD y descargas rápidas.', price: 1500 },
+    { id: '100mb', speed: 100, name: 'Plan Oro', desc: 'Ideal para hogares conectados, streaming 4K, descargas pesadas y gaming.', price: 2000 },
+    { id: '200mb', speed: 200, name: 'Plan Platino', desc: 'Ideal para teletrabajo intensivo, gaming competitivo y muchos dispositivos concurrentes.', price: 2500 },
+    { id: '300mb', speed: 300, name: 'Plan Ultra', desc: 'Velocidad premium para creadores de contenido, streaming 4K/8K y domótica completa.', price: 3000 },
+    { id: '400mb', speed: 400, name: 'Plan Pro', desc: 'Velocidad ultra-rápida para máxima demanda y descargas de gran volumen.', price: 4000 },
+    { id: '500mb', speed: 500, name: 'Plan Élite', desc: 'La máxima potencia disponible. Velocidad empresarial para el hogar del futuro.', price: 5000 }
+  ];
+
+  var currentRecommendedPlan = plansList[0];
+
+  window.toggleCalcActivity = function (el) {
+    el.classList.toggle('active');
+    window.updateMegasCalc();
+  };
+
+  window.updateMegasCalc = function () {
+    var sum = 0;
+    var activeCards = document.querySelectorAll('.calc-activity-card.active');
+    activeCards.forEach(function (card) {
+      sum += parseInt(card.getAttribute('data-speed') || 0);
+    });
+
+    var slider = document.getElementById('devices-slider');
+    if (!slider) return;
+    var devices = parseInt(slider.value);
+    
+    var label = document.getElementById('devices-count-label');
+    if (label) {
+      if (devices === 25) {
+        label.textContent = '25+ Dispositivos';
+      } else if (devices === 1) {
+        label.textContent = '1 Dispositivo';
+      } else {
+        label.textContent = devices + ' Dispositivos';
+      }
+    }
+
+    if (sum === 0) sum = 5;
+    var requiredSpeed = sum * (1 + (devices - 1) * 0.12);
+
+    var matchingPlan = plansList[0];
+    for (var i = 0; i < plansList.length; i++) {
+      if (plansList[i].speed >= requiredSpeed) {
+        matchingPlan = plansList[i];
+        break;
+      }
+      matchingPlan = plansList[i];
+    }
+
+    currentRecommendedPlan = matchingPlan;
+
+    var sugMegas = document.getElementById('calc-sug-megas');
+    if (sugMegas) sugMegas.innerHTML = matchingPlan.speed + ' <span>Mbps</span>';
+    
+    var planName = document.getElementById('calc-plan-name');
+    if (planName) planName.textContent = matchingPlan.name;
+    
+    var planDesc = document.getElementById('calc-plan-desc');
+    if (planDesc) planDesc.textContent = matchingPlan.desc;
+    
+    var planPrice = document.getElementById('calc-plan-price');
+    if (planPrice) planPrice.textContent = 'RD$ ' + matchingPlan.price.toLocaleString() + ' / mes';
+  };
+
+  window.requestSuggestedPlan = function () {
+    if (!currentRecommendedPlan) return;
+    
+    var fullName = currentRecommendedPlan.name + ' ' + currentRecommendedPlan.speed + ' Megas';
+    var planId = currentRecommendedPlan.id;
+    var price = currentRecommendedPlan.price;
+
+    if (!currentUser) {
+      showToast('Por favor, inicia sesión para solicitar este plan', 'info');
+      setTimeout(function () {
+        window.location.href = 'login.html?redirect=internet.html';
+      }, 1500);
+    } else {
+      if (userData && userData.isInternetClient) {
+        window.openSupportModal('change_plan');
+        var speedSelect = document.getElementById('support-new-speed');
+        if (speedSelect) {
+          speedSelect.value = planId;
+        }
+      } else {
+        window.selectHiringPlan(fullName, planId, price);
+      }
+    }
+  };
+
+  // El test de velocidad real de Ookla Speedtest se ejecuta de forma nativa en el iframe de internet.html.
 
   // Auto-inicializar cuando el DOM esté listo
   window.addEventListener('DOMContentLoaded', init);
