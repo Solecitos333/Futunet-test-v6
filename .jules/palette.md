@@ -1,0 +1,3 @@
+## 2024-05-24 - Missing ARIA Labels in Dynamic Template Literals
+**Learning:** In vanilla JavaScript applications that rely on string-based template literals to dynamically generate UI components, static analysis tools and standard linters often fail to catch missing accessibility attributes (like `aria-label`) on interactive elements such as icon-only buttons.
+**Action:** When working on accessibility improvements in such codebases, proactively search for dynamically rendered HTML strings containing `<button>` tags (especially those containing only icons like `+`, `-`, or `&times;`) and manually inject the missing ARIA labels to ensure screen reader support.
