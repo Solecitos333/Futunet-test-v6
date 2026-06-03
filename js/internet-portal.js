@@ -12,6 +12,13 @@
   var selectedFile = null;
 
   // Inicialización
+  // Helper para ocultar la pantalla de carga del portal
+  function hidePortalLoading() {
+    var loader = document.getElementById('portal-loading-view');
+    if (loader) loader.style.display = 'none';
+  }
+
+  // Inicialización
   function init() {
     // Modo Solo Planes por query param ?view=planes
     var urlParams = new URLSearchParams(window.location.search);
@@ -25,12 +32,23 @@
       storage = window.FutunetFirebase.storage;
     }
 
-    // Escuchar cambios de Auth
+    // Escuchar cambios de Auth de forma segura
     FutunetAuth.authReady.then(function () {
-      firebase.auth().onAuthStateChanged(async function (user) {
+      FutunetAuth.onAuthChanged(async function (user, fullUserData) {
         if (user) {
           currentUser = user;
-          await loadPortalUser();
+          userData = fullUserData;
+          if (userData) {
+            // Verificar si es un cliente de internet configurado administrativamente
+            if (userData.isInternetClient) {
+              showPortalView();
+            } else {
+              showNoClientView();
+            }
+          } else {
+            // Fallback en caso de que no se hayan devuelto los datos completos en el listener
+            await loadPortalUser();
+          }
         } else {
           currentUser = null;
           userData = null;
@@ -44,14 +62,32 @@
     setupDropzone();
     setupForms();
 
+    // Cerrar modales al hacer clic fuera (en el background de la clase .portal-modal)
+    document.querySelectorAll('.portal-modal').forEach(function (modal) {
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) {
+          window.closePortalModals();
+        }
+      });
+    });
+
     // Auto-inicializar estado de la calculadora si existe el slider
     if (document.getElementById('devices-slider')) {
       window.updateMegasCalc();
     }
   }
 
-  // Carga datos del cliente de internet
+  // Carga datos del cliente de internet (Fallback)
   async function loadPortalUser() {
+    if (!db) {
+      console.warn('Database is not initialized. Showing public view.');
+      showPublicView();
+      return;
+    }
+    if (!currentUser) {
+      showPublicView();
+      return;
+    }
     try {
       var userDoc = await db.collection('users').doc(currentUser.uid).get();
       if (!userDoc.exists) {
@@ -74,6 +110,7 @@
 
   // Muestra landing pública
   function showPublicView() {
+    hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'block';
     document.getElementById('internet-portal-view').style.display = 'none';
     var container = document.querySelector('.portal-container');
@@ -82,6 +119,7 @@
 
   // Muestra Web App de autogestión
   function showPortalView() {
+    hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'none';
     document.getElementById('internet-portal-view').style.display = 'block';
     document.getElementById('portal-app-card').style.display = 'block';
@@ -133,6 +171,7 @@
 
   // Muestra vista si está logueado pero no tiene internet asociado
   function showNoClientView() {
+    hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'none';
     document.getElementById('internet-portal-view').style.display = 'block';
     document.getElementById('portal-app-card').style.display = 'none';
@@ -182,11 +221,32 @@
 
   // ─── COPYS DE CUENTAS EN UN CLIC ───
   window.copyText = function (text) {
-    navigator.clipboard.writeText(text).then(function () {
-      showToast('Copiado al portapapeles', 'success');
-    }).catch(function () {
-      showToast('Error al copiar', 'error');
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        if (window.showToast) window.showToast('Copiado al portapapeles', 'success');
+      }).catch(function () {
+        if (window.showToast) window.showToast('Error al copiar', 'error');
+      });
+    } else {
+      // Fallback para entornos inseguros (HTTP)
+      var textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        var successful = document.execCommand('copy');
+        if (successful) {
+          if (window.showToast) window.showToast('Copiado al portapapeles', 'success');
+        } else {
+          if (window.showToast) window.showToast('Error al copiar', 'error');
+        }
+      } catch (err) {
+        if (window.showToast) window.showToast('Error al copiar', 'error');
+      }
+      document.body.removeChild(textarea);
+    }
   };
 
   // ─── MODALES DEL PORTAL ───
@@ -238,13 +298,6 @@
     activePortalFocusTrap(modal);
   };
 
-  window.openHiringForm = function (planName) {
-    var modal = document.getElementById('hiring-modal');
-    document.getElementById('hiring-plan-name').value = planName;
-    document.getElementById('hiring-plan-label').textContent = planName;
-    modal.classList.add('is-active');
-    activePortalFocusTrap(modal);
-  };
 
   window.closePortalModals = function () {
     document.querySelectorAll('.portal-modal').forEach(function (m) {
@@ -336,8 +389,23 @@
         var amount = document.getElementById('pay-amount').value;
         var bank = document.getElementById('pay-bank').value;
 
+        // Validar base de datos y almacenamiento
+        if (!db || !storage) {
+          if (window.showToast) window.showToast('El servicio de base de datos no está disponible.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // Validar numéricamente el monto
+        var amountNum = parseFloat(amount);
+        if (isNaN(amountNum) || amountNum <= 0) {
+          if (window.showToast) window.showToast('Por favor introduce un monto de pago válido.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
         if (!selectedFile) {
-          showToast('Por favor sube la foto o PDF del comprobante', 'error');
+          if (window.showToast) window.showToast('Por favor sube la foto o PDF del comprobante', 'error');
           if (btn) btn.disabled = false;
           return;
         }
@@ -349,7 +417,7 @@
           var storagePath = 'vouchers/' + currentUser.uid + '/' + randomId + '_' + Date.now() + '.' + fileExt;
           
           var fileRef = storage.ref().child(storagePath);
-          showToast('Subiendo comprobante...', 'info');
+          if (window.showToast) window.showToast('Subiendo comprobante...', 'info');
           
           var uploadTask = await fileRef.put(selectedFile);
           var downloadUrl = await uploadTask.ref.getDownloadURL();
@@ -359,7 +427,7 @@
             userId: currentUser.uid,
             userName: userData.displayName || 'Cliente',
             userEmail: currentUser.email,
-            amount: parseFloat(amount),
+            amount: amountNum,
             bank: bank,
             voucherUrl: downloadUrl,
             storagePath: storagePath,
@@ -371,17 +439,17 @@
           // Registrar log de auditoría
           await db.collection('audit_logs').add({
             action: 'Reporte de pago',
-            details: 'Cliente reportó pago de RD$ ' + amount + ' vía ' + bank,
+            details: 'Cliente reportó pago de RD$ ' + amountNum + ' vía ' + bank,
             userId: currentUser.uid,
             userEmail: currentUser.email,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
 
-          showToast('Pago reportado exitosamente. Lo verificaremos a la brevedad.', 'success');
+          if (window.showToast) window.showToast('Pago reportado exitosamente. Lo verificaremos a la brevedad.', 'success');
           closePortalModals();
         } catch (err) {
           console.error('Error al subir pago:', err);
-          showToast('Error al enviar el reporte. Intenta nuevamente.', 'error');
+          if (window.showToast) window.showToast('Error al enviar el reporte. Intenta nuevamente.', 'error');
         }
 
         if (btn) btn.disabled = false;
@@ -400,6 +468,12 @@
         var details = document.getElementById('support-details').value.trim();
         var newSpeed = document.getElementById('support-new-speed').value;
 
+        if (!db) {
+          if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
         var ticketData = {
           userId: currentUser.uid,
           userName: userData.displayName || 'Cliente',
@@ -417,55 +491,17 @@
 
         try {
           await db.collection('internet_tickets').add(ticketData);
-          showToast('Solicitud enviada correctamente.', 'success');
+          if (window.showToast) window.showToast('Solicitud enviada correctamente.', 'success');
           closePortalModals();
           supportForm.reset();
         } catch (err) {
-          showToast('Error al enviar solicitud', 'error');
+          if (window.showToast) window.showToast('Error al enviar solicitud', 'error');
         }
         if (btn) btn.disabled = false;
       });
     }
 
-    // 3. Formulario de Contrato (Invitado)
-    var hiringForm = document.getElementById('hiring-form');
-    if (hiringForm) {
-      hiringForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        var btn = document.getElementById('hir-submit-btn');
-        if (btn) btn.disabled = true;
-
-        var name = document.getElementById('hir-name').value.trim();
-        var phone = document.getElementById('hir-phone').value.trim();
-        var email = document.getElementById('hir-email').value.trim();
-        var address = document.getElementById('hir-address').value.trim();
-        var planName = document.getElementById('hiring-plan-name').value;
-
-        try {
-          await db.collection('service_requests').add({
-            name: name,
-            phone: phone,
-            email: email,
-            message: 'Solicitud de contratación de Internet: ' + planName + '.\nDirección: ' + address,
-            serviceId: 'internet',
-            serviceTitle: 'Internet Fibra Óptica',
-            planRequested: planName,
-            status: 'pending',
-            type: 'internet_hiring',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-
-          showToast('Solicitud recibida. Te contactaremos para coordinar la instalación.', 'success');
-          closePortalModals();
-          hiringForm.reset();
-        } catch (err) {
-          showToast('Error al registrar solicitud', 'error');
-        }
-        if (btn) btn.disabled = false;
-      });
-    }
-
-    // 4. Formulario de Contrato (Usuario Logueado sin Servicio desde Portal)
+    // 3. Formulario de Contrato (Usuario Logueado sin Servicio desde Portal)
     var portalHiringForm = document.getElementById('portal-hiring-form');
     if (portalHiringForm) {
       portalHiringForm.addEventListener('submit', async function (e) {
@@ -482,6 +518,12 @@
         var notes = document.getElementById('p-hir-notes').value.trim();
         var planName = document.getElementById('p-hir-plan-name').value;
         var planId = document.getElementById('p-hir-plan-id').value;
+
+        if (!db) {
+          if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
 
         try {
           // Dar formato a la dirección, fecha y comentarios en la propiedad message requerida por las reglas de Firestore
@@ -533,7 +575,7 @@
           }
         } catch (err) {
           console.error('Error al registrar solicitud de internet:', err);
-          showToast('Error al registrar solicitud. Intenta de nuevo.', 'error');
+          if (window.showToast) window.showToast('Error al registrar solicitud. Intenta de nuevo.', 'error');
         }
         if (btn) btn.disabled = false;
       });

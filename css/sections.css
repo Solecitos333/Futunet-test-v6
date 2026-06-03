@@ -822,7 +822,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   .footer-grid { gap: 20px; padding-bottom: 20px; }
   .footer-brand p { font-size: .82rem; margin-top: 8px; line-height: 1.65; max-width: none; }
   .footer-logo-img {
-    width: clamp(132px, 42vw, 156px);
+    width: clamp(110px, 35vw, 130px);
     height: auto;
   }
   .footer-col h5 { font-size: .7rem; margin-bottom: 10px; }

@@ -126,7 +126,7 @@ body.is-loading {
   opacity: 0; visibility: hidden; pointer-events: none;
 }
 .preloader-logo {
-  width: clamp(186px, 34vw, 264px);
+  width: clamp(150px, 28vw, 220px);
   height: auto;
   filter: drop-shadow(0 10px 24px rgba(11, 126, 181, 0.08));
   animation: preloaderPulse .9s ease-in-out infinite;
@@ -386,7 +386,7 @@ body.is-loading {
   margin-bottom: 6px;
 }
 .footer-logo-img {
-  width: clamp(138px, 18vw, 176px);
+  width: clamp(110px, 14vw, 140px);
   height: auto;
   max-width: 100%;
   filter: brightness(0) invert(1);

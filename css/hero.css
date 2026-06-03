@@ -456,8 +456,8 @@
 
 .hero-brand-mark {
   position: relative;
-  width: clamp(320px, 84vw, 520px);
-  margin-bottom: 10px;
+  width: clamp(230px, 64vw, 300px);
+  margin-bottom: 15px;
   margin-inline: auto;
   align-self: center;
   display: block;
@@ -727,8 +727,8 @@
   }
   .hero-logo-anchor { display: none; }
   .hero-brand-mark {
-    width: clamp(430px, 56vw, 620px);
-    margin-bottom: 14px;
+    width: clamp(380px, 45vw, 480px);
+    margin-bottom: 20px;
   }
   .hero-badge {
     font-size: .7rem;
@@ -757,8 +757,8 @@
   }
 
   .hero-brand-mark {
-    width: clamp(360px, 54vw, 460px);
-    margin-bottom: 8px;
+    width: clamp(340px, 45vw, 420px);
+    margin-bottom: 12px;
   }
 
   .hero-badge {
@@ -846,8 +846,8 @@
     margin-bottom: 0;
   }
   .hero-brand-mark {
-    width: clamp(520px, 42vw, 720px);
-    margin-bottom: 14px;
+    width: clamp(480px, 38vw, 560px);
+    margin-bottom: 24px;
   }
   .hero-title { font-size: clamp(3.8rem, 4.8vw, 5.15rem); }
   .hero-desc { font-size: 1.1rem; }
@@ -880,8 +880,8 @@
   }
 
   .hero-brand-mark {
-    width: clamp(246px, 69vw, 344px);
-    margin-bottom: 8px;
+    width: clamp(230px, 64vw, 300px);
+    margin-bottom: 14px;
     animation: fadeUp .58s .12s both;
   }
 

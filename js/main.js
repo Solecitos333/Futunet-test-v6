@@ -1,4 +1,4 @@
-/* =============================================================
+﻿/* =============================================================
    MAIN.JS — Futunet SRL
    Funcionalidad global del sitio:
    - Efecto de scroll en el navbar (opacidad al bajar)
@@ -674,8 +674,8 @@ function injectLocalBusinessSchema() {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 19.476061,
-      "longitude": -70.715163
+      "latitude": 19.4819,
+      "longitude": -70.7200
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
@@ -746,4 +746,5 @@ window.showToast = function(msg, type) {
     setTimeout(function () { toast.remove(); }, 300);
   }, 4000);
 };
+
 
