@@ -839,18 +839,18 @@
 }
 
 /* Enlaces del navbar adaptados para fondo oscuro */
-#navbar .nav-menu li a {
+#navbar .nav-menu > li > a {
   color: rgba(255, 255, 255, 0.72) !important;
   transition: all 0.25s ease;
 }
 
-#navbar .nav-menu li a:hover {
+#navbar .nav-menu > li > a:hover {
   color: #ffffff !important;
   background: rgba(255, 255, 255, 0.05) !important;
   border-color: rgba(11, 126, 181, 0.15) !important;
 }
 
-#navbar .nav-menu li a.active {
+#navbar .nav-menu > li > a.active {
   color: #ffffff !important;
   background: rgba(11, 126, 181, 0.22) !important;
   border-color: rgba(11, 126, 181, 0.35) !important;

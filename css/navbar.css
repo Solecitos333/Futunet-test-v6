@@ -154,7 +154,7 @@
   margin-left: auto;
   list-style: none; position: relative; z-index: 2;
 }
-.nav-menu li a {
+.nav-menu > li > a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -166,13 +166,13 @@
   border-radius: 10px;
   transition: var(--transition);
 }
-.nav-menu li a:hover {
+.nav-menu > li > a:hover {
   color: var(--text-primary);
   background: var(--bg-secondary);
   border-color: rgba(11, 126, 181, 0.08);
 }
-.nav-menu li a.active,
-.nav-menu li a[aria-current="page"] {
+.nav-menu > li > a.active,
+.nav-menu > li > a[aria-current="page"] {
   color: var(--brand);
   background: var(--brand-pale);
   border-color: rgba(11, 126, 181, 0.12);
