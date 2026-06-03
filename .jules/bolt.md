@@ -1,0 +1,3 @@
+## 2024-06-03 - Optimize search result calculation and property normalization
+**Learning:** Search algorithms running on every keystroke against large datasets (`mockDatabase`) suffer significantly from chained array operations (`.map().filter().sort().map()`) which create multiple intermediate arrays. Also, redundant regex processing (like `normalizeSearch`) on object properties inside loops heavily bottlenecks search.
+**Action:** Replace functional array chains with imperative `for` loops to combine filtering and mapping in a single pass. Introduce dynamic property caching using `Object.defineProperty` with `enumerable: false` to memoize expensive string normalizations without leaking keys into serialization.
