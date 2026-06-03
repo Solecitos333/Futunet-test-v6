@@ -1,0 +1,3 @@
+## 2024-05-30 - Missing aria-labels on dynamically generated buttons
+**Learning:** Icon-only buttons that are dynamically generated using template literals in vanilla JavaScript files (like cart and product quantity controls) lack static analysis coverage for accessibility, making them prone to missing `aria-label` attributes.
+**Action:** Always explicitly add `aria-label` attributes (in Spanish, matching the app's localization) to icon-only buttons like `-` and `+` during dynamic HTML generation to ensure screen reader accessibility.
