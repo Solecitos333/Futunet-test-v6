@@ -155,7 +155,7 @@ var FUTUNET_LAYOUT = {
     var mobileMenu = document.getElementById('mobileMenu');
 
     if (desktopMenu) {
-      var lis = Array.from(desktopMenu.querySelectorAll('li'));
+      var lis = Array.from(desktopMenu.children).filter(function (el) { return el.tagName === 'LI'; });
       var liMap = {};
       var otherLis = [];
 
