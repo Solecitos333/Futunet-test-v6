@@ -75,6 +75,30 @@
     if (document.getElementById('devices-slider')) {
       window.updateMegasCalc();
     }
+
+    // Inicializar slider de precio y filtros si existe
+    if (document.getElementById('price-filter-slider')) {
+      window.updatePriceSliderVal();
+      
+      // Aplicar filtros por parámetro de tipo si viene en la URL
+      var typeParam = urlParams.get('type');
+      if (typeParam) {
+        var checkbox = document.querySelector('input[name="filter-plan-type"][value="' + typeParam + '"]');
+        if (checkbox) {
+          checkbox.checked = true;
+          // Ajustar el radio de servicio según corresponda
+          if (typeParam === 'multiplan') {
+            var radio = document.querySelector('input[name="filter-service"][value="television"]');
+            if (radio) radio.checked = true;
+          } else {
+            var radio = document.querySelector('input[name="filter-service"][value="internet"]');
+            if (radio) radio.checked = true;
+          }
+        }
+      }
+      
+      window.filterPlans();
+    }
   }
 
   // Carga datos del cliente de internet (Fallback)
@@ -181,6 +205,19 @@
 
     // Inicializar al primer paso del stepper
     goToHiringStep(1);
+
+    // Verificar si hay un plan de contratación pendiente en sessionStorage
+    var pendingPlanName = sessionStorage.getItem('pending_hiring_plan_name');
+    var pendingPlanId = sessionStorage.getItem('pending_hiring_plan_id');
+    var pendingPlanPrice = sessionStorage.getItem('pending_hiring_plan_price');
+    if (pendingPlanName && pendingPlanId && pendingPlanPrice) {
+      sessionStorage.removeItem('pending_hiring_plan_name');
+      sessionStorage.removeItem('pending_hiring_plan_id');
+      sessionStorage.removeItem('pending_hiring_plan_price');
+      setTimeout(function () {
+        window.selectHiringPlan(pendingPlanName, pendingPlanId, parseFloat(pendingPlanPrice));
+      }, 100);
+    }
 
     var logoutBtn = document.getElementById('no-client-logout-btn');
     if (logoutBtn) {
@@ -808,6 +845,204 @@
       setTimeout(function () {
         window.location.href = 'login.html?redirect=internet.html';
       }, 1500);
+    } else {
+      if (userData && userData.isInternetClient) {
+        window.openSupportModal('change_plan');
+        var speedSelect = document.getElementById('support-new-speed');
+        if (speedSelect) {
+          speedSelect.value = planId;
+        }
+      } else {
+        window.selectHiringPlan(fullName, planId, price);
+      }
+    }
+  };
+
+  // Lógica interactiva de planes estilo Claro: filtros, búsqueda, ordenamiento y selección
+  window.toggleCardDetail = function (btn) {
+    btn.classList.toggle('active');
+    var card = btn.closest('.claro-card');
+    var detailContent = card.querySelector('.claro-card-detail-content');
+    if (btn.classList.contains('active')) {
+      detailContent.style.maxHeight = detailContent.scrollHeight + "px";
+    } else {
+      detailContent.style.maxHeight = null;
+    }
+  };
+
+  window.updatePriceSliderVal = function () {
+    var slider = document.getElementById('price-filter-slider');
+    var display = document.getElementById('price-slider-val');
+    if (slider && display) {
+      display.textContent = 'RD$ ' + parseFloat(slider.value).toLocaleString();
+    }
+    window.filterPlans();
+  };
+
+  window.clearAllFilters = function () {
+    var radios = document.getElementsByName('filter-service');
+    radios.forEach(function (r) {
+      r.checked = (r.value === 'all');
+    });
+
+    var checkboxes = document.getElementsByName('filter-plan-type');
+    checkboxes.forEach(function (c) {
+      c.checked = false;
+    });
+
+    var slider = document.getElementById('price-filter-slider');
+    if (slider) {
+      slider.value = slider.max;
+    }
+    
+    var searchInput = document.getElementById('plan-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+
+    var sortSelect = document.getElementById('plan-sort-select');
+    if (sortSelect) {
+      sortSelect.value = 'default';
+    }
+
+    window.updatePriceSliderVal();
+    window.sortPlans();
+  };
+
+  var originalCardElements = [];
+
+  window.filterPlans = function () {
+    var serviceVal = 'all';
+    var radios = document.getElementsByName('filter-service');
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) {
+        serviceVal = radios[i].value;
+        break;
+      }
+    }
+
+    var checkedTypes = [];
+    var checkboxes = document.getElementsByName('filter-plan-type');
+    checkboxes.forEach(function (c) {
+      if (c.checked) {
+        checkedTypes.push(c.value);
+      }
+    });
+
+    var maxPrice = 5000;
+    var slider = document.getElementById('price-filter-slider');
+    if (slider) {
+      maxPrice = parseFloat(slider.value);
+    }
+
+    var searchQuery = '';
+    var searchInput = document.getElementById('plan-search-input');
+    if (searchInput) {
+      searchQuery = searchInput.value.toLowerCase().trim();
+    }
+
+    var cards = document.querySelectorAll('#claro-plans-grid .claro-card');
+    var visibleCount = 0;
+
+    cards.forEach(function (card) {
+      var cardService = card.getAttribute('data-service');
+      var cardType = card.getAttribute('data-type');
+      var cardPrice = parseFloat(card.getAttribute('data-price') || 0);
+      var cardName = (card.getAttribute('data-name') || '').toLowerCase();
+      var cardSpeed = (card.getAttribute('data-speed') || '').toLowerCase();
+
+      var matchesService = (serviceVal === 'all' || cardService === serviceVal);
+      var matchesType = (checkedTypes.length === 0 || checkedTypes.indexOf(cardType) !== -1);
+      var matchesPrice = (cardPrice <= maxPrice);
+      var matchesSearch = (searchQuery === '' || cardName.indexOf(searchQuery) !== -1 || cardSpeed.indexOf(searchQuery) !== -1);
+
+      if (matchesService && matchesType && matchesPrice && matchesSearch) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    var noResultsMsg = document.getElementById('no-plans-results');
+    var grid = document.getElementById('claro-plans-grid');
+    if (visibleCount === 0) {
+      if (!noResultsMsg && grid) {
+        noResultsMsg = document.createElement('div');
+        noResultsMsg.id = 'no-plans-results';
+        noResultsMsg.style.gridColumn = '1 / -1';
+        noResultsMsg.style.textAlign = 'center';
+        noResultsMsg.style.padding = '40px 20px';
+        noResultsMsg.style.color = '#64748b';
+        noResultsMsg.style.fontFamily = "'Outfit', sans-serif";
+        noResultsMsg.innerHTML = '<i class="fas fa-search" style="font-size:2.2rem; margin-bottom:12px; color:#cbd5e1;"></i><p style="font-weight:600; margin:0;">No se encontraron planes que coincidan con los filtros</p>';
+        grid.appendChild(noResultsMsg);
+      }
+      if (noResultsMsg) noResultsMsg.style.display = 'block';
+    } else if (noResultsMsg) {
+      noResultsMsg.style.display = 'none';
+    }
+  };
+
+  window.sortPlans = function () {
+    var grid = document.getElementById('claro-plans-grid');
+    if (!grid) return;
+
+    var select = document.getElementById('plan-sort-select');
+    if (!select) return;
+    var sortBy = select.value;
+
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.claro-card'));
+
+    if (originalCardElements.length === 0) {
+      originalCardElements = cards.slice();
+    }
+
+    if (sortBy === 'default') {
+      originalCardElements.forEach(function (card) {
+        grid.appendChild(card);
+      });
+    } else {
+      cards.sort(function (a, b) {
+        var priceA = parseFloat(a.getAttribute('data-price') || 0);
+        var priceB = parseFloat(b.getAttribute('data-price') || 0);
+        var speedA = parseFloat(a.getAttribute('data-speed') || 0);
+        var speedB = parseFloat(b.getAttribute('data-speed') || 0);
+
+        if (sortBy === 'price-asc') {
+          return priceA - priceB;
+        } else if (sortBy === 'price-desc') {
+          return priceB - priceA;
+        } else if (sortBy === 'speed-desc') {
+          return speedB - speedA;
+        }
+        return 0;
+      });
+
+      cards.forEach(function (card) {
+        grid.appendChild(card);
+      });
+    }
+
+    var noResultsMsg = document.getElementById('no-plans-results');
+    if (noResultsMsg && noResultsMsg.parentNode === grid) {
+      grid.appendChild(noResultsMsg);
+    }
+  };
+
+  window.selectClaroPlan = function (name, id, price) {
+    var fullName = name;
+    var planId = id;
+
+    if (!currentUser) {
+      sessionStorage.setItem('pending_hiring_plan_name', fullName);
+      sessionStorage.setItem('pending_hiring_plan_id', planId);
+      sessionStorage.setItem('pending_hiring_plan_price', price);
+
+      if (window.showToast) window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
+      setTimeout(function () {
+        window.location.href = 'login.html?redirect=internet.html';
+      }, 1200);
     } else {
       if (userData && userData.isInternetClient) {
         window.openSupportModal('change_plan');

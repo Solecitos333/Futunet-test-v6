@@ -355,3 +355,271 @@
     border-radius: 12px;
   }
 }
+
+/* ─── CLARO STYLE MEGA MENU & NAVBAR EXTENSIONS ─── */
+.claro-top-bar {
+  background: #f1f5f9;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+  padding: 6px 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+}
+.claro-top-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.claro-top-links {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.claro-top-links li a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.claro-top-links li a:hover, .claro-top-links li a.active {
+  color: #0A70A2;
+}
+.claro-top-right {
+  display: flex;
+  gap: 16px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.site-header #navbar {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-menu li.has-mega {
+  position: static;
+}
+
+.mega-trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Mega menu dropdown panel */
+.mega-menu-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: #ffffff;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: 3px solid #0A70A2;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+  padding: 36px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s;
+  z-index: 9999;
+}
+
+.nav-menu li.has-mega:hover .mega-menu-container {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.mega-menu-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+.mega-menu-col h5 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-left: 3px solid #0A70A2;
+  padding-left: 8px;
+}
+
+.mega-menu-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mega-menu-col ul li {
+  margin-bottom: 10px;
+}
+
+.mega-menu-col ul li a {
+  font-size: 0.86rem;
+  color: #475569;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.mega-menu-col ul li a:hover {
+  color: #0A70A2;
+  transform: translateX(4px);
+}
+
+.mega-menu-col ul li a i {
+  width: 14px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* Mi Claro Button Styling */
+.btn-mi-claro {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid #0A70A2;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0A70A2 !important;
+  background: transparent;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+
+.btn-mi-claro:hover {
+  background: #0A70A2;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(10, 112, 162, 0.15);
+}
+
+/* Mobile Accordion Styles */
+.mobile-details {
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.mobile-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 12px 14px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  list-style: none;
+}
+
+.mobile-summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-summary i {
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.mobile-details[open] .mobile-summary i {
+  transform: rotate(180deg);
+  color: #0A70A2;
+}
+
+.mobile-details-content {
+  padding: 4px 14px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(10, 112, 162, 0.01);
+}
+
+.mobile-details-section {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+.mobile-details-content a {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  min-height: 38px !important;
+  padding: 6px 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.mobile-details-content a:hover {
+  color: #0A70A2 !important;
+}
+
+@media (max-width: 1023px) {
+  .claro-top-bar {
+    display: none;
+  }
+  .nav-menu {
+    display: none;
+  }
+}
+
+/* Override nav-auth-login to match Claro-style btn-mi-claro */
+.nav-auth-login {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px !important;
+  border: 1.5px solid #0A70A2 !important;
+  border-radius: 50px !important;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  color: #0A70A2 !important;
+  background: transparent !important;
+  transition: all 0.25s;
+  text-decoration: none;
+  height: auto !important;
+}
+.nav-auth-login:hover {
+  background: #0A70A2 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(10, 112, 162, 0.15) !important;
+}

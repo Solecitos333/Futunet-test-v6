@@ -288,45 +288,211 @@
     </symbol>
   </svg>
 
-  <header class="site-header" role="banner">
+    <header class="site-header" role="banner">
+    <!-- Top Bar estilo Claro -->
+    <div class="claro-top-bar">
+      <div class="container">
+        <ul class="claro-top-links">
+          <li><a href="index.html" class="active">Personas</a></li>
+          <li><a href="#">Negocios</a></li>
+          <li><a href="#">Empresas</a></li>
+        </ul>
+        <div class="claro-top-right">
+          <span>Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem;"></i></span>
+          <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
+        </div>
+      </div>
+    </div>
+
     <nav id="navbar">
       <div class="nav-inner">
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
+        
+        <!-- Buscador compacto visible al hacer scroll -->
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
+
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          <li><a href="index.html#servicios">Servicios</a></li>
-          <li><a href="catalogo.html">Catálogo</a></li>
-          <li><a href="index.html#nosotros">Nosotros</a></li>
-          <li><a href="index.html#contacto">Contacto</a></li>
-          <li>
-            <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
-              <svg width="15" height="15"><use href="#wa-icon"/></svg>
-              829-741-1041
-            </a>
+          
+          <!-- Pestaña Servicios con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
+                  <ul>
+                    <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
+                    <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
+                    <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i> Fibra Óptica</a></li>
+                    <li><a href="internet.html"><i class="fas fa-satellite-dish"></i> Internet Inalámbrico</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Multiplan Doble (Internet + TV)</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
+                  <ul>
+                    <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
+                    <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
+                    <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i> Climatización y Energía</a></li>
+                    <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i> Remozamiento e Infraestructura</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-play" style="margin-right:6px; color:#0A70A2;"></i> Entretenimiento</h5>
+                  <ul>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Futunet Play (TV)</a></li>
+                    <li><a href="#"><i class="fas fa-film"></i> HBO Max</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Prime Video</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
+                  <ul>
+                    <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
-          <li class="nav-auth-wrapper" style="position:relative;">
-            <div class="navbar-auth-container"></div>
+
+          <!-- Pestaña Tienda con Mega Menu -->
+          <li class="has-mega">
+            <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
+                  <ul>
+                    <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
+                    <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
+                    <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i> Cámaras de Seguridad</a></li>
+                    <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i> Suministros e Impresoras</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
+                  <ul>
+                    <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i> Catálogo Completo</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
+                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
+                    <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
+                    <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Pestaña Soporte con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
+                  <ul>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
+
+        <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+          <!-- Botón Mi Cuenta con Auth dinámico -->
+          <div class="navbar-auth-container"></div>
+          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+            <svg width="15" height="15"><use href="#wa-icon"/></svg>
+            829-741-1041
+          </a>
+        </div>
+
         <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
+    
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      <a href="index.html#servicios" data-close-mobile-menu>Servicios</a>
-      <a href="catalogo.html" data-close-mobile-menu>Catálogo</a>
-      <a href="index.html#nosotros" data-close-mobile-menu>Nosotros</a>
-      <a href="index.html#contacto" data-close-mobile-menu>Contacto</a>
+      
+      <!-- Acordeones móviles nativos usando details -->
+      <details class="mobile-details">
+        <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <div class="mobile-details-section">Servicios Hogar</div>
+          <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
+          <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV)</a>
+          
+          <div class="mobile-details-section">Servicios Empresas</div>
+          <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
+          <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
+          <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
+          
+          <div class="mobile-details-section">Entretenimiento</div>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV)</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
+          <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
+          <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
+          <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+          <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
+          <a href="internet.html#planes" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
+        </div>
+      </details>
+
       <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
         <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
         829-741-1041
       </a>
-      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 16px 0;">
-      <div class="navbar-auth-container" style="display:flex; justify-content:center;"></div>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
     </div>
   </header>
 

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -774,6 +774,504 @@
         height: 500px;
       }
     }
+
+    /* ─── CLARO STYLE PLANS LAYOUT & CARDS ─── */
+    .claro-plans-layout {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 30px;
+      margin-top: 40px;
+      margin-bottom: 60px;
+      align-items: start;
+    }
+
+    /* Sidebar de Filtros */
+    .claro-sidebar {
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 20px;
+      padding: 24px;
+      position: sticky;
+      top: 110px;
+      box-shadow: 0 8px 30px rgba(15, 25, 35, 0.01);
+      z-index: 10;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1.5px solid rgba(15, 23, 42, 0.06);
+      padding-bottom: 12px;
+    }
+
+    .sidebar-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 0;
+    }
+
+    .btn-clear-filters {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      transition: color 0.2s;
+    }
+    
+    .btn-clear-filters:hover {
+      color: #e74c3c;
+    }
+
+    .filter-group {
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      padding: 16px 0;
+    }
+    
+    .filter-group:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .filter-group h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .filter-radio, .filter-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.84rem;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    
+    .filter-radio:hover, .filter-checkbox:hover {
+      color: #0A70A2;
+    }
+
+    .filter-radio input, .filter-checkbox input {
+      accent-color: #0A70A2;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .price-slider-wrapper {
+      padding: 4px 0;
+    }
+
+    .price-slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .price-range-slider {
+      width: 100%;
+      height: 5px;
+      border-radius: 5px;
+      background: #e2e8f0;
+      outline: none;
+      accent-color: #0A70A2;
+    }
+
+    /* Columna Derecha Principal */
+    .claro-plans-main {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Barra superior de controles */
+    .claro-plans-top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 6px 20px rgba(15, 25, 35, 0.01);
+    }
+
+    .claro-search-box {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0 12px;
+      background: #ffffff;
+      flex: 1;
+      max-width: 480px;
+      transition: border-color 0.2s;
+    }
+    
+    .claro-search-box:focus-within {
+      border-color: #0A70A2;
+    }
+
+    .claro-search-box .search-icon {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      margin-right: 10px;
+    }
+
+    .claro-search-box input {
+      border: none;
+      background: transparent;
+      outline: none;
+      padding: 10px 0;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      color: #0f172a;
+      flex: 1;
+    }
+
+    .btn-claro-search {
+      background: #0A70A2;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 10px;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-claro-search:hover {
+      background: #065176;
+    }
+
+    .claro-sort-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .claro-sort-box label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .claro-sort-box select {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 8px 12px;
+      background: #ffffff;
+      outline: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.84rem;
+      color: #475569;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    
+    .claro-sort-box select:focus {
+      border-color: #0A70A2;
+    }
+
+    /* Tarjetas de Plan Estilo Claro */
+    .claro-card {
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(15, 25, 35, 0.01);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .claro-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(10, 112, 162, 0.06);
+      border-color: rgba(10, 112, 162, 0.15);
+    }
+
+    .claro-card.popular {
+      border-color: rgba(10, 112, 162, 0.3);
+      background: linear-gradient(180deg, #ffffff 0%, #fcfdfe 100%);
+    }
+
+    .claro-badge-top {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: #64748b;
+      color: #ffffff;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      z-index: 5;
+    }
+
+    /* Cabecera curva de la tarjeta */
+    .claro-card-header {
+      background: linear-gradient(135deg, #09101d 0%, #1e293b 100%);
+      color: #ffffff;
+      padding: 32px 20px 24px;
+      text-align: center;
+      border-radius: 0 0 24px 24px; /* Cabecera curva inferior */
+      position: relative;
+    }
+
+    .claro-card-header-icon {
+      font-size: 1.5rem;
+      color: #3b82f6;
+      margin-bottom: 6px;
+    }
+    
+    .claro-card.popular .claro-card-header-icon {
+      color: #3b82f6;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+    }
+
+    .claro-card-header-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0 0 4px;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .claro-card-header-sub {
+      font-size: 0.76rem;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Cuerpo de la tarjeta */
+    .claro-card-body {
+      padding: 20px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .claro-detail-toggle {
+      background: transparent;
+      border: none;
+      color: #0A70A2;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0 auto 12px;
+      outline: none;
+      transition: color 0.2s;
+    }
+    
+    .claro-detail-toggle:hover {
+      color: #1da1db;
+    }
+
+    .claro-detail-toggle i {
+      font-size: 0.72rem;
+      transition: transform 0.2s;
+    }
+
+    .claro-detail-toggle.active i {
+      transform: rotate(180deg);
+    }
+
+    .claro-card-detail-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 8px;
+    }
+
+    .claro-card-detail-content ul {
+      list-style: none;
+      padding: 0 0 10px 0;
+      margin: 0;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    }
+
+    .claro-card-detail-content ul li {
+      font-size: 0.8rem;
+      color: #475569;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.35;
+    }
+
+    .claro-card-detail-content ul li i {
+      color: #2ecc71;
+      font-size: 0.8rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Precio */
+    .claro-price-block {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .claro-price-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .claro-price-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+      display: block;
+    }
+
+    .claro-price-taxes {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .claro-price-promo {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #fef3c7;
+      color: #d97706;
+      border: 1px solid rgba(217, 119, 6, 0.1);
+    }
+
+    /* Contenido Incluido */
+    .claro-included-content {
+      border-top: 1px solid rgba(15, 23, 42, 0.05);
+      padding-top: 14px;
+      margin-top: auto;
+      margin-bottom: 18px;
+    }
+
+    .claro-included-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .claro-included-icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .claro-included-icons span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    
+    .claro-included-icons span:hover {
+      background: #e2e8f0;
+      color: #0A70A2;
+    }
+
+    /* Botón Solicitar */
+    .claro-btn-solicitar {
+      width: 100%;
+      padding: 11px;
+      border-radius: 50px;
+      border: 1.5px solid #0A70A2;
+      background: #ffffff;
+      color: #0A70A2;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+      outline: none;
+    }
+
+    .claro-btn-solicitar:hover {
+      background: #0A70A2;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(10, 112, 162, 0.15);
+    }
+
+    /* Adaptabilidad */
+    @media (max-width: 991px) {
+      .claro-plans-layout {
+        grid-template-columns: 1fr;
+      }
+      .claro-sidebar {
+        position: relative;
+        top: 0;
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .claro-plans-top-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .claro-search-box {
+        max-width: none;
+      }
+      .claro-sort-box {
+        justify-content: space-between;
+      }
+    }
   </style>
 </head>
 <body class="is-loading">
@@ -792,45 +1290,211 @@
     </symbol>
   </svg>
 
-  <header class="site-header" role="banner">
+    <header class="site-header" role="banner">
+    <!-- Top Bar estilo Claro -->
+    <div class="claro-top-bar">
+      <div class="container">
+        <ul class="claro-top-links">
+          <li><a href="index.html" class="active">Personas</a></li>
+          <li><a href="#">Negocios</a></li>
+          <li><a href="#">Empresas</a></li>
+        </ul>
+        <div class="claro-top-right">
+          <span>Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem;"></i></span>
+          <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
+        </div>
+      </div>
+    </div>
+
     <nav id="navbar">
       <div class="nav-inner">
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
+        
+        <!-- Buscador compacto visible al hacer scroll -->
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
+
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          <li><a href="index.html#servicios">Servicios</a></li>
-          <li><a href="catalogo.html">Catálogo</a></li>
-          <li><a href="index.html#nosotros">Nosotros</a></li>
-          <li><a href="index.html#contacto">Contacto</a></li>
-          <li>
-            <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
-              <svg width="15" height="15"><use href="#wa-icon"/></svg>
-              829-741-1041
-            </a>
+          
+          <!-- Pestaña Servicios con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
+                  <ul>
+                    <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
+                    <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
+                    <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i> Fibra Óptica</a></li>
+                    <li><a href="internet.html"><i class="fas fa-satellite-dish"></i> Internet Inalámbrico</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Multiplan Doble (Internet + TV)</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
+                  <ul>
+                    <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
+                    <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
+                    <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i> Climatización y Energía</a></li>
+                    <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i> Remozamiento e Infraestructura</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-play" style="margin-right:6px; color:#0A70A2;"></i> Entretenimiento</h5>
+                  <ul>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Futunet Play (TV)</a></li>
+                    <li><a href="#"><i class="fas fa-film"></i> HBO Max</a></li>
+                    <li><a href="#"><i class="fas fa-video"></i> Prime Video</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
+                  <ul>
+                    <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
-          <li class="nav-auth-wrapper" style="position:relative;">
-            <div class="navbar-auth-container"></div>
+
+          <!-- Pestaña Tienda con Mega Menu -->
+          <li class="has-mega">
+            <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
+                  <ul>
+                    <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
+                    <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
+                    <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i> Cámaras de Seguridad</a></li>
+                    <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i> Suministros e Impresoras</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
+                  <ul>
+                    <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i> Catálogo Completo</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
+                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
+                    <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
+                    <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Pestaña Soporte con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
+                  <ul>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
+
+        <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+          <!-- Botón Mi Cuenta con Auth dinámico -->
+          <div class="navbar-auth-container"></div>
+          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+            <svg width="15" height="15"><use href="#wa-icon"/></svg>
+            829-741-1041
+          </a>
+        </div>
+
         <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
           <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
+    
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      <a href="index.html#servicios" data-close-mobile-menu>Servicios</a>
-      <a href="catalogo.html" data-close-mobile-menu>Catálogo</a>
-      <a href="index.html#nosotros" data-close-mobile-menu>Nosotros</a>
-      <a href="index.html#contacto" data-close-mobile-menu>Contacto</a>
+      
+      <!-- Acordeones móviles nativos usando details -->
+      <details class="mobile-details">
+        <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <div class="mobile-details-section">Servicios Hogar</div>
+          <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
+          <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV)</a>
+          
+          <div class="mobile-details-section">Servicios Empresas</div>
+          <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
+          <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
+          <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
+          
+          <div class="mobile-details-section">Entretenimiento</div>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV)</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
+          <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
+          <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
+          <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+          <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
+          <a href="internet.html#planes" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
+        </div>
+      </details>
+
       <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
         <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
         829-741-1041
       </a>
-      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 16px 0;">
-      <div class="navbar-auth-container" style="display:flex; justify-content:center;"></div>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
     </div>
   </header>
 
@@ -1004,256 +1668,573 @@
           </div>
         </div>
 
-        <!-- Selector Toggle para alternar categorías -->
-        <div class="plan-toggle-wrapper">
-          <div class="plan-toggle-container">
-            <button type="button" class="plan-toggle-btn public-toggle-btn active" data-category="hogar" onclick="togglePlanCategory('hogar', false)">
-              <i class="fas fa-home"></i> Planes Hogar
-            </button>
-            <button type="button" class="plan-toggle-btn public-toggle-btn" data-category="ultra" onclick="togglePlanCategory('ultra', false)">
-              <i class="fas fa-rocket"></i> Planes Ultra
-            </button>
-          </div>
-        </div>
-
-        <div class="plans-grid">
-          <!-- ─── CATEGORÍA: HOGAR ─── -->
+        <!-- Distribución Estilo Claro: Sidebar Filtros + Grid de Planes -->
+        <div class="claro-plans-layout reveal">
           
-          <!-- Plan 10M -->
-          <div class="plan-card" data-category="hogar">
-            <div class="plan-card-visual">
-              <img src="img/plan_hogar_basic.png" alt="Plan Inicial 10 Megas" class="plan-card-img" />
+          <!-- Barra Lateral: Filtrar Por -->
+          <aside class="claro-sidebar">
+            <div class="sidebar-header">
+              <h3><i class="fas fa-filter" style="color:#0A70A2; margin-right:6px;"></i> Filtrar por</h3>
+              <button type="button" class="btn-clear-filters" onclick="clearAllFilters()">Limpiar filtros</button>
             </div>
-            <span class="plan-badge-top">Económico</span>
-            <h3 class="plan-name">Plan Inicial</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">10 <span>Mega</span></div>
+            
+            <!-- Grupo 1: Categorías (Servicio) -->
+            <div class="filter-group">
+              <h4>Servicio</h4>
+              <label class="filter-radio">
+                <input type="radio" name="filter-service" value="all" checked onclick="filterPlans()" />
+                <span>Todos los servicios</span>
+              </label>
+              <label class="filter-radio">
+                <input type="radio" name="filter-service" value="internet" onclick="filterPlans()" />
+                <span>Solo Internet</span>
+              </label>
+              <label class="filter-radio">
+                <input type="radio" name="filter-service" value="television" onclick="filterPlans()" />
+                <span>Internet + TV</span>
+              </label>
             </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 10 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 5 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
-              <li><i class="fas fa-check"></i> Ideal para redes sociales y chat</li>
-              <li><i class="fas fa-check"></i> Latencia baja garantizada</li>
-              <li><i class="fas fa-check"></i> Soporte técnico 24/7</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 900 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Inicial%20de%2010%20Megas%20(5%20Mbps%20subida%20%2F%2010%20Mbps%20bajada)%20por%20RD%24%20900%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
 
-          <!-- Plan 20M -->
-          <div class="plan-card" data-category="hogar">
-            <div class="plan-card-visual">
-              <img src="img/plan_hogar_basic.png" alt="Plan Bronce 20 Megas" class="plan-card-img" />
+            <!-- Grupo 2: Tipo de Plan -->
+            <div class="filter-group">
+              <h4>Tipo de Plan</h4>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="filter-plan-type" value="simetrico" onclick="filterPlans()" />
+                <span>Internet Simétrico</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="filter-plan-type" value="fijo" onclick="filterPlans()" />
+                <span>Internet Fijo</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="filter-plan-type" value="multiplan" onclick="filterPlans()" />
+                <span>Multiplan (Internet + TV)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="filter-plan-type" value="ultra" onclick="filterPlans()" />
+                <span>Planes Pro (Ultra)</span>
+              </label>
             </div>
-            <span class="plan-badge-top">Familiar</span>
-            <h3 class="plan-name">Plan Bronce</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">20 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 20 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 10 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
-              <li><i class="fas fa-check"></i> Ideal para teletrabajo y clases</li>
-              <li><i class="fas fa-check"></i> Streaming HD y videos fluidos</li>
-              <li><i class="fas fa-check"></i> Soporte técnico 24/7</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 1,000 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Bronce%20de%2020%20Megas%20(10%20Mbps%20subida%20%2F%2020%20Mbps%20bajada)%20por%20RD%24%201%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
 
-          <!-- Plan 50M -->
-          <div class="plan-card popular" data-category="hogar">
-            <div class="plan-popular-badge">Recomendado</div>
-            <div class="plan-card-visual">
-              <img src="img/plan_hogar_premium.png" alt="Plan Plata 50 Megas" class="plan-card-img" />
+            <!-- Grupo 3: Slider de Rango de Precio -->
+            <div class="filter-group">
+              <h4>Precio Mensual</h4>
+              <div class="price-slider-wrapper">
+                <div class="price-slider-labels">
+                  <span>De: <strong>RD$ 900</strong></span>
+                  <span>A: <strong id="price-slider-val" style="color:#0A70A2; font-family:'Space Grotesk',sans-serif; font-size:0.95rem;">RD$ 5,000</strong></span>
+                </div>
+                <input type="range" id="price-filter-slider" min="900" max="5000" step="100" value="5000" oninput="updatePriceSliderVal()" class="price-range-slider" aria-label="Rango de precio de planes" />
+              </div>
             </div>
-            <span class="plan-badge-top">Más Vendido</span>
-            <h3 class="plan-name">Plan Plata</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">50 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 50 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 25 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Fibra óptica simétrica</li>
-              <li><i class="fas fa-check"></i> Streaming Ultra HD y Gaming</li>
-              <li><i class="fas fa-check"></i> Router WiFi inteligente incluido</li>
-              <li><i class="fas fa-check"></i> Soporte técnico prioritario</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 1,500 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Plata%20de%2050%20Megas%20(25%20Mbps%20subida%20%2F%2050%20Mbps%20bajada)%20por%20RD%24%201%2C500%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
+          </aside>
 
-          <!-- Plan 100M -->
-          <div class="plan-card" data-category="hogar">
-            <div class="plan-card-visual">
-              <img src="img/plan_hogar_premium.png" alt="Plan Oro 100 Megas" class="plan-card-img" />
-            </div>
-            <span class="plan-badge-top">Avanzado</span>
-            <h3 class="plan-name">Plan Oro</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">100 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 100 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 50 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Conexión simétrica premium</li>
-              <li><i class="fas fa-check"></i> Múltiples dispositivos a la vez</li>
-              <li><i class="fas fa-check"></i> Ideal para creadores y oficinas</li>
-              <li><i class="fas fa-check"></i> IP Pública disponible (Opcional)</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 2,000 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Oro%20de%20100%20Megas%20(50%20Mbps%20subida%20%2F%20100%20Mbps%20bajada)%20por%20RD%24%202%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
+          <!-- Contenido Principal: Buscador, Ordenamiento y Grid de Planes -->
+          <div class="claro-plans-main">
+            
+            <!-- Barra Superior de Controles -->
+            <div class="claro-plans-top-controls">
+              <!-- Buscador -->
+              <div class="claro-search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="plan-search-input" placeholder="Buscar por velocidad o nombre... (ej: Plata, 100M)" oninput="filterPlans()" aria-label="Buscar planes de internet" />
+                <button type="button" class="btn-claro-search" onclick="filterPlans()">Buscar</button>
+              </div>
 
-          <!-- ─── CATEGORÍA: ULTRA (Ocultos por defecto) ─── -->
+              <!-- Selector de Ordenamiento -->
+              <div class="claro-sort-box">
+                <label for="plan-sort-select">Ordenar por:</label>
+                <select id="plan-sort-select" onchange="sortPlans()">
+                  <option value="default">Recomendados</option>
+                  <option value="price-asc">Precio: Menor a mayor</option>
+                  <option value="price-desc">Precio: Mayor a menor</option>
+                  <option value="speed-desc">Velocidad: Mayor a menor</option>
+                </select>
+              </div>
+            </div>
 
-          <!-- Plan 200M -->
-          <div class="plan-card" data-category="ultra" style="display: none;">
-            <div class="plan-card-visual">
-              <img src="img/plan_ultra_pro.png" alt="Plan Platino 200 Megas" class="plan-card-img" />
-            </div>
-            <span class="plan-badge-top">Fibra Pro</span>
-            <h3 class="plan-name">Plan Platino</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">200 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 200 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Fibra óptica simétrica premium</li>
-              <li><i class="fas fa-check"></i> Descargas ultrarrápidas y gaming</li>
-              <li><i class="fas fa-check"></i> Router corporativo de alta gama</li>
-              <li><i class="fas fa-check"></i> Soporte prioritario 24/7</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 2,500 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Platino%20de%20200%20Megas%20(100%20Mbps%20subida%20%2F%2020%20Mbps%20bajada)%20por%20RD%24%202%2C500%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
+            <!-- Grid de Planes estilo Claro -->
+            <div class="plans-grid" id="claro-plans-grid">
+              
+              <!-- Tarjeta 1: Plan Inicial 10M -->
+              <div class="claro-card" data-service="internet" data-type="fijo" data-price="900" data-speed="10" data-name="Plan Inicial 10 Megas">
+                <span class="claro-badge-top">Económico</span>
+                <div class="claro-card-header">
+                  <div class="claro-card-header-icon"><i class="fas fa-wifi"></i></div>
+                  <div class="claro-card-header-title">10 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Óptica Hogar</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
+                      <li><i class="fas fa-check"></i> 10 Mbps Bajada / 5 Mbps Subida</li>
+                      <li><i class="fas fa-check"></i> Ideal para redes sociales y chat</li>
+                      <li><i class="fas fa-check"></i> Soporte técnico local 24/7</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 900</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo">Oferta: Instalación 50% Off</span>
+                  </div>
 
-          <!-- Plan 300M -->
-          <div class="plan-card" data-category="ultra" style="display: none;">
-            <div class="plan-card-visual">
-              <img src="img/plan_ultra_pro.png" alt="Plan Ultra 300 Megas" class="plan-card-img" />
-            </div>
-            <span class="plan-badge-top">Ancho de Banda</span>
-            <h3 class="plan-name">Plan Ultra</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">300 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 300 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Máxima velocidad residencial</li>
-              <li><i class="fas fa-check"></i> Streaming 4K en múltiples pantallas</li>
-              <li><i class="fas fa-check"></i> Redundancia y estabilidad superior</li>
-              <li><i class="fas fa-check"></i> Soporte VIP técnico inmediato</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 3,000 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Ultra%20de%20300%20Megas%20(100%20Mbps%20subida%20%2F%20300%20Mbps%20bajada)%20por%20RD%24%203%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Dual-Band"><i class="fas fa-router"></i></span>
+                      <span title="Soporte 24/7"><i class="fas fa-headset"></i></span>
+                    </div>
+                  </div>
 
-          <!-- Plan 400M -->
-          <div class="plan-card" data-category="ultra" style="display: none;">
-            <div class="plan-card-visual">
-              <img src="img/plan_ultra_elite.png" alt="Plan Pro 400 Megas" class="plan-card-img" />
-            </div>
-            <span class="plan-badge-top">Profesional</span>
-            <h3 class="plan-name">Plan Pro</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">400 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 400 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Ideal para creadores y streaming</li>
-              <li><i class="fas fa-check"></i> Latencia mínima para videollamadas</li>
-              <li><i class="fas fa-check"></i> IP Pública (Opcional incluida)</li>
-              <li><i class="fas fa-check"></i> Soporte VIP técnico inmediato</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 4,000 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20Pro%20de%20400%20Megas%20(100%20Mbps%20subida%20%2F%20400%20Mbps%20bajada)%20por%20RD%24%204%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Inicial 10 Megas', '10mb', 900)" class="claro-btn-solicitar">Solicitar</button>
+                  </div>
+                </div>
+              </div>
 
-          <!-- Plan 500M -->
-          <div class="plan-card" data-category="ultra" style="display: none;">
-            <div class="plan-card-visual">
-              <img src="img/plan_ultra_elite.png" alt="Plan Élite 500 Megas" class="plan-card-img" />
-            </div>
-            <span class="plan-badge-top">Máxima Potencia</span>
-            <h3 class="plan-name">Plan Élite</h3>
-            <div class="plan-speed-display">
-              <div class="plan-speed-val">500 <span>Mega</span></div>
-            </div>
-            <div class="plan-speed-detail">
-              <span class="speed-ind download"><i class="fas fa-arrow-down"></i> 500 Mbps Bajada</span>
-              <span class="speed-ind upload"><i class="fas fa-arrow-up"></i> 100 Mbps Subida</span>
-            </div>
-            <ul class="plan-features">
-              <li><i class="fas fa-check"></i> Velocidad empresarial en tu hogar</li>
-              <li><i class="fas fa-check"></i> Cero congestión, máxima capacidad</li>
-              <li><i class="fas fa-check"></i> Router WiFi 6 Premium incluido</li>
-              <li><i class="fas fa-check"></i> Soporte técnico VIP 24/7</li>
-            </ul>
-            <div class="plan-price-block">
-              <div class="plan-price-huge">RD$ 5,000 <span>/ mes</span></div>
-            </div>
-            <div class="plan-actions-group">
-              <a href="login.html?redirect=internet.html" class="plan-btn-primary"><i class="fas fa-user-plus"></i> Solicitar en Línea</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20interesa%20contratar%20el%20Plan%20%C3%89lite%20de%20500%20Megas%20(100%20Mbps%20subida%20%2F%20500%20Mbps%20bajada)%20por%20RD%24%205%2C000%2Fmes." target="_blank" class="plan-btn-secondary"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
-            </div>
-          </div>
-        </div> <!-- Cierre plans-grid -->
+              <!-- Tarjeta 2: Plan Bronce 20M -->
+              <div class="claro-card" data-service="internet" data-type="fijo" data-price="1000" data-speed="20" data-name="Plan Bronce 20 Megas">
+                <span class="claro-badge-top">Familiar</span>
+                <div class="claro-card-header">
+                  <div class="claro-card-header-icon"><i class="fas fa-wifi"></i></div>
+                  <div class="claro-card-header-title">20 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Óptica Hogar</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica directa (FTTH)</li>
+                      <li><i class="fas fa-check"></i> 20 Mbps Bajada / 10 Mbps Subida</li>
+                      <li><i class="fas fa-check"></i> Ideal para teletrabajo y clases online</li>
+                      <li><i class="fas fa-check"></i> Streaming HD y videos fluidos</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 1,000</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo">Oferta: Instalación 50% Off</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Dual-Band"><i class="fas fa-router"></i></span>
+                      <span title="Soporte 24/7"><i class="fas fa-headset"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Bronce 20 Megas', '20mb', 1000)" class="claro-btn-solicitar">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 3: Plan Plata 50M (Recomendado) -->
+              <div class="claro-card popular" data-service="internet" data-type="simetrico" data-price="1500" data-speed="50" data-name="Plan Plata 50 Megas">
+                <span class="claro-badge-top" style="background:#0A70A2;">Recomendado</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #0A70A2 0%, #1da1db 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-network-wired"></i></div>
+                  <div class="claro-card-header-title">50 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica FTTH</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica real</li>
+                      <li><i class="fas fa-check"></i> 50 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> Streaming Ultra HD 4K y gaming</li>
+                      <li><i class="fas fa-check"></i> Router WiFi inteligente incluido</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val" style="color:#0A70A2;">RD$ 1,500</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#e0f2fe; color:#0369a1;">Oferta: Instalación Gratis</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Inteligente Dual"><i class="fas fa-router"></i></span>
+                      <span title="Soporte VIP"><i class="fas fa-user-shield"></i></span>
+                      <span title="HBO Max x 1 mes"><i class="fas fa-tv"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Plata 50 Megas', '50mb', 1500)" class="claro-btn-solicitar" style="background:#0A70A2; color:#fff; border-color:#0A70A2;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 4: Plan Oro 100M -->
+              <div class="claro-card" data-service="internet" data-type="simetrico" data-price="2000" data-speed="100" data-name="Plan Oro 100 Megas">
+                <span class="claro-badge-top">Avanzado</span>
+                <div class="claro-card-header">
+                  <div class="claro-card-header-icon"><i class="fas fa-network-wired"></i></div>
+                  <div class="claro-card-header-title">100 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica FTTH</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica premium</li>
+                      <li><i class="fas fa-check"></i> 100 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> Conexión para múltiples dispositivos</li>
+                      <li><i class="fas fa-check"></i> IP Pública disponible (Opcional)</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 2,000</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo">Oferta: Instalación Gratis</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Inteligente Dual"><i class="fas fa-router"></i></span>
+                      <span title="Soporte VIP"><i class="fas fa-user-shield"></i></span>
+                      <span title="HBO Max x 1 mes"><i class="fas fa-tv"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Oro 100 Megas', '100mb', 2000)" class="claro-btn-solicitar">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 5: Plan Doble Inicial (10 Mbps + TV) -->
+              <div class="claro-card" data-service="television" data-type="multiplan" data-price="1695" data-speed="10" data-name="Plan Doble Inicial 10 Mbps + TV">
+                <span class="claro-badge-top" style="background:#22c55e;">Multiplan Doble</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-tv"></i></div>
+                  <div class="claro-card-header-title">10 Mbps + TV</div>
+                  <div class="claro-card-header-sub">Internet + 80 Canales</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Internet Fibra Óptica 10 Mbps</li>
+                      <li><i class="fas fa-check"></i> Futunet Play TV con 80 canales HD</li>
+                      <li><i class="fas fa-check"></i> 1 Caja Convertidora Smart TV Box</li>
+                      <li><i class="fas fa-check"></i> Instalación en 48 horas</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 1,695</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dcfce7; color:#15803d;">Oferta: Instalación 50% Off</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Router"><i class="fas fa-router"></i></span>
+                      <span title="TV Box"><i class="fas fa-tv"></i></span>
+                      <span title="Futunet Play"><i class="fas fa-play-circle"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Doble Inicial 10 Mbps + TV', '10mb_tv', 1695)" class="claro-btn-solicitar" style="border-color:#16a34a; color:#16a34a;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 6: Plan Doble Plata (50 Mbps + TV) -->
+              <div class="claro-card" data-service="television" data-type="multiplan" data-price="2295" data-speed="50" data-name="Plan Doble Plata 50 Mbps + TV">
+                <span class="claro-badge-top" style="background:#22c55e;">Multiplan Doble</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-tv"></i></div>
+                  <div class="claro-card-header-title">50 Mbps + TV</div>
+                  <div class="claro-card-header-sub">Internet + 120 Canales</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Internet Simétrico de 50 Mbps</li>
+                      <li><i class="fas fa-check"></i> Futunet Play TV con 120 canales HD</li>
+                      <li><i class="fas fa-check"></i> Pausa en vivo y retroceder canales</li>
+                      <li><i class="fas fa-check"></i> 1 Caja Convertidora Smart TV Box</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 2,295</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dcfce7; color:#15803d;">Oferta: Instalación Gratis + HBO Max</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Inteligente"><i class="fas fa-router"></i></span>
+                      <span title="TV Box"><i class="fas fa-tv"></i></span>
+                      <span title="Futunet Play"><i class="fas fa-play-circle"></i></span>
+                      <span title="HBO Max x 3 meses"><i class="fas fa-compact-disc"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Doble Plata 50 Mbps + TV', '50mb_tv', 2295)" class="claro-btn-solicitar" style="border-color:#16a34a; color:#16a34a;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 7: Plan Doble Oro (100 Mbps + TV) -->
+              <div class="claro-card" data-service="television" data-type="multiplan" data-price="2895" data-speed="100" data-name="Plan Doble Oro 100 Mbps + TV">
+                <span class="claro-badge-top" style="background:#22c55e;">Multiplan Doble</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-tv"></i></div>
+                  <div class="claro-card-header-title">100 Mbps + TV</div>
+                  <div class="claro-card-header-sub">Internet + 140 Canales</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Internet Simétrico de 100 Mbps</li>
+                      <li><i class="fas fa-check"></i> Futunet Play TV con 140 canales HD</li>
+                      <li><i class="fas fa-check"></i> Canales de Deportes y Estrenos Premium</li>
+                      <li><i class="fas fa-check"></i> 1 Caja Convertidora Smart TV Box</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 2,895</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dcfce7; color:#15803d;">Oferta: Instalación Gratis + HBO & Prime</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Inteligente"><i class="fas fa-router"></i></span>
+                      <span title="TV Box"><i class="fas fa-tv"></i></span>
+                      <span title="Futunet Play"><i class="fas fa-play-circle"></i></span>
+                      <span title="HBO Max"><i class="fas fa-compact-disc"></i></span>
+                      <span title="Prime Video x 3 meses"><i class="fas fa-video"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Doble Oro 100 Mbps + TV', '100mb_tv', 2895)" class="claro-btn-solicitar" style="border-color:#16a34a; color:#16a34a;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 8: Plan Platino 200M -->
+              <div class="claro-card" data-service="internet" data-type="ultra" data-price="2500" data-speed="200" data-name="Plan Platino 200 Megas">
+                <span class="claro-badge-top" style="background:#3b82f6;">Planes Pro</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="claro-card-header-title">200 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica Ultra</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica de alta velocidad</li>
+                      <li><i class="fas fa-check"></i> 200 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> Prioridad de enrutamiento y bajo ping</li>
+                      <li><i class="fas fa-check"></i> Router corporativo de alto rendimiento</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 2,500</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dbeafe; color:#1e40af;">Oferta: Instalación Gratis</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Corporativo"><i class="fas fa-router"></i></span>
+                      <span title="Prioridad de Red"><i class="fas fa-signal"></i></span>
+                      <span title="Soporte VIP 24/7"><i class="fas fa-user-shield"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Platino 200 Megas', '200mb', 2500)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 9: Plan Ultra 300M -->
+              <div class="claro-card" data-service="internet" data-type="ultra" data-price="3000" data-speed="300" data-name="Plan Ultra 300 Megas">
+                <span class="claro-badge-top" style="background:#3b82f6;">Planes Pro</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="claro-card-header-title">300 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica Ultra</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica de ultra velocidad</li>
+                      <li><i class="fas fa-check"></i> 300 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> Router Mesh WiFi 6 de última generación</li>
+                      <li><i class="fas fa-check"></i> Ideal para domótica completa y streaming 4K</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 3,000</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dbeafe; color:#1e40af;">Oferta: Router Mesh WiFi 6 Incluido</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="Router WiFi 6 Mesh"><i class="fas fa-router"></i></span>
+                      <span title="Prioridad de Red"><i class="fas fa-signal"></i></span>
+                      <span title="Soporte VIP 24/7"><i class="fas fa-user-shield"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Ultra 300 Megas', '300mb', 3000)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 10: Plan Pro 400M -->
+              <div class="claro-card" data-service="internet" data-type="ultra" data-price="4000" data-speed="400" data-name="Plan Pro 400 Megas">
+                <span class="claro-badge-top" style="background:#3b82f6;">Planes Pro</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="claro-card-header-title">400 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica Ultra</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica profesional</li>
+                      <li><i class="fas fa-check"></i> 400 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> IP Pública Fija (Opcional e incluida)</li>
+                      <li><i class="fas fa-check"></i> Router Mesh de alta capacidad</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 4,000</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dbeafe; color:#1e40af;">Oferta: IP Pública Fija Gratis</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="Router WiFi 6 Mesh"><i class="fas fa-router"></i></span>
+                      <span title="IP Pública Fija"><i class="fas fa-globe"></i></span>
+                      <span title="Prioridad de Red"><i class="fas fa-signal"></i></span>
+                      <span title="Soporte VIP 24/7"><i class="fas fa-user-shield"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Pro 400 Megas', '400mb', 4000)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tarjeta 11: Plan Élite 500M -->
+              <div class="claro-card" data-service="internet" data-type="ultra" data-price="5000" data-speed="500" data-name="Plan Élite 500 Megas">
+                <span class="claro-badge-top" style="background:#3b82f6;">Planes Pro</span>
+                <div class="claro-card-header" style="background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);">
+                  <div class="claro-card-header-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="claro-card-header-title">500 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Simétrica Ultra</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Máxima velocidad residencial disponible</li>
+                      <li><i class="fas fa-check"></i> 500 Mbps de subida y bajada</li>
+                      <li><i class="fas fa-check"></i> IP Pública Fija de Red Dedicada</li>
+                      <li><i class="fas fa-check"></i> Router Mesh WiFi 6 Premium</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 5,000</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#dbeafe; color:#1e40af;">Oferta: Configuración y Soporte VIP 24/7</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="Router WiFi 6 Mesh Premium"><i class="fas fa-router"></i></span>
+                      <span title="IP Pública Fija"><i class="fas fa-globe"></i></span>
+                      <span title="Prioridad Dedicada"><i class="fas fa-signal"></i></span>
+                      <span title="Soporte VIP 24/7"><i class="fas fa-user-shield"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Élite 500 Megas', '500mb', 5000)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
+            </div> <!-- Cierre plans-grid -->
+          </div> <!-- Cierre claro-plans-main -->
+        </div> <!-- Cierre claro-plans-layout -->
       </div> <!-- Cierre container -->
 
 
