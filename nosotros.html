@@ -1,56 +1,103 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo Corporativo - Futunet</title>
-  <meta
-    name="description"
-    content="Explora el catálogo corporativo de Futunet. Seguridad, redes, energía, equipos de oficina e infraestructura para cotizar con confianza."
-  />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Catálogo Corporativo - Futunet" />
-  <meta property="og:description" content="Explora el catálogo corporativo de Futunet y encuentra productos y servicios para cotizar con confianza." />
-  <meta property="og:image" content="https://futunet.com.do/img/logo.webp" />
-  <meta property="og:image:width" content="1024" />
-  <meta property="og:image:height" content="1024" />
-  <meta property="og:url" content="https://futunet.com.do/catalogo.html" />
-  <meta property="og:locale" content="es_DO" />
-  <meta property="og:site_name" content="Futunet" />
+  <title>Quiénes Somos — Futunet</title>
+  <meta name="description" content="Conoce la historia, misión, visión y valores de Futunet. Tu socio en soluciones tecnológicas, telecomunicaciones y servicios integrales en Santiago, RD." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.3" />
-  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.0" />
-  <link rel="stylesheet" href="css/auth.css?v=3.0" />
-  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
   <link rel="icon" type="image/png" href="img/logo.webp" />
-  <meta name="theme-color" content="#0B7EB5" />
+  <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Catálogo Corporativo - Futunet" />
-  <meta name="twitter:description" content="Explora productos y servicios de Futunet para cotizar con confianza." />
-  <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
-  <link rel="canonical" href="https://futunet.com.do/catalogo.html" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <style>
+    .about-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
+    
+    .about-hero {
+      position: relative; height: 360px; display: flex; align-items: center;
+      background-size: cover; background-position: center; color: #fff; overflow: hidden;
+      background-image: url('img/hero-tech-bg.webp');
+    }
+    .about-hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(9,16,24,0.3) 0%, rgba(9,16,24,0.85) 100%);
+      z-index: 1;
+    }
+    .about-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
+    .about-hero-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+    .about-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
+
+    .about-section { padding: 70px 0; }
+    .about-history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    
+    .about-history-text h2 {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #0a101d; margin: 0 0 20px;
+      line-height: 1.25;
+    }
+    .about-history-text p {
+      color: #394c60; font-size: 0.98rem; line-height: 1.7; margin-bottom: 20px;
+    }
+
+    .about-history-img {
+      border-radius: 28px; overflow: hidden; border: 1px solid rgba(10,112,162,0.08);
+      box-shadow: 0 20px 48px rgba(10,112,162,0.06); aspect-ratio: 4/3;
+    }
+    .about-history-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* Mision y Vision */
+    .mission-vision-section { background: #f8fafc; padding: 80px 0; }
+    .mission-vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .mv-card {
+      background: #ffffff; padding: 40px; border-radius: 24px; border: 1px solid rgba(10,112,162,0.05);
+      box-shadow: 0 10px 30px rgba(10,112,162,0.02); display: flex; flex-direction: column; gap: 20px;
+    }
+    .mv-icon-box {
+      width: 48px; height: 48px; border-radius: 14px; background: rgba(10,112,162,0.08);
+      display: flex; align-items: center; justify-content: center; color: #0A70A2;
+    }
+    .mv-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0; }
+    .mv-card p { color: #475569; font-size: 0.96rem; line-height: 1.7; margin: 0; }
+
+    /* Valores */
+    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
+    .value-card {
+      padding: 30px; border: 1px solid rgba(10,112,162,0.06); border-radius: 20px;
+      background: #ffffff; box-shadow: 0 8px 24px rgba(10,112,162,0.02); transition: all 0.3s;
+    }
+    .value-card:hover {
+      transform: translateY(-4px); box-shadow: 0 16px 36px rgba(10,112,162,0.06); border-color: rgba(10,112,162,0.15);
+    }
+    .value-card-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: rgba(10,112,162,0.06);
+      display: flex; align-items: center; justify-content: center; color: #0A70A2; margin-bottom: 20px;
+    }
+    .value-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0a101d; margin: 0 0 10px; }
+    .value-card p { font-size: 0.88rem; color: #64748b; line-height: 1.5; margin: 0; }
+
+    @media (max-width: 768px) {
+      .about-hero { height: 260px; }
+      .about-hero-title { font-size: 1.8rem; }
+      .about-hero-desc { font-size: 0.9rem; }
+      .about-history-grid { grid-template-columns: 1fr; gap: 30px; }
+      .about-history-img { order: -1; }
+      .mission-vision-grid { grid-template-columns: 1fr; gap: 30px; }
+    }
+  </style>
 </head>
-<body class="is-loading">
-  <div id="page-preloader" class="page-preloader" aria-hidden="true">
-    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="972" height="303" />
-    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
-  </div>
+<body>
 
-  <a href="#catalog-main-content" class="skip-link">Saltar al contenido</a>
-
-  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite">
-    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </symbol>
-  </svg>
-
-          <header class="site-header" role="banner">
+  <!-- El header será inyectado por replace_headers.js -->
+    <header class="site-header" role="banner">
     <!-- Top Bar estilo Claro -->
     <div class="claro-top-bar">
       <div class="container">
@@ -270,140 +317,100 @@
     </div>
   </header>
 
-  <div class="catalog-page-header">
-    <div class="container text-center">
-      <span class="section-label reveal">Compra con contexto</span>
-      <h1 class="section-title reveal">Catálogo Corporativo</h1>
-      <p class="section-sub reveal">Encuentra productos y servicios para tu empresa, tu oficina o tu proyecto sin perder tiempo entre categorías confusas.</p>
-    </div>
-  </div>
-
-  <main id="catalog-main-content" class="section catalog-main-shell" tabindex="-1">
-    <div class="container ecom-container">
-      <aside class="ecom-sidebar reveal">
-        <div class="sidebar-header">
-          <i data-lucide="layers"></i>
-          <h3>Áreas del catálogo</h3>
+  <main class="about-page">
+    <!-- Hero Banner -->
+    <section class="about-hero">
+      <div class="container">
+        <div class="about-hero-content">
+          <h1 class="about-hero-title">Quiénes Somos</h1>
+          <p class="about-hero-desc">Innovación, criterio técnico y garantía real. Conoce la trayectoria y el compromiso de Futunet con el desarrollo tecnológico de la República Dominicana.</p>
         </div>
-        <div class="categories-nav-vertical">
-          <button class="cat-btn active" data-filter-dept="all" type="button">Todo el catálogo</button>
-          <button class="cat-btn" data-filter-dept="seguridad" type="button">Seguridad electrónica</button>
-          <button class="cat-btn" data-filter-dept="redes" type="button">Redes y datos</button>
-          <button class="cat-btn" data-filter-dept="energia" type="button">Energía y climatización</button>
-          <button class="cat-btn" data-filter-dept="equipos" type="button">Computación</button>
-          <button class="cat-btn" data-filter-dept="oficina" type="button">Papelería y mobiliario</button>
-          <button class="cat-btn" data-filter-dept="infra" type="button">Infraestructura</button>
-        </div>
-
-        <div class="sidebar-header" style="margin-top: 24px;">
-          <i data-lucide="dollar-sign"></i>
-          <h3>Rango de precios</h3>
-        </div>
-        <div class="price-filter-widget">
-          <div class="price-slider-container">
-            <input type="range" id="price-min" min="0" max="150000" step="1000" value="0" aria-label="Precio mínimo" />
-            <input type="range" id="price-max" min="0" max="150000" step="1000" value="150000" aria-label="Precio máximo" />
-            <div class="price-slider-track" id="price-track"></div>
-          </div>
-          <div class="price-range-values">
-            <span id="price-min-val">RD$ 0</span>
-            <span id="price-max-val">RD$ 150,000+</span>
-          </div>
-        </div>
-      </aside>
-
-      <div class="ecom-main">
-        <div class="catalog-section-header catalog-section-header--top">
-          <div class="catalog-heading-block">
-            <h2 class="cat-title" id="current-category-title">Catálogo completo</h2>
-            <p class="cat-desc">Busca por producto, marca o servicio y mantén siempre claro en qué área estás explorando.</p>
-            <div class="catalog-context-bar" id="catalog-context-bar">
-              <div class="catalog-context-bar__meta">
-                <span class="catalog-context-pill" id="catalog-results-pill">Explora todo el inventario</span>
-                <span class="catalog-context-pill catalog-context-pill--muted" id="catalog-active-pill">Sin filtros activos</span>
-              </div>
-              <button class="catalog-reset-trigger" id="catalog-reset-trigger" type="button" hidden>
-                Limpiar vista
-              </button>
-            </div>
-          </div>
-
-          <button class="catalog-mobile-filter-trigger" id="catalog-mobile-filter-trigger" type="button">
-            <i data-lucide="sliders-horizontal"></i>
-            <span>Filtros</span>
-          </button>
-
-          <div class="smart-search-wrapper smart-search-wrapper--compact">
-            <i data-lucide="search" class="smart-search-icon"></i>
-            <input
-              type="text"
-              id="search-catalog-page"
-              class="smart-search-input"
-              placeholder="Busca por producto, marca o servicio..."
-              autocomplete="off"
-              aria-label="Buscar dentro del catálogo"
-            />
-            <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-catalog-page">
-              <i data-lucide="arrow-right"></i>
-            </button>
-            <div id="search-drop-catalog" class="search-dropdown" aria-label="Resultados de búsqueda" role="listbox" aria-live="polite"></div>
-          </div>
-        </div>
-
-        <div id="catalog-grid-container" class="products-grid"></div>
       </div>
+    </section>
 
-      <div class="mobile-filter-sheet" id="mobile-filter-sheet" aria-hidden="true">
-        <div class="mobile-filter-sheet__backdrop" data-close-mobile-filters></div>
-        <div class="mobile-filter-sheet__panel">
-          <div class="mobile-filter-sheet__handle" aria-hidden="true"></div>
-          <div class="mobile-filter-sheet__header">
-            <div>
-              <h3>Explora por área</h3>
-              <p>Elige el departamento que quieres revisar y te muestro primero lo más relevante.</p>
-            </div>
-            <button class="mobile-filter-sheet__close" type="button" data-close-mobile-filters aria-label="Cerrar filtros">
-              <i data-lucide="x"></i>
-            </button>
+    <!-- Historia -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-history-grid">
+          <div class="about-history-text">
+            <h2>Nuestra Historia</h2>
+            <p>
+              Establecidos en Santiago de los Caballeros, Futunet nació con la clara visión de llenar la brecha existente en servicios tecnológicos de alto nivel con un soporte humano real, directo y profesional. Empezamos aportando soluciones de cableado y redes para locales locales, y hoy somos un integrador multiservicio de referencia.
+            </p>
+            <p>
+              A lo largo de nuestra trayectoria, hemos consolidado un catálogo que cubre telecomunicaciones (fibra óptica simétrica), seguridad electrónica, climatización, energía renovable, suministro de cómputo y remozamiento de infraestructura corporativa. Creemos en la honestidad comercial, en tiempos de entrega realistas y en un servicio posventa que brinda paz mental a nuestros clientes.
+            </p>
           </div>
-          <div class="mobile-filter-sheet__actions">
-            <button class="mobile-filter-clear-btn" type="button" data-filter-dept="all">Ver todo</button>
-          </div>
-          <div class="mobile-filter-sheet__actions" style="margin-top: 16px; padding: 0 10px;">
-            <h4 style="font-family:'Space Grotesk', sans-serif; font-size:1rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; color:var(--text-primary);"><i data-lucide="dollar-sign" style="width:16px; height:16px; color:var(--brand);"></i> Rango de precios</h4>
-            <div class="price-filter-widget">
-              <div class="price-slider-container">
-                <input type="range" id="mobile-price-min" min="0" max="150000" step="1000" value="0" aria-label="Precio mínimo móvil" />
-                <input type="range" id="mobile-price-max" min="0" max="150000" step="1000" value="150000" aria-label="Precio máximo móvil" />
-                <div class="price-slider-track" id="mobile-price-track"></div>
-              </div>
-              <div class="price-range-values">
-                <span id="mobile-price-min-val">RD$ 0</span>
-                <span id="mobile-price-max-val">RD$ 150,000+</span>
-              </div>
-            </div>
-          </div>
-          <div class="mobile-filter-sheet__list">
-            <button class="cat-btn active" data-filter-dept="all" type="button">Todo el catálogo</button>
-            <button class="cat-btn" data-filter-dept="seguridad" type="button">Seguridad electrónica</button>
-            <button class="cat-btn" data-filter-dept="redes" type="button">Redes y datos</button>
-            <button class="cat-btn" data-filter-dept="energia" type="button">Energía y climatización</button>
-            <button class="cat-btn" data-filter-dept="equipos" type="button">Computación</button>
-            <button class="cat-btn" data-filter-dept="oficina" type="button">Papelería y mobiliario</button>
-            <button class="cat-btn" data-filter-dept="infra" type="button">Infraestructura</button>
+          <div class="about-history-img">
+            <img src="img/hero-tech-bg.webp" alt="Oficinas e ingeniería Futunet" />
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Mision & Vision -->
+    <section class="mission-vision-section">
+      <div class="container">
+        <div class="mission-vision-grid">
+          <div class="mv-card">
+            <div class="mv-icon-box"><i data-lucide="target" style="width:24px; height:24px;"></i></div>
+            <h3>Nuestra Misión</h3>
+            <p>
+              Conectar y equipar a hogares y empresas dominicanas con soluciones tecnológicas integrales de alto estándar, brindando un soporte técnico ágil, transparente y de excelente calidad humana.
+            </p>
+          </div>
+          <div class="mv-card">
+            <div class="mv-icon-box"><i data-lucide="eye" style="width:24px; height:24px;"></i></div>
+            <h3>Nuestra Visión</h3>
+            <p>
+              Ser el socio estratégico de telecomunicaciones e infraestructura de referencia en la región norte y todo el país, reconocidos por nuestra ética comercial, criterio técnico y compromiso con la productividad de nuestros clientes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Valores -->
+    <section class="about-section">
+      <div class="container">
+        <div style="text-align: center; max-width: 600px; margin: 0 auto 50px;">
+          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:#0a101d;">Nuestros Valores</h2>
+          <p style="color:#64748b; font-size:0.95rem;">Los pilares éticos sobre los que construimos relaciones comerciales duraderas y seguras.</p>
+        </div>
+
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-card-icon"><i data-lucide="shield-check"></i></div>
+            <h4>Compromiso & Respaldo</h4>
+            <p>Cada proyecto que ejecutamos cuenta con garantía real y soporte posventa de alta respuesta.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card-icon"><i data-lucide="cpu"></i></div>
+            <h4>Innovación Técnica</h4>
+            <p>Trabajamos con fabricantes oficiales para proveer hardware moderno y metodologías eficientes.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card-icon"><i data-lucide="zoom-in"></i></div>
+            <h4>Transparencia Total</h4>
+            <p>Cotizaciones claras, presupuestos realistas y comunicación sin tecnicismos complejos.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-card-icon"><i data-lucide="heart"></i></div>
+            <h4>Calidad Humana</h4>
+            <p>Nos enfocamos en escuchar a nuestros clientes, resolviendo sus necesidades con empatía y cercanía.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-    <!-- Footer -->
+  <!-- Footer -->
   <footer role="contentinfo">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html#inicio" class="footer-logo-link">
-            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="972" height="303" loading="lazy" decoding="async" />
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="972" height="303" loading="lazy" />
           </a>
           <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
         </div>
@@ -428,116 +435,19 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© <span id="footer-year">2026</span> Futunet · Todos los derechos reservados</span>
+        <span>© <span id="footer-year"></span> Futunet · Todos los derechos reservados</span>
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
   </footer>
 
-  <script defer src="js/chatbot.js"></script>
-
-  <div id="product-modal" class="modal-overlay" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-      <button class="modal-close" type="button" data-close-product-modal aria-label="Cerrar ficha">
-        <i data-lucide="x"></i>
-      </button>
-      <div class="modal-body">
-        <div class="modal-gallery">
-          <div class="main-img-wrapper">
-            <img id="modal-main-img" src="" alt="" />
-          </div>
-          <div id="modal-thumbnails" class="modal-thumbnails"></div>
-        </div>
-
-        <div class="modal-info">
-          <span id="modal-brand" class="product-badge modal-brand-badge"></span>
-          <span id="modal-availability" class="modal-availability-pill">Disponible</span>
-          <h2 id="modal-title"></h2>
-          <div id="modal-price" class="modal-price"></div>
-          <div id="modal-meta-summary" class="modal-meta-summary"></div>
-          <div class="modal-actions">
-            <button class="btn btn-primary" id="modal-add-cart-btn" type="button">
-              <i data-lucide="shopping-cart"></i>
-              Añadir al carrito
-            </button>
-            <button class="btn btn-wa-quote" id="modal-quote-btn" type="button">
-              <i data-lucide="message-circle"></i>
-              Cotizar modelo exacto
-            </button>
-          </div>
-
-          <h4 class="modal-copy-title">Resumen del producto</h4>
-          <p id="modal-desc"></p>
-
-          <h4 class="specs-title">Especificaciones técnicas</h4>
-          <ul id="modal-specs" class="specs-list"></ul>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="mobile-bottom-bar mobile-bottom-bar--catalog" aria-label="Accesos rápidos móviles del catálogo">
-    <button class="mobile-bottom-bar__action" id="catalog-mobile-filter-bar-trigger" type="button">
-      <i data-lucide="sliders-horizontal"></i>
-      <span>Filtros</span>
-    </button>
-    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20cotizar%20un%20producto." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
-      <i data-lucide="message-circle"></i>
-      <span>WhatsApp</span>
-    </a>
-  </div>
-
-  <div id="cart-drawer" class="cart-drawer" aria-hidden="true">
-    <div class="cart-drawer__backdrop" data-close-cart></div>
-    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cart-drawer-title">
-      <div class="cart-drawer__header">
-        <div>
-          <span class="section-label">Carrito</span>
-          <h2 id="cart-drawer-title">Tu carrito de compra</h2>
-        </div>
-        <button type="button" class="cart-drawer__close" data-close-cart aria-label="Cerrar carrito">
-          <i data-lucide="x"></i>
-        </button>
-      </div>
-      <div id="cart-items-list" class="cart-drawer__items"></div>
-      <div class="cart-drawer__footer">
-        <div class="cart-drawer__summary"><span id="cart-summary-count">0 artículos</span></div>
-        <button type="button" class="btn btn-primary cart-drawer__checkout" id="cart-checkout-btn">
-          <i data-lucide="credit-card"></i>
-          Solicitar carrito por WhatsApp
-        </button>
-      </div>
-    </aside>
-  </div>
-
-  <button id="cart-fab" class="cart-fab is-empty" type="button" aria-label="Abrir carrito de compra" aria-controls="cart-drawer" aria-expanded="false">
-    <span class="cart-fab__label" id="cart-fab-label" aria-hidden="true" hidden>
-      <span class="cart-fab__label-count" id="cart-fab-label-count">0</span>
-      <span class="cart-fab__label-copy" id="cart-fab-label-copy">artículos</span>
-    </span>
-    <span class="cart-fab__icon"><i data-lucide="shopping-cart"></i></span>
-    <span class="cart-fab__count" id="cart-count">0</span>
-  </button>
-
-  <script defer src="js/config.js"></script>
-  <script defer src="js/cart.js"></script>
-  <script defer src="js/main.js?v=3.2"></script>
-  <script defer src="js/inventory_data.js"></script>
-  <script defer src="js/supplier_inventory.js"></script>
-  <script defer src="js/image_fixes.js?v=v9"></script>
-  <script defer src="js/catalog.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) lucide.createIcons();
-    });
-  </script>
-  <!-- Firebase Compat SDK -->
+  <!-- Firebase SDK -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script defer src="js/firebase-config.js"></script>
   <script defer src="js/auth.js"></script>
+  <script src="js/main.js?v=3.2"></script>
 </body>
 </html>
-

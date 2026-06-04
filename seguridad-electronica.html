@@ -21,7 +21,7 @@
   
   <!-- CSS Globales -->
   <link rel="stylesheet" href="css/main.css?v=3.0" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.2" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.3" />
   <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.0" />
   <link rel="stylesheet" href="css/catalog.css?v=3.0" />
@@ -55,17 +55,24 @@
   </svg>
 
   <!-- Header (Navbar exacto de la home) -->
-        <header class="site-header" role="banner">
+          <header class="site-header" role="banner">
     <!-- Top Bar estilo Claro -->
     <div class="claro-top-bar">
       <div class="container">
         <ul class="claro-top-links">
-          <li><a href="index.html" class="active">Personas</a></li>
-          <li><a href="#">Negocios</a></li>
-          <li><a href="#">Empresas</a></li>
+          <li><a href="index.html" class="top-link-personas">Personas</a></li>
+          <li><a href="negocios.html" class="top-link-negocios">Negocios</a></li>
+          <li><a href="empresas.html" class="top-link-empresas">Empresas</a></li>
         </ul>
         <div class="claro-top-right">
-          <span>Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem;"></i></span>
+          <div class="top-bar-dropdown">
+            <span class="top-bar-dropdown-trigger">Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:2px;"></i></span>
+            <ul class="top-bar-dropdown-menu">
+              <li><a href="nosotros.html"><i class="fas fa-info-circle"></i> Nosotros</a></li>
+              <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+              <li><a href="https://maps.google.com/maps?q=19.4819,-70.7200" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
+            </ul>
+          </div>
           <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
         </div>
       </div>
@@ -1086,7 +1093,7 @@
   <script defer src="js/config.js"></script>
   <script defer src="js/cart.js"></script>
   <script defer src="js/chatbot.js"></script>
-  <script defer src="js/main.js"></script>
+  <script defer src="js/main.js?v=3.2"></script>
   <script defer src="js/inventory_data.js"></script>
   <script defer src="js/supplier_inventory.js"></script>
   <script defer src="js/image_fixes.js?v=v9"></script>

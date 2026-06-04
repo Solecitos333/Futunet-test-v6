@@ -1,4 +1,4 @@
-﻿/* =============================================================
+/* =============================================================
    MAIN.JS — Futunet SRL
    Funcionalidad global del sitio:
    - Efecto de scroll en el navbar (opacidad al bajar)
@@ -746,5 +746,27 @@ window.showToast = function(msg, type) {
     setTimeout(function () { toast.remove(); }, 300);
   }, 4000);
 };
+
+// Resaltado dinámico del menú superior (Personas, Negocios, Empresas)
+document.addEventListener('DOMContentLoaded', () => {
+  var pathname = window.location.pathname;
+  var filename = pathname.substring(pathname.lastIndexOf('/') + 1) || 'index.html';
+
+  var topLinks = document.querySelectorAll('.claro-top-links a');
+  topLinks.forEach(function (a) {
+    a.classList.remove('active');
+  });
+
+  if (filename === 'negocios.html') {
+    var link = document.querySelector('.top-link-negocios');
+    if (link) link.classList.add('active');
+  } else if (filename === 'empresas.html') {
+    var link = document.querySelector('.top-link-empresas');
+    if (link) link.classList.add('active');
+  } else {
+    var link = document.querySelector('.top-link-personas');
+    if (link) link.classList.add('active');
+  }
+});
 
 
