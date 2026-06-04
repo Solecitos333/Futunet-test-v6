@@ -41,6 +41,99 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="twitter:card" content="summary_large_image" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+
+  <!-- SEO Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://futunet.com.do/#organization",
+        "name": "Futunet",
+        "alternateName": "Futunet SRL",
+        "url": "https://futunet.com.do/",
+        "logo": {
+          "@type": "ImageObject",
+          "@id": "https://futunet.com.do/#logo",
+          "url": "https://futunet.com.do/img/logo.png",
+          "caption": "Futunet Logo"
+        },
+        "image": {
+          "@id": "https://futunet.com.do/#logo"
+        },
+        "contactPoint": [
+          {
+            "@type": "ContactPoint",
+            "telephone": "+1-829-741-1041",
+            "contactType": "customer service",
+            "areaServed": "DO",
+            "availableLanguage": "es"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/futunet",
+          "https://wa.me/18297411041"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://futunet.com.do/#website",
+        "url": "https://futunet.com.do/",
+        "name": "Futunet",
+        "description": "La Tecnología del Futuro. Soluciones tecnológicas, seguridad electrónica, redes, equipos de oficina e infraestructura en Santiago, República Dominicana.",
+        "publisher": {
+          "@id": "https://futunet.com.do/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://futunet.com.do/catalogo.html?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": "https://futunet.com.do/#localbusiness",
+        "name": "Futunet -- Colinas",
+        "image": "https://futunet.com.do/img/logo.png",
+        "telephone": "+1-829-741-1041",
+        "url": "https://futunet.com.do/",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Calle 7 #1, Las Colinas",
+          "addressLocality": "Santiago de los Caballeros",
+          "addressRegion": "Santiago",
+          "postalCode": "51000",
+          "addressCountry": "DO"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 19.4819,
+          "longitude": -70.7200
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
+        ],
+        "priceRange": "$$"
+      }
+    ]
+  }
+  </script>
 </head>
 <body class="is-loading">
   <div id="page-preloader" class="page-preloader" aria-hidden="true">
