@@ -152,7 +152,7 @@
 .nav-menu {
   display: none; align-items: center; gap: 4px;
   margin-left: auto;
-  list-style: none; position: relative; z-index: 2;
+  list-style: none; position: static; z-index: 2;
 }
 .nav-menu > li > a {
   display: inline-flex;
