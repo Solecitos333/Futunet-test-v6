@@ -166,7 +166,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px;">
+        <div class="admin-grid-2col" style="margin-top:24px;">
           <!-- Gráfico de Pedidos Mensuales -->
           <div class="admin-table-card" style="padding:20px;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
@@ -190,7 +190,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px;">
+        <div class="admin-grid-2col" style="margin-top:24px;">
           <!-- Alertas de Stock -->
           <div class="admin-table-card" style="padding:20px;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
@@ -1112,7 +1112,7 @@
           <div style="padding:28px;">
             <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:#0a101d;margin:0 0 20px;">Ajustes del sitio</h3>
             <form id="config-form">
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <div class="admin-grid-form-2col">
                 <div class="auth-form-group">
                   <label class="auth-label" for="config-whatsapp">Número WhatsApp</label>
                   <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" />
@@ -1123,7 +1123,7 @@
                 </div>
               </div>
 
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <div class="admin-grid-form-2col">
                 <div class="auth-form-group">
                   <label class="auth-label" for="config-advisor">Nombre del Asesor</label>
                   <input class="auth-input" type="text" id="config-advisor" placeholder="Orbis Espinal" />
@@ -1139,7 +1139,7 @@
                 <input class="auth-input" type="text" id="config-map-url" placeholder="https://www.google.com/maps/embed?pb=..." />
               </div>
 
-              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+              <div class="admin-grid-form-2col">
                 <div class="auth-form-group">
                   <label class="auth-label" for="config-instagram">Instagram URL</label>
                   <input class="auth-input" type="text" id="config-instagram" placeholder="https://instagram.com/..." />
@@ -1219,7 +1219,7 @@
         <!-- ═══ REPORT PRINT AREA (FOR PDF) ═══ -->
         <div id="competitors-report-area">
           <!-- Charts Section -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;" class="competitors-charts-wrapper">
+          <div class="competitors-charts-wrapper admin-grid-2col" style="margin-bottom:24px;">
             <!-- Radar comparison -->
             <div class="admin-table-card" style="padding:20px;">
               <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
@@ -1284,7 +1284,7 @@
             <input class="auth-input" type="text" id="banner-subtitle" placeholder="Ej. Equipos de alta eficiencia con garantía" />
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="banner-link">Enlace / Botón URL</label>
               <input class="auth-input" type="text" id="banner-link" placeholder="Ej. #contacto, catalogo.html?cat=energia" />
@@ -1295,7 +1295,7 @@
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="banner-start-date">Programar Inicio (Opcional)</label>
               <input class="auth-input" type="date" id="banner-start-date" />
@@ -1438,7 +1438,7 @@
             <input class="auth-input" type="text" id="product-title" placeholder="Ej. Escritorio Ejecutivo en L" required />
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="product-price">Precio (RD$)</label>
               <input class="auth-input" type="number" id="product-price" step="0.01" min="0" placeholder="0.00" />
@@ -1449,7 +1449,7 @@
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="product-category">Categoría</label>
               <select class="auth-input" id="product-category" style="appearance:none; background-color:#f3f7fc;" required>
@@ -1467,7 +1467,7 @@
             </div>
           </div>
           
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="product-brand">Marca</label>
               <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." />
@@ -1639,7 +1639,7 @@
             <label class="auth-label" for="discount-code">Código</label>
             <input class="auth-input" type="text" id="discount-code" placeholder="FUTUNET20" required style="text-transform:uppercase;" />
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="discount-type">Tipo</label>
               <select class="auth-input" id="discount-type">
@@ -1652,7 +1652,7 @@
               <input class="auth-input" type="number" id="discount-value" min="0" step="0.01" required />
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="discount-min">Compra mínima (RD$)</label>
               <input class="auth-input" type="number" id="discount-min" min="0" value="0" />
@@ -1828,7 +1828,7 @@
         </button>
       </div>
       <div class="admin-modal-body" style="padding:24px;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+        <div class="admin-grid-2col" style="margin-bottom:20px;">
           <div style="background:#f3f7fc; padding:12px; border-radius:12px; border:1px solid #e5eef8;">
             <span style="font-size:0.75rem; color:#76889e; display:block;">Cliente</span>
             <strong id="iv-client-name" style="font-size:0.9rem; color:#0a101d;">Cargando...</strong>
@@ -1870,7 +1870,7 @@
         <form id="competitor-form" onsubmit="event.preventDefault(); AdminPanel.saveCompetitor();">
           <input type="hidden" id="competitor-id" />
           
-          <div style="display:grid; grid-template-columns: 2fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="competitor-name">Nombre del Competidor</label>
               <input class="auth-input" type="text" id="competitor-name" placeholder="Ej. Claro Dominicana" required />
@@ -1881,7 +1881,7 @@
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="competitor-relevance">Nivel de Amenaza (Categoría)</label>
               <select class="auth-input" id="competitor-relevance" style="appearance:none; background-color:#f3f7fc;" required>
@@ -1897,7 +1897,7 @@
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-3col">
             <div class="auth-form-group">
               <label class="auth-label" for="competitor-price-idx">Índice Precios (0-100)</label>
               <input class="auth-input" type="number" id="competitor-price-idx" min="0" max="100" placeholder="Ej. 80 (Alto)" required />
@@ -1917,7 +1917,7 @@
             <textarea class="auth-input" id="competitor-differentiator" rows="2" style="resize:vertical;" placeholder="Ej. Infraestructura propia de fibra a nivel nacional..." required></textarea>
           </div>
 
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="admin-grid-form-2col">
             <div class="auth-form-group">
               <label class="auth-label" for="competitor-strengths">Fortalezas (Una por línea)</label>
               <textarea class="auth-input" id="competitor-strengths" rows="3" style="resize:vertical;" placeholder="Gran liquidez&#10;Marca reconocida&#10;Amplio catálogo" required></textarea>

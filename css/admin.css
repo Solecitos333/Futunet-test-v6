@@ -725,3 +725,57 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ─── Responsive Grid & Layout Helper Classes ─── */
+.admin-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.admin-grid-form-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-grid-form-3col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .admin-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-grid-form-2col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .admin-grid-form-3col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  /* Force children that spanned columns to span 1 column in mobile to avoid visual compression */
+  .admin-grid-form-2col > *,
+  .admin-grid-form-3col > *,
+  #tech-map-form > * {
+    grid-column: span 1 !important;
+  }
+  /* Stacking and wrapping for admin action buttons */
+  .admin-topbar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  .admin-topbar-actions .admin-btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
