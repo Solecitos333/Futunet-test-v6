@@ -295,7 +295,7 @@
 
 @media (max-width: 992px) {
   .about-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 40px;
   }
 }

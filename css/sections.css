@@ -772,6 +772,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 
   /* About Section */
   .about-grid {
+    grid-template-columns: 1fr !important;
     gap: 18px;
     margin-top: 22px;
   }
