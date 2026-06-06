@@ -204,8 +204,8 @@
   gap: 5px;
   cursor: pointer;
   margin-left: auto;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
   padding: 8px;
@@ -330,8 +330,8 @@
     height: 24px;
   }
   .hamburger {
-    min-width: 44px;
-    min-height: 44px;
+    min-width: 48px;
+    min-height: 48px;
     gap: 4px;
     padding: 8px;
   }
@@ -524,7 +524,8 @@
   gap: 28px;
 }
 
-.mega-menu-col h5 {
+.mega-menu-col h5,
+.mega-menu-col .mega-menu-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
@@ -644,8 +645,8 @@
 .mobile-details-content a {
   font-size: 0.9rem !important;
   font-weight: 500 !important;
-  min-height: 38px !important;
-  padding: 6px 0 !important;
+  min-height: 48px !important;
+  padding: 8px 0 !important;
   border: none !important;
   background: transparent !important;
 }

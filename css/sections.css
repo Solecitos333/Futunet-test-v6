@@ -71,7 +71,7 @@
   transition: var(--transition);
 }
 .value-item:hover .value-icon-box { transform: scale(1.08); }
-.value-text h4 {
+.value-text h4, .value-text h3 {
   font-family: 'Space Grotesk', sans-serif;
   font-size: .9rem; font-weight: 700;
   color: var(--text-primary); margin-bottom: 3px;
@@ -289,7 +289,8 @@ footer::before {
   font-size: .88rem; margin-top: 12px;
   line-height: 1.75; max-width: 320px;
 }
-.footer-col h5 {
+.footer-col h5,
+.footer-col .footer-heading {
   font-family: 'Space Grotesk', sans-serif;
   font-size: .75rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 1.5px;
@@ -628,7 +629,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   .about-quote { font-size: 1.05rem; padding: 16px 20px; }
   .about-info-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .value-icon-box { width: 46px; height: 46px; }
-  .value-text h4 { font-size: .95rem; }
+  .value-text h4, .value-text h3 { font-size: .95rem; }
   .value-text p { font-size: .84rem; }
   .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 
@@ -794,7 +795,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 
   .values-list { gap: 12px; margin-top: 22px; }
   .value-icon-box { width: 38px; height: 38px; border-radius: 10px; }
-  .value-text h4 { font-size: .85rem; }
+  .value-text h4, .value-text h3 { font-size: .85rem; }
   .value-text p { font-size: .76rem; }
 
   /* CTA Banner */
@@ -826,7 +827,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     width: clamp(110px, 35vw, 130px);
     height: auto;
   }
-  .footer-col h5 { font-size: .7rem; margin-bottom: 10px; }
+  .footer-col h5, .footer-col .footer-heading { font-size: .7rem; margin-bottom: 10px; }
   .footer-col ul { gap: 6px; }
   .footer-col ul a { font-size: .82rem; }
   .footer-bottom {

@@ -24,15 +24,20 @@
   <link rel="canonical" href="https://futunet.com.do/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
   <link rel="preload" as="image" href="img/hero-tech-bg.webp" type="image/webp" />
   <link rel="preload" as="image" href="img/logo.webp" type="image/webp" />
   <link rel="stylesheet" href="css/main.css?v=3.0" />
   <link rel="stylesheet" href="css/navbar.css?v=3.3" />
   <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.1" />
-  <link rel="stylesheet" href="css/auth.css?v=3.0" />
-  <link rel="stylesheet" href="css/chatbot.css?v=3.0" />
+  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
@@ -195,7 +200,7 @@
             <div class="mega-menu-container">
               <div class="mega-menu-grid">
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
+                  <div class="mega-menu-title"><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</div>
                   <ul>
                     <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
                     <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
@@ -205,7 +210,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
+                  <div class="mega-menu-title"><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</div>
                   <ul>
                     <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
                     <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
@@ -214,7 +219,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i> Equipamiento B2B</h5>
+                  <div class="mega-menu-title"><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i> Equipamiento B2B</div>
                   <ul>
                     <li><a href="equipos-oficina.html"><i class="fas fa-laptop"></i> Equipos de Oficina y Cómputo</a></li>
                     <li><a href="mobiliario-suministros.html"><i class="fas fa-chair"></i> Mobiliario y Suministros</a></li>
@@ -222,7 +227,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
+                  <div class="mega-menu-title"><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</div>
                   <ul>
                     <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
                     <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
@@ -238,7 +243,7 @@
             <div class="mega-menu-container">
               <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
+                  <div class="mega-menu-title"><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</div>
                   <ul>
                     <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
                     <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
@@ -247,7 +252,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
+                  <div class="mega-menu-title"><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</div>
                   <ul>
                     <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
                     <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
@@ -256,7 +261,7 @@
                 </div>
                 <div class="mega-menu-col">
                   <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
-                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
+                    <div class="mega-menu-title" style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px; border-left: none; padding-left: 0; text-transform: none;"><i class="fas fa-percentage"></i> Oferta de la Semana</div>
                     <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
                     <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
                   </div>
@@ -271,7 +276,7 @@
             <div class="mega-menu-container">
               <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
+                  <div class="mega-menu-title"><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</div>
                   <ul>
                     <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
                     <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
@@ -279,7 +284,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
+                  <div class="mega-menu-title"><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</div>
                   <ul>
                     <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
                     <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
@@ -287,7 +292,7 @@
                   </ul>
                 </div>
                 <div class="mega-menu-col">
-                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
+                  <div class="mega-menu-title"><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</div>
                   <ul>
                     <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
                     <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
@@ -611,7 +616,7 @@
           <img src="img/camaras.jpg" alt="Seguridad electrónica" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Seguridad<br>electrónica</h4>
+              <h3 class="category-card-title">Seguridad<br>electrónica</h3>
               <p class="category-card-copy">Cámaras, control de acceso y protección para tus espacios.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="shield-check"></i></div>
@@ -622,7 +627,7 @@
           <img src="img/redes.jpg" alt="Redes y datos" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Redes y<br>datos</h4>
+              <h3 class="category-card-title">Redes y<br>datos</h3>
               <p class="category-card-copy">Conectividad estable para oficinas, negocios y proyectos.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="wifi"></i></div>
@@ -633,7 +638,7 @@
           <img src="img/solar.jpg" alt="Energía y climatización" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Energía y<br>climatización</h4>
+              <h3 class="category-card-title">Energía y<br>climatización</h3>
               <p class="category-card-copy">Respaldo eléctrico y confort pensado para trabajar sin pausa.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="zap"></i></div>
@@ -644,7 +649,7 @@
           <img src="img/laptops.jpg" alt="Equipos de oficina" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Equipos de<br>oficina</h4>
+              <h3 class="category-card-title">Equipos de<br>oficina</h3>
               <p class="category-card-copy">Laptops, impresoras, periféricos y tecnología lista para producir.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="monitor"></i></div>
@@ -655,7 +660,7 @@
           <img src="img/mobiliario.jpg" alt="Mobiliario y suministros" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Mobiliario y<br>suministros</h4>
+              <h3 class="category-card-title">Mobiliario y<br>suministros</h3>
               <p class="category-card-copy">Todo lo necesario para equipar tu espacio con criterio y orden.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="briefcase"></i></div>
@@ -666,7 +671,7 @@
           <img src="img/sheetrock.jpg" alt="Infraestructura y remozamiento" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Infraestructura y<br>remozamiento</h4>
+              <h3 class="category-card-title">Infraestructura y<br>remozamiento</h3>
               <p class="category-card-copy">Adecuaciones, terminaciones y mejoras para tus espacios físicos.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="building-2"></i></div>
@@ -677,7 +682,7 @@
           <img src="img/fibra-optica.png" alt="Internet Fibra Óptica" loading="lazy" decoding="async" width="880" height="880" />
           <div class="category-card-content">
             <div>
-              <h4 class="category-card-title">Internet<br>Fibra Óptica</h4>
+              <h3 class="category-card-title">Internet<br>Fibra Óptica</h3>
               <p class="category-card-copy">Conexión de alta velocidad simétrica para hogares y empresas.</p>
             </div>
             <div class="category-card-icon"><i data-lucide="globe"></i></div>
@@ -687,7 +692,7 @@
         <a href="catalogo.html?cat=all" class="category-card cta-card-bg">
           <img src="img/papeleria.jpg" alt="Catálogo completo" loading="lazy" decoding="async" width="880" height="880" class="cta-card-image-muted" />
           <div class="category-card-content cta-card-content-full">
-            <h4 class="category-card-title cta-card-title-lg">Ver<br>catálogo<br>completo →</h4>
+            <h3 class="category-card-title cta-card-title-lg">Ver<br>catálogo<br>completo →</h3>
             <p class="cta-card-subtitle">Encuentra productos, servicios y opciones para cotizar sin perder tiempo.</p>
           </div>
         </a>
@@ -707,7 +712,7 @@
       <div class="office-grid reveal">
         <a href="catalogo.html?cat=equipos" class="office-card">
           <div class="office-card__media">
-            <img src="img/office/computadoras.webp" alt="Computadoras y laptops" loading="lazy" decoding="async" />
+            <img src="img/office/computadoras.webp" alt="Computadoras y laptops" loading="lazy" decoding="async" width="1024" height="1024" />
           </div>
           <div class="office-card__body">
             <h3 class="office-card__title">Computadoras</h3>
@@ -717,7 +722,7 @@
         </a>
         <a href="catalogo.html?cat=oficina&q=mobiliario" class="office-card">
           <div class="office-card__media">
-            <img src="img/office/mobiliario.webp" alt="Mobiliario de oficina" loading="lazy" decoding="async" />
+            <img src="img/office/mobiliario.webp" alt="Mobiliario de oficina" loading="lazy" decoding="async" width="1024" height="1024" />
           </div>
           <div class="office-card__body">
             <h3 class="office-card__title">Mobiliario</h3>
@@ -727,7 +732,7 @@
         </a>
         <a href="catalogo.html?cat=oficina&q=suministro" class="office-card">
           <div class="office-card__media">
-            <img src="img/office/suministros.webp" alt="Suministros de oficina" loading="lazy" decoding="async" />
+            <img src="img/office/suministros.webp" alt="Suministros de oficina" loading="lazy" decoding="async" width="1024" height="1024" />
           </div>
           <div class="office-card__body">
             <h3 class="office-card__title">Suministros</h3>
@@ -737,7 +742,7 @@
         </a>
         <a href="catalogo.html?cat=equipos&q=impresora" class="office-card">
           <div class="office-card__media">
-            <img src="img/office/impresoras.webp" alt="Impresoras" loading="lazy" decoding="async" />
+            <img src="img/office/impresoras.webp" alt="Impresoras" loading="lazy" decoding="async" width="1024" height="1024" />
           </div>
           <div class="office-card__body">
             <h3 class="office-card__title">Impresoras</h3>
@@ -759,58 +764,58 @@
       <p class="section-sub brands-sub">Pasa el cursor sobre una marca para descubrir sus productos destacados.</p>
       <div class="brands-grid brands-grid--preview">
         <a href="catalogo.html?brand=dell" class="brand-item" data-brand-preview="dell" title="Ver productos Dell" aria-label="Ver productos Dell">
-          <img src="img/marcas/dell.svg" alt="Dell" loading="lazy" />
+          <img src="img/marcas/dell.svg" alt="Dell" loading="lazy" decoding="async" width="72" height="72" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/dell.webp" alt="Productos Dell" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/dell.webp" alt="Productos Dell" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Dell</span>
           </div>
         </a>
         <a href="catalogo.html?brand=lenovo" class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo">
-          <img src="img/marcas/lenovo.svg" alt="Lenovo" loading="lazy" />
+          <img src="img/marcas/lenovo.svg" alt="Lenovo" loading="lazy" decoding="async" width="120" height="30" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/lenovo.webp" alt="Productos Lenovo" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/lenovo.webp" alt="Productos Lenovo" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Lenovo</span>
           </div>
         </a>
         <a href="catalogo.html?brand=epson" class="brand-item" data-brand-preview="epson" title="Ver productos Epson">
-          <img src="img/marcas/epson.svg" alt="Epson" loading="lazy" />
+          <img src="img/marcas/epson.svg" alt="Epson" loading="lazy" decoding="async" width="120" height="40" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/epson.webp" alt="Productos Epson" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/epson.webp" alt="Productos Epson" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Epson</span>
           </div>
         </a>
         <a href="catalogo.html?brand=hikvision" class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision">
-          <img src="img/marcas/hikvision.svg" alt="Hikvision" loading="lazy" />
+          <img src="img/marcas/hikvision.svg" alt="Hikvision" loading="lazy" decoding="async" width="150" height="30" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/hikvision.webp" alt="Productos Hikvision" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/hikvision.webp" alt="Productos Hikvision" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Hikvision</span>
           </div>
         </a>
         <a href="catalogo.html?brand=samsung" class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung">
-          <img src="img/marcas/samsung.webp" alt="Samsung" loading="lazy" />
+          <img src="img/marcas/samsung.webp" alt="Samsung" loading="lazy" decoding="async" width="134" height="34" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/samsung.webp" alt="Productos Samsung" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/samsung.webp" alt="Productos Samsung" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Samsung</span>
           </div>
         </a>
         <a href="catalogo.html?brand=hp" class="brand-item" data-brand-preview="hp" title="Ver productos HP">
-          <img src="img/marcas/hp.svg" alt="HP" loading="lazy" class="brand-image-hp" />
+          <img src="img/marcas/hp.svg" alt="HP" loading="lazy" decoding="async" width="48" height="48" class="brand-image-hp" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/hp.webp" alt="Productos HP" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/hp.webp" alt="Productos HP" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos HP</span>
           </div>
         </a>
         <a href="catalogo.html?brand=tp%20link" class="brand-item brand-item--tplink" data-brand-preview="tplink" title="Ver productos TP-Link">
-          <img src="img/marcas/tp-link.webp" alt="TP-Link" loading="lazy" />
+          <img src="img/marcas/tp-link.webp" alt="TP-Link" loading="lazy" decoding="async" width="130" height="44" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/tplink.webp" alt="Productos TP-Link" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/tplink.webp" alt="Productos TP-Link" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos TP-Link</span>
           </div>
         </a>
         <a href="catalogo.html?brand=logitech" class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech">
-          <img src="img/marcas/logitech.svg" alt="Logitech" loading="lazy" />
+          <img src="img/marcas/logitech.svg" alt="Logitech" loading="lazy" decoding="async" width="120" height="35" />
           <div class="brand-preview-popup">
-            <img src="img/brands-preview/logitech.webp" alt="Productos Logitech" class="brand-preview-img" loading="lazy" />
+            <img src="img/brands-preview/logitech.webp" alt="Productos Logitech" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Logitech</span>
           </div>
         </a>
@@ -834,28 +839,28 @@
             <li class="value-item">
               <div class="value-icon-box"><i data-lucide="badge-check"></i></div>
               <div class="value-text">
-                <h4>Calidad garantizada</h4>
+                <h3>Calidad garantizada</h3>
                 <p>Seleccionamos soluciones útiles y bien respaldadas para que inviertas con confianza.</p>
               </div>
             </li>
             <li class="value-item">
               <div class="value-icon-box"><i data-lucide="shield"></i></div>
               <div class="value-text">
-                <h4>Seguridad en cada proyecto</h4>
+                <h3>Seguridad en cada proyecto</h3>
                 <p>Protegemos espacios, datos y operaciones con productos y servicios confiables.</p>
               </div>
             </li>
             <li class="value-item">
               <div class="value-icon-box"><i data-lucide="handshake"></i></div>
               <div class="value-text">
-                <h4>Relación clara y cercana</h4>
+                <h3>Relación clara y cercana</h3>
                 <p>Trabajamos con transparencia, tiempos realistas y comunicación directa.</p>
               </div>
             </li>
             <li class="value-item">
               <div class="value-icon-box"><i data-lucide="zap"></i></div>
               <div class="value-text">
-                <h4>Asesoría personalizada</h4>
+                <h3>Asesoría personalizada</h3>
                 <p>Te guiamos para elegir mejor, sin complicarte con lenguaje técnico innecesario.</p>
               </div>
             </li>
@@ -931,6 +936,7 @@
               allowfullscreen=""
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
+              title="Ubicación de la sucursal de Futunet en Santiago"
             ></iframe>
           </div>
         </div>
@@ -1002,7 +1008,7 @@
           <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
         </div>
         <div class="footer-col">
-          <h5>Soluciones</h5>
+          <div class="footer-heading">Soluciones</div>
           <ul>
             <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
             <li><a href="redes-datos.html">Redes y datos</a></li>
@@ -1013,7 +1019,7 @@
           </ul>
         </div>
         <div class="footer-col">
-          <h5>Contacto</h5>
+          <div class="footer-heading">Contacto</div>
           <ul>
             <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
             <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Calle 7 #1, Las Colinas, Santiago</a></li>
@@ -1048,7 +1054,7 @@
   <script defer src="js/cart.js"></script>
   <script defer src="js/chatbot.js"></script>
   <script defer src="js/main.js?v=3.2"></script>
-  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/inventory_data.js"></script>\r\n  <script defer src="js/supplier_inventory.js"></script>
   <script defer src="js/image_fixes.js?v=v9"></script>
   <script defer src="js/catalog.js"></script>
   <script defer src="js/home_showcase.js"></script>
