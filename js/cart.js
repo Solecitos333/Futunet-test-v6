@@ -363,13 +363,17 @@
           <div class="checkout-step">
             <h4>1. Información de Envío</h4>
             <div class="checkout-form-grid">
-              <div class="checkout-form-group">
+              <div class="checkout-form-group full-width">
                 <label for="chk-name">Nombre de Contacto *</label>
                 <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-phone">Teléfono de Contacto *</label>
                 <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" required>
+              </div>
+              <div class="checkout-form-group">
+                <label for="chk-email">Correo Electrónico *</label>
+                <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" required>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-address">Dirección de Entrega *</label>
@@ -599,6 +603,9 @@
     } else {
       if (transferOption) transferOption.style.opacity = '1';
       
+      const emailField = document.getElementById('chk-email');
+      if (emailField) emailField.value = user.email || '';
+      
       // Load user profile details from Firestore
       if (db) {
         try {
@@ -608,6 +615,9 @@
             document.getElementById('chk-name').value = data.displayName || '';
             document.getElementById('chk-phone').value = data.phone || '';
             document.getElementById('chk-address').value = data.address || '';
+            if (data.email && emailField) {
+              emailField.value = data.email;
+            }
           }
         } catch (e) {
           console.warn('Error autofilling checkout fields:', e);
@@ -658,10 +668,16 @@
     if (!items.length) return;
     
     const submitBtn = document.getElementById('btn-submit-checkout');
-    if (submitBtn) submitBtn.disabled = true;
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : "Confirmar y Enviar Pedido";
+    
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Procesando cotización...';
+    }
     
     const name = escapeHTML(document.getElementById('chk-name').value.trim());
     const phone = escapeHTML(document.getElementById('chk-phone').value.trim());
+    const email = escapeHTML(document.getElementById('chk-email').value.trim());
     const address = escapeHTML(document.getElementById('chk-address').value.trim());
     const notes = escapeHTML(document.getElementById('chk-notes').value.trim());
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
@@ -676,6 +692,7 @@
       userId: user ? user.uid : 'guest',
       userName: name,
       userPhone: phone,
+      userEmail: email,
       shippingAddress: address,
       shippingNotes: notes,
       items: items.map(p => ({
@@ -693,18 +710,66 @@
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
+
+    // Generar PDF y enviar correo llamando al backend en Render
+    let quoteBackendSuccess = false;
+    let quoteBackendMsg = "";
+    
+    try {
+      const quotePayload = {
+        client_name: name,
+        client_email: email,
+        client_phone: phone,
+        shipping_address: address,
+        shipping_notes: notes,
+        payment_method: paymentMethod,
+        products: items.map(p => ({
+          id: p.id,
+          title: p.title,
+          price: parsePriceToNumber(p.price),
+          qty: cartState.items[p.id].qty,
+          brand: p.brand || '',
+          category: p.category || ''
+        })),
+        total: totalValue
+      };
+      
+      const response = await fetch('https://futunet-backend.onrender.com/api/quote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(quotePayload)
+      });
+      
+      const resData = await response.json();
+      if (response.ok && resData.success) {
+        quoteBackendSuccess = true;
+        quoteBackendMsg = resData.message;
+      } else {
+        console.warn('El backend respondió con error al generar cotización:', resData);
+      }
+    } catch (apiErr) {
+      console.warn('No se pudo comunicar con el backend de cotización:', apiErr);
+    }
     
     try {
       if (paymentMethod === 'bank_transfer') {
         if (!user || !db || !storage) {
           showCartToast('Error de autenticación o base de datos.', 'error');
-          if (submitBtn) submitBtn.disabled = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          }
           return;
         }
         
         if (!selectedCheckoutFile) {
           showCartToast('Por favor, sube tu comprobante de pago.', 'error');
-          if (submitBtn) submitBtn.disabled = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          }
           return;
         }
         
@@ -733,7 +798,11 @@
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        showCartToast('Pedido y comprobante registrados con éxito.', 'success');
+        if (quoteBackendSuccess) {
+          showCartToast(quoteBackendMsg, 'success');
+        } else {
+          showCartToast('Pedido registrado con éxito. Se procesará vía transferencia.', 'success');
+        }
         
         // Vaciar carrito
         cartState.items = {};
@@ -751,9 +820,19 @@
           }
         }
         
+        if (quoteBackendSuccess) {
+          showCartToast(quoteBackendMsg, 'success');
+        } else {
+          showCartToast('Abriendo WhatsApp para completar tu pedido...', 'info');
+        }
+        
         const message = buildCheckoutMessage(items);
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
-        window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank');
+        
+        // Esperar un momento breve para que el usuario pueda ver el Toast de éxito
+        setTimeout(() => {
+          window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank');
+        }, 1000);
         
         cartState.items = {};
         saveCartState();
@@ -765,7 +844,10 @@
       showCartToast('Error al procesar el pedido. Intenta nuevamente.', 'error');
     }
     
-    if (submitBtn) submitBtn.disabled = false;
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    }
   }
 
   function renderCartDrawer() {
