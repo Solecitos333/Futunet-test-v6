@@ -20,6 +20,7 @@
   const nextBtn = carousel.querySelector('.hero-carousel-arrow--next');
   const dotsContainer = carousel.querySelector('.hero-carousel-dots');
   const navbar = document.getElementById('navbar');
+  const progressBar = document.getElementById('hero-progress-bar');
 
   if (!track) return;
 
@@ -100,6 +101,8 @@
   let current = 0;
   let autoTimer = null;
   const AUTO_INTERVAL = 6000;
+  let progressVal = 0;
+  let isPaused = false;
   let startX = 0;
   let isDragging = false;
   let isSearching = false;
@@ -153,18 +156,47 @@
     if (e.key === 'ArrowRight') next();
   });
 
+  function updateProgressBar() {
+    if (progressBar) {
+      progressBar.style.width = progressVal + '%';
+    }
+  }
+
   function startAutoPlay() {
     stopAutoPlay();
     if (isSearching) return;
-    autoTimer = setInterval(next, AUTO_INTERVAL);
+    isPaused = false;
+
+    let startTime = Date.now() - (progressVal / 100) * AUTO_INTERVAL;
+
+    autoTimer = setInterval(function () {
+      if (isPaused) return;
+
+      let elapsed = Date.now() - startTime;
+      progressVal = (elapsed / AUTO_INTERVAL) * 100;
+
+      if (progressVal >= 100) {
+        progressVal = 0;
+        updateProgressBar();
+        next();
+      } else {
+        updateProgressBar();
+      }
+    }, 30);
   }
 
   function stopAutoPlay() {
-    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    isPaused = true;
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+    }
   }
 
   function resetAutoPlay() {
     stopAutoPlay();
+    progressVal = 0;
+    updateProgressBar();
     startAutoPlay();
   }
 

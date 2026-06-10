@@ -1055,3 +1055,32 @@
     height: 44px;
   }
 }
+
+/* ── Progress Bar & Carousel Enhancements ── */
+.hero-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand) 0%, var(--brand-light) 100%);
+  width: 0%;
+  z-index: 25;
+  transition: width 0.05s linear;
+}
+.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-progress-bar {
+  background: linear-gradient(90deg, var(--brand-light) 0%, #00d68f 100%);
+}
+
+.hero-carousel-dots {
+  display: flex;
+  align-items: center;
+}
+.hero-carousel-dot {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.hero-carousel-dot:hover {
+  transform: scale(1.15);
+  opacity: 0.9;
+}
