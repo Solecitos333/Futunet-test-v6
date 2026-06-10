@@ -5,13 +5,14 @@
 var FUTUNET_LAYOUT = {
   sections: [
     { id: 'inicio', name: 'Banner Rotativo', visible: true, title: 'La tecnología del<br><span class="hero-title-accent">futuro</span>', subtitle: '' },
+    { id: 'portal-rapido', name: 'Portal Rápido', visible: true, title: 'Hola, ¿en qué podemos ayudarte hoy?', subtitle: 'Accede rápidamente a nuestros servicios, contrata fibra óptica y gestiona tus necesidades tecnológicas en Santiago.' },
     { id: 'productos-categoria', name: 'Productos por Categoría', visible: true, title: 'Productos por categoría', subtitle: 'Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.' },
     { id: 'destacados-catalogo', name: 'Artículos Destacados', visible: true, title: 'Artículos destacados del catálogo', subtitle: 'Descubre productos listos para cotizar y entra directo al detalle que más se parezca a lo que estás buscando.' },
     { id: 'servicios', name: 'Nuestros Servicios / Soluciones', visible: true, title: 'Soluciones para vender, operar y proteger mejor', subtitle: 'Explora las áreas en las que acompañamos a empresas, instituciones y hogares con equipos, instalación y soporte.' },
     { id: 'equipa-oficina', name: 'Equipa tu Oficina', visible: true, title: 'Equipa tu oficina', subtitle: 'Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.' },
     { id: 'marcas', name: 'Logos de Marcas', visible: true, title: 'Marcas con las que trabajamos', subtitle: 'Pasa el cursor sobre una marca para descubrir sus productos destacados.' },
     { id: 'nosotros', name: 'Quiénes Somos', visible: true, title: 'Tecnología con criterio, servicio con respaldo', subtitle: '' },
-    { id: 'proyecto-cta', name: 'Llamado a la Acción (Proyecto)', visible: true, title: '¿Tienes un proyecto en mente?', subtitle: 'Cuéntanos lo que necesitas y te ayudamos a aterrizar una solución realista, clara y lista para cotizar.' },
+    { id: 'proyecto-cta', name: 'Llamado a la Acción (Proyecto)', visible: true, title: '¿Tienes un proyecto en mente?', subtitle: 'Cuéntanos lo que necesitas y te ayudamos a ajustar una solución realista, clara y lista para cotizar.' },
     { id: 'contacto', name: 'Contacto / Mensaje', visible: true, title: 'Conversemos sobre lo que necesitas', subtitle: 'Escríbenos y recibe una orientación clara para tu compra, tu instalación o tu próximo proyecto.' }
   ]
 };
@@ -68,6 +69,24 @@ var FUTUNET_LAYOUT = {
   function applyLayout() {
     var main = document.getElementById('main-content');
     if (!main) return;
+
+    // Ensure portal-rapido is in the sections array if it exists in the DOM but not in the configuration
+    var hasPortal = FUTUNET_LAYOUT.sections.some(function (sec) { return sec.id === 'portal-rapido'; });
+    if (!hasPortal && document.getElementById('portal-rapido')) {
+      var inicioIdx = FUTUNET_LAYOUT.sections.findIndex(function (sec) { return sec.id === 'inicio'; });
+      var portalSec = { 
+        id: 'portal-rapido', 
+        name: 'Portal Rápido', 
+        visible: true, 
+        title: 'Hola, ¿en qué podemos ayudarte hoy?', 
+        subtitle: 'Accede rápidamente a nuestros servicios, contrata fibra óptica y gestiona tus necesidades tecnológicas en Santiago.' 
+      };
+      if (inicioIdx !== -1) {
+        FUTUNET_LAYOUT.sections.splice(inicioIdx + 1, 0, portalSec);
+      } else {
+        FUTUNET_LAYOUT.sections.unshift(portalSec);
+      }
+    }
 
     var sectionsMap = {};
     FUTUNET_LAYOUT.sections.forEach(function (sec) {

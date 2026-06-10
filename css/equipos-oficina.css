@@ -15,14 +15,25 @@
 
 /* 1. BARRA DE NAVEGACIÓN SECUNDARIA (Sticky Subnav) */
 .service-subnav {
-  background-color: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(15, 25, 35, 0.05);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(15, 25, 35, 0.06);
   padding: 0 5%;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 99;
-  box-shadow: 0 8px 30px rgba(15, 25, 35, 0.02);
+  box-shadow: 0 8px 30px rgba(10, 112, 162, 0.04);
+  position: relative;
+}
+.subnav-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(to right, var(--brand-office-light), var(--accent-amber));
+  transition: width 0.1s ease-out;
+  z-index: 100;
 }
 
 .service-subnav.sticky {
@@ -179,10 +190,27 @@
 
 /* 3. CARRUSEL INFINITO DE MARCAS (Brands Slider) */
 .brands-section {
-  background: #0b121b !important; /* Fondo ultra oscuro con tono azul de base */
-  border-bottom: 1px solid rgba(10, 112, 162, 0.12) !important;
+  background: radial-gradient(circle at center, #0f1c2c 0%, #060b12 100%) !important;
+  border-top: 1px solid rgba(10, 112, 162, 0.15) !important;
+  border-bottom: 1px solid rgba(10, 112, 162, 0.15) !important;
   padding: 45px 0 !important;
   text-align: center;
+  position: relative;
+}
+.brands-section::before, .brands-section::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; height: 10px;
+  pointer-events: none;
+  z-index: 2;
+}
+.brands-section::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15), transparent);
+}
+.brands-section::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.15), transparent);
 }
 
 .brands-title-top {
@@ -835,10 +863,10 @@
 }
 
 .about-card.dark-highlight {
-  background: linear-gradient(135deg, #050d18 0%, #0e1e33 100%) !important;
+  background: linear-gradient(135deg, #060f1c 0%, #0e1e33 100%) !important;
   color: white;
-  border: 1px solid rgba(10, 112, 162, 0.25) !important;
-  box-shadow: 0 20px 50px rgba(7, 21, 38, 0.28);
+  border: 1px solid rgba(10, 112, 162, 0.22) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05), 0 20px 50px rgba(0, 0, 0, 0.35);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -846,6 +874,13 @@
   justify-content: center;
   padding: 40px 30px;
   border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-card.dark-highlight:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34, 164, 224, 0.45) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.08), 0 24px 60px rgba(10, 112, 162, 0.15);
 }
 
 .btn-glow {
@@ -853,7 +888,7 @@
   border-radius: 50px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--brand-office) 0%, var(--brand-office-dark) 100%);
-  box-shadow: 0 8px 24px rgba(10, 112, 162, 0.3);
+  box-shadow: 0 8px 20px rgba(10, 112, 162, 0.25);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   color: white !important;
   text-decoration: none;
@@ -865,13 +900,48 @@
   cursor: pointer;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+  transform: rotate(30deg);
+  transition: transform 0.6s ease-out;
+  pointer-events: none;
 }
 
 .btn-glow:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(10, 112, 162, 0.5);
+  box-shadow: 0 12px 32px rgba(10, 112, 162, 0.45);
   opacity: 0.95;
   color: white !important;
+}
+
+.btn-glow:hover::after {
+  transform: translate(50%, 50%) rotate(30deg);
+}
+
+/* Venta cruzada premium */
+.cross-selling-banner {
+  background: linear-gradient(135deg, #0A70A2 0%, #054160 100%) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 15px 35px rgba(10, 112, 162, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.cross-selling-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%; width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(34, 164, 224, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .about-info-grid {
@@ -1052,5 +1122,32 @@
 
 .btn-add-mini i {
   font-size: 0.85rem;
+}
+
+/* 13. ESTILOS DEL CONFIGURADOR TECH & LEASING B2B */
+.billing-toggle-btn.active {
+  background: var(--brand-office) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(10, 112, 162, 0.2);
+}
+
+.qty-btn:hover {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+/* OSD Consola HUD modernizada */
+.simulator-panel {
+  border-color: rgba(34, 164, 224, 0.45) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 0 35px rgba(10, 112, 162, 0.25) !important;
+}
+
+.simulator-screen {
+  border-color: rgba(10, 112, 162, 0.35) !important;
+}
+
+.budget-total-box {
+  background: rgba(10, 112, 162, 0.18) !important;
+  border-color: rgba(34, 164, 224, 0.4) !important;
 }
 

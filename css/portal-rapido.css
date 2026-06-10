@@ -1,0 +1,572 @@
+/* =============================================================
+   PORTAL-RAPIDO.CSS — Claro-style Dashboard & Plans Switcher
+   Futunet Brand Color Integration (Mobile-First)
+   ============================================================= */
+
+#portal-rapido {
+  padding: 60px 0;
+  background: radial-gradient(circle at bottom left, rgba(10, 112, 162, 0.03), transparent 40%),
+              radial-gradient(circle at top right, rgba(0, 194, 129, 0.02), transparent 30%),
+              #ffffff;
+}
+
+#portal-rapido .text-center {
+  margin-bottom: 40px;
+}
+
+#portal-rapido .section-title {
+  margin-bottom: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-primary);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+#portal-rapido .section-sub {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── 1. PORTAL QUICK ACTION CARDS (5 Banners) ── */
+.portal-cards-container {
+  position: relative;
+  margin-bottom: 56px;
+}
+
+.portal-cards-grid {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE/Edge */
+  padding: 10px 4px 24px;
+  margin-inline: -14px;
+  padding-inline: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.portal-cards-grid::-webkit-scrollbar {
+  display: none; /* Safari/Chrome */
+}
+
+.portal-card {
+  flex: 0 0 calc(70% - 10px);
+  scroll-snap-align: start;
+  aspect-ratio: 4 / 5;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(10, 112, 162, 0.06);
+  background: var(--bg-dark);
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.portal-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.portal-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, 
+    rgba(10, 16, 29, 0.92) 0%, 
+    rgba(10, 16, 29, 0.6) 35%, 
+    rgba(10, 16, 29, 0.1) 70%, 
+    transparent 100%);
+  z-index: 2;
+  transition: opacity 0.4s ease;
+}
+
+.portal-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 3;
+}
+
+.portal-card__title {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--white);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.portal-card__accent-bar {
+  width: 32px;
+  height: 4px;
+  background: #f59e0b; /* Claro style orange accent */
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover effects */
+@media (hover: hover) {
+  .portal-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10, 112, 162, 0.2);
+  }
+  
+  .portal-card:hover .portal-card__bg {
+    transform: scale(1.08);
+  }
+  
+  .portal-card:hover .portal-card__accent-bar {
+    width: 64px;
+  }
+}
+
+/* Responsive portal cards layout */
+@media (min-width: 576px) {
+  .portal-cards-grid {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+  .portal-card {
+    flex: 0 0 calc(45% - 10px);
+  }
+}
+
+@media (min-width: 768px) {
+  .portal-card {
+    flex: 0 0 calc(33.333% - 12px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .portal-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  .portal-card {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 3.5 / 5;
+  }
+}
+
+/* ── 2. PORTAL PLANS TABS SWITCHER ── */
+.portal-tabs-section {
+  position: relative;
+  background: var(--bg-secondary);
+  border-radius: 32px;
+  padding: 48px 20px;
+  border: 1px solid rgba(10, 112, 162, 0.06);
+  box-shadow: var(--shadow-xs);
+}
+
+@media (min-width: 768px) {
+  .portal-tabs-section {
+    padding: 56px 40px;
+  }
+}
+
+/* Tab buttons wrap */
+.portal-tabs-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.portal-tab-btn {
+  background: transparent;
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 10px 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.3s ease;
+  outline: none;
+}
+
+.portal-tab-btn i, .portal-tab-btn svg {
+  font-size: 1.15rem;
+  transition: transform 0.3s ease;
+}
+
+.portal-tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light));
+  border-radius: 4px 4px 0 0;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-tab-btn.active {
+  color: var(--brand);
+}
+
+.portal-tab-btn.active::after {
+  transform: scaleX(1);
+}
+
+.portal-tab-btn:hover:not(.active) {
+  color: var(--text-primary);
+}
+.portal-tab-btn:hover i {
+  transform: translateY(-2px);
+}
+
+/* Tab Panels */
+.portal-tab-panel {
+  display: none;
+  animation: portalFadeIn 0.5s ease;
+}
+
+.portal-tab-panel.active {
+  display: block;
+}
+
+@keyframes portalFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.portal-plans-title {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-primary);
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 36px;
+}
+
+/* ── 3. CLARO-STYLE PLANS GRID ── */
+.home-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+@media (min-width: 640px) {
+  .home-plans-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+}
+
+/* Plan Card layout style */
+.home-plan-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  border-radius: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(10, 112, 162, 0.15);
+}
+
+.home-plan-card.popular {
+  border-color: var(--brand);
+  background: linear-gradient(180deg, #ffffff 0%, #f9fcff 100%);
+  box-shadow: var(--shadow-md);
+}
+
+/* Card Ribbon Badge */
+.home-plan-badge {
+  position: absolute;
+  top: 14px;
+  right: -32px;
+  background: var(--brand);
+  color: var(--white);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 4px 32px;
+  transform: rotate(45deg);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 5;
+}
+
+/* Header style Claro */
+.home-plan-header {
+  background: linear-gradient(135deg, #09101d 0%, #162233 100%);
+  color: var(--white);
+  padding: 30px 24px 20px;
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+  position: relative;
+}
+
+.home-plan-card.popular .home-plan-header {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+}
+
+.home-plan-header__icon {
+  font-size: 1.4rem;
+  color: var(--brand-light);
+  margin-bottom: 6px;
+}
+.home-plan-card.popular .home-plan-header__icon {
+  color: #fff;
+}
+
+.home-plan-header__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  margin: 0 0 2px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.home-plan-header__sub {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card Body */
+.home-plan-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.home-plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  text-align: left;
+}
+
+.home-plan-features li {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.home-plan-features li i, .home-plan-features li svg {
+  color: var(--accent);
+  font-size: 0.88rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Pricing Display */
+.home-plan-price-block {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+}
+
+.home-plan-price-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.home-plan-price-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  display: block;
+}
+
+.home-plan-price-taxes {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.home-plan-price-promo {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(0, 194, 129, 0.1);
+}
+
+.home-plan-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 50px;
+  border: 1.5px solid var(--brand);
+  background: #ffffff;
+  color: var(--brand);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
+  outline: none;
+}
+
+.home-plan-btn:hover {
+  background: var(--brand);
+  color: var(--white);
+  box-shadow: 0 6px 16px var(--brand-glow);
+}
+
+.home-plan-card.popular .home-plan-btn {
+  background: linear-gradient(135deg, #0a7ab0 0%, #22a4e0 100%);
+  color: var(--white);
+  border-color: transparent;
+  box-shadow: 0 4px 12px var(--brand-glow);
+}
+.home-plan-card.popular .home-plan-btn:hover {
+  box-shadow: var(--shadow-brand);
+  transform: translateY(-2px);
+}
+
+/* ── 4. BUSINESS SOLUTIONS SLIDES / ALTERNATIVE FOR B2B TAB ── */
+.home-b2b-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .home-b2b-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.home-b2b-card {
+  background: var(--white);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.home-b2b-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(10, 112, 162, 0.15);
+  box-shadow: var(--shadow-md);
+}
+
+.home-b2b-card__icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--brand-pale);
+  color: var(--brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  margin-bottom: 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.home-b2b-card:hover .home-b2b-card__icon {
+  background: var(--brand);
+  color: var(--white);
+}
+
+.home-b2b-card__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.home-b2b-card__desc {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+.home-b2b-card__link {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brand);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s;
+}
+
+.home-b2b-card:hover .home-b2b-card__link i {
+  transform: translateX(4px);
+}

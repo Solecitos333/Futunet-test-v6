@@ -204,7 +204,7 @@ service cloud.firestore {
     match /service_requests/{requestId} {
       // Whitelist fields, enforce status 'pending', validate types and limit lengths
       allow create: if request.resource.data.keys().hasAll(['name', 'phone', 'email', 'message', 'serviceId', 'serviceTitle', 'status', 'type', 'createdAt']) &&
-                    request.resource.data.keys().hasOnly(['name', 'phone', 'email', 'message', 'serviceId', 'serviceTitle', 'status', 'type', 'createdAt', 'company', 'planRequested']) &&
+                    request.resource.data.keys().hasOnly(['name', 'phone', 'email', 'message', 'serviceId', 'serviceTitle', 'status', 'type', 'createdAt', 'company', 'planRequested', 'profile']) &&
                     request.resource.data.name is string && request.resource.data.name.size() <= 100 &&
                     request.resource.data.phone is string && request.resource.data.phone.size() <= 50 &&
                     request.resource.data.email is string && request.resource.data.email.size() <= 100 &&
@@ -215,7 +215,8 @@ service cloud.firestore {
                     request.resource.data.type in ['standard_service', 'internet_hiring'] &&
                     request.resource.data.createdAt == request.time &&
                     (!('company' in request.resource.data.keys()) || (request.resource.data.company is string && request.resource.data.company.size() <= 100)) &&
-                    (!('planRequested' in request.resource.data.keys()) || (request.resource.data.planRequested is string && request.resource.data.planRequested.size() <= 100));
+                    (!('planRequested' in request.resource.data.keys()) || (request.resource.data.planRequested is string && request.resource.data.planRequested.size() <= 100)) &&
+                    (!('profile' in request.resource.data.keys()) || (request.resource.data.profile is string && request.resource.data.profile.size() <= 50));
       allow read, update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
     }

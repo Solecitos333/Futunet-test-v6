@@ -3001,6 +3001,21 @@
       document.getElementById('sr-client-email').textContent = req.email || 'correo@domain.com';
       document.getElementById('sr-client-phone').textContent = 'Teléfono: ' + (req.phone || '—');
       document.getElementById('sr-client-company').textContent = req.company ? 'Empresa: ' + req.company : 'Empresa: No especificada';
+      
+      var profileLabel = 'Perfil: No especificado';
+      if (req.profile === 'pyme') {
+        profileLabel = 'Perfil: Pyme / Negocio Local / Local Comercial';
+      } else if (req.profile === 'corporativo') {
+        profileLabel = 'Perfil: Gran Empresa / Corporación / Nave Industrial';
+      } else if (req.profile) {
+        profileLabel = 'Perfil: ' + req.profile;
+      }
+      var profileEl = document.getElementById('sr-client-profile');
+      if (profileEl) {
+        profileEl.textContent = profileLabel;
+        profileEl.style.display = req.profile ? 'block' : 'none';
+      }
+
       document.getElementById('sr-client-message').textContent = req.message || 'Sin mensaje.';
       document.getElementById('sr-service-name').textContent = req.serviceTitle || 'General';
       document.getElementById('sr-created-date').textContent = req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleString('es-DO') : '—';

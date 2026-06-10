@@ -1,0 +1,262 @@
+/* =============================================================
+   B2B-SUBPAGE-BASE.CSS — Futunet SRL
+   Estilos base compartidos para las subpáginas B2B simples:
+   - Remozamiento e Infraestructura
+   - Mobiliario y Suministros
+   ============================================================= */
+
+.service-page {
+  padding-top: 80px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.service-hero {
+  position: relative;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.service-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(9, 16, 24, 0.4) 0%, rgba(9, 16, 24, 0.85) 100%);
+  z-index: 1;
+}
+
+.service-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  padding: 0 20px;
+}
+
+.service-hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+  letter-spacing: -0.03em;
+}
+
+.service-hero-desc {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 600px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.service-section {
+  padding: 60px 0;
+}
+
+.service-grid-info {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+}
+
+@media (max-width: 768px) {
+  .service-hero {
+    height: 280px;
+  }
+  .service-hero-title {
+    font-size: 1.8rem;
+  }
+  .service-hero-desc {
+    font-size: 0.9rem;
+  }
+  .service-grid-info {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+.service-details h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0a101d;
+  margin: 0 0 20px;
+}
+
+.service-details p {
+  color: #394c60;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 480px) {
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(10, 112, 162, 0.06);
+  border-radius: 16px;
+  background: #fdfefe;
+  box-shadow: 0 4px 12px rgba(10, 112, 162, 0.02);
+}
+
+.feature-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(10, 112, 162, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0A70A2;
+  flex-shrink: 0;
+}
+
+.feature-text h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0a101d;
+  margin: 0 0 4px;
+}
+
+.feature-text p {
+  font-size: 0.8rem;
+  color: #76889e;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Formulario de Solicitud */
+.request-card {
+  background: #ffffff;
+  border: 1px solid rgba(10, 112, 162, 0.06);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(10, 112, 162, 0.04);
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+}
+
+.request-card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #0a101d;
+  margin: 0 0 8px;
+}
+
+.request-card p {
+  font-size: 0.85rem;
+  color: #76889e;
+  margin: 0 0 20px;
+}
+
+.request-form-group {
+  margin-bottom: 14px;
+}
+
+.request-form-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #394c60;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.request-form-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: #f3f7fc;
+  border: 1.5px solid #e5eef8;
+  border-radius: 12px;
+  color: #0a101d;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.86rem;
+  transition: all 0.3s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.request-form-input:focus {
+  border-color: #0A70A2;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(10, 112, 162, 0.08);
+}
+
+.request-btn-submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #0a7ab0, #22a4e0);
+  box-shadow: 0 4px 14px rgba(10, 112, 162, 0.18);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.request-btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(10, 112, 162, 0.26);
+}
+
+.request-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Productos Asignados */
+.service-products-section {
+  background: #fdfefe;
+  border-top: 1px solid rgba(10, 112, 162, 0.03);
+  padding: 60px 0;
+}
+
+.service-products-section h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0a101d;
+  margin: 0 0 8px;
+}
+
+.service-products-section p {
+  font-size: 0.9rem;
+  color: #76889e;
+  margin: 0 0 30px;
+}
+
+.products-grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}

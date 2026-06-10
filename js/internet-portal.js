@@ -157,16 +157,15 @@
     
     // Mapeo de planes
     var plans = {
-      '10mb': { name: 'Plan Inicial 10 Megas', price: 'RD$ 900.00' },
-      '20mb': { name: 'Plan Bronce 20 Megas', price: 'RD$ 1,000.00' },
-      '50mb': { name: 'Plan Plata 50 Megas', price: 'RD$ 1,500.00' },
-      '100mb': { name: 'Plan Oro 100 Megas', price: 'RD$ 2,000.00' },
-      '200mb': { name: 'Plan Platino 200 Megas', price: 'RD$ 2,500.00' },
-      '300mb': { name: 'Plan Ultra 300 Megas', price: 'RD$ 3,000.00' },
-      '400mb': { name: 'Plan Pro 400 Megas', price: 'RD$ 4,000.00' },
-      '500mb': { name: 'Plan Élite 500 Megas', price: 'RD$ 5,000.00' }
+      '20mb': { name: 'Plan Bronce 20 Mbps Simétrico', price: 'RD$ 1,000.00' },
+      '50mb': { name: 'Plan Plata 50 Mbps Simétrico', price: 'RD$ 1,500.00' },
+      '100mb': { name: 'Plan Oro 100 Mbps Simétrico', price: 'RD$ 1,900.00' },
+      '200mb': { name: 'Plan Platino 200 Mbps Simétrico', price: 'RD$ 2,400.00' },
+      '300mb': { name: 'Plan Ultra 300 Mbps Simétrico', price: 'RD$ 3,200.00' },
+      '400mb': { name: 'Plan Pro 400 Mbps Simétrico', price: 'RD$ 4,100.00' },
+      '500mb': { name: 'Plan Élite 500 Mbps Simétrico', price: 'RD$ 4,500.00' }
     };
-    var planId = userData.internetPlan || '50mb';
+    var planId = userData.internetPlan || '100mb';
     var planInfo = plans[planId] || { name: 'Plan Personalizado ' + planId, price: 'A cotizar' };
     
     setText('portal-plan-name', planInfo.name);
@@ -617,7 +616,115 @@
         if (btn) btn.disabled = false;
       });
     }
+
+    // 4. Formulario de Contrato (Invitado sin registrarse)
+    var guestHiringForm = document.getElementById('internet-guest-hiring-form');
+    if (guestHiringForm) {
+      guestHiringForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var btn = document.getElementById('p-guest-submit-btn');
+        if (btn) btn.disabled = true;
+
+        var name = document.getElementById('p-guest-name').value.trim();
+        var email = document.getElementById('p-guest-email').value.trim();
+        var phone = document.getElementById('p-guest-phone').value.trim();
+        var date = document.getElementById('p-guest-date').value;
+        var schedule = document.getElementById('p-guest-schedule').value;
+        var address = document.getElementById('p-guest-address').value.trim();
+        var planName = document.getElementById('p-guest-plan-name').value;
+
+        if (!db) {
+          if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        try {
+          var messageText = 'Solicitud de contratación de Internet (Cliente Invitado): ' + planName + '.\n' +
+                            'Dirección: ' + address + '\n' +
+                            'Fecha Preferida: ' + date + '\n' +
+                            'Horario: ' + schedule;
+
+          await db.collection('service_requests').add({
+            name: name,
+            phone: phone,
+            email: email,
+            message: messageText,
+            serviceId: 'internet',
+            serviceTitle: 'Internet Fibra Óptica',
+            planRequested: planName,
+            status: 'pending',
+            type: 'internet_hiring',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          if (window.showToast) window.showToast('¡Solicitud enviada con éxito! Nos contactaremos a la brevedad.', 'success');
+          
+          guestHiringForm.reset();
+          setTimeout(function () {
+            window.closePortalModals();
+            window.toggleHiringWebForm(false);
+          }, 2000);
+        } catch (err) {
+          console.error('Error al registrar solicitud express:', err);
+          if (window.showToast) window.showToast('Error al enviar la solicitud. Intenta nuevamente.', 'error');
+        } finally {
+          if (btn) btn.disabled = false;
+        }
+      });
+    }
   }
+
+  // Modal de Canales de Contratación (B2C)
+  window.openHiringChannelsModal = function (name, id, price) {
+    var planTitleEl = document.getElementById('hiring-channels-plan-title');
+    var planPriceEl = document.getElementById('hiring-channels-plan-price');
+    if (planTitleEl) planTitleEl.textContent = name;
+    if (planPriceEl) planPriceEl.textContent = 'RD$ ' + price.toLocaleString();
+
+    var hiddenName = document.getElementById('p-guest-plan-name');
+    var hiddenId = document.getElementById('p-guest-plan-id');
+    var hiddenPrice = document.getElementById('p-guest-plan-price');
+    if (hiddenName) hiddenName.value = name;
+    if (hiddenId) hiddenId.value = id;
+    if (hiddenPrice) hiddenPrice.value = price;
+
+    var waBtn = document.getElementById('hiring-channel-wa-btn');
+    if (waBtn) {
+      var waMessage = "Hola Futunet! Estoy interesado en contratar el plan: " + name + " de RD$ " + price.toLocaleString() + "/mes. Por favor, me gustaría que me contactaran para coordinar la instalación.";
+      waBtn.href = "https://wa.me/18297411041?text=" + encodeURIComponent(waMessage);
+    }
+
+    var dateEl = document.getElementById('p-guest-date');
+    if (dateEl) {
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      var dd = String(tomorrow.getDate()).padStart(2, '0');
+      var mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+      var yyyy = tomorrow.getFullYear();
+      dateEl.min = yyyy + '-' + mm + '-' + dd;
+    }
+
+    window.toggleHiringWebForm(false);
+
+    var modal = document.getElementById('internet-hiring-channels-modal');
+    if (modal) {
+      modal.classList.add('is-active');
+      activePortalFocusTrap(modal);
+    }
+  };
+
+  window.toggleHiringWebForm = function (show) {
+    var selectorView = document.getElementById('hiring-channels-selector-view');
+    var formView = document.getElementById('hiring-channels-web-form-view');
+    if (show) {
+      if (selectorView) selectorView.style.display = 'none';
+      if (formView) formView.style.display = 'block';
+    } else {
+      if (selectorView) selectorView.style.display = 'block';
+      if (formView) formView.style.display = 'none';
+    }
+  };
 
   // Stepper para contratación
   window.selectHiringPlan = function (planName, planId, price) {
@@ -767,14 +874,13 @@
 
   // ─── CALCULADORA DE MEGAS (ACTIVIDADES Y DISPOSITIVOS) ───
   var plansList = [
-    { id: '10mb', speed: 10, name: 'Plan Inicial', desc: 'Ideal para redes sociales, chat y navegación básica de pocos dispositivos.', price: 900 },
-    { id: '20mb', speed: 20, name: 'Plan Bronce', desc: 'Ideal para familias pequeñas, streaming de video HD y navegación fluida.', price: 1000 },
-    { id: '50mb', speed: 50, name: 'Plan Plata', desc: 'Perfecto para teletrabajo, múltiples streamings HD y descargas rápidas.', price: 1500 },
-    { id: '100mb', speed: 100, name: 'Plan Oro', desc: 'Ideal para hogares conectados, streaming 4K, descargas pesadas y gaming.', price: 2000 },
-    { id: '200mb', speed: 200, name: 'Plan Platino', desc: 'Ideal para teletrabajo intensivo, gaming competitivo y muchos dispositivos concurrentes.', price: 2500 },
-    { id: '300mb', speed: 300, name: 'Plan Ultra', desc: 'Velocidad premium para creadores de contenido, streaming 4K/8K y domótica completa.', price: 3000 },
-    { id: '400mb', speed: 400, name: 'Plan Pro', desc: 'Velocidad ultra-rápida para máxima demanda y descargas de gran volumen.', price: 4000 },
-    { id: '500mb', speed: 500, name: 'Plan Élite', desc: 'La máxima potencia disponible. Velocidad empresarial para el hogar del futuro.', price: 5000 }
+    { id: '20mb', speed: 20, name: 'Plan Bronce Simétrico', desc: 'Ideal para familias pequeñas, streaming de video HD y navegación fluida con velocidad simétrica.', price: 1000 },
+    { id: '50mb', speed: 50, name: 'Plan Plata Simétrico', desc: 'Perfecto para teletrabajo, múltiples streamings HD y descargas rápidas con velocidad simétrica.', price: 1500 },
+    { id: '100mb', speed: 100, name: 'Plan Oro Simétrico', desc: 'Ideal para hogares conectados, streaming 4K, descargas pesadas y gaming con velocidad simétrica.', price: 1900 },
+    { id: '200mb', speed: 200, name: 'Plan Platino Simétrico', desc: 'Ideal para teletrabajo intensivo, gaming competitivo y muchos dispositivos concurrentes.', price: 2400 },
+    { id: '300mb', speed: 300, name: 'Plan Ultra Simétrico', desc: 'Velocidad premium para creadores de contenido, streaming 4K/8K y domótica completa.', price: 3200 },
+    { id: '400mb', speed: 400, name: 'Plan Pro Simétrico', desc: 'Velocidad ultra-rápida para máxima demanda y descargas de gran volumen.', price: 4100 },
+    { id: '500mb', speed: 500, name: 'Plan Élite Simétrico', desc: 'La máxima potencia disponible. Conectividad empresarial de ultra velocidad.', price: 4500 }
   ];
 
   var currentRecommendedPlan = plansList[0];
@@ -1035,14 +1141,18 @@
     var planId = id;
 
     if (!currentUser) {
-      sessionStorage.setItem('pending_hiring_plan_name', fullName);
-      sessionStorage.setItem('pending_hiring_plan_id', planId);
-      sessionStorage.setItem('pending_hiring_plan_price', price);
+      if (window.openHiringChannelsModal) {
+        window.openHiringChannelsModal(fullName, planId, price);
+      } else {
+        sessionStorage.setItem('pending_hiring_plan_name', fullName);
+        sessionStorage.setItem('pending_hiring_plan_id', planId);
+        sessionStorage.setItem('pending_hiring_plan_price', price);
 
-      if (window.showToast) window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
-      setTimeout(function () {
-        window.location.href = 'login.html?redirect=internet.html';
-      }, 1200);
+        if (window.showToast) window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
+        setTimeout(function () {
+          window.location.href = 'login.html?redirect=internet.html';
+        }, 1200);
+      }
     } else {
       if (userData && userData.isInternetClient) {
         window.openSupportModal('change_plan');

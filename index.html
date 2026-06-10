@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/navbar.css?v=3.3" />
   <link rel="stylesheet" href="css/hero.css?v=3.0" />
   <link rel="stylesheet" href="css/sections.css?v=3.1" />
+  <link rel="stylesheet" href="css/portal-rapido.css?v=1.0" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
@@ -161,8 +162,7 @@
       <div class="container">
         <ul class="claro-top-links">
           <li><a href="index.html" class="top-link-personas">Personas</a></li>
-          <li><a href="negocios.html" class="top-link-negocios">Negocios</a></li>
-          <li><a href="empresas.html" class="top-link-empresas">Empresas</a></li>
+          <li><a href="corporativo.html" class="top-link-corporativo">Corporativo</a></li>
         </ul>
         <div class="claro-top-right">
           <div class="top-bar-dropdown">
@@ -280,7 +280,7 @@
                   <ul>
                     <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
                     <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
-                    <li><a href="internet.html#planes"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                    <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
                   </ul>
                 </div>
                 <div class="mega-menu-col">
@@ -360,7 +360,7 @@
         <div class="mobile-details-content">
           <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
           <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
-          <a href="internet.html#planes" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
           <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
           <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
         </div>
@@ -560,6 +560,258 @@
       </div>
     </div>
   </div>
+
+  <hr class="section-divider" />
+
+  <!-- ═══ PORTAL DE ACCESOS RÁPIDOS Y PLANES (Claro-style) ═══ -->
+  <section id="portal-rapido" class="section">
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Centro de Soluciones</span>
+        <h2 class="section-title">Hola, ¿en qué podemos ayudarte hoy?</h2>
+        <p class="section-sub">Accede rápidamente a nuestros servicios, contrata fibra óptica y gestiona tus necesidades tecnológicas en Santiago.</p>
+      </div>
+
+      <!-- Grid de 5 Accesos Rápidos -->
+      <div class="portal-cards-container reveal">
+        <div class="portal-cards-grid">
+          <!-- Tarjeta 1: Solicitar Servicios -->
+          <a href="#contacto" class="portal-card">
+            <div class="portal-card__bg" style="background-image: url('img/banners/seguridad.webp');"></div>
+            <div class="portal-card__overlay"></div>
+            <div class="portal-card__content">
+              <h3 class="portal-card__title">Solicita servicios</h3>
+              <div class="portal-card__accent-bar"></div>
+            </div>
+          </a>
+
+          <!-- Tarjeta 2: Cámbiate a Futunet -->
+          <a href="internet.html" class="portal-card">
+            <div class="portal-card__bg" style="background-image: url('img/banners/redes.webp');"></div>
+            <div class="portal-card__overlay"></div>
+            <div class="portal-card__content">
+              <h3 class="portal-card__title">Cámbiate a Futunet</h3>
+              <div class="portal-card__accent-bar"></div>
+            </div>
+          </a>
+
+          <!-- Tarjeta 3: Conoce Ofertas -->
+          <a href="internet.html#planes" class="portal-card">
+            <div class="portal-card__bg" style="background-image: url('img/banners/energia.webp');"></div>
+            <div class="portal-card__overlay"></div>
+            <div class="portal-card__content">
+              <h3 class="portal-card__title">Conoce ofertas</h3>
+              <div class="portal-card__accent-bar"></div>
+            </div>
+          </a>
+
+          <!-- Tarjeta 4: Compra de Equipos -->
+          <a href="catalogo.html" class="portal-card">
+            <div class="portal-card__bg" style="background-image: url('img/banners/equipamos.webp');"></div>
+            <div class="portal-card__overlay"></div>
+            <div class="portal-card__content">
+              <h3 class="portal-card__title">Compra de equipos</h3>
+              <div class="portal-card__accent-bar"></div>
+            </div>
+          </a>
+
+          <!-- Tarjeta 5: Mide tu Velocidad -->
+          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" class="portal-card">
+            <div class="portal-card__bg" style="background-image: url('img/fibra-optica.png');"></div>
+            <div class="portal-card__overlay"></div>
+            <div class="portal-card__content">
+              <h3 class="portal-card__title">Mide tu velocidad</h3>
+              <div class="portal-card__accent-bar"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Sección de Planes Interactivos -->
+      <div class="portal-tabs-section reveal">
+        <!-- Navegación de Pestañas -->
+        <div class="portal-tabs-nav" role="tablist" aria-label="Planes por tipo">
+          <button type="button" class="portal-tab-btn active" role="tab" aria-selected="true" aria-controls="panel-hogar" id="tab-hogar" onclick="switchPortalTab('hogar')">
+            <i class="fas fa-home"></i> Servicios Hogar
+          </button>
+          <button type="button" class="portal-tab-btn" role="tab" aria-selected="false" aria-controls="panel-empresas" id="tab-empresas" onclick="switchPortalTab('empresas')">
+            <i class="fas fa-briefcase"></i> Servicios Empresas
+          </button>
+        </div>
+
+        <!-- Panel 1: Servicios Hogar -->
+        <div class="portal-tab-panel active" id="panel-hogar" role="tabpanel" aria-labelledby="tab-hogar">
+          <h3 class="portal-plans-title">Tenemos el mejor plan para ti</h3>
+          
+          <div class="home-plans-grid">
+            <!-- Plan Bronce 20M -->
+            <div class="home-plan-card">
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-wifi"></i></div>
+                <h4 class="home-plan-header__title">20 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Óptica Simétrica</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Fibra óptica simétrica (FTTH)</li>
+                  <li><i class="fas fa-check"></i> 20 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> Ideal para redes sociales y chat</li>
+                  <li><i class="fas fa-check"></i> Soporte técnico local 24/7</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 1,000</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Instalación 50% Off</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Bronce 20 Megas', '20mb', 1000)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan Plata 50M -->
+            <div class="home-plan-card">
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-wifi"></i></div>
+                <h4 class="home-plan-header__title">50 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Óptica Simétrica</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Fibra óptica simétrica (FTTH)</li>
+                  <li><i class="fas fa-check"></i> 50 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> Ideal para teletrabajo y streaming HD</li>
+                  <li><i class="fas fa-check"></i> Estabilidad garantizada sin cortes</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 1,500</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Instalación 50% Off</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Plata 50 Megas', '50mb', 1500)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan Oro 100M (Popular) -->
+            <div class="home-plan-card popular">
+              <span class="home-plan-badge">Recomendado</span>
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-network-wired"></i></div>
+                <h4 class="home-plan-header__title">100 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Simétrica FTTH</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Fibra óptica simétrica real (FTTH)</li>
+                  <li><i class="fas fa-check"></i> 100 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> Ideal para Smart Homes y streaming 4K</li>
+                  <li><i class="fas fa-check"></i> Router WiFi de alta potencia</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 1,900</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Oferta: Instalación Gratis</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Oro 100 Megas', '100mb', 1900)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Servicios Empresas -->
+        <div class="portal-tab-panel" id="panel-empresas" role="tabpanel" aria-labelledby="tab-empresas">
+          <h3 class="portal-plans-title">Conectividad comercial y soluciones IT</h3>
+          
+          <div class="home-plans-grid">
+            <!-- Plan Platino 200M -->
+            <div class="home-plan-card">
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-network-wired"></i></div>
+                <h4 class="home-plan-header__title">200 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Simétrica Ultra</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Fibra simétrica de alta velocidad (FTTH)</li>
+                  <li><i class="fas fa-check"></i> 200 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> Ideal para oficinas medianas y servidores</li>
+                  <li><i class="fas fa-check"></i> IP Pública disponible (Opcional)</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 2,400</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Oferta: Instalación Gratis</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Platino 200 Megas', '200mb', 2400)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan Ultra 300M -->
+            <div class="home-plan-card">
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-rocket"></i></div>
+                <h4 class="home-plan-header__title">300 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Simétrica Ultra</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Fibra simétrica de ultra velocidad (FTTH)</li>
+                  <li><i class="fas fa-check"></i> 300 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> Transferencia masiva y streaming 8K</li>
+                  <li><i class="fas fa-check"></i> Router Mesh WiFi 6 de alta cobertura</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 3,200</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Oferta: Instalación Gratis</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Ultra 300 Megas', '300mb', 3200)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+
+            <!-- Plan Élite 500M -->
+            <div class="home-plan-card">
+              <div class="home-plan-header">
+                <div class="home-plan-header__icon"><i class="fas fa-rocket"></i></div>
+                <h4 class="home-plan-header__title">500 Mbps</h4>
+                <span class="home-plan-header__sub">Fibra Simétrica Ultra</span>
+              </div>
+              <div class="home-plan-body">
+                <ul class="home-plan-features">
+                  <li><i class="fas fa-check"></i> Conectividad corporativa simétrica</li>
+                  <li><i class="fas fa-check"></i> 500 Mbps de subida y bajada</li>
+                  <li><i class="fas fa-check"></i> IP Pública Fija incluida sin costo</li>
+                  <li><i class="fas fa-check"></i> Soporte VIP técnico prioritario 24/7</li>
+                </ul>
+                <div class="home-plan-price-block">
+                  <span class="home-plan-price-label">Renta mensual</span>
+                  <strong class="home-plan-price-val">RD$ 4,500</strong>
+                  <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                  <span class="home-plan-price-promo">Oferta: Instalación Gratis</span>
+                </div>
+                <button type="button" class="home-plan-btn" onclick="selectHomePlan('Plan Élite 500 Megas', '500mb', 4500)">
+                  Solicitar plan
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
 
   <hr class="section-divider" />
 

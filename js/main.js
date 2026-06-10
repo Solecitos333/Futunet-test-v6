@@ -747,7 +747,7 @@ window.showToast = function(msg, type) {
   }, 4000);
 };
 
-// Resaltado dinámico del menú superior (Personas, Negocios, Empresas)
+// Resaltado dinámico del menú superior (Personas, Corporativo)
 document.addEventListener('DOMContentLoaded', () => {
   var pathname = window.location.pathname;
   var filename = pathname.substring(pathname.lastIndexOf('/') + 1) || 'index.html';
@@ -757,16 +757,59 @@ document.addEventListener('DOMContentLoaded', () => {
     a.classList.remove('active');
   });
 
-  if (filename === 'negocios.html') {
-    var link = document.querySelector('.top-link-negocios');
-    if (link) link.classList.add('active');
-  } else if (filename === 'empresas.html') {
-    var link = document.querySelector('.top-link-empresas');
+  if (filename === 'corporativo.html') {
+    var link = document.querySelector('.top-link-corporativo');
     if (link) link.classList.add('active');
   } else {
     var link = document.querySelector('.top-link-personas');
     if (link) link.classList.add('active');
   }
 });
+
+/* -------------------------------------------------------------
+   8. PORTAL RAPIDO — Interacciones del portal de inicio
+   ------------------------------------------------------------- */
+function switchPortalTab(tabName) {
+  const tabHogar = document.getElementById('tab-hogar');
+  const tabEmpresas = document.getElementById('tab-empresas');
+  const panelHogar = document.getElementById('panel-hogar');
+  const panelEmpresas = document.getElementById('panel-empresas');
+  
+  if (!tabHogar || !tabEmpresas || !panelHogar || !panelEmpresas) return;
+  
+  if (tabName === 'hogar') {
+    tabHogar.classList.add('active');
+    tabHogar.setAttribute('aria-selected', 'true');
+    tabEmpresas.classList.remove('active');
+    tabEmpresas.setAttribute('aria-selected', 'false');
+    
+    panelHogar.classList.add('active');
+    panelEmpresas.classList.remove('active');
+  } else if (tabName === 'empresas') {
+    tabEmpresas.classList.add('active');
+    tabEmpresas.setAttribute('aria-selected', 'true');
+    tabHogar.classList.remove('active');
+    tabHogar.setAttribute('aria-selected', 'false');
+    
+    panelEmpresas.classList.add('active');
+    panelHogar.classList.remove('active');
+  }
+}
+window.switchPortalTab = switchPortalTab;
+
+function selectHomePlan(planName, planId, price) {
+  sessionStorage.setItem('pending_hiring_plan_name', planName);
+  sessionStorage.setItem('pending_hiring_plan_id', planId);
+  sessionStorage.setItem('pending_hiring_plan_price', price);
+  
+  if (window.showToast) {
+    window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
+  }
+  
+  setTimeout(function() {
+    window.location.href = 'internet.html';
+  }, 1000);
+}
+window.selectHomePlan = selectHomePlan;
 
 

@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soluciones Corporativas y para Negocios — Futunet</title>
+  <meta name="description" content="Impulsa tu empresa con soluciones tecnológicas de fibra óptica simétrica y soporte técnico de TI. Soluciones a medida para Pymes y Empresas en Santiago." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css?v=3.0" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.3" />
+  <link rel="stylesheet" href="css/sections.css?v=3.1" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
+  <link rel="stylesheet" href="css/portal-rapido.css?v=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.json" />
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+  <style>
+    .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
+    
+    .service-hero {
+      position: relative; height: 380px; display: flex; align-items: center;
+      background-size: cover; background-position: center; color: #fff; overflow: hidden;
+    }
+    .service-hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(9,16,24,0.35) 0%, rgba(9,16,24,0.85) 100%);
+      z-index: 1;
+    }
+    .service-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
+    .service-hero-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+    .service-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
+
+    .service-section { padding: 60px 0; }
+    .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
+    
+    @media (max-width: 768px) {
+      .service-hero { height: 280px; }
+      .service-hero-title { font-size: 1.8rem; }
+      .service-hero-desc { font-size: 0.9rem; }
+      .service-grid-info { grid-template-columns: 1fr; gap: 30px; }
+    }
+
+    .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
+    .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
+    
+    .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
+    @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
+    .feature-item {
+      display: flex; gap: 12px; padding: 16px; border: 1px solid rgba(10,112,162,0.06);
+      border-radius: 16px; background: #fdfefe; box-shadow: 0 4px 12px rgba(10,112,162,0.02);
+    }
+    .feature-icon-wrapper {
+      width: 36px; height: 36px; border-radius: 50%; background: rgba(10,112,162,0.06);
+      display: flex; align-items: center; justify-content: center; color: #0A70A2; flex-shrink: 0;
+    }
+    .feature-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: 0.92rem; font-weight: 700; color: #0a101d; margin: 0 0 4px; }
+    .feature-text p { font-size: 0.8rem; color: #76889e; margin: 0; line-height: 1.4; }
+
+    /* Formulario de Solicitud */
+    .request-card {
+      background: #ffffff; border: 1px solid rgba(10,112,162,0.06); border-radius: 24px;
+      padding: 30px; box-shadow: 0 10px 30px rgba(10,112,162,0.04); position: sticky; top: 100px;
+    }
+    .request-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: #0a101d; margin: 0 0 8px; }
+    .request-card p { font-size: 0.85rem; color: #76889e; margin: 0 0 20px; }
+    .request-form-group { margin-bottom: 14px; }
+    .request-form-label { display: block; font-size: 0.72rem; font-weight: 600; color: #394c60; margin-bottom: 4px; text-transform: uppercase; }
+    .request-form-input {
+      width: 100%; padding: 11px 14px; background: #f3f7fc; border: 1.5px solid #e5eef8;
+      border-radius: 12px; color: #0a101d; font-family: 'Outfit', sans-serif; font-size: 0.86rem;
+      transition: all 0.3s; outline: none; box-sizing: border-box;
+    }
+    .request-form-input:focus { border-color: #0A70A2; background: #fff; box-shadow: 0 0 0 3px rgba(10,112,162,0.08); }
+    .request-btn-submit {
+      width: 100%; padding: 12px; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem; font-weight: 700; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, #0a7ab0, #22a4e0); box-shadow: 0 4px 14px rgba(10,112,162,0.18);
+      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .request-btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,112,162,0.26); }
+
+    /* Custom Styles for Hero Badge and FAQ */
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 15px; 
+      background: rgba(10, 112, 162, 0.15); border: 1px solid rgba(10, 112, 162, 0.3); 
+      padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; 
+      color: #0A70A2; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(4px);
+    }
+    .hero-badge .dot {
+      width: 8px; height: 8px; background: #0ea5e9; border-radius: 50%; display: inline-block;
+      box-shadow: 0 0 8px #0ea5e9; animation: badgePulseAnim 2s infinite;
+    }
+    @keyframes badgePulseAnim {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 12px #0ea5e9; }
+      100% { transform: scale(0.9); opacity: 0.8; }
+    }
+
+    .faqs-container { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+    .faq-item { background: white; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 16px; overflow: hidden; transition: all 0.3s; }
+    .faq-item.active { border-color: #0A70A2; box-shadow: 0 4px 16px rgba(10, 112, 162, 0.04); }
+    .faq-trigger {
+      width: 100%; border: none; background: transparent; padding: 20px 24px; text-align: left;
+      display: flex; justify-content: space-between; align-items: center; font-family: 'Outfit', sans-serif;
+      font-size: 1.02rem; font-weight: 700; color: #0f172a; cursor: pointer; transition: color 0.3s;
+    }
+    .faq-trigger:hover { color: #0A70A2; }
+    .faq-trigger i { font-size: 0.88rem; color: #64748b; transition: transform 0.3s; }
+    .faq-item.active .faq-trigger i { transform: rotate(180deg); color: #0A70A2; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(0, 1, 0, 1); padding: 0 24px; }
+    .faq-answer p { color: #475569; font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; }
+
+    /* Tabs corporativos */
+    .portal-tab-btn {
+      position: relative;
+      color: #64748b;
+    }
+    .portal-tab-btn.active {
+      color: #0A70A2 !important;
+    }
+    .portal-tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: #0A70A2;
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .portal-tab-btn.active::after {
+      transform: scaleX(1);
+    }
+  </style>
+</head>
+<body>
+
+  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
+    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" role="banner">
+    <!-- Top Bar estilo Claro -->
+    <div class="claro-top-bar">
+      <div class="container">
+        <ul class="claro-top-links">
+          <li><a href="index.html" class="top-link-personas">Personas</a></li>
+          <li><a href="corporativo.html" class="top-link-corporativo active">Corporativo</a></li>
+        </ul>
+        <div class="claro-top-right">
+          <div class="top-bar-dropdown">
+            <span class="top-bar-dropdown-trigger">Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:2px;"></i></span>
+            <ul class="top-bar-dropdown-menu">
+              <li><a href="nosotros.html"><i class="fas fa-info-circle"></i> Nosotros</a></li>
+              <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+              <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
+            </ul>
+          </div>
+          <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
+        </div>
+      </div>
+    </div>
+
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+          <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
+        </a>
+        
+        <!-- Buscador compacto visible al hacer scroll -->
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
+
+        <ul class="nav-menu">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          
+          <!-- Pestaña Servicios con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
+                  <ul>
+                    <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
+                    <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
+                    <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i> Fibra Óptica</a></li>
+                    <li><a href="internet.html"><i class="fas fa-satellite-dish"></i> Internet Inalámbrico</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
+                  <ul>
+                    <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
+                    <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
+                    <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i> Climatización y Energía</a></li>
+                    <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i> Remozamiento e Infraestructura</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i> Equipamiento B2B</h5>
+                  <ul>
+                    <li><a href="equipos-oficina.html"><i class="fas fa-laptop"></i> Equipos de Oficina y Cómputo</a></li>
+                    <li><a href="mobiliario-suministros.html"><i class="fas fa-chair"></i> Mobiliario y Suministros</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
+                  <ul>
+                    <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Pestaña Tienda con Mega Menu -->
+          <li class="has-mega">
+            <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
+                  <ul>
+                    <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
+                    <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
+                    <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i> Cámaras de Seguridad</a></li>
+                    <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i> Suministros e Impresoras</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
+                  <ul>
+                    <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i> Catálogo Completo</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
+                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
+                    <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
+                    <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Pestaña Soporte con Mega Menu -->
+          <li class="has-mega">
+            <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
+                    <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
+                  <ul>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+          <!-- Botón Mi Cuenta con Auth dinámico -->
+          <div class="navbar-auth-container"></div>
+          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+            <svg width="15" height="15"><use href="#wa-icon"/></svg>
+            829-741-1041
+          </a>
+        </div>
+
+        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+      
+      <!-- Acordeones móviles nativos -->
+      <details class="mobile-details">
+        <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <div class="mobile-details-section">Servicios Hogar</div>
+          <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
+          <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
+          
+          <div class="mobile-details-section">Servicios Empresas</div>
+          <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
+          <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
+          <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
+          <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
+          
+          <div class="mobile-details-section">Equipamiento B2B</div>
+          <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
+          <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
+          
+          <div class="mobile-details-section">Entretenimiento</div>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
+          <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
+          <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
+          <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+          <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
+          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
+        </div>
+      </details>
+
+      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+        829-741-1041
+      </a>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
+    </div>
+  </header>
+
+  <main class="service-page">
+    <!-- Hero Banner -->
+    <section class="service-hero" style="background-image: url('img/hero-tech-bg.webp');">
+      <div class="container">
+        <div class="service-hero-content">
+          <div class="hero-badge">
+            <span class="dot"></span>Futunet Corporativo
+          </div>
+          <h1 class="service-hero-title" id="service-title">Soluciones Tecnológicas Corporativas</h1>
+          <p class="service-hero-desc">Impulsamos tu negocio, local comercial o gran corporación con conectividad simétrica a internet, redes robustas, seguridad electrónica y equipamiento informático integral.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de Confianza Corporativa (Trust Bar) -->
+    <div id="home-trust-bar" class="stats-bar trust-bar">
+      <div class="container">
+        <div class="stats-inner">
+          <button
+            class="trust-item trust-toggle reveal is-active"
+            type="button"
+            data-trust-title="Facturación con NCF"
+            data-trust-copy="Comprobantes fiscales válidos para tus reportes tributarios sin complicaciones en todos tus servicios."
+            aria-controls="trust-mobile-detail"
+            aria-expanded="true"
+          >
+            <div class="trust-icon"><i data-lucide="file-text"></i></div>
+            <div class="trust-text">
+              <strong>Facturación con NCF</strong>
+              <span>Comprobantes fiscales para tus reportes tributarios en todos los servicios.</span>
+            </div>
+          </button>
+    
+          <button
+            class="trust-item trust-toggle reveal"
+            type="button"
+            data-trust-title="Despliegue Rápido"
+            data-trust-copy="Prioridad de instalación en Santiago (24/48 horas hábiles para tu oficina o negocio)."
+            aria-controls="trust-mobile-detail"
+            aria-expanded="false"
+          >
+            <div class="trust-icon"><i data-lucide="zap"></i></div>
+            <div class="trust-text">
+              <strong>Despliegue Rápido</strong>
+              <span>Instalación prioritaria de fibra en tu negocio en 24/48 horas hábiles.</span>
+            </div>
+          </button>
+    
+          <button
+            class="trust-item trust-toggle reveal"
+            type="button"
+            data-trust-title="Soporte Profesional SLA"
+            data-trust-copy="Atención técnica dedicada con técnicos de campo en Santiago listos para resolver incidencias in-situ en tiempo récord."
+            aria-controls="trust-mobile-detail"
+            aria-expanded="false"
+          >
+            <div class="trust-icon"><i data-lucide="wrench"></i></div>
+            <div class="trust-text">
+              <strong>Soporte Profesional SLA</strong>
+              <span>Técnicos calificados in-situ con contratos de nivel de servicio garantizados.</span>
+            </div>
+          </button>
+    
+          <button
+            class="trust-item trust-toggle reveal"
+            type="button"
+            data-trust-title="Garantía de Hardware"
+            data-trust-copy="Todos los equipos de red, energía y cómputo cuentan con garantía oficial directa de marca."
+            aria-controls="trust-mobile-detail"
+            aria-expanded="false"
+          >
+            <div class="trust-icon"><i data-lucide="shield-check"></i></div>
+            <div class="trust-text">
+              <strong>Garantía de Hardware</strong>
+              <span>Suministros y equipamiento con garantía de hardware y respaldo técnico directo.</span>
+            </div>
+          </button>
+        </div>
+        <div class="trust-mobile-detail" id="trust-mobile-detail" aria-live="polite">
+          <strong id="trust-mobile-detail-title">Facturación con NCF</strong>
+          <p id="trust-mobile-detail-copy">Comprobantes fiscales válidos para tus reportes tributarios sin complicaciones en todos tus servicios.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Planes Fibra Óptica Corporativos y Pyme -->
+    <section id="planes-corporativos" class="section bg-light" style="padding: 60px 0;">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 40px; text-align: center;">
+          <span class="section-label" style="color: #0A70A2; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Internet para Empresas</span>
+          <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Conectividad de alto rendimiento</h2>
+          <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Planes de fibra simétrica comercial optimizados para Pymes y oficinas en Santiago, con la mejor relación costo-beneficio del mercado.</p>
+        </div>
+    
+        <!-- Planes Pyme Simétricos -->
+        <div class="home-plans-grid" id="panel-pyme" style="display: grid;">
+          <!-- Plan Platino 200M -->
+          <div class="home-plan-card">
+            <div class="home-plan-header">
+              <div class="home-plan-header__icon"><i class="fas fa-network-wired"></i></div>
+              <h4 class="home-plan-header__title">200 Mbps</h4>
+              <span class="home-plan-header__sub">Fibra Simétrica Pyme</span>
+            </div>
+            <div class="home-plan-body">
+              <ul class="home-plan-features">
+                <li><i class="fas fa-check"></i> Fibra simétrica de alta velocidad (FTTH)</li>
+                <li><i class="fas fa-check"></i> 200 Mbps de subida y 200 Mbps de bajada</li>
+                <li><i class="fas fa-check"></i> Ideal para 10-20 dispositivos</li>
+                <li><i class="fas fa-check"></i> Soporte técnico local prioritario</li>
+              </ul>
+              <div class="home-plan-price-block">
+                <span class="home-plan-price-label">Renta mensual</span>
+                <strong class="home-plan-price-val">RD$ 2,400</strong>
+                <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                <span class="home-plan-price-promo">Oferta: Instalación Gratis</span>
+              </div>
+              <button type="button" class="home-plan-btn" onclick="selectB2bPlan('Plan Pyme Platino 200 Megas', '200 Mbps Simétrico', 2400)">
+                Solicitar plan
+              </button>
+            </div>
+          </div>
+    
+          <!-- Plan Ultra 300M (Popular) -->
+          <div class="home-plan-card popular">
+            <span class="home-plan-badge">Recomendado</span>
+            <div class="home-plan-header">
+              <div class="home-plan-header__icon"><i class="fas fa-rocket"></i></div>
+              <h4 class="home-plan-header__title">300 Mbps</h4>
+              <span class="home-plan-header__sub">Fibra Simétrica Pyme</span>
+            </div>
+            <div class="home-plan-body">
+              <ul class="home-plan-features">
+                <li><i class="fas fa-check"></i> Fibra simétrica de ultra velocidad</li>
+                <li><i class="fas fa-check"></i> 300 Mbps de subida y 300 Mbps de bajada</li>
+                <li><i class="fas fa-check"></i> Router Mesh WiFi corporativo incluido</li>
+                <li><i class="fas fa-check"></i> Soporte VIP 24/7 y monitoreo</li>
+              </ul>
+              <div class="home-plan-price-block">
+                <span class="home-plan-price-label">Renta mensual</span>
+                <strong class="home-plan-price-val">RD$ 3,200</strong>
+                <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                <span class="home-plan-price-promo">Prioridad de Red + Soporte VIP</span>
+              </div>
+              <button type="button" class="home-plan-btn" onclick="selectB2bPlan('Plan Pyme Ultra 300 Megas', '300 Mbps Simétrico', 3200)">
+                Solicitar plan
+              </button>
+            </div>
+          </div>
+    
+          <!-- Plan Élite 500M -->
+          <div class="home-plan-card">
+            <div class="home-plan-header">
+              <div class="home-plan-header__icon"><i class="fas fa-building"></i></div>
+              <h4 class="home-plan-header__title">500 Mbps</h4>
+              <span class="home-plan-header__sub">Fibra Simétrica Pyme</span>
+            </div>
+            <div class="home-plan-body">
+              <ul class="home-plan-features">
+                <li><i class="fas fa-check"></i> Máxima potencia simétrica disponible</li>
+                <li><i class="fas fa-check"></i> 500 Mbps de subida y 500 Mbps de bajada</li>
+                <li><i class="fas fa-check"></i> IP Pública Fija incluida sin costo</li>
+                <li><i class="fas fa-check"></i> Soporte prioritario in-situ Santiago</li>
+              </ul>
+              <div class="home-plan-price-block">
+                <span class="home-plan-price-label">Renta mensual</span>
+                <strong class="home-plan-price-val">RD$ 4,500</strong>
+                <span class="home-plan-price-taxes">Impuestos incluidos</span>
+                <span class="home-plan-price-promo">Garantía de disponibilidad VIP</span>
+              </div>
+              <button type="button" class="home-plan-btn" onclick="selectB2bPlan('Plan Pyme Élite 500 Megas', '500 Mbps Simétrico', 4500)">
+                Solicitar plan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Soluciones Corporativas TI (Hub de Servicios) -->
+    <section id="soluciones-corporativas" class="section" style="padding: 60px 0;">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 40px; text-align: center;">
+          <span class="section-label" style="color: #0A70A2; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Hub Tecnológico B2B</span>
+          <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Soluciones integrales de infraestructura</h2>
+          <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Proyectos llave en mano de ingeniería, redes y soporte técnico para oficinas, naves comerciales y locales.</p>
+        </div>
+    
+        <div class="categories-grid reveal">
+          <a href="redes-datos.html" class="category-card">
+            <img src="img/redes.jpg" alt="Conectividad &amp; Redes" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Conectividad &amp;<br>Redes</h3>
+                <p class="category-card-copy">Cableado estructurado Cat6, enlaces de fibra, racks de servidores y WiFi administrado.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="network"></i></div>
+            </div>
+          </a>
+    
+          <a href="seguridad-electronica.html" class="category-card">
+            <img src="img/camaras.jpg" alt="Cámaras IP &amp; Seguridad" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Cámaras IP &amp;<br>Seguridad</h3>
+                <p class="category-card-copy">CCTV IP monitoreable 24/7, analíticas de video, accesos biométricos y detección de incendios.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="shield-check"></i></div>
+            </div>
+          </a>
+    
+          <a href="energia-climatizacion.html" class="category-card">
+            <img src="img/ups.jpg" alt="Climatización &amp; Respaldo" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Respaldo de Energía<br>&amp; Climatización</h3>
+                <p class="category-card-copy">UPS industriales de doble conversión, sistemas solares y climatización de precisión.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="zap"></i></div>
+            </div>
+          </a>
+    
+          <a href="infraestructura-remozamiento.html" class="category-card">
+            <img src="img/sheetrock.jpg" alt="Infraestructura &amp; Remozamiento" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Infraestructura &amp;<br>Remozamiento</h3>
+                <p class="category-card-copy">Remodelaciones de oficinas, drywall (sheetrock), pintura comercial y canalización industrial.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="hammer"></i></div>
+            </div>
+          </a>
+    
+          <a href="equipos-oficina.html" class="category-card">
+            <img src="img/laptops.jpg" alt="Equipamiento B2B &amp; Computo" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Equipamiento B2B<br>&amp; Cómputo</h3>
+                <p class="category-card-copy">Laptops corporativas, equipos de escritorio, servidores e impresoras de alta demanda.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="monitor"></i></div>
+            </div>
+          </a>
+    
+          <a href="mobiliario-suministros.html" class="category-card">
+            <img src="img/mobiliario.jpg" alt="Mobiliario &amp; Suministros" loading="lazy" decoding="async" />
+            <div class="category-card-content">
+              <div>
+                <h3 class="category-card-title">Mobiliario &amp;<br>Suministros</h3>
+                <p class="category-card-copy">Sillas de oficina ergonómicas, escritorios, archivos de metal y útiles comerciales.</p>
+                <span class="category-card-link" aria-hidden="true">Ver soluciones <i class="fas fa-arrow-right"></i></span>
+              </div>
+              <div class="category-card-icon"><i data-lucide="armchair"></i></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Aliados Tecnológicos B2B -->
+    <section class="section B2B-brands bg-light" style="padding: 40px 0 20px; border-top: 1px solid rgba(11,126,181,0.05); border-bottom: 1px solid rgba(11,126,181,0.05);">
+      <div class="container">
+        <div class="text-center" style="margin-bottom: 25px; text-align: center;">
+          <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: #76889e; text-transform: uppercase; letter-spacing: 1.5px; margin: 0;">Marcas y Aliados Tecnológicos Autorizados</h3>
+          <p style="color: #94a3b8; font-size: 0.85rem; margin: 6px 0 0;">Instalamos y respaldamos equipos de las marcas líderes a nivel mundial</p>
+        </div>
+        <div class="brands-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px 45px; opacity: 0.85;">
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/cisco.svg" alt="Cisco" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/ubiquiti.svg" alt="Ubiquiti" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/hikvision.svg" alt="Hikvision" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/dell.svg" alt="Dell" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/lenovo.svg" alt="Lenovo" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/tp-link.svg" alt="TP-Link" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+          <div class="brand-item-b2b" style="width: 110px; height: 50px; display: flex; align-items: center; justify-content: center; filter: grayscale(100%) brightness(0.9); transition: all 0.3s; opacity: 0.7;" onmouseover="this.style.filter='none'; this.style.opacity='1'" onmouseout="this.style.filter='grayscale(100%) brightness(0.9)'; this.style.opacity='0.7'">
+            <img src="img/marcas/schneiderelectric.svg" alt="Schneider Electric" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Main Content Grid with Lead Form -->
+    <section class="service-section">
+      <div class="container">
+        <div class="service-grid-info">
+          <!-- Text and Specs -->
+          <div class="service-details">
+            <h3>Ingeniería tecnológica integrada para todo tamaño de empresa</h3>
+            <p>
+              En Futunet diseñamos y ejecutamos proyectos de telecomunicaciones, seguridad electrónica e infraestructura física. Nos adaptamos a las necesidades de negocios locales que inician, hasta grandes industrias con rigurosas normas de seguridad y continuidad operativa.
+            </p>
+
+            <h3 style="margin-top:40px;">Beneficios Futunet Corporativo</h3>
+            <div class="features-list">
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="check"></i></div>
+                <div class="feature-text">
+                  <h4>NCF y Cumplimiento Tributario</h4>
+                  <p>Facturación formal con comprobantes fiscales válidos y autorizados.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="check"></i></div>
+                <div class="feature-text">
+                  <h4>Soporte local en sitio prioritario</h4>
+                  <p>Técnicos expertos en Santiago listos para resolver incidencias en tiempo récord.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="check"></i></div>
+                <div class="feature-text">
+                  <h4>Contratos de Mantenimiento (SLA)</h4>
+                  <p>Monitoreo proactivo de redes y mantenimiento preventivo periódico.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon-wrapper"><i data-lucide="check"></i></div>
+                <div class="feature-text">
+                  <h4>Evaluación y Cotización Gratis</h4>
+                  <p>Visitamos tu local u oficina en Santiago para evaluar tus necesidades sin costo.</p>
+                </div>
+              </div>
+            </div>
+
+            <p style="margin-top: 30px;">
+              Somos Proveedores del Estado inscritos formalmente y estamos comprometidos con entregar proyectos llave en mano de alto desempeño con garantía de hardware y respaldo técnico directo.
+            </p>
+          </div>
+
+          <!-- Sticky Lead Form B2B -->
+          <div>
+            <div class="request-card">
+              <h3>Contacto B2B</h3>
+              <p>Envíanos los requerimientos de tu local o proyecto corporativo y te enviaremos una propuesta formal en 24 horas.</p>
+              
+              <form id="service-request-form">
+                <input type="hidden" id="req-service-type" value="Corporativo B2B" />
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-name">Nombre de Contacto</label>
+                  <input type="text" id="req-name" class="request-form-input" required />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-email">Correo Institucional</label>
+                  <input type="email" id="req-email" class="request-form-input" required />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-company">Empresa / Razón Social</label>
+                  <input type="text" id="req-company" class="request-form-input" required placeholder="Ej. Tiendas del Cibao SRL" />
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-profile">Perfil de tu Empresa</label>
+                  <select id="req-profile" class="request-form-input" required style="width: 100%; border: 1.5px solid #e5eef8; border-radius: 12px; padding: 11px 14px; background: #f3f7fc;">
+                    <option value="pyme">Pyme / Negocio Local / Local Comercial</option>
+                    <option value="corporativo">Gran Empresa / Corporación / Nave Industrial</option>
+                  </select>
+                </div>
+                <div class="request-form-group">
+                  <label class="request-form-label" for="req-message">Especificaciones de tu requerimiento</label>
+                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe brevemente tus necesidades (ej: cotizar plan de 200 Megas, cámaras para almacén y cableado estructurado)..."></textarea>
+                </div>
+                
+                <button type="submit" class="request-btn-submit" id="req-submit-btn">
+                  <i data-lucide="send"></i> Solicitar Propuesta Corporativa
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Sección de Preguntas Frecuentes B2B -->
+    <section id="faqs-pyme" class="section bg-light" style="padding: 60px 0;">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 40px; text-align: center;">
+          <span class="section-label" style="color: #0A70A2; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem;">Soporte y Dudas</span>
+          <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Preguntas Frecuentes Corporativas</h2>
+          <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Respuestas a dudas comerciales sobre comprobantes fiscales, SLA e instalaciones en Santiago.</p>
+        </div>
+    
+        <div class="faqs-container" style="max-width: 800px; margin: 0 auto;">
+          <div class="faq-item">
+            <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
+              <span>¿Ofrecen facturación formal con comprobante fiscal (NCF)?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Sí, por supuesto. Futunet es una empresa formalmente constituida en la República Dominicana. Emitimos facturas con comprobante fiscal (NCF) válido para crédito fiscal para todos los planes de internet B2B, enlaces de datos y equipamiento informático.</p>
+            </div>
+          </div>
+    
+          <div class="faq-item">
+            <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
+              <span>¿Cuál es el tiempo de respuesta del soporte técnico B2B?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Los clientes corporativos cuentan con una línea prioritaria en el 829-741-1041. El soporte técnico remoto es inmediato. Para asistencias físicas in-situ en Santiago de los Caballeros, nuestro tiempo de respuesta está estipulado por contrato en un plazo promedio de 2 a 4 horas hábiles.</p>
+            </div>
+          </div>
+    
+          <div class="faq-item">
+            <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
+              <span>¿Qué tipo de red de internet de fibra óptica utilizan?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Nuestros planes de internet Pyme utilizan una red compartida simétrica (red de reuso) de fibra óptica de alto rendimiento. Esto nos permite garantizar velocidades simétricas reales (misma velocidad de subida y bajada) y una estabilidad excepcional a tarifas altamente competitivas para negocios locales.</p>
+            </div>
+          </div>
+    
+          <div class="faq-item">
+            <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
+              <span>¿Ofrecen facilidades de pago o financiamiento para proyectos corporativos?</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="faq-answer">
+              <p>Sí. Para proyectos integrales de infraestructura, redes complejas o flotilla de cómputo, ofrecemos financiamiento comercial y planes de pago en cuotas sujetos a evaluación crediticia. Puedes detallar las especificaciones de tu proyecto en el formulario de contacto para recibir asesoría comercial personalizada.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="section-divider" />
+
+    <!-- Banner final de CTA -->
+    <section id="pyme-cta" class="cta-banner" style="margin-bottom: 0;">
+      <div class="container">
+        <div class="cta-banner-inner reveal">
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; color: #fff; margin-bottom: 15px; letter-spacing: -0.04em;">¿Listo para impulsar la tecnología de tu empresa?</h2>
+          <p style="color: rgba(255, 255, 255, 0.8); max-width: 600px; margin: 0 auto 30px; font-size: 0.98rem; line-height: 1.7;">Consúltanos vía WhatsApp de forma directa o solicita una llamada de asesoría comercial gratuita en Santiago de los Caballeros.</p>
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quisiera%20asesor%C3%ADa%20y%20cotizaci%C3%B3n%20para%20mi%20empresa." target="_blank" rel="noopener noreferrer" class="btn btn-wa cta-btn-lg" style="display: inline-flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18"><use href="#wa-icon"/></svg>
+              Hablar con un Asesor Corporativo
+            </a>
+            <a href="#service-request-form" class="btn btn-primary cta-btn-lg" style="background: linear-gradient(135deg, #0a7ab0, #22a4e0); border-color: transparent;" onclick="document.getElementById('req-name').focus();">
+              Solicitar Propuesta por Web
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html#inicio" class="footer-logo-link">
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="1009" height="207" loading="lazy" decoding="async" />
+          </a>
+          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Soluciones</h5>
+          <ul>
+            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+            <li><a href="infraestructura-remozamiento.html">Infraestructura</a></li>
+            <li><a href="catalogo.html">Ver catálogo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contacto</h5>
+          <ul>
+            <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
+            <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Calle 7 #1, Las Colinas, Santiago</a></li>
+            <li><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20comercial." target="_blank" rel="noopener noreferrer"><i data-lucide="user" class="footer-icon"></i> Orbis Espinal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="footer-year">2026</span> Futunet · Todos los derechos reservados</span>
+        <span>Santiago, República Dominicana</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
+    <a href="catalogo.html" class="mobile-bottom-bar__action">
+      <i data-lucide="layout-grid"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/chatbot.js"></script>
+  <script src="js/main.js?v=3.2"></script>
+  <script defer src="js/service-page.js"></script>
+  <script>
+    function selectB2bPlan(planName, speed, price) {
+      var messageArea = document.getElementById('req-message');
+      var nameInput = document.getElementById('req-name');
+      var profileSelect = document.getElementById('req-profile');
+      
+      if (profileSelect) {
+        profileSelect.value = 'pyme';
+      }
+      
+      if (messageArea) {
+        messageArea.value = 'Hola, me interesa contratar el plan Pyme Simétrico ' + planName + ' (' + speed + ') de RD$ ' + price.toLocaleString('es-DO') + '/mes para mi negocio. Por favor, contáctenme con los detalles de instalación.';
+      }
+      
+      var formCard = document.querySelector('.request-card');
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
+      if (nameInput) {
+        setTimeout(function() {
+          nameInput.focus();
+        }, 800);
+      }
+    }
+
+    function toggleLocalFaq(btn) {
+      var item = btn.parentElement;
+      var answer = item.querySelector('.faq-answer');
+      var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      
+      // Cerrar otros
+      document.querySelectorAll('#faqs-pyme .faq-item').forEach(function(el) {
+        if (el !== item) {
+          el.classList.remove('active');
+          el.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+          el.querySelector('.faq-answer').style.maxHeight = null;
+        }
+      });
+      
+      if (isExpanded) {
+        item.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+        answer.style.maxHeight = null;
+      } else {
+        item.classList.add('active');
+        btn.setAttribute('aria-expanded', 'true');
+        answer.style.maxHeight = answer.scrollHeight + "px";
+      }
+    }
+
+    // Inicializar iconos de Lucide al cargar el DOM
+    window.addEventListener('DOMContentLoaded', function() {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -10,38 +10,57 @@
 
   // Inicialización de la Página de Servicio
   async function init() {
-    // Si estamos en la página de seguridad electrónica, redes y datos, energía y clima, o equipos de oficina, inicializar y disparar la carga inicial
-    if (window.currentServiceCategory === 'seguridad_electronica' || window.currentServiceCategory === 'redes_datos' || window.currentServiceCategory === 'energia_climatizacion' || window.currentServiceCategory === 'equipos_oficina') {
+    var requestForm = document.getElementById('service-request-form');
+    
+    // Si la página tiene el formulario de solicitud, inicializar base de datos y configurarlo
+    if (requestForm) {
       if (window.FutunetFirebase && window.FutunetFirebase.db) {
         db = window.FutunetFirebase.db;
       }
-      serviceId = window.currentServiceCategory === 'seguridad_electronica' ? 'seguridad' : 
-                  (window.currentServiceCategory === 'redes_datos' ? 'redes' : 
-                  (window.currentServiceCategory === 'energia_climatizacion' ? 'energia' : 'equipos'));
+      
+      // Determinar serviceId
+      if (window.currentServiceCategory) {
+        serviceId = window.currentServiceCategory === 'seguridad_electronica' ? 'seguridad' : 
+                    (window.currentServiceCategory === 'redes_datos' ? 'redes' : 
+                    (window.currentServiceCategory === 'energia_climatizacion' ? 'energia' : 'equipos'));
+      } else {
+        var container = document.getElementById('service-page-container');
+        if (container) {
+          serviceId = container.getAttribute('data-service-id') || '';
+        } else {
+          serviceId = 'corporativo';
+        }
+      }
+      
       setupRequestForm();
-      var event = new CustomEvent('filterSubcategory', { detail: 'all' });
-      document.dispatchEvent(event);
-      return;
+      
+      // Si tiene subcategorías dinámicas, disparar carga inicial
+      if (window.currentServiceCategory === 'seguridad_electronica' || window.currentServiceCategory === 'redes_datos' || window.currentServiceCategory === 'energia_climatizacion' || window.currentServiceCategory === 'equipos_oficina') {
+        var event = new CustomEvent('filterSubcategory', { detail: 'all' });
+        document.dispatchEvent(event);
+        return;
+      }
+      
+      // Si no tiene contenedor dinámico de productos, no hay nada más que hacer
+      if (!document.getElementById('service-page-container')) {
+        return;
+      }
+    } else {
+      // Si no hay formulario en absoluto, pero hay contenedor
+      var container = document.getElementById('service-page-container');
+      if (!container) return;
+      serviceId = container.getAttribute('data-service-id');
     }
 
+    // Carga de contenido dinámico si aplica y existe contenedor
     var container = document.getElementById('service-page-container');
-    if (!container) return;
-
-    serviceId = container.getAttribute('data-service-id');
-    if (!serviceId) return;
-
-    // Esperar a que Firebase esté listo
-    if (window.FutunetFirebase && window.FutunetFirebase.db) {
-      db = window.FutunetFirebase.db;
-      
-      // Sincronizar datos dinámicos del servicio desde Firestore
-      await syncServiceContent();
-      
-      // Configurar el formulario de solicitudes
-      setupRequestForm();
-    } else {
-      console.warn('Firebase no inicializado. Utilizando contenido estático base.');
-      setupRequestForm(); // Fallback sin Firebase directo
+    if (container) {
+      if (window.FutunetFirebase && window.FutunetFirebase.db) {
+        db = window.FutunetFirebase.db;
+        await syncServiceContent();
+      } else {
+        console.warn('Firebase no inicializado. Utilizando contenido estático base.');
+      }
     }
   }
 
@@ -264,6 +283,37 @@
     var form = document.getElementById('service-request-form');
     if (!form) return;
 
+    // Auto-completado de campos si el usuario está autenticado
+    function autofillUserData(userData) {
+      if (!userData) return;
+      var nameField = document.getElementById('req-name');
+      var emailField = document.getElementById('req-email');
+      var phoneField = document.getElementById('req-phone');
+      
+      if (nameField && !nameField.value && userData.displayName) {
+        nameField.value = userData.displayName;
+      }
+      if (emailField && !emailField.value && userData.email) {
+        emailField.value = userData.email;
+      }
+      if (phoneField && !phoneField.value && userData.phone) {
+        phoneField.value = userData.phone;
+      }
+    }
+
+    if (window.FutunetAuth) {
+      var userData = window.FutunetAuth.getUserData();
+      if (userData) {
+        autofillUserData(userData);
+      }
+    }
+
+    window.addEventListener('futunet-auth-ready', function (e) {
+      if (e.detail && e.detail.userData) {
+        autofillUserData(e.detail.userData);
+      }
+    });
+
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       
@@ -273,8 +323,17 @@
       var name = document.getElementById('req-name').value.trim();
       var phone = document.getElementById('req-phone').value.trim();
       var email = document.getElementById('req-email').value.trim();
-      var company = document.getElementById('req-company').value.trim();
+      
+      var companyEl = document.getElementById('req-company');
+      var company = companyEl ? companyEl.value.trim() : '';
+      
+      var profileEl = document.getElementById('req-profile');
+      var profile = profileEl ? profileEl.value : '';
+
       var message = document.getElementById('req-message').value.trim();
+
+      var serviceTitleEl = document.getElementById('service-title');
+      var serviceTitleText = serviceTitleEl ? serviceTitleEl.textContent.trim() : 'Servicio Corporativo';
 
       var requestData = {
         name: name,
@@ -283,20 +342,33 @@
         company: company,
         message: message,
         serviceId: serviceId,
-        serviceTitle: document.getElementById('service-title').textContent,
+        serviceTitle: serviceTitleText,
         status: 'pending',
         type: 'standard_service',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
+
+      if (profile) {
+        requestData.profile = profile;
+      }
 
       try {
         if (db) {
           await db.collection('service_requests').add(requestData);
         } else {
           // Si por alguna razón la BD falla, simulamos envío por WhatsApp como respaldo
-          var waText = encodeURIComponent('Hola Futunet, me interesa el servicio de ' + requestData.serviceTitle + '.\n\nNombre: ' + name + '\nTeléfono: ' + phone + '\nEmail: ' + email + '\nDetalles: ' + message);
+          var waMessage = 'Hola Futunet, me interesa el servicio de ' + serviceTitleText + '.\n\n' +
+                          'Nombre: ' + name + '\n' +
+                          'Teléfono: ' + phone + '\n' +
+                          'Email: ' + email + '\n';
+          if (company) waMessage += 'Empresa: ' + company + '\n';
+          if (profile) waMessage += 'Perfil: ' + (profile === 'pyme' ? 'Pyme / Negocio Local' : 'Gran Empresa / Corporación') + '\n';
+          waMessage += 'Detalles: ' + message;
+          
+          var waText = encodeURIComponent(waMessage);
           window.open('https://wa.me/18297411041?text=' + waText, '_blank');
           showToast('Enviando solicitud por WhatsApp...', 'success');
+          if (btn) btn.disabled = false;
           return;
         }
 

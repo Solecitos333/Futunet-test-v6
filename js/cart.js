@@ -41,6 +41,26 @@
 
   // Permite obtener el producto independientemente de si estamos en catalog.js o producto.js
   function findProduct(productId) {
+    if (productId === 'custom_office_bundle') {
+      try {
+        const saved = window.localStorage.getItem('futunetCustomOfficeBundle');
+        if (saved) {
+          return JSON.parse(saved);
+        }
+      } catch (e) {
+        console.warn('Error reading custom bundle:', e);
+      }
+      return {
+        id: 'custom_office_bundle',
+        title: 'Configuración Personalizada de Oficina',
+        category: 'Equipos de Oficina',
+        brand: 'FUTUNET B2B',
+        price: 'RD$ 0',
+        img: 'images/oficina/sim_office_pro.png',
+        description: 'Combo configurado a medida en el Estimador Tecnológico.',
+        specs: []
+      };
+    }
     if (typeof mockDatabase !== 'undefined') {
       return mockDatabase.find(p => p.id === productId);
     }
@@ -288,20 +308,36 @@
   function buildCheckoutMessage(items) {
     const lines = ['Hola Futunet, quiero solicitar este carrito:'];
     let total = 0;
+    let totalLease = 0;
 
     items.forEach((product, index) => {
       const qty = cartState.items[product.id]?.qty || 0;
       const unitPrice = parsePriceToNumber(product.price);
       const lineTotal = unitPrice * qty;
-      total += lineTotal;
+      const isLease = String(product.price).includes('/ mes');
+      
+      if (isLease) {
+        totalLease += lineTotal;
+      } else {
+        total += lineTotal;
+      }
+      
       lines.push(`${index + 1}. ${product.title}`);
       lines.push(`   Cantidad: ${qty}`);
       lines.push(`   Precio ref.: ${product.price}`);
+      if (product.id === 'custom_office_bundle' && product.description) {
+        lines.push(`   Detalle:\n${product.description.split('\n').map(l => '     ' + l).join('\n')}`);
+      }
     });
 
-    if (total > 0) {
+    if (total > 0 || totalLease > 0) {
       lines.push('');
-      lines.push(`Total referencial: ${formatCurrency(total)}`);
+      if (total > 0) {
+        lines.push(`Total Compra (CapEx): ${formatCurrency(total)}`);
+      }
+      if (totalLease > 0) {
+        lines.push(`Total Leasing Mensual (OpEx): ${formatCurrency(totalLease)} / mes`);
+      }
     }
 
     lines.push('');
@@ -686,7 +722,17 @@
     const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
     const storage = window.FutunetFirebase && window.FutunetFirebase.storage ? window.FutunetFirebase.storage : null;
     
-    const totalValue = items.reduce((sum, p) => sum + parsePriceToNumber(p.price) * (cartState.items[p.id]?.qty || 0), 0);
+    let totalPurchase = 0;
+    let totalLease = 0;
+    items.forEach(p => {
+      const qty = cartState.items[p.id].qty;
+      const val = parsePriceToNumber(p.price) * qty;
+      if (String(p.price).includes('/ mes')) {
+        totalLease += val;
+      } else {
+        totalPurchase += val;
+      }
+    });
     
     const orderData = {
       userId: user ? user.uid : 'guest',
@@ -699,12 +745,15 @@
         id: p.id,
         title: p.title,
         price: parsePriceToNumber(p.price),
+        priceLabel: String(p.price),
         qty: cartState.items[p.id].qty,
         img: p.img || '',
         brand: p.brand || '',
-        category: p.category || ''
+        category: p.category || '',
+        isLease: String(p.price).includes('/ mes')
       })),
-      total: totalValue,
+      total: totalPurchase,
+      leaseTotal: totalLease,
       status: 'pending',
       paymentMethod: paymentMethod,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -727,11 +776,14 @@
           id: p.id,
           title: p.title,
           price: parsePriceToNumber(p.price),
+          price_label: String(p.price),
           qty: cartState.items[p.id].qty,
           brand: p.brand || '',
-          category: p.category || ''
+          category: p.category || '',
+          is_lease: String(p.price).includes('/ mes')
         })),
-        total: totalValue
+        total: totalPurchase,
+        lease_total: totalLease
       };
       
       const response = await fetch('https://futunet-backend.onrender.com/api/quote', {
@@ -885,14 +937,29 @@
         `;
         list.appendChild(card);
       });
-      
       const totalCount = items.reduce((sum, product) => sum + (cartState.items[product.id]?.qty || 0), 0);
-      const totalValue = items.reduce((sum, product) => {
+      let totalPurchase = 0;
+      let totalLease = 0;
+      items.forEach((product) => {
         const qty = cartState.items[product.id]?.qty || 0;
-        return sum + parsePriceToNumber(product.price) * qty;
-      }, 0);
+        const val = parsePriceToNumber(product.price) * qty;
+        if (String(product.price).includes('/ mes')) {
+          totalLease += val;
+        } else {
+          totalPurchase += val;
+        }
+      });
       
-      summary.textContent = `${formatCartQuantity(totalCount)} · Total ${formatCurrency(totalValue)}`;
+      let summaryText = formatCartQuantity(totalCount);
+      if (totalPurchase > 0 && totalLease > 0) {
+        summaryText += ` · Compra: ${formatCurrency(totalPurchase)} + Lease: ${formatCurrency(totalLease)}/mes`;
+      } else if (totalPurchase > 0) {
+        summaryText += ` · Total: ${formatCurrency(totalPurchase)}`;
+      } else if (totalLease > 0) {
+        summaryText += ` · Total Lease: ${formatCurrency(totalLease)}/mes`;
+      }
+      
+      summary.textContent = summaryText;
       checkoutBtn.disabled = false;
       checkoutBtn.innerHTML = '<i data-lucide="shopping-bag"></i> Tramitar pedido';
     }

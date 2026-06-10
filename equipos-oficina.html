@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -62,8 +62,7 @@
       <div class="container">
         <ul class="claro-top-links">
           <li><a href="index.html" class="top-link-personas">Personas</a></li>
-          <li><a href="negocios.html" class="top-link-negocios">Negocios</a></li>
-          <li><a href="empresas.html" class="top-link-empresas">Empresas</a></li>
+          <li><a href="corporativo.html" class="top-link-corporativo active">Corporativo</a></li>
         </ul>
         <div class="claro-top-right">
           <div class="top-bar-dropdown">
@@ -181,7 +180,7 @@
                   <ul>
                     <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
                     <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
-                    <li><a href="internet.html#planes"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                    <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
                   </ul>
                 </div>
                 <div class="mega-menu-col">
@@ -261,7 +260,7 @@
         <div class="mobile-details-content">
           <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
           <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
-          <a href="internet.html#planes" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
           <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
           <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
         </div>
@@ -321,6 +320,7 @@
           <li><a href="#solicitud">Contacto</a></li>
         </ul>
       </div>
+      <div class="subnav-progress-bar" id="subnav-progress-bar"></div>
     </div>
 
     <!-- Carrusel Infinito de Marcas Líderes -->
@@ -497,7 +497,12 @@
                 <span>Escritorios modernos de madera y metal, cajoneras de archivo y pasacables limpios.</span>
               </div>
             </div>
-            <a href="#catalogo" onclick="window.filterBySubcategory('oficina_mobiliario')" class="btn-glow" style="margin-top: 30px;">Ver Mobiliario en Stock <i class="fa-solid fa-arrow-right"></i></a>
+            <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 30px;">
+              <a href="#catalogo" onclick="window.filterBySubcategory('oficina_mobiliario')" class="btn-glow">Ver Mobiliario en Stock <i class="fa-solid fa-arrow-right"></i></a>
+              <a href="mobiliario-suministros.html" class="btn btn-outline" style="border-radius: 50px; border-color: rgba(255, 255, 255, 0.2); color: white; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 24px; text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: all 0.3s;">
+                Catálogo Completo <i class="fa-solid fa-chair" style="margin-left: 8px;"></i>
+              </a>
+            </div>
           </div>
         </div>
         <!-- Showcase de Productos Destacados -->
@@ -506,14 +511,14 @@
     </section>
 
     <!-- Sección de Venta Cruzada (Cross-selling Banner) -->
-    <section class="section" style="padding: 40px 0; background: #0A70A2; color: white;">
-      <div class="container">
+    <section class="section cross-selling-banner" style="padding: 50px 0; color: white;">
+      <div class="container" style="position: relative; z-index: 2;">
         <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
           <div style="max-width: 700px;">
-            <h4 style="font-family:'Space Grotesk',sans-serif; font-size: 1.35rem; font-weight: 700; margin-bottom: 6px; color: white;">¿Tu oficina requiere climatización y respaldo eléctrico constante?</h4>
-            <p style="font-size: 0.88rem; color: rgba(255,255,255,0.85); margin: 0; line-height: 1.5;">Tus computadoras, servidores locales y UPS funcionan mejor en climas estables y libres de cortes eléctricos. Conoce nuestras soluciones eco-eficientes de paneles solares y aire acondicionado inverter.</p>
+            <h4 style="font-family:'Space Grotesk',sans-serif; font-size: 1.45rem; font-weight: 700; margin-bottom: 8px; color: white;">¿Tu oficina requiere climatización y respaldo eléctrico constante?</h4>
+            <p style="font-size: 0.92rem; color: rgba(255,255,255,0.9); margin: 0; line-height: 1.6;">Tus computadoras, servidores locales y UPS funcionan mejor en climas estables y libres de cortes eléctricos. Conoce nuestras soluciones eco-eficientes de paneles solares y aire acondicionado inverter.</p>
           </div>
-          <a href="energia-climatizacion.html" class="btn btn-outline" style="background: white; border-color: white; color: #0A70A2; border-radius: 50px; font-weight: 700; min-height: 48px;">Ver Energía y Clima</a>
+          <a href="energia-climatizacion.html" class="btn btn-outline" style="background: white; border-color: white; color: #0A70A2; border-radius: 50px; font-weight: 700; min-height: 48px; display: inline-flex; align-items: center; justify-content: center; padding: 0 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); transition: all 0.3s;">Ver Energía y Clima</a>
         </div>
       </div>
     </section>
@@ -576,7 +581,19 @@
                     <h4 class="workstation-card-title">Creativa / Diseño / Servidores Gráficos</h4>
                     <p class="workstation-card-desc">HP ZBook/Dell Precision i7/Xeon, 32GB RAM, 1TB SSD NVMe, GPU dedicada, Monitor IPS 4K 27" y ratón de precisión.</p>
                   </div>
-                  <div class="workstation-card-checkbox"></div>
+                </div>
+              </div>
+              
+              <!-- Control de Cantidades -->
+              <div class="quantity-selector-group" style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(10, 112, 162, 0.08); display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;">
+                <div>
+                  <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.05rem; font-weight:700; color:#0a101d; margin:0 0 4px 0;">Número de Estaciones / Colaboradores</h4>
+                  <p style="color:#64748b; font-size:0.78rem; margin:0;">Elige la cantidad de colaboradores que equiparás en la oficina.</p>
+                </div>
+                <div class="qty-control" style="display:flex; align-items:center; background:#f1f5f9; border-radius:50px; padding:6px 12px; border:1px solid #e2e8f0;">
+                  <button type="button" class="qty-btn" id="est-qty-minus" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(-1)">&minus;</button>
+                  <input type="number" id="est-qty-val" value="1" min="1" max="100" style="border:none; background:none; text-align:center; width:45px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.1rem; color:#0a101d; outline:none;" readonly />
+                  <button type="button" class="qty-btn" id="est-qty-plus" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(1)">&plus;</button>
                 </div>
               </div>
             </div>
@@ -754,8 +771,11 @@
             <div class="estimator-actions">
               <button class="btn btn-ghost" id="est-prev-btn" type="button">Atrás</button>
               <button class="btn btn-primary" id="est-next-btn" type="button">Siguiente Paso</button>
+              <button type="button" class="btn btn-primary" id="est-cart-btn" style="display:none; border-radius:14px; justify-content:center; align-items:center; gap:8px;" onclick="addEstimateToCart()">
+                <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+              </button>
               <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="est-wa-btn" style="display:none; border-radius:14px; text-decoration:none; justify-content:center; align-items:center;">
-                <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Solicitar Cotización
+                <svg width="16" height="16" style="margin-right:8px;"><use href="#wa-icon"/></svg> Solicitar por WhatsApp
               </a>
             </div>
           </div>
@@ -797,8 +817,17 @@
                 </table>
               </div>
               
+              <!-- Modalidad de Adquisición B2B -->
+              <div class="billing-mode-container" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(10, 112, 162, 0.2); display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-family:'Space Grotesk',sans-serif; font-size:0.75rem; font-weight:700; color:#cbd5e1; text-transform:uppercase; letter-spacing:1px;">Modalidad</span>
+                <div class="billing-toggle-wrapper" style="display:flex; background:rgba(255,255,255,0.04); border-radius:50px; padding:3px; border:1px solid rgba(255,255,255,0.08);">
+                  <button type="button" class="billing-toggle-btn active" id="btn-billing-buy" style="border:none; background:none; color:#ffffff; font-family:'Outfit',sans-serif; font-weight:600; font-size:0.76rem; padding:6px 14px; border-radius:50px; cursor:pointer; transition:all 0.3s;" onclick="setBillingMode('buy')">Compra</button>
+                  <button type="button" class="billing-toggle-btn" id="btn-billing-lease" style="border:none; background:none; color:#64748b; font-family:'Outfit',sans-serif; font-weight:600; font-size:0.76rem; padding:6px 14px; border-radius:50px; cursor:pointer; transition:all 0.3s;" onclick="setBillingMode('lease')">Leasing B2B</button>
+                </div>
+              </div>
+              
               <div class="budget-total-box">
-                <span class="budget-label">Inversión Estimada (Equipos)</span>
+                <span class="budget-label" id="budget-label-text">Inversión Estimada (Equipos)</span>
                 <span class="budget-price" id="sum-price">RD$ 26,000*</span>
               </div>
             </div>
@@ -1089,6 +1118,137 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
+      // Variables de estado del Estimador y Leasing
+      window.qtyStations = 1;
+      window.billingMode = 'buy';
+
+      // Control del selector de cantidad
+      window.changeEstQty = function(delta) {
+        const input = document.getElementById('est-qty-val');
+        if (!input) return;
+        let val = parseInt(input.value) || 1;
+        val += delta;
+        if (val < 1) val = 1;
+        if (val > 100) val = 100;
+        input.value = val;
+        window.qtyStations = val;
+        updateOfficeSimulator();
+      };
+
+      // Control del toggle de facturación (Compra vs Leasing)
+      window.setBillingMode = function(mode) {
+        window.billingMode = mode;
+        const btnBuy = document.getElementById('btn-billing-buy');
+        const btnLease = document.getElementById('btn-billing-lease');
+        if (btnBuy && btnLease) {
+          if (mode === 'buy') {
+            btnBuy.classList.add('active');
+            btnLease.classList.remove('active');
+          } else {
+            btnLease.classList.add('active');
+            btnBuy.classList.remove('active');
+          }
+        }
+        updateOfficeSimulator();
+      };
+
+      // Agregar cotización de oficina personalizada al carrito
+      window.addEstimateToCart = function() {
+        if (!window.FutunetCart) {
+          console.error('El módulo del carrito (FutunetCart) no está listo.');
+          return;
+        }
+
+        const computoMode = document.querySelector('input[name="est-computo"]:checked').value;
+        const backupMode = document.querySelector('input[name="est-backup"]:checked').value;
+        const printMode = document.querySelector('input[name="est-impresion"]:checked').value;
+        const mobiliarioMode = document.querySelector('input[name="est-mobiliario"]:checked').value;
+        const softMode = document.querySelector('input[name="est-software"]:checked').value;
+
+        let compText = 'Administrativa / Recepción';
+        if (computoMode === 'pro') compText = 'Profesional (Programación/Analistas)';
+        else if (computoMode === 'creative') compText = 'Creativa (Diseño/Servidores Gráficos)';
+
+        let backupText = 'Sin Servidor Local';
+        if (backupMode === 'nas_basic') backupText = 'Synology NAS DS223 4TB (RAID 1)';
+        else if (backupMode === 'nas_pro') backupText = 'Synology NAS DS423+ 16TB (RAID 5) + UPS';
+
+        let printText = 'Sin Equipo de Impresión';
+        if (printMode === 'inkjet') printText = 'Epson EcoTank Color';
+        else if (printMode === 'laser') printText = 'HP LaserJet Pro MFP B/N';
+        else if (printMode === 'laser_color') printText = 'Multifuncional Láser Color Corporativa';
+
+        let mobText = 'Sin Mobiliario Adicional';
+        if (mobiliarioMode === 'basico') mobText = 'Kit Ergonómico Operativo (Silla + Escritorio)';
+        else if (mobiliarioMode === 'premium') mobText = 'Kit Ejecutivo (Sillón + Escritorio en L)';
+
+        let softText = 'Sin Licenciamiento Adicional';
+        if (softMode === 'office_basic') softText = 'Windows 11 Pro + Microsoft 365 Personal';
+        else if (softMode === 'office_business') softText = 'Windows Pro + 365 Biz + Antivirus Endpoint';
+
+        // Calcular sumas
+        const priceComputo = pricing.computo[computoMode];
+        const priceBackup = pricing.backup[backupMode];
+        const pricePrint = pricing.impresion[printMode];
+        const priceMobiliario = pricing.mobiliario[mobiliarioMode];
+        const priceSoft = pricing.software[softMode];
+
+        const basePrice = priceComputo + priceMobiliario + priceSoft;
+        const flatPrice = priceBackup + pricePrint;
+        const totalCapEx = (basePrice * window.qtyStations) + flatPrice;
+
+        let priceStr = '';
+        let detailsText = '';
+        if (window.billingMode === 'lease') {
+          const leaseQuota = Math.round(totalCapEx * 0.045);
+          priceStr = `RD$ ${leaseQuota.toLocaleString('es-DO')} / mes`;
+          detailsText = `• Cantidad de Estaciones: ${window.qtyStations} puestos\n` +
+                        `• Perfil Estación: ${compText}\n` +
+                        `• Almacenamiento: ${backupText}\n` +
+                        `• Impresión: ${printText}\n` +
+                        `• Mobiliario: ${mobiliarioMode === 'no' ? 'N/A' : mobText}\n` +
+                        `• Software: ${softMode === 'free' ? 'N/A' : softText}\n` +
+                        `• Modalidad: Leasing Tecnológico B2B (Cuota mensual, soporte y mantenimiento incluidos)`;
+        } else {
+          priceStr = `RD$ ${totalCapEx.toLocaleString('es-DO')}`;
+          detailsText = `• Cantidad de Estaciones: ${window.qtyStations} puestos\n` +
+                        `• Perfil Estación: ${compText}\n` +
+                        `• Almacenamiento: ${backupText}\n` +
+                        `• Impresión: ${printText}\n` +
+                        `• Mobiliario: ${mobiliarioMode === 'no' ? 'N/A' : mobText}\n` +
+                        `• Software: ${softMode === 'free' ? 'N/A' : softText}\n` +
+                        `• Modalidad: Compra Directa (Equipos en propiedad)`;
+        }
+
+        // Crear/Actualizar objeto del bundle virtual en localStorage
+        const customBundle = {
+          id: 'custom_office_bundle',
+          title: `Configuración de Oficina (${window.qtyStations} Puestos) - ${window.billingMode === 'lease' ? 'Leasing' : 'Compra'}`,
+          category: 'Equipos de Oficina',
+          brand: 'FUTUNET B2B',
+          price: priceStr,
+          img: computoMode === 'creative' ? 'images/oficina/sim_office_enterprise.png' : computoMode === 'pro' ? 'images/oficina/sim_office_pro.png' : 'images/oficina/sim_office_basic.png',
+          description: detailsText,
+          specs: [
+            `Estaciones: ${window.qtyStations}x ${compText}`,
+            `Servidor: ${backupText}`,
+            `Impresión: ${printText}`,
+            `Mobiliario: ${mobiliarioMode === 'no' ? 'Sin mobiliario' : `${window.qtyStations}x ${mobText}`}`,
+            `Software: ${softMode === 'free' ? 'Sin licencias' : `${window.qtyStations}x ${softText}`}`
+          ]
+        };
+
+        window.localStorage.setItem('futunetCustomOfficeBundle', JSON.stringify(customBundle));
+
+        // Remover si ya existe para evitar inconsistencias de qty en el carrito
+        if (window.FutunetCart.state.items['custom_office_bundle']) {
+          window.FutunetCart.remove('custom_office_bundle');
+        }
+
+        window.FutunetCart.add('custom_office_bundle', 1);
+        window.FutunetCart.openDrawer();
+      };
+
       // Activar clics en botones de filtrado de subcategoría
       document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1117,6 +1277,17 @@
           }
         });
       }
+
+      // Sincronizar barra de progreso del subnav con el scroll de la página
+      window.addEventListener('scroll', () => {
+        const progressBar = document.getElementById('subnav-progress-bar');
+        if (progressBar) {
+          const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+          progressBar.style.width = scrolled + '%';
+        }
+      });
 
       // Resaltar enlace de sección activa en la barra subnav
       const sections = document.querySelectorAll('section[id]');
@@ -1160,6 +1331,7 @@
       const prevBtn = document.getElementById('est-prev-btn');
       const nextBtn = document.getElementById('est-next-btn');
       const waBtn = document.getElementById('est-wa-btn');
+      const cartBtn = document.getElementById('est-cart-btn');
       
       let currentStep = 1;
       const totalSteps = 6;
@@ -1223,15 +1395,18 @@
           prevBtn.style.display = 'none';
           nextBtn.style.display = 'inline-block';
           waBtn.style.display = 'none';
+          if (cartBtn) cartBtn.style.display = 'none';
         } else if (currentStep === totalSteps) {
           prevBtn.style.display = 'inline-block';
           nextBtn.style.display = 'none';
           waBtn.style.display = 'inline-flex';
+          if (cartBtn) cartBtn.style.display = 'inline-flex';
           calculateSummary();
         } else {
           prevBtn.style.display = 'inline-block';
           nextBtn.style.display = 'inline-block';
           waBtn.style.display = 'none';
+          if (cartBtn) cartBtn.style.display = 'none';
         }
 
         // Siempre refrescar el simulador HUD al cambiar de opciones
@@ -1301,36 +1476,38 @@
         simImg.style.opacity = '0.35';
         
         setTimeout(() => {
+          const qtySuffix = window.qtyStations > 1 ? ` (x${window.qtyStations})` : '';
+          
           if (level === 'basic') {
             simImg.src = 'images/oficina/sim_office_basic.png';
-            osdModeLabel.textContent = 'ESTACIÓN BÁSICA';
+            osdModeLabel.textContent = 'ESTACIÓN BÁSICA' + (window.qtyStations > 1 ? ` (${window.qtyStations} PUESTOS)` : '');
             osdModeLabel.style.color = '#38bdf8'; // Celeste
-            osdSpecs.textContent = 'SYS INIT: OPTIMAL | WORKSPACE: BASIC | RAM: 8GB | SER: LOCAL BKP';
+            osdSpecs.textContent = `SYS INIT: OPTIMAL | WORKSPACE: BASIC${window.qtyStations > 1 ? ` x${window.qtyStations}` : ''} | RAM: 8GB | SER: LOCAL BKP`;
             simDesc.textContent = 'Configuración optimizada para personal de atención al cliente y facturación. El equipo cuenta con rendimiento estable para cargas de trabajo cotidianas y ofimática general.';
             
-            osdCpu.textContent = 'Intel Core i3 / vPro';
-            osdRam.textContent = '8 GB DDR4';
-            osdStorage.textContent = '256 GB SSD NVMe';
+            osdCpu.textContent = 'Intel Core i3 / vPro' + qtySuffix;
+            osdRam.textContent = '8 GB DDR4' + qtySuffix;
+            osdStorage.textContent = '256 GB SSD NVMe' + qtySuffix;
           } else if (level === 'pro') {
             simImg.src = 'images/oficina/sim_office_pro.png';
-            osdModeLabel.textContent = 'ESTACIÓN PROFESSIONAL';
+            osdModeLabel.textContent = 'ESTACIÓN PROFESSIONAL' + (window.qtyStations > 1 ? ` (${window.qtyStations} PUESTOS)` : '');
             osdModeLabel.style.color = '#f59e0b'; // Ámbar
-            osdSpecs.textContent = 'SYS INIT: SECURE | WORKSPACE: DEV/PRO | RAM: 16GB | SER: NAS CENTRAL';
+            osdSpecs.textContent = `SYS INIT: SECURE | WORKSPACE: DEV/PRO${window.qtyStations > 1 ? ` x${window.qtyStations}` : ''} | RAM: 16GB | SER: NAS CENTRAL`;
             simDesc.textContent = 'Ideal para programadores, analistas y diseñadores. Incorpora pantalla extendida IPS, mayor velocidad de procesamiento y acceso centralizado al servidor NAS local de la red de oficina.';
             
-            osdCpu.textContent = 'Intel Core i5 / Ryzen 5';
-            osdRam.textContent = '16 GB DDR4';
-            osdStorage.textContent = '512 GB SSD + 4TB NAS';
+            osdCpu.textContent = 'Intel Core i5 / Ryzen 5' + qtySuffix;
+            osdRam.textContent = '16 GB DDR4' + qtySuffix;
+            osdStorage.textContent = '512 GB SSD + 4TB NAS' + qtySuffix;
           } else if (level === 'enterprise') {
             simImg.src = 'images/oficina/sim_office_enterprise.png';
-            osdModeLabel.textContent = 'SOPORTE ENTERPRISE';
+            osdModeLabel.textContent = 'SOPORTE ENTERPRISE' + (window.qtyStations > 1 ? ` (${window.qtyStations} PUESTOS)` : '');
             osdModeLabel.style.color = '#00c281'; // Eco-Verde
-            osdSpecs.textContent = 'SYS INIT: REDUNDANT | WORKSPACE: HIGH-PERF | RAM: 32GB | SER: CLOUD + NAS';
+            osdSpecs.textContent = `SYS INIT: REDUNDANT | WORKSPACE: HIGH-PERF${window.qtyStations > 1 ? ` x${window.qtyStations}` : ''} | RAM: 32GB | SER: CLOUD + NAS`;
             simDesc.textContent = 'Infraestructura robusta para departamentos creativos avanzados, edición de video o servidores. Soporta copias RAID espejo, protección perimetral endpoint contra malware y alto volumen de impresión.';
             
-            osdCpu.textContent = 'Intel Core i7 / Xeon';
-            osdRam.textContent = '32 GB DDR5';
-            osdStorage.textContent = '1 TB SSD + 16TB NAS';
+            osdCpu.textContent = 'Intel Core i7 / Xeon' + qtySuffix;
+            osdRam.textContent = '32 GB DDR5' + qtySuffix;
+            osdStorage.textContent = '1 TB SSD + 16TB NAS' + qtySuffix;
           }
           
           // Actualizaciones en cascada de impresión, mobiliario y software en OSD
@@ -1348,18 +1525,20 @@
             if (mobiliarioMode === 'no') {
               osdMob.textContent = 'N/A';
             } else if (mobiliarioMode === 'basico') {
-              osdMob.textContent = 'Silla + Escritorio Base';
+              osdMob.textContent = 'Silla + Escritorio Base' + qtySuffix;
             } else if (mobiliarioMode === 'premium') {
-              osdMob.textContent = 'Silla + Escritorio Gerencial';
+              osdMob.textContent = 'Silla + Escritorio Gerencial' + qtySuffix;
             }
           }
           
-          if (softMode === 'free') {
-            osdSoft.textContent = 'Sistemas Base';
-          } else if (softMode === 'office_basic') {
-            osdSoft.textContent = 'Win Pro + Office 365';
-          } else if (softMode === 'office_business') {
-            osdSoft.textContent = 'Win Pro + 365 Biz + Antivirus';
+          if (osdSoft) {
+            if (softMode === 'free') {
+              osdSoft.textContent = 'Sistemas Base' + qtySuffix;
+            } else if (softMode === 'office_basic') {
+              osdSoft.textContent = 'Win Pro + Office 365' + qtySuffix;
+            } else if (softMode === 'office_business') {
+              osdSoft.textContent = 'Win Pro + 365 Biz + Antivirus' + qtySuffix;
+            }
           }
           
           simImg.style.opacity = '1';
@@ -1372,8 +1551,21 @@
         const priceMobiliario = pricing.mobiliario[mobiliarioMode];
         const priceSoft = pricing.software[softMode];
         
-        const finalPrice = priceComputo + priceBackup + pricePrint + priceMobiliario + priceSoft;
-        document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+        const basePrice = priceComputo + priceMobiliario + priceSoft;
+        const flatPrice = priceBackup + pricePrint;
+        const totalCapEx = (basePrice * window.qtyStations) + flatPrice;
+
+        const budgetLabelText = document.getElementById('budget-label-text');
+        const sumPriceEl = document.getElementById('sum-price');
+        
+        if (window.billingMode === 'lease') {
+          const leaseQuota = Math.round(totalCapEx * 0.045);
+          if (budgetLabelText) budgetLabelText.textContent = 'Cuota Mensual B2B (Leasing)';
+          if (sumPriceEl) sumPriceEl.textContent = 'RD$ ' + leaseQuota.toLocaleString('es-DO') + ' / mes';
+        } else {
+          if (budgetLabelText) budgetLabelText.textContent = 'Inversión Estimada (Equipos)';
+          if (sumPriceEl) sumPriceEl.textContent = 'RD$ ' + totalCapEx.toLocaleString('es-DO') + '*';
+        }
       }
       
       // Cálculo del presupuesto definitivo en paso final (Resumen)
@@ -1388,28 +1580,30 @@
         let compText = 'Administrativa / Recepción';
         if (computoMode === 'pro') compText = 'Profesional (Programación/Analistas)';
         else if (computoMode === 'creative') compText = 'Creativa (Diseño/Servidores Gráficos)';
-        document.getElementById('sum-computo').textContent = compText;
         
         let backupText = 'Sin Servidor Local';
         if (backupMode === 'nas_basic') backupText = 'Synology NAS DS223 4TB (RAID 1)';
         else if (backupMode === 'nas_pro') backupText = 'Synology NAS DS423+ 16TB (RAID 5) + UPS';
-        document.getElementById('sum-backup').textContent = backupText;
         
         let printText = 'Sin Equipo de Impresión';
         if (printMode === 'inkjet') printText = 'Epson EcoTank Color (Tinta continua)';
         else if (printMode === 'laser') printText = 'HP LaserJet Pro MFP B/N';
         else if (printMode === 'laser_color') printText = 'Multifuncional Láser Color Corporativa';
-        document.getElementById('sum-impresion').textContent = printText;
         
         let mobText = 'Sin Mobiliario Adicional';
         if (mobiliarioMode === 'basico') mobText = 'Kit Ergonómico Operativo (Silla + Escritorio)';
         else if (mobiliarioMode === 'premium') mobText = 'Kit Ejecutivo de Alta Gama (Sillón + Escritorio en L)';
-        document.getElementById('sum-mobiliario').textContent = mobText;
         
         let softText = 'Sin Licenciamiento Adicional';
         if (softMode === 'office_basic') softText = 'Windows 11 Pro + Microsoft 365 Personal';
         else if (softMode === 'office_business') softText = 'Windows Pro + 365 Biz + Antivirus Endpoint';
-        document.getElementById('sum-software').textContent = softText;
+
+        // Render summary items
+        document.getElementById('sum-computo').textContent = `${window.qtyStations}x ${compText}`;
+        document.getElementById('sum-backup').textContent = backupText;
+        document.getElementById('sum-impresion').textContent = printText;
+        document.getElementById('sum-mobiliario').textContent = mobiliarioMode === 'no' ? mobText : `${window.qtyStations}x ${mobText}`;
+        document.getElementById('sum-software').textContent = softMode === 'free' ? softText : `${window.qtyStations}x ${softText}`;
         
         // Calcular sumas
         const priceComputo = pricing.computo[computoMode];
@@ -1418,17 +1612,32 @@
         const priceMobiliario = pricing.mobiliario[mobiliarioMode];
         const priceSoft = pricing.software[softMode];
         
-        const finalPrice = priceComputo + priceBackup + pricePrint + priceMobiliario + priceSoft;
+        const basePrice = priceComputo + priceMobiliario + priceSoft;
+        const flatPrice = priceBackup + pricePrint;
+        const totalCapEx = (basePrice * window.qtyStations) + flatPrice;
+
+        let priceSummaryText = '';
+        let quoteModeText = '';
+        if (window.billingMode === 'lease') {
+          const leaseQuota = Math.round(totalCapEx * 0.045);
+          priceSummaryText = `RD$ ${leaseQuota.toLocaleString('es-DO')} / mes`;
+          quoteModeText = 'Arrendamiento Tecnológico B2B (Leasing con mantenimiento)';
+        } else {
+          priceSummaryText = `RD$ ${totalCapEx.toLocaleString('es-DO')} (Equipos configurados)`;
+          quoteModeText = 'Compra Directa';
+        }
         
         // Construir mensaje de WhatsApp
         const waText = `Hola Futunet, utilicé la Calculadora de Equipos de Oficina y deseo cotizar:
-- Estación de Trabajo: ${compText}
+- Cantidad de Estaciones: ${window.qtyStations} puestos
+- Perfil Estación: ${compText}
 - Almacenamiento NAS: ${backupText}
 - Centro de Impresión: ${printText}
-- Mobiliario / Confort: ${mobText}
-- Licencias y Software: ${softText}
-- Presupuesto estimado: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos configurados)
-Me gustaría programar una llamada para afinar detalles de volumen y cantidades.`;
+- Mobiliario / Confort: ${mobiliarioMode === 'no' ? 'N/A' : mobText}
+- Licencias y Software: ${softMode === 'free' ? 'N/A' : softText}
+- Modalidad de Adquisición: ${quoteModeText}
+- Presupuesto estimado: ${priceSummaryText}
+Me gustaría recibir una propuesta formal y coordinar facturación con NCF corporativo.`;
         
         waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
       }
