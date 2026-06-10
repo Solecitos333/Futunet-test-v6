@@ -39,6 +39,8 @@
   margin: 0 auto;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .subnav-container::-webkit-scrollbar {

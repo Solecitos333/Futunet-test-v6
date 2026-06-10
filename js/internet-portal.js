@@ -139,6 +139,8 @@
     document.getElementById('internet-portal-view').style.display = 'none';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.remove('wide');
+    var subnav = document.querySelector('.service-subnav');
+    if (subnav) subnav.style.display = '';
   }
 
   // Muestra Web App de autogestión
@@ -150,6 +152,8 @@
     document.getElementById('portal-no-client').style.display = 'none';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.remove('wide');
+    var subnav = document.querySelector('.service-subnav');
+    if (subnav) subnav.style.display = 'none';
 
     // Rellenar datos
     setText('client-name', 'Hola, ' + (userData.displayName || 'Cliente'));
@@ -201,6 +205,8 @@
     document.getElementById('portal-no-client').style.display = 'block';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.add('wide');
+    var subnav = document.querySelector('.service-subnav');
+    if (subnav) subnav.style.display = 'none';
 
     // Inicializar al primer paso del stepper
     goToHiringStep(1);

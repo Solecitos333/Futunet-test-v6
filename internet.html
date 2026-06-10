@@ -577,10 +577,88 @@
     .portal-container.wide { max-width: 820px; }
 
     @media (max-width: 640px) {
-      .stepper-wrapper { flex-direction: column; gap: 16px; text-align: left; align-items: flex-start; padding: 16px; }
-      .step-indicator { flex-direction: row; gap: 12px; text-align: left; width: 100%; }
-      .step-line { display: none; }
-      .form-row-2 { grid-template-columns: 1fr; gap: 0; }
+      .stepper-wrapper {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .step-indicator {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-align: center;
+        width: auto;
+        flex: 0 0 auto;
+      }
+      .step-line {
+        display: block;
+        height: 2px;
+        background: #2d3b50;
+        flex-grow: 1;
+        margin: 0;
+        margin-bottom: 0;
+      }
+      .step-text {
+        display: none;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        font-size: 0.78rem;
+      }
+      .form-row-2 {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .no-client-card {
+        padding: 24px 16px;
+        border-radius: 20px;
+      }
+      /* Ocultar barra de desplazamiento visual de la subnavegación */
+      .subnav-links::-webkit-scrollbar {
+        display: none;
+      }
+      .subnav-links {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stepper-wrapper {
+        padding: 10px 12px;
+        gap: 4px;
+        margin-bottom: 20px;
+      }
+      .no-client-card {
+        padding: 20px 12px;
+        border-radius: 16px;
+      }
+      .portal-plans-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .benefit-item {
+        gap: 8px;
+      }
+      .glow-icon {
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+      }
+      .glow-icon svg {
+        width: 22px;
+        height: 22px;
+      }
+      .no-service-hero h3 {
+        font-size: 1.15rem;
+      }
+      .no-service-hero p {
+        font-size: 0.8rem;
+      }
     }
 
     /* ─── COBERTURA RADAR SCANNER ─── */
