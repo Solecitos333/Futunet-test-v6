@@ -1,0 +1,3 @@
+## 2024-06-11 - Optimize search result mapping in catalog
+**Learning:** Found chained `.map().filter().sort().map()` in `js/catalog.js` for search operations. This allocates multiple intermediate arrays for `mockDatabase`. Combining scoring and filtering into a single pass loop avoids creating unneeded object wrappers for items with 0 score, significantly reducing memory allocations, especially on large databases.
+**Action:** Replace `mockDatabase.map(p => ({ product: p, score: scoreProductMatch(p, q) })).filter(r => r.score > 0).sort((a, b) => b.score - a.score).map(r => r.product)` with an imperative approach that scores, filters, and retains scores in one pass, then sorts and extracts.
