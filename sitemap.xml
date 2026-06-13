@@ -2,92 +2,249 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://futunet.com.do/</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/index.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/nosotros.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/corporativo.html</loc>
-    <lastmod>2026-06-10</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/catalogo.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/internet.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/energia-climatizacion.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/redes-datos.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/seguridad-electronica.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/equipos-oficina.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/infraestructura-remozamiento.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/mobiliario-suministros.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/producto.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/login.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://futunet.com.do/mi-cuenta.html</loc>
-    <lastmod>2026-06-04</lastmod>
+    <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <!-- URLs de Páginas de Marcas Dedicadas para SEO -->
+  <url>
+    <loc>https://futunet.com.do/marca-dell.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-lenovo.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-epson.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-hikvision.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-samsung.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-hp.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-tp-link.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-logitech.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-cisco.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-dahua.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-ezviz.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-ubiquiti.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-mikrotik.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-zkteco.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-juniper.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-lg.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-linksys.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-netgear.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-panasonic.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-paradox.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-schneiderelectric.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-siemens.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-tesla.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-uniview.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-victronenergy.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://futunet.com.do/marca-mitsubishi.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>

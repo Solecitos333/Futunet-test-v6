@@ -734,11 +734,12 @@ body.is-loading {
 
   /* Buttons */
   .btn {
-    min-height: 48px;
+    min-height: 50px;
     padding: 0 18px;
     font-size: .84rem;
     border-radius: 14px;
     box-shadow: 0 6px 18px rgba(15,25,35,0.06);
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Bottom Bar */
@@ -791,6 +792,25 @@ body.is-loading {
     min-height: 50px;
     font-size: .82rem;
   }
+}
+
+/* ── 20. RESPONSIVE — Extra Small Mobile (≤360px) ── */
+@media (max-width: 360px) {
+  .section-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+  }
+  .section-sub {
+    font-size: .82rem;
+  }
+  .section-label {
+    font-size: .56rem;
+    letter-spacing: .1em;
+  }
+  .btn {
+    font-size: .8rem;
+    padding: 0 14px;
+  }
+  .container { padding: 0 12px; }
 }
 
 /* ── SHOPPING CART (CARRITO DE COMPRA) — MOVED TO MAIN.CSS FOR PUBLIC ACCESS ── */

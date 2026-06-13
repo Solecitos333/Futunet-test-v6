@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equipos y Soluciones Mitsubishi en Santiago, RD — Futunet</title>
+  <meta name="description" content="Explora el catálogo oficial de productos Mitsubishi en República Dominicana. Distribución, instalación y soporte técnico de soluciones Mitsubishi para empresas y hogares." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css?v=3.0" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.3" />
+  <link rel="stylesheet" href="css/sections.css?v=3.1" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
+  <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
+  <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
+  <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="manifest" href="manifest.json" />
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
+  <style>
+    .brand-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
+    .brand-hero {
+      position: relative; height: 320px; display: flex; align-items: center;
+      background-size: cover; background-position: center; color: #fff; overflow: hidden;
+      background-image: url('img/hero-tech-bg.webp');
+    }
+    .brand-hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(9,16,24,0.3) 0%, rgba(9,16,24,0.85) 100%);
+      z-index: 1;
+    }
+    .brand-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
+    .brand-hero-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
+      letter-spacing: -0.03em;
+    }
+    .brand-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
+    
+    .breadcrumb-nav {
+      padding: 24px 0 12px;
+    }
+    .breadcrumb-list {
+      display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0;
+      font-size: 0.88rem; gap: 8px; color: var(--text-muted);
+    }
+    .breadcrumb-list a {
+      color: #0B7EB5; text-decoration: none; transition: color 0.2s;
+    }
+    .breadcrumb-list a:hover {
+      color: #0a101d;
+    }
+    .breadcrumb-separator {
+      color: #94a3b8;
+    }
+
+    .brand-products-section {
+      padding: 40px 0 80px;
+    }
+    .brand-header-flex {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 30px; border-bottom: 1px solid rgba(11, 126, 181, 0.08);
+      padding-bottom: 15px; flex-wrap: wrap; gap: 15px;
+    }
+    .brand-header-title {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700;
+      color: #0a101d; margin: 0;
+    }
+    .brand-counter {
+      color: #64748b; font-size: 0.95rem; font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .brand-hero { height: 240px; }
+      .brand-hero-title { font-size: 1.8rem; }
+      .brand-hero-desc { font-size: 0.9rem; }
+      .brand-header-title { font-size: 1.5rem; }
+    }
+  </style>
+  
+  <!-- Breadcrumb structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://futunet.com.do/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Tienda",
+        "item": "https://futunet.com.do/catalogo.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Mitsubishi",
+        "item": "https://futunet.com.do/marca-mitsubishi.html"
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-brand-name="Mitsubishi">
+
+  <!-- SVG Sprite para WhatsApp -->
+  <svg style="display: none;">
+    <symbol id="wa-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 001.333 4.982L2 22l5.233-1.371a9.936 9.936 0 004.78 1.23h.005c5.507 0 9.99-4.478 9.99-9.986 0-2.67-1.037-5.178-2.924-7.067C17.197 2.923 14.686 2 12.012 2zm5.727 14.045c-.314.881-1.547 1.62-2.124 1.72-.513.088-1.185.166-3.418-.76-2.853-1.182-4.63-4.088-4.774-4.28-.14-.19-1.137-1.511-1.137-2.883 0-1.372.718-2.046.974-2.313.257-.267.564-.334.754-.334.19 0 .38 0 .546.008.175.008.411-.033.642.505.237.553.809 1.977.879 2.12.07.142.115.308.019.497-.095.19-.142.308-.285.474-.142.167-.3.376-.427.505-.142.143-.292.299-.126.586.166.284.737 1.213 1.581 1.965.844.752 1.557.986 1.84.1.285-.143.567-.384.708-.575.143-.19.285-.143.475-.072.19.071 1.196.564 1.4.666.206.103.342.155.394.243.053.088.053.513-.261 1.394z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header" role="banner">
+    <!-- Top Bar estilo Claro -->
+    <div class="claro-top-bar">
+      <div class="container">
+        <ul class="claro-top-links">
+          <li><a href="index.html" class="top-link-personas">Personas</a></li>
+          <li><a href="corporativo.html" class="top-link-corporativo">Corporativo</a></li>
+        </ul>
+        <div class="claro-top-right">
+          <div class="top-bar-dropdown">
+            <span class="top-bar-dropdown-trigger">Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:2px;"></i></span>
+            <ul class="top-bar-dropdown-menu">
+              <li><a href="nosotros.html"><i class="fas fa-info-circle"></i> Nosotros</a></li>
+              <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+              <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
+            </ul>
+          </div>
+          <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
+        </div>
+      </div>
+    </div>
+
+    <nav id="navbar">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+          <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
+        </a>
+        
+        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+        </div>
+
+        <ul class="nav-menu">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          
+          <li class="has-mega">
+            <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
+                  <ul>
+                    <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
+                    <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
+                    <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i> Fibra Óptica</a></li>
+                    <li><a href="internet.html"><i class="fas fa-satellite-dish"></i> Internet Inalámbrico</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
+                  <ul>
+                    <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
+                    <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
+                    <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i> Climatización y Energía</a></li>
+                    <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i> Remozamiento e Infraestructura</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i> Equipamiento B2B</h5>
+                  <ul>
+                    <li><a href="equipos-oficina.html"><i class="fas fa-laptop"></i> Equipos de Oficina y Cómputo</a></li>
+                    <li><a href="mobiliario-suministros.html"><i class="fas fa-chair"></i> Mobiliario y Suministros</a></li>
+                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
+                  <ul>
+                    <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
+                    <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="has-mega">
+            <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
+                  <ul>
+                    <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
+                    <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
+                    <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i> Cámaras de Seguridad</a></li>
+                    <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i> Suministros e Impresoras</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
+                  <ul>
+                    <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
+                    <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i> Catálogo Completo</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
+                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
+                    <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
+                    <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li class="has-mega">
+            <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+            <div class="mega-menu-container">
+              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
+                    <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
+                  <ul>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
+                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
+                    <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a></li>
+                  </ul>
+                </div>
+                <div class="mega-menu-col">
+                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
+                  <ul>
+                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+        <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+          <div class="navbar-auth-container"></div>
+          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+            <svg width="15" height="15"><use href="#wa-icon"/></svg>
+            829-741-1041
+          </a>
+        </div>
+
+        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+    
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+      
+      <details class="mobile-details">
+        <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <div class="mobile-details-section">Servicios Hogar</div>
+          <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
+          <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
+          <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV)</a>
+          
+          <div class="mobile-details-section">Servicios Empresas</div>
+          <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
+          <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
+          <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
+          <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
+          
+          <div class="mobile-details-section">Equipamiento B2B</div>
+          <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
+          <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
+          <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
+          <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
+          <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
+        </div>
+      </details>
+
+      <details class="mobile-details">
+        <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
+        <div class="mobile-details-content">
+          <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+          <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
+          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
+        </div>
+      </details>
+
+      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+        829-741-1041
+      </a>
+      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
+      <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
+    </div>
+  </header>
+
+  <main class="brand-page">
+    <!-- Hero Banner -->
+    <section class="brand-hero">
+      <div class="container">
+        <div class="brand-hero-content">
+          <h1 class="brand-hero-title">Equipos y Soluciones Mitsubishi</h1>
+          <p class="brand-hero-desc">Descubre nuestra gama de soluciones e integración de productos corporativos y residenciales de la marca Mitsubishi con garantía total y soporte técnico calificado de Futunet en Santiago, República Dominicana.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Migas de pan (Breadcrumbs) -->
+    <div class="container breadcrumb-nav">
+      <nav aria-label="Breadcrumb">
+        <ul class="breadcrumb-list">
+          <li><a href="index.html">Inicio</a></li>
+          <li class="breadcrumb-separator">/</li>
+          <li><a href="catalogo.html">Tienda</a></li>
+          <li class="breadcrumb-separator">/</li>
+          <li aria-current="page">Mitsubishi</li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Sección de Productos -->
+    <section class="brand-products-section">
+      <div class="container">
+        <div class="brand-header-flex">
+          <h2 class="brand-header-title">Catálogo de Productos Mitsubishi</h2>
+          <span id="brand-products-count" class="brand-counter">Cargando productos de la marca...</span>
+        </div>
+        
+        <!-- Contenedor del catálogo inyectado por JS -->
+        <div id="brand-products-container" class="products-grid">
+          <!-- El script js/brand-page-loader.js inyectará las tarjetas de producto aquí -->
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #0B7EB5; margin-bottom: 10px;"></i>
+            <p>Cargando inventario de productos...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html#inicio" class="footer-logo-link">
+            <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="1009" height="207" loading="lazy" decoding="async" />
+          </a>
+          <p>La Tecnología del Futuro. Soluciones tecnológicas y servicios generales para empresas, instituciones y hogares en Santiago, República Dominicana.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Soluciones</h5>
+          <ul>
+            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+            <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+            <li><a href="infraestructura-remozamiento.html">Infraestructura</a></li>
+            <li><a href="catalogo.html">Ver catálogo</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contacto</h5>
+          <ul>
+            <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i data-lucide="phone" class="footer-icon"></i> 829-741-1041</a></li>
+            <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i data-lucide="map-pin" class="footer-icon"></i> Calle 7 #1, Las Colinas, Santiago</a></li>
+            <li><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20asesor%20comercial." target="_blank" rel="noopener noreferrer"><i data-lucide="user" class="footer-icon"></i> Orbis Espinal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>Santiago, República Dominicana</span>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
+    <a href="catalogo.html" class="mobile-bottom-bar__action">
+      <i data-lucide="layout-grid"></i>
+      <span>Catálogo</span>
+    </a>
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+      <i data-lucide="message-circle"></i>
+      <span>WhatsApp</span>
+    </a>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/chatbot.js"></script>
+  
+  <!-- Catálogo y carrito necesarios para la carga del loader -->
+  <script defer src="js/config.js"></script>
+  <script defer src="js/layout-manager.js?v=3.1"></script>
+  <script defer src="js/cart.js"></script>
+  <script defer src="js/inventory_data.js"></script>
+  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/image_fixes.js?v=v9"></script>
+  <script defer src="js/catalog.js"></script>
+  <script src="js/main.js?v=3.2"></script>
+  <script defer src="js/brand-page-loader.js"></script>
+</body>
+</html>

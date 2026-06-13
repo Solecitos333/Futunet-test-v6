@@ -129,6 +129,47 @@
     if (e.key === 'Escape') closeAllPopups();
   });
 
+  // Lógica del botón de expansión de marcas
+  const btnToggle = document.getElementById('btn-toggle-brands');
+  const extendedGrid = document.getElementById('extended-brands-grid');
+  
+  if (btnToggle && extendedGrid) {
+    btnToggle.addEventListener('click', function() {
+      const isExpanded = extendedGrid.classList.contains('expanded');
+      
+      if (!isExpanded) {
+        // Expandir
+        const displayStyle = window.matchMedia('(max-width: 767px)').matches ? 'grid' : 'flex';
+        extendedGrid.style.display = displayStyle;
+        // Forzar reflow
+        void extendedGrid.offsetWidth;
+        extendedGrid.classList.add('expanded');
+        extendedGrid.setAttribute('aria-hidden', 'false');
+        btnToggle.setAttribute('aria-expanded', 'true');
+        const textSpan = btnToggle.querySelector('span');
+        if (textSpan) textSpan.textContent = 'Ver menos marcas';
+        const icon = btnToggle.querySelector('.toggle-icon');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+      } else {
+        // Colapsar
+        extendedGrid.classList.remove('expanded');
+        extendedGrid.setAttribute('aria-hidden', 'true');
+        btnToggle.setAttribute('aria-expanded', 'false');
+        const textSpan = btnToggle.querySelector('span');
+        if (textSpan) textSpan.textContent = '¡Y muchas más marcas!';
+        const icon = btnToggle.querySelector('.toggle-icon');
+        if (icon) icon.style.transform = 'rotate(0deg)';
+        
+        // Ocultar display después de la transición de CSS (500ms)
+        setTimeout(() => {
+          if (!extendedGrid.classList.contains('expanded')) {
+            extendedGrid.style.display = 'none';
+          }
+        }, 500);
+      }
+    });
+  }
+
   function escapeHtml(s) {
     const d = document.createElement('div');
     d.textContent = s || '';

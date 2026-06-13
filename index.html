@@ -28,11 +28,11 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
   <link rel="preload" as="image" href="img/hero-tech-bg.webp" type="image/webp" />
   <link rel="preload" as="image" href="img/logo.webp" type="image/webp" />
-  <link rel="stylesheet" href="css/main.css?v=3.0" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.3" />
-  <link rel="stylesheet" href="css/hero.css?v=3.0" />
-  <link rel="stylesheet" href="css/sections.css?v=3.1" />
-  <link rel="stylesheet" href="css/portal-rapido.css?v=1.0" />
+  <link rel="stylesheet" href="css/main.css?v=3.1" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.4" />
+  <link rel="stylesheet" href="css/hero.css?v=3.2" />
+  <link rel="stylesheet" href="css/sections.css?v=3.3" />
+  <link rel="stylesheet" href="css/portal-rapido.css?v=1.1" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
@@ -1043,58 +1043,60 @@
     <div class="container text-center reveal">
       <span class="section-label">Confianza y calidad</span>
       <h2 class="section-title brands-title">Marcas con las que trabajamos</h2>
-      <p class="section-sub brands-sub">Pasa el cursor sobre una marca para descubrir sus productos destacados.</p>
+      <!-- Texto adaptado al dispositivo -->
+      <p class="section-sub brands-sub brands-sub--desktop">Pasa el cursor sobre una marca para descubrir sus productos destacados.</p>
+      <p class="section-sub brands-sub brands-sub--mobile">Toca una marca para explorar sus productos destacados.</p>
       <div class="brands-grid brands-grid--preview">
-        <a href="catalogo.html?brand=dell" class="brand-item" data-brand-preview="dell" title="Ver productos Dell" aria-label="Ver productos Dell">
+        <a href="marca-dell.html" class="brand-item" data-brand-preview="dell" title="Ver productos Dell" aria-label="Ver productos Dell">
           <img src="img/marcas/dell.svg" alt="Dell" loading="lazy" decoding="async" width="72" height="72" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/dell.webp" alt="Productos Dell" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Dell</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=lenovo" class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo">
+        <a href="marca-lenovo.html" class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo">
           <img src="img/marcas/lenovo.svg" alt="Lenovo" loading="lazy" decoding="async" width="120" height="30" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/lenovo.webp" alt="Productos Lenovo" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Lenovo</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=epson" class="brand-item" data-brand-preview="epson" title="Ver productos Epson">
+        <a href="marca-epson.html" class="brand-item" data-brand-preview="epson" title="Ver productos Epson">
           <img src="img/marcas/epson.svg" alt="Epson" loading="lazy" decoding="async" width="120" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/epson.webp" alt="Productos Epson" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Epson</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=hikvision" class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision">
+        <a href="marca-hikvision.html" class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision">
           <img src="img/marcas/hikvision.svg" alt="Hikvision" loading="lazy" decoding="async" width="150" height="30" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/hikvision.webp" alt="Productos Hikvision" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Hikvision</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=samsung" class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung">
-          <img src="img/marcas/samsung.webp" alt="Samsung" loading="lazy" decoding="async" width="134" height="34" />
+        <a href="marca-samsung.html" class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung">
+          <img src="img/marcas/samsung.svg" alt="Samsung" loading="lazy" decoding="async" width="134" height="34" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/samsung.webp" alt="Productos Samsung" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Samsung</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=hp" class="brand-item" data-brand-preview="hp" title="Ver productos HP">
+        <a href="marca-hp.html" class="brand-item" data-brand-preview="hp" title="Ver productos HP">
           <img src="img/marcas/hp.svg" alt="HP" loading="lazy" decoding="async" width="48" height="48" class="brand-image-hp" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/hp.webp" alt="Productos HP" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos HP</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=tp%20link" class="brand-item brand-item--tplink" data-brand-preview="tplink" title="Ver productos TP-Link">
-          <img src="img/marcas/tp-link.webp" alt="TP-Link" loading="lazy" decoding="async" width="130" height="44" />
+        <a href="marca-tp-link.html" class="brand-item brand-item--tplink" data-brand-preview="tplink" title="Ver productos TP-Link">
+          <img src="img/marcas/tp-link.svg" alt="TP-Link" loading="lazy" decoding="async" width="130" height="44" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/tplink.webp" alt="Productos TP-Link" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos TP-Link</span>
           </div>
         </a>
-        <a href="catalogo.html?brand=logitech" class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech">
+        <a href="marca-logitech.html" class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech">
           <img src="img/marcas/logitech.svg" alt="Logitech" loading="lazy" decoding="async" width="120" height="35" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/logitech.webp" alt="Productos Logitech" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
@@ -1102,7 +1104,141 @@
           </div>
         </a>
       </div>
-      <div class="brands-more">¡Y muchas más!</div>
+
+      <!-- Grilla secundaria oculta de marcas adicionales -->
+      <div id="extended-brands-grid" class="brands-grid brands-grid--preview extended-brands-grid" aria-hidden="true" style="display: none;">
+        <a href="marca-cisco.html" class="brand-item" data-brand-preview="cisco" title="Ver productos Cisco">
+          <img src="img/marcas/cisco.svg" alt="Cisco" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/cisco.png" alt="Productos Cisco" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Cisco</span>
+          </div>
+        </a>
+        <a href="marca-dahua.html" class="brand-item" data-brand-preview="dahua" title="Ver productos Dahua">
+          <img src="img/marcas/dahua.svg" alt="Dahua" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/dahua.png" alt="Productos Dahua" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Dahua</span>
+          </div>
+        </a>
+        <a href="marca-ezviz.html" class="brand-item" data-brand-preview="ezviz" title="Ver productos Ezviz">
+          <img src="img/marcas/ezviz.svg" alt="Ezviz" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/ezviz.png" alt="Productos Ezviz" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Ezviz</span>
+          </div>
+        </a>
+        <a href="marca-ubiquiti.html" class="brand-item" data-brand-preview="ubiquiti" title="Ver productos Ubiquiti">
+          <img src="img/marcas/ubiquiti.svg" alt="Ubiquiti" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/ubiquiti.png" alt="Productos Ubiquiti" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Ubiquiti</span>
+          </div>
+        </a>
+        <a href="marca-mikrotik.html" class="brand-item" data-brand-preview="mikrotik" title="Ver productos MikroTik">
+          <img src="img/marcas/mikrotik.svg" alt="MikroTik" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/mikrotik.png" alt="Productos MikroTik" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos MikroTik</span>
+          </div>
+        </a>
+        <a href="marca-zkteco.html" class="brand-item" data-brand-preview="zkteco" title="Ver productos ZKTeco">
+          <img src="img/marcas/zkteco.png" alt="ZKTeco" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/zkteco.png" alt="Productos ZKTeco" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos ZKTeco</span>
+          </div>
+        </a>
+        <a href="marca-juniper.html" class="brand-item" data-brand-preview="juniper" title="Ver productos Juniper">
+          <img src="img/marcas/juniper.svg" alt="Juniper" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/juniper.png" alt="Productos Juniper" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Juniper</span>
+          </div>
+        </a>
+        <a href="marca-lg.html" class="brand-item" data-brand-preview="lg" title="Ver productos LG">
+          <img src="img/marcas/lg.svg" alt="LG" loading="lazy" decoding="async" width="60" height="60" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/lg.png" alt="Productos LG" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos LG</span>
+          </div>
+        </a>
+        <a href="marca-linksys.html" class="brand-item" data-brand-preview="linksys" title="Ver productos Linksys">
+          <img src="img/marcas/linksys.svg" alt="Linksys" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/linksys.png" alt="Productos Linksys" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Linksys</span>
+          </div>
+        </a>
+        <a href="marca-netgear.html" class="brand-item" data-brand-preview="netgear" title="Ver productos Netgear">
+          <img src="img/marcas/netgear.svg" alt="Netgear" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/netgear.png" alt="Productos Netgear" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Netgear</span>
+          </div>
+        </a>
+        <a href="marca-panasonic.html" class="brand-item" data-brand-preview="panasonic" title="Ver productos Panasonic">
+          <img src="img/marcas/panasonic.svg" alt="Panasonic" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/panasonic.png" alt="Productos Panasonic" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Panasonic</span>
+          </div>
+        </a>
+        <a href="marca-paradox.html" class="brand-item" data-brand-preview="paradox" title="Ver productos Paradox">
+          <img src="img/marcas/paradox.svg" alt="Paradox" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/paradox.png" alt="Productos Paradox" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Paradox</span>
+          </div>
+        </a>
+        <a href="marca-schneiderelectric.html" class="brand-item" data-brand-preview="schneiderelectric" title="Ver productos Schneider Electric">
+          <img src="img/marcas/schneiderelectric.svg" alt="Schneider Electric" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/schneiderelectric.png" alt="Productos Schneider Electric" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Schneider Electric</span>
+          </div>
+        </a>
+        <a href="marca-siemens.html" class="brand-item" data-brand-preview="siemens" title="Ver productos Siemens">
+          <img src="img/marcas/siemens.svg" alt="Siemens" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/siemens.png" alt="Productos Siemens" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Siemens</span>
+          </div>
+        </a>
+        <a href="marca-tesla.html" class="brand-item" data-brand-preview="tesla" title="Ver productos Tesla">
+          <img src="img/marcas/tesla.svg" alt="Tesla" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/tesla.png" alt="Productos Tesla" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Tesla</span>
+          </div>
+        </a>
+        <a href="marca-uniview.html" class="brand-item" data-brand-preview="uniview" title="Ver productos Uniview">
+          <img src="img/marcas/uniview.svg" alt="Uniview" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/uniview.png" alt="Productos Uniview" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Uniview</span>
+          </div>
+        </a>
+        <a href="marca-victronenergy.html" class="brand-item" data-brand-preview="victronenergy" title="Ver productos Victron Energy">
+          <img src="img/marcas/victronenergy.svg" alt="Victron Energy" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/victronenergy.png" alt="Productos Victron Energy" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
+            <span class="brand-preview-btn">Ver productos Victron Energy</span>
+          </div>
+        </a>
+        <a href="marca-mitsubishi.html" class="brand-item" data-brand-preview="mitsubishi" title="Ver productos Mitsubishi">
+          <img src="img/marcas/mitsubishi.svg" alt="Mitsubishi" loading="lazy" decoding="async" width="100" height="40" />
+          <div class="brand-preview-popup">
+            <img src="img/brands-preview/mitsubishi.png" alt="Productos Mitsubishi" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="768" />
+            <span class="brand-preview-btn">Ver productos Mitsubishi</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Botón interactivo para desplegar marcas -->
+      <button id="btn-toggle-brands" class="brands-more-btn" aria-expanded="false" aria-controls="extended-brands-grid">
+        <span>¡Y muchas más marcas!</span> <i class="fa-solid fa-chevron-down toggle-icon" style="transition: transform 0.3s ease;"></i>
+      </button>
       <div class="state-provider">
         <span>PROVEEDORES DEL ESTADO</span>
       </div>

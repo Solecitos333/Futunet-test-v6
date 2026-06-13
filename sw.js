@@ -49,7 +49,8 @@ const ASSETS_TO_CACHE = [
   './js/chatbot.js',
   './js/layout-manager.js',
   './js/internet-portal.js',
-  './js/service-page.js'
+  './js/service-page.js',
+  './js/brand-page-loader.js'
 ];
 
 // Install Event
@@ -87,7 +88,9 @@ self.addEventListener('fetch', event => {
     event.request.url.includes('firebaseinstallations.googleapis.com') ||
     event.request.url.includes('identitytoolkit.googleapis.com') ||
     event.request.url.includes('admin.html') ||
-    event.request.url.includes('mi-cuenta.html')
+    event.request.url.includes('mi-cuenta.html') ||
+    event.request.url.includes('backup_data.js') ||
+    event.request.url.includes('admin-panel.js')
   ) {
     return;
   }

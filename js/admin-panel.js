@@ -1316,22 +1316,30 @@
         voucherHtml += '<div style="margin-bottom:20px; padding:16px; background:#f3f7fc; border-radius:12px; border:1px solid #e5eef8;">' +
           '<div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Transferencia Bancaria</div>';
         if (o.paymentVoucherUrl) {
-          if (o.paymentVoucherUrl.indexOf('.pdf') > -1) {
-            voucherHtml += '<div style="border-radius:8px; overflow:hidden; border:1px solid #e5eef8; height:250px;">' +
-              '<iframe src="' + o.paymentVoucherUrl + '" style="width:100%; height:100%; border:none;"></iframe>' +
+          var safeVoucherUrl = (o.paymentVoucherUrl || '').trim();
+          var isSafeUrl = !safeVoucherUrl.toLowerCase().startsWith('javascript:') && 
+                          !safeVoucherUrl.toLowerCase().startsWith('data:');
+          if (isSafeUrl) {
+            var escapedVoucherUrl = escapeAttr(safeVoucherUrl);
+            if (safeVoucherUrl.indexOf('.pdf') > -1) {
+              voucherHtml += '<div style="border-radius:8px; overflow:hidden; border:1px solid #e5eef8; height:250px;">' +
+                '<iframe src="' + escapedVoucherUrl + '" style="width:100%; height:100%; border:none;"></iframe>' +
+                '</div>';
+            } else {
+              voucherHtml += '<div style="text-align:center; background:#fff; border:1px solid #e5eef8; border-radius:8px; padding:8px;">' +
+                '<a href="' + escapedVoucherUrl + '" target="_blank">' +
+                '<img src="' + escapedVoucherUrl + '" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px;">' +
+                '</a>' +
+                '</div>';
+            }
+            voucherHtml += '<div style="margin-top:10px; text-align:right;">' +
+              '<a href="' + escapedVoucherUrl + '" target="_blank" class="admin-btn admin-btn-ghost admin-btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>' +
+              'Descargar Comprobante</a>' +
               '</div>';
           } else {
-            voucherHtml += '<div style="text-align:center; background:#fff; border:1px solid #e5eef8; border-radius:8px; padding:8px;">' +
-              '<a href="' + o.paymentVoucherUrl + '" target="_blank">' +
-              '<img src="' + o.paymentVoucherUrl + '" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px;">' +
-              '</a>' +
-              '</div>';
+            voucherHtml += '<div style="color:#e74c3c; font-size:0.85rem; font-weight:600;">Enlace de comprobante inválido o potencialmente no seguro.</div>';
           }
-          voucherHtml += '<div style="margin-top:10px; text-align:right;">' +
-            '<a href="' + o.paymentVoucherUrl + '" target="_blank" class="admin-btn admin-btn-ghost admin-btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>' +
-            'Descargar Comprobante</a>' +
-            '</div>';
         } else {
           voucherHtml += '<div style="color:#e74c3c; font-size:0.85rem; font-weight:600;">No se ha cargado comprobante de pago aún.</div>';
         }

@@ -185,6 +185,65 @@
   }
 }
 
+/* ── MOBILE: Portal tabs mejorado ── */
+@media (max-width: 767px) {
+  .portal-tabs-section {
+    padding: 32px 14px 36px;
+    border-radius: 22px;
+  }
+  .portal-tabs-nav {
+    gap: 6px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .portal-tab-btn {
+    font-size: 0.84rem;
+    padding: 10px 16px;
+    min-height: 44px; /* touch target */
+    gap: 7px;
+    border-radius: 10px;
+  }
+  .portal-tab-btn::after {
+    bottom: -10px;
+  }
+  .portal-plans-title {
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    margin-bottom: 22px;
+  }
+  .home-plans-grid {
+    gap: 18px;
+  }
+  .home-plan-header {
+    padding: 22px 18px 16px;
+  }
+  .home-plan-header__title {
+    font-size: 1.3rem;
+  }
+  .home-plan-body {
+    padding: 18px 16px;
+  }
+  .home-plan-features li {
+    font-size: 0.82rem;
+    margin-bottom: 6px;
+  }
+  .home-plan-price-val {
+    font-size: 1.75rem;
+  }
+  .home-b2b-card {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+  .home-b2b-card__icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.15rem;
+    margin-bottom: 14px;
+  }
+  .home-b2b-card__title { font-size: 1.05rem; }
+  .home-b2b-card__desc { font-size: .8rem; margin-bottom: 16px; }
+}
+
 /* Tab buttons wrap */
 .portal-tabs-nav {
   display: flex;

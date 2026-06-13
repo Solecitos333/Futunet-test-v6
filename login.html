@@ -276,8 +276,13 @@
         var params = new URLSearchParams(window.location.search);
         var redirectUrl = params.get('redirect');
         if (redirectUrl) {
-          // Evitar Open Redirects: validar que sea una ruta interna/relativa
-          if (!redirectUrl.startsWith('http://') && !redirectUrl.startsWith('https://') && !redirectUrl.startsWith('//')) {
+          // Evitar Open Redirects y XSS: validar que sea una ruta interna/relativa y no use esquemas potencialmente dañinos
+          var cleanRedirect = redirectUrl.trim().toLowerCase();
+          if (!cleanRedirect.startsWith('http://') && 
+              !cleanRedirect.startsWith('https://') && 
+              !cleanRedirect.startsWith('//') && 
+              !cleanRedirect.startsWith('javascript:') && 
+              !cleanRedirect.startsWith('data:')) {
             window.location.href = redirectUrl;
             return;
           }

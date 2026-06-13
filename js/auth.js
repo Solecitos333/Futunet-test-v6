@@ -317,6 +317,16 @@
     }));
   });
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   // ─── Navbar Auth UI ───
   function renderNavbarAuth() {
     var containers = document.querySelectorAll('.navbar-auth-container');
@@ -328,8 +338,9 @@
     var isAdminUser = false;
     
     if (user && currentUserData) {
-      initials = (currentUserData.displayName || user.email || '?').charAt(0).toUpperCase();
-      name = currentUserData.displayName || user.email;
+      var rawInitials = (currentUserData.displayName || user.email || '?').charAt(0).toUpperCase();
+      initials = escapeHtml(rawInitials);
+      name = escapeHtml(currentUserData.displayName || user.email);
       isAdminUser = hasRole(ROLES.EDITOR);
     }
 

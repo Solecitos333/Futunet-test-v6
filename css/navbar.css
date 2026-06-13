@@ -356,6 +356,30 @@
   }
 }
 
+/* ── 10b. RESPONSIVE — Very Small Mobile (≤360px) ── */
+@media (max-width: 360px) {
+  .nav-inner {
+    padding: 0 8px;
+    gap: 4px;
+  }
+  .nav-logo img {
+    height: 20px;
+  }
+  .hamburger {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 6px;
+  }
+  /* Ocultar texto del botón WA en navbar si es muy pequeño */
+  .nav-wa-btn span:not(:only-child) {
+    display: none;
+  }
+  .nav-wa-btn {
+    padding: 0 12px !important;
+    min-height: 40px;
+  }
+}
+
 /* ─── CLARO STYLE MEGA MENU & NAVBAR EXTENSIONS ─── */
 .claro-top-bar {
   background: #f1f5f9;

@@ -144,15 +144,12 @@ function applyLogoFlip(currentScrollY) {
 }
 
 window.addEventListener('resize', initLogoFlip);
-document.addEventListener('DOMContentLoaded', initLogoFlip);
 window.addEventListener('resize', syncViewportUIVars);
 window.addEventListener('load', syncViewportUIVars);
-document.addEventListener('DOMContentLoaded', syncViewportUIVars);
 window.addEventListener('resize', syncHomeTrustBarPlacement);
 window.addEventListener('load', syncHomeTrustBarPlacement);
-document.addEventListener('DOMContentLoaded', syncHomeTrustBarPlacement);
 
-document.addEventListener('DOMContentLoaded', () => {
+function initInternalNavLinks() {
   const navbar = document.getElementById('navbar');
   const internalNavLinks = document.querySelectorAll('nav a[href^="#"], .mobile-menu a[href^="#"]');
 
@@ -162,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (navbar) navbar.classList.remove('nav-hidden');
     });
   });
-});
+}
 
 let ticking = false;
 
@@ -426,7 +423,10 @@ document.addEventListener('keydown', (e) => {
 /* -------------------------------------------------------------
    3. SCROLL REVEAL — Animación de entrada
    ------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
+/* -------------------------------------------------------------
+   3. SCROLL REVEAL — Animación de entrada
+   ------------------------------------------------------------- */
+function initScrollReveal() {
   initNavigationBindings();
   initBrandImageFallbacks();
   initTrustBarDetails();
@@ -441,14 +441,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: 0.1 });
   revealEls.forEach((el) => observer.observe(el));
-});
+}
 
 
 /* -------------------------------------------------------------
    4. BACK TO TOP — Botón de volver arriba
    ------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-  // Create Back to Top button
+function initBackToTop() {
   const btn = document.createElement('button');
   btn.id = 'back-to-top';
   btn.className = 'back-to-top';
@@ -458,14 +457,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   document.body.appendChild(btn);
-});
+}
 
 
 
 /* -------------------------------------------------------------
    5. HOME SEARCH — Redirect logic for hero search
    ------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
+function initHomeSearch() {
   const searchInput = document.getElementById('search-home');
   const searchBtn = document.querySelector('[data-search-trigger][data-search-input="search-home"]');
 
@@ -474,7 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleSearch() {
     const q = searchInput.value.trim();
     if (q) {
-      // Redirect to catalog page with search query
       window.location.href = `catalogo.html?q=${encodeURIComponent(q)}`;
     }
   }
@@ -487,13 +485,13 @@ document.addEventListener('DOMContentLoaded', () => {
       handleSearch();
     }
   });
-});
+}
 
 
 /* -------------------------------------------------------------
    6. TYPING ANIMATION — Search placeholder rotator (Optimized)
    ------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
+function initTypingAnimation() {
   const searchInput = document.getElementById('search-home');
   if (!searchInput) return;
 
@@ -511,11 +509,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let isDeleting = false;
   let isPaused = false;
   let lastTime = 0;
-  let delay = 2000; // start delay
+  let delay = 2000;
   let isIntersecting = true;
   let frameId = null;
 
-  // Use Intersection Observer so it only animates when visible
   const observer = new IntersectionObserver((entries) => {
     const entry = entries[0];
     isIntersecting = entry ? entry.isIntersecting : true;
@@ -543,7 +540,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elapsed >= delay) {
       lastTime = timestamp;
       
-      // If focused or has content, reset and check later
       if (document.activeElement === searchInput || searchInput.value.length > 0) {
         searchInput.setAttribute('placeholder', phrases[0]);
         delay = 1000;
@@ -562,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.setAttribute('placeholder', current.substring(0, charIndex));
         if (charIndex === current.length) {
           isPaused = true;
-          delay = 2000; // pause at full text
+          delay = 2000;
         } else {
           delay = 70 + Math.random() * 40;
         }
@@ -580,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     frameId = requestAnimationFrame(tick);
   }
-});
+}
 
 
 /* -------------------------------------------------------------
@@ -696,19 +692,20 @@ function injectLocalBusinessSchema() {
   document.head.appendChild(script);
 }
 
-if (typeof window.FutunetConfigReady !== 'undefined') {
-  window.FutunetConfigReady.then(injectLocalBusinessSchema);
-} else {
-  document.addEventListener('DOMContentLoaded', injectLocalBusinessSchema);
+// Lógica de inyección de schema del LocalBusiness
+function handleLocalBusinessSchema() {
+  if (typeof injectLocalBusinessSchema === 'function') {
+    injectLocalBusinessSchema();
+  }
 }
 
 // Inyección dinámica del año actual en el footer
-document.addEventListener('DOMContentLoaded', () => {
+function initFooterYear() {
   const footerYear = document.getElementById('footer-year');
   if (footerYear) {
     footerYear.textContent = new Date().getFullYear();
   }
-});
+}
 
 // Función de notificación Toast compartida globalmente
 window.showToast = function(msg, type) {
@@ -748,7 +745,7 @@ window.showToast = function(msg, type) {
 };
 
 // Resaltado dinámico del menú superior (Personas, Corporativo)
-document.addEventListener('DOMContentLoaded', () => {
+function initTopMenuHighlight() {
   var pathname = window.location.pathname;
   var filename = pathname.substring(pathname.lastIndexOf('/') + 1) || 'index.html';
 
@@ -764,6 +761,35 @@ document.addEventListener('DOMContentLoaded', () => {
     var link = document.querySelector('.top-link-personas');
     if (link) link.classList.add('active');
   }
+}
+
+// =============================================================
+// BOOTSTRAPPING CENTRALIZADO - UNICO LISTENER DOMContentLoaded
+// =============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicialización de logo, navbar y vistas adaptables
+  initLogoFlip();
+  syncViewportUIVars();
+  syncHomeTrustBarPlacement();
+  initInternalNavLinks();
+  
+  // Inicializaciones visuales y observers de scroll
+  initScrollReveal();
+  initBackToTop();
+  
+  // Buscadores y placeholders animados
+  initHomeSearch();
+  initTypingAnimation();
+  
+  // Inyección de Schemas SEO y metadatos
+  if (typeof window.FutunetConfigReady !== 'undefined') {
+    window.FutunetConfigReady.then(handleLocalBusinessSchema);
+  } else {
+    handleLocalBusinessSchema();
+  }
+  
+  initFooterYear();
+  initTopMenuHighlight();
 });
 
 /* -------------------------------------------------------------

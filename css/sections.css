@@ -401,6 +401,14 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 }
 
 /* ── 6. MARCAS (Brands) ── */
+/* Subtítulo adaptativo desktop/mobile */
+.brands-sub--mobile { display: none; }
+.brands-sub--desktop { display: block; }
+@media (max-width: 767px) {
+  .brands-sub--desktop { display: none; }
+  .brands-sub--mobile { display: block; }
+}
+
 .brands-grid {
   display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
   gap: 18px;
@@ -416,6 +424,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   filter: grayscale(100%) opacity(70%);
   transition: var(--transition); cursor: pointer;
   text-decoration: none;
+  position: relative; /* necesario para ::after en móvil */
 }
 .brand-item:hover {
   filter: grayscale(0%) opacity(100%);
@@ -450,15 +459,63 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   text-transform: uppercase;
 }
 
-.brands-more {
-  margin-top: 24px; font-weight: 600;
+.brands-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 32px auto 0;
+  padding: 12px 28px;
+  min-height: 48px; /* touch target mínimo */
+  border: 1px solid rgba(11, 126, 181, 0.2);
+  border-radius: 30px;
+  background: #ffffff;
+  font-family: inherit;
+  font-weight: 600;
   font-size: .82rem;
-  color: var(--text-muted);
-  letter-spacing: .22em;
+  color: #0B7EB5;
+  letter-spacing: .12em;
   text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(11, 126, 181, 0.05);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.brands-more-btn:hover {
+  background: #0B7EB5;
+  color: #ffffff;
+  border-color: #0B7EB5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11, 126, 181, 0.2);
+}
+
+.brands-more-btn:active {
+  transform: scale(0.97);
+}
+
+.brands-more-btn .toggle-icon {
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+/* Grilla extendida colapsable con animación suave */
+.extended-brands-grid {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-top: 0 !important;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, margin-top 0.4s ease;
+}
+
+.extended-brands-grid.expanded {
+  max-height: 2000px; /* suficiente para todas las marcas en cualquier layout */
+  opacity: 1;
+  margin-top: 18px !important;
+  overflow: visible;
 }
 .state-provider {
-  margin-top: 30px; display: inline-block;
+  margin: 30px auto 0; display: block; max-width: max-content;
   padding: 14px 20px 0;
   border-top: 1px solid rgba(11, 126, 181, 0.24);
 }
@@ -697,7 +754,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     gap: 10px;
   }
   .category-card {
-    height: 174px;
+    height: 164px;
     border-radius: 18px;
   }
   .category-card-content {
@@ -705,13 +762,13 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     gap: 10px;
   }
   .category-card-title {
-    font-size: .96rem;
-    line-height: 1.08;
+    font-size: .9rem;
+    line-height: 1.1;
     letter-spacing: -0.02em;
     text-wrap: balance;
   }
   .category-card-copy {
-    font-size: .72rem;
+    font-size: .7rem;
     line-height: 1.45;
     max-width: none;
     display: -webkit-box;
@@ -720,15 +777,15 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     overflow: hidden;
   }
   .category-card-link {
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     margin-top: 6px;
   }
   .category-card-content > div:first-child {
     min-width: 0;
   }
   .category-card-icon {
-    width: 36px; height: 36px;
-    min-width: 36px; min-height: 36px;
+    width: 34px; height: 34px;
+    min-width: 34px; min-height: 34px;
   }
 
   /* Showcase Carousel */
@@ -749,6 +806,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   .showcase-row {
     padding-inline: calc(var(--showcase-edge-fade) * 0.52);
     margin-inline: calc(var(--showcase-edge-fade) * -0.52);
+    overscroll-behavior-x: contain;
   }
   .showcase-shell--static .showcase-row {
     padding-inline: 0;
@@ -779,23 +837,51 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   }
   .showcase-card__price { font-size: .82rem; }
 
-  /* Brands */
-  .brand-item {
-    width: min(38vw, 130px);
-    height: 58px;
-    border-radius: 14px;
-    padding: 10px 12px;
-    filter: none;
-    box-shadow: 0 10px 22px rgba(15, 25, 35, 0.06);
+  /* ── BRANDS GRID MOBILE — Grid 3 columnas ── */
+  .brands-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 360px;
+    margin-inline: auto;
+    margin-top: 20px;
   }
-  .brand-item:hover,
+  .brand-item {
+    width: 100%;
+    height: 62px;
+    border-radius: 14px;
+    padding: 10px 8px;
+    filter: grayscale(20%) opacity(90%);
+    box-shadow: 0 6px 16px rgba(15, 25, 35, 0.06);
+    min-height: 62px;
+    -webkit-tap-highlight-color: transparent;
+  }
   .brand-item:active {
-    filter: none;
-    transform: none;
-    border-color: rgba(11, 126, 181, 0.08);
-    box-shadow: 0 10px 22px rgba(15, 25, 35, 0.06);
+    filter: grayscale(0%) opacity(100%);
+    transform: scale(0.96);
+    border-color: rgba(11, 126, 181, 0.22);
+    box-shadow: 0 10px 24px rgba(10, 112, 162, 0.12);
+  }
+  .brand-item > img {
+    max-height: 38px;
+    max-width: 80%;
+    object-fit: contain;
+  }
+  /* Indicador sutil de interactividad */
+  .brands-grid--preview .brand-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s ease;
+    pointer-events: none;
+  }
+  .brands-grid--preview .brand-item:active::after {
+    border-color: rgba(11, 126, 181, 0.25);
   }
   .brands-more { margin-top: 18px; font-size: .75rem; }
+  .brands-more-btn { margin-top: 22px; }
   .state-provider { margin-top: 20px; }
   .state-provider span { font-size: .88rem; }
 
@@ -806,7 +892,7 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     margin-top: 22px;
   }
   .about-card {
-    padding: 18px;
+    padding: 24px 20px;
     border-radius: 18px;
   }
   .about-card-title { font-size: 1.25rem; }
@@ -888,6 +974,25 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   }
   .showcase-card__price {
     font-size: .76rem;
+  }
+
+  /* Brands grid muy pequeño: 2 columnas */
+  .brands-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 280px;
+    gap: 8px;
+  }
+  .brand-item {
+    height: 58px;
+    min-height: 58px;
+  }
+
+  /* Category cards en móvil muy pequeño */
+  .category-card {
+    height: 150px;
+  }
+  .category-card-title {
+    font-size: .84rem;
   }
 }
 
@@ -1292,11 +1397,11 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
     margin-top: 22px;
   }
   .office-card { border-radius: 18px; }
-  .office-card__media { aspect-ratio: 16 / 10; }
+  .office-card__media { aspect-ratio: 5 / 3; } /* más alto que 16/10 — imagen más visible */
   .office-card__body { padding: 14px 16px 18px; }
   .office-card__title { font-size: 1rem; }
   .office-card__desc { font-size: .78rem; margin-bottom: 10px; }
-  .office-card__btn { padding: 9px 20px; font-size: .78rem; }
+  .office-card__btn { padding: 9px 20px; font-size: .78rem; min-height: 40px; }
 }
 
 @media (min-width: 1024px) {
@@ -1391,40 +1496,47 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   z-index: 101;
 }
 
-/* Mobile: popup appears below instead of above */
+/* Mobile: popup aparece centrado en pantalla como modal */
 @media (max-width: 767px) {
-  .brands-grid--preview {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
+  /* El brands-grid--preview ya es grid de 3 cols desde el @media 767px de arriba */
   .brands-grid--preview .brand-item {
-    width: min(42vw, 140px);
-    display: inline-flex;
+    /* Resetear width para que el grid lo controle */
+    width: 100%;
+    height: 62px;
   }
+
   .brand-preview-popup {
     position: fixed;
     bottom: auto;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.95);
-    width: min(90vw, 320px);
+    width: min(88vw, 310px);
     border-radius: 22px;
-    padding: 16px;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    padding: 14px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+    z-index: 10000;
   }
   .brand-preview-popup.visible {
     transform: translate(-50%, -50%) scale(1);
   }
   .brand-preview-popup::after { display: none; }
 
+  /* Tamaño de imagen del popup en móvil */
+  .brand-preview-img {
+    height: 180px;
+    margin-bottom: 10px;
+  }
+
   /* Overlay backdrop */
   .brand-item.brand-active::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 99;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
   }
 }
 
