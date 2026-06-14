@@ -272,6 +272,12 @@
   outline: none;
 }
 
+.portal-tab-btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
 .portal-tab-btn i, .portal-tab-btn svg {
   font-size: 1.15rem;
   transition: transform 0.3s ease;

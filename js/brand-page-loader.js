@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await window.FutunetData.readyPromise;
   }
 
-  const products = window.mockDatabase || window.FutunetData.products || [];
+  const products = window.mockDatabase || window.FutunetData?.products || [];
   
   // 2. Filtrar productos de la marca (insensible a mayúsculas/minúsculas)
   const brandProducts = products.filter(p => {

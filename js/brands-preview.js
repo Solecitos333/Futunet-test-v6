@@ -6,6 +6,12 @@
 (async function () {
   'use strict';
 
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
   const brandsSection = document.getElementById('marcas');
   if (!brandsSection) return;
 
@@ -96,7 +102,7 @@
     item.addEventListener('click', (e) => {
       if (!isTouchDevice()) return;
 
-      if (e.target.closest('.brand-preview-btn')) return;
+      if (e.target.closest('.brand-preview-popup')) return;
 
       e.preventDefault();
       e.stopPropagation();
@@ -170,9 +176,4 @@
     });
   }
 
-  function escapeHtml(s) {
-    const d = document.createElement('div');
-    d.textContent = s || '';
-    return d.innerHTML;
-  }
 })();

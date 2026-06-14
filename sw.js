@@ -1,10 +1,10 @@
-const CACHE_NAME = 'futunet-cache-v5';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'futunet-cache-v6';
+
+// Assets críticos que deben cachearse (verificados como existentes)
+const CRITICAL_ASSETS = [
   './',
   './index.html',
   './catalogo.html',
-  './producto.html',
-  './login.html',
   './internet.html',
   './energia-climatizacion.html',
   './equipos-oficina.html',
@@ -15,51 +15,67 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './css/main.css',
   './css/navbar.css',
-  './css/catalog.css',
   './css/sections.css',
   './css/auth.css',
-  './css/producto.css',
   './css/chatbot.css',
   './css/hero.css',
+  './css/portal-rapido.css',
+  './css/catalog.css',
   './css/energia-climatizacion.css',
   './css/equipos-oficina.css',
   './css/redes-datos.css',
   './css/seguridad-electronica.css',
+  './css/internet.css',
+  './css/producto.css',
   './img/logo.webp',
   './img/logo-navbar.webp',
   './img/placeholder.svg',
-  './js/firebase-config.js',
-  './js/auth.js',
-  './js/auth-guard.js',
-  './js/cart.js',
   './js/main.js',
   './js/config.js',
-  './js/inventory_data.js',
-  './js/supplier_inventory.js',
-  './js/image_fixes.js',
+  './js/brands-preview.js',
+  './js/form.js',
+  './js/cart.js',
+  './js/chatbot.js',
+  './js/layout-manager.js',
+  './js/internet-portal.js',
+  './js/brand-page-loader.js',
   './js/catalog.js',
   './js/home_showcase.js',
   './js/promo-carousel.js',
   './js/category-showcase.js',
-  './js/brands-preview.js',
-  './js/form.js',
+  './js/image_fixes.js',
+  './js/inventory_data.js',
+  './js/supplier_inventory.js',
+  './js/service-page.js',
   './js/product_detail_shared.js',
   './js/product_detail_overrides.js',
-  './js/producto.js',
-  './js/chatbot.js',
-  './js/layout-manager.js',
-  './js/internet-portal.js',
-  './js/service-page.js',
-  './js/brand-page-loader.js'
+  './js/producto.js'
 ];
 
-// Install Event
+// Assets opcionales (si fallan, no se rompe la instalación)
+const OPTIONAL_ASSETS = [
+  './producto.html',
+  './auth-guard.js'
+];
+
+// Install Event — cachear assets críticos
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
+      .then(async cache => {
         console.log('[Service Worker] Caching App Shell');
-        return cache.addAll(ASSETS_TO_CACHE);
+
+        // Cachear críticos (fallo total si alguno falla)
+        await cache.addAll(CRITICAL_ASSETS);
+
+        // Cachear opcionales individualmente (sin romper la instalación)
+        for (const asset of OPTIONAL_ASSETS) {
+          try {
+            await cache.add(asset);
+          } catch (e) {
+            console.warn('[Service Worker] Optional asset not cached:', asset, e.message);
+          }
+        }
       })
       .then(() => self.skipWaiting())
   );
@@ -90,7 +106,10 @@ self.addEventListener('fetch', event => {
     event.request.url.includes('admin.html') ||
     event.request.url.includes('mi-cuenta.html') ||
     event.request.url.includes('backup_data.js') ||
-    event.request.url.includes('admin-panel.js')
+    event.request.url.includes('admin-panel.js') ||
+    // Excluir archivos de configuración de Firebase del caché por seguridad
+    event.request.url.includes('firebase-config.js') ||
+    event.request.url.includes('auth.js')
   ) {
     return;
   }
@@ -126,9 +145,9 @@ self.addEventListener('fetch', event => {
 
         return networkResponse;
       }).catch(() => {
-        // Fallback for offline catalog or image if network fails
-        if (event.request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/)) {
-          return caches.match('./img/placeholder.svg');
+        // Return offline fallback for HTML pages
+        if (event.request.headers.get('Accept').includes('text/html')) {
+          return caches.match('./index.html');
         }
       });
     })

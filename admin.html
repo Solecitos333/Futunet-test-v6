@@ -7,9 +7,11 @@
   <meta name="description" content="Panel de administración Futunet: inventario, usuarios, descuentos y configuración." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
   <link rel="stylesheet" href="css/admin.css?v=3.1" />
-  <link rel="stylesheet" href="css/auth.css?v=3.0" />
+  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
   <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
   <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
@@ -1851,7 +1853,7 @@
             <img id="iv-voucher-img" src="img/placeholder.svg" alt="Capture del voucher" style="max-width:100%; height:auto; display:block; margin:0 auto;" />
             <iframe id="iv-voucher-pdf" src="" style="width:100%; height:300px; display:none; border:none;"></iframe>
           </div>
-          <a id="iv-download-link" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#22a4e0; font-size:0.78rem; font-weight:600; text-decoration:none; margin-top:8px;">
+          <a id="iv-download-link" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#22a4e0; font-size:0.78rem; font-weight:600; text-decoration:none; margin-top:8px;" rel="noopener noreferrer">
             <i data-lucide="external-link" style="width:12px;"></i> Abrir comprobante en nueva pestaña
           </a>
         </div>

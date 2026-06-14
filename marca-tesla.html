@@ -7,10 +7,11 @@
   <meta name="description" content="Explora el catálogo oficial de productos Tesla en República Dominicana. Distribución, instalación y soporte técnico de soluciones Tesla para empresas y hogares." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css?v=3.0" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.3" />
-  <link rel="stylesheet" href="css/sections.css?v=3.1" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="css/main.css?v=3.1" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.4" />
+  <link rel="stylesheet" href="css/sections.css?v=3.3" />
   <link rel="stylesheet" href="css/catalog.css?v=3.0" />
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
   <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
@@ -20,9 +21,11 @@
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript></noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript></noscript>
   <style>
     .brand-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
     .brand-hero {
@@ -110,6 +113,11 @@
     ]
   }
   </script>
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Equipos y Soluciones Tesla en Santiago, RD — Futunet" />
+  <meta name="twitter:description" content="Explora el catálogo oficial de productos Tesla en República Dominicana. Distribución, instalación y soporte técnico de soluciones Tesla para empresas y hogares." />
+  <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
 </head>
 <body data-brand-name="Tesla">
 
@@ -254,7 +262,7 @@
                 <div class="mega-menu-col">
                   <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
                   <ul>
-                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
                     <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
                   </ul>
                 </div>

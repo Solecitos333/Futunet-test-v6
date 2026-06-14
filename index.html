@@ -18,14 +18,17 @@
   <meta property="og:url" content="https://futunet.com.do" />
   <meta property="og:locale" content="es_DO" />
   <meta property="og:site_name" content="Futunet" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Futunet – La Tecnología del Futuro" />
   <meta name="twitter:description" content="Soluciones tecnológicas, seguridad, redes, equipos de oficina e infraestructura en Santiago, República Dominicana." />
   <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
+  <meta property="og:image:alt" content="Logo de Futunet – La Tecnología del Futuro" />
   <link rel="canonical" href="https://futunet.com.do/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
+  <noscript><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript></noscript>
   <link rel="preload" as="image" href="img/hero-tech-bg.webp" type="image/webp" />
   <link rel="preload" as="image" href="img/logo.webp" type="image/webp" />
   <link rel="stylesheet" href="css/main.css?v=3.1" />
@@ -34,18 +37,21 @@
   <link rel="stylesheet" href="css/sections.css?v=3.3" />
   <link rel="stylesheet" href="css/portal-rapido.css?v=1.1" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
+  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript></noscript>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
   <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
   <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
   <meta name="theme-color" content="#0B7EB5" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <!-- twitter:card moved to top with other Twitter meta tags -->
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
 
   <!-- SEO Structured Data (JSON-LD) -->
@@ -62,7 +68,7 @@
         "logo": {
           "@type": "ImageObject",
           "@id": "https://futunet.com.do/#logo",
-          "url": "https://futunet.com.do/img/logo.png",
+          "url": "https://futunet.com.do/img/logo.webp",
           "caption": "Futunet Logo"
         },
         "image": {
@@ -104,7 +110,7 @@
         "@type": "LocalBusiness",
         "@id": "https://futunet.com.do/#localbusiness",
         "name": "Futunet -- Colinas",
-        "image": "https://futunet.com.do/img/logo.png",
+        "image": "https://futunet.com.do/img/logo.webp",
         "telephone": "+1-829-741-1041",
         "url": "https://futunet.com.do/",
         "address": {
@@ -294,7 +300,7 @@
                 <div class="mega-menu-col">
                   <div class="mega-menu-title"><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</div>
                   <ul>
-                    <li><a href="https://wa.me/18297411041" target="_blank"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
+                    <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
                     <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
                   </ul>
                 </div>
@@ -390,6 +396,7 @@
             <div class="hero-content">
               <div id="hero-logo-anchor" class="hero-logo-anchor" aria-hidden="true"></div>
               <h1 class="hero-brand-mark">
+                <span class="sr-only">Futunet – La Tecnología del Futuro</span>
                 <img src="img/logo-navbar.webp" alt="Futunet – La Tecnología del Futuro" width="972" height="303" />
               </h1>
               <div class="hero-badge"><span class="dot"></span>Santiago, República Dominicana</div>
@@ -516,7 +523,7 @@
       <!-- Indicadores -->
       <div class="hero-carousel-dots" aria-label="Indicadores"></div>
       <!-- Barra de Progreso Autoplay -->
-      <div class="hero-progress-bar" id="hero-progress-bar"></div>
+      <div class="hero-progress-bar" id="hero-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de rotación de diapositivas"></div>
     </div>
   </section>
 
@@ -527,8 +534,8 @@
         <button
           class="trust-item trust-toggle reveal is-active"
           type="button"
-          data-trust-title="Envios nacionales"
-          data-trust-copy="Cobertura agil para Santiago y toda Republica Dominicana."
+          data-trust-title="Envíos nacionales"
+          data-trust-copy="Cobertura ágil para Santiago y toda República Dominicana."
           aria-controls="trust-mobile-detail"
           aria-expanded="true"
         >
@@ -542,8 +549,8 @@
         <button
           class="trust-item trust-toggle reveal"
           type="button"
-          data-trust-title="Soporte tecnico"
-          data-trust-copy="Acompanamiento antes, durante y despues de cada instalacion."
+          data-trust-title="Soporte técnico"
+          data-trust-copy="Acompañamiento antes, durante y después de cada instalación."
           aria-controls="trust-mobile-detail"
           aria-expanded="false"
         >
@@ -557,8 +564,8 @@
         <button
           class="trust-item trust-toggle reveal"
           type="button"
-          data-trust-title="Garantia oficial"
-          data-trust-copy="Productos respaldados y asesoria de compra con criterio."
+          data-trust-title="Garantía oficial"
+          data-trust-copy="Productos respaldados y asesoría de compra con criterio."
           aria-controls="trust-mobile-detail"
           aria-expanded="false"
         >
@@ -572,7 +579,7 @@
         <button
           class="trust-item trust-toggle reveal"
           type="button"
-          data-trust-title="Atencion B2B"
+          data-trust-title="Atención B2B"
           data-trust-copy="Cotizaciones corporativas para compras, upgrades y proyectos."
           aria-controls="trust-mobile-detail"
           aria-expanded="false"
@@ -585,8 +592,8 @@
         </button>
       </div>
       <div class="trust-mobile-detail" id="trust-mobile-detail" aria-live="polite">
-        <strong id="trust-mobile-detail-title">Envios nacionales</strong>
-        <p id="trust-mobile-detail-copy">Cobertura agil para Santiago y toda Republica Dominicana.</p>
+        <strong id="trust-mobile-detail-title">Envíos nacionales</strong>
+        <p id="trust-mobile-detail-copy">Cobertura ágil para Santiago y toda República Dominicana.</p>
       </div>
     </div>
   </div>
@@ -1054,49 +1061,49 @@
             <span class="brand-preview-btn">Ver productos Dell</span>
           </div>
         </a>
-        <a href="marca-lenovo.html" class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo">
+        <a href="marca-lenovo.html" class="brand-item" data-brand-preview="lenovo" title="Ver productos Lenovo" aria-label="Ver productos Lenovo">
           <img src="img/marcas/lenovo.svg" alt="Lenovo" loading="lazy" decoding="async" width="120" height="30" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/lenovo.webp" alt="Productos Lenovo" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Lenovo</span>
           </div>
         </a>
-        <a href="marca-epson.html" class="brand-item" data-brand-preview="epson" title="Ver productos Epson">
+        <a href="marca-epson.html" class="brand-item" data-brand-preview="epson" title="Ver productos Epson" aria-label="Ver productos Epson">
           <img src="img/marcas/epson.svg" alt="Epson" loading="lazy" decoding="async" width="120" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/epson.webp" alt="Productos Epson" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Epson</span>
           </div>
         </a>
-        <a href="marca-hikvision.html" class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision">
+        <a href="marca-hikvision.html" class="brand-item" data-brand-preview="hikvision" title="Ver productos Hikvision" aria-label="Ver productos Hikvision">
           <img src="img/marcas/hikvision.svg" alt="Hikvision" loading="lazy" decoding="async" width="150" height="30" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/hikvision.webp" alt="Productos Hikvision" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Hikvision</span>
           </div>
         </a>
-        <a href="marca-samsung.html" class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung">
+        <a href="marca-samsung.html" class="brand-item brand-item--samsung" data-brand-preview="samsung" title="Ver productos Samsung" aria-label="Ver productos Samsung">
           <img src="img/marcas/samsung.svg" alt="Samsung" loading="lazy" decoding="async" width="134" height="34" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/samsung.webp" alt="Productos Samsung" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Samsung</span>
           </div>
         </a>
-        <a href="marca-hp.html" class="brand-item" data-brand-preview="hp" title="Ver productos HP">
+        <a href="marca-hp.html" class="brand-item" data-brand-preview="hp" title="Ver productos HP" aria-label="Ver productos HP">
           <img src="img/marcas/hp.svg" alt="HP" loading="lazy" decoding="async" width="48" height="48" class="brand-image-hp" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/hp.webp" alt="Productos HP" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos HP</span>
           </div>
         </a>
-        <a href="marca-tp-link.html" class="brand-item brand-item--tplink" data-brand-preview="tplink" title="Ver productos TP-Link">
+        <a href="marca-tp-link.html" class="brand-item brand-item--tplink" data-brand-preview="tp-link" title="Ver productos TP-Link" aria-label="Ver productos TP-Link">
           <img src="img/marcas/tp-link.svg" alt="TP-Link" loading="lazy" decoding="async" width="130" height="44" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/tplink.webp" alt="Productos TP-Link" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos TP-Link</span>
           </div>
         </a>
-        <a href="marca-logitech.html" class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech">
+        <a href="marca-logitech.html" class="brand-item" data-brand-preview="logitech" title="Ver productos Logitech" aria-label="Ver productos Logitech">
           <img src="img/marcas/logitech.svg" alt="Logitech" loading="lazy" decoding="async" width="120" height="35" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/logitech.webp" alt="Productos Logitech" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
@@ -1107,126 +1114,126 @@
 
       <!-- Grilla secundaria oculta de marcas adicionales -->
       <div id="extended-brands-grid" class="brands-grid brands-grid--preview extended-brands-grid" aria-hidden="true" style="display: none;">
-        <a href="marca-cisco.html" class="brand-item" data-brand-preview="cisco" title="Ver productos Cisco">
+        <a href="marca-cisco.html" class="brand-item" data-brand-preview="cisco" title="Ver productos Cisco" aria-label="Ver productos Cisco">
           <img src="img/marcas/cisco.svg" alt="Cisco" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/cisco.png" alt="Productos Cisco" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Cisco</span>
           </div>
         </a>
-        <a href="marca-dahua.html" class="brand-item" data-brand-preview="dahua" title="Ver productos Dahua">
+        <a href="marca-dahua.html" class="brand-item" data-brand-preview="dahua" title="Ver productos Dahua" aria-label="Ver productos Dahua">
           <img src="img/marcas/dahua.svg" alt="Dahua" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/dahua.png" alt="Productos Dahua" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Dahua</span>
           </div>
         </a>
-        <a href="marca-ezviz.html" class="brand-item" data-brand-preview="ezviz" title="Ver productos Ezviz">
+        <a href="marca-ezviz.html" class="brand-item" data-brand-preview="ezviz" title="Ver productos Ezviz" aria-label="Ver productos Ezviz">
           <img src="img/marcas/ezviz.svg" alt="Ezviz" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/ezviz.png" alt="Productos Ezviz" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Ezviz</span>
           </div>
         </a>
-        <a href="marca-ubiquiti.html" class="brand-item" data-brand-preview="ubiquiti" title="Ver productos Ubiquiti">
+        <a href="marca-ubiquiti.html" class="brand-item" data-brand-preview="ubiquiti" title="Ver productos Ubiquiti" aria-label="Ver productos Ubiquiti">
           <img src="img/marcas/ubiquiti.svg" alt="Ubiquiti" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/ubiquiti.png" alt="Productos Ubiquiti" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Ubiquiti</span>
           </div>
         </a>
-        <a href="marca-mikrotik.html" class="brand-item" data-brand-preview="mikrotik" title="Ver productos MikroTik">
+        <a href="marca-mikrotik.html" class="brand-item" data-brand-preview="mikrotik" title="Ver productos MikroTik" aria-label="Ver productos MikroTik">
           <img src="img/marcas/mikrotik.svg" alt="MikroTik" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/mikrotik.png" alt="Productos MikroTik" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos MikroTik</span>
           </div>
         </a>
-        <a href="marca-zkteco.html" class="brand-item" data-brand-preview="zkteco" title="Ver productos ZKTeco">
+        <a href="marca-zkteco.html" class="brand-item" data-brand-preview="zkteco" title="Ver productos ZKTeco" aria-label="Ver productos ZKTeco">
           <img src="img/marcas/zkteco.png" alt="ZKTeco" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/zkteco.png" alt="Productos ZKTeco" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos ZKTeco</span>
           </div>
         </a>
-        <a href="marca-juniper.html" class="brand-item" data-brand-preview="juniper" title="Ver productos Juniper">
+        <a href="marca-juniper.html" class="brand-item" data-brand-preview="juniper" title="Ver productos Juniper" aria-label="Ver productos Juniper">
           <img src="img/marcas/juniper.svg" alt="Juniper" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/juniper.png" alt="Productos Juniper" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Juniper</span>
           </div>
         </a>
-        <a href="marca-lg.html" class="brand-item" data-brand-preview="lg" title="Ver productos LG">
+        <a href="marca-lg.html" class="brand-item" data-brand-preview="lg" title="Ver productos LG" aria-label="Ver productos LG">
           <img src="img/marcas/lg.svg" alt="LG" loading="lazy" decoding="async" width="60" height="60" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/lg.png" alt="Productos LG" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos LG</span>
           </div>
         </a>
-        <a href="marca-linksys.html" class="brand-item" data-brand-preview="linksys" title="Ver productos Linksys">
+        <a href="marca-linksys.html" class="brand-item" data-brand-preview="linksys" title="Ver productos Linksys" aria-label="Ver productos Linksys">
           <img src="img/marcas/linksys.svg" alt="Linksys" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/linksys.png" alt="Productos Linksys" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Linksys</span>
           </div>
         </a>
-        <a href="marca-netgear.html" class="brand-item" data-brand-preview="netgear" title="Ver productos Netgear">
+        <a href="marca-netgear.html" class="brand-item" data-brand-preview="netgear" title="Ver productos Netgear" aria-label="Ver productos Netgear">
           <img src="img/marcas/netgear.svg" alt="Netgear" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/netgear.png" alt="Productos Netgear" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Netgear</span>
           </div>
         </a>
-        <a href="marca-panasonic.html" class="brand-item" data-brand-preview="panasonic" title="Ver productos Panasonic">
+        <a href="marca-panasonic.html" class="brand-item" data-brand-preview="panasonic" title="Ver productos Panasonic" aria-label="Ver productos Panasonic">
           <img src="img/marcas/panasonic.svg" alt="Panasonic" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/panasonic.png" alt="Productos Panasonic" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Panasonic</span>
           </div>
         </a>
-        <a href="marca-paradox.html" class="brand-item" data-brand-preview="paradox" title="Ver productos Paradox">
+        <a href="marca-paradox.html" class="brand-item" data-brand-preview="paradox" title="Ver productos Paradox" aria-label="Ver productos Paradox">
           <img src="img/marcas/paradox.svg" alt="Paradox" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/paradox.png" alt="Productos Paradox" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Paradox</span>
           </div>
         </a>
-        <a href="marca-schneiderelectric.html" class="brand-item" data-brand-preview="schneiderelectric" title="Ver productos Schneider Electric">
+        <a href="marca-schneiderelectric.html" class="brand-item" data-brand-preview="schneiderelectric" title="Ver productos Schneider Electric" aria-label="Ver productos Schneider Electric">
           <img src="img/marcas/schneiderelectric.svg" alt="Schneider Electric" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/schneiderelectric.png" alt="Productos Schneider Electric" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Schneider Electric</span>
           </div>
         </a>
-        <a href="marca-siemens.html" class="brand-item" data-brand-preview="siemens" title="Ver productos Siemens">
+        <a href="marca-siemens.html" class="brand-item" data-brand-preview="siemens" title="Ver productos Siemens" aria-label="Ver productos Siemens">
           <img src="img/marcas/siemens.svg" alt="Siemens" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/siemens.png" alt="Productos Siemens" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Siemens</span>
           </div>
         </a>
-        <a href="marca-tesla.html" class="brand-item" data-brand-preview="tesla" title="Ver productos Tesla">
+        <a href="marca-tesla.html" class="brand-item" data-brand-preview="tesla" title="Ver productos Tesla" aria-label="Ver productos Tesla">
           <img src="img/marcas/tesla.svg" alt="Tesla" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/tesla.png" alt="Productos Tesla" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Tesla</span>
           </div>
         </a>
-        <a href="marca-uniview.html" class="brand-item" data-brand-preview="uniview" title="Ver productos Uniview">
+        <a href="marca-uniview.html" class="brand-item" data-brand-preview="uniview" title="Ver productos Uniview" aria-label="Ver productos Uniview">
           <img src="img/marcas/uniview.svg" alt="Uniview" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/uniview.png" alt="Productos Uniview" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Uniview</span>
           </div>
         </a>
-        <a href="marca-victronenergy.html" class="brand-item" data-brand-preview="victronenergy" title="Ver productos Victron Energy">
+        <a href="marca-victronenergy.html" class="brand-item" data-brand-preview="victronenergy" title="Ver productos Victron Energy" aria-label="Ver productos Victron Energy">
           <img src="img/marcas/victronenergy.svg" alt="Victron Energy" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/victronenergy.png" alt="Productos Victron Energy" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="1024" />
             <span class="brand-preview-btn">Ver productos Victron Energy</span>
           </div>
         </a>
-        <a href="marca-mitsubishi.html" class="brand-item" data-brand-preview="mitsubishi" title="Ver productos Mitsubishi">
+        <a href="marca-mitsubishi.html" class="brand-item" data-brand-preview="mitsubishi" title="Ver productos Mitsubishi" aria-label="Ver productos Mitsubishi">
           <img src="img/marcas/mitsubishi.svg" alt="Mitsubishi" loading="lazy" decoding="async" width="100" height="40" />
           <div class="brand-preview-popup">
             <img src="img/brands-preview/mitsubishi.png" alt="Productos Mitsubishi" class="brand-preview-img" loading="lazy" decoding="async" width="1024" height="768" />
@@ -1356,6 +1363,15 @@
               referrerpolicy="no-referrer-when-downgrade"
               title="Ubicación de la sucursal de Futunet en Santiago"
             ></iframe>
+            <noscript>
+              <iframe
+                src="https://maps.google.com/maps?q=Futunet+Las+colinas,+Santiago&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                width="100%" height="250"
+                allowfullscreen=""
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Ubicación de la sucursal de Futunet en Santiago"
+              ></iframe>
+            </noscript>
           </div>
         </div>
 
@@ -1376,28 +1392,28 @@
             <select id="f-servicio" name="servicio">
               <option value="">Selecciona una opción...</option>
               <optgroup label="Seguridad electrónica">
-                <option>Sistema de cámaras</option>
-                <option>Control de accesos</option>
-                <option>Cerraduras magnéticas</option>
-                <option>Cerco eléctrico</option>
+                <option value="sistema-camaras">Sistema de cámaras</option>
+                <option value="control-accesos">Control de accesos</option>
+                <option value="cerraduras-magneticas">Cerraduras magnéticas</option>
+                <option value="cerco-electrico">Cerco eléctrico</option>
               </optgroup>
               <optgroup label="Redes y energía">
-                <option>Redes de internet</option>
-                <option>Paneles solares</option>
-                <option>Aire acondicionado</option>
+                <option value="redes-internet">Redes de internet</option>
+                <option value="paneles-solares">Paneles solares</option>
+                <option value="aire-acondicionado">Aire acondicionado</option>
               </optgroup>
               <optgroup label="Equipos de oficina">
-                <option>Laptops y computadoras</option>
-                <option>UPS</option>
-                <option>Impresoras y proyectores</option>
-                <option>Mobiliario</option>
-                <option>Papelería</option>
+                <option value="laptops-computadoras">Laptops y computadoras</option>
+                <option value="ups">UPS</option>
+                <option value="impresoras-proyectores">Impresoras y proyectores</option>
+                <option value="mobiliario">Mobiliario</option>
+                <option value="papeleria">Papelería</option>
               </optgroup>
               <optgroup label="Infraestructura">
-                <option>Pintura</option>
-                <option>Sheetrock</option>
-                <option>Divisiones de cristal</option>
-                <option>Puertas y ventanas</option>
+                <option value="pintura">Pintura</option>
+                <option value="sheetrock">Sheetrock</option>
+                <option value="divisiones-cristal">Divisiones de cristal</option>
+                <option value="puertas-ventanas">Puertas y ventanas</option>
               </optgroup>
             </select>
           </div>
@@ -1446,7 +1462,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© <script>document.write(new Date().getFullYear())</script> Futunet · Todos los derechos reservados</span>
+        <span>© <span id="footer-year"></span> Futunet · Todos los derechos reservados</span>
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
@@ -1487,16 +1503,21 @@
 
       // Lazy-load Google Maps iframe (solo se carga si está cerca del viewport)
       const mapFrame = document.querySelector('.contact-map-frame');
-      if (mapFrame && 'IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(e => {
-            if (e.isIntersecting) {
-              mapFrame.setAttribute('src', mapFrame.dataset.src);
-              obs.disconnect();
-            }
-          });
-        }, { rootMargin: '200px' });
-        obs.observe(mapFrame);
+      if (mapFrame) {
+        if ('IntersectionObserver' in window) {
+          const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                mapFrame.setAttribute('src', mapFrame.dataset.src);
+                obs.disconnect();
+              }
+            });
+          }, { rootMargin: '200px' });
+          obs.observe(mapFrame);
+        } else {
+          // Fallback: load immediately if IntersectionObserver not supported
+          mapFrame.setAttribute('src', mapFrame.dataset.src);
+        }
       }
     });
   </script>

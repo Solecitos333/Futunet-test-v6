@@ -7,7 +7,6 @@ Disallow: /mi-cuenta.html
 Disallow: /login.html
 Disallow: /js/admin-panel.js
 Disallow: /js/user-panel.js
-Disallow: /js/backup_data.js
 
 # Declaración oficial del Sitemap
 Sitemap: https://futunet.com.do/sitemap.xml

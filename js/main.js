@@ -143,10 +143,20 @@ function applyLogoFlip(currentScrollY) {
   logoImg.style.transform = `translate(${currentDx}px, ${currentDy}px) scale(${currentScale})`;
 }
 
-window.addEventListener('resize', initLogoFlip);
-window.addEventListener('resize', syncViewportUIVars);
+// Debounce helper for resize events
+function debounce(fn, delay) {
+  let timer;
+  return function() { clearTimeout(timer); timer = setTimeout(fn, delay); };
+}
+
+const onResize = debounce(function() {
+  initLogoFlip();
+  syncViewportUIVars();
+  syncHomeTrustBarPlacement();
+}, 150);
+
+window.addEventListener('resize', onResize);
 window.addEventListener('load', syncViewportUIVars);
-window.addEventListener('resize', syncHomeTrustBarPlacement);
 window.addEventListener('load', syncHomeTrustBarPlacement);
 
 function initInternalNavLinks() {
@@ -621,16 +631,18 @@ function initTypingAnimation() {
   }, { passive: true });
 })();
 
+let preloaderTimeout = null;
+
 function hidePagePreloader() {
+  if (preloaderTimeout) clearTimeout(preloaderTimeout);
   const preloader = document.getElementById('page-preloader');
   if (preloader) preloader.classList.add('hidden');
   document.body.classList.remove('is-loading');
-  document.body.style.display = ''; // Fallback for safety
 }
 
 window.addEventListener('load', hidePagePreloader);
 // Fallback timeout in case resources (images, large scripts) hang the load event on mobile
-setTimeout(hidePagePreloader, 1250);
+preloaderTimeout = setTimeout(hidePagePreloader, 1500);
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
@@ -755,11 +767,11 @@ function initTopMenuHighlight() {
   });
 
   if (filename === 'corporativo.html') {
-    var link = document.querySelector('.top-link-corporativo');
-    if (link) link.classList.add('active');
+    var corpLink = document.querySelector('.top-link-corporativo');
+    if (corpLink) corpLink.classList.add('active');
   } else {
-    var link = document.querySelector('.top-link-personas');
-    if (link) link.classList.add('active');
+    var personasLink = document.querySelector('.top-link-personas');
+    if (personasLink) personasLink.classList.add('active');
   }
 }
 
