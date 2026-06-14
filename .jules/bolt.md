@@ -1,0 +1,3 @@
+## 2025-02-12 - Optimize search performance by caching normalized strings
+**Learning:** In a codebase with client-side searching across a large dataset (like the mock database here), running complex normalization functions (e.g. removing accents, lowercasing, regex replaces) on every property of every item during a search/filter pass is highly inefficient. It can take hundreds of milliseconds on thousands of items.
+**Action:** When filtering objects via text search, lazily cache the normalized string representations on the objects themselves using `Object.defineProperty` (with `enumerable: false` to avoid leaking the cache keys). This avoids redundant string allocations and regex execution during the inner loop of the search.
