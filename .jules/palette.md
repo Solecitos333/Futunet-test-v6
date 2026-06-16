@@ -1,0 +1,3 @@
+## 2024-06-25 - Accessibility in dynamic conditional templates
+**Learning:** When using template literals to dynamically generate UI components with conditional variants (e.g., 'compact' vs 'regular' layouts for cart controls in `js/catalog.js`), it's easy for accessibility coverage to become inconsistent. The compact variant had `aria-label`s on its quantity buttons, while the regular variant was missing them, likely because they were added as an afterthought to the compact branch. Screen readers depend on these labels for icon-only buttons.
+**Action:** Always audit *all* structural variants and branches of a dynamically generated template literal whenever making accessibility or UX updates to ensure uniform coverage across the application state.
