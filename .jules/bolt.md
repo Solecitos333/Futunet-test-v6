@@ -1,0 +1,3 @@
+## 2024-06-16 - Reduce array allocations in catalog search
+**Learning:** Replaced chained array methods (`.map().filter().sort().map()`) with a single imperative `for` loop in `js/catalog.js` search operations. This codebase does a lot of array manipulation for search and filtering over `mockDatabase` array which can be quite large. The chained methods create intermediate arrays that are then immediately discarded, causing unnecessary memory allocation and garbage collection.
+**Action:** When performing complex mapping and filtering operations on large data sets (like `mockDatabase`), use a single `for` loop instead of chaining multiple array methods to minimize memory allocations and improve overall search responsiveness.
