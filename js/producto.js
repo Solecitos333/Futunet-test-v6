@@ -4,10 +4,14 @@
   let currentDetail = null;
   let selectedQuantity = 1;
 
-  function escapeHTML(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
+  function escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function refreshIcons() {
