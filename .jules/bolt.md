@@ -1,0 +1,3 @@
+## 2024-05-24 - Cache normalized strings on objects to avoid redundant string normalization
+**Learning:** In heavily used search functions like autocomplete or real-time filtering loops, applying string normalizations (e.g. `toLowerCase`, `normalize`, removing accents with Regex) repeatedly on the exact same text data across every keystroke is a massive performance bottleneck and causes heavy CPU usage.
+**Action:** Use a helper function like `getNormalized(obj, key)` to lazily cache the normalized string directly on the object. Hide the cached property using `Object.defineProperty(obj, cacheKey, { enumerable: false })` so that the newly injected property doesn't unexpectedly leak into UI loops, serialization, or `Object.keys()` iterations.
