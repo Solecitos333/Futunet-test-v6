@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimize Product Search and Search Chains
+**Learning:** In a codebase without an explicit build system and heavy runtime string normalization, executing expensive regex operations via `.map().filter().sort().map()` chains dynamically on thousands of items causes main-thread blocking. A `WeakMap` avoids mutating the underlying mockDatabase, letting us lazy-cache the normalized values and reducing array allocations from three to one using a single imperative loop.
+**Action:** Always prefer caching expensive text-normalization routines using object references if the underlying array objects are stable, and collapse functional array iterations into single passes when working with large client-side datasets.
