@@ -1,0 +1,3 @@
+## 2024-06-14 - Optimize Search Performance
+**Learning:** Chained `.map().filter().sort().map()` array operations on large datasets cause multiple unnecessary intermediate array allocations which bloats memory and triggers GC pauses. In addition, repeated regex mapping and character normalization inside filter loops on every keystroke (without caching) heavily degrades typing performance.
+**Action:** Use an imperative `for` loop to combine mapping and filtering into a single pass to reduce intermediate allocations. Use a `WeakMap` for lazy caching of normalized strings tied to object references to drastically reduce repetitive, expensive regex execution without mutating the source data structures.
