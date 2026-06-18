@@ -1,0 +1,3 @@
+## 2024-05-18 - Missing ARIA Labels in Dynamically Rendered Controls
+**Learning:** Dynamically generated HTML components in JavaScript (like cart and product quantity controls using template literals in `js/catalog.js` and `js/cart.js`) often bypass static accessibility analysis coverage. Because they are injected at runtime, missing accessibility attributes (like `aria-label` for icon-only `-` and `+` buttons) are easily overlooked.
+**Action:** Always explicitly check template literals defining UI components (like buttons, modals, or controls without text) for proper accessibility attributes during frontend verification or code reviews.
