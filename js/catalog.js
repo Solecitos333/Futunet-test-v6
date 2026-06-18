@@ -77,14 +77,33 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
 }
 
 /**
+ * Caché para strings normalizados. Evita costosas recálculos de normalización
+ * en cada pulsación de tecla durante la búsqueda en tiempo real.
+ */
+const normalizedCache = new WeakMap();
+
+function getNormalized(obj, key) {
+  if (!obj) return normalizeSearch('');
+  let cache = normalizedCache.get(obj);
+  if (!cache) {
+    cache = {};
+    normalizedCache.set(obj, cache);
+  }
+  if (!(key in cache)) {
+    cache[key] = normalizeSearch(obj[key]);
+  }
+  return cache[key];
+}
+
+/**
  * Filtra un producto contra un query normalizado.
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getNormalized(product, 'title');
+  const desc = getNormalized(product, 'desc');
+  const category = getNormalized(product, 'category');
+  const brand = getNormalized(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -1397,10 +1416,10 @@ function initSmartSearch(inputId, dropdownId) {
 
     const nq = normalizeSearch(q);
     mockDatabase.forEach(p => {
-      const nCat = normalizeSearch(p.category);
-      const nBrand = normalizeSearch(p.brand);
-      const nTitle = normalizeSearch(p.title);
-      const nDesc = normalizeSearch(p.desc);
+      const nCat = getNormalized(p, 'category');
+      const nBrand = getNormalized(p, 'brand');
+      const nTitle = getNormalized(p, 'title');
+      const nDesc = getNormalized(p, 'desc');
       if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
       if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
       if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {
