@@ -1,0 +1,3 @@
+## 2024-05-01 - Optimizing Search Normalization and Allocations
+**Learning:** In frontend search loops, repeated string normalization (regex replacements, lowercasing, unicode removal) on the same object properties is a major CPU bottleneck. Also, chaining array methods (`.map().filter().sort().map()`) creates unnecessary intermediate allocations that strain the garbage collector.
+**Action:** Use an imperative `for` loop to compute scores, filter, and allocate in a single pass. To cache the normalized strings on the target objects without affecting serialization or other iterations, use `Object.defineProperty(obj, cacheKey, { value: normalizedValue, enumerable: false })` instead of direct assignment.
