@@ -61,18 +61,39 @@
     
     /* Barra secundaria Sticky */
     .service-subnav {
-      position: sticky; top: 70px; background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px); border-bottom: 1px solid rgba(15, 23, 42, 0.05);
-      z-index: 999; margin-bottom: 40px;
+      position: sticky;
+      /* En móvil: debajo del navbar (76px). En desktop se ajusta vía media query */
+      top: var(--navbar-height-mobile, 76px);
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      /* z-index menor que el navbar (900) para no superponerse a él */
+      z-index: 850;
+      margin-bottom: 40px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
     }
     .subnav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    .subnav-links { display: flex; list-style: none; padding: 0; margin: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .subnav-links {
+      display: flex; list-style: none; padding: 0; margin: 0;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Oculta scrollbar en Firefox */
+    }
+    .subnav-links::-webkit-scrollbar { display: none; } /* Oculta scrollbar en Chrome/Safari */
     .subnav-links li a {
-      display: block; padding: 16px 20px; font-family: 'Outfit', sans-serif; font-weight: 600;
+      display: block; padding: 14px 20px; font-family: 'Outfit', sans-serif; font-weight: 600;
       color: #64748b; text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.3s;
       white-space: nowrap; font-size: 0.9rem;
     }
     .subnav-links li a:hover, .subnav-links li a.active { color: #0A70A2; border-bottom-color: #0A70A2; }
+    
+    /* En desktop la subnav va debajo del navbar desktop (aprox 70px) + top bar (38px) */
+    @media (min-width: 1024px) {
+      .service-subnav {
+        top: 108px; /* navbar desktop ~70px + top-bar ~38px */
+        z-index: 850;
+      }
+    }
     
     /* Toggle Switcher de Categorías */
     .plan-toggle-wrapper {
@@ -1398,6 +1419,129 @@
       }
     }
 
+    /* ── CARRUSEL HORIZONTAL DE PLANES EN MÓVIL ──
+       Muestra ~1.5 tarjetas para que el usuario pueda
+       ver que hay más planes y comparar fácilmente. */
+    @media (max-width: 767px) {
+      /* El grid de planes se convierte en carrusel horizontal */
+      .plans-grid {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 14px;
+        padding-bottom: 16px;
+        margin-left: -4px;
+        margin-right: -4px;
+        padding-left: 4px;
+        padding-right: 4px;
+        scrollbar-width: none;
+        /* Elimina la cuadrícula, cada tarjeta tendrá ancho fijo */
+        grid-template-columns: none !important;
+      }
+      .plans-grid::-webkit-scrollbar { display: none; }
+
+      /* Indicador visual de scroll */
+      .plans-grid-wrapper {
+        position: relative;
+      }
+      .plans-grid-wrapper::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 16px;
+        width: 40px;
+        background: linear-gradient(to left, rgba(248,250,252,0.95), transparent);
+        pointer-events: none;
+        border-radius: 0 20px 20px 0;
+      }
+
+      /* Cada tarjeta del grid ocupa 78vw (muestra 1.3 en pantalla) */
+      .plans-grid > .plan-card {
+        flex: 0 0 78vw;
+        min-width: 78vw;
+        max-width: 340px;
+        scroll-snap-align: start;
+      }
+
+      /* El nuevo grid de tarjetas claro también en carrusel */
+      #claro-plans-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 14px !important;
+        padding-bottom: 16px !important;
+        scrollbar-width: none !important;
+        /* Overrides el grid estándar */
+        grid-template-columns: none !important;
+      }
+      #claro-plans-grid::-webkit-scrollbar { display: none; }
+
+      #claro-plans-grid > .claro-card {
+        flex: 0 0 80vw !important;
+        min-width: 80vw !important;
+        max-width: 340px !important;
+        scroll-snap-align: start !important;
+      }
+
+      /* Hint de scroll: pequeño texto o flecha */
+      .plans-scroll-hint {
+        display: flex !important;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        font-weight: 600;
+        margin-bottom: 12px;
+        font-family: 'Outfit', sans-serif;
+      }
+      .plans-scroll-hint i {
+        animation: hintSlide 1.5s ease-in-out infinite;
+      }
+      @keyframes hintSlide {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
+      }
+
+      /* Ocultar sidebar filtros en móvil por defecto, mostrar como panel toggle */
+      .claro-sidebar {
+        border-radius: 16px;
+        padding: 16px 20px;
+      }
+
+      /* Puntos indicadores de posición (dots) */
+      .plans-dots {
+        display: flex !important;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 12px;
+        margin-bottom: 24px;
+      }
+      .plans-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #cbd5e1;
+        transition: all 0.3s;
+        cursor: pointer;
+        border: none;
+        padding: 0;
+      }
+      .plans-dot.active {
+        background: #0A70A2;
+        width: 22px;
+        border-radius: 4px;
+      }
+    }
+
+    /* En desktop estos elementos nuevos no se ven */
+    .plans-scroll-hint { display: none; }
+    .plans-dots { display: none; }
+
     /* Estilos Premium para Canales de Contratación / Modal de Canales */
     .hiring-channels-modal-card {
       background: #09101d;
@@ -1633,3 +1777,828 @@
 
 /* Spin animation loader */
 @keyframes portalSpin { to { transform: rotate(360deg); } }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE-FIRST REDESIGN — internet.html
+   Todas las mejoras son exclusivas de max-width: 767px
+   Desktop no se ve afectado.
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ────────────────────────────────────────────────────────────────
+   [1] PILL FILTERS — Visibles solo en móvil, encima del carrusel
+   ──────────────────────────────────────────────────────────────── */
+.mobile-plan-filters {
+  display: none; /* Oculto en desktop */
+}
+
+@media (max-width: 767px) {
+  /* El layout cambia a columna única y elimina el sidebar */
+  .claro-plans-layout {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* [1] Ocultar el aside del sidebar en móvil */
+  .claro-sidebar {
+    display: none !important;
+  }
+
+  /* [1] Mostrar el filtro de pills */
+  .mobile-plan-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 0 4px;
+  }
+
+  .mobile-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .mobile-filter-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    width: 72px; /* Fijar ancho para alinear chips */
+    flex-shrink: 0;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .mobile-filter-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+
+  .mpf-chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 50px;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    outline: none;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mpf-chip:active {
+    transform: scale(0.96);
+  }
+
+  .mpf-chip.active {
+    background: #0A70A2;
+    border-color: #0A70A2;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(10, 112, 162, 0.15);
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     [2] Ocultar buscador y selector de orden en móvil
+     ──────────────────────────────────────────────────────────────── */
+  .claro-plans-top-controls {
+    display: none !important;
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     [3] Tarjetas de planes más compactas en móvil
+     ──────────────────────────────────────────────────────────────── */
+  .claro-card-header {
+    padding: 22px 16px 16px !important;
+  }
+
+  .claro-card-header-title {
+    font-size: 1.35rem !important;
+  }
+
+  .claro-card-header-icon {
+    font-size: 1.25rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .claro-card-body {
+    padding: 14px 16px 18px !important;
+  }
+
+  .claro-price-val {
+    font-size: 1.75rem !important;
+  }
+
+  .claro-btn-solicitar {
+    min-height: 48px !important; /* Zona táctil mínima */
+    font-size: 0.9rem !important;
+  }
+
+  /* El detalle del plan en móvil: cerrado por defecto y más compacto */
+  .claro-detail-toggle {
+    font-size: 0.76rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .claro-included-content {
+    padding-top: 10px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .claro-price-block {
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [4] HERO SECTION — Padding y altura en móvil
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* El hero banner tiene min-height reducida en móvil */
+  .hero-carousel-slide--banner {
+    min-height: 420px !important;
+    padding-top: var(--navbar-height-mobile, 76px) !important;
+  }
+
+  /* Reducir tamaño del título hero en móvil */
+  .hb-title {
+    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hb-desc {
+    font-size: 0.92rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  .hb-actions {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .hb-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 13px 20px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [5] SECCIÓN COBERTURA — Rediseño móvil
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .coverage-section {
+    padding: 48px 0 !important;
+  }
+
+  .coverage-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+
+  .coverage-list-card {
+    padding: 20px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Mapa: interactivo en móvil, altura compacta */
+  .coverage-map-box {
+    border-radius: 16px !important;
+    overflow: hidden;
+    min-height: 260px !important;
+  }
+
+  .coverage-map-iframe {
+    min-height: 260px !important;
+    pointer-events: none !important; /* Desactivar interactividad para evitar capturar el scroll táctil */
+  }
+
+  /* Botón de cobertura: full width en móvil */
+  .coverage-list-card .plan-btn-primary {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px !important;
+  }
+
+  /* Ocultar badges radar en móvil (muy pequeños e ilegibles) */
+  .radar-scan-overlay,
+  .radar-scan-line,
+  .factibilidad-badge {
+    display: none !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [6] CALCULADORA — Grid 2 columnas para actividades en móvil
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .megas-calculator {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
+    margin-top: 0 !important;
+    margin-bottom: 40px !important;
+  }
+
+  .calc-header {
+    margin-bottom: 20px !important;
+  }
+
+  .calc-header h3 {
+    font-size: 1.2rem !important;
+  }
+
+  .calc-header p {
+    font-size: 0.82rem !important;
+  }
+
+  .calc-main-icon {
+    font-size: 1.75rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Actividades en grid 2 columnas */
+  .calc-activities-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .calc-activity-card {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 12px 8px !important;
+    gap: 6px !important;
+    border-radius: 12px !important;
+    grid-template-columns: unset !important;
+  }
+
+  .calc-activity-card i {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+    grid-row: auto !important;
+  }
+
+  .calc-activity-card span {
+    font-size: 0.78rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .calc-activity-card p {
+    display: none !important; /* Descripción oculta en móvil */
+  }
+
+  .calc-slider-wrapper {
+    padding: 14px !important;
+  }
+
+  .calc-recommendation-box {
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .rec-megas {
+    font-size: 2.2rem !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [7] FAQs — Simplificadas en móvil
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Sección FAQs padding reducido */
+  #faqs {
+    padding: 40px 0 !important;
+  }
+
+  /* Ocultar los tags de categoría en móvil (reducir fricción) */
+  .faq-tags-container {
+    display: none !important;
+  }
+
+  /* Buscador FAQ: oculto por defecto en móvil, toggle visible */
+  .faq-search-input-wrap {
+    display: none;
+    position: relative; /* Para el ícono absoluto */
+    margin-top: 10px;
+  }
+
+  .faq-search-input-wrap.faq-search-open {
+    display: block;
+    animation: fadeInDown 0.2s ease;
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Botón toggle del buscador */
+  .faq-search-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 50px;
+    background: #ffffff;
+    color: #475569;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.22s;
+    outline: none;
+    min-height: 44px;
+  }
+
+  .faq-search-toggle:active {
+    background: #f1f5f9;
+  }
+
+  .faq-search-toggle[aria-expanded="true"] {
+    background: #0A70A2;
+    border-color: #0A70A2;
+    color: #ffffff;
+  }
+
+  /* El trigger del FAQ más grande y táctil */
+  .faq-trigger {
+    padding: 16px 18px !important;
+    font-size: 0.92rem !important;
+    min-height: 56px !important;
+  }
+
+  .faq-answer p {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* Ocultar el toggle del buscador en desktop */
+.faq-search-toggle {
+  display: none;
+}
+
+/* En desktop el input siempre visible */
+@media (min-width: 768px) {
+  .faq-search-input-wrap {
+    display: block !important;
+    position: relative;
+  }
+  .faq-tags-container {
+    display: flex !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [8] CTA FLOTANTE DE WHATSAPP — Solo en móvil
+   ──────────────────────────────────────────────────────────────── */
+.wa-floating-cta {
+  display: none; /* Oculto en desktop */
+}
+
+@media (max-width: 767px) {
+  .wa-floating-cta {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 890; /* Debajo del navbar (900) pero encima del contenido */
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to top, rgba(255,255,255,0.98) 60%, transparent);
+    /* Invisible por defecto, aparece con la clase .visible */
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .wa-floating-cta.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .wa-floating-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    background: linear-gradient(135deg, #25d366, #1da851);
+    color: #ffffff !important;
+    border-radius: 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.32),
+                0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s;
+    letter-spacing: 0.1px;
+  }
+
+  .wa-floating-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+  }
+
+  /* Añadir padding al último elemento para que no quede tapado */
+  .login-teaser {
+    padding-bottom: 80px !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   [9] ESPACIADO GLOBAL REDUCIDO EN MÓVIL
+   ──────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Sección de encabezado de planes */
+  .text-center.reveal[style*="margin-bottom: 40px"] {
+    margin-bottom: 20px !important;
+  }
+
+  /* Título de sección */
+  .section-title {
+    font-size: 1.65rem !important;
+  }
+
+  .section-sub {
+    font-size: 0.88rem !important;
+  }
+
+  /* Cabecera de Beneficios */
+  .benefits-header {
+    margin-top: 32px !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Beneficios */
+  .benefits-grid {
+    margin-top: 24px !important;
+    margin-bottom: 32px !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .benefit-card-premium {
+    padding: 18px !important;
+    border-radius: 16px !important;
+  }
+
+  .benefit-card-premium h4 {
+    font-size: 0.95rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .benefit-card-premium p {
+    font-size: 0.8rem !important;
+  }
+
+  /* Cobertura: reducir margen del heading */
+  .coverage-section .text-center {
+    margin-bottom: 28px !important;
+  }
+
+  /* Container padding más pequeño en móvil */
+  .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Internet page padding */
+  #internet-public-view {
+    padding-bottom: 40px !important;
+  }
+
+  /* Plans section title/subtitle */
+  #planes .text-center {
+    margin-bottom: 16px !important;
+  }
+
+  /* Hint de scroll más visible */
+  .plans-scroll-hint {
+    font-size: 0.78rem !important;
+    color: #64748b !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Barra de Navegación Secundaria (Subnav) en Móvil */
+  .service-subnav {
+    position: relative !important;
+    top: 0 !important;
+    margin-bottom: 24px !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  }
+  .subnav-container {
+    padding: 0 8px !important;
+  }
+  .subnav-links {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 4px !important;
+    overflow-x: visible !important;
+    width: 100% !important;
+  }
+  .subnav-links li {
+    flex: 1 !important;
+    text-align: center !important;
+  }
+  .subnav-links li a {
+    padding: 10px 4px !important;
+    font-size: 0.78rem !important;
+    text-align: center !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────────
+   BENEFICIOS: Grid responsive (columna única → 2 columnas en md)
+   ──────────────────────────────────────────────────────────────── */
+@media (min-width: 500px) and (max-width: 767px) {
+  .benefits-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CSS — FEATURES 1-9
+   ═══════════════════════════════════════════════════════════════ */
+
+
+
+/* ── [4] QUIZ CTA BAR ── */
+.quiz-cta-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1.5px solid #bfdbfe; border-radius: 14px; padding: 10px 16px; margin-bottom: 14px;
+}
+.quiz-cta-text { font-family: 'Outfit', sans-serif; font-size: 0.88rem; color: #1e40af; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.quiz-cta-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 18px;
+  background: #0A70A2 !important; color: #ffffff !important; border: none; border-radius: 50px;
+  font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap; min-height: 38px;
+}
+.quiz-cta-btn:hover { background: #085a82 !important; transform: translateX(2px); }
+.quiz-cta-btn i { color: #ffffff !important; }
+@media (max-width: 767px) {
+  .quiz-cta-bar {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 8px 0 16px 0 !important;
+    display: block !important;
+    text-align: center !important;
+    width: 100% !important;
+  }
+  .quiz-cta-text {
+    font-size: 0.78rem !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+    display: inline-block !important;
+  }
+  .quiz-cta-btn {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: #0A70A2 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    min-height: auto !important;
+    display: inline-block !important;
+    margin-left: 4px !important;
+  }
+  .quiz-cta-btn i {
+    color: #0A70A2 !important;
+    font-size: 0.72rem !important;
+    display: inline-block !important;
+  }
+}
+
+/* ── [1] COMPARE CHECKBOX on card ── */
+.compare-checkbox-wrap {
+  position: absolute; top: 10px; right: 10px;
+  display: flex; align-items: center; gap: 5px; cursor: pointer; z-index: 10;
+}
+.compare-cb { display: none; }
+.compare-cb-label {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 50px;
+  font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 700;
+  color: rgba(255,255,255,0.9); cursor: pointer; transition: all 0.2s;
+  backdrop-filter: blur(4px); user-select: none;
+}
+.compare-cb:checked + .compare-cb-label { background: #ffffff; color: #0A70A2; border-color: #ffffff; }
+.claro-card { position: relative; }
+
+/* ── [1] COMPARE ACTION BAR ── */
+.compare-action-bar {
+  display: none; align-items: center; justify-content: space-between; gap: 12px;
+  background: #0f172a; border: 1.5px solid #0A70A2; border-radius: 14px;
+  padding: 10px 16px; margin-bottom: 12px;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+}
+.compare-action-bar.active { display: flex; opacity: 1; transform: translateY(0); pointer-events: auto; }
+.compare-count-text { font-family: 'Outfit', sans-serif; font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: 500; }
+.compare-action-btns { display: flex; align-items: center; gap: 8px; }
+.compare-btn-open {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px;
+  background: #0A70A2; color: #ffffff; border: none; border-radius: 50px;
+  font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; min-height: 38px;
+}
+.compare-btn-open:disabled { opacity: 0.4; cursor: not-allowed; }
+.compare-btn-open:not(:disabled):hover { background: #0960a0; }
+.compare-btn-clear {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6); border: none; border-radius: 50%;
+  cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+}
+.compare-btn-clear:hover { background: rgba(255,255,255,0.2); color: #fff; }
+@media (max-width: 767px) {
+  .compare-action-bar { flex-direction: column; align-items: flex-start; }
+  .compare-action-btns { width: 100%; }
+  .compare-btn-open { flex: 1; justify-content: center; }
+}
+
+/* ── MODAL BASE ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(10,16,29,0.75);
+  backdrop-filter: blur(4px); z-index: 9999;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal-box {
+  background: #ffffff; border-radius: 24px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+  width: 100%; max-width: 760px; max-height: 88vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid #f1f5f9; flex-shrink: 0;
+}
+.modal-header h3 {
+  font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700;
+  color: #0a101d; display: flex; align-items: center; gap: 8px;
+}
+.modal-header h3 i { color: #0A70A2; }
+.modal-close-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: none; border-radius: 50%;
+  background: #f1f5f9; color: #64748b; cursor: pointer; font-size: 1rem; transition: all 0.2s;
+}
+.modal-close-btn:hover { background: #e2e8f0; color: #0f172a; }
+@media (max-width: 767px) {
+  .modal-box { border-radius: 20px 20px 0 0; max-height: 90vh; margin: auto 0 0; align-self: flex-end; width: 100%; }
+  .modal-overlay { align-items: flex-end; padding: 0; }
+}
+
+/* ── COMPARE TABLE ── */
+.compare-table-wrap { overflow: auto; flex: 1; padding: 0 4px 16px; }
+.compare-table { width: 100%; border-collapse: collapse; font-family: 'Outfit', sans-serif; min-width: 360px; }
+.compare-table thead tr { background: #0a1928; }
+.compare-table thead th { padding: 14px 16px; text-align: center; color: #ffffff; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+.compare-table thead th:first-child { text-align: left; color: rgba(255,255,255,0.5); font-size: 0.75rem; }
+.compare-table tbody tr:nth-child(even) { background: #f8fafc; }
+.compare-table tbody tr:hover { background: #eff6ff; }
+.compare-table tbody td { padding: 12px 16px; font-size: 0.85rem; color: #334155; text-align: center; border-bottom: 1px solid #f1f5f9; }
+.compare-table tbody td.cmp-feat { text-align: left; color: #64748b; font-weight: 600; font-size: 0.8rem; white-space: nowrap; }
+.cmp-cta-row td { padding: 16px; border: none !important; background: transparent !important; }
+.cmp-solicitar-btn {
+  display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px;
+  background: linear-gradient(135deg, #25d366, #1da851); color: #ffffff !important;
+  border-radius: 50px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700;
+  text-decoration: none; min-height: 40px; transition: all 0.2s;
+}
+.cmp-solicitar-btn:hover { box-shadow: 0 4px 14px rgba(37,211,102,0.3); transform: translateY(-1px); }
+
+/* ── QUIZ MODAL ── */
+.quiz-modal-box { max-width: 520px; }
+.quiz-progress-bar { height: 4px; background: #e2e8f0; margin: 0 24px; border-radius: 2px; overflow: hidden; flex-shrink: 0; }
+.quiz-progress-fill { height: 100%; background: linear-gradient(90deg, #0A70A2, #1da1db); border-radius: 2px; width: 33%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+.quiz-step-label { font-family: 'Outfit', sans-serif; font-size: 0.78rem; color: #94a3b8; font-weight: 600; text-align: center; margin: 8px 24px 0; flex-shrink: 0; }
+.quiz-step { display: none; padding: 24px; flex-direction: column; gap: 16px; }
+.quiz-step.active { display: flex; animation: quizFadeIn 0.3s ease; }
+@keyframes quizFadeIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+.quiz-question { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: #0a101d; margin: 0; line-height: 1.3; }
+.quiz-options { display: flex; flex-direction: column; gap: 10px; }
+.quiz-option {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+  background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 14px;
+  cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600;
+  color: #334155; transition: all 0.2s; text-align: left; min-height: 52px;
+}
+.quiz-option i { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #e0f2fe; color: #0A70A2; font-size: 1rem; flex-shrink: 0; }
+.quiz-option:hover { border-color: #0A70A2; background: #f0f9ff; color: #0A70A2; transform: translateX(4px); }
+.quiz-option:hover i { background: #0A70A2; color: #ffffff; }
+.quiz-option:active { transform: scale(0.98); }
+.quiz-result-box { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 8px 0; }
+.quiz-result-icon { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ffffff; box-shadow: 0 8px 20px rgba(251,191,36,0.35); }
+.quiz-result-box h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 800; color: #0a101d; margin: 0; }
+.quiz-result-box p { font-size: 0.86rem; color: #50647a; margin: 0; max-width: 320px; }
+.quiz-result-price { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 800; color: #0A70A2; }
+.quiz-result-cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 13px 28px; background: linear-gradient(135deg, #25d366, #1da851); color: #ffffff !important;
+  border-radius: 50px; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700;
+  text-decoration: none; min-height: 48px; width: 100%; max-width: 320px;
+  transition: all 0.2s; box-shadow: 0 6px 16px rgba(37,211,102,0.25);
+}
+.quiz-result-cta:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(37,211,102,0.35); }
+.quiz-retry-btn { background: none; border: none; color: #94a3b8; font-family: 'Outfit', sans-serif; font-size: 0.78rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 8px; transition: color 0.2s; }
+.quiz-retry-btn:hover { color: #0A70A2; }
+
+
+
+/* ── [2] COVERAGE CHECKER ── */
+.coverage-checker { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1.5px solid #bae6fd; border-radius: 16px; padding: 16px; margin-bottom: 0; }
+.coverage-checker-label { display: flex; align-items: center; gap: 6px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700; color: #0369a1; margin-bottom: 10px; }
+.coverage-checker-row { display: flex; gap: 8px; align-items: stretch; }
+.coverage-address-input { flex: 1; padding: 11px 14px; border: 1.5px solid #bae6fd; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 0.88rem; color: #0f172a; background: #ffffff; outline: none; transition: border-color 0.2s; min-height: 44px; }
+.coverage-address-input:focus { border-color: #0A70A2; }
+.coverage-check-btn { padding: 0 18px; background: #0A70A2; color: #ffffff; border: none; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; min-height: 44px; white-space: nowrap; flex-shrink: 0; }
+.coverage-check-btn:hover { background: #0960a0; }
+.coverage-result { margin-top: 10px; min-height: 0; }
+.cov-success, .cov-pending { display: flex; align-items: flex-start; gap: 10px; padding: 12px; border-radius: 12px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; }
+.cov-success { background: #f0fdf4; border: 1px solid #86efac; }
+.cov-success i { color: #22c55e; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.cov-success strong { color: #15803d; display: block; margin-bottom: 6px; }
+.cov-pending { background: #fffbeb; border: 1px solid #fde68a; }
+.cov-pending i { color: #f59e0b; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.cov-pending strong { color: #92400e; display: block; margin-bottom: 6px; }
+.cov-warn { display: inline-flex; align-items: center; gap: 6px; font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: #b45309; }
+.cov-cta-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: linear-gradient(135deg, #25d366, #1da851); color: #ffffff !important; border-radius: 50px; font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.cov-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
+.cov-cta-report { background: linear-gradient(135deg, #0A70A2, #1da1db); }
+.coverage-city-item i { color: #22c55e; margin-right: 4px; }
+@media (max-width: 767px) {
+  .coverage-checker-row { flex-direction: column; }
+  .coverage-check-btn { justify-content: center; }
+
+  /* [2] Modales del Portal como Bottom Sheets */
+  .portal-modal {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .portal-modal-card {
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 90vh !important;
+    margin: 0 !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+    animation: portalModalSlideUp 0.3s cubic-bezier(0.32, 0.94, 0.6, 1) !important;
+  }
+
+  @keyframes portalModalSlideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  /* [3] Apilar botones de acción del formulario en móvil */
+  .form-actions {
+    flex-direction: column-reverse !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+    margin-top: 20px !important;
+  }
+  .form-actions .btn-portal-action {
+    width: 100% !important;
+    display: block !important;
+    float: none !important;
+    margin: 0 !important;
+  }
+}
+
+

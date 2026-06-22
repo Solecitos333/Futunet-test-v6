@@ -178,6 +178,8 @@
   box-shadow: var(--shadow-sm);
   position: relative;
   touch-action: manipulation;
+  text-decoration: none;
+  color: inherit;
 }
 .product-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0;

@@ -383,6 +383,88 @@
     }, 4000);
   }
 
+  let currentStep = 1;
+
+  function updateWizardUI() {
+    document.querySelectorAll('#cart-checkout-form .checkout-step').forEach((el, index) => {
+      el.style.display = (index + 1 === currentStep) ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.wizard-step-node').forEach((node) => {
+      const stepVal = parseInt(node.dataset.step);
+      node.classList.toggle('active', stepVal === currentStep);
+      node.classList.toggle('completed', stepVal < currentStep);
+    });
+
+    const progressFill = document.getElementById('wizard-progress-fill');
+    if (progressFill) {
+      progressFill.style.width = `${((currentStep - 1) / 2) * 100}%`;
+    }
+
+    const btnPrev = document.getElementById('btn-prev-checkout');
+    const btnNext = document.getElementById('btn-next-checkout');
+    const btnSubmit = document.getElementById('btn-submit-checkout');
+
+    if (currentStep === 1) {
+      btnPrev.textContent = 'Cancelar';
+      btnNext.style.display = 'inline-flex';
+      btnSubmit.style.display = 'none';
+    } else if (currentStep === 2) {
+      btnPrev.textContent = 'Atrás';
+      btnNext.style.display = 'inline-flex';
+      btnSubmit.style.display = 'none';
+      
+      const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked')?.value;
+      const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+      if (paymentMethod === 'bank_transfer' && !user) {
+        btnNext.disabled = true;
+      } else {
+        btnNext.disabled = false;
+      }
+    } else if (currentStep === 3) {
+      btnPrev.textContent = 'Atrás';
+      btnNext.style.display = 'none';
+      btnSubmit.style.display = 'inline-flex';
+      renderStep3Summary();
+    }
+  }
+
+  function renderStep3Summary() {
+    const summaryCard = document.getElementById('checkout-step3-summary-card');
+    if (!summaryCard) return;
+
+    const name = document.getElementById('chk-name').value;
+    const phone = document.getElementById('chk-phone').value;
+    const email = document.getElementById('chk-email').value;
+    const address = document.getElementById('chk-address').value;
+    const notes = document.getElementById('chk-notes').value;
+    const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
+    const pmDisplay = paymentMethod === 'bank_transfer' ? 'Transferencia Bancaria' : 'WhatsApp (Pedido Rápido)';
+
+    summaryCard.innerHTML = `
+      <div class="summary-field"><strong>Nombre:</strong> <span>${escapeHTML(name)}</span></div>
+      <div class="summary-field"><strong>Teléfono:</strong> <span>${escapeHTML(phone)}</span></div>
+      <div class="summary-field"><strong>Correo:</strong> <span>${escapeHTML(email)}</span></div>
+      <div class="summary-field"><strong>Dirección:</strong> <span>${escapeHTML(address)}</span></div>
+      ${notes ? `<div class="summary-field"><strong>Notas:</strong> <span>${escapeHTML(notes)}</span></div>` : ''}
+      <div class="summary-field"><strong>Método de Pago:</strong> <span class="badge-payment-method">${escapeHTML(pmDisplay)}</span></div>
+    `;
+
+    const bankSection = document.getElementById('checkout-step3-bank-details');
+    const whatsappSection = document.getElementById('checkout-step3-whatsapp-details');
+    const submitBtn = document.getElementById('btn-submit-checkout');
+
+    if (paymentMethod === 'bank_transfer') {
+      bankSection.style.display = 'block';
+      whatsappSection.style.display = 'none';
+      if (submitBtn) submitBtn.disabled = !selectedCheckoutFile;
+    } else {
+      bankSection.style.display = 'none';
+      whatsappSection.style.display = 'block';
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  }
+
   function injectCheckoutModal() {
     if (document.getElementById('cart-checkout-modal')) return;
 
@@ -395,8 +477,29 @@
           <h3>Detalles de Entrega y Pago</h3>
           <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal">&times;</button>
         </div>
+        
+        <!-- Wizard Progress Navigation -->
+        <div class="checkout-wizard-nav">
+          <div class="wizard-progress-bar">
+            <div class="wizard-progress-fill" id="wizard-progress-fill" style="width: 0%;"></div>
+          </div>
+          <div class="wizard-step-node active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Envío</div>
+          </div>
+          <div class="wizard-step-node" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Pago</div>
+          </div>
+          <div class="wizard-step-node" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Confirmación</div>
+          </div>
+        </div>
+
         <form id="cart-checkout-form" class="cart-checkout-modal-body">
-          <div class="checkout-step">
+          <!-- Paso 1: Envío -->
+          <div class="checkout-step" id="step-1-content">
             <h4>1. Información de Envío</h4>
             <div class="checkout-form-grid">
               <div class="checkout-form-group full-width">
@@ -422,7 +525,8 @@
             </div>
           </div>
 
-          <div class="checkout-step">
+          <!-- Paso 2: Método de Pago -->
+          <div class="checkout-step" id="step-2-content" style="display:none;">
             <h4>2. Método de Pago</h4>
             <div class="checkout-methods">
               <label class="checkout-method-option">
@@ -451,9 +555,24 @@
             <div id="checkout-guest-warning" class="checkout-warning-box" style="display:none; margin-top:12px;">
               <p>⚠️ Para pagar mediante transferencia y subir tu comprobante directamente en la web, debes <a href="login.html" style="text-decoration:underline; font-weight:600; color:#0A70A2;">iniciar sesión</a> o registrarte. De lo contrario, puedes solicitar tu pedido por WhatsApp y acordar el pago allí.</p>
             </div>
+          </div>
 
-            <!-- Sección de transferencia -->
-            <div id="checkout-bank-details" class="checkout-subpanel" style="display:none; margin-top:12px;">
+          <!-- Paso 3: Confirmación y comprobante -->
+          <div class="checkout-step" id="step-3-content" style="display:none;">
+            <h4>3. Confirmación del Pedido</h4>
+            
+            <div class="checkout-summary-card" id="checkout-step3-summary-card">
+              <!-- Renderizado dinámicamente en JS -->
+            </div>
+
+            <!-- Detalles específicos por método de pago -->
+            <div id="checkout-step3-whatsapp-details" style="display:none; margin-top:16px;">
+              <div class="checkout-info-box">
+                <p>💡 <strong>Pedido por WhatsApp:</strong> Al confirmar, abriremos un chat con nuestro asesor Orbis Espinal para coordinar los detalles finales de entrega y facturación con todo el listado de tu carrito listo.</p>
+              </div>
+            </div>
+
+            <div id="checkout-step3-bank-details" class="checkout-subpanel" style="display:none; margin-top:16px;">
               <div class="bank-accounts-info">
                 <h5>Datos de Cuenta Oficial Futunet SRL:</h5>
                 <div class="bank-account-card">
@@ -466,7 +585,7 @@
                 <small class="click-to-copy-hint">💡 Toca el titular, cuenta o RNC para copiarlos al portapapeles.</small>
               </div>
 
-              <div class="checkout-upload-area">
+              <div class="checkout-upload-area" style="margin-top:16px;">
                 <label>Sube tu comprobante de pago *</label>
                 <div class="checkout-dropzone" id="checkout-voucher-dropzone">
                   <i data-lucide="upload-cloud"></i>
@@ -483,8 +602,9 @@
           </div>
 
           <div class="cart-checkout-modal-footer">
-            <button type="button" class="btn btn-ghost" id="btn-cancel-checkout">Cancelar</button>
-            <button type="submit" class="btn btn-primary" id="btn-submit-checkout">
+            <button type="button" class="btn btn-ghost" id="btn-prev-checkout">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="btn-next-checkout">Siguiente</button>
+            <button type="submit" class="btn btn-primary" id="btn-submit-checkout" style="display:none;">
               Confirmar y Enviar Pedido
             </button>
           </div>
@@ -495,7 +615,38 @@
 
     // Bind events
     document.getElementById('close-checkout-modal').addEventListener('click', closeCheckoutModal);
-    document.getElementById('btn-cancel-checkout').addEventListener('click', closeCheckoutModal);
+
+    // Navigation buttons
+    const btnPrev = document.getElementById('btn-prev-checkout');
+    const btnNext = document.getElementById('btn-next-checkout');
+
+    btnPrev.addEventListener('click', () => {
+      if (currentStep === 1) {
+        closeCheckoutModal();
+      } else {
+        currentStep--;
+        updateWizardUI();
+      }
+    });
+
+    btnNext.addEventListener('click', () => {
+      if (currentStep === 1) {
+        const fields = ['chk-name', 'chk-phone', 'chk-email', 'chk-address'];
+        let isValid = true;
+        fields.forEach(fid => {
+          const el = document.getElementById(fid);
+          if (el && !el.reportValidity()) {
+            isValid = false;
+          }
+        });
+        if (!isValid) return;
+        currentStep = 2;
+        updateWizardUI();
+      } else if (currentStep === 2) {
+        currentStep = 3;
+        updateWizardUI();
+      }
+    });
 
     // Payment method toggle
     const methods = modal.querySelectorAll('input[name="chk-payment-method"]');
@@ -545,34 +696,30 @@
   }
 
   function togglePaymentSubpanels(method) {
-    const bankDetails = document.getElementById('checkout-bank-details');
     const warningBox = document.getElementById('checkout-guest-warning');
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+    const btnNext = document.getElementById('btn-next-checkout');
 
     if (method === 'bank_transfer') {
       if (user) {
-        bankDetails.style.display = 'block';
         warningBox.style.display = 'none';
-        const submitBtn = document.getElementById('btn-submit-checkout');
-        if (submitBtn) submitBtn.disabled = !selectedCheckoutFile;
+        if (btnNext) btnNext.disabled = false;
       } else {
-        bankDetails.style.display = 'none';
         warningBox.style.display = 'block';
-        const submitBtn = document.getElementById('btn-submit-checkout');
-        if (submitBtn) submitBtn.disabled = true;
+        if (btnNext) btnNext.disabled = true;
       }
     } else {
-      bankDetails.style.display = 'none';
       warningBox.style.display = 'none';
-      const submitBtn = document.getElementById('btn-submit-checkout');
-      if (submitBtn) submitBtn.disabled = false;
+      if (btnNext) btnNext.disabled = false;
     }
   }
 
   function handleCheckoutFile(file) {
-    // Validar tipo MIME
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'pdf'];
+    const fileExt = file.name.split('.').pop().toLowerCase();
+    
+    if (!allowedTypes.includes(file.type) || !allowedExtensions.includes(fileExt)) {
       showCartToast('Solo se permiten imágenes (JPG, PNG, WEBP) o archivos PDF.', 'error');
       return;
     }
@@ -581,11 +728,37 @@
       return;
     }
     selectedCheckoutFile = file;
-    document.getElementById('checkout-voucher-filename').textContent = file.name;
-    document.getElementById('checkout-voucher-preview-box').style.display = 'flex';
-    document.getElementById('checkout-voucher-dropzone').style.display = 'none';
     
-    // Enable submit button
+    const filenameSpan = document.getElementById('checkout-voucher-filename');
+    filenameSpan.textContent = file.name;
+    
+    const previewBox = document.getElementById('checkout-voucher-preview-box');
+    const dropzone = document.getElementById('checkout-voucher-dropzone');
+    
+    let previewImg = document.getElementById('checkout-voucher-img-preview');
+    if (!previewImg) {
+      previewImg = document.createElement('img');
+      previewImg.id = 'checkout-voucher-img-preview';
+      previewImg.className = 'checkout-voucher-preview-img';
+      previewBox.insertBefore(previewImg, filenameSpan);
+    }
+    
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.src = e.target.result;
+        previewImg.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      // PDF
+      previewImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%230A70A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
+      previewImg.style.display = 'block';
+    }
+    
+    previewBox.style.display = 'flex';
+    dropzone.style.display = 'none';
+    
     const submitBtn = document.getElementById('btn-submit-checkout');
     if (submitBtn) submitBtn.disabled = false;
   }
@@ -594,10 +767,15 @@
     selectedCheckoutFile = null;
     const fileInput = document.getElementById('chk-voucher-file');
     if (fileInput) fileInput.value = '';
-    document.getElementById('checkout-voucher-preview-box').style.display = 'none';
-    document.getElementById('checkout-voucher-dropzone').style.display = 'block';
     
-    // If bank transfer selected, disable submit until file is re-selected
+    const previewBox = document.getElementById('checkout-voucher-preview-box');
+    const dropzone = document.getElementById('checkout-voucher-dropzone');
+    const previewImg = document.getElementById('checkout-voucher-img-preview');
+    if (previewImg) previewImg.remove();
+    
+    previewBox.style.display = 'none';
+    dropzone.style.display = 'block';
+    
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked')?.value;
     if (paymentMethod === 'bank_transfer') {
       const submitBtn = document.getElementById('btn-submit-checkout');
@@ -667,6 +845,9 @@
     
     togglePaymentSubpanels('whatsapp'); // default option
     closeCartDrawer();
+    
+    currentStep = 1;
+    updateWizardUI();
 
     // Focus Trap
     checkoutModalPreviousActiveElement = cartDrawerPreviousActiveElement || document.activeElement;
@@ -708,107 +889,48 @@
     
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Procesando cotización...';
+      submitBtn.textContent = 'Procesando pedido...';
     }
     
-    const name = escapeHTML(document.getElementById('chk-name').value.trim());
-    const phone = escapeHTML(document.getElementById('chk-phone').value.trim());
-    const email = escapeHTML(document.getElementById('chk-email').value.trim());
-    const address = escapeHTML(document.getElementById('chk-address').value.trim());
-    const notes = escapeHTML(document.getElementById('chk-notes').value.trim());
+    const name = document.getElementById('chk-name').value.trim();
+    const phone = document.getElementById('chk-phone').value.trim();
+    const email = document.getElementById('chk-email').value.trim();
+    const address = document.getElementById('chk-address').value.trim();
+    const notes = document.getElementById('chk-notes').value.trim();
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
     
+    // Validaciones de formato en frontend para mitigar envío de datos inválidos
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+    
+    if (!emailRegex.test(email)) {
+      showCartToast('Por favor introduce un correo electrónico válido.', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+    
+    if (!phoneRegex.test(phone)) {
+      showCartToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+    
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
-    const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
     const storage = window.FutunetFirebase && window.FutunetFirebase.storage ? window.FutunetFirebase.storage : null;
     
-    let totalPurchase = 0;
-    let totalLease = 0;
-    items.forEach(p => {
-      const qty = cartState.items[p.id].qty;
-      const val = parsePriceToNumber(p.price) * qty;
-      if (String(p.price).includes('/ mes')) {
-        totalLease += val;
-      } else {
-        totalPurchase += val;
-      }
-    });
-    
-    const orderData = {
-      userId: user ? user.uid : 'guest',
-      userName: name,
-      userPhone: phone,
-      userEmail: email,
-      shippingAddress: address,
-      shippingNotes: notes,
-      items: items.map(p => ({
-        id: p.id,
-        title: p.title,
-        price: parsePriceToNumber(p.price),
-        priceLabel: String(p.price),
-        qty: cartState.items[p.id].qty,
-        img: p.img || '',
-        brand: p.brand || '',
-        category: p.category || '',
-        isLease: String(p.price).includes('/ mes')
-      })),
-      total: totalPurchase,
-      leaseTotal: totalLease,
-      status: 'pending',
-      paymentMethod: paymentMethod,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    // Generar PDF y enviar correo llamando al backend en Render
-    let quoteBackendSuccess = false;
-    let quoteBackendMsg = "";
-    
-    try {
-      const quotePayload = {
-        client_name: name,
-        client_email: email,
-        client_phone: phone,
-        shipping_address: address,
-        shipping_notes: notes,
-        payment_method: paymentMethod,
-        products: items.map(p => ({
-          id: p.id,
-          title: p.title,
-          price: parsePriceToNumber(p.price),
-          price_label: String(p.price),
-          qty: cartState.items[p.id].qty,
-          brand: p.brand || '',
-          category: p.category || '',
-          is_lease: String(p.price).includes('/ mes')
-        })),
-        total: totalPurchase,
-        lease_total: totalLease
-      };
-      
-      const response = await fetch('https://futunet-backend.onrender.com/api/quote', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(quotePayload)
-      });
-      
-      const resData = await response.json();
-      if (response.ok && resData.success) {
-        quoteBackendSuccess = true;
-        quoteBackendMsg = resData.message;
-      } else {
-        console.warn('El backend respondió con error al generar cotización:', resData);
-      }
-    } catch (apiErr) {
-      console.warn('No se pudo comunicar con el backend de cotización:', apiErr);
-    }
+    let downloadUrl = null;
+    let storagePath = null;
     
     try {
       if (paymentMethod === 'bank_transfer') {
-        if (!user || !db || !storage) {
-          showCartToast('Error de autenticación o base de datos.', 'error');
+        if (!user || !storage) {
+          showCartToast('Error: Debes iniciar sesión para pagar mediante transferencia bancaria.', 'error');
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.innerHTML = originalBtnText;
@@ -827,56 +949,75 @@
         
         showCartToast('Subiendo comprobante...', 'info');
         
-        const fileExt = selectedCheckoutFile.name.split('.').pop();
+        const fileExt = selectedCheckoutFile.name.split('.').pop().toLowerCase();
         const randomId = Math.random().toString(36).substring(2, 10);
-        const storagePath = 'vouchers/' + user.uid + '/order_' + randomId + '_' + Date.now() + '.' + fileExt;
+        storagePath = 'vouchers/' + user.uid + '/order_' + randomId + '_' + Date.now() + '.' + fileExt;
         
         const fileRef = storage.ref().child(storagePath);
         const uploadTask = await fileRef.put(selectedCheckoutFile);
-        const downloadUrl = await uploadTask.ref.getDownloadURL();
-        
-        orderData.paymentVoucherUrl = downloadUrl;
-        orderData.paymentStoragePath = storagePath;
-        orderData.paymentStatus = 'pending_review';
-        
-        const docRef = await db.collection('orders').add(orderData);
-        
-        // Registrar log de auditoría
-        await db.collection('audit_logs').add({
-          action: 'Pedido por Transferencia',
-          details: 'Cliente realizó pedido ID: ' + docRef.id + ' por valor de RD$ ' + totalValue,
-          userId: user.uid,
-          userEmail: user.email,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        if (quoteBackendSuccess) {
-          showCartToast(quoteBackendMsg, 'success');
-        } else {
-          showCartToast('Pedido registrado con éxito. Se procesará vía transferencia.', 'success');
+        downloadUrl = await uploadTask.ref.getDownloadURL();
+      }
+      
+      // Construir payload para el API del backend
+      const orderPayload = {
+        user_id: user ? user.uid : 'guest',
+        user_name: name,
+        user_email: email,
+        user_phone: phone,
+        shipping_address: address,
+        shipping_notes: notes,
+        payment_method: paymentMethod,
+        items: items.map(p => ({
+          id: p.id,
+          title: p.title,
+          price: parsePriceToNumber(p.price),
+          qty: cartState.items[p.id].qty,
+          brand: p.brand || '',
+          category: p.category || '',
+          is_lease: String(p.price).includes('/ mes')
+        })),
+        payment_voucher_url: downloadUrl,
+        payment_storage_path: storagePath
+      };
+
+      // Configurar cabeceras y obtener JWT de Firebase para autenticación
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      if (user) {
+        try {
+          const idToken = await user.getIdToken();
+          headers['Authorization'] = `Bearer ${idToken}`;
+        } catch (tokenErr) {
+          console.warn('No se pudo obtener el token ID del usuario:', tokenErr);
         }
+      }
+
+      showCartToast('Registrando pedido...', 'info');
+      
+      const response = await fetch('https://futunet-backend.onrender.com/api/order', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(orderPayload)
+      });
+      
+      const resData = await response.json();
+      
+      if (!response.ok || !resData.success) {
+        throw new Error(resData.detail || 'El servidor rechazó el pedido.');
+      }
+      
+      if (paymentMethod === 'bank_transfer') {
+        showCartToast(resData.message || 'Pedido por transferencia registrado con éxito.', 'success');
         
         // Vaciar carrito
         cartState.items = {};
         saveCartState();
         updateCartCount();
         closeCheckoutModal();
-        
       } else {
-        // WhatsApp method
-        if (user && db) {
-          try {
-            await db.collection('orders').add(orderData);
-          } catch (e) {
-            console.warn('Error saving WhatsApp order to Firestore:', e);
-          }
-        }
-        
-        if (quoteBackendSuccess) {
-          showCartToast(quoteBackendMsg, 'success');
-        } else {
-          showCartToast('Abriendo WhatsApp para completar tu pedido...', 'info');
-        }
+        // Método WhatsApp
+        showCartToast(resData.message || 'Pedido registrado. Abriendo WhatsApp...', 'success');
         
         const message = buildCheckoutMessage(items);
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
@@ -893,7 +1034,7 @@
       }
     } catch (err) {
       console.error('Error during checkout processing:', err);
-      showCartToast('Error al procesar el pedido. Intenta nuevamente.', 'error');
+      showCartToast('Error al procesar el pedido: ' + err.message, 'error');
     }
     
     if (submitBtn) {

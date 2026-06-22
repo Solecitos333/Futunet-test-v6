@@ -400,6 +400,17 @@
       showToast('El archivo supera los 5MB permitidos.', 'error');
       return;
     }
+    
+    // Validar extensión y tipo MIME
+    var allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+    var allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    var fileExt = file.name.split('.').pop().toLowerCase();
+    
+    if (allowedExtensions.indexOf(fileExt) === -1 || allowedMimeTypes.indexOf(file.type) === -1) {
+      showToast('Solo se permiten imágenes (JPG, PNG) o archivos PDF.', 'error');
+      return;
+    }
+    
     selectedFile = file;
     document.getElementById('voucher-filename').textContent = file.name;
     document.getElementById('voucher-preview-box').style.display = 'flex';
@@ -454,7 +465,7 @@
 
         try {
           // Subir a Storage
-          var fileExt = selectedFile.name.split('.').pop();
+          var fileExt = selectedFile.name.split('.').pop().toLowerCase();
           var randomId = Math.random().toString(36).substring(2, 10);
           var storagePath = 'vouchers/' + currentUser.uid + '/' + randomId + '_' + Date.now() + '.' + fileExt;
           
@@ -510,6 +521,12 @@
         var details = document.getElementById('support-details').value.trim();
         var newSpeed = document.getElementById('support-new-speed').value;
 
+        if (details.length > 1500) {
+          if (window.showToast) window.showToast('El detalle de la solicitud no debe superar los 1500 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
         if (!db) {
           if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
           if (btn) btn.disabled = false;
@@ -554,12 +571,56 @@
         var name = document.getElementById('p-hir-name').value.trim();
         var email = document.getElementById('p-hir-email').value.trim();
         var phone = document.getElementById('p-hir-phone').value.trim();
+
+        // Validaciones de formato
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        var phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+
+        if (!emailRegex.test(email)) {
+          if (window.showToast) window.showToast('Por favor introduce un correo electrónico válido.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        if (!phoneRegex.test(phone)) {
+          if (window.showToast) window.showToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
         var date = document.getElementById('p-hir-date').value;
         var schedule = document.getElementById('p-hir-schedule').value;
         var address = document.getElementById('p-hir-address').value.trim();
         var notes = document.getElementById('p-hir-notes').value.trim();
         var planName = document.getElementById('p-hir-plan-name').value;
         var planId = document.getElementById('p-hir-plan-id').value;
+
+        // Validaciones de longitud para alinearse con Firestore rules
+        if (name.length > 100) {
+          if (window.showToast) window.showToast('El nombre no debe superar los 100 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (email.length > 100) {
+          if (window.showToast) window.showToast('El correo electrónico no debe superar los 100 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (phone.length > 50) {
+          if (window.showToast) window.showToast('El teléfono no debe superar los 50 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (address.length > 500) {
+          if (window.showToast) window.showToast('La dirección no debe superar los 500 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (notes.length > 1000) {
+          if (window.showToast) window.showToast('Los comentarios no deben superar los 1000 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
 
         if (!db) {
           if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
@@ -634,10 +695,49 @@
         var name = document.getElementById('p-guest-name').value.trim();
         var email = document.getElementById('p-guest-email').value.trim();
         var phone = document.getElementById('p-guest-phone').value.trim();
+
+        // Validaciones de formato
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        var phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+
+        if (!emailRegex.test(email)) {
+          if (window.showToast) window.showToast('Por favor introduce un correo electrónico válido.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        if (!phoneRegex.test(phone)) {
+          if (window.showToast) window.showToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
         var date = document.getElementById('p-guest-date').value;
         var schedule = document.getElementById('p-guest-schedule').value;
         var address = document.getElementById('p-guest-address').value.trim();
         var planName = document.getElementById('p-guest-plan-name').value;
+
+        // Validaciones de longitud para alinearse con Firestore rules
+        if (name.length > 100) {
+          if (window.showToast) window.showToast('El nombre no debe superar los 100 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (email.length > 100) {
+          if (window.showToast) window.showToast('El correo electrónico no debe superar los 100 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (phone.length > 50) {
+          if (window.showToast) window.showToast('El teléfono no debe superar los 50 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        if (address.length > 500) {
+          if (window.showToast) window.showToast('La dirección no debe superar los 500 caracteres.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
 
         if (!db) {
           if (window.showToast) window.showToast('Base de datos no disponible.', 'error');
@@ -883,6 +983,7 @@
     { id: '20mb', speed: 20, name: 'Plan Bronce Simétrico', desc: 'Ideal para familias pequeñas, streaming de video HD y navegación fluida con velocidad simétrica.', price: 1000 },
     { id: '50mb', speed: 50, name: 'Plan Plata Simétrico', desc: 'Perfecto para teletrabajo, múltiples streamings HD y descargas rápidas con velocidad simétrica.', price: 1500 },
     { id: '100mb', speed: 100, name: 'Plan Oro Simétrico', desc: 'Ideal para hogares conectados, streaming 4K, descargas pesadas y gaming con velocidad simétrica.', price: 1900 },
+    { id: '150mb', speed: 150, name: 'Plan Titanio Simétrico', desc: 'Excelente potencia intermedia para familias activas, múltiples conexiones, gaming y streaming UHD.', price: 2200 },
     { id: '200mb', speed: 200, name: 'Plan Platino Simétrico', desc: 'Ideal para teletrabajo intensivo, gaming competitivo y muchos dispositivos concurrentes.', price: 2400 },
     { id: '300mb', speed: 300, name: 'Plan Ultra Simétrico', desc: 'Velocidad premium para creadores de contenido, streaming 4K/8K y domótica completa.', price: 3200 },
     { id: '400mb', speed: 400, name: 'Plan Pro Simétrico', desc: 'Velocidad ultra-rápida para máxima demanda y descargas de gran volumen.', price: 4100 },

@@ -24,7 +24,7 @@ service cloud.firestore {
     }
 
     function isEmailVerified() {
-      return isSignedIn();
+      return isSignedIn() && request.auth.token.email_verified == true;
     }
     
     function getUserRole() {
@@ -97,14 +97,11 @@ service cloud.firestore {
     match /carts/{cartId} {
       // Users can read their own carts, admins/editors can read all (if email verified)
       allow read: if isEmailVerified() && (
-        resource.data.userId == request.auth.uid || isEditorOrAbove()
+        cartId == request.auth.uid || isEditorOrAbove()
       );
       
-      // Users can create their own carts (if email verified)
-      allow create: if isEmailVerified() && request.resource.data.userId == request.auth.uid;
-      
-      // Users can update/delete their own carts (if email verified)
-      allow update, delete: if isEmailVerified() && resource.data.userId == request.auth.uid;
+      // Users can create/update/delete their own carts (if email verified)
+      allow create, update, delete: if isEmailVerified() && cartId == request.auth.uid;
     }
 
     // ─── ORDERS Collection ───
@@ -114,11 +111,8 @@ service cloud.firestore {
         resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
       
-      // Users can create their own orders with status 'pending' (if email verified)
-      allow create: if isEmailVerified() && 
-                    request.resource.data.userId == request.auth.uid && 
-                    request.resource.data.status == 'pending' &&
-                    (!('paymentStatus' in request.resource.data.keys()) || request.resource.data.paymentStatus == 'pending_review');
+      // Client-side document creation is blocked (orders are created securely via backend API)
+      allow create: if false;
       
       // Only admins/editors can update order status
       allow update: if isEditorOrAbove();
@@ -229,7 +223,14 @@ service cloud.firestore {
                     request.resource.data.status == 'pending' &&
                     request.resource.data.amount is number &&
                     request.resource.data.amount > 0 &&
-                    request.resource.data.timestamp == request.time;
+                    request.resource.data.timestamp == request.time &&
+                    request.resource.data.keys().hasOnly(['userId', 'userName', 'userEmail', 'amount', 'bank', 'voucherUrl', 'storagePath', 'status', 'plan', 'timestamp']) &&
+                    request.resource.data.userName is string && request.resource.data.userName.size() <= 100 &&
+                    request.resource.data.userEmail is string && request.resource.data.userEmail.size() <= 100 &&
+                    request.resource.data.bank is string && request.resource.data.bank.size() <= 50 &&
+                    request.resource.data.voucherUrl is string && request.resource.data.voucherUrl.size() <= 500 &&
+                    request.resource.data.storagePath is string && request.resource.data.storagePath.size() <= 500 &&
+                    request.resource.data.plan is string && request.resource.data.plan.size() <= 50;
       allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
       allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();
@@ -241,7 +242,13 @@ service cloud.firestore {
       allow create: if isEmailVerified() && 
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.status == 'pending' &&
-                    request.resource.data.timestamp == request.time;
+                    request.resource.data.timestamp == request.time &&
+                    request.resource.data.keys().hasOnly(['userId', 'userName', 'userEmail', 'type', 'details', 'status', 'timestamp', 'requestedPlan']) &&
+                    request.resource.data.userName is string && request.resource.data.userName.size() <= 100 &&
+                    request.resource.data.userEmail is string && request.resource.data.userEmail.size() <= 100 &&
+                    request.resource.data.type is string && request.resource.data.type.size() <= 50 &&
+                    request.resource.data.details is string && request.resource.data.details.size() <= 1500 &&
+                    (!('requestedPlan' in request.resource.data.keys()) || (request.resource.data.requestedPlan is string && request.resource.data.requestedPlan.size() <= 50));
       allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
       allow update: if isEditorOrAbove();
       allow delete: if isSuperAdmin();

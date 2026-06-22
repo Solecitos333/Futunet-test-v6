@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="chatbot-footer">
         <div class="chatbot-chips" id="cb-chips"></div>
         <div class="chatbot-divider"></div>
+        
+        <!-- Entrada de texto libre -->
+        <div class="chatbot-input-container">
+          <input type="text" id="cb-input-text" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Escribe tu mensaje" />
+          <button type="button" id="cb-send-btn" aria-label="Enviar" class="chatbot-send-btn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+
         <button class="chatbot-wa" id="cb-wa" type="button">Hablar con un Agente (WhatsApp)</button>
       </div>
     </div>
@@ -66,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const messages = document.getElementById('cb-messages');
   const chips = document.getElementById('cb-chips');
   const waBtn = document.getElementById('cb-wa');
+  const cbInputText = document.getElementById('cb-input-text');
+  const cbSendBtn = document.getElementById('cb-send-btn');
 
   let initialized = false;
 
@@ -96,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `https://wa.me/${INFO.whatsapp}?text=${encodeURIComponent(message)}`;
   }
 
-  function addRow(sender, html, includeAvatar = false) {
+  function addRow(sender, text, includeAvatar = false) {
     const row = document.createElement('div');
     row.className = `cb-row cb-row--${sender}`;
 
@@ -110,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bubble = document.createElement('div');
     bubble.className = `cb-bubble cb-bubble--${sender}`;
-    bubble.innerHTML = html;
+    bubble.textContent = text;
     row.appendChild(bubble);
     messages.appendChild(row);
     messages.scrollTop = messages.scrollHeight;
@@ -153,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
           node.type = 'button';
           node.dataset.kind = action.kind;
           if (action.query) node.dataset.query = action.query;
+          if (action.id) node.dataset.id = action.id;
           if (action.message) node.dataset.message = action.message;
         }
 
@@ -319,6 +334,102 @@ document.addEventListener('DOMContentLoaded', () => {
     else openChat();
   }
 
+  function botSearchProducts(query) {
+    const products = window.mockDatabase || [];
+    if (!products.length) return [];
+    
+    const words = query.toLowerCase().split(/\s+/).filter(w => w.length >= 2);
+    if (!words.length) return [];
+    
+    const scored = products.map(p => {
+      let score = 0;
+      const title = (p.title || '').toLowerCase();
+      const brand = (p.brand || '').toLowerCase();
+      const cat = (p.category || '').toLowerCase();
+      const desc = (p.desc || '').toLowerCase();
+      
+      words.forEach(w => {
+        if (title.includes(w)) score += 10;
+        if (brand.includes(w)) score += 5;
+        if (cat.includes(w)) score += 3;
+        if (desc.includes(w)) score += 1;
+      });
+      
+      return { product: p, score };
+    }).filter(item => item.score > 0);
+    
+    scored.sort((a, b) => b.score - a.score);
+    return scored.map(item => item.product).slice(0, 3);
+  }
+
+  function handleFreeTextInput() {
+    const text = cbInputText.value.trim();
+    if (!text) return;
+    
+    cbInputText.value = '';
+    addUserMessage(text);
+    
+    const query = text.toLowerCase();
+    
+    // Saludo
+    if (query.match(/\b(hola|buenos|buenas|buen|holaa|saludos|que tal)\b/)) {
+      addBotMessage("¡Hola! ¿Cómo puedo ayudarte hoy? Puedes preguntarme por productos específicos (como proyectores, impresoras, cámaras) o sobre nuestro horario y ubicación.", QUICK_ACTIONS.main);
+      renderChips(QUICK_ACTIONS.main);
+      return;
+    }
+    
+    // Redirecciones rápidas
+    if (query.includes("horario") || query.includes("hora") || query.includes("abierto")) {
+      const response = getResponseByKey('horario');
+      addBotMessage(response.text, response.actions);
+      renderChips(response.chips || QUICK_ACTIONS.main);
+      return;
+    }
+    if (query.includes("ubicacion") || query.includes("donde") || query.includes("direccion") || query.includes("sucursal") || query.includes("mapa")) {
+      const response = getResponseByKey('ubicacion');
+      addBotMessage(response.text, response.actions);
+      renderChips(response.chips || QUICK_ACTIONS.main);
+      return;
+    }
+    if (query.includes("envio") || query.includes("entrega") || query.includes("delivery") || query.includes("domicilio")) {
+      const response = getResponseByKey('envios');
+      addBotMessage(response.text, response.actions);
+      renderChips(response.chips || QUICK_ACTIONS.main);
+      return;
+    }
+    if (query.includes("servicio") || query.includes("instalacion") || query.includes("soporte") || query.includes("mantenimiento")) {
+      const response = getResponseByKey('servicios');
+      addBotMessage(response.text, response.actions);
+      renderChips(response.chips || QUICK_ACTIONS.main);
+      return;
+    }
+    
+    // Búsqueda de Productos
+    const matchingProducts = botSearchProducts(query);
+    if (matchingProducts.length > 0) {
+      let botResponse = `He encontrado estos productos que coinciden con tu consulta:`;
+      const actions = matchingProducts.map(p => ({
+        kind: 'product',
+        label: p.title.length > 25 ? p.title.substring(0, 22) + '...' : p.title,
+        id: p.id
+      }));
+      actions.push({
+        kind: 'wa',
+        label: 'Consultar con Asesor',
+        message: `Hola Futunet, me interesa el producto: ${matchingProducts[0].title}`
+      });
+      
+      addBotMessage(botResponse, actions);
+      renderChips(QUICK_ACTIONS.catalogo);
+    } else {
+      addBotMessage("Disculpa, no encontré productos específicos para tu búsqueda. ¿Te gustaría ver el catálogo de la tienda o hablar con un asesor por WhatsApp?", [
+        { kind: 'catalog', label: 'Ver catálogo', query: '' },
+        { kind: 'wa', label: 'Hablar con Asesor', message: `Hola Futunet, necesito información sobre: ${text}` }
+      ]);
+      renderChips(QUICK_ACTIONS.main);
+    }
+  }
+
   setFabIcon(false);
   syncChatViewportState();
 
@@ -352,8 +463,22 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (kind === 'product') {
+      window.location.href = `producto.html?id=${encodeURIComponent(button.dataset.id)}`;
+      closeChat();
+      return;
+    }
+
     if (kind === 'wa') {
       window.open(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'), '_blank', 'noopener');
+    }
+  });
+
+  cbSendBtn.addEventListener('click', handleFreeTextInput);
+  cbInputText.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleFreeTextInput();
     }
   });
 

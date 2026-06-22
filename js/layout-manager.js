@@ -66,6 +66,59 @@ var FUTUNET_LAYOUT = {
     }
   });
 
+  function sanitizeHtml(htmlString) {
+    if (!htmlString) return '';
+    try {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(htmlString, 'text/html');
+      var clean = sanitizeNode(doc.body);
+      return clean.innerHTML;
+    } catch (e) {
+      console.warn('HTML sanitization failed, returning escaped text:', e);
+      var div = document.createElement('div');
+      div.textContent = htmlString;
+      return div.innerHTML;
+    }
+  }
+
+  function sanitizeNode(node) {
+    var allowedTags = ['br', 'span', 'b', 'i', 'strong', 'em', 'p'];
+    var allowedClasses = ['hero-title-accent', 'section-title', 'section-sub'];
+    
+    var doc = node.ownerDocument;
+    var cleanNode = doc.createElement(node.tagName);
+    
+    if (node.hasAttributes()) {
+      var attrs = node.attributes;
+      for (var i = 0; i < attrs.length; i++) {
+        var attrName = attrs[i].name.toLowerCase();
+        var attrVal = attrs[i].value;
+        if (attrName === 'class') {
+          var classes = attrVal.split(/\s+/).filter(function (c) {
+            return allowedClasses.indexOf(c) !== -1;
+          }).join(' ');
+          if (classes) {
+            cleanNode.setAttribute('class', classes);
+          }
+        }
+      }
+    }
+    
+    for (var i = 0; i < node.childNodes.length; i++) {
+      var child = node.childNodes[i];
+      if (child.nodeType === Node.TEXT_NODE) {
+        cleanNode.appendChild(doc.createTextNode(child.nodeValue));
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        var tag = child.tagName.toLowerCase();
+        if (allowedTags.indexOf(tag) !== -1) {
+          var cleanChild = sanitizeNode(child);
+          cleanNode.appendChild(cleanChild);
+        }
+      }
+    }
+    return cleanNode;
+  }
+
   function applyLayout() {
     var main = document.getElementById('main-content');
     if (!main) return;
@@ -159,7 +212,7 @@ var FUTUNET_LAYOUT = {
       titleEl = el.querySelector('.hero-title');
     }
     if (titleEl && sec.title) {
-      titleEl.innerHTML = sec.title;
+      titleEl.innerHTML = sanitizeHtml(sec.title);
     }
 
     // Subtitle mapping

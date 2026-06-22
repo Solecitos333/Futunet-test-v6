@@ -91,7 +91,7 @@ var FUTUNET_CONFIG = {
           '<img src="img/logo-navbar.webp" style="max-height:80px; margin-bottom:32px;">' +
           '<h1 style="font-family:\'Space Grotesk\', sans-serif; font-size:2rem; font-weight:700; margin-bottom:16px;">Sitio en Mantenimiento</h1>' +
           '<p style="color:#a0b0c4; max-width:500px; font-size:1rem; line-height:1.6; margin-bottom:32px;">' + escapeHtml(FUTUNET_CONFIG.MAINTENANCE_MESSAGE) + '</p>' +
-          '<a href="https://wa.me/' + FUTUNET_CONFIG.WHATSAPP_NUMBER + '" style="display:inline-flex; align-items:center; gap:8px; background:#0A70A2; color:white; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:600; transition: background 0.2s;">' +
+          '<a href="https://wa.me/' + escapeHtml(FUTUNET_CONFIG.WHATSAPP_NUMBER) + '" style="display:inline-flex; align-items:center; gap:8px; background:#0A70A2; color:white; padding:12px 24px; border-radius:12px; text-decoration:none; font-weight:600; transition: background 0.2s;">' +
           '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
           'Contactar por WhatsApp' +
           '</a>' +
@@ -140,25 +140,34 @@ var FUTUNET_CONFIG = {
     // 4. Google Maps Iframe
     var mapIframe = document.querySelector('.contact-map-frame');
     if (mapIframe && FUTUNET_CONFIG.MAP_URL) {
-      mapIframe.setAttribute('data-src', FUTUNET_CONFIG.MAP_URL);
-      if (mapIframe.getAttribute('src')) {
-        mapIframe.setAttribute('src', FUTUNET_CONFIG.MAP_URL);
+      var safeMapUrl = sanitizeUrl(FUTUNET_CONFIG.MAP_URL);
+      if (safeMapUrl) {
+        mapIframe.setAttribute('data-src', safeMapUrl);
+        if (mapIframe.getAttribute('src')) {
+          mapIframe.setAttribute('src', safeMapUrl);
+        }
       }
     }
 
     // 5. Social Links
     if (FUTUNET_CONFIG.INSTAGRAM_URL) {
-      var instagramLinks = document.querySelectorAll('a[href*="instagram.com"]');
-      instagramLinks.forEach(function (link) {
-        link.setAttribute('href', FUTUNET_CONFIG.INSTAGRAM_URL);
-      });
+      var safeInsta = sanitizeUrl(FUTUNET_CONFIG.INSTAGRAM_URL);
+      if (safeInsta) {
+        var instagramLinks = document.querySelectorAll('a[href*="instagram.com"]');
+        instagramLinks.forEach(function (link) {
+          link.setAttribute('href', safeInsta);
+        });
+      }
     }
     
     if (FUTUNET_CONFIG.FACEBOOK_URL) {
-      var facebookLinks = document.querySelectorAll('a[href*="facebook.com"]');
-      facebookLinks.forEach(function (link) {
-        link.setAttribute('href', FUTUNET_CONFIG.FACEBOOK_URL);
-      });
+      var safeFb = sanitizeUrl(FUTUNET_CONFIG.FACEBOOK_URL);
+      if (safeFb) {
+        var facebookLinks = document.querySelectorAll('a[href*="facebook.com"]');
+        facebookLinks.forEach(function (link) {
+          link.setAttribute('href', safeFb);
+        });
+      }
     }
   }
 
@@ -166,5 +175,14 @@ var FUTUNET_CONFIG = {
     var d = document.createElement('div');
     d.textContent = s || '';
     return d.innerHTML;
+  }
+
+  function sanitizeUrl(url) {
+    if (!url) return '';
+    var clean = url.trim().toLowerCase();
+    if (clean.indexOf('javascript:') === 0 || clean.indexOf('data:') === 0 || clean.indexOf('vbscript:') === 0) {
+      return '';
+    }
+    return url;
   }
 })();

@@ -46,7 +46,7 @@
           phone: data.phone || '',
           address: '',
           role: role,
-          status: 'active',
+          status: data.status || 'active',
           favorites: [],
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           lastLogin: firebase.firestore.FieldValue.serverTimestamp()
@@ -79,7 +79,8 @@
     // Create user document (resilient - won't block if Firestore fails)
     await ensureUserDoc(cred.user.uid, {
       displayName: displayName,
-      email: email
+      email: email,
+      status: 'pending_verification'
     });
 
     // Sign out immediately so they must verify and log in
@@ -107,10 +108,15 @@
       throw err;
     }
 
-    // Update last login (best effort)
-    getDB().collection('users').doc(cred.user.uid).update({
+    // Update last login (best effort) and activate status if verified
+    var updateFields = {
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    }).catch(function () { });
+    };
+    if (currentUserData && currentUserData.status === 'pending_verification') {
+      updateFields.status = 'active';
+      currentUserData.status = 'active';
+    }
+    getDB().collection('users').doc(cred.user.uid).update(updateFields).catch(function () { });
 
     // Write audit log
     getDB().collection('audit_logs').add({
@@ -148,7 +154,8 @@
       await ensureUserDoc(cred.user.uid, {
         displayName: cred.user.displayName || '',
         email: cred.user.email || '',
-        phone: cred.user.phoneNumber || ''
+        phone: cred.user.phoneNumber || '',
+        status: 'active'
       });
     } else {
       getDB().collection('users').doc(cred.user.uid).update({

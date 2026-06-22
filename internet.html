@@ -39,6 +39,105 @@
     ]
   }
   </script>
+
+  <!-- [8] Schema.org: Product/Offer para planes de Internet (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Planes de Internet Fibra Óptica — Futunet",
+    "description": "Planes de internet de fibra óptica simétrica FTTH en Santiago, República Dominicana",
+    "url": "https://futunet.com.do/internet.html",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@type": "Product",
+          "name": "Plan Bronce 20 Megas",
+          "description": "20 Mbps simétrico FTTH. Ideal para redes sociales, clases online y descargas básicas.",
+          "brand": { "@type": "Brand", "name": "Futunet" },
+          "offers": {
+            "@type": "Offer",
+            "price": "1000",
+            "priceCurrency": "DOP",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@type": "Organization", "name": "Futunet SRL" }
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "item": {
+          "@type": "Product",
+          "name": "Plan Plata 50 Megas",
+          "description": "50 Mbps simétrico FTTH. Ideal para teletrabajo y streaming en HD/4K.",
+          "brand": { "@type": "Brand", "name": "Futunet" },
+          "offers": {
+            "@type": "Offer",
+            "price": "1500",
+            "priceCurrency": "DOP",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@type": "Organization", "name": "Futunet SRL" }
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@type": "Product",
+          "name": "Plan Oro 100 Megas",
+          "description": "100 Mbps simétrico FTTH. Plan más popular. Smart Home, 4K y gaming.",
+          "brand": { "@type": "Brand", "name": "Futunet" },
+          "offers": {
+            "@type": "Offer",
+            "price": "1900",
+            "priceCurrency": "DOP",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@type": "Organization", "name": "Futunet SRL" }
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 4,
+        "item": {
+          "@type": "Product",
+          "name": "Plan Diamante 200 Megas",
+          "description": "200 Mbps simétrico FTTH. Para empresas y hogares con alta demanda.",
+          "brand": { "@type": "Brand", "name": "Futunet" },
+          "offers": {
+            "@type": "Offer",
+            "price": "3000",
+            "priceCurrency": "DOP",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@type": "Organization", "name": "Futunet SRL" }
+          }
+        }
+      },
+      {
+        "@type": "ListItem",
+        "position": 5,
+        "item": {
+          "@type": "Product",
+          "name": "Plan Élite 500 Megas",
+          "description": "500 Mbps simétrico FTTH. Máxima velocidad con IP pública fija incluida.",
+          "brand": { "@type": "Brand", "name": "Futunet" },
+          "offers": {
+            "@type": "Offer",
+            "price": "4500",
+            "priceCurrency": "DOP",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@type": "Organization", "name": "Futunet SRL" }
+          }
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
@@ -61,7 +160,9 @@
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
-  <link rel="stylesheet" href="css/internet.css?v=1.0" />
+  <link rel="stylesheet" href="css/internet.css?v=4.6" />
+  <!-- [8] LCP: Preload hero image para mejorar Core Web Vitals -->
+  <link rel="preload" as="image" href="img/hero_internet.png" fetchpriority="high" />
 </head>
 <body class="is-loading">
 
@@ -323,6 +424,7 @@
     </div>
   </section>
 
+
   <!-- Barra de Navegación Secundaria (Sticky Subnav) -->
   <div class="service-subnav">
     <div class="subnav-container">
@@ -355,6 +457,7 @@
           </a>
         </div>
 
+
         <div class="text-center reveal" style="text-align: center; margin-bottom: 40px;">
           <span class="section-label">Planes Flexibles</span>
           <h2 class="section-title">Elige tu Velocidad de Fibra</h2>
@@ -363,8 +466,30 @@
 
         <!-- Distribución Estilo Claro: Sidebar Filtros + Grid de Planes -->
         <div class="claro-plans-layout reveal">
-          
-          <!-- Barra Lateral: Filtrar Por -->
+
+          <!-- ── FILTROS MÓVIL: Dos filas de Chips (solo visibles en móvil) ── -->
+          <div class="mobile-plan-filters" id="mobile-plan-filters" role="group" aria-label="Filtrar planes">
+            <!-- Fila 1: Categoría -->
+            <div class="mobile-filter-row">
+              <span class="mobile-filter-label">Para:</span>
+              <div class="mobile-filter-chips">
+                <button type="button" class="mpf-chip active" data-filter="service" data-value="all" onclick="mpfFilter(this)">Todos</button>
+                <button type="button" class="mpf-chip" data-filter="service" data-value="hogar" onclick="mpfFilter(this)">Hogar</button>
+                <button type="button" class="mpf-chip" data-filter="service" data-value="empresas" onclick="mpfFilter(this)">Negocios</button>
+              </div>
+            </div>
+            <!-- Fila 2: Velocidad -->
+            <div class="mobile-filter-row">
+              <span class="mobile-filter-label">Velocidad:</span>
+              <div class="mobile-filter-chips">
+                <button type="button" class="mpf-chip" data-filter="speed" data-value="fijo" onclick="mpfSpeedFilter(this)">20–50M</button>
+                <button type="button" class="mpf-chip" data-filter="speed" data-value="simetrico" onclick="mpfSpeedFilter(this)">100M</button>
+                <button type="button" class="mpf-chip" data-filter="speed" data-value="ultra" onclick="mpfSpeedFilter(this)">200M+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra Lateral: Filtrar Por (desktop)-->
           <aside class="claro-sidebar">
             <div class="sidebar-header">
               <h3><i class="fas fa-filter" style="color:#0A70A2; margin-right:6px;"></i> Filtrar por</h3>
@@ -443,6 +568,33 @@
             </div>
 
             <!-- Grid de Planes estilo Claro -->
+            <!-- Hint de scroll (solo visible en móvil vía CSS) -->
+            <div class="plans-scroll-hint" aria-hidden="true">
+              <i class="fas fa-hand-point-right"></i>
+              Desliza para ver todos los planes y comparar
+            </div>
+
+            <!-- [4] Quiz CTA: visible arriba del grid -->
+            <div class="quiz-cta-bar">
+              <span class="quiz-cta-text"><i class="fas fa-magic"></i> ¿No sabes cuál elegir?</span>
+              <button type="button" class="quiz-cta-btn" onclick="openQuizModal()">
+                Descubre tu plan ideal <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+
+            <!-- [1] Barra de comparación (oculta hasta que se seleccionan 2+ planes) -->
+            <div class="compare-action-bar" id="compare-action-bar" role="status" aria-live="polite">
+              <span class="compare-count-text"><span id="compare-count">0</span> plan(es) seleccionados para comparar</span>
+              <div class="compare-action-btns">
+                <button type="button" class="compare-btn-open" id="compare-btn-open" onclick="openCompareModal()" disabled>
+                  <i class="fas fa-columns"></i> Comparar planes
+                </button>
+                <button type="button" class="compare-btn-clear" onclick="clearComparison()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+
             <div class="plans-grid" id="claro-plans-grid">
               
               <!-- Tarjeta 1: Plan Bronce 20M -->
@@ -574,6 +726,49 @@
                 </div>
               </div>
 
+              <!-- Tarjeta: Plan Titanio 150M -->
+              <div class="claro-card" data-service="hogar" data-type="simetrico" data-price="2200" data-speed="150" data-name="Plan Titanio 150 Megas">
+                <span class="claro-badge-top">Hogar / Negocios</span>
+                <div class="claro-card-header">
+                  <div class="claro-card-header-icon"><i class="fas fa-rocket"></i></div>
+                  <div class="claro-card-header-title">150 Mbps</div>
+                  <div class="claro-card-header-sub">Fibra Óptica Simétrica</div>
+                </div>
+                <div class="claro-card-body">
+                  <button type="button" class="claro-detail-toggle" onclick="toggleCardDetail(this)">
+                    Ver detalle de plan <i class="fas fa-chevron-down"></i>
+                  </button>
+                  <div class="claro-card-detail-content">
+                    <ul>
+                      <li><i class="fas fa-check"></i> Fibra óptica simétrica real (FTTH)</li>
+                      <li><i class="fas fa-check"></i> 150 Mbps de subida y 150 Mbps de bajada</li>
+                      <li><i class="fas fa-check"></i> Ideal para teletrabajo avanzado y streaming 4K multinivel</li>
+                      <li><i class="fas fa-check"></i> Soporte técnico local 24/7</li>
+                    </ul>
+                  </div>
+                  
+                  <div class="claro-price-block">
+                    <span class="claro-price-label">Renta mensual</span>
+                    <strong class="claro-price-val">RD$ 2,200</strong>
+                    <span class="claro-price-taxes">Impuestos incluidos</span>
+                    <span class="claro-price-promo" style="background:#e0f2fe; color:#0369a1;">Oferta: Instalación Gratis</span>
+                  </div>
+
+                  <div class="claro-included-content">
+                    <span class="claro-included-title">Contenido incluido</span>
+                    <div class="claro-included-icons">
+                      <span title="WiFi Inteligente Dual" data-tooltip="WiFi Inteligente: Router dual con asignación inteligente de ancho de banda."><i class="fas fa-wifi"></i></span>
+                      <span title="Soporte VIP 24/7" data-tooltip="Soporte VIP 24/7: Asistencia técnica prioritaria y resolución rápida en Santiago."><i class="fas fa-user-shield"></i></span>
+                      <span title="Conexión Simétrica" data-tooltip="Conexión Simétrica: Cero delay, ideal para gaming y Smart Homes."><i class="fas fa-exchange-alt"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="claro-card-actions">
+                    <button type="button" onclick="selectClaroPlan('Plan Titanio 150 Megas', '150mb', 2200)" class="claro-btn-solicitar">Solicitar</button>
+                  </div>
+                </div>
+              </div>
+
               <!-- Tarjeta 4: Plan Platino 200M -->
               <div class="claro-card" data-service="empresas" data-type="ultra" data-price="2400" data-speed="200" data-name="Plan Platino 200 Megas">
                 <span class="claro-badge-top">Negocios</span>
@@ -612,7 +807,7 @@
                   </div>
 
                   <div class="claro-card-actions">
-                    <button type="button" onclick="selectClaroPlan('Plan Platino 200 Megas', '200mb', 2400)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                    <button type="button" onclick="selectClaroPlan('Plan Platino 200 Megas', '200mb', 2400)" class="claro-btn-solicitar">Solicitar</button>
                   </div>
                 </div>
               </div>
@@ -655,7 +850,7 @@
                   </div>
 
                   <div class="claro-card-actions">
-                    <button type="button" onclick="selectClaroPlan('Plan Ultra 300 Megas', '300mb', 3200)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                    <button type="button" onclick="selectClaroPlan('Plan Ultra 300 Megas', '300mb', 3200)" class="claro-btn-solicitar">Solicitar</button>
                   </div>
                 </div>
               </div>
@@ -698,16 +893,20 @@
                   </div>
 
                   <div class="claro-card-actions">
-                    <button type="button" onclick="selectClaroPlan('Plan Élite 500 Megas', '500mb', 4500)" class="claro-btn-solicitar" style="border-color:#1d4ed8; color:#1d4ed8;">Solicitar</button>
+                    <button type="button" onclick="selectClaroPlan('Plan Élite 500 Megas', '500mb', 4500)" class="claro-btn-solicitar">Solicitar</button>
                   </div>
                 </div>
               </div>
             </div> <!-- Cierre plans-grid -->
+
+            <!-- Dots indicadores de posición (solo visibles en móvil vía CSS) -->
+            <div class="plans-dots" id="plans-dots-container" aria-hidden="true"></div>
+
           </div> <!-- Cierre claro-plans-main -->
         </div> <!-- Cierre claro-plans-layout -->
 
         <!-- Hub de Beneficios Premium (Symmetric FTTH Advantages) -->
-        <div class="text-center reveal" style="text-align: center; margin-top: 80px; margin-bottom: 30px;">
+        <div class="text-center reveal benefits-header" style="text-align: center; margin-top: 80px; margin-bottom: 30px;">
           <span class="section-label">Beneficios Premium</span>
           <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: #0a101d; margin: 10px 0 16px;">¿Por qué elegir nuestra Fibra Óptica?</h2>
           <p class="section-sub" style="max-width: 600px; margin: 0 auto; color: #50647a; font-size: 1rem; line-height: 1.5;">Nuestra tecnología FTTH garantiza una navegación superior, estable y ultra rápida.</p>
@@ -833,11 +1032,30 @@
           <div class="coverage-grid">
             <div class="coverage-list-card">
               <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; color: #0a101d; margin: 0 0 16px;">Sectores Habilitados</h3>
-              <p style="font-size: 0.9rem; color: #50647a; line-height: 1.6; margin-bottom: 20px;">Contamos con infraestructura de fibra óptica en los siguientes sectores de Santiago de los Caballeros:</p>
+
+              <!-- [2] Verificador de cobertura por dirección -->
+              <div class="coverage-checker" id="coverage-checker">
+                <label for="coverage-address-input" class="coverage-checker-label">
+                  <i class="fas fa-search-location"></i> Verifica si tienes cobertura:
+                </label>
+                <div class="coverage-checker-row">
+                  <input type="text" id="coverage-address-input"
+                    placeholder="Ej: Ensanche Dolores, Calle 5..."
+                    class="coverage-address-input"
+                    aria-label="Tu dirección o sector"
+                    onkeydown="if(event.key==='Enter') checkCoverage()" />
+                  <button type="button" class="coverage-check-btn" onclick="checkCoverage()">
+                    <i class="fas fa-bolt"></i> Verificar
+                  </button>
+                </div>
+                <div class="coverage-result" id="coverage-result" aria-live="polite"></div>
+              </div>
+
+              <p style="font-size: 0.9rem; color: #50647a; line-height: 1.6; margin-bottom: 14px; margin-top: 20px;">Sectores con fibra óptica activa:</p>
               <div class="coverage-cities" style="grid-template-columns: 1fr; max-width: 320px;">
-                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Ensanche Dolores</div>
-                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Pueblo Nuevo</div>
-                <div class="coverage-city-item"><i class="fas fa-map-marker-alt"></i> Cuesta Colorada</div>
+                <div class="coverage-city-item"><i class="fas fa-check-circle"></i> Ensanche Dolores</div>
+                <div class="coverage-city-item"><i class="fas fa-check-circle"></i> Pueblo Nuevo</div>
+                <div class="coverage-city-item"><i class="fas fa-check-circle"></i> Cuesta Colorada</div>
               </div>
               <div style="margin-top: 28px;">
                 <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20solicitar%20cobertura%20de%20internet%20de%20fibra%20%C3%B3ptica%20en%20mi%20zona%20(Sector%3A%20%5BIndica%20tu%20sector%5D%2C%20Santiago)." target="_blank" class="plan-btn-primary" style="display: inline-flex; width: auto; padding: 12px 24px; border-radius: 50px;" rel="noopener noreferrer">
@@ -886,13 +1104,20 @@
 
           <!-- Buscador y Filtros de FAQs -->
           <div class="faq-controls reveal" style="max-width: 800px; margin: 0 auto 36px; display: flex; flex-direction: column; gap: 20px;">
-            <!-- Buscador -->
+            <!-- Buscador (desktop siempre visible; móvil: toggle) -->
             <div class="faq-search-wrapper" style="position: relative; width: 100%;">
-              <input type="text" id="faq-search-input" placeholder="Buscar preguntas frecuentes... (ej. instalación, velocidad, soporte)" oninput="filterFaqs()" style="width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #cbd5e1; border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #0a101d; outline: none; transition: all 0.25s;" aria-label="Buscar preguntas frecuentes" />
-              <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #76889e; font-size: 1.1rem;"></i>
+              <!-- Botón toggle visible solo en móvil -->
+              <button type="button" class="faq-search-toggle" id="faq-search-toggle" onclick="toggleFaqSearch()" aria-expanded="false">
+                <i class="fas fa-search"></i> Buscar pregunta
+              </button>
+              <!-- Input (oculto en móvil hasta que se activa) -->
+              <div class="faq-search-input-wrap" id="faq-search-input-wrap">
+                <input type="text" id="faq-search-input" placeholder="Buscar preguntas frecuentes..." oninput="filterFaqs()" style="width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #cbd5e1; border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #0a101d; outline: none; transition: all 0.25s;" aria-label="Buscar preguntas frecuentes" />
+                <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #76889e; font-size: 1.1rem;"></i>
+              </div>
             </div>
             
-            <!-- Categorías -->
+            <!-- Categorías (tags) -->
             <div class="faq-tags-container" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
               <button type="button" class="faq-tag-btn active" data-category="todos" onclick="filterFaqCategory('todos', this)">Todos</button>
               <button type="button" class="faq-tag-btn" data-category="general" onclick="filterFaqCategory('general', this)">General</button>
@@ -1152,6 +1377,22 @@
                   <ul class="pp-features">
                     <li><i data-lucide="check"></i> 100 Mbps Bajada / 100 Mbps Subida</li>
                     <li><i data-lucide="check"></i> Múltiples equipos en simultáneo</li>
+                  </ul>
+                  <button type="button" class="pp-btn">Seleccionar plan</button>
+                </div>
+
+                <!-- Plan Titanio 150M -->
+                <div class="portal-plan-item" data-category="hogar" onclick="selectHiringPlan('Plan Titanio 150 Megas', '150mb', 2200)">
+                  <div class="portal-plan-visual">
+                    <img src="img/plan_hogar_premium.png" alt="Plan Titanio" class="portal-plan-img" />
+                  </div>
+                  <div class="pp-badge">Potencia Pro</div>
+                  <h4 class="pp-name">Plan Titanio</h4>
+                  <div class="pp-speed">150 <span>Mega</span></div>
+                  <div class="pp-price">RD$ 2,200 <span>/ mes</span></div>
+                  <ul class="pp-features">
+                    <li><i data-lucide="check"></i> 150 Mbps Bajada / 150 Mbps Subida</li>
+                    <li><i data-lucide="check"></i> Ideal para teletrabajo avanzado y streaming 4K</li>
                   </ul>
                   <button type="button" class="pp-btn">Seleccionar plan</button>
                 </div>
@@ -1654,7 +1895,405 @@
         item.classList.remove('active');
       });
     });
-  </script>
-</body>
-</html>
 
+    // ── Carrusel de planes: dots indicadores (solo móvil) ──
+    (function() {
+      var grid = document.getElementById('claro-plans-grid');
+      var dotsContainer = document.getElementById('plans-dots-container');
+      if (!grid || !dotsContainer) return;
+
+      function isMobile() {
+        return window.innerWidth <= 767;
+      }
+
+      function buildDots() {
+        if (!isMobile()) { dotsContainer.innerHTML = ''; return; }
+        var cards = grid.querySelectorAll('.claro-card:not([style*="display: none"]):not([style*="display:none"])');
+        dotsContainer.innerHTML = '';
+        if (cards.length <= 1) return;
+        cards.forEach(function(_, i) {
+          var dot = document.createElement('button');
+          dot.className = 'plans-dot' + (i === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', 'Plan ' + (i + 1));
+          dot.addEventListener('click', function() {
+            var card = cards[i];
+            grid.scrollTo({ left: card.offsetLeft - grid.offsetLeft, behavior: 'smooth' });
+          });
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      function updateDots() {
+        if (!isMobile()) return;
+        var cards = grid.querySelectorAll('.claro-card:not([style*="display: none"]):not([style*="display:none"])');
+        var dots = dotsContainer.querySelectorAll('.plans-dot');
+        if (!dots.length) return;
+        var scrollLeft = grid.scrollLeft;
+        var cardWidth = cards[0] ? cards[0].offsetWidth + 14 : 1; // 14 = gap
+        var idx = Math.round(scrollLeft / cardWidth);
+        dots.forEach(function(d, i) {
+          d.classList.toggle('active', i === idx);
+        });
+      }
+
+      // Inicializar
+      buildDots();
+      grid.addEventListener('scroll', updateDots, { passive: true });
+      window.addEventListener('resize', function() {
+        buildDots();
+        updateDots();
+      });
+
+      // Rebuild dots when filterPlans modifies visibility
+      var origFilter = window.filterPlans;
+      window.filterPlans = function() {
+        if (origFilter) origFilter.apply(this, arguments);
+        setTimeout(buildDots, 50);
+      };
+    })();
+
+    // ── Pill Filters M\u00f3vil ──
+    function mpfFilter(btn) {
+      // Deseleccionar chips de la misma categor\u00eda (service)
+      document.querySelectorAll('.mpf-chip[data-filter="service"]').forEach(function(c) {
+        c.classList.remove('active');
+      });
+      btn.classList.add('active');
+      // Sincronizar con radio buttons del sidebar desktop
+      var val = btn.getAttribute('data-value');
+      var radio = document.querySelector('input[name="filter-service"][value="' + val + '"]');
+      if (radio) { radio.checked = true; }
+      if (window.filterPlans) filterPlans();
+    }
+
+    function mpfSpeedFilter(btn) {
+      // Toggle: permite multi-select igual que los checkboxes del sidebar
+      btn.classList.toggle('active');
+      var val = btn.getAttribute('data-value');
+      var checkbox = document.querySelector('input[name="filter-plan-type"][value="' + val + '"]');
+      if (checkbox) { checkbox.checked = btn.classList.contains('active'); }
+      if (window.filterPlans) filterPlans();
+    }
+
+    // ── FAQ Search Toggle (m\u00f3vil) ──
+    function toggleFaqSearch() {
+      var wrap = document.getElementById('faq-search-input-wrap');
+      var btn = document.getElementById('faq-search-toggle');
+      var isOpen = wrap.classList.toggle('faq-search-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (isOpen) {
+        var input = document.getElementById('faq-search-input');
+        if (input) setTimeout(function() { input.focus(); }, 100);
+      }
+    }
+
+    // ── CTA Flotante WhatsApp: ocultar en el hero ──
+    (function() {
+      var cta = document.getElementById('wa-floating-cta');
+      var hero = document.getElementById('inicio');
+      if (!cta || !hero) return;
+      var shown = false;
+      function checkScroll() {
+        var heroBottom = hero.getBoundingClientRect().bottom;
+        if (heroBottom < 0 && !shown) {
+          cta.classList.add('visible');
+          shown = true;
+        } else if (heroBottom >= 0 && shown) {
+          cta.classList.remove('visible');
+          shown = false;
+        }
+      }
+      window.addEventListener('scroll', checkScroll, { passive: true });
+      checkScroll();
+    })();
+  </script>
+
+  <!-- ── CTA Flotante de WhatsApp (solo m\u00f3vil) ── -->
+  <div id="wa-floating-cta" class="wa-floating-cta" role="complementary" aria-label="Contratar por WhatsApp">
+    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20contratar%20un%20plan%20de%20internet%20de%20fibra%20%C3%B3ptica." target="_blank" rel="noopener noreferrer" class="wa-floating-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      <span>Contratar por WhatsApp</span>
+    </a>
+  </div>
+
+</body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODALS & OVERLAYS
+     ═══════════════════════════════════════════════════════════ -->
+
+<!-- [1] Modal Comparador de Planes -->
+<div class="modal-overlay" id="compare-modal" role="dialog" aria-modal="true" aria-label="Comparar planes" onclick="if(event.target===this)closeCompareModal()">
+  <div class="modal-box compare-modal-box">
+    <div class="modal-header">
+      <h3><i class="fas fa-columns"></i> Comparar Planes</h3>
+      <button type="button" class="modal-close-btn" onclick="closeCompareModal()" aria-label="Cerrar comparador"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="compare-table-wrap">
+      <table class="compare-table" id="compare-table">
+        <thead id="compare-thead"></thead>
+        <tbody id="compare-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- [4] Modal Quiz: ¿Qué plan necesito? -->
+<div class="modal-overlay" id="quiz-modal" role="dialog" aria-modal="true" aria-label="Quiz de planes" onclick="if(event.target===this)closeQuizModal()">
+  <div class="modal-box quiz-modal-box">
+    <div class="modal-header">
+      <h3><i class="fas fa-magic"></i> Descubre tu Plan Ideal</h3>
+      <button type="button" class="modal-close-btn" onclick="closeQuizModal()" aria-label="Cerrar quiz"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+    <p class="quiz-step-label" id="quiz-step-label">Pregunta 1 de 3</p>
+
+    <!-- Paso 1: Personas en el hogar -->
+    <div class="quiz-step active" id="quiz-step-1">
+      <h4 class="quiz-question">¿Cuántas personas viven en tu hogar?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-option" onclick="quizAnswer(1,'personas','1-2')">
+          <i class="fas fa-user"></i><span>1 – 2 personas</span>
+        </button>
+        <button type="button" class="quiz-option" onclick="quizAnswer(1,'personas','3-5')">
+          <i class="fas fa-users"></i><span>3 – 5 personas</span>
+        </button>
+        <button type="button" class="quiz-option" onclick="quizAnswer(1,'personas','6+')">
+          <i class="fas fa-building"></i><span>6 o más / Empresa</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 2: Uso principal -->
+    <div class="quiz-step" id="quiz-step-2">
+      <h4 class="quiz-question">¿Cuál es tu uso principal de internet?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-option" onclick="quizAnswer(2,'uso','basico')">
+          <i class="fas fa-globe"></i><span>Redes sociales y navegación</span>
+        </button>
+        <button type="button" class="quiz-option" onclick="quizAnswer(2,'uso','streaming')">
+          <i class="fas fa-tv"></i><span>Streaming HD / 4K</span>
+        </button>
+        <button type="button" class="quiz-option" onclick="quizAnswer(2,'uso','trabajo')">
+          <i class="fas fa-laptop-house"></i><span>Teletrabajo / Gaming / 4K</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 3: Trabajo desde casa -->
+    <div class="quiz-step" id="quiz-step-3">
+      <h4 class="quiz-question">¿Trabajas o estudias desde casa con videollamadas?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-option" onclick="quizAnswer(3,'trabajo','no')">
+          <i class="fas fa-times-circle"></i><span>No, solo uso casual</span>
+        </button>
+        <button type="button" class="quiz-option" onclick="quizAnswer(3,'trabajo','si')">
+          <i class="fas fa-check-circle"></i><span>Sí, varias horas al día</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div class="quiz-step" id="quiz-result">
+      <div class="quiz-result-box">
+        <div class="quiz-result-icon"><i class="fas fa-trophy"></i></div>
+        <h4 id="quiz-result-plan-name">Plan Oro 100 Megas</h4>
+        <p id="quiz-result-reason">Ideal para tu perfil de uso.</p>
+        <div class="quiz-result-price" id="quiz-result-price">RD$ 1,900 / mes</div>
+        <a href="#" class="quiz-result-cta" id="quiz-result-cta" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Contratar por WhatsApp
+        </a>
+        <button type="button" class="quiz-retry-btn" onclick="resetQuiz()"><i class="fas fa-redo"></i> Volver a empezar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT — Features 1-9
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+'use strict';
+
+// También añadir checkbox de comparación
+function buildCompareCheckboxes() {
+  document.querySelectorAll('.claro-card').forEach(function(card) {
+    if (card.querySelector('.compare-checkbox-wrap')) return;
+    var name = card.getAttribute('data-name') || '';
+    var wrap = document.createElement('label');
+    wrap.className = 'compare-checkbox-wrap';
+    wrap.title = 'Añadir al comparador';
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.className = 'compare-cb';
+    cb.setAttribute('aria-label', 'Comparar ' + name);
+    cb.addEventListener('change', function() { updateCompareBar(); });
+    wrap.appendChild(cb);
+    wrap.insertAdjacentHTML('beforeend', '<span class="compare-cb-label"><i class="fas fa-plus"></i> Comparar</span>');
+    card.insertBefore(wrap, card.firstChild);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  buildCompareCheckboxes();
+});
+// También en caso de que ya se haya cargado
+if (document.readyState !== 'loading') {
+  buildCompareCheckboxes();
+}
+
+// ── [1] COMPARADOR DE PLANES ──
+var selectedPlans = [];
+
+function updateCompareBar() {
+  var cbs = document.querySelectorAll('.compare-cb:checked');
+  var count = cbs.length;
+  var countEl = document.getElementById('compare-count');
+  var openBtn = document.getElementById('compare-btn-open');
+  var bar = document.getElementById('compare-action-bar');
+  if (countEl) countEl.textContent = count;
+  if (openBtn) openBtn.disabled = count < 2;
+  if (bar) bar.classList.toggle('active', count > 0);
+}
+
+window.clearComparison = function() {
+  document.querySelectorAll('.compare-cb:checked').forEach(function(cb) { cb.checked = false; });
+  updateCompareBar();
+};
+
+window.openCompareModal = function() {
+  var checked = document.querySelectorAll('.compare-cb:checked');
+  if (checked.length < 2) return;
+  var plans = [];
+  checked.forEach(function(cb) {
+    var card = cb.closest('.claro-card');
+    plans.push({
+      name: card.getAttribute('data-name') || '—',
+      speed: card.getAttribute('data-speed') || '—',
+      price: card.getAttribute('data-price') || '—',
+      type: card.getAttribute('data-type') || '—',
+      service: card.getAttribute('data-service') || '—',
+    });
+  });
+
+  var rows = [
+    ['Velocidad', plans.map(function(p) { return p.speed + ' Mbps'; })],
+    ['Precio mensual', plans.map(function(p) { return 'RD$ ' + parseInt(p.price).toLocaleString('es-DO'); })],
+    ['Tipo de conexión', plans.map(function() { return 'Fibra Óptica FTTH'; })],
+    ['Simetría', plans.map(function() { return 'Simétrica (Subida = Bajada)'; })],
+    ['Soporte', plans.map(function() { return 'Local 24/7 en Santiago'; })],
+    ['Para', plans.map(function(p) { return p.service === 'hogar' ? 'Hogar' : 'Empresas'; })],
+  ];
+
+  var thead = '<tr><th>Característica</th>' + plans.map(function(p) { return '<th>' + p.name + '</th>'; }).join('') + '</tr>';
+  var tbody = rows.map(function(row) {
+    return '<tr><td class="cmp-feat">' + row[0] + '</td>' + row[1].map(function(v) { return '<td>' + v + '</td>'; }).join('') + '</tr>';
+  }).join('');
+  // CTA row
+  tbody += '<tr class="cmp-cta-row"><td></td>' + plans.map(function(p) {
+    var msg = encodeURIComponent('Hola Futunet, me interesa el ' + p.name + ' (' + p.speed + ' Mbps - RD$ ' + p.price + '/mes).');
+    return '<td><a href="https://wa.me/18297411041?text=' + msg + '" target="_blank" rel="noopener noreferrer" class="cmp-solicitar-btn">Solicitar</a></td>';
+  }).join('') + '</tr>';
+
+  document.getElementById('compare-thead').innerHTML = thead;
+  document.getElementById('compare-tbody').innerHTML = tbody;
+  document.getElementById('compare-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeCompareModal = function() {
+  document.getElementById('compare-modal').classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+// ── [4] QUIZ ──
+var quizAnswers = {};
+var quizCurrentStep = 1;
+var QUIZ_PLANS = [
+  { name: 'Plan Bronce 20 Megas', speed: 20, price: 1000, reason: 'Perfecto para 1-2 personas con uso básico de redes sociales y navegación.', wa: 'Plan%20Bronce%2020%20Megas' },
+  { name: 'Plan Plata 50 Megas', speed: 50, price: 1500, reason: 'Ideal para un hogar de hasta 4 personas con streaming y teletrabajo ocasional.', wa: 'Plan%20Plata%2050%20Megas' },
+  { name: 'Plan Oro 100 Megas', speed: 100, price: 1900, reason: 'Nuestra opción más popular: velocidad simétrica real para todo tu hogar.', wa: 'Plan%20Oro%20100%20Megas' },
+  { name: 'Plan Titanio 150 Megas', speed: 150, price: 2200, reason: 'Excelente equilibrio: velocidad simétrica de 150 Megas para múltiples dispositivos y streaming fluido.', wa: 'Plan%20Titanio%20150%20Megas' },
+  { name: 'Plan Diamante 200 Megas', speed: 200, price: 3000, reason: 'Para hogares grandes o pequeñas empresas con alta demanda simultánea.', wa: 'Plan%20Diamante%20200%20Megas' },
+  { name: 'Plan Élite 500 Megas', speed: 500, price: 4500, reason: 'La máxima potencia: empresas, múltiples oficinas y trabajo intensivo en la nube.', wa: 'Plan%20%C3%89lite%20500%20Megas' },
+];
+
+function recommendPlan(answers) {
+  var score = 0;
+  if (answers.personas === '3-5') score += 1;
+  if (answers.personas === '6+') score += 3;
+  if (answers.uso === 'streaming') score += 1;
+  if (answers.uso === 'trabajo') score += 2;
+  if (answers.trabajo === 'si') score += 1;
+  var idx = Math.min(Math.round(score * 0.8), QUIZ_PLANS.length - 1);
+  return QUIZ_PLANS[idx];
+}
+
+window.openQuizModal = function() {
+  resetQuiz();
+  document.getElementById('quiz-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeQuizModal = function() {
+  document.getElementById('quiz-modal').classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+window.quizAnswer = function(step, key, value) {
+  quizAnswers[key] = value;
+  var next = step + 1;
+  document.querySelectorAll('.quiz-step').forEach(function(s) { s.classList.remove('active'); });
+  if (next <= 3) {
+    quizCurrentStep = next;
+    document.getElementById('quiz-step-' + next).classList.add('active');
+    document.getElementById('quiz-step-label').textContent = 'Pregunta ' + next + ' de 3';
+    document.getElementById('quiz-progress-fill').style.width = ((next - 1) / 3 * 100) + '%';
+  } else {
+    // Mostrar resultado
+    var plan = recommendPlan(quizAnswers);
+    document.getElementById('quiz-result-plan-name').textContent = plan.name;
+    document.getElementById('quiz-result-reason').textContent = plan.reason;
+    document.getElementById('quiz-result-price').textContent = 'RD$ ' + plan.price.toLocaleString('es-DO') + ' / mes';
+    document.getElementById('quiz-result-cta').href = 'https://wa.me/18297411041?text=Hola%20Futunet%2C%20el%20quiz%20me%20recomend%C3%B3%20el%20' + plan.wa + '.%20Me%20gustar%C3%ADa%20contratarlo.';
+    document.getElementById('quiz-result').classList.add('active');
+    document.getElementById('quiz-step-label').textContent = '¡Tu plan ideal!';
+    document.getElementById('quiz-progress-fill').style.width = '100%';
+  }
+};
+
+window.resetQuiz = function() {
+  quizAnswers = {};
+  quizCurrentStep = 1;
+  document.querySelectorAll('.quiz-step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('quiz-step-1').classList.add('active');
+  document.getElementById('quiz-step-label').textContent = 'Pregunta 1 de 3';
+  document.getElementById('quiz-progress-fill').style.width = '33%';
+};
+
+// ── [2] VERIFICADOR DE COBERTURA ──
+var COVERED_ZONES = ['ensanche dolores', 'pueblo nuevo', 'cuesta colorada', 'dolores', 'pueblonuevo'];
+window.checkCoverage = function() {
+  var input = document.getElementById('coverage-address-input');
+  var result = document.getElementById('coverage-result');
+  if (!input || !result) return;
+  var val = input.value.trim().toLowerCase();
+  if (!val) { result.innerHTML = '<span class="cov-warn"><i class="fas fa-exclamation-circle"></i> Por favor ingresa tu dirección o sector.</span>'; return; }
+  var covered = COVERED_ZONES.some(function(z) { return val.indexOf(z) !== -1; });
+  if (covered) {
+    result.innerHTML = '<div class="cov-success"><i class="fas fa-check-circle"></i><div><strong>¡Excelente! Tu zona tiene cobertura.</strong><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quiero%20contratar%20internet.%20Mi%20direcci%C3%B3n%20es%3A%20' + encodeURIComponent(input.value) + '" target="_blank" rel="noopener noreferrer" class="cov-cta-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Contratar ahora</a></div></div>';
+  } else {
+    result.innerHTML = '<div class="cov-pending"><i class="fas fa-clock"></i><div><strong>Tu zona aún no está en nuestra cobertura.</strong><a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20reportar%20mi%20zona%20para%20cobertura%3A%20' + encodeURIComponent(input.value) + '" target="_blank" rel="noopener noreferrer" class="cov-cta-btn cov-cta-report"><i class="fas fa-paper-plane"></i> Reportar mi zona</a></div></div>';
+  }
+};
+
+})(); // end IIFE
+</script>
+</html>

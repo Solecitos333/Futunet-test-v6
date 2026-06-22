@@ -47,9 +47,9 @@
       
       const logoUrl = b.logo || 'img/logo.webp';
       itemLink.innerHTML = `
-        <img src="${logoUrl}" alt="${escapeHtml(b.name)}" loading="lazy" />
+        <img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(b.name)}" loading="lazy" />
         <div class="brand-preview-popup">
-          <img src="${logoUrl}" alt="Productos ${escapeHtml(b.name)}" class="brand-preview-img" style="object-fit:contain; background:#ffffff; padding:10px; border-radius:8px;" loading="lazy" />
+          <img src="${escapeHtml(logoUrl)}" alt="Productos ${escapeHtml(b.name)}" class="brand-preview-img" style="object-fit:contain; background:#ffffff; padding:10px; border-radius:8px;" loading="lazy" />
           <span class="brand-preview-btn">Ver productos ${escapeHtml(b.name)}</span>
         </div>
       `;

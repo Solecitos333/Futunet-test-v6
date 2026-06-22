@@ -403,10 +403,10 @@
           return;
         }
 
-        // Validación de fortaleza de contraseña en cliente
-        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // Validación de fortaleza de contraseña en cliente (sincronizada con auth.js)
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
         if (!passwordRegex.test(password)) {
-          showMessage('register-message', 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial (ej: @$!%*?&).', 'error');
+          showMessage('register-message', 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial (ej: @$!%*?&#^_-./).', 'error');
           setLoading('register-btn', false);
           return;
         }

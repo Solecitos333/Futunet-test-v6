@@ -1075,17 +1075,10 @@ function shouldIgnoreProductCardActivation(event, card) {
 
 function bindProductCardActivation(card, productId) {
   card.addEventListener('click', (event) => {
-    if (shouldIgnoreProductCardActivation(event, card)) return;
-    window.location.href = 'producto.html?id=' + productId;
-  });
-
-  card.addEventListener('keydown', (event) => {
-    if (event.target !== card) return;
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    if (shouldIgnoreProductCardActivation(event, card)) return;
-
-    event.preventDefault();
-    window.location.href = 'producto.html?id=' + productId;
+    if (shouldIgnoreProductCardActivation(event, card)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   });
 }
 
@@ -1107,12 +1100,10 @@ function renderProductsGrid(productsList, options = {}) {
       ? `${getDeptDisplayName(product.department)} · Servicio`
       : `${product.brand} · ${product.category}`;
     const availabilityText = serviceItem ? 'A medida' : 'Disponible';
-    const card = document.createElement('div');
+    const card = document.createElement('a');
+    card.href = 'producto.html?id=' + product.id;
     card.className = `product-card reveal in${serviceItem ? ' product-card--service' : ''}${previewCard ? ' product-card--preview-mobile' : compactCard ? ' product-card--compact-mobile' : ''}`;
     card.style.animationDelay = `${idx * 40}ms`;
-    card.style.cursor = 'pointer';
-    card.setAttribute('role', 'button');
-    card.setAttribute('tabindex', '0');
     card.setAttribute('aria-label', `Ver detalles de ${product.title}`);
 
     bindProductCardActivation(card, product.id);
@@ -1430,7 +1421,7 @@ function initSmartSearch(inputId, dropdownId) {
     if (resultModels.length > 0) {
       html += `<div class="search-group-title">Modelos Específicos</div>`;
       resultModels.slice(0, 5).forEach(m => {
-        html += `<div class="search-item search-item--product" data-search="${escapeHTML(m.title)}" role="option" tabindex="0">` +
+        html += `<div class="search-item search-item--product" data-product-id="${escapeHTML(m.id)}" data-search="${escapeHTML(m.title)}" role="option" tabindex="0">` +
                 `  <img src="${escapeHTML(m.img || 'img/placeholder.svg')}" class="search-item-thumb" alt="" onerror="this.src='img/placeholder.svg'" />` +
                 `  <div class="search-item-info">` +
                 `    <span class="search-item-name">${escapeHTML(m.title)}</span>` +
@@ -1448,14 +1439,21 @@ function initSmartSearch(inputId, dropdownId) {
     drop.innerHTML = html;
 
     // Attach click handlers to search items (instead of inline onclick)
-    drop.querySelectorAll('.search-item[data-search]').forEach(item => {
-      item.addEventListener('click', () => {
-        executeSearch(item.getAttribute('data-search'));
-      });
+    drop.querySelectorAll('.search-item').forEach(item => {
+      const handler = () => {
+        const prodId = item.getAttribute('data-product-id');
+        if (prodId) {
+          window.location.href = `producto.html?id=${encodeURIComponent(prodId)}`;
+        } else {
+          const q = item.getAttribute('data-search');
+          if (q) executeSearch(q);
+        }
+      };
+      item.addEventListener('click', handler);
       item.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          executeSearch(item.getAttribute('data-search'));
+          handler();
         }
       });
     });

@@ -56,6 +56,72 @@
     console.warn('Failed to load dynamic banners, using HTML static fallback:', e);
   }
 
+  function escapeAttr(s) {
+    return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function sanitizeUrl(url) {
+    if (!url) return '#';
+    var clean = url.trim().toLowerCase();
+    if (clean.indexOf('javascript:') === 0 || clean.indexOf('data:') === 0 || clean.indexOf('vbscript:') === 0) {
+      return '#';
+    }
+    return url;
+  }
+
+  function sanitizeHtml(htmlString) {
+    if (!htmlString) return '';
+    try {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(htmlString, 'text/html');
+      var clean = sanitizeNode(doc.body);
+      return clean.innerHTML;
+    } catch (e) {
+      console.warn('HTML sanitization failed, returning escaped text:', e);
+      var div = document.createElement('div');
+      div.textContent = htmlString;
+      return div.innerHTML;
+    }
+  }
+
+  function sanitizeNode(node) {
+    var allowedTags = ['br', 'span', 'b', 'i', 'strong', 'em', 'p'];
+    var allowedClasses = ['hero-title-accent', 'section-title', 'section-sub', 'hb-title', 'hb-desc'];
+    
+    var doc = node.ownerDocument;
+    var cleanNode = doc.createElement(node.tagName);
+    
+    if (node.hasAttributes()) {
+      var attrs = node.attributes;
+      for (var i = 0; i < attrs.length; i++) {
+        var attrName = attrs[i].name.toLowerCase();
+        var attrVal = attrs[i].value;
+        if (attrName === 'class') {
+          var classes = attrVal.split(/\s+/).filter(function (c) {
+            return allowedClasses.indexOf(c) !== -1;
+          }).join(' ');
+          if (classes) {
+            cleanNode.setAttribute('class', classes);
+          }
+        }
+      }
+    }
+    
+    for (var i = 0; i < node.childNodes.length; i++) {
+      var child = node.childNodes[i];
+      if (child.nodeType === Node.TEXT_NODE) {
+        cleanNode.appendChild(doc.createTextNode(child.nodeValue));
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        var tag = child.tagName.toLowerCase();
+        if (allowedTags.indexOf(tag) !== -1) {
+          var cleanChild = sanitizeNode(child);
+          cleanNode.appendChild(cleanChild);
+        }
+      }
+    }
+    return cleanNode;
+  }
+
   // If we found dynamic banners in Firestore, replace the static ones in HTML
   if (dynamicBanners.length > 0) {
     // Keep only the first slide (the original Hero)
@@ -71,20 +137,20 @@
       slideDiv.className = 'hero-carousel-slide hero-carousel-slide--banner';
       slideDiv.setAttribute('data-slide', 'banner');
       
-      const linkUrl = banner.link || '#';
+      const linkUrl = sanitizeUrl(banner.link || '#');
       const cleanWaMsg = `Hola Futunet, me interesa la promoción: ${banner.title.replace(/<[^>]*>/g, '')}`;
       const waUrl = `https://wa.me/${FUTUNET_CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(cleanWaMsg)}`;
 
       slideDiv.innerHTML = `
-        <div class="hb-bg" style="background-image:url('${banner.image || 'img/logo.webp'}')"></div>
+        <div class="hb-bg" style="background-image:url('${escapeAttr(banner.image || 'img/logo.webp')}')"></div>
         <div class="hb-overlay"></div>
         <div class="hb-body">
           <span class="hb-label"><i data-lucide="tag"></i> Promoción</span>
-          <h2 class="hb-title">${banner.title}</h2>
-          <p class="hb-desc">${banner.subtitle || ''}</p>
+          <h2 class="hb-title">${sanitizeHtml(banner.title)}</h2>
+          <p class="hb-desc">${sanitizeHtml(banner.subtitle || '')}</p>
           <div class="hb-actions">
-            <a href="${linkUrl}" class="btn btn-primary">Ver detalles</a>
-            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-wa">
+            <a href="${escapeAttr(linkUrl)}" class="btn btn-primary">Ver detalles</a>
+            <a href="${escapeAttr(waUrl)}" target="_blank" rel="noopener noreferrer" class="btn btn-wa">
               <svg width="16" height="16"><use href="#wa-icon"/></svg> Consultar ahora
             </a>
           </div>

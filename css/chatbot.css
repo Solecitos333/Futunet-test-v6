@@ -447,3 +447,57 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Nuevo contenedor de entrada de texto libre del Chatbot */
+.chatbot-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1.5px solid #e5eef8;
+  border-radius: 16px;
+  padding: 6px 12px;
+  margin-top: 4px;
+  transition: border-color 0.2s;
+}
+.chatbot-input-container:focus-within {
+  border-color: #0b5fc6;
+}
+.chatbot-input-container input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #0a101d;
+  padding: 4px 0;
+}
+.chatbot-input-container input::placeholder {
+  color: #55687d;
+  opacity: 0.8;
+}
+.chatbot-send-btn {
+  background: #0b5fc6;
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  padding: 0;
+}
+.chatbot-send-btn:hover {
+  background: #084896;
+  transform: scale(1.05);
+}
+.chatbot-send-btn svg {
+  transform: rotate(45deg);
+  margin-left: -2px;
+}
+

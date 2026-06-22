@@ -249,28 +249,29 @@
     }
   }
 
-  // Renderiza la cuadrícula de productos en formato de tarjeta premium
   function renderProductsGrid(products, container) {
     var html = '';
     products.forEach(function (p) {
       var priceLabel = p.price ? 'RD$ ' + parseFloat(p.price).toLocaleString('es-DO', { minimumFractionDigits: 2 }) : 'A cotizar';
       var imgUrl = p.img || 'img/placeholder.svg';
+      var escapedId = escapeHtml(p.id);
+      var escapedImg = escapeHtml(imgUrl);
       
       html += '<div class="product-card reveal in">' +
         '  <div class="product-card-badge ' + (p.stock > 0 ? 'badge-in-stock' : 'badge-out-of-stock') + '">' +
         '    ' + (p.stock > 0 ? 'DISPONIBLE' : 'COTIZAR') +
         '  </div>' +
-        '  <a href="producto.html?id=' + p.id + '" class="product-card-img-wrapper">' +
-        '    <img src="' + imgUrl + '" alt="' + escapeHtml(p.title) + '" loading="lazy">' +
+        '  <a href="producto.html?id=' + escapedId + '" class="product-card-img-wrapper">' +
+        '    <img src="' + escapedImg + '" alt="' + escapeHtml(p.title) + '" loading="lazy">' +
         '  </a>' +
         '  <div class="product-card-body">' +
         '    <span class="product-card-brand">' + escapeHtml(p.brand || 'Futunet') + '</span>' +
         '    <h4 class="product-card-title">' +
-        '      <a href="producto.html?id=' + p.id + '">' + escapeHtml(p.title) + '</a>' +
+        '      <a href="producto.html?id=' + escapedId + '">' + escapeHtml(p.title) + '</a>' +
         '    </h4>' +
         '    <div class="product-card-footer">' +
         '      <span class="product-card-price">' + priceLabel + '</span>' +
-        '      <a href="producto.html?id=' + p.id + '" class="btn btn-primary btn-sm product-card-btn" aria-label="Ver detalles de ' + escapeHtml(p.title) + '">Ver equipo</a>' +
+        '      <a href="producto.html?id=' + escapedId + '" class="btn btn-primary btn-sm product-card-btn" aria-label="Ver detalles de ' + escapeHtml(p.title) + '">Ver equipo</a>' +
         '    </div>' +
         '  </div>' +
         '</div>';
@@ -324,13 +325,56 @@
       var phone = document.getElementById('req-phone').value.trim();
       var email = document.getElementById('req-email').value.trim();
       
+      // Validaciones de formato
+      var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      var phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+      
+      if (!emailRegex.test(email)) {
+        showToast('Por favor introduce un correo electrónico válido.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      
+      if (!phoneRegex.test(phone)) {
+        showToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      
+      // Validaciones de longitud para alinearse con Firestore rules
+      if (name.length > 100) {
+        showToast('El nombre no debe superar los 100 caracteres.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      if (email.length > 100) {
+        showToast('El correo electrónico no debe superar los 100 caracteres.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      if (phone.length > 50) {
+        showToast('El teléfono no debe superar los 50 caracteres.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+      
       var companyEl = document.getElementById('req-company');
       var company = companyEl ? companyEl.value.trim() : '';
+      if (company.length > 100) {
+        showToast('El nombre de la empresa no debe superar los 100 caracteres.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
       
       var profileEl = document.getElementById('req-profile');
       var profile = profileEl ? profileEl.value : '';
 
       var message = document.getElementById('req-message').value.trim();
+      if (message.length > 1500) {
+        showToast('El mensaje no debe superar los 1500 caracteres.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
 
       var serviceTitleEl = document.getElementById('service-title');
       var serviceTitleText = serviceTitleEl ? serviceTitleEl.textContent.trim() : 'Servicio Corporativo';
@@ -356,18 +400,23 @@
         if (db) {
           await db.collection('service_requests').add(requestData);
         } else {
-          // Si por alguna razón la BD falla, simulamos envío por WhatsApp como respaldo
-          var waMessage = 'Hola Futunet, me interesa el servicio de ' + serviceTitleText + '.\n\n' +
-                          'Nombre: ' + name + '\n' +
-                          'Teléfono: ' + phone + '\n' +
-                          'Email: ' + email + '\n';
-          if (company) waMessage += 'Empresa: ' + company + '\n';
-          if (profile) waMessage += 'Perfil: ' + (profile === 'pyme' ? 'Pyme / Negocio Local' : 'Gran Empresa / Corporación') + '\n';
-          waMessage += 'Detalles: ' + message;
-          
-          var waText = encodeURIComponent(waMessage);
-          window.open('https://wa.me/18297411041?text=' + waText, '_blank');
-          showToast('Enviando solicitud por WhatsApp...', 'success');
+          // Preguntar consentimiento explícito del usuario antes de abrir WhatsApp (respetar privacidad)
+          var userConsent = confirm('La base de datos de solicitudes no está disponible temporalmente. ¿Deseas enviar tu solicitud a través de WhatsApp para recibir asistencia inmediata?');
+          if (userConsent) {
+            var waMessage = 'Hola Futunet, me interesa el servicio de ' + serviceTitleText + '.\n\n' +
+                            'Nombre: ' + name + '\n' +
+                            'Teléfono: ' + phone + '\n' +
+                            'Email: ' + email + '\n';
+            if (company) waMessage += 'Empresa: ' + company + '\n';
+            if (profile) waMessage += 'Perfil: ' + (profile === 'pyme' ? 'Pyme / Negocio Local' : 'Gran Empresa / Corporación') + '\n';
+            waMessage += 'Detalles: ' + message;
+            
+            var waText = encodeURIComponent(waMessage);
+            window.open('https://wa.me/18297411041?text=' + waText, '_blank');
+            showToast('Enviando solicitud por WhatsApp...', 'success');
+          } else {
+            showToast('Solicitud cancelada.', 'info');
+          }
           if (btn) btn.disabled = false;
           return;
         }

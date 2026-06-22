@@ -3112,9 +3112,9 @@
         html += '<tr>' +
           '  <td data-label="Código"><strong>' + escapeHtml(client.clientCode || 'S/C') + '</strong></td>' +
           '  <td data-label="Nombre"><strong>' + escapeHtml(client.displayName || 'Sin nombre') + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(client.email || '') + '</span></td>' +
-          '  <td data-label="Plan">' + (plans[client.internetPlan] || client.internetPlan || '—') + '</td>' +
+          '  <td data-label="Plan">' + escapeHtml(plans[client.internetPlan] || client.internetPlan || '—') + '</td>' +
           '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
-          '  <td data-label="Teléfono">' + (client.phone || '—') + '</td>' +
+          '  <td data-label="Teléfono">' + escapeHtml(client.phone || '—') + '</td>' +
           '  <td data-label="Acciones" style="text-align:right;">' +
           '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openInternetEdit(\'' + id + '\')">Editar plan</button>' +
           '  </td>' +
@@ -3330,7 +3330,7 @@
       await db.collection('audit_logs').add({
         action: 'Aprobación de pago',
         details: 'Aprobado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
-        userId: currentUserData.id,
+        userId: currentUserData.uid || currentUserData.id || '',
         userEmail: currentUserData.email,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -3356,7 +3356,7 @@
       await db.collection('audit_logs').add({
         action: 'Rechazo de pago',
         details: 'Rechazado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
-        userId: currentUserData.id,
+        userId: currentUserData.uid || currentUserData.id || '',
         userEmail: currentUserData.email,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
@@ -4796,11 +4796,11 @@ function renderPreview() {
   if(!container) return;
   container.innerHTML = '';
   existingGallery.forEach(function(url, idx) {
-    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+url+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeExistingImage('+idx+')\">X</button></div>';
+    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+escapeAttr(url)+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeExistingImage('+idx+')\">X</button></div>';
   });
   uploadFiles.forEach(function(file, idx) {
     var objectUrl = URL.createObjectURL(file);
-    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+objectUrl+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeUploadFile('+idx+')\">X</button></div>';
+    container.innerHTML += '<div class=\"image-thumb-wrapper\"><img src=\"'+escapeAttr(objectUrl)+'\"><button type=\"button\" class=\"image-thumb-remove\" onclick=\"removeUploadFile('+idx+')\">X</button></div>';
   });
 }
 
@@ -4838,7 +4838,7 @@ function renderBannerPreview() {
   container.innerHTML = '';
   if (bannerUploadFile) {
     var url = typeof bannerUploadFile === 'string' ? bannerUploadFile : URL.createObjectURL(bannerUploadFile);
-    container.innerHTML = '<div class="image-thumb-wrapper"><img src="'+url+'"><button type="button" class="image-thumb-remove" onclick="AdminPanel.removeBannerImage()">X</button></div>';
+    container.innerHTML = '<div class="image-thumb-wrapper"><img src="'+escapeAttr(url)+'"><button type="button" class="image-thumb-remove" onclick="AdminPanel.removeBannerImage()">X</button></div>';
   }
 }
 
@@ -4873,6 +4873,6 @@ function renderBrandPreview() {
   container.innerHTML = '';
   if (brandUploadFile) {
     var url = typeof brandUploadFile === 'string' ? brandUploadFile : URL.createObjectURL(brandUploadFile);
-    container.innerHTML = '<div class="image-thumb-wrapper"><img src="'+url+'"><button type="button" class="image-thumb-remove" onclick="AdminPanel.removeBrandImage()">X</button></div>';
+    container.innerHTML = '<div class="image-thumb-wrapper"><img src="'+escapeAttr(url)+'"><button type="button" class="image-thumb-remove" onclick="AdminPanel.removeBrandImage()">X</button></div>';
   }
 }
