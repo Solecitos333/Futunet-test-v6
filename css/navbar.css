@@ -708,3 +708,59 @@
   color: #ffffff !important;
   box-shadow: 0 4px 12px rgba(10, 112, 162, 0.15) !important;
 }
+
+/* =============================================================
+   MOBILE NAVBAR OPTIMIZATION (<768px)
+   ============================================================= */
+@media (max-width: 767px) {
+  /* 1. WhatsApp Button: Turn into a 44px circle with only the icon */
+  .nav-wa-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0 !important;
+  }
+  .nav-wa-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 !important;
+  }
+
+  /* 2. Login Button: Compact padding and font size */
+  .nav-auth-login {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+    gap: 4px !important;
+    height: auto !important;
+  }
+  .nav-auth-login svg,
+  .nav-auth-login [data-lucide] {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* 3. User Avatar/Name (Logged In State): Hide username and chevron */
+  .nav-auth-name,
+  .nav-auth-chevron {
+    display: none !important;
+  }
+  .nav-auth-user {
+    padding: 4px !important;
+  }
+
+  /* 4. Scrolled State Navigation: Hide call-to-actions to give full space to search */
+  #navbar.scrolled .nav-wa-btn,
+  #navbar.scrolled .navbar-auth-container {
+    display: none !important;
+  }
+  #navbar.scrolled .nav-search-compact {
+    flex: 1 1 auto !important;
+    margin-right: 12px !important;
+  }
+}
