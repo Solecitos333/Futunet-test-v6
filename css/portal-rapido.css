@@ -54,7 +54,7 @@
 }
 
 .portal-card {
-  flex: 0 0 calc(40% - 10px);
+  flex: 0 0 calc(46% - 10px);
   scroll-snap-align: start;
   aspect-ratio: 4 / 5;
   position: relative;
@@ -102,7 +102,7 @@
 
 @media (max-width: 575px) {
   .portal-card__content {
-    padding: 14px;
+    padding: 16px;
   }
 }
 
@@ -119,8 +119,8 @@
 
 @media (max-width: 575px) {
   .portal-card__title {
-    font-size: 0.95rem;
-    line-height: 1.2;
+    font-size: 1.05rem;
+    line-height: 1.25;
     margin-bottom: 6px;
   }
 }
