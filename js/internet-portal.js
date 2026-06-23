@@ -1158,6 +1158,11 @@
     var visibleCount = 0;
 
     cards.forEach(function (card) {
+      if (card.classList.contains('claro-speedtest-card')) {
+        card.style.display = '';
+        visibleCount++;
+        return;
+      }
       var cardService = card.getAttribute('data-service');
       var cardType = card.getAttribute('data-type');
       var cardPrice = parseFloat(card.getAttribute('data-price') || 0);
@@ -1205,7 +1210,8 @@
     if (!select) return;
     var sortBy = select.value;
 
-    var cards = Array.prototype.slice.call(grid.querySelectorAll('.claro-card'));
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.claro-card:not(.claro-speedtest-card)'));
+    var speedtestCard = grid.querySelector('.claro-speedtest-card');
 
     if (originalCardElements.length === 0) {
       originalCardElements = cards.slice();
@@ -1235,6 +1241,10 @@
       cards.forEach(function (card) {
         grid.appendChild(card);
       });
+    }
+
+    if (speedtestCard) {
+      grid.appendChild(speedtestCard);
     }
 
     var noResultsMsg = document.getElementById('no-plans-results');

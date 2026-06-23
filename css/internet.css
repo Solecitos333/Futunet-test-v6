@@ -2575,6 +2575,128 @@
 .cov-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(37,211,102,0.3); }
 .cov-cta-report { background: linear-gradient(135deg, #0A70A2, #1da1db); }
 .coverage-city-item i { color: #22c55e; margin-right: 4px; }
+
+/* ── CLARO SPEEDTEST CARD ── */
+.claro-speedtest-card {
+  background: #09101d !important;
+  border: 1px solid rgba(10, 112, 162, 0.15) !important;
+  padding: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+}
+.speedtest-card-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.speedtest-card-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../img/fibra-optica.png');
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+.speedtest-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(9, 16, 29, 0.95) 0%, rgba(9, 16, 29, 0.6) 40%, rgba(9, 16, 29, 0.2) 100%);
+  z-index: 2;
+  transition: opacity 0.4s ease;
+}
+.speedtest-card-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  min-height: 400px;
+  padding: 32px 24px;
+}
+.speedtest-badge {
+  align-self: flex-start;
+  background: rgba(10, 112, 162, 0.2);
+  border: 1.5px solid rgba(10, 112, 162, 0.4);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.speedtest-main {
+  margin-top: auto;
+}
+.speedtest-icon {
+  font-size: 1.8rem;
+  color: #3b82f6;
+  margin-bottom: 12px;
+}
+.speedtest-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+.speedtest-accent-bar {
+  width: 32px;
+  height: 3px;
+  background: #0A70A2;
+  margin-bottom: 12px;
+  transition: width 0.3s ease;
+}
+.speedtest-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 20px;
+  line-height: 1.4;
+}
+.speedtest-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  background: #0A70A2;
+  color: white;
+  border: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* Hover effects */
+.claro-speedtest-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(10, 112, 162, 0.15);
+  border-color: rgba(10, 112, 162, 0.3) !important;
+}
+.claro-speedtest-card:hover .speedtest-card-bg {
+  transform: scale(1.08);
+}
+.claro-speedtest-card:hover .speedtest-accent-bar {
+  width: 64px;
+}
+.claro-speedtest-card:hover .speedtest-btn {
+  background: #085a82;
+}
+
 @media (max-width: 767px) {
   .coverage-checker-row { flex-direction: column; }
   .coverage-check-btn { justify-content: center; }

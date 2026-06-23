@@ -897,6 +897,27 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Tarjeta Speedtest: Mide tu velocidad -->
+              <div class="claro-card claro-speedtest-card" data-service="all" data-type="all">
+                <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" class="speedtest-card-link">
+                  <div class="speedtest-card-bg"></div>
+                  <div class="speedtest-card-overlay"></div>
+                  <div class="speedtest-card-content">
+                    <div class="speedtest-badge">Medidor de velocidad</div>
+                    <div class="speedtest-main">
+                      <div class="speedtest-icon"><i class="fas fa-tachometer-alt"></i></div>
+                      <h3 class="speedtest-title">Mide tu velocidad</h3>
+                      <div class="speedtest-accent-bar"></div>
+                      <p class="speedtest-desc">Comprueba la velocidad de tu conexión actual para saber si necesitas un plan de fibra más rápido.</p>
+                      <span class="speedtest-btn">
+                        Medir velocidad <i class="fas fa-external-link-alt"></i>
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
             </div> <!-- Cierre plans-grid -->
 
             <!-- Dots indicadores de posición (solo visibles en móvil vía CSS) -->
@@ -2193,6 +2214,7 @@
 // También añadir checkbox de comparación
 function buildCompareCheckboxes() {
   document.querySelectorAll('.claro-card').forEach(function(card) {
+    if (card.classList.contains('claro-speedtest-card')) return;
     if (card.querySelector('.compare-checkbox-wrap')) return;
     var name = card.getAttribute('data-name') || '';
     var wrap = document.createElement('label');
