@@ -635,3 +635,64 @@
 .home-b2b-card:hover .home-b2b-card__link i {
   transform: translateX(4px);
 }
+
+/* Carrusel de planes en index para móvil */
+@media (max-width: 767px) {
+  .home-plans-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 16px !important;
+    scroll-behavior: smooth;
+    padding: 10px 15px 25px !important;
+    margin: 0 -15px 10px !important;
+    width: calc(100% + 30px) !important;
+    box-sizing: border-box;
+  }
+  
+  .home-plans-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .home-plans-grid .home-plan-card {
+    flex: 0 0 80vw !important;
+    min-width: 80vw !important;
+    max-width: 300px !important;
+    scroll-snap-align: center !important;
+    margin: 0 !important;
+  }
+  
+  /* Dots en index */
+  .plans-dots {
+    display: flex !important;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 5px;
+    margin-bottom: 25px;
+  }
+  
+  .plans-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  
+  .plans-dot.active {
+    background: #0A70A2;
+    width: 22px;
+    border-radius: 4px;
+  }
+}
+
+@media (min-width: 768px) {
+  .plans-dots {
+    display: none !important;
+  }
+}

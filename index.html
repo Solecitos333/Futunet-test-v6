@@ -680,7 +680,7 @@
         <div class="portal-tab-panel active" id="panel-hogar" role="tabpanel" aria-labelledby="tab-hogar">
           <h3 class="portal-plans-title">Tenemos el mejor plan para ti</h3>
           
-          <div class="home-plans-grid">
+          <div class="home-plans-grid" id="home-plans-hogar-grid">
             <!-- Plan Bronce 20M -->
             <div class="home-plan-card">
               <div class="home-plan-header">
@@ -760,13 +760,14 @@
               </div>
             </div>
           </div>
+          <div class="plans-dots" id="home-plans-hogar-dots" aria-label="Navegación de planes Hogar"></div>
         </div>
 
         <!-- Panel 2: Servicios Empresas -->
         <div class="portal-tab-panel" id="panel-empresas" role="tabpanel" aria-labelledby="tab-empresas">
           <h3 class="portal-plans-title">Conectividad comercial y soluciones IT</h3>
           
-          <div class="home-plans-grid">
+          <div class="home-plans-grid" id="home-plans-empresas-grid">
             <!-- Plan Platino 200M -->
             <div class="home-plan-card">
               <div class="home-plan-header">
@@ -845,6 +846,7 @@
               </div>
             </div>
           </div>
+          <div class="plans-dots" id="home-plans-empresas-dots" aria-label="Navegación de planes Empresas"></div>
         </div>
       </div>
     </div>
@@ -1500,6 +1502,64 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      // ── Carrusel de planes para index (Hogar y Empresas) ──
+      function setupPlansCarousel(gridId, dotsContainerId, globalRefreshName) {
+        var grid = document.getElementById(gridId);
+        var dotsContainer = document.getElementById(dotsContainerId);
+        if (!grid || !dotsContainer) return;
+
+        function isMobile() {
+          return window.innerWidth <= 767;
+        }
+
+        function buildDots() {
+          if (!isMobile()) { dotsContainer.innerHTML = ''; return; }
+          var cards = grid.querySelectorAll('.home-plan-card');
+          dotsContainer.innerHTML = '';
+          if (cards.length <= 1) return;
+          cards.forEach(function(_, i) {
+            var dot = document.createElement('button');
+            dot.className = 'plans-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Plan ' + (i + 1));
+            dot.addEventListener('click', function() {
+              var card = cards[i];
+              grid.scrollTo({ left: card.offsetLeft - grid.offsetLeft, behavior: 'smooth' });
+            });
+            dotsContainer.appendChild(dot);
+          });
+        }
+
+        function updateDots() {
+          if (!isMobile()) return;
+          var cards = grid.querySelectorAll('.home-plan-card');
+          var dots = dotsContainer.querySelectorAll('.plans-dot');
+          if (!dots.length) return;
+          var scrollLeft = grid.scrollLeft;
+          var cardWidth = cards[0] ? cards[0].offsetWidth + 16 : 1; // 16 = gap
+          var idx = Math.round(scrollLeft / cardWidth);
+          dots.forEach(function(d, i) {
+            d.classList.toggle('active', i === idx);
+          });
+        }
+
+        // Inicializar
+        buildDots();
+        grid.addEventListener('scroll', updateDots, { passive: true });
+        window.addEventListener('resize', function() {
+          buildDots();
+        });
+
+        if (globalRefreshName) {
+          window[globalRefreshName] = function() {
+            buildDots();
+            updateDots();
+          };
+        }
+      }
+
+      setupPlansCarousel('home-plans-hogar-grid', 'home-plans-hogar-dots', 'refreshHogarCarousel');
+      setupPlansCarousel('home-plans-empresas-grid', 'home-plans-empresas-dots', 'refreshEmpresasCarousel');
 
       // Lazy-load Google Maps iframe (solo se carga si está cerca del viewport)
       const mapFrame = document.querySelector('.contact-map-frame');

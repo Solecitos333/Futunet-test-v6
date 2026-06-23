@@ -832,6 +832,10 @@ function switchPortalTab(tabName) {
     panelEmpresas.classList.add('active');
     panelHogar.classList.remove('active');
   }
+
+  // Refrescar carruseles de planes en móvil si cambian de tab
+  if (typeof window.refreshHogarCarousel === 'function') window.refreshHogarCarousel();
+  if (typeof window.refreshEmpresasCarousel === 'function') window.refreshEmpresasCarousel();
 }
 window.switchPortalTab = switchPortalTab;
 
