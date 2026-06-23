@@ -736,9 +736,103 @@ function parsePrice(priceString) {
    2. RENDERIZADO PRINCIPAL
    ------------------------------------------------------------- */
 
+function updateContextualBanner() {
+  const bannerEl = document.getElementById('catalog-context-banner');
+  if (!bannerEl) return;
+
+  const dept = state.dept;
+  
+  if (dept === 'all') {
+    bannerEl.style.display = 'none';
+    bannerEl.innerHTML = '';
+    return;
+  }
+
+  let bannerHTML = '';
+  
+  if (dept === 'redes') {
+    bannerHTML = `
+      <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 20px; padding: 25px 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div style="display: flex; gap: 15px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.3rem; flex-shrink: 0;">
+            <i class="fas fa-wifi"></i>
+          </div>
+          <div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">¿Tienes el internet ideal para alimentar tu red?</h4>
+            <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">Un cableado estructurado necesita la mejor salida al exterior. Contrata internet de fibra óptica simétrica de alta velocidad con nosotros.</p>
+          </div>
+        </div>
+        <a href="internet.html" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
+          Ver Planes de Internet
+        </a>
+      </div>
+    `;
+  } else if (dept === 'seguridad') {
+    bannerHTML = `
+      <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 20px; padding: 25px 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div style="display: flex; gap: 15px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.3rem; flex-shrink: 0;">
+            <i class="fas fa-network-wired"></i>
+          </div>
+          <div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">Complementa tu sistema con una red estructurada</h4>
+            <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">Las cámaras IP y sistemas de control de acceso requieren una infraestructura de red sólida y conmutadores PoE confiables para operar sin caídas.</p>
+          </div>
+        </div>
+        <a href="redes-datos.html" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
+          Ver Redes y Datos
+        </a>
+      </div>
+    `;
+  } else if (dept === 'equipos') {
+    bannerHTML = `
+      <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 20px; padding: 25px 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div style="display: flex; gap: 15px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.3rem; flex-shrink: 0;">
+            <i class="fas fa-handshake"></i>
+          </div>
+          <div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">Instala, conecta y administra con un solo proveedor</h4>
+            <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">Te ayudamos con la configuración, el licenciamiento y la conexión de tus nuevos equipos de cómputo en la red de tu oficina local.</p>
+          </div>
+        </div>
+        <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
+          Contactar Soporte B2B
+        </a>
+      </div>
+    `;
+  } else if (dept === 'energia') {
+    bannerHTML = `
+      <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 20px; padding: 25px 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div style="display: flex; gap: 15px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.3rem; flex-shrink: 0;">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">¿Ya tienes respaldo para tu red y seguridad?</h4>
+            <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">Un apagón puede desconfigurar tus switches o apagar tus cámaras de vigilancia. Cotiza sistemas solares o UPS industriales de respaldo.</p>
+          </div>
+        </div>
+        <a href="energia-climatizacion.html" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
+          Ver Energía y Clima
+        </a>
+      </div>
+    `;
+  }
+
+  if (bannerHTML) {
+    bannerEl.innerHTML = bannerHTML;
+    bannerEl.style.display = 'block';
+  } else {
+    bannerEl.style.display = 'none';
+    bannerEl.innerHTML = '';
+  }
+}
+
 function renderUI() {
   const container = document.getElementById('catalog-grid-container');
   if (!container) return;
+  updateContextualBanner();
   container.innerHTML = '';
   const compactMobile = isCompactMobileViewport();
   if (compactMobile && renderCompactMobileCatalogView()) {

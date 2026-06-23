@@ -35,6 +35,36 @@ const BRAND_PREVIEW_IMAGES = {
   'mitsubishi':        'img/brands-preview/mitsubishi.png',
 };
 
+// Mapa de servicios sugeridos y descripciones de venta cruzada por marca
+const BRAND_SERVICE_MAPPING = {
+  'cisco': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'Cisco es nuestro proveedor de confianza para redes y switches de nivel empresarial.' },
+  'juniper': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'Juniper equipa nuestras infraestructuras de enrutamiento y seguridad de datos robustas.' },
+  'mikrotik': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'MikroTik es ideal para balanceo de carga de internet y administración de redes inalámbricas.' },
+  'tp-link': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'TP-Link es nuestra marca de elección para redes Mesh y conectividad rápida.' },
+  'netgear': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'Netgear es el estándar de conectividad confiable para oficinas inteligentes.' },
+  'linksys': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'Linksys ofrece enrutadores residenciales y de oficina ágiles y sencillos.' },
+  'ubiquiti': { name: 'Redes y Datos', url: 'redes-datos.html', icon: 'fa-network-wired', text: 'Ubiquiti (UniFi) es nuestra plataforma favorita de WiFi Mesh de alta gama.' },
+  'hikvision': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'Hikvision es líder en equipamiento para nuestros sistemas de videovigilancia y cámaras IP.' },
+  'dahua': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'Dahua destaca en cámaras inteligentes e integración de CCTV de alta definición.' },
+  'ezviz': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'Ezviz equipa nuestros hogares con cámaras inteligentes inalámbricas autogestionables.' },
+  'paradox': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'Paradox es nuestra marca de referencia para sistemas de alarma contra intrusión.' },
+  'zkteco': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'ZKTeco provee los biométricos y controladores de asistencia para nuestros accesos.' },
+  'uniview': { name: 'Seguridad Electrónica', url: 'seguridad-electronica.html', icon: 'fa-shield-alt', text: 'Uniview destaca en cámaras IP de seguridad activa y monitoreo 24/7.' },
+  'mitsubishi': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-solar-panel', text: 'Mitsubishi Electric provee sistemas de aire acondicionado eficientes de alta gama.' },
+  'victron energy': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-solar-panel', text: 'Victron Energy es nuestra marca de elección para inversores y cargadores solares.' },
+  'schneider electric': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-solar-panel', text: 'Schneider Electric ofrece el mejor respaldo y supresión de picos eléctricos.' },
+  'tesla': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-solar-panel', text: 'Tesla Powerwall e inversores proveen el respaldo energético definitivo.' },
+  'dell': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'Dell es nuestro estándar de laptops corporativas, servidores de datos y estaciones de trabajo.' },
+  'hp': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'HP provee laptops robustas, ordenadores de escritorio e impresoras comerciales.' },
+  'lenovo': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'Lenovo es el líder de fiabilidad y laptops ThinkPad para oficinas de alto ritmo.' },
+  'epson': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'Epson es la marca que integra nuestros sistemas de impresión y proyectores.' },
+  'logitech': { name: 'Equipos de Oficina', url: 'fa-laptop', icon: 'fa-keyboard', text: 'Logitech provee los mejores teclados, mouses y periféricos de videollamada.' },
+  'lg': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-desktop', text: 'LG equipa salas de conferencias y oficinas con pantallas y monitores premium.' },
+  'samsung': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-hdd', text: 'Samsung destaca en almacenamiento SSD ultra-rápido y monitores de oficina.' },
+  'siemens': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-network-wired', text: 'Siemens es ideal para control industrial e infraestructura automatizada de oficinas.' },
+  'panasonic': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-phone-alt', text: 'Panasonic es nuestro proveedor para telefonía IP y centrales analógicas híbridas.' }
+};
+
 // Mapa de logos de marcas por nombre (clave en minúsculas)
 const BRAND_LOGOS = {
   'dell':              'img/marcas/dell.svg',
@@ -201,6 +231,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Enriquecer el hero con imagen del producto
   enrichBrandHero(brandName);
+
+  // Insertar banner de venta cruzada si la marca tiene un servicio sugerido
+  const serviceInfo = BRAND_SERVICE_MAPPING[brandName.toLowerCase().trim()];
+  if (serviceInfo) {
+    const bannerDiv = document.createElement('div');
+    bannerDiv.className = 'cross-selling-banner reveal';
+    bannerDiv.style.cssText = 'max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;';
+    bannerDiv.innerHTML = `
+      <div style="background: linear-gradient(135deg, rgba(15,23,42,0.85) 0%, rgba(13,30,54,0.85) 100%); border: 1.5px dashed rgba(11,126,181,0.3); border-radius: 20px; padding: 25px 35px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; box-shadow: 0 8px 24px rgba(0,0,0,0.15);">
+        <div style="display: flex; gap: 15px; align-items: center; text-align: left; max-width: 700px; flex-grow: 1;">
+          <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(11, 126, 181, 0.15); display: flex; align-items: center; justify-content: center; color: #0EA5E9; font-size: 1.3rem; flex-shrink: 0;">
+            <i class="fas ${serviceInfo.icon}"></i>
+          </div>
+          <div>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">Instalación técnica de equipos ${brandName}</h4>
+            <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">${serviceInfo.text} Además de la venta, proveemos servicios especializados de diseño y soporte en República Dominicana.</p>
+          </div>
+        </div>
+        <a href="${serviceInfo.url}" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
+          Ver Servicio de ${serviceInfo.name}
+        </a>
+      </div>
+    `;
+    container.parentNode.insertBefore(bannerDiv, container);
+  }
 
   // 1. Esperar a que la base de datos esté cargada
   if (window.FutunetData && window.FutunetData.readyPromise) {
