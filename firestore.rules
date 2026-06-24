@@ -194,6 +194,23 @@ service cloud.firestore {
       allow read, write: if isEditorOrAbove();
     }
 
+    // ─── CREATICOS BILLING Collections ───
+    match /creaticos_invoices/{invoiceId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /creaticos_clients/{clientId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /creaticos_payments/{paymentId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /creaticos_products/{productId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /creaticos_settings/{settingId} {
+      allow read, write: if isAdminOrAbove();
+    }
+
     // ─── SERVICE REQUESTS Collection ───
     match /service_requests/{requestId} {
       // Whitelist fields, enforce status 'pending', validate types and limit lengths

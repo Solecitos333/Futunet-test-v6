@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Facturación — Creaticos</title>
+  <meta name="description" content="Sistema de facturación interno y administración para Creaticos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/facturacion-creaticos.css?v=1.0" />
+  <link rel="icon" type="image/png" sizes="192x192" href="img/logo-creaticos.png" />
+  <link rel="shortcut icon" href="img/logo-creaticos.png" />
+  <meta name="theme-color" content="#0f1923" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+  <!-- Mobile Toggle -->
+  <button class="admin-mobile-toggle" id="admin-mobile-toggle" aria-label="Abrir menú">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+  <div class="admin-overlay" id="admin-overlay"></div>
+
+  <div class="admin-layout" id="billing-layout">
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="admin-sidebar" id="admin-sidebar">
+      <button class="admin-sidebar-close" id="admin-sidebar-close" aria-label="Cerrar menú">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <div class="admin-sidebar-logo">
+        <img src="img/logo-creaticos.png" alt="Creaticos" />
+        <span>Creaticos Facturación</span>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-label">Menú Facturación</div>
+        <button class="admin-nav-item is-active" data-nav="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          Dashboard
+        </button>
+        <button class="admin-nav-item" data-nav="invoices">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01M14 14h.01"/></svg>
+          Facturas
+        </button>
+        <button class="admin-nav-item" data-nav="clients">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Clientes
+        </button>
+        <button class="admin-nav-item" data-nav="products">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" x2="7.01" y1="7" y2="7"/></svg>
+          Productos / Servicios
+        </button>
+
+        <div class="admin-nav-label">Configuración</div>
+        <button class="admin-nav-item" data-nav="settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          Ajustes Creaticos
+        </button>
+
+        <a href="admin.html" class="admin-nav-item" style="margin-top: 24px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
+          Volver al Panel General
+        </a>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-info">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div class="admin-user-avatar" id="admin-avatar">?</div>
+            <div style="overflow: hidden;">
+              <div class="admin-user-name" id="admin-name">Cargando...</div>
+              <div class="admin-user-role" id="admin-role">...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <main class="admin-main">
+
+      <!-- ═══ PANEL: DASHBOARD ═══ -->
+      <div class="admin-panel is-active" id="panel-dashboard">
+        <div class="admin-topbar">
+          <h1>Dashboard Creaticos</h1>
+        </div>
+        
+        <div class="admin-stats">
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+            </div>
+            <div class="admin-stat-label">Total Facturado</div>
+            <div class="admin-stat-value" id="stat-total-billed">RD$ 0.00</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="admin-stat-label">Cobrado / Pagado</div>
+            <div class="admin-stat-value" id="stat-total-paid">RD$ 0.00</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-orange">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="admin-stat-label">Pendiente de Cobro</div>
+            <div class="admin-stat-value" id="stat-total-pending">RD$ 0.00</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-stat-icon stat-icon-teal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div class="admin-stat-label">Clientes Activos</div>
+            <div class="admin-stat-value" id="stat-total-clients">0</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;" class="db-grid-container">
+          <!-- Gráfico de Ventas Mensuales -->
+          <div class="admin-table-card" style="padding: 24px;">
+            <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Facturación Mensual
+            </h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+              <canvas id="chart-billing-trend"></canvas>
+            </div>
+          </div>
+
+          <!-- Facturas Recientes -->
+          <div class="admin-table-card" style="display: flex; flex-direction: column;">
+            <div class="admin-table-header" style="border-bottom: 1px solid var(--border-color); padding: 18px 24px;">
+              <h3 style="font-size: 1rem;">Facturas Recientes</h3>
+            </div>
+            <div style="flex: 1; overflow-y: auto; max-height: 300px; padding: 10px;">
+              <table class="admin-table" style="font-size: 0.8rem;">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="db-recent-invoices-body">
+                  <tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:20px;">Cargando recientes...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: INVOICES (FACTURAS) ═══ -->
+      <div class="admin-panel" id="panel-invoices">
+        <div class="admin-topbar">
+          <h1>Gestión de Facturas</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="CreaticosBilling.openNewInvoiceForm()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Nueva Factura
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-table-card">
+          <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <select id="invoice-status-filter" class="admin-select" onchange="CreaticosBilling.renderInvoicesTable()">
+                <option value="all">Todos los estados</option>
+                <option value="pending">Pendientes</option>
+                <option value="paid">Pagadas</option>
+                <option value="cancelled">Anuladas</option>
+              </select>
+              <div class="admin-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="invoice-search" placeholder="Buscar factura..." oninput="CreaticosBilling.renderInvoicesTable()" />
+              </div>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>No. Factura</th>
+                  <th>Cliente</th>
+                  <th>Fecha Emisión</th>
+                  <th>Fecha Venc.</th>
+                  <th>NCF</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="invoices-table-body">
+                <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text-muted);">Cargando facturas...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="invoices-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: NEW/EDIT INVOICE FORM ═══ -->
+      <div class="admin-panel" id="panel-invoice-form">
+        <div class="admin-topbar">
+          <h1 id="invoice-form-title">Crear Nueva Factura</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.switchPanel('invoices')">Cancelar</button>
+          </div>
+        </div>
+
+        <div class="invoice-form-container">
+          <form id="invoice-editor-form" onsubmit="CreaticosBilling.saveInvoice(event)">
+            <input type="hidden" id="form-invoice-id" />
+            
+            <div class="form-grid-3" style="grid-template-columns: 1fr 2fr; margin-bottom: 20px;">
+              <div class="form-group">
+                <label for="form-invoice-doc-type">Tipo de Documento *</label>
+                <select id="form-invoice-doc-type" class="form-input" onchange="CreaticosBilling.handleDocTypeChange(this.value)">
+                  <option value="invoice">Factura de Venta</option>
+                  <option value="quote">Cotización / Propuesta</option>
+                </select>
+              </div>
+              <div id="form-invoice-doc-notes" style="display:flex; align-items:center; font-size:0.8rem; color:var(--text-muted); padding-top:16px;">
+                Crea facturas comerciales estándar o presupuestos informativos para tus clientes.
+              </div>
+            </div>
+
+            <div class="form-grid-3">
+              <div class="form-group autocomplete-wrapper">
+                <label for="form-invoice-client-name">Cliente *</label>
+                <input type="text" id="form-invoice-client-name" class="form-input" placeholder="Escribe el nombre del cliente..." required autocomplete="off" oninput="CreaticosBilling.searchClientAutocomplete(this.value)" />
+                <input type="hidden" id="form-invoice-client-id" />
+                <div class="autocomplete-dropdown" id="client-autocomplete-dropdown"></div>
+              </div>
+              
+              <div class="form-group">
+                <label for="form-invoice-client-rnc">RNC / Cédula</label>
+                <input type="text" id="form-invoice-client-rnc" class="form-input" readonly placeholder="RNC / Cédula del cliente" />
+              </div>
+
+              <div class="form-group">
+                <label for="form-invoice-date">Fecha Emisión *</label>
+                <input type="date" id="form-invoice-date" class="form-input" required />
+              </div>
+            </div>
+
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="form-invoice-due-date">Fecha Vencimiento *</label>
+                <input type="date" id="form-invoice-due-date" class="form-input" required />
+              </div>
+
+              <div class="form-group">
+                <label for="form-invoice-ncf-type">Tipo de Comprobante</label>
+                <select id="form-invoice-ncf-type" class="form-input" onchange="CreaticosBilling.handleNcfTypeChange(this.value)">
+                  <option value="none">Sin Comprobante Fiscal</option>
+                  <option value="B01">Crédito Fiscal (B01)</option>
+                  <option value="B02">Consumidor Final (B02)</option>
+                  <option value="manual">Ingreso Manual de NCF</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="form-invoice-ncf">Número NCF</label>
+                <input type="text" id="form-invoice-ncf" class="form-input" placeholder="Generado automáticamente o manual" readonly />
+              </div>
+            </div>
+
+            <!-- Items Table -->
+            <div style="overflow-x: auto; margin-top: 30px;">
+              <table class="items-table" id="form-items-table">
+                <thead>
+                  <tr>
+                    <th style="width: 40%;">Concepto / Producto *</th>
+                    <th style="width: 15%;">Precio Unitario (RD$) *</th>
+                    <th style="width: 10%;">Cant. *</th>
+                    <th style="width: 15%;">ITBIS (%)</th>
+                    <th style="width: 15%; text-align: right;">Total Línea</th>
+                    <th style="width: 5%;"></th>
+                  </tr>
+                </thead>
+                <tbody id="invoice-form-items-body">
+                  <!-- JS will dynamically inject items here -->
+                </tbody>
+              </table>
+            </div>
+
+            <button type="button" class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.addInvoiceFormItemRow()" style="margin-top: 10px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar Fila
+            </button>
+
+            <!-- Summary -->
+            <div class="invoice-summary">
+              <div class="summary-box">
+                <div class="summary-row">
+                  <span>Subtotal:</span>
+                  <span id="form-summary-subtotal">RD$ 0.00</span>
+                </div>
+                <div class="summary-row">
+                  <span>ITBIS:</span>
+                  <span id="form-summary-itbis">RD$ 0.00</span>
+                </div>
+                <div class="summary-row summary-row-total">
+                  <span>Total General:</span>
+                  <span id="form-summary-total">RD$ 0.00</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-modal-footer" id="invoice-form-buttons" style="margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+              <button type="button" class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.switchPanel('invoices')">Cancelar</button>
+              <button type="submit" class="admin-btn admin-btn-primary">Guardar Factura</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: INVOICE DETAIL VIEW (VISTA FACTURA) ═══ -->
+      <div class="admin-panel" id="panel-invoice-view">
+        <div class="admin-topbar" id="invoice-detail-controls">
+          <h1>Detalle de Factura</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.switchPanel('invoices')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+              Volver
+            </button>
+            <button class="admin-btn admin-btn-secondary" id="btn-view-register-payment" onclick="CreaticosBilling.openRegisterPaymentModal()" style="display:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
+              Registrar Cobro
+            </button>
+            <button class="admin-btn admin-btn-secondary" id="btn-view-convert-invoice" onclick="CreaticosBilling.convertQuoteToInvoice()" style="display:none; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border:none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Convertir a Factura
+            </button>
+            <button class="admin-btn admin-btn-primary" onclick="window.print()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+              Imprimir / PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Printable Invoice Frame -->
+        <div class="printable-invoice-wrapper" id="invoice-print-area">
+          <div class="invoice-header">
+            <div class="company-branding">
+              <img src="img/logo-creaticos.png" alt="Creaticos Logo" id="view-company-logo" />
+              <div class="company-info">
+                <h2 id="view-company-name">Creaticos Papelería</h2>
+                <p><strong>RNC:</strong> <span id="view-company-rnc">Cargando...</span></p>
+                <p><strong>Teléfono:</strong> <span id="view-company-phone">Cargando...</span></p>
+                <p><strong>Correo:</strong> <span id="view-company-email">Cargando...</span></p>
+                <p><strong>Dirección:</strong> <span id="view-company-address">Cargando...</span></p>
+              </div>
+            </div>
+            
+            <div class="billing-meta-box">
+              <h3>FACTURA</h3>
+              <p><strong>No. Factura:</strong> <span id="view-invoice-number">...</span></p>
+              <p><strong>Fecha Emisión:</strong> <span id="view-invoice-date">...</span></p>
+              <p><strong>Fecha Venc.:</strong> <span id="view-invoice-due-date">...</span></p>
+              <p><strong>NCF:</strong> <span id="view-invoice-ncf">...</span></p>
+              <p style="margin-top: 8px;"><strong>Estado:</strong> <span id="view-invoice-status" class="admin-badge">...</span></p>
+            </div>
+          </div>
+
+          <div class="invoice-billing-details">
+            <div class="client-info">
+              <h4>Cliente</h4>
+              <p><strong id="view-client-name">...</strong></p>
+              <p><strong>RNC / Cédula:</strong> <span id="view-client-rnc">...</span></p>
+              <p><strong>Teléfono:</strong> <span id="view-client-phone">...</span></p>
+              <p><strong>Correo:</strong> <span id="view-client-email">...</span></p>
+              <p><strong>Dirección:</strong> <span id="view-client-address">...</span></p>
+            </div>
+            
+            <div class="billing-terms">
+              <h4>Condiciones y Notas</h4>
+              <p><strong>Términos de Pago:</strong> Pago inmediato en vencimiento.</p>
+              <p><strong>Moneda:</strong> Pesos Dominicanos (RD$)</p>
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <table class="invoice-items-preview-table">
+            <thead>
+              <tr>
+                <th>Concepto / Producto</th>
+                <th style="width: 18%; text-align: right;">Precio Unitario</th>
+                <th style="width: 10%; text-align: center;">Cant.</th>
+                <th style="width: 12%; text-align: center;">ITBIS</th>
+                <th style="width: 18%; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody id="view-invoice-items-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+
+          <div class="invoice-preview-summary-box">
+            <!-- Left side: Payment Logs -->
+            <div class="payment-log-box">
+              <h5>Historial de Cobros / Abonos</h5>
+              <ul class="payment-log-list" id="view-invoice-payments-body">
+                <li>No hay cobros registrados para esta factura.</li>
+              </ul>
+            </div>
+
+            <!-- Right side: Mathematical Totals -->
+            <div class="summary-box">
+              <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="view-summary-subtotal">RD$ 0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>ITBIS:</span>
+                <span id="view-summary-itbis">RD$ 0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Total Facturado:</span>
+                <span id="view-summary-total">RD$ 0.00</span>
+              </div>
+              <div class="summary-row" style="color: var(--success); font-weight: 600;">
+                <span>Total Cobrado:</span>
+                <span id="view-summary-paid">RD$ 0.00</span>
+              </div>
+              <div class="summary-row summary-row-total" style="border-top: 1.5px solid var(--border-color); padding-top: 10px;">
+                <span>Balance Pendiente:</span>
+                <span id="view-summary-balance">RD$ 0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: CLIENTS (CLIENTES) ═══ -->
+      <div class="admin-panel" id="panel-clients">
+        <div class="admin-topbar">
+          <h1>Directorio de Clientes</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="CreaticosBilling.openNewClientModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Agregar Cliente
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-table-card">
+          <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>Clientes de Creaticos</h3>
+            <div class="admin-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="clients-search" placeholder="Buscar cliente..." oninput="CreaticosBilling.renderClientsTable()" />
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Cliente / Razón Social</th>
+                  <th>RNC / Cédula</th>
+                  <th>Teléfono</th>
+                  <th>Correo</th>
+                  <th>Dirección</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="clients-table-body">
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">Cargando clientes...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: PRODUCTS (PRODUCTOS / SERVICIOS) ═══ -->
+      <div class="admin-panel" id="panel-products">
+        <div class="admin-topbar">
+          <h1>Productos y Servicios</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="CreaticosBilling.openNewProductModal()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Agregar Ítem
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-table-card">
+          <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>Ítems de Facturación Frecuentes</h3>
+            <div class="admin-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="products-search" placeholder="Buscar ítem..." oninput="CreaticosBilling.renderProductsTable()" />
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Concepto / Ítem</th>
+                  <th>Descripción</th>
+                  <th>Precio Unitario (RD$)</th>
+                  <th>ITBIS Predeterminado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body">
+                <tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-muted);">Cargando productos y servicios...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PANEL: SETTINGS (AJUSTES CREATICOS) ═══ -->
+      <div class="admin-panel" id="panel-settings">
+        <div class="admin-topbar">
+          <h1>Configuración de Creaticos</h1>
+        </div>
+
+        <div class="invoice-form-container" style="max-width:700px;">
+          <form id="settings-editor-form" onsubmit="CreaticosBilling.saveSettings(event)">
+            <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Datos de Identificación de la Empresa</h3>
+            
+            <div class="form-grid-3" style="grid-template-columns: 1fr 1fr;">
+              <div class="form-group">
+                <label for="set-company-name">Nombre / Razón Social *</label>
+                <input type="text" id="set-company-name" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label for="set-company-rnc">RNC de la Empresa *</label>
+                <input type="text" id="set-company-rnc" class="form-input" required />
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="grid-template-columns: 1fr 1fr; margin-top:15px;">
+              <div class="form-group">
+                <label for="set-company-phone">Teléfono *</label>
+                <input type="text" id="set-company-phone" class="form-input" required />
+              </div>
+              <div class="form-group">
+                <label for="set-company-email">Correo Electrónico *</label>
+                <input type="email" id="set-company-email" class="form-input" required />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top:15px; margin-bottom: 30px;">
+              <label for="set-company-address">Dirección Física *</label>
+              <input type="text" id="set-company-address" class="form-input" required />
+            </div>
+
+            <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Configuración de Comprobantes Fiscales (NCF)</h3>
+            
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="set-ncf-b01-prefix">Prefijo B01 (Crédito Fiscal)</label>
+                <input type="text" id="set-ncf-b01-prefix" class="form-input" placeholder="Ej. B0100000" />
+              </div>
+              <div class="form-group">
+                <label for="set-ncf-b01-seq">Siguiente Secuencia B01</label>
+                <input type="number" id="set-ncf-b01-seq" class="form-input" min="1" placeholder="Ej. 1" />
+              </div>
+              <div class="form-group">
+                <label for="set-ncf-b02-prefix">Prefijo B02 (Consumidor Final)</label>
+                <input type="text" id="set-ncf-b02-prefix" class="form-input" placeholder="Ej. B0200000" />
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="grid-template-columns: 1fr 2fr;">
+              <div class="form-group">
+                <label for="set-ncf-b02-seq">Siguiente Secuencia B02</label>
+                <input type="number" id="set-ncf-b02-seq" class="form-input" min="1" placeholder="Ej. 1" />
+              </div>
+              <div class="form-group">
+                <label for="set-invoice-prefix">Prefijo de Factura (Interno)</label>
+                <input type="text" id="set-invoice-prefix" class="form-input" placeholder="Ej. CRE-" />
+              </div>
+            </div>
+
+            <div class="form-grid-3" style="grid-template-columns: 1fr 2fr; margin-top: 15px;">
+              <div class="form-group">
+                <label for="set-invoice-seq">Siguiente Núm. Factura</label>
+                <input type="number" id="set-invoice-seq" class="form-input" min="1" placeholder="Ej. 1001" />
+              </div>
+              <div class="form-group">
+                <label for="set-default-tax">ITBIS Predeterminado (%)</label>
+                <select id="set-default-tax" class="form-input">
+                  <option value="18">18% ITBIS Estándar</option>
+                  <option value="16">16% ITBIS Reducido</option>
+                  <option value="0">Exento de Impuestos (0%)</option>
+                </select>
+              </div>
+            </div>
+
+            <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Configuración de Cotizaciones</h3>
+            
+            <div class="form-grid-3" style="grid-template-columns: 1fr 2fr;">
+              <div class="form-group">
+                <label for="set-quote-prefix">Prefijo de Cotización</label>
+                <input type="text" id="set-quote-prefix" class="form-input" placeholder="Ej. COT-" />
+              </div>
+              <div class="form-group">
+                <label for="set-quote-seq">Siguiente Núm. Cotización</label>
+                <input type="number" id="set-quote-seq" class="form-input" min="1" placeholder="Ej. 1001" />
+              </div>
+            </div>
+
+            <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px; text-align:right;">
+              <button type="submit" class="admin-btn admin-btn-primary">Guardar Configuración</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ═══ MODAL: CLIENT ADD/EDIT ═══ -->
+  <div class="admin-modal" id="modal-client">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h2 id="client-modal-title">Agregar Nuevo Cliente</h2>
+        <button class="admin-modal-close" onclick="CreaticosBilling.closeModal('modal-client')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="client-editor-form" onsubmit="CreaticosBilling.saveClient(event)">
+        <input type="hidden" id="form-client-id" />
+        <div class="admin-modal-body">
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-client-name">Nombre o Razón Social *</label>
+            <input type="text" id="form-client-name" class="form-input" required placeholder="Ej. Juan Pérez o Distribuidora X" />
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-client-rnc">RNC / Cédula</label>
+            <input type="text" id="form-client-rnc" class="form-input" placeholder="Ej. 101-XXXXX-X o 001-XXXXXXX-X" />
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-client-phone">Teléfono</label>
+            <input type="text" id="form-client-phone" class="form-input" placeholder="Ej. 809-555-5555" />
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-client-email">Correo Electrónico</label>
+            <input type="email" id="form-client-email" class="form-input" placeholder="Ej. cliente@correo.com" />
+          </div>
+          <div class="form-group">
+            <label for="form-client-address">Dirección</label>
+            <input type="text" id="form-client-address" class="form-input" placeholder="Ej. Av. Winston Churchill #12" />
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.closeModal('modal-client')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Guardar Cliente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: PRODUCT ADD/EDIT ═══ -->
+  <div class="admin-modal" id="modal-product">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h2 id="product-modal-title">Agregar Producto / Servicio</h2>
+        <button class="admin-modal-close" onclick="CreaticosBilling.closeModal('modal-product')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="product-editor-form" onsubmit="CreaticosBilling.saveProduct(event)">
+        <input type="hidden" id="form-product-id" />
+        <div class="admin-modal-body">
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-product-name">Concepto / Nombre del Ítem *</label>
+            <input type="text" id="form-product-name" class="form-input" required placeholder="Ej. Libreta Personalizada Creaticos" />
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-product-description">Descripción corta</label>
+            <input type="text" id="form-product-description" class="form-input" placeholder="Ej. Pasta dura, 100 hojas a rayas" />
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-product-price">Precio Unitario (RD$) *</label>
+            <input type="number" id="form-product-price" class="form-input" step="0.01" min="0" required placeholder="Ej. 350.00" />
+          </div>
+          <div class="form-group">
+            <label for="form-product-tax">Tasa ITBIS Predeterminada</label>
+            <select id="form-product-tax" class="form-input">
+              <option value="18">18% ITBIS Estándar</option>
+              <option value="16">16% ITBIS Reducido</option>
+              <option value="0">Exento (0%)</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.closeModal('modal-product')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Guardar Ítem</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: REGISTER PAYMENT (REGISTRAR COBRO) ═══ -->
+  <div class="admin-modal" id="modal-payment">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h2>Registrar Cobro / Abono</h2>
+        <button class="admin-modal-close" onclick="CreaticosBilling.closeModal('modal-payment')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="payment-register-form" onsubmit="CreaticosBilling.registerPayment(event)">
+        <input type="hidden" id="form-payment-invoice-id" />
+        <div class="admin-modal-body">
+          <div style="background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Total Facturado:</span>
+              <strong id="payment-info-total">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Monto Cobrado:</span>
+              <strong style="color:var(--success)" id="payment-info-paid">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-color); padding-top:6px; margin-top:6px;">
+              <span>Balance Pendiente:</span>
+              <strong style="color:var(--danger)" id="payment-info-balance">RD$ 0.00</strong>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-payment-amount">Monto a Cobrar (RD$) *</label>
+            <input type="number" id="form-payment-amount" class="form-input" step="0.01" min="0.01" required />
+          </div>
+          
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-payment-method">Método de Pago *</label>
+            <select id="form-payment-method" class="form-input" required>
+              <option value="Transferencia">Transferencia Bancaria</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Tarjeta">Tarjeta de Crédito / Débito</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="form-payment-notes">Referencia / Notas</label>
+            <input type="text" id="form-payment-notes" class="form-input" placeholder="Ej. Transf. Banco Popular Ref: #12345" />
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="CreaticosBilling.closeModal('modal-payment')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Registrar Pago</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js"></script>
+  <script defer src="js/auth.js"></script>
+  <script defer src="js/auth-guard.js"></script>
+  <script defer src="js/facturacion-creaticos.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.lucide) lucide.createIcons();
+
+      // Protect route - Only allow admins and superadmins
+      FutunetGuard.requireAdmin(function (user, userData) {
+        var layout = document.getElementById('billing-layout');
+        if (layout) layout.classList.add('is-loaded');
+
+        // Set sidebar user details
+        var avatar = document.getElementById('admin-avatar');
+        var name = document.getElementById('admin-name');
+        var role = document.getElementById('admin-role');
+        if (avatar) avatar.textContent = (userData.displayName || '?').charAt(0).toUpperCase();
+        if (name) name.textContent = userData.displayName || userData.email || '';
+        if (role) role.textContent = (userData.role || 'admin').toUpperCase();
+
+        // Initialize our billing script
+        CreaticosBilling.init();
+      });
+
+      // ─── Sidebar Navigation Tabs ───
+      var navItems = document.querySelectorAll('[data-nav]');
+      var panels = document.querySelectorAll('.admin-panel');
+
+      navItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          var target = this.getAttribute('data-nav');
+          navItems.forEach(function (i) { i.classList.remove('is-active'); });
+          panels.forEach(function (p) { p.classList.remove('is-active'); });
+          this.classList.add('is-active');
+          
+          var panel = document.getElementById('panel-' + target);
+          if (panel) panel.classList.add('is-active');
+
+          // Trigger special panel load events
+          if (target === 'dashboard') {
+            CreaticosBilling.initDashboard();
+          } else if (target === 'invoices') {
+            CreaticosBilling.renderInvoicesTable();
+          } else if (target === 'clients') {
+            CreaticosBilling.renderClientsTable();
+          } else if (target === 'products') {
+            CreaticosBilling.renderProductsTable();
+          } else if (target === 'settings') {
+            CreaticosBilling.loadSettingsForm();
+          }
+
+          // Close mobile sidebar
+          var sidebar = document.getElementById('admin-sidebar');
+          var overlay = document.getElementById('admin-overlay');
+          if (sidebar) sidebar.classList.remove('is-open');
+          if (overlay) overlay.classList.remove('is-open');
+        });
+      });
+
+      // ─── Mobile sidebar toggle ───
+      var toggleBtn = document.getElementById('admin-mobile-toggle');
+      var closeBtn = document.getElementById('admin-sidebar-close');
+      var sidebar = document.getElementById('admin-sidebar');
+      var overlay = document.getElementById('admin-overlay');
+
+      function openSidebar() {
+        if (sidebar) sidebar.classList.add('is-open');
+        if (overlay) overlay.classList.add('is-open');
+      }
+      function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('is-open');
+        if (overlay) overlay.classList.remove('is-open');
+      }
+
+      if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+      if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+      if (overlay) overlay.addEventListener('click', closeSidebar);
+    });
+  </script>
+</body>
+</html>

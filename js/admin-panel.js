@@ -131,10 +131,16 @@
     initBrandUploader();
     initRealTimeBadges();
 
-    // Auto-migrate hidden items ONCE without user intervention
+    // Auto-migrate hidden items ONCE without user intervention (only if DB is empty)
     if (currentUserData.role === 'superadmin' && !localStorage.getItem('futunet_auto_migrated_v2')) {
       localStorage.setItem('futunet_auto_migrated_v2', 'true');
-      syncToFirebase();
+      db.collection('products').limit(1).get().then(function (snapshot) {
+        if (snapshot.empty) {
+          syncToFirebase();
+        }
+      }).catch(function (err) {
+        console.warn('Error checking products collection for auto-migrate:', err);
+      });
     }
   }
 
