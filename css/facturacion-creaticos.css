@@ -392,13 +392,16 @@ body {
 /* ─── Actions Button Group ─── */
 .table-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  align-items: center;
 }
 .table-btn {
-  background: none;
-  border: none;
-  padding: 6px;
-  border-radius: 8px;
+  background: #f8fafc;
+  border: 1.5px solid var(--border-color);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   cursor: pointer;
   color: var(--text-muted);
   transition: all 0.2s;
@@ -407,16 +410,30 @@ body {
   justify-content: center;
 }
 .table-btn:hover {
+  transform: translateY(-1px);
   background: #f1f5f9;
   color: var(--text-main);
-}
-.table-btn-danger:hover {
-  background: #fef2f2;
-  color: var(--danger);
+  border-color: #cbd5e1;
 }
 .table-btn-primary:hover {
   background: #eef2ff;
+  border-color: rgba(99, 102, 241, 0.3);
   color: var(--primary);
+}
+.table-btn-secondary:hover {
+  background: #f0fdfa;
+  border-color: rgba(20, 184, 166, 0.3);
+  color: var(--secondary);
+}
+.table-btn-success:hover {
+  background: #ecfdf5;
+  border-color: rgba(16, 185, 129, 0.3);
+  color: var(--success);
+}
+.table-btn-danger:hover {
+  background: #fef2f2;
+  border-color: rgba(239, 68, 68, 0.3);
+  color: var(--danger);
 }
 
 /* ─── Create Invoice Form Styles ─── */
@@ -872,4 +889,74 @@ body {
     color: #ef4444 !important;
     border: 1px solid #ef4444 !important;
   }
+}
+
+/* ─── ERP Subtabs Navigation ─── */
+.erp-subtabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 20px;
+  padding-bottom: 2px;
+}
+.erp-subtab-btn {
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 10px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+.erp-subtab-btn:hover {
+  color: var(--primary-hover);
+}
+.erp-subtab-btn.is-active {
+  color: var(--primary);
+}
+.erp-subtab-btn.is-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+/* ─── ERP Tab Content Visibility ─── */
+.erp-tab-content {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+.erp-tab-content.is-active {
+  display: block;
+}
+
+/* ─── Advanced Filter Bar ─── */
+.erp-filter-bar {
+  background: #f8fafc;
+  border-bottom: 1.5px solid var(--border-color);
+  padding: 16px 20px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.erp-filter-bar .form-group {
+  flex: 1;
+  min-width: 150px;
+  margin-bottom: 0;
+}
+.erp-filter-bar .form-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  display: block;
 }

@@ -20,6 +20,7 @@ window.CreaticosBilling = (function () {
   
   let currentInvoiceItems = [];
   let dashboardChart = null;
+  let returnToInvoice = false;
 
   // Pagination for Invoices
   let invoiceCurrentPage = 1;
@@ -48,6 +49,12 @@ window.CreaticosBilling = (function () {
       // Backward compatibility for quote settings
       if (settings.quotePrefix === undefined) settings.quotePrefix = 'COT-';
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
+      if (settings.ncfB14Prefix === undefined) settings.ncfB14Prefix = 'B1400000';
+      if (settings.ncfB14Seq === undefined) settings.ncfB14Seq = 1;
+      if (settings.ncfB15Prefix === undefined) settings.ncfB15Prefix = 'B1500000';
+      if (settings.ncfB15Seq === undefined) settings.ncfB15Seq = 1;
+      if (settings.ncfB12Prefix === undefined) settings.ncfB12Prefix = 'B1200000';
+      if (settings.ncfB12Seq === undefined) settings.ncfB12Seq = 1;
     } else {
       // Default initial settings
       settings = {
@@ -64,6 +71,12 @@ window.CreaticosBilling = (function () {
         ncfB01Seq: 1,
         ncfB02Prefix: 'B0200000',
         ncfB02Seq: 1,
+        ncfB14Prefix: 'B1400000',
+        ncfB14Seq: 1,
+        ncfB15Prefix: 'B1500000',
+        ncfB15Seq: 1,
+        ncfB12Prefix: 'B1200000',
+        ncfB12Seq: 1,
         defaultTax: 18
       };
       await docRef.set(settings);
@@ -300,16 +313,66 @@ window.CreaticosBilling = (function () {
   function renderInvoicesTable() {
     switchPanel('invoices');
 
+    const startDateVal = document.getElementById('filter-invoice-start-date').value;
+    const endDateVal = document.getElementById('filter-invoice-end-date').value;
     const statusFilter = document.getElementById('invoice-status-filter').value;
-    const searchVal = document.getElementById('invoice-search').value.toLowerCase();
+    const ncfFilter = document.getElementById('invoice-ncf-filter').value;
+    const searchVal = document.getElementById('invoice-search').value.toLowerCase().trim();
 
     // Filter array
     let filtered = invoices.filter(inv => {
-      const matchStatus = (statusFilter === 'all') || (inv.status === statusFilter);
-      const matchSearch = inv.invoiceNumber.toLowerCase().includes(searchVal) ||
-                          inv.clientName.toLowerCase().includes(searchVal) ||
-                          (inv.ncf && inv.ncf.toLowerCase().includes(searchVal));
-      return matchStatus && matchSearch;
+      // 1. Status Filter
+      let matchStatus = true;
+      if (statusFilter !== 'all') {
+        matchStatus = (inv.status === statusFilter);
+      }
+
+      // 2. NCF Filter
+      let matchNcf = true;
+      if (ncfFilter !== 'all') {
+        if (ncfFilter === 'none') {
+          matchNcf = !inv.ncf || inv.ncf === '';
+        } else {
+          matchNcf = inv.ncf && inv.ncf.startsWith(ncfFilter);
+        }
+      }
+
+      // 3. Date Filter
+      let matchDate = true;
+      let invDate = null;
+      if (inv.date) {
+        invDate = new Date(inv.date);
+      }
+      if (invDate) {
+        invDate.setHours(0,0,0,0);
+        if (startDateVal) {
+          const startDate = new Date(startDateVal);
+          startDate.setHours(0,0,0,0);
+          if (invDate < startDate) matchDate = false;
+        }
+        if (endDateVal) {
+          const endDate = new Date(endDateVal);
+          endDate.setHours(0,0,0,0);
+          if (invDate > endDate) matchDate = false;
+        }
+      } else if (startDateVal || endDateVal) {
+        matchDate = false;
+      }
+
+      // 4. Search Filter
+      let matchSearch = true;
+      if (searchVal) {
+        const clientName = (inv.clientName || '').toLowerCase();
+        const clientRnc = (inv.clientRnc || '').toLowerCase();
+        const invoiceNum = (inv.invoiceNumber || '').toLowerCase();
+        const ncfVal = (inv.ncf || '').toLowerCase();
+        matchSearch = clientName.includes(searchVal) ||
+                      clientRnc.includes(searchVal) ||
+                      invoiceNum.includes(searchVal) ||
+                      ncfVal.includes(searchVal);
+      }
+
+      return matchStatus && matchNcf && matchDate && matchSearch;
     });
 
     // Pagination bounds
@@ -346,6 +409,42 @@ window.CreaticosBilling = (function () {
         statusBadge = '<span class="admin-badge badge-cancelled">Anulada</span>';
       }
 
+      const balance = Number(inv.total) - Number(inv.paidAmount || 0);
+
+      let actionsHtml = `
+        <div class="table-actions">
+          <button class="table-btn table-btn-primary" title="Ver Detalle" onclick="CreaticosBilling.viewInvoice('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" onclick="CreaticosBilling.printInvoiceDirectly('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          </button>
+      `;
+
+      if (inv.status !== 'cancelled') {
+        if (inv.docType === 'quote') {
+          actionsHtml += `
+            <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="CreaticosBilling.convertQuoteFromList('${inv.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          `;
+        } else if (inv.status === 'pending' && balance > 0) {
+          actionsHtml += `
+            <button class="table-btn table-btn-success" title="Registrar Cobro" onclick="CreaticosBilling.openRegisterPaymentFromList('${inv.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
+            </button>
+          `;
+        }
+
+        actionsHtml += `
+          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="CreaticosBilling.cancelInvoice('${inv.id}', '${inv.invoiceNumber}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+          </button>
+        `;
+      }
+
+      actionsHtml += `</div>`;
+
       tr.innerHTML = `
         <td><strong>${inv.invoiceNumber}</strong></td>
         <td>${inv.clientName}</td>
@@ -354,18 +453,7 @@ window.CreaticosBilling = (function () {
         <td>${inv.ncf || '<span style="color:#cbd5e1;font-size:0.8rem;">Ninguno</span>'}</td>
         <td>${formatMoney(inv.total)}</td>
         <td>${statusBadge}</td>
-        <td>
-          <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Ver Detalle" onclick="CreaticosBilling.viewInvoice('${inv.id}')">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-            ${inv.status !== 'cancelled' ? `
-              <button class="table-btn table-btn-danger" title="Anular Factura" onclick="CreaticosBilling.cancelInvoice('${inv.id}', '${inv.invoiceNumber}')">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
-              </button>
-            ` : ''}
-          </div>
-        </td>
+        <td>${actionsHtml}</td>
       `;
       tbody.appendChild(tr);
     });
@@ -404,7 +492,8 @@ window.CreaticosBilling = (function () {
 
   // Reset form and view Create Panel
   function openNewInvoiceForm() {
-    switchPanel('invoice-form');
+    switchPanel('invoices');
+    switchSubTab('invoices', 'form');
     document.getElementById('invoice-form-title').textContent = 'Crear Nueva Factura';
     
     // Clear fields
@@ -630,7 +719,7 @@ window.CreaticosBilling = (function () {
       item.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="16" x2="22" y1="11" y2="11"/></svg> + Registrar "${val}" como nuevo cliente</span>`;
       item.onclick = function() {
         dropdown.style.display = 'none';
-        openNewClientModal(val);
+        openNewClientForm(val);
       };
       dropdown.appendChild(item);
     } else {
@@ -650,8 +739,6 @@ window.CreaticosBilling = (function () {
 
     dropdown.style.display = 'block';
   }
-
-  // Handle sequential generation of Dominican NCFs
   function handleNcfTypeChange(type) {
     const ncfInput = document.getElementById('form-invoice-ncf');
     if (type === 'none') {
@@ -669,6 +756,18 @@ window.CreaticosBilling = (function () {
       ncfInput.setAttribute('readonly', 'true');
       const sequence = String(settings.ncfB02Seq).padStart(8, '0');
       ncfInput.value = settings.ncfB02Prefix + sequence;
+    } else if (type === 'B14') {
+      ncfInput.setAttribute('readonly', 'true');
+      const sequence = String(settings.ncfB14Seq || 1).padStart(8, '0');
+      ncfInput.value = (settings.ncfB14Prefix || 'B1400000') + sequence;
+    } else if (type === 'B15') {
+      ncfInput.setAttribute('readonly', 'true');
+      const sequence = String(settings.ncfB15Seq || 1).padStart(8, '0');
+      ncfInput.value = (settings.ncfB15Prefix || 'B1500000') + sequence;
+    } else if (type === 'B12') {
+      ncfInput.setAttribute('readonly', 'true');
+      const sequence = String(settings.ncfB12Seq || 1).padStart(8, '0');
+      ncfInput.value = (settings.ncfB12Prefix || 'B1200000') + sequence;
     }
   }
 
@@ -779,6 +878,12 @@ window.CreaticosBilling = (function () {
         settingsUpdates.ncfB01Seq = settings.ncfB01Seq + 1;
       } else if (ncfType === 'B02') {
         settingsUpdates.ncfB02Seq = settings.ncfB02Seq + 1;
+      } else if (ncfType === 'B14') {
+        settingsUpdates.ncfB14Seq = (settings.ncfB14Seq || 1) + 1;
+      } else if (ncfType === 'B15') {
+        settingsUpdates.ncfB15Seq = (settings.ncfB15Seq || 1) + 1;
+      } else if (ncfType === 'B12') {
+        settingsUpdates.ncfB12Seq = (settings.ncfB12Seq || 1) + 1;
       }
     }
 
@@ -789,6 +894,7 @@ window.CreaticosBilling = (function () {
     await fetchAllData();
     
     // Go to Invoices list
+    switchSubTab('invoices', 'list');
     renderInvoicesTable();
   }
 
@@ -946,45 +1052,7 @@ window.CreaticosBilling = (function () {
     const convertBtn = document.getElementById('btn-view-convert-invoice');
     if (!convertBtn) return;
     const quoteId = convertBtn.getAttribute('data-quote-id');
-    const inv = invoices.find(i => i.id === quoteId);
-    if (!inv) return;
-
-    // Load form with details
-    switchPanel('invoice-form');
-    document.getElementById('invoice-form-title').textContent = 'Convertir Cotización a Factura';
-    
-    document.getElementById('form-invoice-id').value = ''; // Save as a NEW document (invoice)
-    document.getElementById('form-invoice-client-name').value = inv.clientName;
-    document.getElementById('form-invoice-client-id').value = inv.clientId;
-    document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
-    
-    // Set dates
-    const today = new Date();
-    document.getElementById('form-invoice-date').value = today.toISOString().split('T')[0];
-    const dueDate = new Date();
-    dueDate.setDate(today.getDate() + 15);
-    document.getElementById('form-invoice-due-date').value = dueDate.toISOString().split('T')[0];
-
-    // Force docType to invoice
-    const docTypeSelect = document.getElementById('form-invoice-doc-type');
-    if (docTypeSelect) {
-      docTypeSelect.value = 'invoice';
-      handleDocTypeChange('invoice');
-    }
-
-    // Populate items
-    const tbody = document.getElementById('invoice-form-items-body');
-    tbody.innerHTML = '';
-
-    inv.items.forEach(item => {
-      addInvoiceFormItemRow({
-        productId: item.productId,
-        description: item.description,
-        price: item.price,
-        qty: item.qty,
-        tax: item.tax
-      });
-    });
+    convertQuoteFromList(quoteId);
   }
 
   // ═══════════════════════════════════════════
@@ -993,21 +1061,7 @@ window.CreaticosBilling = (function () {
   function openRegisterPaymentModal() {
     const payBtn = document.getElementById('btn-view-register-payment');
     const invId = payBtn.getAttribute('data-inv-id');
-    const total = Number(payBtn.getAttribute('data-inv-total'));
-    const paid = Number(payBtn.getAttribute('data-inv-paid'));
-    const balance = Number(payBtn.getAttribute('data-inv-balance'));
-
-    document.getElementById('form-payment-invoice-id').value = invId;
-    document.getElementById('payment-info-total').textContent = formatMoney(total);
-    document.getElementById('payment-info-paid').textContent = formatMoney(paid);
-    document.getElementById('payment-info-balance').textContent = formatMoney(balance);
-
-    // Pre-fill amount field to full pending balance
-    document.getElementById('form-payment-amount').value = balance.toFixed(2);
-    document.getElementById('form-payment-amount').setAttribute('max', balance.toFixed(2));
-    document.getElementById('form-payment-notes').value = '';
-
-    openModal('modal-payment');
+    openRegisterPaymentFromList(invId);
   }
 
   async function registerPayment(e) {
@@ -1099,7 +1153,7 @@ window.CreaticosBilling = (function () {
         <td>${c.address || '—'}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditClientModal('${c.id}')">
+            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditClientForm('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
             <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteClient('${c.id}', '${c.name}')">
@@ -1112,8 +1166,10 @@ window.CreaticosBilling = (function () {
     });
   }
 
-  function openNewClientModal(prefilledName = '') {
-    document.getElementById('client-modal-title').textContent = 'Agregar Nuevo Cliente';
+  function openNewClientForm(prefilledName = '') {
+    const titleEl = document.getElementById('client-form-title');
+    if (titleEl) titleEl.textContent = 'Agregar Nuevo Cliente';
+
     document.getElementById('form-client-id').value = '';
     document.getElementById('form-client-name').value = prefilledName;
     document.getElementById('form-client-rnc').value = '';
@@ -1121,14 +1177,26 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-client-email').value = '';
     document.getElementById('form-client-address').value = '';
 
-    openModal('modal-client');
+    // Check if we are coming from invoice autocomplete
+    const invoicePanel = document.getElementById('panel-invoices');
+    const invoiceFormTab = document.getElementById('subtab-invoices-form');
+    if (invoicePanel && invoicePanel.classList.contains('is-active') && invoiceFormTab && invoiceFormTab.classList.contains('is-active')) {
+      returnToInvoice = true;
+    } else {
+      returnToInvoice = false;
+    }
+
+    switchPanel('clients');
+    switchSubTab('clients', 'form');
   }
 
-  function openEditClientModal(clientId) {
+  function openEditClientForm(clientId) {
     const c = clients.find(item => item.id === clientId);
     if (!c) return;
 
-    document.getElementById('client-modal-title').textContent = 'Editar Cliente';
+    const titleEl = document.getElementById('client-form-title');
+    if (titleEl) titleEl.textContent = 'Editar Cliente';
+
     document.getElementById('form-client-id').value = c.id;
     document.getElementById('form-client-name').value = c.name;
     document.getElementById('form-client-rnc').value = c.rnc || '';
@@ -1136,7 +1204,10 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-client-email').value = c.email || '';
     document.getElementById('form-client-address').value = c.address || '';
 
-    openModal('modal-client');
+    returnToInvoice = false;
+
+    switchPanel('clients');
+    switchSubTab('clients', 'form');
   }
 
   async function saveClient(e) {
@@ -1152,6 +1223,7 @@ window.CreaticosBilling = (function () {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
+    let savedId = id;
     if (id) {
       // Update
       await getDB().collection('creaticos_clients').doc(id).update(clientData);
@@ -1159,22 +1231,21 @@ window.CreaticosBilling = (function () {
       // Create
       clientData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
       const newDoc = await getDB().collection('creaticos_clients').add(clientData);
-      
-      // If we are currently filling the invoice creation form, select this new client
-      const formInvoicePanel = document.getElementById('panel-invoice-form');
-      if (formInvoicePanel && formInvoicePanel.classList.contains('is-active')) {
-        document.getElementById('form-invoice-client-name').value = clientData.name;
-        document.getElementById('form-invoice-client-id').value = newDoc.id;
-        document.getElementById('form-invoice-client-rnc').value = clientData.rnc || 'No registrado';
-      }
+      savedId = newDoc.id;
     }
 
-    closeModal('modal-client');
     await fetchAllData();
-    
-    // Refresh client list table if in clients view
-    const panelClients = document.getElementById('panel-clients');
-    if (panelClients && panelClients.classList.contains('is-active')) {
+
+    if (returnToInvoice) {
+      returnToInvoice = false;
+      document.getElementById('form-invoice-client-name').value = clientData.name;
+      document.getElementById('form-invoice-client-id').value = savedId;
+      document.getElementById('form-invoice-client-rnc').value = clientData.rnc || 'No registrado';
+      
+      switchPanel('invoices');
+      switchSubTab('invoices', 'form');
+    } else {
+      switchSubTab('clients', 'list');
       renderClientsTable();
     }
   }
@@ -1203,7 +1274,6 @@ window.CreaticosBilling = (function () {
     const sourceEl = document.getElementById('products-source-filter');
     const source = sourceEl ? sourceEl.value : 'creaticos';
     
-    // Set active products based on selection
     products = source === 'creaticos' ? creaticosProducts : futunetProducts;
 
     const searchVal = document.getElementById('products-search').value.toLowerCase();
@@ -1211,7 +1281,14 @@ window.CreaticosBilling = (function () {
     const filtered = products.filter(p => {
       const name = p.name || p.title || '';
       const desc = p.description || p.desc || '';
-      return name.toLowerCase().includes(searchVal) || desc.toLowerCase().includes(searchVal);
+      const sku = p.sku || '';
+      const ref = p.reference || p.ref || '';
+      const barcode = p.barcode || '';
+      return name.toLowerCase().includes(searchVal) || 
+             desc.toLowerCase().includes(searchVal) ||
+             sku.toLowerCase().includes(searchVal) ||
+             ref.toLowerCase().includes(searchVal) ||
+             barcode.toLowerCase().includes(searchVal);
     });
 
     const tbody = document.getElementById('products-table-body');
@@ -1230,14 +1307,25 @@ window.CreaticosBilling = (function () {
       const tax = p.tax !== undefined ? `${p.tax}% ITBIS` : '18% ITBIS (Al facturar)';
       const isCreaticosVal = p._isCreaticos ? 'true' : 'false';
 
+      let codesHtml = '';
+      if (p.sku || p.reference || p.ref) {
+        const codes = [];
+        if (p.sku) codes.push(`SKU: <span class="admin-code-badge">${p.sku}</span>`);
+        if (p.reference || p.ref) codes.push(`Ref: <span class="admin-code-badge">${p.reference || p.ref}</span>`);
+        codesHtml = `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:flex; gap:8px;">${codes.join(' | ')}</div>`;
+      }
+
       tr.innerHTML = `
-        <td><strong>${name}</strong></td>
+        <td>
+          <strong>${name}</strong>
+          ${codesHtml}
+        </td>
         <td>${desc}</td>
         <td>${formatMoney(price)}</td>
         <td>${tax}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditProductModal('${p.id}', ${isCreaticosVal})">
+            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditProductForm('${p.id}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
             <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteProduct('${p.id}', '${name.replace(/'/g, "\\'")}', ${isCreaticosVal})">
@@ -1267,14 +1355,20 @@ window.CreaticosBilling = (function () {
     }
   }
 
-  function openNewProductModal() {
-    document.getElementById('product-modal-title').textContent = 'Agregar Producto / Servicio';
+  function openNewProductForm() {
+    const titleEl = document.getElementById('product-form-title');
+    if (titleEl) titleEl.textContent = 'Agregar Producto / Servicio';
+
     document.getElementById('form-product-id').value = '';
     document.getElementById('form-product-name').value = '';
     document.getElementById('form-product-description').value = '';
     document.getElementById('form-product-price').value = '';
     document.getElementById('form-product-tax').value = settings.defaultTax.toString();
     
+    document.getElementById('form-product-sku').value = '';
+    document.getElementById('form-product-reference').value = '';
+    document.getElementById('form-product-barcode').value = '';
+
     const sourceFilter = document.getElementById('products-source-filter');
     const activeSource = sourceFilter ? sourceFilter.value : 'creaticos';
     
@@ -1288,19 +1382,28 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-product-category').value = 'Otros';
 
     handleModalSourceChange();
-    openModal('modal-product');
+    switchPanel('products');
+    switchSubTab('products', 'form');
   }
 
-  function openEditProductModal(productId, isCreaticos) {
+  function openEditProductForm(productId, isCreaticos) {
     const activeProducts = isCreaticos ? creaticosProducts : futunetProducts;
     const p = activeProducts.find(item => item.id === productId);
     if (!p) return;
 
-    document.getElementById('product-modal-title').textContent = isCreaticos ? 'Editar Producto / Servicio (Creaticos)' : 'Editar Producto (Futunet)';
+    const titleEl = document.getElementById('product-form-title');
+    if (titleEl) {
+      titleEl.textContent = isCreaticos ? 'Editar Producto / Servicio (Creaticos)' : 'Editar Producto (Futunet)';
+    }
+
     document.getElementById('form-product-id').value = p.id;
     document.getElementById('form-product-name').value = p.name || p.title || '';
     document.getElementById('form-product-description').value = p.description || p.desc || '';
     document.getElementById('form-product-price').value = p.price;
+    
+    document.getElementById('form-product-sku').value = p.sku || '';
+    document.getElementById('form-product-reference').value = p.reference || p.ref || '';
+    document.getElementById('form-product-barcode').value = p.barcode || '';
 
     const sourceSelect = document.getElementById('form-product-source');
     if (sourceSelect) {
@@ -1316,7 +1419,8 @@ window.CreaticosBilling = (function () {
     }
 
     handleModalSourceChange();
-    openModal('modal-product');
+    switchPanel('products');
+    switchSubTab('products', 'form');
   }
 
   async function saveProduct(e) {
@@ -1326,13 +1430,20 @@ window.CreaticosBilling = (function () {
     const source = document.getElementById('form-product-source').value;
     const isCreaticos = source === 'creaticos';
 
+    const skuVal = document.getElementById('form-product-sku').value.trim();
+    const referenceVal = document.getElementById('form-product-reference').value.trim();
+    const barcodeVal = document.getElementById('form-product-barcode').value.trim();
+
     try {
       if (isCreaticos) {
         const prodData = {
           name: document.getElementById('form-product-name').value.trim(),
           description: document.getElementById('form-product-description').value.trim(),
           price: Number(document.getElementById('form-product-price').value) || 0,
-          tax: Number(document.getElementById('form-product-tax').value) || 0
+          tax: Number(document.getElementById('form-product-tax').value) || 0,
+          sku: skuVal,
+          reference: referenceVal,
+          barcode: barcodeVal
         };
 
         if (id) {
@@ -1356,6 +1467,9 @@ window.CreaticosBilling = (function () {
           department: categoryVal.toLowerCase(),
           condition: 'Nuevo',
           isActive: true,
+          sku: skuVal,
+          reference: referenceVal,
+          barcode: barcodeVal,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
@@ -1367,8 +1481,8 @@ window.CreaticosBilling = (function () {
         }
       }
 
-      closeModal('modal-product');
       await fetchAllData();
+      switchSubTab('products', 'list');
       renderProductsTable();
     } catch (err) {
       console.error(err);
@@ -1408,6 +1522,13 @@ window.CreaticosBilling = (function () {
     document.getElementById('set-ncf-b01-seq').value = settings.ncfB01Seq;
     document.getElementById('set-ncf-b02-prefix').value = settings.ncfB02Prefix;
     document.getElementById('set-ncf-b02-seq').value = settings.ncfB02Seq;
+    
+    document.getElementById('set-ncf-b14-prefix').value = settings.ncfB14Prefix || 'B1400000';
+    document.getElementById('set-ncf-b14-seq').value = settings.ncfB14Seq || 1;
+    document.getElementById('set-ncf-b15-prefix').value = settings.ncfB15Prefix || 'B1500000';
+    document.getElementById('set-ncf-b15-seq').value = settings.ncfB15Seq || 1;
+    document.getElementById('set-ncf-b12-prefix').value = settings.ncfB12Prefix || 'B1200000';
+    document.getElementById('set-ncf-b12-seq').value = settings.ncfB12Seq || 1;
 
     document.getElementById('set-invoice-prefix').value = settings.invoicePrefix;
     document.getElementById('set-invoice-seq').value = settings.nextInvoiceNum;
@@ -1431,6 +1552,13 @@ window.CreaticosBilling = (function () {
       ncfB01Seq: Number(document.getElementById('set-ncf-b01-seq').value) || 1,
       ncfB02Prefix: document.getElementById('set-ncf-b02-prefix').value.trim(),
       ncfB02Seq: Number(document.getElementById('set-ncf-b02-seq').value) || 1,
+      
+      ncfB14Prefix: document.getElementById('set-ncf-b14-prefix').value.trim(),
+      ncfB14Seq: Number(document.getElementById('set-ncf-b14-seq').value) || 1,
+      ncfB15Prefix: document.getElementById('set-ncf-b15-prefix').value.trim(),
+      ncfB15Seq: Number(document.getElementById('set-ncf-b15-seq').value) || 1,
+      ncfB12Prefix: document.getElementById('set-ncf-b12-prefix').value.trim(),
+      ncfB12Seq: Number(document.getElementById('set-ncf-b12-seq').value) || 1,
 
       invoicePrefix: document.getElementById('set-invoice-prefix').value.trim(),
       nextInvoiceNum: Number(document.getElementById('set-invoice-seq').value) || 1001,
@@ -1471,11 +1599,109 @@ window.CreaticosBilling = (function () {
     }
   }
 
+  // Sub-tabs navigation & custom helper actions
+  function switchSubTab(tabGroup, tabName) {
+    const btns = document.querySelectorAll(`#panel-${tabGroup} .erp-subtab-btn`);
+    btns.forEach(btn => btn.classList.remove('is-active'));
+
+    const activeBtn = document.getElementById(`subtab-btn-${tabGroup}-${tabName}`);
+    if (activeBtn) activeBtn.classList.add('is-active');
+
+    const contents = document.querySelectorAll(`#panel-${tabGroup} .erp-tab-content`);
+    contents.forEach(c => c.classList.remove('is-active'));
+
+    const activeContent = document.getElementById(`subtab-${tabGroup}-${tabName}`);
+    if (activeContent) activeContent.classList.add('is-active');
+
+    // Auto-initialize form with clean defaults if manually switching to empty form tab
+    if (tabName === 'form') {
+      const idVal = document.getElementById(tabGroup === 'invoices' ? 'form-invoice-id' : (tabGroup === 'clients' ? 'form-client-id' : 'form-product-id')).value;
+      if (!idVal) {
+        if (tabGroup === 'invoices') {
+          openNewInvoiceForm();
+        } else if (tabGroup === 'clients') {
+          openNewClientForm();
+        } else if (tabGroup === 'products') {
+          openNewProductForm();
+        }
+      }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function printInvoiceDirectly(id) {
+    await viewInvoice(id);
+    setTimeout(() => {
+      window.print();
+    }, 300);
+  }
+
+  function convertQuoteFromList(id) {
+    const inv = invoices.find(i => i.id === id);
+    if (!inv) return;
+
+    switchPanel('invoices');
+    switchSubTab('invoices', 'form');
+    document.getElementById('invoice-form-title').textContent = 'Convertir Cotización a Factura';
+    
+    document.getElementById('form-invoice-id').value = '';
+    document.getElementById('form-invoice-client-name').value = inv.clientName;
+    document.getElementById('form-invoice-client-id').value = inv.clientId;
+    document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
+    
+    const today = new Date();
+    document.getElementById('form-invoice-date').value = today.toISOString().split('T')[0];
+    const dueDate = new Date();
+    dueDate.setDate(today.getDate() + 15);
+    document.getElementById('form-invoice-due-date').value = dueDate.toISOString().split('T')[0];
+
+    const docTypeSelect = document.getElementById('form-invoice-doc-type');
+    if (docTypeSelect) {
+      docTypeSelect.value = 'invoice';
+      handleDocTypeChange('invoice');
+    }
+
+    const tbody = document.getElementById('invoice-form-items-body');
+    tbody.innerHTML = '';
+
+    inv.items.forEach(item => {
+      addInvoiceFormItemRow({
+        productId: item.productId,
+        description: item.description,
+        price: item.price,
+        qty: item.qty,
+        tax: item.tax
+      });
+    });
+  }
+
+  function openRegisterPaymentFromList(id) {
+    const inv = invoices.find(i => i.id === id);
+    if (!inv) return;
+
+    const total = Number(inv.total);
+    const paid = Number(inv.paidAmount || 0);
+    const balance = total - paid;
+
+    document.getElementById('form-payment-invoice-id').value = id;
+    document.getElementById('payment-info-total').textContent = formatMoney(total);
+    document.getElementById('payment-info-paid').textContent = formatMoney(paid);
+    document.getElementById('payment-info-balance').textContent = formatMoney(balance);
+
+    document.getElementById('form-payment-amount').value = balance.toFixed(2);
+    document.getElementById('form-payment-amount').setAttribute('max', balance.toFixed(2));
+    document.getElementById('form-payment-notes').value = '';
+
+    openModal('modal-payment');
+  }
+
   // Expose API methods globally inside module wrapper
   return {
     init: init,
     initDashboard: initDashboard,
     switchPanel: switchPanel,
+    switchSubTab: switchSubTab,
     
     // Invoices
     renderInvoicesTable: renderInvoicesTable,
@@ -1491,6 +1717,9 @@ window.CreaticosBilling = (function () {
     viewInvoice: viewInvoice,
     cancelInvoice: cancelInvoice,
     convertQuoteToInvoice: convertQuoteToInvoice,
+    printInvoiceDirectly: printInvoiceDirectly,
+    convertQuoteFromList: convertQuoteFromList,
+    openRegisterPaymentFromList: openRegisterPaymentFromList,
 
     // Payments
     openRegisterPaymentModal: openRegisterPaymentModal,
@@ -1498,15 +1727,19 @@ window.CreaticosBilling = (function () {
 
     // Clients
     renderClientsTable: renderClientsTable,
-    openNewClientModal: openNewClientModal,
-    openEditClientModal: openEditClientModal,
+    openNewClientForm: openNewClientForm,
+    openEditClientForm: openEditClientForm,
+    openNewClientModal: openNewClientForm, // backward compatibility
+    openEditClientModal: openEditClientForm, // backward compatibility
     saveClient: saveClient,
     deleteClient: deleteClient,
 
     // Products
     renderProductsTable: renderProductsTable,
-    openNewProductModal: openNewProductModal,
-    openEditProductModal: openEditProductModal,
+    openNewProductForm: openNewProductForm,
+    openEditProductForm: openEditProductForm,
+    openNewProductModal: openNewProductForm, // backward compatibility
+    openEditProductModal: openEditProductForm, // backward compatibility
     saveProduct: saveProduct,
     deleteProduct: deleteProduct,
     handleModalSourceChange: handleModalSourceChange,

@@ -1465,6 +1465,22 @@
             </div>
           </div>
 
+          <!-- SKU, Referencia, Código de Barra -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px;">
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-sku">SKU</label>
+              <input class="auth-input" type="text" id="product-sku" placeholder="Ej. FUT-01" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-reference">Referencia</label>
+              <input class="auth-input" type="text" id="product-reference" placeholder="Ej. REF-ABC" />
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="product-barcode">Código de Barra</label>
+              <input class="auth-input" type="text" id="product-barcode" placeholder="Ej. 742111..." />
+            </div>
+          </div>
+
           <!-- Creaticos ITBIS Dropdown (conditionally shown) -->
           <div class="auth-form-group" id="product-tax-wrapper" style="display:none;">
             <label class="auth-label" for="product-tax">Impuesto (ITBIS %)</label>

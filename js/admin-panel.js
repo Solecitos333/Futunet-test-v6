@@ -465,7 +465,10 @@
             category: 'Creaticos',
             stock: null,
             isActive: true,
-            _isCreaticos: true
+            _isCreaticos: true,
+            sku: data.sku || '',
+            reference: data.reference || '',
+            barcode: data.barcode || ''
           });
         });
       } else {
@@ -505,9 +508,17 @@
 
       var eyeBtn = p._isCreaticos ? '' : '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>';
 
+      var codeInfo = '';
+      if (p.sku || p.reference) {
+        var parts = [];
+        if (p.sku) parts.push('SKU: ' + p.sku);
+        if (p.reference) parts.push('Ref: ' + p.reference);
+        codeInfo = '<br><span style="font-size:0.75rem; color:#76889e; font-weight:500;">' + escapeHtml(parts.join(' | ')) + '</span>';
+      }
+
       html += '<tr>' +
         '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.webp\'"></td>' +
-        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + (p._isCreaticos ? '' : statusBadge) + '</td>' +
+        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + (p._isCreaticos ? '' : statusBadge) + codeInfo + '</td>' +
         '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
         '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
         '<td data-label="Stock" class="col-hide-mobile">' + (p.stock != null ? p.stock : '-') + '</td>' +
@@ -614,7 +625,10 @@
           name: data.title,
           description: data.desc,
           price: data.price,
-          tax: taxVal
+          tax: taxVal,
+          sku: data.sku || '',
+          reference: data.reference || '',
+          barcode: data.barcode || ''
         };
 
         if (productId) {
@@ -881,6 +895,9 @@
     setVal('product-title', product.title || '');
     setVal('product-desc', product.desc || '');
     setVal('product-price', product.price || '');
+    setVal('product-sku', product.sku || '');
+    setVal('product-reference', product.reference || '');
+    setVal('product-barcode', product.barcode || '');
     
     if (product._isCreaticos) {
       setVal('product-tax', product.tax || 18);
@@ -922,6 +939,9 @@
 
     document.getElementById('product-form').reset();
     setVal('product-id', '');
+    setVal('product-sku', '');
+    setVal('product-reference', '');
+    setVal('product-barcode', '');
     existingGallery = [];
     uploadFiles = [];
     
@@ -2595,7 +2615,10 @@
             isActive: activeCb ? activeCb.checked : true,
             specs: specsArr,
             gallery: finalGallery,
-            img: finalGallery.length > 0 ? finalGallery[0] : ''
+            img: finalGallery.length > 0 ? finalGallery[0] : '',
+            sku: getVal('product-sku') || '',
+            reference: getVal('product-reference') || '',
+            barcode: getVal('product-barcode') || ''
           };
 
           var id = getVal('product-id');
