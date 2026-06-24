@@ -1,0 +1,3 @@
+## 2024-05-24 - Search Optimization: Text Normalization Memoization and Single-pass Processing
+**Learning:** During continuous keystroke search filtering, repeated regex operations and `.normalize('NFD')` in string normalization quickly become a CPU bottleneck for large data arrays. In addition, processing combinations like `array.map().filter().sort().map()` allocate multiple intermediary arrays which triggers garbage collection pressure.
+**Action:** When implementing front-end text-based search filters, always lazy-cache normalized search strings on objects using a `WeakMap` instead of re-normalizing on each execution. And prefer a single-pass `for` loop that checks conditions and pushes directly to a collection, rather than combining `.map()` and `.filter()`.
