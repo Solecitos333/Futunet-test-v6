@@ -14,6 +14,8 @@ window.CreaticosBilling = (function () {
   let invoices = [];
   let clients = [];
   let products = [];
+  let creaticosProducts = [];
+  let futunetProducts = [];
   let payments = [];
   
   let currentInvoiceItems = [];
@@ -94,10 +96,21 @@ window.CreaticosBilling = (function () {
     });
 
     const productsSnap = await getDB().collection('creaticos_products').get();
-    products = [];
+    creaticosProducts = [];
     productsSnap.forEach(doc => {
-      products.push({ id: doc.id, ...doc.data() });
+      creaticosProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: true });
     });
+
+    const futunetSnap = await getDB().collection('products').get();
+    futunetProducts = [];
+    futunetSnap.forEach(doc => {
+      futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+    });
+
+    // Update active products based on filter selection
+    const sourceEl = document.getElementById('products-source-filter');
+    const source = sourceEl ? sourceEl.value : 'creaticos';
+    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
 
     const invoicesSnap = await getDB().collection('creaticos_invoices').orderBy('createdAt', 'desc').get();
     invoices = [];
@@ -458,11 +471,28 @@ window.CreaticosBilling = (function () {
     const rowId = 'row-' + Date.now() + '-' + Math.floor(Math.random()*1000);
     tr.id = rowId;
 
-    // Build product options
+    // Build product options grouping by catalog source
     let prodOptions = `<option value="custom">— Concepto Personalizado —</option>`;
-    products.forEach(p => {
-      prodOptions += `<option value="${p.id}" ${itemData && itemData.productId === p.id ? 'selected' : ''}>${p.name} (${formatMoney(p.price)})</option>`;
+    
+    prodOptions += `<optgroup label="Creaticos Papelería">`;
+    creaticosProducts.forEach(p => {
+      let isSelected = false;
+      if (itemData) {
+        isSelected = itemData.productId === 'creaticos_' + p.id || itemData.productId === p.id;
+      }
+      prodOptions += `<option value="creaticos_${p.id}" ${isSelected ? 'selected' : ''}>${p.name} (${formatMoney(p.price)})</option>`;
     });
+    prodOptions += `</optgroup>`;
+
+    prodOptions += `<optgroup label="Futunet Suministros">`;
+    futunetProducts.forEach(p => {
+      let isSelected = false;
+      if (itemData) {
+        isSelected = itemData.productId === 'futunet_' + p.id;
+      }
+      prodOptions += `<option value="futunet_${p.id}" ${isSelected ? 'selected' : ''}>${p.title} (${formatMoney(p.price)})</option>`;
+    });
+    prodOptions += `</optgroup>`;
 
     tr.innerHTML = `
       <td>
@@ -523,14 +553,26 @@ window.CreaticosBilling = (function () {
     const taxSelect = tr.querySelector('.row-tax');
 
     if (val === 'custom') {
-      // Don't overwrite values, let user write freely
       priceInput.removeAttribute('readonly');
     } else {
-      const prod = products.find(p => p.id === val);
+      let prod = null;
+      let isCreaticos = true;
+      if (val.startsWith('creaticos_')) {
+        const cleanId = val.substring('creaticos_'.length);
+        prod = creaticosProducts.find(p => p.id === cleanId);
+      } else if (val.startsWith('futunet_')) {
+        const cleanId = val.substring('futunet_'.length);
+        prod = futunetProducts.find(p => p.id === cleanId);
+        isCreaticos = false;
+      }
+
       if (prod) {
-        descInput.value = prod.name + (prod.description ? ' - ' + prod.description : '');
+        const name = prod.name || prod.title || '';
+        const desc = prod.description || prod.desc || '';
+        descInput.value = name + (desc ? ' - ' + desc : '');
         priceInput.value = Number(prod.price).toFixed(2);
-        taxSelect.value = (prod.tax !== undefined) ? prod.tax.toString() : '18';
+        // Default tax for Futunet items is the defaultTax from settings, for Creaticos it is stored in the item
+        taxSelect.value = (prod.tax !== undefined) ? prod.tax.toString() : (settings ? settings.defaultTax.toString() : '18');
       }
     }
     calculateInvoiceFormTotals();
@@ -1158,11 +1200,18 @@ window.CreaticosBilling = (function () {
   function renderProductsTable() {
     switchPanel('products');
 
+    const sourceEl = document.getElementById('products-source-filter');
+    const source = sourceEl ? sourceEl.value : 'creaticos';
+    
+    // Set active products based on selection
+    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+
     const searchVal = document.getElementById('products-search').value.toLowerCase();
     
     const filtered = products.filter(p => {
-      return p.name.toLowerCase().includes(searchVal) ||
-             (p.description && p.description.toLowerCase().includes(searchVal));
+      const name = p.name || p.title || '';
+      const desc = p.description || p.desc || '';
+      return name.toLowerCase().includes(searchVal) || desc.toLowerCase().includes(searchVal);
     });
 
     const tbody = document.getElementById('products-table-body');
@@ -1175,17 +1224,23 @@ window.CreaticosBilling = (function () {
 
     filtered.forEach(p => {
       const tr = document.createElement('tr');
+      const name = p.name || p.title || 'Sin nombre';
+      const desc = p.description || p.desc || '—';
+      const price = p.price || 0;
+      const tax = p.tax !== undefined ? `${p.tax}% ITBIS` : '18% ITBIS (Al facturar)';
+      const isCreaticosVal = p._isCreaticos ? 'true' : 'false';
+
       tr.innerHTML = `
-        <td><strong>${p.name}</strong></td>
-        <td>${p.description || '—'}</td>
-        <td>${formatMoney(p.price)}</td>
-        <td>${p.tax}% ITBIS</td>
+        <td><strong>${name}</strong></td>
+        <td>${desc}</td>
+        <td>${formatMoney(price)}</td>
+        <td>${tax}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditProductModal('${p.id}')">
+            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditProductModal('${p.id}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteProduct('${p.id}', '${p.name}')">
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteProduct('${p.id}', '${name.replace(/'/g, "\\'")}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -1195,6 +1250,23 @@ window.CreaticosBilling = (function () {
     });
   }
 
+  function handleModalSourceChange() {
+    const source = document.getElementById('form-product-source').value;
+    const isFutunet = source === 'futunet';
+    
+    document.getElementById('futunet-only-fields').style.display = isFutunet ? 'block' : 'none';
+    document.getElementById('form-product-tax-group').style.display = isFutunet ? 'none' : 'block';
+    
+    document.getElementById('label-product-name').textContent = isFutunet ? 'Título del producto (Futunet) *' : 'Concepto / Nombre del Ítem *';
+    
+    const stockInput = document.getElementById('form-product-stock');
+    if (isFutunet) {
+      stockInput.setAttribute('required', 'required');
+    } else {
+      stockInput.removeAttribute('required');
+    }
+  }
+
   function openNewProductModal() {
     document.getElementById('product-modal-title').textContent = 'Agregar Producto / Servicio';
     document.getElementById('form-product-id').value = '';
@@ -1202,21 +1274,48 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-product-description').value = '';
     document.getElementById('form-product-price').value = '';
     document.getElementById('form-product-tax').value = settings.defaultTax.toString();
+    
+    const sourceFilter = document.getElementById('products-source-filter');
+    const activeSource = sourceFilter ? sourceFilter.value : 'creaticos';
+    
+    const sourceSelect = document.getElementById('form-product-source');
+    if (sourceSelect) {
+      sourceSelect.value = activeSource;
+      sourceSelect.removeAttribute('disabled');
+    }
+    
+    document.getElementById('form-product-stock').value = '0';
+    document.getElementById('form-product-category').value = 'Otros';
 
+    handleModalSourceChange();
     openModal('modal-product');
   }
 
-  function openEditProductModal(productId) {
-    const p = products.find(item => item.id === productId);
+  function openEditProductModal(productId, isCreaticos) {
+    const activeProducts = isCreaticos ? creaticosProducts : futunetProducts;
+    const p = activeProducts.find(item => item.id === productId);
     if (!p) return;
 
-    document.getElementById('product-modal-title').textContent = 'Editar Producto / Servicio';
+    document.getElementById('product-modal-title').textContent = isCreaticos ? 'Editar Producto / Servicio (Creaticos)' : 'Editar Producto (Futunet)';
     document.getElementById('form-product-id').value = p.id;
-    document.getElementById('form-product-name').value = p.name;
-    document.getElementById('form-product-description').value = p.description || '';
+    document.getElementById('form-product-name').value = p.name || p.title || '';
+    document.getElementById('form-product-description').value = p.description || p.desc || '';
     document.getElementById('form-product-price').value = p.price;
-    document.getElementById('form-product-tax').value = (p.tax !== undefined) ? p.tax.toString() : '18';
 
+    const sourceSelect = document.getElementById('form-product-source');
+    if (sourceSelect) {
+      sourceSelect.value = isCreaticos ? 'creaticos' : 'futunet';
+      sourceSelect.setAttribute('disabled', 'disabled');
+    }
+
+    if (isCreaticos) {
+      document.getElementById('form-product-tax').value = (p.tax !== undefined) ? p.tax.toString() : '18';
+    } else {
+      document.getElementById('form-product-stock').value = p.stock != null ? p.stock : '0';
+      document.getElementById('form-product-category').value = p.category || 'Otros';
+    }
+
+    handleModalSourceChange();
     openModal('modal-product');
   }
 
@@ -1224,31 +1323,67 @@ window.CreaticosBilling = (function () {
     e.preventDefault();
 
     const id = document.getElementById('form-product-id').value;
-    const prodData = {
-      name: document.getElementById('form-product-name').value.trim(),
-      description: document.getElementById('form-product-description').value.trim(),
-      price: Number(document.getElementById('form-product-price').value) || 0,
-      tax: Number(document.getElementById('form-product-tax').value) || 0
-    };
+    const source = document.getElementById('form-product-source').value;
+    const isCreaticos = source === 'creaticos';
 
-    if (id) {
-      await getDB().collection('creaticos_products').doc(id).update(prodData);
-    } else {
-      await getDB().collection('creaticos_products').add(prodData);
+    try {
+      if (isCreaticos) {
+        const prodData = {
+          name: document.getElementById('form-product-name').value.trim(),
+          description: document.getElementById('form-product-description').value.trim(),
+          price: Number(document.getElementById('form-product-price').value) || 0,
+          tax: Number(document.getElementById('form-product-tax').value) || 0
+        };
+
+        if (id) {
+          await getDB().collection('creaticos_products').doc(id).update(prodData);
+        } else {
+          await getDB().collection('creaticos_products').add(prodData);
+        }
+      } else {
+        const nameVal = document.getElementById('form-product-name').value.trim();
+        const descVal = document.getElementById('form-product-description').value.trim();
+        const priceVal = Number(document.getElementById('form-product-price').value) || 0;
+        const stockVal = parseInt(document.getElementById('form-product-stock').value) || 0;
+        const categoryVal = document.getElementById('form-product-category').value;
+
+        const prodData = {
+          title: nameVal,
+          desc: descVal,
+          price: priceVal,
+          stock: stockVal,
+          category: categoryVal,
+          department: categoryVal.toLowerCase(),
+          condition: 'Nuevo',
+          isActive: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        if (id) {
+          await getDB().collection('products').doc(id).update(prodData);
+        } else {
+          prodData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          await getDB().collection('products').add(prodData);
+        }
+      }
+
+      closeModal('modal-product');
+      await fetchAllData();
+      renderProductsTable();
+    } catch (err) {
+      console.error(err);
+      alert('Error al guardar el producto en la base de datos: ' + err.message);
     }
-
-    closeModal('modal-product');
-    await fetchAllData();
-    renderProductsTable();
   }
 
-  async function deleteProduct(id, name) {
+  async function deleteProduct(id, name, isCreaticos) {
     if (!confirm(`¿Está seguro de que desea eliminar el ítem "${name}"?`)) {
       return;
     }
 
     try {
-      await getDB().collection('creaticos_products').doc(id).delete();
+      const coll = isCreaticos ? 'creaticos_products' : 'products';
+      await getDB().collection(coll).doc(id).delete();
       await fetchAllData();
       renderProductsTable();
     } catch (e) {
@@ -1374,6 +1509,7 @@ window.CreaticosBilling = (function () {
     openEditProductModal: openEditProductModal,
     saveProduct: saveProduct,
     deleteProduct: deleteProduct,
+    handleModalSourceChange: handleModalSourceChange,
 
     // Settings
     loadSettingsForm: loadSettingsForm,

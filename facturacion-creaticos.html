@@ -35,6 +35,13 @@
         <span>Creaticos Facturación</span>
       </div>
 
+      <div style="padding: 0 20px 16px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px;">
+        <a href="admin.html" class="admin-btn admin-btn-ghost" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 1.5px solid var(--primary); color: var(--primary); font-weight: 600; padding: 10px; border-radius: 12px; transition: all 0.2s; font-size: 0.85rem; text-decoration: none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
+          Volver a Futunet Admin
+        </a>
+      </div>
+
       <nav class="admin-nav">
         <div class="admin-nav-label">Menú Facturación</div>
         <button class="admin-nav-item is-active" data-nav="dashboard">
@@ -493,11 +500,17 @@
         </div>
 
         <div class="admin-table-card">
-          <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center;">
+           <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
             <h3>Ítems de Facturación Frecuentes</h3>
-            <div class="admin-search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input type="text" id="products-search" placeholder="Buscar ítem..." oninput="CreaticosBilling.renderProductsTable()" />
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <select id="products-source-filter" onchange="CreaticosBilling.renderProductsTable()" style="padding: 9px 16px; border: 1.5px solid var(--border-color); border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: var(--card-bg); color: var(--text-color); outline: none; transition: border-color 0.2s; cursor:pointer;">
+                <option value="creaticos">Catálogo Creaticos</option>
+                <option value="futunet">Catálogo Futunet</option>
+              </select>
+              <div class="admin-search" style="margin: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" id="products-search" placeholder="Buscar ítem..." oninput="CreaticosBilling.renderProductsTable()" />
+              </div>
             </div>
           </div>
 
@@ -676,8 +689,15 @@
       <form id="product-editor-form" onsubmit="CreaticosBilling.saveProduct(event)">
         <input type="hidden" id="form-product-id" />
         <div class="admin-modal-body">
+          <div class="form-group" style="margin-bottom:15px;" id="form-product-source-group">
+            <label for="form-product-source">Destino / Catálogo *</label>
+            <select id="form-product-source" class="form-input" onchange="CreaticosBilling.handleModalSourceChange()">
+              <option value="creaticos">Catálogo Creaticos</option>
+              <option value="futunet">Catálogo Futunet</option>
+            </select>
+          </div>
           <div class="form-group" style="margin-bottom:15px;">
-            <label for="form-product-name">Concepto / Nombre del Ítem *</label>
+            <label for="form-product-name" id="label-product-name">Concepto / Nombre del Ítem *</label>
             <input type="text" id="form-product-name" class="form-input" required placeholder="Ej. Libreta Personalizada Creaticos" />
           </div>
           <div class="form-group" style="margin-bottom:15px;">
@@ -688,13 +708,33 @@
             <label for="form-product-price">Precio Unitario (RD$) *</label>
             <input type="number" id="form-product-price" class="form-input" step="0.01" min="0" required placeholder="Ej. 350.00" />
           </div>
-          <div class="form-group">
+          <div class="form-group" id="form-product-tax-group" style="margin-bottom:15px;">
             <label for="form-product-tax">Tasa ITBIS Predeterminada</label>
             <select id="form-product-tax" class="form-input">
               <option value="18">18% ITBIS Estándar</option>
               <option value="16">16% ITBIS Reducido</option>
               <option value="0">Exento (0%)</option>
             </select>
+          </div>
+          
+          <!-- Futunet-only fields (conditionally shown) -->
+          <div id="futunet-only-fields" style="display:none; margin-top:15px; border-top:1px dashed var(--border-color); padding-top:15px;">
+            <div class="form-group" style="margin-bottom:15px;">
+              <label for="form-product-stock">Stock / Inventario *</label>
+              <input type="number" id="form-product-stock" class="form-input" min="0" placeholder="Ej. 10" />
+            </div>
+            <div class="form-group" style="margin-bottom:15px;">
+              <label for="form-product-category">Categoría *</label>
+              <select id="form-product-category" class="form-input">
+                <option value="Equipos de Oficina">Equipos de Oficina</option>
+                <option value="Energía y Climatización">Energía y Climatización</option>
+                <option value="Redes y Datos">Redes y Datos</option>
+                <option value="Seguridad Electrónica">Seguridad Electrónica</option>
+                <option value="Mobiliario y Suministros">Mobiliario y Suministros</option>
+                <option value="Infraestructura y Remozamiento">Infraestructura y Remozamiento</option>
+                <option value="Otros">Otros</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="admin-modal-footer">

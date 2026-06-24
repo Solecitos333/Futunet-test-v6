@@ -430,15 +430,52 @@
       if (syncBtn) syncBtn.style.display = 'inline-flex';
     }
 
+    var sourceFilter = document.getElementById('inventory-source-filter');
+    if (sourceFilter) {
+      if (currentUserData.role === 'admin' || currentUserData.role === 'superadmin') {
+        sourceFilter.style.display = 'inline-flex';
+      } else {
+        sourceFilter.style.display = 'none';
+        sourceFilter.value = 'futunet';
+      }
+    }
+
     var tbody = document.getElementById('inventory-table-body');
     if (!tbody) return;
     tbody.innerHTML = getTableSkeletonHtml(6, 6);
 
     try {
-      var snapshot = await db.collection('products').orderBy('title').get();
+      var source = sourceFilter ? sourceFilter.value : 'futunet';
+      var snapshot;
       allProducts = [];
-      snapshot.forEach(function (doc) { allProducts.push({ id: doc.id, ...doc.data() }); });
-      populateCategoryFilter(allProducts);
+      
+      var catFilterEl = document.getElementById('inventory-category-filter');
+
+      if (source === 'creaticos') {
+        if (catFilterEl) catFilterEl.style.display = 'none';
+        snapshot = await db.collection('creaticos_products').get();
+        snapshot.forEach(function (doc) {
+          var data = doc.data();
+          allProducts.push({
+            id: doc.id,
+            title: data.name || '',
+            desc: data.description || '',
+            price: data.price || 0,
+            tax: data.tax || 18,
+            category: 'Creaticos',
+            stock: null,
+            isActive: true,
+            _isCreaticos: true
+          });
+        });
+      } else {
+        if (catFilterEl) catFilterEl.style.display = 'inline-flex';
+        snapshot = await db.collection('products').orderBy('title').get();
+        snapshot.forEach(function (doc) {
+          allProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+        });
+        populateCategoryFilter(allProducts);
+      }
       filterAndRenderInventory();
     } catch (e) {
       console.error('Inventory load error:', e);
@@ -466,14 +503,16 @@
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' : 
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
 
+      var eyeBtn = p._isCreaticos ? '' : '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>';
+
       html += '<tr>' +
         '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.webp\'"></td>' +
-        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + statusBadge + '</td>' +
+        '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + (p._isCreaticos ? '' : statusBadge) + '</td>' +
         '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
         '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
         '<td data-label="Stock" class="col-hide-mobile">' + (p.stock != null ? p.stock : '-') + '</td>' +
         '<td data-label="Acciones">' +
-        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>' +
+        eyeBtn +
         '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editProduct(\'' + p.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
         '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteProduct(\'' + p.id + '\')" title="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>' +
         '</td>' +
@@ -565,29 +604,66 @@
     try {
       data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
       data.updatedBy = currentUserData.uid || '';
-      if (productId) {
-        var prevSnap = await db.collection('products').doc(productId).get();
-        var prevData = prevSnap.exists ? prevSnap.data() : null;
-        await db.collection('products').doc(productId).update(data);
-        writeAuditLog('Editar Producto', data.title, {
-          collection: 'products',
-          docId: productId,
-          type: 'update',
-          previousData: prevData,
-          newData: data
-        });
-        showToast('Producto actualizado', 'success');
+      
+      var sourceFilter = document.getElementById('inventory-source-filter');
+      var isCreaticos = sourceFilter && sourceFilter.value === 'creaticos';
+
+      if (isCreaticos) {
+        var taxVal = parseFloat(document.getElementById('product-tax').value) || 0;
+        var creaticosData = {
+          name: data.title,
+          description: data.desc,
+          price: data.price,
+          tax: taxVal
+        };
+
+        if (productId) {
+          var prevSnap = await db.collection('creaticos_products').doc(productId).get();
+          var prevData = prevSnap.exists ? prevSnap.data() : null;
+          await db.collection('creaticos_products').doc(productId).update(creaticosData);
+          writeAuditLog('Editar Producto (Creaticos)', creaticosData.name, {
+            collection: 'creaticos_products',
+            docId: productId,
+            type: 'update',
+            previousData: prevData,
+            newData: creaticosData
+          });
+          showToast('Producto de Creaticos actualizado', 'success');
+        } else {
+          var docRef = await db.collection('creaticos_products').add(creaticosData);
+          writeAuditLog('Crear Producto (Creaticos)', creaticosData.name, {
+            collection: 'creaticos_products',
+            docId: docRef.id,
+            type: 'create',
+            newData: creaticosData
+          });
+          showToast('Producto de Creaticos creado', 'success');
+        }
       } else {
-        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        data.isActive = true;
-        var docRef = await db.collection('products').add(data);
-        writeAuditLog('Crear Producto', data.title, {
-          collection: 'products',
-          docId: docRef.id,
-          type: 'create',
-          newData: data
-        });
-        showToast('Producto creado', 'success');
+        if (productId) {
+          var prevSnap = await db.collection('products').doc(productId).get();
+          var prevData = prevSnap.exists ? prevSnap.data() : null;
+          await db.collection('products').doc(productId).update(data);
+          writeAuditLog('Editar Producto', data.title, {
+            collection: 'products',
+            docId: productId,
+            type: 'update',
+            previousData: prevData,
+            newData: data
+          });
+          showToast('Producto actualizado', 'success');
+        } else {
+          data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+          data.isActive = true;
+          var docRef = await db.collection('products').add(data);
+          writeAuditLog('Crear Producto', data.title, {
+            collection: 'products',
+            docId: docRef.id,
+            type: 'create',
+            newData: data
+          });
+          showToast('Producto creado', 'success');
+        }
       }
       closeModal('product-modal');
       loadInventory();
@@ -694,13 +770,18 @@
   }
 
   async function deleteProduct(id) {
+    var product = allProducts.find(function (p) { return p.id === id; });
+    var isCreaticos = product && product._isCreaticos;
+    var coll = isCreaticos ? 'creaticos_products' : 'products';
+    var titleField = isCreaticos ? 'name' : 'title';
+
     if (!(await showConfirmModal('Eliminar producto', '¿Eliminar este producto? Esta acción no se puede deshacer.'))) return;
     try {
-      var prevSnap = await db.collection('products').doc(id).get();
+      var prevSnap = await db.collection(coll).doc(id).get();
       var prevData = prevSnap.exists ? prevSnap.data() : null;
-      await db.collection('products').doc(id).delete();
-      writeAuditLog('Eliminar Producto', prevData ? prevData.title : id, {
-        collection: 'products',
+      await db.collection(coll).doc(id).delete();
+      writeAuditLog('Eliminar Producto (' + (isCreaticos ? 'Creaticos' : 'Futunet') + ')', prevData ? (prevData[titleField] || prevData.title) : id, {
+        collection: coll,
         docId: id,
         type: 'delete',
         previousData: prevData
@@ -739,57 +820,123 @@
     }
   }
 
+  function adjustProductModalFields(source) {
+    var isCreaticos = source === 'creaticos';
+    
+    var taxWrapper = document.getElementById('product-tax-wrapper');
+    if (taxWrapper) taxWrapper.style.display = isCreaticos ? 'block' : 'none';
+    
+    var fieldsToToggle = [
+      'product-active',
+      'product-images',
+      'image-upload-zone',
+      'image-preview-container',
+      'product-stock',
+      'product-category',
+      'product-condition',
+      'product-brand',
+      'product-service-sub',
+      'product-specs'
+    ];
+    
+    fieldsToToggle.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        var wrapper = (id === 'product-active' || id === 'product-images' || id === 'image-upload-zone' || id === 'image-preview-container') ? el.closest('.auth-form-group') : el.closest('.auth-form-group') || el;
+        if (wrapper) {
+          wrapper.style.display = isCreaticos ? 'none' : '';
+        }
+      }
+    });
+
+    var titleLabel = document.querySelector('label[for="product-title"]');
+    if (titleLabel) titleLabel.textContent = isCreaticos ? 'Nombre del producto / servicio' : 'Título del producto';
+    
+    var descLabel = document.querySelector('label[for="product-desc"]');
+    if (descLabel) descLabel.textContent = isCreaticos ? 'Descripción del servicio o artículo' : 'Descripción';
+
+    var categorySelect = document.getElementById('product-category');
+    if (categorySelect) {
+      if (isCreaticos) {
+        categorySelect.removeAttribute('required');
+      } else {
+        categorySelect.setAttribute('required', 'required');
+      }
+    }
+    
+    var btn = document.getElementById('btn-save-product');
+    if (btn) {
+      btn.textContent = isCreaticos ? 'Guardar Producto/Servicio' : 'Publicar producto';
+    }
+  }
+
   function editProduct(id) {
     var product = allProducts.find(function (p) { return p.id === id; });
     if (!product) return;
+
+    var source = product._isCreaticos ? 'creaticos' : 'futunet';
+    adjustProductModalFields(source);
 
     setVal('product-id', product.id);
     setVal('product-title', product.title || '');
     setVal('product-desc', product.desc || '');
     setVal('product-price', product.price || '');
-    setVal('product-brand', product.brand || '');
-    setVal('product-stock', product.stock != null ? product.stock : '');
-    setVal('product-condition', product.condition || 'Nuevo');
     
-    // Auto-select category
-    populateProductCategorySelect();
-    setVal('product-category', product.category || product.department || '');
-    setVal('product-service-sub', product.serviceSubcategory || '');
-    
-    var cb = document.getElementById('product-active');
-    if(cb) cb.checked = product.isActive !== false;
+    if (product._isCreaticos) {
+      setVal('product-tax', product.tax || 18);
+    } else {
+      setVal('product-brand', product.brand || '');
+      setVal('product-stock', product.stock != null ? product.stock : '');
+      setVal('product-condition', product.condition || 'Nuevo');
+      
+      // Auto-select category
+      populateProductCategorySelect();
+      setVal('product-category', product.category || product.department || '');
+      setVal('product-service-sub', product.serviceSubcategory || '');
+      
+      var cb = document.getElementById('product-active');
+      if(cb) cb.checked = product.isActive !== false;
 
-    var specsStr = Array.isArray(product.specs) ? product.specs.join('\n') : (product.specs || '');
-    setVal('product-specs', specsStr);
+      var specsStr = Array.isArray(product.specs) ? product.specs.join('\n') : (product.specs || '');
+      setVal('product-specs', specsStr);
 
-    existingGallery = [];
-    uploadFiles = [];
-    if(product.gallery && product.gallery.length) {
-      existingGallery = [...product.gallery];
-    } else if (product.img) {
-      existingGallery = [product.img];
+      existingGallery = [];
+      uploadFiles = [];
+      if(product.gallery && product.gallery.length) {
+        existingGallery = [...product.gallery];
+      } else if (product.img) {
+        existingGallery = [product.img];
+      }
+      renderPreview();
     }
-    renderPreview();
 
     var modalTitle = document.querySelector('#product-modal .admin-modal-header h3');
-    if (modalTitle) modalTitle.textContent = 'Editar producto';
+    if (modalTitle) modalTitle.textContent = product._isCreaticos ? 'Editar Producto (Creaticos)' : 'Editar producto (Futunet)';
     openModal('product-modal');
   }
 
   function openNewProduct() {
+    var sourceFilter = document.getElementById('inventory-source-filter');
+    var source = sourceFilter ? sourceFilter.value : 'futunet';
+    adjustProductModalFields(source);
+
     document.getElementById('product-form').reset();
     setVal('product-id', '');
     existingGallery = [];
     uploadFiles = [];
-    populateProductCategorySelect();
-    setVal('product-service-sub', '');
-    renderPreview();
     
-    var cb = document.getElementById('product-active');
-    if(cb) cb.checked = true;
-
+    if (source === 'creaticos') {
+      setVal('product-tax', 18);
+    } else {
+      populateProductCategorySelect();
+      setVal('product-service-sub', '');
+      renderPreview();
+      var cb = document.getElementById('product-active');
+      if(cb) cb.checked = true;
+    }
+    
     var modalTitle = document.querySelector('#product-modal .admin-modal-header h3');
-    if (modalTitle) modalTitle.textContent = 'Agregar producto';
+    if (modalTitle) modalTitle.textContent = source === 'creaticos' ? 'Agregar Producto (Creaticos)' : 'Agregar producto (Futunet)';
     openModal('product-modal');
   }
 
@@ -2541,6 +2688,15 @@
           currentPageInventory = 1;
           filterAndRenderInventory();
         }, 300);
+      });
+    }
+
+    // Inventory source filter
+    var sourceFilter = document.getElementById('inventory-source-filter');
+    if (sourceFilter) {
+      sourceFilter.addEventListener('change', function () {
+        currentPageInventory = 1;
+        loadInventory();
       });
     }
 
