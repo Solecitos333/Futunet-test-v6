@@ -1907,9 +1907,9 @@ window.FutunetBilling = (function () {
           <div class="pos-item-meta">${formatMoney(item.price)} c/u${sourceBadge}</div>
         </div>
         <div class="pos-item-qty-controls">
-          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, -1)">-</button>
+          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, -1)" aria-label="Disminuir cantidad">-</button>
           <span class="pos-qty-val">${item.qty}</span>
-          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, 1)">+</button>
+          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, 1)" aria-label="Aumentar cantidad">+</button>
         </div>
         <div class="pos-item-price">${formatMoney(sub)}</div>
         <button type="button" class="pos-btn-icon" onclick="FutunetBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
