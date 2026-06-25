@@ -611,35 +611,13 @@ window.CreaticosBilling = (function () {
     const rowId = 'row-' + Date.now() + '-' + Math.floor(Math.random()*1000);
     tr.id = rowId;
 
-    // Build product options grouping by catalog source
-    let prodOptions = `<option value="custom">— Concepto Personalizado —</option>`;
-    
-    prodOptions += `<optgroup label="Creaticos Papelería">`;
-    creaticosProducts.forEach(p => {
-      let isSelected = false;
-      if (itemData) {
-        isSelected = itemData.productId === 'creaticos_' + p.id || itemData.productId === p.id;
-      }
-      prodOptions += `<option value="creaticos_${p.id}" ${isSelected ? 'selected' : ''}>${p.name} (${formatMoney(p.price)})</option>`;
-    });
-    prodOptions += `</optgroup>`;
-
-    prodOptions += `<optgroup label="Futunet Suministros">`;
-    futunetProducts.forEach(p => {
-      let isSelected = false;
-      if (itemData) {
-        isSelected = itemData.productId === 'futunet_' + p.id;
-      }
-      prodOptions += `<option value="futunet_${p.id}" ${isSelected ? 'selected' : ''}>${p.title} (${formatMoney(p.price)})</option>`;
-    });
-    prodOptions += `</optgroup>`;
-
     tr.innerHTML = `
       <td>
-        <select class="form-input row-product-select" onchange="CreaticosBilling.handleFormProductSelect(this, '${rowId}')" style="margin-bottom:4px;">
-          ${prodOptions}
-        </select>
-        <input type="text" class="form-input row-desc" placeholder="Detalle / Descripción del servicio..." value="${itemData ? itemData.description : ''}" required />
+        <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
+          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." oninput="CreaticosBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? itemData.description : ''}" required autocomplete="off" />
+          <input type="hidden" class="row-product-id" value="${itemData ? itemData.productId : 'custom'}" />
+          <div class="autocomplete-dropdown row-autocomplete-list" style="display:none; position:absolute; left:0; right:0; z-index:100; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px;"></div>
+        </div>
       </td>
       <td>
         <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="CreaticosBilling.calculateInvoiceFormTotals()" />
@@ -664,13 +642,14 @@ window.CreaticosBilling = (function () {
 
     tbody.appendChild(tr);
     
-    // Fire initial select handling
-    const select = tr.querySelector('.row-product-select');
-    if (!itemData) {
-      handleFormProductSelect(select, rowId);
-    } else {
-      calculateInvoiceFormTotals();
-    }
+    const list = tr.querySelector('.row-autocomplete-list');
+    document.addEventListener('click', function (e) {
+      if (list && !e.target.closest('#' + rowId)) {
+        list.style.display = 'none';
+      }
+    });
+
+    calculateInvoiceFormTotals();
   }
 
   // Quitar fila
@@ -682,40 +661,121 @@ window.CreaticosBilling = (function () {
     }
   }
 
-  // Handle product prefilled selections
-  function handleFormProductSelect(select, rowId) {
+  // Row autocomplete search
+  function searchRowProductAutocomplete(input, rowId) {
     const tr = document.getElementById(rowId);
     if (!tr) return;
 
-    const val = select.value;
-    const descInput = tr.querySelector('.row-desc');
-    const priceInput = tr.querySelector('.row-price');
-    const taxSelect = tr.querySelector('.row-tax');
+    const listEl = tr.querySelector('.row-autocomplete-list');
+    const idInput = tr.querySelector('.row-product-id');
+    if (!listEl) return;
 
-    if (val === 'custom') {
-      priceInput.removeAttribute('readonly');
-    } else {
-      let prod = null;
-      let isCreaticos = true;
-      if (val.startsWith('creaticos_')) {
-        const cleanId = val.substring('creaticos_'.length);
-        prod = creaticosProducts.find(p => p.id === cleanId);
-      } else if (val.startsWith('futunet_')) {
-        const cleanId = val.substring('futunet_'.length);
-        prod = futunetProducts.find(p => p.id === cleanId);
-        isCreaticos = false;
-      }
-
-      if (prod) {
-        const name = prod.name || prod.title || '';
-        const desc = prod.description || prod.desc || '';
-        descInput.value = name + (desc ? ' - ' + desc : '');
-        priceInput.value = Number(prod.price).toFixed(2);
-        // Default tax for Futunet items is the defaultTax from settings, for Creaticos it is stored in the item
-        taxSelect.value = (prod.tax !== undefined) ? prod.tax.toString() : (settings ? settings.defaultTax.toString() : '18');
-      }
+    const val = input.value.trim();
+    if (!val) {
+      listEl.style.display = 'none';
+      idInput.value = 'custom';
+      return;
     }
-    calculateInvoiceFormTotals();
+
+    const allProds = [].concat(
+      creaticosProducts.map(p => ({ ...p, _src: 'creaticos' })),
+      futunetProducts.map(p => ({ ...p, _src: 'futunet' }))
+    );
+
+    const seen = new Set();
+    const uniqueProds = allProds.filter(p => {
+      const compositeId = p._src + '_' + p.id;
+      if (seen.has(compositeId)) return false;
+      seen.add(compositeId);
+      return true;
+    });
+
+    const matches = uniqueProds.filter(p => {
+      const name = (p.name || p.title || '').toLowerCase();
+      const sku = (p.sku || '').toLowerCase();
+      const ref = (p.reference || '').toLowerCase();
+      const barcode = (p.barcode || '').toLowerCase();
+      
+      return name.includes(val.toLowerCase()) || 
+             sku.includes(val.toLowerCase()) || 
+             ref.includes(val.toLowerCase()) || 
+             barcode.includes(val.toLowerCase());
+    });
+
+    listEl.innerHTML = '';
+    listEl.style.display = 'block';
+
+    matches.slice(0, 10).forEach(p => {
+      const item = document.createElement('div');
+      item.className = 'autocomplete-item';
+      item.style.padding = '8px 12px';
+      item.style.cursor = 'pointer';
+      item.style.borderBottom = '1px solid var(--border-color)';
+      item.style.fontSize = '0.82rem';
+
+      const pName = p.name || p.title || '';
+      const pPrice = Number(p.price);
+      const srcLabel = p._src === 'creaticos' ? 'Creaticos' : 'Futunet';
+      const codeLabel = p.sku ? ` [SKU: ${p.sku}]` : '';
+
+      item.textContent = `${pName} (${formatMoney(pPrice)}) - ${srcLabel}${codeLabel}`;
+      
+      item.onclick = () => {
+        input.value = pName;
+        idInput.value = p._src + '_' + p.id;
+        
+        const priceInput = tr.querySelector('.row-price');
+        const taxSelect = tr.querySelector('.row-tax');
+
+        if (priceInput) priceInput.value = pPrice.toFixed(2);
+        if (taxSelect) {
+          taxSelect.value = (p.tax !== undefined) ? p.tax.toString() : (settings ? settings.defaultTax.toString() : '18');
+        }
+
+        listEl.style.display = 'none';
+        calculateInvoiceFormTotals();
+      };
+      listEl.appendChild(item);
+    });
+
+    const customItem = document.createElement('div');
+    customItem.className = 'autocomplete-item';
+    customItem.style.padding = '8px 12px';
+    customItem.style.cursor = 'pointer';
+    customItem.style.borderBottom = '1px solid var(--border-color)';
+    customItem.style.fontSize = '0.82rem';
+    customItem.style.fontWeight = '600';
+    customItem.style.color = 'var(--text-muted)';
+    customItem.textContent = `✏️ Usar concepto temporal: "${val}"`;
+    customItem.onclick = () => {
+      idInput.value = 'custom';
+      listEl.style.display = 'none';
+    };
+    listEl.appendChild(customItem);
+
+    const createItem = document.createElement('div');
+    createItem.className = 'autocomplete-item';
+    createItem.style.padding = '8px 12px';
+    createItem.style.cursor = 'pointer';
+    createItem.style.fontSize = '0.82rem';
+    createItem.style.fontWeight = '600';
+    createItem.style.color = 'var(--primary)';
+    createItem.textContent = `➕ Crear nuevo producto: "${val}"`;
+    createItem.onclick = () => {
+      listEl.style.display = 'none';
+      localStorage.setItem('redirect_product_invoice_row', rowId);
+      localStorage.setItem('redirect_product_invoice_name', val);
+
+      switchPanel('products');
+      switchSubTab('products', 'form');
+      openNewProductForm();
+      
+      const formNameInput = document.getElementById('form-product-name');
+      if (formNameInput) {
+        formNameInput.value = val;
+      }
+    };
+    listEl.appendChild(createItem);
   }
 
   // Calculate Subtotal, Taxes, and Totals inside creation form
@@ -855,8 +915,9 @@ window.CreaticosBilling = (function () {
     let totalItbis = 0;
 
     for (let tr of rows) {
-      const productSelect = tr.querySelector('.row-product-select');
-      const description = tr.querySelector('.row-desc').value.trim();
+      const searchInput = tr.querySelector('.row-product-search');
+      const productIdInput = tr.querySelector('.row-product-id');
+      const description = searchInput ? searchInput.value.trim() : '';
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
       const taxRate = Number(tr.querySelector('.row-tax').value) || 0;
@@ -870,7 +931,7 @@ window.CreaticosBilling = (function () {
       const lineTax = lineSub * (taxRate / 100);
 
       items.push({
-        productId: productSelect.value,
+        productId: productIdInput ? productIdInput.value : 'custom',
         description: description,
         price: price,
         qty: qty,
@@ -1565,6 +1626,49 @@ window.CreaticosBilling = (function () {
       }
 
       await fetchAllData();
+
+      // Check if redirecting back to invoice row
+      const redirectRowId = localStorage.getItem('redirect_product_invoice_row');
+      if (redirectRowId) {
+        localStorage.removeItem('redirect_product_invoice_row');
+        localStorage.removeItem('redirect_product_invoice_name');
+
+        const tr = document.getElementById(redirectRowId);
+        if (tr) {
+          const savedName = document.getElementById('form-product-name').value.trim();
+          
+          let savedProd = null;
+          let compositeId = 'custom';
+          
+          if (isCreaticos) {
+            savedProd = creaticosProducts.find(p => p.name === savedName);
+            if (savedProd) compositeId = 'creaticos_' + savedProd.id;
+          } else {
+            savedProd = futunetProducts.find(p => p.title === savedName);
+            if (savedProd) compositeId = 'futunet_' + savedProd.id;
+          }
+
+          if (savedProd) {
+            const searchInput = tr.querySelector('.row-product-search');
+            const idInput = tr.querySelector('.row-product-id');
+            const priceInput = tr.querySelector('.row-price');
+            const taxSelect = tr.querySelector('.row-tax');
+
+            if (searchInput) searchInput.value = savedName;
+            if (idInput) idInput.value = compositeId;
+            if (priceInput) priceInput.value = Number(savedProd.price).toFixed(2);
+            if (taxSelect) {
+              taxSelect.value = (savedProd.tax !== undefined) ? savedProd.tax.toString() : (settings ? settings.defaultTax.toString() : '18');
+            }
+          }
+          
+          switchPanel('invoices');
+          switchSubTab('invoices', 'form');
+          calculateInvoiceFormTotals();
+          return;
+        }
+      }
+
       switchSubTab('products', 'list');
       renderProductsTable();
     } catch (err) {
@@ -1934,7 +2038,7 @@ window.CreaticosBilling = (function () {
 
     matches.forEach(c => {
       const item = document.createElement('div');
-      item.className = 'autocomplete-suggestion';
+      item.className = 'autocomplete-item';
       item.textContent = c.name + (c.rnc ? ` (RNC: ${c.rnc})` : '');
       item.onclick = () => {
         document.getElementById('pos-client-search').value = c.name;
@@ -2351,7 +2455,7 @@ window.CreaticosBilling = (function () {
     openNewInvoiceForm: openNewInvoiceForm,
     addInvoiceFormItemRow: addInvoiceFormItemRow,
     deleteInvoiceFormItemRow: deleteInvoiceFormItemRow,
-    handleFormProductSelect: handleFormProductSelect,
+    searchRowProductAutocomplete: searchRowProductAutocomplete,
     calculateInvoiceFormTotals: calculateInvoiceFormTotals,
     searchClientAutocomplete: searchClientAutocomplete,
     handleNcfTypeChange: handleNcfTypeChange,

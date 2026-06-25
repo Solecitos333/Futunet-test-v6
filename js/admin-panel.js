@@ -3459,17 +3459,31 @@
       var pdfEl = document.getElementById('iv-voucher-pdf');
       var downloadLink = document.getElementById('iv-download-link');
 
-      downloadLink.href = currentSelectedPaymentData.voucherUrl;
+      var safeVoucherUrl = (currentSelectedPaymentData.voucherUrl || '').trim();
+      var isSafeUrl = !safeVoucherUrl.toLowerCase().startsWith('javascript:') && 
+                      !safeVoucherUrl.toLowerCase().startsWith('data:') &&
+                      !safeVoucherUrl.toLowerCase().startsWith('vbscript:');
 
-      // Detectar si es PDF
-      if (currentSelectedPaymentData.voucherUrl.indexOf('.pdf') > -1) {
-        imgEl.style.display = 'none';
-        pdfEl.style.display = 'block';
-        pdfEl.src = currentSelectedPaymentData.voucherUrl;
+      if (isSafeUrl) {
+        downloadLink.href = safeVoucherUrl;
+        downloadLink.style.display = 'inline-flex';
+        
+        // Detectar si es PDF
+        if (safeVoucherUrl.indexOf('.pdf') > -1) {
+          imgEl.style.display = 'none';
+          pdfEl.style.display = 'block';
+          pdfEl.src = safeVoucherUrl;
+        } else {
+          pdfEl.style.display = 'none';
+          imgEl.style.display = 'block';
+          imgEl.src = safeVoucherUrl;
+        }
       } else {
+        downloadLink.href = '#';
+        downloadLink.style.display = 'none';
         pdfEl.style.display = 'none';
-        imgEl.style.display = 'block';
-        imgEl.src = currentSelectedPaymentData.voucherUrl;
+        imgEl.style.display = 'none';
+        showToast('Enlace de comprobante no seguro bloqueado.', 'error');
       }
 
       var btnApprove = document.getElementById('btn-approve-voucher');
