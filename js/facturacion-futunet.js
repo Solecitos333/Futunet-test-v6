@@ -3,7 +3,7 @@
  * Maneja estadísticas (Chart.js), CRUD de facturas, clientes, productos y cobros con Firestore.
  */
 
-window.CreaticosBilling = (function () {
+window.FutunetBilling = (function () {
   'use strict';
 
   // Firestore DB reference
@@ -34,21 +34,21 @@ window.CreaticosBilling = (function () {
 
   // Initialize Module
   async function init() {
-    console.log('%c✏️ Initializing Creaticos Billing System...', 'color: #6366f1; font-weight: bold;');
+    console.log('%c✏️ Initializing Futunet Billing System...', 'color: #0a70a2; font-weight: bold;');
     try {
       await loadSettings();
       await fetchAllData();
       initDashboard();
       setupEventListeners();
     } catch (err) {
-      console.error('Error initializing Creaticos Billing:', err);
+      console.error('Error initializing Futunet Billing:', err);
       alert('Error al inicializar la base de datos de facturación.');
     }
   }
 
   // Load Settings (Ensure default document in Firestore if not existing)
   async function loadSettings() {
-    const docRef = getDB().collection('creaticos_settings').doc('general');
+    const docRef = getDB().collection('futunet_settings').doc('general');
     const doc = await docRef.get();
     if (doc.exists) {
       settings = doc.data();
@@ -66,12 +66,12 @@ window.CreaticosBilling = (function () {
     } else {
       // Default initial settings
       settings = {
-        name: 'Creaticos Papelería y Sublimados',
-        rnc: '131-78945-2',
+        name: 'Futunet Suministros',
+        rnc: '132-70207-7',
         phone: '809-541-2367',
-        email: 'info@creaticos.com.do',
-        address: 'Av. Gustavo Mejía Ricart #83, Santo Domingo, R.D.',
-        invoicePrefix: 'CRE-',
+        email: 'info@futunet.com.do',
+        address: 'Santo Domingo, R.D.',
+        invoicePrefix: 'FUT-',
         nextInvoiceNum: 1001,
         quotePrefix: 'COT-',
         nextQuoteNum: 1001,
@@ -112,7 +112,7 @@ window.CreaticosBilling = (function () {
 
   // Fetch all collections in background
   async function fetchAllData() {
-    const clientsSnap = await getDB().collection('creaticos_clients').get();
+    const clientsSnap = await getDB().collection('futunet_clients').get();
     clients = [];
     clientsSnap.forEach(doc => {
       clients.push({ id: doc.id, ...doc.data() });
@@ -132,16 +132,16 @@ window.CreaticosBilling = (function () {
 
     // Update active products based on filter selection
     const sourceEl = document.getElementById('products-source-filter');
-    const source = sourceEl ? sourceEl.value : 'creaticos';
-    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+    const source = sourceEl ? sourceEl.value : 'futunet';
+    products = source === 'futunet' ? futunetProducts : creaticosProducts;
 
-    const invoicesSnap = await getDB().collection('creaticos_invoices').orderBy('createdAt', 'desc').get();
+    const invoicesSnap = await getDB().collection('futunet_invoices').orderBy('createdAt', 'desc').get();
     invoices = [];
     invoicesSnap.forEach(doc => {
       invoices.push({ id: doc.id, ...doc.data() });
     });
 
-    const paymentsSnap = await getDB().collection('creaticos_payments').orderBy('timestamp', 'desc').get();
+    const paymentsSnap = await getDB().collection('futunet_payments').orderBy('timestamp', 'desc').get();
     payments = [];
     paymentsSnap.forEach(doc => {
       payments.push({ id: doc.id, ...doc.data() });
@@ -462,10 +462,10 @@ window.CreaticosBilling = (function () {
 
       let actionsHtml = `
         <div class="table-actions">
-          <button class="table-btn table-btn-primary" title="Ver Detalle" onclick="CreaticosBilling.viewInvoice('${inv.id}')">
+          <button class="table-btn table-btn-primary" title="Ver Detalle" onclick="FutunetBilling.viewInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
-          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" onclick="CreaticosBilling.printInvoiceDirectly('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" onclick="FutunetBilling.printInvoiceDirectly('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
           </button>
       `;
@@ -473,20 +473,20 @@ window.CreaticosBilling = (function () {
       if (inv.status !== 'cancelled') {
         if (inv.docType === 'quote' || inv.docType === 'proforma') {
           actionsHtml += `
-            <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="CreaticosBilling.convertQuoteFromList('${inv.id}')">
+            <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="FutunetBilling.convertQuoteFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           `;
         } else if (inv.status === 'pending' && balance > 0) {
           actionsHtml += `
-            <button class="table-btn table-btn-success" title="Registrar Cobro" onclick="CreaticosBilling.openRegisterPaymentFromList('${inv.id}')">
+            <button class="table-btn table-btn-success" title="Registrar Cobro" onclick="FutunetBilling.openRegisterPaymentFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
             </button>
           `;
         }
 
         actionsHtml += `
-          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="CreaticosBilling.cancelInvoice('${inv.id}', '${inv.invoiceNumber}')">
+          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="FutunetBilling.cancelInvoice('${inv.id}', '${inv.invoiceNumber}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
         `;
@@ -636,19 +636,19 @@ window.CreaticosBilling = (function () {
 
     tr.innerHTML = `
       <td>
-        <select class="form-input row-product-select" onchange="CreaticosBilling.handleFormProductSelect(this, '${rowId}')" style="margin-bottom:4px;">
+        <select class="form-input row-product-select" onchange="FutunetBilling.handleFormProductSelect(this, '${rowId}')" style="margin-bottom:4px;">
           ${prodOptions}
         </select>
         <input type="text" class="form-input row-desc" placeholder="Detalle / Descripción del servicio..." value="${itemData ? itemData.description : ''}" required />
       </td>
       <td>
-        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="CreaticosBilling.calculateInvoiceFormTotals()" />
+        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="FutunetBilling.calculateInvoiceFormTotals()" />
       </td>
       <td>
-        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="CreaticosBilling.calculateInvoiceFormTotals()" />
+        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="FutunetBilling.calculateInvoiceFormTotals()" />
       </td>
       <td>
-        <select class="form-input row-tax" onchange="CreaticosBilling.calculateInvoiceFormTotals()">
+        <select class="form-input row-tax" onchange="FutunetBilling.calculateInvoiceFormTotals()">
           <option value="18" ${!itemData || itemData.tax === 18 ? 'selected' : ''}>18% ITBIS</option>
           <option value="16" ${itemData && itemData.tax === 16 ? 'selected' : ''}>16% ITBIS</option>
           <option value="0" ${itemData && itemData.tax === 0 ? 'selected' : ''}>Exento (0%)</option>
@@ -656,7 +656,7 @@ window.CreaticosBilling = (function () {
       </td>
       <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">RD$ 0.00</td>
       <td>
-        <button type="button" class="table-btn table-btn-danger" title="Quitar Fila" onclick="CreaticosBilling.deleteInvoiceFormItemRow('${rowId}')">
+        <button type="button" class="table-btn table-btn-danger" title="Quitar Fila" onclick="FutunetBilling.deleteInvoiceFormItemRow('${rowId}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       </td>
@@ -919,7 +919,7 @@ window.CreaticosBilling = (function () {
     };
 
     // Save to Firestore
-    const newDoc = await getDB().collection('creaticos_invoices').add(invoiceData);
+    const newDoc = await getDB().collection('futunet_invoices').add(invoiceData);
 
     // Update settings sequences
     const settingsUpdates = {};
@@ -943,7 +943,7 @@ window.CreaticosBilling = (function () {
       }
     }
 
-    await getDB().collection('creaticos_settings').doc('general').update(settingsUpdates);
+    await getDB().collection('futunet_settings').doc('general').update(settingsUpdates);
     
     // Reload local settings and cache
     await loadSettings();
@@ -961,14 +961,14 @@ window.CreaticosBilling = (function () {
     }
 
     try {
-      await getDB().collection('creaticos_invoices').doc(id).update({
+      await getDB().collection('futunet_invoices').doc(id).update({
         status: 'cancelled'
       });
 
       // Write Audit Log
       await getDB().collection('audit_logs').add({
-        action: 'Anulación Factura Creaticos',
-        details: `Factura ${number} anulada en el panel de Creaticos`,
+        action: 'Anulación Factura Futunet',
+        details: `Factura ${number} anulada en el panel de Futunet`,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         userId: firebase.auth().currentUser.uid,
         userEmail: firebase.auth().currentUser.email
@@ -1161,10 +1161,10 @@ window.CreaticosBilling = (function () {
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       };
 
-      await getDB().collection('creaticos_payments').add(paymentData);
+      await getDB().collection('futunet_payments').add(paymentData);
 
       // 2. Fetch current invoice paid amount
-      const invRef = getDB().collection('creaticos_invoices').doc(invoiceId);
+      const invRef = getDB().collection('futunet_invoices').doc(invoiceId);
       const invSnap = await invRef.get();
       if (invSnap.exists) {
         const inv = invSnap.data();
@@ -1227,10 +1227,10 @@ window.CreaticosBilling = (function () {
         <td>${c.address || '—'}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditClientForm('${c.id}')">
+            <button class="table-btn table-btn-primary" title="Editar" onclick="FutunetBilling.openEditClientForm('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteClient('${c.id}', '${c.name}')">
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="FutunetBilling.deleteClient('${c.id}', '${c.name}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -1300,11 +1300,11 @@ window.CreaticosBilling = (function () {
     let savedId = id;
     if (id) {
       // Update
-      await getDB().collection('creaticos_clients').doc(id).update(clientData);
+      await getDB().collection('futunet_clients').doc(id).update(clientData);
     } else {
       // Create
       clientData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      const newDoc = await getDB().collection('creaticos_clients').add(clientData);
+      const newDoc = await getDB().collection('futunet_clients').add(clientData);
       savedId = newDoc.id;
     }
 
@@ -1339,7 +1339,7 @@ window.CreaticosBilling = (function () {
     }
 
     try {
-      await getDB().collection('creaticos_clients').doc(id).delete();
+      await getDB().collection('futunet_clients').doc(id).delete();
       await fetchAllData();
       renderClientsTable();
     } catch (e) {
@@ -1355,9 +1355,9 @@ window.CreaticosBilling = (function () {
     switchPanel('products');
 
     const sourceEl = document.getElementById('products-source-filter');
-    const source = sourceEl ? sourceEl.value : 'creaticos';
+    const source = sourceEl ? sourceEl.value : 'futunet';
     
-    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+    products = source === 'futunet' ? futunetProducts : creaticosProducts;
 
     const searchVal = document.getElementById('products-search').value.toLowerCase();
     
@@ -1408,10 +1408,10 @@ window.CreaticosBilling = (function () {
         <td>${tax}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="CreaticosBilling.openEditProductForm('${p.id}', ${isCreaticosVal})">
+            <button class="table-btn table-btn-primary" title="Editar" onclick="FutunetBilling.openEditProductForm('${p.id}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="CreaticosBilling.deleteProduct('${p.id}', '${name.replace(/'/g, "\\'")}', ${isCreaticosVal})">
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="FutunetBilling.deleteProduct('${p.id}', '${name.replace(/'/g, "\\'")}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -1453,7 +1453,7 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-product-barcode').value = '';
 
     const sourceFilter = document.getElementById('products-source-filter');
-    const activeSource = sourceFilter ? sourceFilter.value : 'creaticos';
+    const activeSource = sourceFilter ? sourceFilter.value : 'futunet';
     
     const sourceSelect = document.getElementById('form-product-source');
     if (sourceSelect) {
@@ -1658,7 +1658,7 @@ window.CreaticosBilling = (function () {
     };
 
     try {
-      await getDB().collection('creaticos_settings').doc('general').update(updated);
+      await getDB().collection('futunet_settings').doc('general').update(updated);
       
       // Reload settings in cache
       await loadSettings();
@@ -1803,12 +1803,12 @@ window.CreaticosBilling = (function () {
           <div class="pos-item-meta">${formatMoney(item.price)} c/u${sourceBadge}</div>
         </div>
         <div class="pos-item-qty-controls">
-          <button type="button" class="pos-qty-btn" onclick="CreaticosBilling.changePosCartItemQty(${index}, -1)">-</button>
+          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, -1)">-</button>
           <span class="pos-qty-val">${item.qty}</span>
-          <button type="button" class="pos-qty-btn" onclick="CreaticosBilling.changePosCartItemQty(${index}, 1)">+</button>
+          <button type="button" class="pos-qty-btn" onclick="FutunetBilling.changePosCartItemQty(${index}, 1)">+</button>
         </div>
         <div class="pos-item-price">${formatMoney(sub)}</div>
-        <button type="button" class="pos-btn-icon" onclick="CreaticosBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
+        <button type="button" class="pos-btn-icon" onclick="FutunetBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       `;
@@ -2100,9 +2100,9 @@ window.CreaticosBilling = (function () {
 
     try {
       const isFutunet = (settings.rnc === '132-70207-7');
-      const collectionName = isFutunet ? 'futunet_invoices' : 'creaticos_invoices';
-      const settingsColl = isFutunet ? 'futunet_settings' : 'creaticos_settings';
-      const paymentsColl = isFutunet ? 'futunet_payments' : 'creaticos_payments';
+      const collectionName = isFutunet ? 'futunet_invoices' : 'futunet_invoices';
+      const settingsColl = isFutunet ? 'futunet_settings' : 'futunet_settings';
+      const paymentsColl = isFutunet ? 'futunet_payments' : 'futunet_payments';
 
       const docRef = await getDB().collection(collectionName).add(invoiceData);
 

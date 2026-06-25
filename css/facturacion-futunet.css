@@ -1,18 +1,18 @@
 /* ═══════════════════════════════════════════
-   CREATICOS BILLING SYSTEM STYLES
+   FUTUNET BILLING SYSTEM STYLES
    Premium Indigo & Teal palette matching branding
    ═══════════════════════════════════════════ */
 
 :root {
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-rgb: 99, 102, 241;
-  --secondary: #14b8a6;
-  --secondary-hover: #0d9488;
+  --primary: #0a70a2;
+  --primary-hover: #085d88;
+  --primary-rgb: 10, 112, 162;
+  --secondary: #00bcd4;
+  --secondary-hover: #00acc1;
   --dark-sidebar: #0f1923;
-  --bg-layout: linear-gradient(180deg, #f8faff 0%, #eef2ff 100%);
-  --card-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(99, 102, 241, 0.03);
-  --input-focus: rgba(99, 102, 241, 0.15);
+  --bg-layout: linear-gradient(180deg, #f3f7fc 0%, #eaf2fb 100%);
+  --card-shadow: 0 10px 30px -10px rgba(10, 112, 162, 0.08), 0 1px 3px rgba(10, 112, 162, 0.03);
+  --input-focus: rgba(10, 112, 162, 0.15);
   --text-main: #1e293b;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
