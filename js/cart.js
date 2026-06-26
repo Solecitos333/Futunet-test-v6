@@ -475,7 +475,7 @@
       <div class="cart-checkout-modal-card">
         <div class="cart-checkout-modal-header">
           <h3>Detalles de Entrega y Pago</h3>
-          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal">&times;</button>
+          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal" aria-label="Cerrar modal de pago">&times;</button>
         </div>
         
         <!-- Wizard Progress Navigation -->
@@ -595,7 +595,7 @@
                 
                 <div class="checkout-preview-box" id="checkout-voucher-preview-box" style="display:none;">
                   <span id="checkout-voucher-filename">archivo.jpg</span>
-                  <button type="button" class="btn-remove-file" id="btn-remove-chk-file">&times; Eliminar</button>
+                  <button type="button" class="btn-remove-file" id="btn-remove-chk-file" aria-label="Eliminar archivo">&times; Eliminar</button>
                 </div>
               </div>
             </div>
@@ -1068,9 +1068,9 @@
             <div class="cart-item__title">${escapeHTML(product.title)}</div>
             <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
             <div class="cart-item__qty">
-              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Quitar una unidad">-</button>
               <span>${qty}</span>
-              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Agregar una unidad">+</button>
             </div>
             <div class="cart-item__meta">Precio: ${escapeHTML(product.price)}</div>
           </div>
