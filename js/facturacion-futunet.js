@@ -74,7 +74,7 @@ window.FutunetBilling = (function () {
         rnc: '132-70207-7',
         phone: '829-741-1041',
         email: 'info@futunet.com.do',
-        address: 'Santo Domingo, R.D.',
+        address: 'Calle 7 Las Colinas, Santiago',
         invoicePrefix: 'FUT-',
         nextInvoiceNum: 1001,
         quotePrefix: 'COT-',

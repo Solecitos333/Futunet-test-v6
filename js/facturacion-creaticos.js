@@ -74,7 +74,7 @@ window.CreaticosBilling = (function () {
         rnc: '131-78945-2',
         phone: '849-342-8525',
         email: '',
-        address: 'Santo Domingo, R.D.',
+        address: 'Calle 7 Las Colinas, Santiago',
         invoicePrefix: 'CRE-',
         nextInvoiceNum: 1001,
         quotePrefix: 'COT-',
