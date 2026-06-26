@@ -32,6 +32,10 @@ window.CreaticosBilling = (function () {
   let invoiceCurrentPage = 1;
   const invoicePageSize = 10;
 
+  // Edit State
+  let editingInvoiceId = null;
+  let editingInvoiceNumber = null;
+
   // Initialize Module
   async function init() {
     console.log('%c✏️ Initializing Creaticos Billing System...', 'color: #6366f1; font-weight: bold;');
@@ -473,6 +477,9 @@ window.CreaticosBilling = (function () {
       if (inv.status !== 'cancelled') {
         if (inv.docType === 'quote' || inv.docType === 'proforma') {
           actionsHtml += `
+            <button class="table-btn table-btn-secondary" title="Editar Cotización" onclick="CreaticosBilling.editQuote('${inv.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
+            </button>
             <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="CreaticosBilling.convertQuoteFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
@@ -541,9 +548,17 @@ window.CreaticosBilling = (function () {
 
   // Reset form and view Create Panel
   function openNewInvoiceForm() {
+    editingInvoiceId = null;
+    editingInvoiceNumber = null;
+
     switchPanel('invoices');
     switchSubTab('invoices', 'form');
-    document.getElementById('invoice-form-title').textContent = 'Crear Nueva Factura';
+    
+    const titleEl = document.getElementById('invoice-form-title');
+    if (titleEl) titleEl.textContent = 'Crear Nueva Factura';
+
+    const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Guardar Factura';
     
     // Clear fields
     document.getElementById('form-invoice-id').value = '';
@@ -949,14 +964,19 @@ window.CreaticosBilling = (function () {
     let invoiceNum = '';
     let status = 'pending';
     
-    if (docType === 'quote') {
-      invoiceNum = (settings.quotePrefix || 'COT-') + String(settings.nextQuoteNum || 1001);
-      status = 'quote';
-    } else if (docType === 'proforma') {
-      invoiceNum = (settings.proformaPrefix || 'PROF-') + String(settings.nextProformaNum || 1001);
-      status = 'proforma';
+    if (editingInvoiceId && editingInvoiceNumber) {
+      invoiceNum = editingInvoiceNumber;
+      status = docType === 'quote' ? 'quote' : (docType === 'proforma' ? 'proforma' : 'pending');
     } else {
-      invoiceNum = settings.invoicePrefix + String(settings.nextInvoiceNum);
+      if (docType === 'quote') {
+        invoiceNum = (settings.quotePrefix || 'COT-') + String(settings.nextQuoteNum || 1001);
+        status = 'quote';
+      } else if (docType === 'proforma') {
+        invoiceNum = (settings.proformaPrefix || 'PROF-') + String(settings.nextProformaNum || 1001);
+        status = 'proforma';
+      } else {
+        invoiceNum = settings.invoicePrefix + String(settings.nextInvoiceNum);
+      }
     }
 
     // Document Data
@@ -976,35 +996,45 @@ window.CreaticosBilling = (function () {
       total: total,
       paidAmount: 0,
       status: status, // paid, pending, cancelled, quote
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Save to Firestore
-    const newDoc = await getDB().collection('creaticos_invoices').add(invoiceData);
-
-    // Update settings sequences
-    const settingsUpdates = {};
-    
-    if (docType === 'quote') {
-      settingsUpdates.nextQuoteNum = (settings.nextQuoteNum || 1001) + 1;
-    } else if (docType === 'proforma') {
-      settingsUpdates.nextProformaNum = (settings.nextProformaNum || 1001) + 1;
+    if (editingInvoiceId) {
+      // Save updates to Firestore
+      await getDB().collection('creaticos_invoices').doc(editingInvoiceId).update(invoiceData);
     } else {
-      settingsUpdates.nextInvoiceNum = settings.nextInvoiceNum + 1;
-      if (ncfType === 'B01') {
-        settingsUpdates.ncfB01Seq = settings.ncfB01Seq + 1;
-      } else if (ncfType === 'B02') {
-        settingsUpdates.ncfB02Seq = settings.ncfB02Seq + 1;
-      } else if (ncfType === 'B14') {
-        settingsUpdates.ncfB14Seq = (settings.ncfB14Seq || 1) + 1;
-      } else if (ncfType === 'B15') {
-        settingsUpdates.ncfB15Seq = (settings.ncfB15Seq || 1) + 1;
-      } else if (ncfType === 'B12') {
-        settingsUpdates.ncfB12Seq = (settings.ncfB12Seq || 1) + 1;
+      // Save new document to Firestore
+      invoiceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      const newDoc = await getDB().collection('creaticos_invoices').add(invoiceData);
+
+      // Update settings sequences
+      const settingsUpdates = {};
+      
+      if (docType === 'quote') {
+        settingsUpdates.nextQuoteNum = (settings.nextQuoteNum || 1001) + 1;
+      } else if (docType === 'proforma') {
+        settingsUpdates.nextProformaNum = (settings.nextProformaNum || 1001) + 1;
+      } else {
+        settingsUpdates.nextInvoiceNum = settings.nextInvoiceNum + 1;
+        if (ncfType === 'B01') {
+          settingsUpdates.ncfB01Seq = settings.ncfB01Seq + 1;
+        } else if (ncfType === 'B02') {
+          settingsUpdates.ncfB02Seq = settings.ncfB02Seq + 1;
+        } else if (ncfType === 'B14') {
+          settingsUpdates.ncfB14Seq = (settings.ncfB14Seq || 1) + 1;
+        } else if (ncfType === 'B15') {
+          settingsUpdates.ncfB15Seq = (settings.ncfB15Seq || 1) + 1;
+        } else if (ncfType === 'B12') {
+          settingsUpdates.ncfB12Seq = (settings.ncfB12Seq || 1) + 1;
+        }
       }
+
+      await getDB().collection('creaticos_settings').doc('general').update(settingsUpdates);
     }
 
-    await getDB().collection('creaticos_settings').doc('general').update(settingsUpdates);
+    // Reset edit state
+    editingInvoiceId = null;
+    editingInvoiceNumber = null;
     
     // Reload local settings and cache
     await loadSettings();
@@ -2383,6 +2413,65 @@ window.CreaticosBilling = (function () {
     }
   }
 
+  function editQuote(id) {
+    const inv = invoices.find(i => i.id === id);
+    if (!inv) return;
+
+    editingInvoiceId = id;
+    editingInvoiceNumber = inv.invoiceNumber;
+
+    switchPanel('invoices');
+    switchSubTab('invoices', 'form');
+
+    const titleEl = document.getElementById('invoice-form-title');
+    if (titleEl) {
+      titleEl.textContent = inv.docType === 'quote' ? 'Editar Cotización' : 'Editar Proforma';
+    }
+
+    const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.textContent = 'Guardar Cambios';
+    }
+
+    // Populate fields
+    document.getElementById('form-invoice-id').value = inv.id;
+    document.getElementById('form-invoice-client-name').value = inv.clientName;
+    document.getElementById('form-invoice-client-id').value = inv.clientId;
+    document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
+    document.getElementById('form-invoice-date').value = inv.date;
+    document.getElementById('form-invoice-due-date').value = inv.dueDate;
+
+    const docTypeSelect = document.getElementById('form-invoice-doc-type');
+    if (docTypeSelect) {
+      docTypeSelect.value = inv.docType;
+      handleDocTypeChange(inv.docType);
+    }
+
+    const ncfTypeSelect = document.getElementById('form-invoice-ncf-type');
+    if (ncfTypeSelect) {
+      ncfTypeSelect.value = inv.ncfType || 'none';
+    }
+    
+    const ncfInput = document.getElementById('form-invoice-ncf');
+    if (ncfInput) {
+      ncfInput.value = inv.ncf || '';
+    }
+
+    // Populate items
+    const tbody = document.getElementById('invoice-form-items-body');
+    tbody.innerHTML = '';
+
+    if (inv.items && inv.items.length > 0) {
+      inv.items.forEach(item => {
+        addInvoiceFormItemRow(item);
+      });
+    } else {
+      addInvoiceFormItemRow();
+    }
+
+    calculateInvoiceFormTotals();
+  }
+
   function convertQuoteFromList(id) {
     const inv = invoices.find(i => i.id === id);
     if (!inv) return;
@@ -2453,6 +2542,7 @@ window.CreaticosBilling = (function () {
     // Invoices
     renderInvoicesTable: renderInvoicesTable,
     openNewInvoiceForm: openNewInvoiceForm,
+    editQuote: editQuote,
     addInvoiceFormItemRow: addInvoiceFormItemRow,
     deleteInvoiceFormItemRow: deleteInvoiceFormItemRow,
     searchRowProductAutocomplete: searchRowProductAutocomplete,
