@@ -68,9 +68,9 @@ window.CreaticosBilling = (function () {
       settings = {
         name: 'Creaticos Papelería y Sublimados',
         rnc: '131-78945-2',
-        phone: '809-541-2367',
-        email: 'info@creaticos.com.do',
-        address: 'Av. Gustavo Mejía Ricart #83, Santo Domingo, R.D.',
+        phone: '849-342-8525',
+        email: '',
+        address: 'Santo Domingo, R.D.',
         invoicePrefix: 'CRE-',
         nextInvoiceNum: 1001,
         quotePrefix: 'COT-',

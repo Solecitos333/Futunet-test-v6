@@ -68,7 +68,7 @@ window.FutunetBilling = (function () {
       settings = {
         name: 'Futunet Suministros',
         rnc: '132-70207-7',
-        phone: '809-541-2367',
+        phone: '829-741-1041',
         email: 'info@futunet.com.do',
         address: 'Santo Domingo, R.D.',
         invoicePrefix: 'FUT-',
