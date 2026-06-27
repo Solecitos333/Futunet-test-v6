@@ -175,7 +175,11 @@
       <div class="admin-panel" id="panel-invoices">
         <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
           <h1>Gestión de Facturas y Cotizaciones</h1>
-          <div class="admin-topbar-actions">
+          <div class="admin-topbar-actions" style="display:flex; gap:8px;">
+            <button class="admin-btn admin-btn-secondary" onclick="ERPBilling.exportInvoicesToCSV()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;" title="Exportar Historial a CSV">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Exportar CSV
+            </button>
             <button class="admin-btn admin-btn-primary" onclick="ERPBilling.openNewInvoiceForm()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
               Nueva Factura / Cotización
@@ -400,11 +404,16 @@
           <div class="pos-layout">
             <!-- Left: Cart details (items, NCF, client, totals, checkout) -->
             <div class="pos-cart-panel">
-              <div class="pos-cart-header">
+              <div class="pos-cart-header" style="display:flex; justify-content:space-between; align-items:center;">
                 <h3>Detalle de Venta</h3>
-                <button type="button" class="pos-btn-icon" onclick="ERPBilling.clearPosCart()" title="Limpiar Venta">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/></svg>
-                </button>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  <button type="button" id="pos-btn-cash-session" class="admin-btn admin-btn-secondary" style="height:32px; font-size:0.75rem; padding: 0 10px; display:inline-flex; align-items:center; gap:4px; border-radius:8px;" onclick="ERPBilling.handleCashSessionAction()">
+                    <span id="pos-cash-session-status">Caja Cerrada</span>
+                  </button>
+                  <button type="button" class="pos-btn-icon" onclick="ERPBilling.clearPosCart()" title="Limpiar Venta">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/></svg>
+                  </button>
+                </div>
               </div>
 
               <!-- Cart items list (scrollable) -->
@@ -639,8 +648,12 @@
 
       <!-- ═══ PANEL: CLIENTS (CLIENTES) ═══ -->
       <div class="admin-panel" id="panel-clients">
-        <div class="admin-topbar">
+        <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center;">
           <h1>Directorio de Clientes</h1>
+          <button class="admin-btn admin-btn-secondary" onclick="ERPBilling.exportClientsToCSV()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;" title="Exportar Clientes a CSV">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Exportar CSV
+          </button>
         </div>
 
         <!-- Sub-tabs navigation -->
@@ -723,8 +736,12 @@
 
       <!-- ═══ PANEL: PRODUCTS (PRODUCTOS / SERVICIOS) ═══ -->
       <div class="admin-panel" id="panel-products">
-        <div class="admin-topbar">
+        <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center;">
           <h1>Productos y Servicios</h1>
+          <button class="admin-btn admin-btn-secondary" onclick="ERPBilling.exportProductsToCSV()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;" title="Exportar Catálogo a CSV">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Exportar CSV
+          </button>
         </div>
 
         <!-- Sub-tabs navigation -->
@@ -1123,6 +1140,92 @@
         <button type="button" class="admin-btn admin-btn-primary" onclick="ERPBilling.simulateNfcCardTap()" style="background: #38bdf8; border: none; color: #0f172a; font-weight: 700; border-radius: 12px; padding: 12px; font-size: 0.9rem; cursor: pointer;" id="btn-nfc-tap-action">Simular Contacto (Tap)</button>
         <button type="button" class="admin-btn admin-btn-ghost" onclick="ERPBilling.closeModal('modal-nfc-payment')" style="color: #94a3b8; border-color: #334155; padding: 10px; font-size: 0.8rem; cursor: pointer;">Cancelar Transacción</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: APERTURA DE CAJA ═══ -->
+  <div class="admin-modal" id="modal-cash-open">
+    <div class="admin-modal-content" style="max-width: 450px;">
+      <div class="admin-modal-header">
+        <h2>Apertura de Caja (POS)</h2>
+        <button class="admin-modal-close" onclick="ERPBilling.closeModal('modal-cash-open')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="cash-open-form" onsubmit="ERPBilling.openCashSession(event)">
+        <div class="admin-modal-body">
+          <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Antes de realizar ventas en el Punto de Venta, debes registrar la apertura de caja e indicar el efectivo base disponible en gaveta.</p>
+          <div class="form-group">
+            <label for="form-cash-open-amount">Efectivo Inicial en Gaveta (RD$) *</label>
+            <input type="number" id="form-cash-open-amount" class="form-input" min="0" step="0.01" value="0.00" required />
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="ERPBilling.closeModal('modal-cash-open')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Abrir Caja</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ MODAL: CIERRE DE CAJA ═══ -->
+  <div class="admin-modal" id="modal-cash-close">
+    <div class="admin-modal-content" style="max-width: 500px;">
+      <div class="admin-modal-header">
+        <h2>Cierre de Caja / Arqueo</h2>
+        <button class="admin-modal-close" onclick="ERPBilling.closeModal('modal-cash-close')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <form id="cash-close-form" onsubmit="ERPBilling.closeCashSession(event)">
+        <div class="admin-modal-body">
+          <div style="background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Efectivo Inicial:</span>
+              <strong id="cash-close-initial">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Ventas en Efectivo (+):</span>
+              <strong style="color:var(--success)" id="cash-close-sales-cash">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Ventas con Tarjeta (POS):</span>
+              <strong id="cash-close-sales-card">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Ventas con NFC (POS):</span>
+              <strong id="cash-close-sales-nfc">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+              <span style="color:var(--text-muted)">Transferencias Contables:</span>
+              <strong id="cash-close-sales-transfer">RD$ 0.00</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-color); padding-top:6px; margin-top:6px;">
+              <span><strong>Efectivo Esperado en Caja:</strong></span>
+              <strong style="color:var(--primary)" id="cash-close-expected-cash">RD$ 0.00</strong>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom:15px;">
+            <label for="form-cash-close-real">Efectivo Real Contado en Caja (RD$) *</label>
+            <input type="number" id="form-cash-close-real" class="form-input" min="0" step="0.01" required oninput="ERPBilling.calculateCashDifference()" />
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;">
+            <span>Diferencia (Sobrante/Faltante):</span>
+            <strong id="cash-close-difference">RD$ 0.00</strong>
+          </div>
+
+          <div class="form-group">
+            <label for="form-cash-close-notes">Notas / Observaciones del Cierre</label>
+            <textarea id="form-cash-close-notes" class="form-input" rows="2" placeholder="Ej. Cuadre perfecto, o falta RD$ 50 por cambio de cliente."></textarea>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-ghost" onclick="ERPBilling.closeModal('modal-cash-close')">Cancelar</button>
+          <button type="submit" class="admin-btn admin-btn-danger">Confirmar Cierre de Caja</button>
+        </div>
+      </form>
     </div>
   </div>
 

@@ -14,12 +14,14 @@ window.ERPBilling = (function () {
   const collectionInvoices = isCreaticos ? 'creaticos_invoices' : 'futunet_invoices';
   const collectionPayments = isCreaticos ? 'creaticos_payments' : 'futunet_payments';
   const collectionSettings = isCreaticos ? 'creaticos_settings' : 'futunet_settings';
+  const collectionCashSessions = isCreaticos ? 'creaticos_cash_sessions' : 'futunet_cash_sessions';
 
   // Firestore DB reference
   function getDB() { return window.FutunetFirebase.db; }
 
   // System State Caches
   let settings = null;
+  let activeCashSession = null;
   let invoices = [];
   let clients = [];
   let products = [];
@@ -65,6 +67,7 @@ window.ERPBilling = (function () {
       applyTenantTheme();
       await loadSettings();
       await fetchAllData();
+      await checkActiveCashSession();
       initDashboard();
       setupEventListeners();
     } catch (err) {
@@ -233,6 +236,7 @@ window.ERPBilling = (function () {
           defaultTax: 18
         };
       }
+      // Save it directly to Firestore so the document is created
       await docRef.set(settings);
     }
     updateBrandingText();
@@ -1613,6 +1617,25 @@ window.ERPBilling = (function () {
           paidAmount: newPaidAmount,
           status: status
         });
+
+        // Update Cash Register session totals if active
+        if (activeCashSession) {
+          const sessRef = getDB().collection(collectionCashSessions).doc(activeCashSession.id);
+          const updates = {};
+          if (method === 'Efectivo') {
+            updates.salesCash = firebase.firestore.FieldValue.increment(amount);
+          } else if (method === 'Tarjeta') {
+            updates.salesCard = firebase.firestore.FieldValue.increment(amount);
+          } else if (method === 'Transferencia') {
+            updates.salesTransfer = firebase.firestore.FieldValue.increment(amount);
+          }
+          await sessRef.update(updates);
+
+          // Refresh local cache of cash session
+          const freshDoc = await sessRef.get();
+          activeCashSession = { id: freshDoc.id, ...freshDoc.data() };
+          updateCashSessionUI();
+        }
       }
 
       // Reload references
@@ -2332,6 +2355,12 @@ window.ERPBilling = (function () {
   }
 
   function addPosCartItem(p) {
+    if (!activeCashSession) {
+      alert('Debes abrir una sesión de caja antes de agregar productos al carrito.');
+      handleCashSessionAction();
+      return;
+    }
+
     const isCr = p._isCreaticos;
     const pId = isCr ? 'creaticos_' + p.id : 'futunet_' + p.id;
     
@@ -2464,7 +2493,231 @@ window.ERPBilling = (function () {
     }
   }
 
+  // ─── CASH REGISTER TURN MANAGEMENT ───
+  async function checkActiveCashSession() {
+    if (!currentUser) return;
+    try {
+      const email = currentUser.email || '';
+      const snap = await getDB().collection(collectionCashSessions)
+        .where('status', '==', 'open')
+        .where('openedBy', '==', email)
+        .limit(1)
+        .get();
+
+      if (!snap.empty) {
+        const doc = snap.docs[0];
+        activeCashSession = { id: doc.id, ...doc.data() };
+      } else {
+        activeCashSession = null;
+      }
+      updateCashSessionUI();
+    } catch (err) {
+      console.error('Error checking active cash session:', err);
+      activeCashSession = null;
+      updateCashSessionUI();
+    }
+  }
+
+  function updateCashSessionUI() {
+    const btn = document.getElementById('pos-btn-cash-session');
+    const label = document.getElementById('pos-cash-session-status');
+    if (!btn || !label) return;
+
+    if (activeCashSession) {
+      label.textContent = `Caja Abierta: ${formatMoney(activeCashSession.initialCash + (activeCashSession.salesCash || 0))}`;
+      btn.style.background = 'rgba(16, 185, 129, 0.15)';
+      btn.style.color = '#10b981';
+      btn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+    } else {
+      label.textContent = 'Abrir Caja';
+      btn.style.background = 'rgba(239, 68, 68, 0.15)';
+      btn.style.color = '#ef4444';
+      btn.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+    }
+  }
+
+  function handleCashSessionAction() {
+    if (activeCashSession) {
+      // Pop open close register modal
+      document.getElementById('cash-close-initial').textContent = formatMoney(activeCashSession.initialCash);
+      document.getElementById('cash-close-sales-cash').textContent = formatMoney(activeCashSession.salesCash || 0);
+      document.getElementById('cash-close-sales-card').textContent = formatMoney(activeCashSession.salesCard || 0);
+      document.getElementById('cash-close-sales-nfc').textContent = formatMoney(activeCashSession.salesNfc || 0);
+      document.getElementById('cash-close-sales-transfer').textContent = formatMoney(activeCashSession.salesTransfer || 0);
+      
+      const expected = activeCashSession.initialCash + (activeCashSession.salesCash || 0);
+      document.getElementById('cash-close-expected-cash').textContent = formatMoney(expected);
+      document.getElementById('form-cash-close-real').value = '';
+      document.getElementById('cash-close-difference').textContent = 'RD$ 0.00';
+      document.getElementById('cash-close-difference').style.color = 'var(--text-main)';
+      document.getElementById('form-cash-close-notes').value = '';
+      
+      openModal('modal-cash-close');
+    } else {
+      // Pop open open register modal
+      document.getElementById('form-cash-open-amount').value = '0.00';
+      openModal('modal-cash-open');
+    }
+  }
+
+  async function openCashSession(e) {
+    if (e) e.preventDefault();
+    if (!currentUser) return;
+
+    const amountInput = document.getElementById('form-cash-open-amount');
+    const initialCash = Number(amountInput ? amountInput.value : 0) || 0;
+
+    try {
+      const email = currentUser.email || '';
+      const docData = {
+        openedBy: email,
+        openedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        initialCash: initialCash,
+        status: 'open',
+        salesCash: 0,
+        salesCard: 0,
+        salesNfc: 0,
+        salesTransfer: 0,
+        transactionsCount: 0
+      };
+
+      const ref = await getDB().collection(collectionCashSessions).add(docData);
+      activeCashSession = { id: ref.id, ...docData };
+      updateCashSessionUI();
+      closeModal('modal-cash-open');
+      alert('Caja abierta correctamente.');
+    } catch (err) {
+      console.error('Error opening cash session:', err);
+      alert('Error al abrir la caja: ' + err.message);
+    }
+  }
+
+  function calculateCashDifference() {
+    if (!activeCashSession) return;
+    const realInput = document.getElementById('form-cash-close-real');
+    const realVal = Number(realInput ? realInput.value : 0) || 0;
+    const expected = activeCashSession.initialCash + (activeCashSession.salesCash || 0);
+    const diff = realVal - expected;
+
+    const diffEl = document.getElementById('cash-close-difference');
+    if (diffEl) {
+      diffEl.textContent = formatMoney(diff);
+      if (diff === 0) {
+        diffEl.style.color = '#10b981'; // Green
+      } else if (diff < 0) {
+        diffEl.style.color = '#ef4444'; // Red
+      } else {
+        diffEl.style.color = '#3b82f6'; // Blue
+      }
+    }
+  }
+
+  async function closeCashSession(e) {
+    if (e) e.preventDefault();
+    if (!activeCashSession) return;
+
+    const realInput = document.getElementById('form-cash-close-real');
+    const notesInput = document.getElementById('form-cash-close-notes');
+    const realVal = Number(realInput ? realInput.value : 0) || 0;
+    const notes = notesInput ? notesInput.value.trim() : '';
+
+    const expected = activeCashSession.initialCash + (activeCashSession.salesCash || 0);
+    const diff = realVal - expected;
+
+    try {
+      await getDB().collection(collectionCashSessions).doc(activeCashSession.id).update({
+        closedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        realCash: realVal,
+        difference: diff,
+        notes: notes,
+        status: 'closed'
+      });
+
+      activeCashSession = null;
+      updateCashSessionUI();
+      closeModal('modal-cash-close');
+      alert('Caja cerrada con éxito. El arqueo ha sido registrado.');
+    } catch (err) {
+      console.error('Error closing cash session:', err);
+      alert('Error al cerrar la caja: ' + err.message);
+    }
+  }
+
+  // ─── DATA EXPORT UTILITIES ───
+  function downloadCSV(filename, csvContent) {
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+
+  function exportInvoicesToCSV() {
+    if (invoices.length === 0) {
+      alert('No hay facturas registradas para exportar.');
+      return;
+    }
+
+    let csv = 'No. Factura,Tipo,NCF,Cliente,RNC/Cédula,Fecha Emisión,Subtotal,ITBIS,Total,Pagado,Estado\n';
+    invoices.forEach(inv => {
+      const ncf = inv.ncf || 'N/D';
+      const rnc = inv.clientRnc || 'N/D';
+      const cleanName = (inv.clientName || 'Consumidor Final').replace(/"/g, '""');
+      
+      csv += `"${inv.invoiceNumber}","${inv.docType}","${ncf}","${cleanName}","${rnc}","${inv.date}",${inv.subtotal || 0},${inv.itbis || 0},${inv.total || 0},${inv.paidAmount || 0},"${inv.status}"\n`;
+    });
+
+    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`Facturas_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+  }
+
+  function exportClientsToCSV() {
+    if (clients.length === 0) {
+      alert('No hay clientes registrados para exportar.');
+      return;
+    }
+
+    let csv = 'Nombre,RNC/Cédula,Teléfono,Email,Dirección\n';
+    clients.forEach(c => {
+      const cleanName = (c.name || '').replace(/"/g, '""');
+      const cleanAddr = (c.address || '').replace(/"/g, '""');
+      csv += `"${cleanName}","${c.rnc || ''}","${c.phone || ''}","${c.email || ''}","${cleanAddr}"\n`;
+    });
+
+    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`Clientes_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+  }
+
+  function exportProductsToCSV() {
+    if (products.length === 0) {
+      alert('No hay productos registrados para exportar.');
+      return;
+    }
+
+    let csv = 'Código/ID,Descripción,Precio,Impuesto (%),Origen\n';
+    products.forEach(p => {
+      const cleanDesc = (p.name || p.title || p.description || '').replace(/"/g, '""');
+      const origin = p._isCreaticos ? 'Creaticos' : 'Futunet';
+      csv += `"${p.id}","${cleanDesc}",${p.price || 0},${p.tax || 0},"${origin}"\n`;
+    });
+
+    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`Productos_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+  }
+
   async function checkoutPos(method) {
+    if (!activeCashSession) {
+      alert('Debes abrir una sesión de caja antes de realizar un cobro.');
+      handleCashSessionAction();
+      return;
+    }
+
     if (posCart.length === 0) {
       alert('El carrito está vacío.');
       return;
@@ -2607,6 +2860,27 @@ window.ERPBilling = (function () {
       }
 
       await getDB().collection(settingsColl).doc('general').update(settingsUpdates);
+
+      // Update Cash Register session totals if active
+      if (activeCashSession && docType === 'invoice' && paidAmount > 0) {
+        const sessRef = getDB().collection(collectionCashSessions).doc(activeCashSession.id);
+        const updates = {
+          transactionsCount: firebase.firestore.FieldValue.increment(1)
+        };
+        if (method === 'cash') {
+          updates.salesCash = firebase.firestore.FieldValue.increment(paidAmount);
+        } else if (method === 'nfc') {
+          updates.salesNfc = firebase.firestore.FieldValue.increment(paidAmount);
+        } else {
+          updates.salesCard = firebase.firestore.FieldValue.increment(paidAmount);
+        }
+        await sessRef.update(updates);
+        
+        // Refresh local cache of cash session
+        const freshDoc = await sessRef.get();
+        activeCashSession = { id: freshDoc.id, ...freshDoc.data() };
+        updateCashSessionUI();
+      }
 
       await loadSettings();
       await fetchAllData();
@@ -3031,6 +3305,14 @@ window.ERPBilling = (function () {
     addPosCartItem: addPosCartItem,
     changePosCartItemQty: changePosCartItemQty,
     removePosCartItem: removePosCartItem,
+    handleCashSessionAction: handleCashSessionAction,
+    openCashSession: openCashSession,
+    closeCashSession: closeCashSession,
+    calculateCashDifference: calculateCashDifference,
+    checkActiveCashSession: checkActiveCashSession,
+    exportInvoicesToCSV: exportInvoicesToCSV,
+    exportClientsToCSV: exportClientsToCSV,
+    exportProductsToCSV: exportProductsToCSV,
 
     // Payments
     openRegisterPaymentModal: openRegisterPaymentModal,
