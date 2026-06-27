@@ -2670,7 +2670,7 @@ window.CreaticosBilling = (function () {
     }
 
     try {
-      const url = 'https://corsproxy.io/?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+      const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error al consultar RNC');
       const data = await res.json();
