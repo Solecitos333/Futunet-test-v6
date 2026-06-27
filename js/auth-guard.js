@@ -49,6 +49,65 @@
       });
     },
 
+    /**
+     * Require platform access (must be platform editor/admin and NOT have a companyCode restriction)
+     */
+    requirePlatformEditor: function (callback) {
+      this.requireAuth(function (user, userData) {
+        if (userData && userData.companyCode) {
+          // Tenant ERP users cannot access global platform admin panel
+          window.location.href = 'mi-cuenta.html';
+          return;
+        }
+        if (userData && userData.role !== 'superadmin' && userData.role !== 'admin' && userData.role !== 'editor') {
+          window.location.href = 'mi-cuenta.html';
+          return;
+        }
+        callback(user, userData);
+      });
+    },
+
+    /**
+     * Require ERP Access (either erp_admin, erp_operator, or general admin/editor with a companyCode)
+     */
+    requireErpAccess: function (minRole, callback) {
+      this.requireAuth(function (user, userData) {
+        // Platform superadmins can access any ERP
+        if (userData && userData.role === 'superadmin' && !userData.companyCode) {
+          callback(user, userData);
+          return;
+        }
+
+        // Tenant users must have a company code to access the ERP
+        if (userData && !userData.companyCode) {
+          window.location.href = 'mi-cuenta.html';
+          return;
+        }
+
+        // Validate roles
+        const userRole = (userData && userData.role) ? userData.role : 'user';
+        if (minRole === 'erp_admin') {
+          if (userRole !== 'erp_admin' && userRole !== 'admin' && userRole !== 'superadmin') {
+            window.location.href = 'mi-cuenta.html';
+            return;
+          }
+        } else if (minRole === 'erp_operator') {
+          if (userRole !== 'erp_admin' && userRole !== 'admin' && userRole !== 'superadmin' && userRole !== 'erp_operator' && userRole !== 'editor') {
+            window.location.href = 'mi-cuenta.html';
+            return;
+          }
+        } else {
+          // General fallback
+          if (userRole === 'user') {
+            window.location.href = 'mi-cuenta.html';
+            return;
+          }
+        }
+
+        callback(user, userData);
+      });
+    },
+
     requireEditor: function (callback) { this.requireRole('editor', callback); },
     requireAdmin: function (callback) { this.requireRole('admin', callback); },
     requireSuperAdmin: function (callback) { this.requireRole('superadmin', callback); }

@@ -46,7 +46,15 @@ window.ERPBilling = (function () {
   let editingInvoiceNumber = null;
   let isInitializingForm = false;
 
-  async function init() {
+  // Security Context
+  let currentUser = null;
+  let isUserAdmin = false;
+
+  async function init(userData) {
+    currentUser = userData;
+    const rawRole = userData ? (userData.role || 'user') : 'user';
+    isUserAdmin = (rawRole === 'erp_admin' || rawRole === 'admin' || rawRole === 'superadmin');
+
     console.log('%c✏️ Initializing ERP Billing System for ' + activeCompanyCode + '...', 'color: #0a70a2; font-weight: bold;');
     try {
       applyTenantTheme();
@@ -1337,6 +1345,10 @@ window.ERPBilling = (function () {
 
   // Cancel/Anular Invoice
   async function cancelInvoice(id, number) {
+    if (!isUserAdmin) {
+      alert('No tienes permisos (Admin) para anular facturas.');
+      return;
+    }
     if (!confirm(`¿Está seguro de que desea ANULAR la factura ${number}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
       return;
     }
@@ -1738,6 +1750,10 @@ window.ERPBilling = (function () {
   }
 
   async function deleteClient(id, name) {
+    if (!isUserAdmin) {
+      alert('No tienes permisos (Admin) para eliminar clientes.');
+      return;
+    }
     if (!confirm(`¿Está seguro de que desea eliminar al cliente "${name}"? Las facturas asociadas seguirán existiendo.`)) {
       return;
     }
@@ -2021,6 +2037,10 @@ window.ERPBilling = (function () {
   }
 
   async function deleteProduct(id, name, isCreaticos) {
+    if (!isUserAdmin) {
+      alert('No tienes permisos (Admin) para eliminar ítems.');
+      return;
+    }
     if (!confirm(`¿Está seguro de que desea eliminar el ítem "${name}"?`)) {
       return;
     }
@@ -2073,6 +2093,11 @@ window.ERPBilling = (function () {
 
   async function saveSettings(e) {
     e.preventDefault();
+
+    if (!isUserAdmin) {
+      alert('No tienes permisos (Admin) para guardar configuraciones.');
+      return;
+    }
 
     const updated = {
       name: document.getElementById('set-company-name').value.trim(),

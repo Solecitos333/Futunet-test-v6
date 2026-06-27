@@ -2009,7 +2009,7 @@
       if (window.lucide) lucide.createIcons();
 
       // ─── Protect route ───
-      FutunetGuard.requireEditor(function (user, userData) {
+      FutunetGuard.requirePlatformEditor(function (user, userData) {
         // Show admin layout
         var layout = document.getElementById('admin-layout');
         if (layout) layout.classList.add('is-loaded');
