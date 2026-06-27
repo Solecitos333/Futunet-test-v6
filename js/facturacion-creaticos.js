@@ -35,8 +35,8 @@ window.CreaticosBilling = (function () {
   // Edit State
   let editingInvoiceId = null;
   let editingInvoiceNumber = null;
+  let isInitializingForm = false;
 
-  // Initialize Module
   async function init() {
     console.log('%c✏️ Initializing Creaticos Billing System...', 'color: #6366f1; font-weight: bold;');
     try {
@@ -1915,7 +1915,8 @@ window.CreaticosBilling = (function () {
     if (activeContent) activeContent.classList.add('is-active');
 
     // Auto-initialize form with clean defaults if manually switching to empty form tab
-    if (tabName === 'form') {
+    if (tabName === 'form' && !isInitializingForm) {
+      isInitializingForm = true;
       const idVal = document.getElementById(tabGroup === 'invoices' ? 'form-invoice-id' : (tabGroup === 'clients' ? 'form-client-id' : 'form-product-id')).value;
       if (!idVal) {
         if (tabGroup === 'invoices') {
@@ -1926,6 +1927,7 @@ window.CreaticosBilling = (function () {
           openNewProductForm();
         }
       }
+      isInitializingForm = false;
     }
 
     if (tabGroup === 'invoices' && tabName === 'pos') {

@@ -35,8 +35,8 @@ window.FutunetBilling = (function () {
   // Edit State
   let editingInvoiceId = null;
   let editingInvoiceNumber = null;
+  let isInitializingForm = false;
 
-  // Initialize Module
   async function init() {
     console.log('%c✏️ Initializing Futunet Billing System...', 'color: #0a70a2; font-weight: bold;');
     try {
@@ -1909,7 +1909,8 @@ window.FutunetBilling = (function () {
     if (activeContent) activeContent.classList.add('is-active');
 
     // Auto-initialize form with clean defaults if manually switching to empty form tab
-    if (tabName === 'form') {
+    if (tabName === 'form' && !isInitializingForm) {
+      isInitializingForm = true;
       const idVal = document.getElementById(tabGroup === 'invoices' ? 'form-invoice-id' : (tabGroup === 'clients' ? 'form-client-id' : 'form-product-id')).value;
       if (!idVal) {
         if (tabGroup === 'invoices') {
@@ -1920,6 +1921,7 @@ window.FutunetBilling = (function () {
           openNewProductForm();
         }
       }
+      isInitializingForm = false;
     }
 
     if (tabGroup === 'invoices' && tabName === 'pos') {
