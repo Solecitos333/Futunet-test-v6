@@ -69,7 +69,7 @@ window.ERPBilling = (function () {
       setupEventListeners();
     } catch (err) {
       console.error('Error initializing ERP Billing:', err);
-      alert('Error al inicializar la base de datos de facturación.');
+      alert('Error al inicializar la base de datos de facturación: ' + err.message);
     }
   }
 
