@@ -90,7 +90,7 @@
   }
 
   // ─── Sign In with Email ───
-  async function signIn(email, password, remember = true) {
+  async function signIn(email, password, remember = true, companyCode = '') {
     var persistence = remember 
       ? firebase.auth.Auth.Persistence.LOCAL 
       : firebase.auth.Auth.Persistence.SESSION;
@@ -106,6 +106,22 @@
       var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
       err.code = 'auth/email-not-verified';
       throw err;
+    }
+
+    // Verify companyCode if provided
+    if (companyCode) {
+      const codeUpper = companyCode.trim().toUpperCase();
+      if (!currentUserData.companyCode) {
+        // Self-heal: set the company code entered by the user
+        currentUserData.companyCode = codeUpper;
+        await getDB().collection('users').doc(cred.user.uid).update({ companyCode: codeUpper });
+      } else if (currentUserData.companyCode.toUpperCase() !== codeUpper) {
+        await getAuth().signOut();
+        currentUserData = null;
+        var err = new Error('El código de empresa es incorrecto para este usuario.');
+        err.code = 'auth/invalid-company-code';
+        throw err;
+      }
     }
 
     // Update last login (best effort) and activate status if verified

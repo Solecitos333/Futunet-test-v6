@@ -24,6 +24,12 @@
           });
           return;
         }
+
+        // Restore active company code from Firestore if missing from localStorage
+        if (userData && userData.companyCode && !localStorage.getItem('active_company_code')) {
+          localStorage.setItem('active_company_code', userData.companyCode.toUpperCase());
+        }
+
         callback(FutunetAuth.getCurrentUser(), userData);
       });
     },
