@@ -35,6 +35,16 @@
         <span id="sidebar-brand-name">ERP</span>
       </div>
 
+      <!-- Superadmin Company Switcher -->
+      <div id="superadmin-company-switcher" style="padding: 0 20px 10px 20px; display: none; margin-bottom: 5px;">
+        <label style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; display: block;">Ver como Empresa:</label>
+        <select id="superadmin-company-select" class="form-input" style="height: 34px; padding: 0 8px; font-size: 0.8rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; border: 1.5px solid var(--border-color); background: var(--card-bg); color: var(--text-color);">
+          <option value="CREATICOS">CREATICOS</option>
+          <option value="FUTUNETSRL">FUTUNETSRL</option>
+          <option value="CUSTOM">Otro código...</option>
+        </select>
+      </div>
+
       <div style="padding: 0 20px 16px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px;">
         <a href="admin.html" class="admin-btn admin-btn-ghost" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; border: 1.5px solid var(--primary); color: var(--primary); font-weight: 600; padding: 10px; border-radius: 12px; transition: all 0.2s; font-size: 0.85rem; text-decoration: none;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1160,6 +1170,38 @@
         const backToAdminBtn = document.getElementById('sidebar-nav-back-admin');
         if (backToAdminBtn) {
           backToAdminBtn.style.display = userData.companyCode ? 'none' : 'flex';
+        }
+
+        // Show company switcher for platform superadmins
+        if (rawRole === 'superadmin' && !userData.companyCode) {
+          const switcher = document.getElementById('superadmin-company-switcher');
+          const select = document.getElementById('superadmin-company-select');
+          if (switcher && select) {
+            switcher.style.display = 'block';
+            
+            // Set current active value
+            const activeCode = (localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
+            if (activeCode === 'CREATICOS' || activeCode === 'FUTUNETSRL') {
+              select.value = activeCode;
+            } else {
+              select.value = 'CUSTOM';
+            }
+
+            select.addEventListener('change', function() {
+              let selected = select.value;
+              if (selected === 'CUSTOM') {
+                const customCode = prompt('Ingrese el Código de Empresa a inspeccionar:');
+                if (customCode && customCode.trim()) {
+                  selected = customCode.trim().toUpperCase();
+                } else {
+                  select.value = activeCode;
+                  return;
+                }
+              }
+              localStorage.setItem('active_company_code', selected);
+              window.location.reload();
+            });
+          }
         }
 
         // Initialize our billing script

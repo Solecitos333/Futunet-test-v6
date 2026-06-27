@@ -25,8 +25,8 @@
           return;
         }
 
-        // Restore active company code from Firestore if missing from localStorage
-        if (userData && userData.companyCode && !localStorage.getItem('active_company_code')) {
+        // Tenant-restricted users are strictly locked to their assigned companyCode
+        if (userData && userData.companyCode) {
           localStorage.setItem('active_company_code', userData.companyCode.toUpperCase());
         }
 
