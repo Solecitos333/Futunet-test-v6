@@ -325,6 +325,100 @@ window.ERPBilling = (function () {
         barcodeBuffer += e.key;
       }
     });
+
+    setupRncAutoLookup();
+  }
+
+  // Set up listeners for automatic RNC lookup
+  function setupRncAutoLookup() {
+    const inputs = [
+      { rncId: 'form-invoice-client-rnc', nameId: 'form-invoice-client-name', idId: 'form-invoice-client-id', context: 'invoice-form' },
+      { rncId: 'form-client-rnc', nameId: 'form-client-name', idId: 'form-client-id', context: 'client-form' }
+    ];
+
+    inputs.forEach(cfg => {
+      const rncEl = document.getElementById(cfg.rncId);
+      if (!rncEl) return;
+
+      // Create a suggestion box container under the input if it doesn't exist
+      let sugBox = document.getElementById(cfg.rncId + '-suggestion');
+      if (!sugBox) {
+        sugBox = document.createElement('div');
+        sugBox.id = cfg.rncId + '-suggestion';
+        sugBox.className = 'rnc-suggestion-box';
+        sugBox.style.display = 'none';
+        sugBox.style.fontSize = '0.75rem';
+        sugBox.style.marginTop = '4px';
+        sugBox.style.padding = '8px 12px';
+        sugBox.style.borderRadius = '8px';
+        sugBox.style.background = 'rgba(16, 185, 129, 0.1)';
+        sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
+        sugBox.style.color = '#10b981';
+        sugBox.style.fontWeight = '600';
+        sugBox.style.cursor = 'pointer';
+        sugBox.style.transition = 'all 0.2s';
+        rncEl.parentNode.appendChild(sugBox);
+      }
+
+      let lastCheckedRnc = '';
+      let lookupTimeout = null;
+
+      rncEl.addEventListener('input', function() {
+        const cleanRnc = rncEl.value.replace(/[^0-9]/g, '');
+        sugBox.style.display = 'none';
+        sugBox.innerHTML = '';
+
+        if (cleanRnc === lastCheckedRnc) return;
+
+        if (cleanRnc.length === 9 || cleanRnc.length === 11) {
+          lastCheckedRnc = cleanRnc;
+          sugBox.style.display = 'block';
+          sugBox.style.background = 'rgba(59, 130, 246, 0.1)';
+          sugBox.style.border = '1px solid rgba(59, 130, 246, 0.2)';
+          sugBox.style.color = '#3b82f6';
+          sugBox.innerHTML = '⚡ Consultando DGII...';
+
+          if (lookupTimeout) clearTimeout(lookupTimeout);
+          lookupTimeout = setTimeout(async function() {
+            try {
+              const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+              const res = await fetch(url);
+              if (!res.ok) throw new Error('Error API');
+              const data = await res.json();
+              if (data && !data.error && data.nombre_razon_social) {
+                const nombre = data.nombre_razon_social;
+                const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
+                const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
+
+                sugBox.style.background = 'rgba(16, 185, 129, 0.1)';
+                sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
+                sugBox.style.color = '#10b981';
+                sugBox.innerHTML = `💡 DGII: ${fullName} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
+                sugBox.onclick = function() {
+                  const nameEl = document.getElementById(cfg.nameId);
+                  const idEl = document.getElementById(cfg.idId);
+                  if (nameEl) nameEl.value = fullName;
+                  if (idEl) idEl.value = 'custom';
+                  rncEl.value = data.cedula_rnc || cleanRnc;
+                  sugBox.style.display = 'none';
+                };
+              } else {
+                sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
+                sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
+                sugBox.style.color = '#ef4444';
+                sugBox.innerHTML = '❌ No encontrado en DGII';
+              }
+            } catch (err) {
+              console.error(err);
+              sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
+              sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
+              sugBox.style.color = '#ef4444';
+              sugBox.innerHTML = '❌ Error de consulta DGII';
+            }
+          }, 300);
+        }
+      });
+    });
   }
 
   // Switch Panel View
@@ -993,8 +1087,27 @@ window.ERPBilling = (function () {
       return;
     }
 
-    const filtered = clients.filter(c => c.name.toLowerCase().includes(val.toLowerCase()));
+    const cleanVal = val.replace(/[^0-9]/g, '');
+    const filtered = clients.filter(c => {
+      const matchName = c.name.toLowerCase().includes(val.toLowerCase());
+      const matchRnc = c.rnc && c.rnc.replace(/[^0-9]/g, '').includes(cleanVal);
+      return matchName || (cleanVal.length > 0 && matchRnc);
+    });
     
+    // Add DGII query options if the typed value looks like an RNC (9 or 11 digits)
+    if (cleanVal.length === 9 || cleanVal.length === 11) {
+      const dgiiItem = document.createElement('div');
+      dgiiItem.className = 'autocomplete-item';
+      dgiiItem.style.fontWeight = 'bold';
+      dgiiItem.style.color = 'var(--primary)';
+      dgiiItem.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> 🔍 Consultar RNC "${cleanVal}" en DGII</span>`;
+      dgiiItem.onclick = function() {
+        dropdown.style.display = 'none';
+        searchClientByRnc(cleanVal, 'invoice-form');
+      };
+      dropdown.appendChild(dgiiItem);
+    }
+
     if (filtered.length === 0) {
       // Option to quickly register a new client
       const item = document.createElement('div');
