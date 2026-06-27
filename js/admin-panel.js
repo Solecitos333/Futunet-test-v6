@@ -79,6 +79,18 @@
   var allAuditLogs = [];
   var currentAuditSearchQuery = '';
 
+  function checkPermission(allowedRoles, errorMessage) {
+    if (!currentUserData) return false;
+    var roles = Array.isArray(currentUserData.roles) ? currentUserData.roles : [currentUserData.role || 'user'];
+    var isSuper = roles.includes('superadmin');
+    var hasAccess = isSuper || roles.some(function (r) { return allowedRoles.includes(r); });
+    if (!hasAccess) {
+      showToast(errorMessage || 'No tienes permisos para realizar esta acción.', 'error');
+      return false;
+    }
+    return true;
+  }
+
   function init() {
     db = window.FutunetFirebase.db;
     storage = window.FutunetFirebase.storage;
@@ -612,6 +624,7 @@
   }
 
   async function saveProduct(data, productId) {
+    if (!checkPermission(['superadmin', 'admin', 'editor'], 'No tienes permisos para modificar el catálogo.')) return;
     try {
       data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
       data.updatedBy = currentUserData.uid || '';
@@ -784,6 +797,7 @@
   }
 
   async function deleteProduct(id) {
+    if (!checkPermission(['superadmin', 'admin', 'editor'], 'No tienes permisos para modificar el catálogo.')) return;
     var product = allProducts.find(function (p) { return p.id === id; });
     var isCreaticos = product && product._isCreaticos;
     var coll = isCreaticos ? 'creaticos_products' : 'products';
@@ -1126,6 +1140,7 @@
   }
 
   async function saveUser() {
+    if (!checkPermission(['superadmin', 'admin'], 'No tienes permisos para gestionar usuarios.')) return;
     var userId = getVal('user-id');
     var role = getVal('user-role-select');
     var statusCheck = document.getElementById('user-status-check');
@@ -1668,6 +1683,7 @@
 
   async function saveConfig(e) {
     if (e) e.preventDefault();
+    if (!checkPermission(['superadmin', 'admin'], 'No tienes permisos para cambiar la configuración del sistema.')) return;
     var whatsapp = getVal('config-whatsapp');
     var siteName = getVal('config-sitename');
     var advisor = getVal('config-advisor');

@@ -2030,7 +2030,58 @@
         var role = document.getElementById('admin-role');
         if (avatar) avatar.textContent = (userData.displayName || '?').charAt(0).toUpperCase();
         if (name) name.textContent = userData.displayName || userData.email || '';
-        if (role) role.textContent = (userData.role || 'user').toUpperCase();
+        
+        // Map display role
+        var roles = Array.isArray(userData.roles) ? userData.roles : [userData.role || 'user'];
+        var isSuper = roles.includes('superadmin');
+        var isAdmin = roles.includes('admin') || isSuper;
+        
+        var displayRole = 'Editor Plataforma';
+        if (isSuper) displayRole = 'Super Admin';
+        else if (roles.includes('admin')) displayRole = 'Admin Plataforma';
+        else if (roles.includes('support_agent')) displayRole = 'Agente de Soporte';
+        else if (roles.includes('billing_clerk')) displayRole = 'Encargado Cobros';
+        else if (roles.includes('marketing_manager')) displayRole = 'Gestor Marketing';
+        if (role) role.textContent = displayRole;
+
+        // Hide navigation tabs not permitted for the user's roles
+        var permissions = {
+          'dashboard': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk', 'marketing_manager'],
+          'inventory': ['superadmin', 'admin', 'editor'],
+          'orders': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'],
+          'service-requests': ['superadmin', 'admin', 'support_agent'],
+          'internet-management': ['superadmin', 'admin', 'support_agent', 'billing_clerk'],
+          'clients-map': ['superadmin', 'admin', 'support_agent'],
+          'competitors': ['superadmin', 'admin', 'editor', 'marketing_manager'],
+          'users': ['superadmin', 'admin', 'support_agent'],
+          'discounts': ['superadmin', 'admin', 'editor', 'marketing_manager'],
+          'banners': ['superadmin', 'admin', 'editor', 'marketing_manager'],
+          'marketing-calendar': ['superadmin', 'admin', 'editor', 'marketing_manager'],
+          'categories-brands': ['superadmin', 'admin', 'editor'],
+          'searches': ['superadmin', 'admin', 'marketing_manager'],
+          'audit': ['superadmin', 'admin'],
+          'visual-editor': ['superadmin', 'admin'],
+          'config': ['superadmin', 'admin']
+        };
+
+        var navItems = document.querySelectorAll('[data-admin-nav]');
+        navItems.forEach(function (btn) {
+          var navTarget = btn.getAttribute('data-admin-nav');
+          var allowedRoles = permissions[navTarget];
+          if (!allowedRoles) return;
+
+          var hasAccess = isSuper || roles.some(function (r) { return allowedRoles.includes(r); });
+          btn.style.display = hasAccess ? 'flex' : 'none';
+        });
+
+        // Hide section headers/labels if they don't have access
+        var labels = document.querySelectorAll('.admin-nav-label');
+        labels.forEach(function (label) {
+          var labelText = label.textContent.trim().toLowerCase();
+          if (labelText === 'sistema') {
+            label.style.display = isAdmin ? 'block' : 'none';
+          }
+        });
 
         // Init admin panel
         AdminPanel.init();
