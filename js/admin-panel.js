@@ -1050,6 +1050,12 @@
     setVal('user-email-input', user.email || '');
     setVal('user-role-select', user.role || 'user');
 
+    // Build roles array string
+    var rolesList = Array.isArray(user.roles) ? user.roles : [user.role || 'user'];
+    rolesList = rolesList.filter(function(v, i, a) { return a.indexOf(v) === i; });
+    setVal('user-roles-list-input', rolesList.join(', '));
+    renderRoleToggles(rolesList);
+
     var statusCheck = document.getElementById('user-status-check');
     if (statusCheck) statusCheck.checked = user.status === 'active';
 
@@ -1068,6 +1074,57 @@
     openModal('user-modal');
   }
 
+  function renderRoleToggles(activeRoles) {
+    var container = document.getElementById('role-quick-toggles');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var availableRoles = [
+      { id: 'superadmin', label: 'Superadmin' },
+      { id: 'admin', label: 'Admin Plataforma' },
+      { id: 'editor', label: 'Editor Plataforma' },
+      { id: 'user', label: 'Usuario General' },
+      { id: 'revendedor', label: 'Revendedor' },
+      { id: 'cliente', label: 'Cliente Plataforma' },
+      { id: 'cliente_internet', label: 'Cliente Internet' },
+      { id: 'creaticos_admin', label: 'Creaticos Admin' },
+      { id: 'creaticos_operator', label: 'Creaticos Operador' },
+      { id: 'futunetsrl_admin', label: 'Futunet Admin' },
+      { id: 'futunetsrl_operator', label: 'Futunet Operador' }
+    ];
+
+    availableRoles.forEach(function(r) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      var isActive = activeRoles.includes(r.id);
+      btn.className = 'admin-btn admin-btn-sm';
+      btn.style.fontSize = '0.7rem';
+      btn.style.padding = '4px 8px';
+      btn.style.borderRadius = '6px';
+      btn.style.border = '1px solid ' + (isActive ? 'var(--primary)' : '#cbd5e1');
+      btn.style.background = isActive ? 'rgba(10, 112, 162, 0.1)' : '#f8fafc';
+      btn.style.color = isActive ? 'var(--primary)' : '#475569';
+      btn.style.fontWeight = isActive ? '700' : '500';
+      btn.style.cursor = 'pointer';
+      btn.textContent = r.label;
+
+      btn.onclick = function() {
+        var input = document.getElementById('user-roles-list-input');
+        if (!input) return;
+        var currentRoles = input.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+        if (currentRoles.includes(r.id)) {
+          currentRoles = currentRoles.filter(function(x) { return x !== r.id; });
+        } else {
+          currentRoles.push(r.id);
+        }
+        input.value = currentRoles.join(', ');
+        renderRoleToggles(currentRoles);
+      };
+
+      container.appendChild(btn);
+    });
+  }
+
   async function saveUser() {
     var userId = getVal('user-id');
     var role = getVal('user-role-select');
@@ -1075,20 +1132,44 @@
     var status = (statusCheck && statusCheck.checked) ? 'active' : 'disabled';
     var displayName = getVal('user-name-input');
 
+    var rolesInput = getVal('user-roles-list-input');
+    var roles = rolesInput.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+
+    // Keep primary role in sync with select if changed, or set from first element of roles
+    if (roles.length > 0 && !roles.includes(role)) {
+      role = roles[0];
+    } else if (roles.length === 0) {
+      roles = [role];
+    }
+
     if (!userId) return;
 
     try {
       var prevSnap = await db.collection('users').doc(userId).get();
       var prevData = prevSnap.exists ? prevSnap.data() : null;
+
+      // Determine companyCode automatically from tenant roles if present
+      let companyCode = prevData ? (prevData.companyCode || '') : '';
+      const lowerRoles = roles.map(function(r) { return r.toLowerCase(); });
+      
+      if (lowerRoles.includes('creaticos_admin') || lowerRoles.includes('creaticos_operator') || lowerRoles.includes('creaticos_user') || lowerRoles.includes('creaticos_usuario')) {
+        companyCode = 'CREATICOS';
+      } else if (lowerRoles.includes('futunetsrl_admin') || lowerRoles.includes('futunetsrl_operator') || lowerRoles.includes('futunetsrl_user') || lowerRoles.includes('futunetsrl_usuario')) {
+        companyCode = 'FUTUNETSRL';
+      }
+
       var updatedFields = {
         displayName: displayName,
         role: role,
+        roles: roles,
+        companyCode: companyCode,
         status: status
       };
+
       await db.collection('users').doc(userId).update(updatedFields);
       var u = prevData || {};
       var nextData = { ...u, ...updatedFields };
-      writeAuditLog('Editar Usuario', (u.email || userId) + ' (Rol: ' + role + ', Estado: ' + status + ')', {
+      writeAuditLog('Editar Usuario', (u.email || userId) + ' (Rol: ' + role + ', Roles: ' + roles.join(',') + ', Estado: ' + status + ')', {
         collection: 'users',
         docId: userId,
         type: 'update',
@@ -1122,6 +1203,7 @@
         phone: '',
         address: '',
         role: role,
+        roles: [role],
         status: 'active',
         favorites: [],
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),

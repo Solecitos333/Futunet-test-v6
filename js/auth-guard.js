@@ -72,8 +72,11 @@
      */
     requireErpAccess: function (minRole, callback) {
       this.requireAuth(function (user, userData) {
+        const roles = (userData && Array.isArray(userData.roles)) ? userData.roles : [userData ? (userData.role || 'user') : 'user'];
+        const activeCompany = (localStorage.getItem('active_company_code') || '').toLowerCase();
+
         // Platform superadmins can access any ERP
-        if (userData && userData.role === 'superadmin' && !userData.companyCode) {
+        if (roles.includes('superadmin') && userData && !userData.companyCode) {
           callback(user, userData);
           return;
         }
@@ -85,20 +88,36 @@
         }
 
         // Validate roles
-        const userRole = (userData && userData.role) ? userData.role : 'user';
+        const tenantAdminRole = activeCompany + '_admin';
+        const tenantOperatorRole = activeCompany + '_operator';
+        const tenantUserRole = activeCompany + '_user';
+        const tenantUsuarioRole = activeCompany + '_usuario';
+
+        const hasAdminPrivilege = roles.includes('superadmin') || 
+                                  roles.includes('admin') || 
+                                  roles.includes('erp_admin') || 
+                                  roles.includes(tenantAdminRole);
+
+        const hasOperatorPrivilege = hasAdminPrivilege || 
+                                     roles.includes('editor') || 
+                                     roles.includes('erp_operator') || 
+                                     roles.includes(tenantOperatorRole) ||
+                                     roles.includes(tenantUserRole) ||
+                                     roles.includes(tenantUsuarioRole);
+
         if (minRole === 'erp_admin') {
-          if (userRole !== 'erp_admin' && userRole !== 'admin' && userRole !== 'superadmin') {
+          if (!hasAdminPrivilege) {
             window.location.href = 'mi-cuenta.html';
             return;
           }
         } else if (minRole === 'erp_operator') {
-          if (userRole !== 'erp_admin' && userRole !== 'admin' && userRole !== 'superadmin' && userRole !== 'erp_operator' && userRole !== 'editor') {
+          if (!hasOperatorPrivilege) {
             window.location.href = 'mi-cuenta.html';
             return;
           }
         } else {
           // General fallback
-          if (userRole === 'user') {
+          if (!hasOperatorPrivilege) {
             window.location.href = 'mi-cuenta.html';
             return;
           }

@@ -1160,7 +1160,14 @@
         if (role) role.textContent = displayRole;
 
         // Hide settings tab for operators/non-admins
-        const isUserAdmin = (rawRole === 'erp_admin' || rawRole === 'admin' || rawRole === 'superadmin');
+        const roles = Array.isArray(userData.roles) ? userData.roles : [rawRole];
+        const activeCompany = (localStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
+        const tenantAdminRole = activeCompany + '_admin';
+        const isUserAdmin = roles.includes('superadmin') || 
+                            roles.includes('admin') || 
+                            roles.includes('erp_admin') || 
+                            roles.includes(tenantAdminRole);
+
         const settingsBtn = document.getElementById('sidebar-nav-settings');
         const settingsLabel = document.getElementById('sidebar-nav-settings-label');
         if (settingsBtn) settingsBtn.style.display = isUserAdmin ? 'flex' : 'none';

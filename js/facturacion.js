@@ -52,8 +52,13 @@ window.ERPBilling = (function () {
 
   async function init(userData) {
     currentUser = userData;
-    const rawRole = userData ? (userData.role || 'user') : 'user';
-    isUserAdmin = (rawRole === 'erp_admin' || rawRole === 'admin' || rawRole === 'superadmin');
+    const roles = (userData && Array.isArray(userData.roles)) ? userData.roles : [userData ? (userData.role || 'user') : 'user'];
+    const activeCompany = activeCompanyCode.toLowerCase();
+    const tenantAdminRole = activeCompany + '_admin';
+    isUserAdmin = roles.includes('superadmin') || 
+                  roles.includes('admin') || 
+                  roles.includes('erp_admin') || 
+                  roles.includes(tenantAdminRole);
 
     console.log('%c✏️ Initializing ERP Billing System for ' + activeCompanyCode + '...', 'color: #0a70a2; font-weight: bold;');
     try {

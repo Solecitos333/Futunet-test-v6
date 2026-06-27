@@ -1600,13 +1600,23 @@
             <input class="auth-input" type="email" id="user-email-input" readonly />
           </div>
           <div class="auth-form-group">
-            <label class="auth-label" for="user-role-select">Rol</label>
+            <label class="auth-label" for="user-role-select">Rol Principal</label>
             <select class="auth-input" id="user-role-select">
               <option value="user">Usuario</option>
               <option value="editor">Editor</option>
               <option value="admin">Admin</option>
               <option value="superadmin">Superadmin</option>
             </select>
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label" for="user-roles-list-input">Roles Asignados (Separados por comas)</label>
+            <input class="auth-input" type="text" id="user-roles-list-input" placeholder="Ej. user, revendedor, creaticos_admin" />
+            <div style="margin-top: 8px; font-size: 0.72rem; color: #475569;">
+              <strong style="display:block; margin-bottom:4px;">Accesos Rápidos (Haz clic para alternar):</strong>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="role-quick-toggles">
+                <!-- Toggles will be rendered by JS -->
+              </div>
+            </div>
           </div>
           <div class="auth-form-group" style="display:flex;align-items:center;gap:12px;">
             <input type="checkbox" id="user-status-check" checked style="width:20px;height:20px;accent-color:#0A70A2;" />

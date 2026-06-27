@@ -294,7 +294,25 @@
   }
 
   function hasRole(requiredRole) {
-    var userRole = getUserRole();
+    if (!currentUserData) return false;
+    
+    // Check in roles array if present
+    if (Array.isArray(currentUserData.roles)) {
+      // Direct match
+      if (currentUserData.roles.includes(requiredRole)) return true;
+      // Hierarchical match for standard roles
+      for (var i = 0; i < currentUserData.roles.length; i++) {
+        var r = currentUserData.roles[i];
+        var userLevel = ROLE_HIERARCHY.indexOf(r);
+        var requiredLevel = ROLE_HIERARCHY.indexOf(requiredRole);
+        if (userLevel >= 0 && requiredLevel >= 0 && userLevel <= requiredLevel) {
+          return true;
+        }
+      }
+    }
+
+    // Fallback to legacy single role field
+    var userRole = currentUserData.role;
     if (!userRole) return false;
     var userLevel = ROLE_HIERARCHY.indexOf(userRole);
     var requiredLevel = ROLE_HIERARCHY.indexOf(requiredRole);
