@@ -133,8 +133,16 @@ js_mod = js_mod.replace(
     "await docRef.update({ name: 'Futunet Suministros' });"
 )
 js_mod = js_mod.replace(
-    "rnc: '131-78945-2',",
+    "rnc: '133-73669-1',",
     "rnc: '132-70207-7',"
+)
+js_mod = js_mod.replace(
+    "settings.rnc = '133-73669-1';",
+    "settings.rnc = '132-70207-7';"
+)
+js_mod = js_mod.replace(
+    "await docRef.update({ rnc: '133-73669-1' });",
+    "await docRef.update({ rnc: '132-70207-7' });"
 )
 js_mod = js_mod.replace(
     "phone: '849-342-8525',",

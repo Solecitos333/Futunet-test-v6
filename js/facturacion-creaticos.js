@@ -61,6 +61,11 @@ window.CreaticosBilling = (function () {
         settings.name = 'Creaticos Group';
         await docRef.update({ name: 'Creaticos Group' });
       }
+      // Ensure RNC is updated to the real one
+      if (settings.rnc === '131-78945-2') {
+        settings.rnc = '133-73669-1';
+        await docRef.update({ rnc: '133-73669-1' });
+      }
       // Backward compatibility for quote settings
       if (settings.quotePrefix === undefined) settings.quotePrefix = 'COT-';
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
@@ -76,7 +81,7 @@ window.CreaticosBilling = (function () {
       // Default initial settings
       settings = {
         name: 'Creaticos Group',
-        rnc: '131-78945-2',
+        rnc: '133-73669-1',
         phone: '849-342-8525',
         email: '',
         address: 'Calle 7 Las Colinas, Santiago',

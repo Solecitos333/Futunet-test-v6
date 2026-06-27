@@ -61,6 +61,11 @@ window.FutunetBilling = (function () {
         settings.name = 'Futunet Suministros';
         await docRef.update({ name: 'Futunet Suministros' });
       }
+      // Ensure RNC is updated to the real one
+      if (settings.rnc === '131-78945-2') {
+        settings.rnc = '132-70207-7';
+        await docRef.update({ rnc: '132-70207-7' });
+      }
       // Backward compatibility for quote settings
       if (settings.quotePrefix === undefined) settings.quotePrefix = 'COT-';
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
