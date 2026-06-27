@@ -381,55 +381,66 @@ window.ERPBilling = (function () {
         sugBox.style.display = 'none';
         sugBox.innerHTML = '';
 
-        if (cleanRnc === lastCheckedRnc) return;
+        // Format as they type if it's a complete 9-digit RNC or 11-digit Cédula
+        if (cleanRnc.length === 9) {
+          rncEl.value = cleanRnc.replace(/^(\d{3})(\d{5})(\d{1})$/, '$1-$2-$3');
+        } else if (cleanRnc.length === 11) {
+          rncEl.value = cleanRnc.replace(/^(\d{3})(\d{7})(\d{1})$/, '$1-$2-$3');
+        }
 
-        if (cleanRnc.length === 9 || cleanRnc.length === 11) {
-          lastCheckedRnc = cleanRnc;
-          sugBox.style.display = 'block';
-          sugBox.style.background = 'rgba(59, 130, 246, 0.1)';
-          sugBox.style.border = '1px solid rgba(59, 130, 246, 0.2)';
-          sugBox.style.color = '#3b82f6';
-          sugBox.innerHTML = '⚡ Consultando DGII...';
-
+        if (cleanRnc.length !== 9 && cleanRnc.length !== 11) {
+          lastCheckedRnc = '';
           if (lookupTimeout) clearTimeout(lookupTimeout);
-          lookupTimeout = setTimeout(async function() {
-            try {
-              const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
-              const res = await fetch(url);
-              if (!res.ok) throw new Error('Error API');
-              const data = await res.json();
-              if (data && !data.error && data.nombre_razon_social) {
-                const nombre = data.nombre_razon_social;
-                const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
-                const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
+          return;
+        }
 
-                sugBox.style.background = 'rgba(16, 185, 129, 0.1)';
-                sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
-                sugBox.style.color = '#10b981';
-                sugBox.innerHTML = `💡 DGII: ${fullName} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
-                sugBox.onclick = function() {
-                  const nameEl = document.getElementById(cfg.nameId);
-                  const idEl = document.getElementById(cfg.idId);
-                  if (nameEl) nameEl.value = fullName;
-                  if (idEl) idEl.value = 'custom';
-                  rncEl.value = data.cedula_rnc || cleanRnc;
-                  sugBox.style.display = 'none';
-                };
-              } else {
-                sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
-                sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
-                sugBox.style.color = '#ef4444';
-                sugBox.innerHTML = '❌ No encontrado en DGII';
-              }
-            } catch (err) {
-              console.error(err);
+        if (cleanRnc === lastCheckedRnc) return;
+        lastCheckedRnc = cleanRnc;
+
+        sugBox.style.display = 'block';
+        sugBox.style.background = 'rgba(59, 130, 246, 0.1)';
+        sugBox.style.border = '1px solid rgba(59, 130, 246, 0.2)';
+        sugBox.style.color = '#3b82f6';
+        sugBox.innerHTML = '⚡ Consultando DGII...';
+
+        if (lookupTimeout) clearTimeout(lookupTimeout);
+        lookupTimeout = setTimeout(async function() {
+          try {
+            const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+            const res = await fetch(url);
+            if (!res.ok) throw new Error('Error API');
+            const data = await res.json();
+            if (data && !data.error && data.nombre_razon_social) {
+              const nombre = data.nombre_razon_social;
+              const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
+              const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
+
+              sugBox.style.background = 'rgba(16, 185, 129, 0.1)';
+              sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
+              sugBox.style.color = '#10b981';
+              sugBox.innerHTML = `💡 DGII: ${fullName} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
+              sugBox.onclick = function() {
+                const nameEl = document.getElementById(cfg.nameId);
+                const idEl = document.getElementById(cfg.idId);
+                if (nameEl) nameEl.value = fullName;
+                if (idEl) idEl.value = 'custom';
+                rncEl.value = data.cedula_rnc || rncEl.value;
+                sugBox.style.display = 'none';
+              };
+            } else {
               sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
               sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
               sugBox.style.color = '#ef4444';
-              sugBox.innerHTML = '❌ Error de consulta DGII';
+              sugBox.innerHTML = '❌ No encontrado en DGII';
             }
-          }, 300);
-        }
+          } catch (err) {
+            console.error(err);
+            sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
+            sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
+            sugBox.style.color = '#ef4444';
+            sugBox.innerHTML = '❌ Error de consulta DGII';
+          }
+        }, 300);
       });
     });
   }
