@@ -72,6 +72,7 @@ body {
 .admin-sidebar-logo img {
   height: 48px;
   width: auto;
+  object-fit: contain;
   border-radius: 8px;
   margin-bottom: 8px;
 }
@@ -635,6 +636,7 @@ body {
 .company-branding img {
   height: 60px;
   width: auto;
+  object-fit: contain;
   border-radius: 8px;
 }
 .company-info h2 {
@@ -1554,5 +1556,55 @@ body {
     height: auto;
     position: static;
   }
+}
+
+/* ─── Signatures and Stamp Block ─── */
+.invoice-signatures-area {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 45px;
+  padding: 0 10px;
+  gap: 60px;
+}
+.signature-box {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.signature-line {
+  width: 100%;
+  border-top: 1.5px solid #000;
+  margin-top: 45px;
+  margin-bottom: 8px;
+}
+.signature-box span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Print Overrides for Signatures */
+@media print {
+  .invoice-signatures-area {
+    margin-top: 50px !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* Ticket Print Format Overrides */
+.printable-invoice-wrapper.print-format-ticket .invoice-signatures-area {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 15px !important;
+  margin-top: 25px !important;
+  padding: 0 !important;
+}
+.printable-invoice-wrapper.print-format-ticket .signature-line {
+  margin-top: 20px !important;
+}
+.printable-invoice-wrapper.print-format-ticket .signature-box span {
+  font-size: 7.5pt !important;
 }
 

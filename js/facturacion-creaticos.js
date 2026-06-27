@@ -56,6 +56,11 @@ window.CreaticosBilling = (function () {
     const doc = await docRef.get();
     if (doc.exists) {
       settings = doc.data();
+      // Ensure name is updated to Creaticos Group in Firestore if it was the old one
+      if (settings.name === 'Creaticos Papelería y Sublimados' || settings.name === 'Creaticos Papelería') {
+        settings.name = 'Creaticos Group';
+        await docRef.update({ name: 'Creaticos Group' });
+      }
       // Backward compatibility for quote settings
       if (settings.quotePrefix === undefined) settings.quotePrefix = 'COT-';
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
@@ -70,7 +75,7 @@ window.CreaticosBilling = (function () {
     } else {
       // Default initial settings
       settings = {
-        name: 'Creaticos Papelería y Sublimados',
+        name: 'Creaticos Group',
         rnc: '131-78945-2',
         phone: '849-342-8525',
         email: '',
@@ -475,11 +480,15 @@ window.CreaticosBilling = (function () {
       `;
 
       if (inv.status !== 'cancelled') {
+        // Edit button is available for all documents (quotes, proformas, invoices)
+        actionsHtml += `
+          <button class="table-btn table-btn-secondary" title="Editar" onclick="CreaticosBilling.editQuote('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
+          </button>
+        `;
+
         if (inv.docType === 'quote' || inv.docType === 'proforma') {
           actionsHtml += `
-            <button class="table-btn table-btn-secondary" title="Editar Cotización" onclick="CreaticosBilling.editQuote('${inv.id}')">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
-            </button>
             <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="CreaticosBilling.convertQuoteFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
@@ -546,21 +555,11 @@ window.CreaticosBilling = (function () {
     };
   }
 
-  // Reset form and view Create Panel
-  function openNewInvoiceForm() {
+  // Reset form helper
+  function clearInvoiceForm() {
     editingInvoiceId = null;
     editingInvoiceNumber = null;
 
-    switchPanel('invoices');
-    switchSubTab('invoices', 'form');
-    
-    const titleEl = document.getElementById('invoice-form-title');
-    if (titleEl) titleEl.textContent = 'Crear Nueva Factura';
-
-    const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
-    if (submitBtn) submitBtn.textContent = 'Guardar Factura';
-    
-    // Clear fields
     document.getElementById('form-invoice-id').value = '';
     document.getElementById('form-invoice-client-name').value = '';
     document.getElementById('form-invoice-client-id').value = '';
@@ -572,14 +571,18 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-invoice-date').value = todayStr;
     
     const dueDate = new Date();
-    dueDate.setDate(today.getDate() + 15); // Default due date in 15 days
+    dueDate.setDate(today.getDate() + 15);
     document.getElementById('form-invoice-due-date').value = dueDate.toISOString().split('T')[0];
 
     document.getElementById('form-invoice-ncf-type').value = 'none';
     document.getElementById('form-invoice-ncf').value = '';
     document.getElementById('form-invoice-ncf').setAttribute('readonly', 'true');
 
-    // Reset doc type to invoice
+    // Reset division
+    const divisionSelect = document.getElementById('form-invoice-division');
+    if (divisionSelect) divisionSelect.value = 'general';
+
+    // Reset doc type
     const docTypeSelect = document.getElementById('form-invoice-doc-type');
     if (docTypeSelect) {
       docTypeSelect.value = 'invoice';
@@ -588,10 +591,23 @@ window.CreaticosBilling = (function () {
 
     // Clean body table
     const tbody = document.getElementById('invoice-form-items-body');
-    tbody.innerHTML = '';
+    if (tbody) tbody.innerHTML = '';
 
     // Add first row
     addInvoiceFormItemRow();
+  }
+
+  // Reset form and view Create Panel
+  function openNewInvoiceForm() {
+    clearInvoiceForm();
+    switchPanel('invoices');
+    switchSubTab('invoices', 'form');
+    
+    const titleEl = document.getElementById('invoice-form-title');
+    if (titleEl) titleEl.textContent = 'Crear Nueva Factura';
+
+    const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Guardar Factura';
   }
 
   function handleDocTypeChange(val) {
@@ -626,6 +642,23 @@ window.CreaticosBilling = (function () {
     const rowId = 'row-' + Date.now() + '-' + Math.floor(Math.random()*1000);
     tr.id = rowId;
 
+    let rowTaxAmount = 0.00;
+    let overrideStr = 'false';
+    if (itemData) {
+      const price = Number(itemData.price) || 0;
+      const qty = Number(itemData.qty) || 1;
+      const taxVal = Number(itemData.tax) || 0;
+      if (taxVal > 0 && taxVal <= 100) {
+        // Old document percentage format (e.g. 18 or 16), calculate it
+        rowTaxAmount = price * qty * (taxVal / 100);
+        overrideStr = 'false';
+      } else {
+        // New document amount format
+        rowTaxAmount = taxVal;
+        overrideStr = 'true';
+      }
+    }
+
     tr.innerHTML = `
       <td>
         <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
@@ -635,17 +668,13 @@ window.CreaticosBilling = (function () {
         </div>
       </td>
       <td>
-        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="CreaticosBilling.calculateInvoiceFormTotals()" />
+        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="CreaticosBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="CreaticosBilling.calculateInvoiceFormTotals()" />
+        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="CreaticosBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <select class="form-input row-tax" onchange="CreaticosBilling.calculateInvoiceFormTotals()">
-          <option value="18" ${!itemData || itemData.tax === 18 ? 'selected' : ''}>18% ITBIS</option>
-          <option value="16" ${itemData && itemData.tax === 16 ? 'selected' : ''}>16% ITBIS</option>
-          <option value="0" ${itemData && itemData.tax === 0 ? 'selected' : ''}>Exento (0%)</option>
-        </select>
+        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" oninput="CreaticosBilling.handleRowTaxChange(this)" data-override="${overrideStr}" />
       </td>
       <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">RD$ 0.00</td>
       <td>
@@ -729,7 +758,7 @@ window.CreaticosBilling = (function () {
       item.style.fontSize = '0.82rem';
 
       const pName = p.name || p.title || '';
-      const pPrice = Number(p.price);
+      const pPrice = isNaN(Number(p.price)) ? 0 : Number(p.price);
       const srcLabel = p._src === 'creaticos' ? 'Creaticos' : 'Futunet';
       const codeLabel = p.sku ? ` [SKU: ${p.sku}]` : '';
 
@@ -740,11 +769,14 @@ window.CreaticosBilling = (function () {
         idInput.value = p._src + '_' + p.id;
         
         const priceInput = tr.querySelector('.row-price');
-        const taxSelect = tr.querySelector('.row-tax');
+        const taxInput = tr.querySelector('.row-tax');
 
         if (priceInput) priceInput.value = pPrice.toFixed(2);
-        if (taxSelect) {
-          taxSelect.value = (p.tax !== undefined) ? p.tax.toString() : (settings ? settings.defaultTax.toString() : '18');
+        if (taxInput) {
+          const productTaxPercent = (p.tax !== undefined) ? Number(p.tax) : 18;
+          const qty = Number(tr.querySelector('.row-qty').value) || 1;
+          taxInput.value = (pPrice * qty * (productTaxPercent / 100)).toFixed(2);
+          taxInput.dataset.override = 'false';
         }
 
         listEl.style.display = 'none';
@@ -796,6 +828,7 @@ window.CreaticosBilling = (function () {
   // Calculate Subtotal, Taxes, and Totals inside creation form
   function calculateInvoiceFormTotals() {
     const tbody = document.getElementById('invoice-form-items-body');
+    if (!tbody) return;
     const rows = tbody.querySelectorAll('tr');
 
     let subtotal = 0;
@@ -804,24 +837,28 @@ window.CreaticosBilling = (function () {
     rows.forEach(tr => {
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
-      const taxRate = Number(tr.querySelector('.row-tax').value) || 0;
+      const lineItbis = Number(tr.querySelector('.row-tax').value) || 0;
 
       const lineSubtotal = price * qty;
-      const lineItbis = lineSubtotal * (taxRate / 100);
       const lineTotal = lineSubtotal + lineItbis;
 
       subtotal += lineSubtotal;
       totalItbis += lineItbis;
 
       // Update text in row total column
-      tr.querySelector('.row-total').textContent = formatMoney(lineTotal);
+      const totalCol = tr.querySelector('.row-total');
+      if (totalCol) totalCol.textContent = formatMoney(lineTotal);
     });
 
     const grandTotal = subtotal + totalItbis;
 
-    document.getElementById('form-summary-subtotal').textContent = formatMoney(subtotal);
-    document.getElementById('form-summary-itbis').textContent = formatMoney(totalItbis);
-    document.getElementById('form-summary-total').textContent = formatMoney(grandTotal);
+    const subtotalEl = document.getElementById('form-summary-subtotal');
+    const itbisEl = document.getElementById('form-summary-itbis');
+    const totalEl = document.getElementById('form-summary-total');
+
+    if (subtotalEl) subtotalEl.textContent = formatMoney(subtotal);
+    if (itbisEl) itbisEl.textContent = formatMoney(totalItbis);
+    if (totalEl) totalEl.textContent = formatMoney(grandTotal);
   }
 
   // Client Auto-Complete Dropdown Search
@@ -902,19 +939,25 @@ window.CreaticosBilling = (function () {
     e.preventDefault();
 
     const docType = document.getElementById('form-invoice-doc-type').value;
-    const clientId = document.getElementById('form-invoice-client-id').value;
-    const clientName = document.getElementById('form-invoice-client-name').value;
-    const clientRnc = document.getElementById('form-invoice-client-rnc').value;
+    let clientId = document.getElementById('form-invoice-client-id').value;
+    const clientName = document.getElementById('form-invoice-client-name').value.trim();
+    const clientRnc = document.getElementById('form-invoice-client-rnc').value.trim();
     
-    if (!clientId) {
-      alert('Por favor selecciona un cliente válido de la lista auto-completada.');
+    if (!clientName) {
+      alert('Por favor, introduzca el nombre del cliente.');
       return;
+    }
+    if (!clientId) {
+      clientId = 'custom';
     }
 
     const date = document.getElementById('form-invoice-date').value;
     const dueDate = document.getElementById('form-invoice-due-date').value;
     const ncfType = document.getElementById('form-invoice-ncf-type').value;
     const ncf = document.getElementById('form-invoice-ncf').value.trim();
+    
+    const divisionEl = document.getElementById('form-invoice-division');
+    const division = divisionEl ? divisionEl.value : 'general';
 
     // Check if items table is empty
     const tbody = document.getElementById('invoice-form-items-body');
@@ -935,7 +978,7 @@ window.CreaticosBilling = (function () {
       const description = searchInput ? searchInput.value.trim() : '';
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
-      const taxRate = Number(tr.querySelector('.row-tax').value) || 0;
+      const lineTax = Number(tr.querySelector('.row-tax').value) || 0;
 
       if (!description) {
         alert('Todos los ítems agregados deben tener una descripción.');
@@ -943,14 +986,13 @@ window.CreaticosBilling = (function () {
       }
 
       const lineSub = price * qty;
-      const lineTax = lineSub * (taxRate / 100);
 
       items.push({
         productId: productIdInput ? productIdInput.value : 'custom',
         description: description,
         price: price,
         qty: qty,
-        tax: taxRate,
+        tax: lineTax,
         total: lineSub + lineTax
       });
 
@@ -963,10 +1005,23 @@ window.CreaticosBilling = (function () {
     // Generate document ID number
     let invoiceNum = '';
     let status = 'pending';
+    let paidAmount = 0;
     
     if (editingInvoiceId && editingInvoiceNumber) {
       invoiceNum = editingInvoiceNumber;
       status = docType === 'quote' ? 'quote' : (docType === 'proforma' ? 'proforma' : 'pending');
+      const originalDoc = invoices.find(i => i.id === editingInvoiceId);
+      if (originalDoc) {
+        paidAmount = originalDoc.paidAmount || 0;
+        status = originalDoc.status || 'pending';
+        if (docType !== 'quote' && docType !== 'proforma') {
+          if (paidAmount >= total) {
+            status = 'paid';
+          } else {
+            status = 'pending';
+          }
+        }
+      }
     } else {
       if (docType === 'quote') {
         invoiceNum = (settings.quotePrefix || 'COT-') + String(settings.nextQuoteNum || 1001);
@@ -988,14 +1043,15 @@ window.CreaticosBilling = (function () {
       clientRnc: clientRnc,
       date: date,
       dueDate: dueDate,
+      division: division,
       ncfType: (docType === 'quote' || docType === 'proforma') ? 'none' : ncfType,
       ncf: (docType === 'quote' || docType === 'proforma') ? '' : ncf,
       items: items,
       subtotal: subtotal,
       itbis: totalItbis,
       total: total,
-      paidAmount: 0,
-      status: status, // paid, pending, cancelled, quote
+      paidAmount: paidAmount,
+      status: status,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -1005,7 +1061,7 @@ window.CreaticosBilling = (function () {
     } else {
       // Save new document to Firestore
       invoiceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      const newDoc = await getDB().collection('creaticos_invoices').add(invoiceData);
+      await getDB().collection('creaticos_invoices').add(invoiceData);
 
       // Update settings sequences
       const settingsUpdates = {};
@@ -1032,9 +1088,8 @@ window.CreaticosBilling = (function () {
       await getDB().collection('creaticos_settings').doc('general').update(settingsUpdates);
     }
 
-    // Reset edit state
-    editingInvoiceId = null;
-    editingInvoiceNumber = null;
+    // Clear form fields
+    clearInvoiceForm();
     
     // Reload local settings and cache
     await loadSettings();
@@ -1091,6 +1146,18 @@ window.CreaticosBilling = (function () {
     let client = clients.find(c => c.id === inv.clientId);
     if (!client) {
       client = { address: 'Dirección no registrada', phone: 'N/D', email: 'N/D' };
+    }
+
+    // Set company name based on division in invoice
+    const nameEl = document.getElementById('view-company-name');
+    if (nameEl) {
+      if (inv.division === 'papeleria') {
+        nameEl.textContent = 'Creaticos Papelería y Suministros';
+      } else if (inv.division === 'sublimacion') {
+        nameEl.textContent = 'Creaticos Sublimación';
+      } else {
+        nameEl.textContent = 'Creaticos Group';
+      }
     }
 
     // Target the printable title (Factura vs Cotización vs Proforma)
@@ -1150,13 +1217,24 @@ window.CreaticosBilling = (function () {
     itemsTbody.innerHTML = '';
     
     inv.items.forEach(line => {
-      const sub = line.price * line.qty;
+      let lineTaxAmount = 0;
+      const price = Number(line.price) || 0;
+      const qty = Number(line.qty) || 1;
+      const taxVal = Number(line.tax) || 0;
+      if (taxVal > 0 && taxVal <= 100) {
+        // Old document percentage format (e.g. 18 or 16), calculate it
+        lineTaxAmount = price * qty * (taxVal / 100);
+      } else {
+        // New document amount format
+        lineTaxAmount = taxVal;
+      }
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${line.description}</td>
-        <td style="text-align:right;">${formatMoney(line.price)}</td>
-        <td style="text-align:center;">${line.qty}</td>
-        <td style="text-align:center;">${line.tax}%</td>
+        <td style="text-align:right;">${formatMoney(price)}</td>
+        <td style="text-align:center;">${qty}</td>
+        <td style="text-align:right;">${formatMoney(lineTaxAmount)}</td>
         <td style="text-align:right;">${formatMoney(line.total)}</td>
       `;
       itemsTbody.appendChild(tr);
@@ -2425,7 +2503,13 @@ window.CreaticosBilling = (function () {
 
     const titleEl = document.getElementById('invoice-form-title');
     if (titleEl) {
-      titleEl.textContent = inv.docType === 'quote' ? 'Editar Cotización' : 'Editar Proforma';
+      if (inv.docType === 'quote') {
+        titleEl.textContent = 'Editar Cotización';
+      } else if (inv.docType === 'proforma') {
+        titleEl.textContent = 'Editar Proforma';
+      } else {
+        titleEl.textContent = 'Editar Factura';
+      }
     }
 
     const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
@@ -2440,6 +2524,11 @@ window.CreaticosBilling = (function () {
     document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
     document.getElementById('form-invoice-date').value = inv.date;
     document.getElementById('form-invoice-due-date').value = inv.dueDate;
+
+    const divisionSelect = document.getElementById('form-invoice-division');
+    if (divisionSelect) {
+      divisionSelect.value = inv.division || 'general';
+    }
 
     const docTypeSelect = document.getElementById('form-invoice-doc-type');
     if (docTypeSelect) {
@@ -2532,6 +2621,93 @@ window.CreaticosBilling = (function () {
     openModal('modal-payment');
   }
 
+  // ─── HELPER FUNCTIONS FOR ROW TAX & ITBIS ───
+  function handleRowPriceQtyChange(el) {
+    const tr = el.closest('tr');
+    const price = Number(tr.querySelector('.row-price').value) || 0;
+    const qty = Number(tr.querySelector('.row-qty').value) || 1;
+    const taxInput = tr.querySelector('.row-tax');
+    
+    if (taxInput && taxInput.dataset.override !== 'true') {
+      taxInput.value = (price * qty * 0.18).toFixed(2);
+    }
+    calculateInvoiceFormTotals();
+  }
+
+  function handleRowTaxChange(el) {
+    el.dataset.override = 'true';
+    calculateInvoiceFormTotals();
+  }
+
+  function removeAllRowTaxes() {
+    const tbody = document.getElementById('invoice-form-items-body');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(tr => {
+      const taxInput = tr.querySelector('.row-tax');
+      if (taxInput) {
+        taxInput.value = '0.00';
+        taxInput.dataset.override = 'true';
+      }
+    });
+    calculateInvoiceFormTotals();
+  }
+
+  async function searchClientByRnc(rnc, context = 'invoice-form') {
+    const cleanRnc = String(rnc).replace(/[^0-9]/g, '');
+    if (!cleanRnc || (cleanRnc.length !== 9 && cleanRnc.length !== 11)) {
+      alert('Por favor, introduzca un RNC válido de 9 o 11 dígitos.');
+      return;
+    }
+
+    // Find the button inside the event target context
+    const btn = window.event ? window.event.currentTarget : null;
+    let originalText = '';
+    if (btn) {
+      originalText = btn.innerHTML;
+      btn.innerHTML = '⚡ Consultando...';
+      btn.disabled = true;
+    }
+
+    try {
+      const url = 'https://corsproxy.io/?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Error al consultar RNC');
+      const data = await res.json();
+      
+      if (data && !data.error && data.nombre_razon_social) {
+        const nombre = data.nombre_razon_social;
+        const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
+        const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
+
+        if (context === 'client-form') {
+          const nameInput = document.getElementById('form-client-name');
+          const rncInput = document.getElementById('form-client-rnc');
+          if (nameInput) nameInput.value = fullName;
+          if (rncInput) rncInput.value = data.cedula_rnc || cleanRnc;
+        } else {
+          const nameInput = document.getElementById('form-invoice-client-name');
+          const idInput = document.getElementById('form-invoice-client-id');
+          const rncInput = document.getElementById('form-invoice-client-rnc');
+          if (nameInput) nameInput.value = fullName;
+          if (idInput) idInput.value = 'custom';
+          if (rncInput) rncInput.value = data.cedula_rnc || cleanRnc;
+        }
+        alert('Cliente encontrado en DGII: ' + fullName);
+      } else {
+        alert('No se encontraron registros para este RNC/Cédula.');
+      }
+    } catch (e) {
+      console.error('RNC Lookup Error:', e);
+      alert('Error de conexión o RNC no encontrado. Por favor, digite los datos manualmente.');
+    } finally {
+      if (btn) {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  }
+
   // Expose API methods globally inside module wrapper
   return {
     init: init,
@@ -2558,6 +2734,10 @@ window.CreaticosBilling = (function () {
     convertQuoteFromList: convertQuoteFromList,
     openRegisterPaymentFromList: openRegisterPaymentFromList,
     handlePrintFormatChange: handlePrintFormatChange,
+    handleRowPriceQtyChange: handleRowPriceQtyChange,
+    handleRowTaxChange: handleRowTaxChange,
+    removeAllRowTaxes: removeAllRowTaxes,
+    searchClientByRnc: searchClientByRnc,
 
     // POS exports
     clearPosCart: clearPosCart,

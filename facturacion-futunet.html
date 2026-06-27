@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/facturacion-futunet.css?v=1.0" />
-  <link rel="icon" type="image/png" sizes="192x192" href="img/futunet-logo-clean.png" />
-  <link rel="shortcut icon" href="img/logo-navbar.webp" />
+  <link rel="icon" type="image/png" sizes="192x192" href="img/logo-creaticos.png" />
+  <link rel="shortcut icon" href="img/logo-creaticos.png" />
   <meta name="theme-color" content="#0f1923" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
@@ -32,7 +32,7 @@
 
       <div class="admin-sidebar-logo">
         <img src="img/logo-navbar.webp" alt="Futunet Suministros" />
-        <span>Futunet Facturación</span>
+        <span>Futunet Suministros</span>
       </div>
 
       <div style="padding: 0 20px 16px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px;">
@@ -163,8 +163,14 @@
 
       <!-- ═══ PANEL: INVOICES (FACTURAS Y COTIZACIONES) ═══ -->
       <div class="admin-panel" id="panel-invoices">
-        <div class="admin-topbar">
+        <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
           <h1>Gestión de Facturas y Cotizaciones</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="FutunetBilling.openNewInvoiceForm()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              Nueva Factura / Cotización
+            </button>
+          </div>
         </div>
 
         <!-- Sub-tabs navigation -->
@@ -270,8 +276,14 @@
                 </div>
                 
                 <div class="form-group">
-                  <label for="form-invoice-client-rnc">RNC / Cédula</label>
-                  <input type="text" id="form-invoice-client-rnc" class="form-input" readonly placeholder="RNC / Cédula del cliente" />
+                  <label for="form-invoice-client-rnc" style="display:flex; justify-content:space-between; align-items:center;">
+                    <span>RNC / Cédula</span>
+                    <button type="button" onclick="FutunetBilling.searchClientByRnc(document.getElementById('form-invoice-client-rnc').value)" style="border:none; background:none; color:var(--primary); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:2px;" title="Buscar RNC en DGII">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                      Consultar DGII
+                    </button>
+                  </label>
+                  <input type="text" id="form-invoice-client-rnc" class="form-input" placeholder="Ej. 132702077" />
                 </div>
 
                 <div class="form-group">
@@ -305,6 +317,24 @@
                 </div>
               </div>
 
+              <div class="form-grid-3" style="margin-top: 15px; margin-bottom: 10px;">
+                <div class="form-group">
+                  <label for="form-invoice-division">División Emisora (Futunet Suministros)</label>
+                  <select id="form-invoice-division" class="form-input">
+                    <option value="general">Futunet Suministros (General)</option>
+                    <option value="papeleria">Futunet Suministros y Suministros</option>
+                    <option value="sublimacion">Creaticos Sublimación</option>
+                  </select>
+                </div>
+                <div class="form-group" style="display:flex; align-items:flex-end;">
+                  <button type="button" class="admin-btn" onclick="FutunetBilling.removeAllRowTaxes()" style="height:38px; border-radius:10px; color:#ef4444; border: 1.5px solid #fca5a5; background: #fef2f2; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.3 5.7 5.7 18.3M5.7 5.7l12.6 12.6"/></svg>
+                    Quitar ITBIS de todos los artículos
+                  </button>
+                </div>
+                <div></div>
+              </div>
+
               <!-- Items Table -->
               <div style="overflow-x: auto; margin-top: 30px;">
                 <table class="items-table" id="form-items-table">
@@ -313,8 +343,8 @@
                       <th style="width: 40%;">Concepto / Producto *</th>
                       <th style="width: 15%;">Precio Unitario (RD$) *</th>
                       <th style="width: 10%;">Cant. *</th>
-                      <th style="width: 15%;">ITBIS (%)</th>
-                      <th style="width: 15%; text-align: right;">Total Línea</th>
+                      <th style="width: 15%;">ITBIS (RD$)</th>
+                      <th style="width: 15%; text-align: right;">Total</th>
                       <th style="width: 5%;"></th>
                     </tr>
                   </thead>
@@ -582,6 +612,18 @@
               </div>
             </div>
           </div>
+          
+          <!-- Space for signatures and seals -->
+          <div class="invoice-signatures-area">
+            <div class="signature-box">
+              <div class="signature-line"></div>
+              <span>Entregado Por</span>
+            </div>
+            <div class="signature-box">
+              <div class="signature-line"></div>
+              <span>Recibido Por (Firma y Sello)</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -639,7 +681,13 @@
                 <input type="text" id="form-client-name" class="form-input" required placeholder="Ej. Juan Pérez o Distribuidora X" />
               </div>
               <div class="form-group" style="margin-bottom:15px;">
-                <label for="form-client-rnc">RNC / Cédula</label>
+                <label for="form-client-rnc" style="display:flex; justify-content:space-between; align-items:center;">
+                  <span>RNC / Cédula</span>
+                  <button type="button" onclick="FutunetBilling.searchClientByRnc(document.getElementById('form-client-rnc').value, 'client-form')" style="border:none; background:none; color:var(--primary); font-size:0.75rem; font-weight:600; cursor:pointer; padding:0; display:inline-flex; align-items:center; gap:2px;" title="Buscar RNC en DGII">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    Consultar DGII
+                  </button>
+                </label>
                 <input type="text" id="form-client-rnc" class="form-input" placeholder="Ej. 101-XXXXX-X o 001-XXXXXXX-X" />
               </div>
               <div class="form-group" style="margin-bottom:15px;">
