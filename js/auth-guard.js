@@ -13,7 +13,8 @@
     requireAuth: function (callback) {
       FutunetAuth.authReady.then(function () {
         if (!FutunetAuth.isLoggedIn()) {
-          window.location.href = 'login.html';
+          var currentPage = window.location.pathname.split('/').pop() + window.location.search;
+          window.location.href = 'login.html?redirect=' + encodeURIComponent(currentPage);
           return;
         }
         var userData = FutunetAuth.getUserData();
