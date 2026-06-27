@@ -132,12 +132,12 @@ function renderInlineAddButtonHTML(productId, variant = 'default') {
     }
     return `
       <div class="inline-cart-control">
-        <button class="inline-qty-btn" type="button" data-inline-change="-1" data-product-id="${escapeHTML(productId)}"><i data-lucide="minus"></i></button>
+        <button class="inline-qty-btn" type="button" data-inline-change="-1" data-product-id="${escapeHTML(productId)}" aria-label="Quitar una unidad"><i data-lucide="minus"></i></button>
         <span class="inline-qty-readout">
           <span class="inline-qty-count">${qty}</span>
           <span class="inline-qty-label">en carrito</span>
         </span>
-        <button class="inline-qty-btn" type="button" data-inline-change="1" data-product-id="${escapeHTML(productId)}"><i data-lucide="plus"></i></button>
+        <button class="inline-qty-btn" type="button" data-inline-change="1" data-product-id="${escapeHTML(productId)}" aria-label="Agregar una unidad"><i data-lucide="plus"></i></button>
       </div>
     `;
   }
@@ -151,7 +151,7 @@ function renderInlineAddButtonHTML(productId, variant = 'default') {
   }
 
   return `
-    <button class="inline-add-btn product-add-btn" type="button" data-product-id="${escapeHTML(productId)}">
+    <button class="inline-add-btn product-add-btn" type="button" data-product-id="${escapeHTML(productId)}" aria-label="Agregar al carrito">
       <span class="product-add-btn__icon-wrap"><i data-lucide="shopping-cart"></i></span>
       <span class="product-add-btn__text">Agregar al carrito</span>
     </button>
