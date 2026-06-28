@@ -76,15 +76,30 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
   });
 }
 
+// Caché para normalización de textos de búsqueda usando WeakMap para evitar mutar objetos y permitir GC
+const normalizedCache = new WeakMap();
+
+function getNormalized(obj, key) {
+  let objCache = normalizedCache.get(obj);
+  if (!objCache) {
+    objCache = {};
+    normalizedCache.set(obj, objCache);
+  }
+  if (objCache[key] === undefined) {
+    objCache[key] = normalizeSearch(obj[key]);
+  }
+  return objCache[key];
+}
+
 /**
  * Filtra un producto contra un query normalizado.
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getNormalized(product, 'title');
+  const desc = getNormalized(product, 'desc');
+  const category = getNormalized(product, 'category');
+  const brand = getNormalized(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
