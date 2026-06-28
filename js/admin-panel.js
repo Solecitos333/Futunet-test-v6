@@ -1171,6 +1171,8 @@
         companyCode = 'CREATICOS';
       } else if (lowerRoles.includes('futunetsrl_admin') || lowerRoles.includes('futunetsrl_operator') || lowerRoles.includes('futunetsrl_user') || lowerRoles.includes('futunetsrl_usuario')) {
         companyCode = 'FUTUNETSRL';
+      } else if (lowerRoles.includes('panitas_admin') || lowerRoles.includes('panitas_operator') || lowerRoles.includes('panitas_user') || lowerRoles.includes('panitas_usuario')) {
+        companyCode = 'PANITAS';
       }
 
       var updatedFields = {
@@ -3246,7 +3248,7 @@
         var statusClass = req.status === 'completed' ? 'badge-in-stock' : 'badge-out-of-stock';
         var statusLabel = req.status === 'completed' ? 'Completado' : 'Pendiente';
         
-        html += '<tr data-search-req="' + (req.name + ' ' + (req.serviceTitle || '') + ' ' + (req.email || '')).toLowerCase() + '">' +
+        html += '<tr data-search-req="' + escapeHtml((req.name + ' ' + (req.serviceTitle || '') + ' ' + (req.email || '')).toLowerCase()) + '">' +
           '  <td data-label="Cliente"><strong>' + escapeHtml(req.name) + '</strong><br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(req.email || '') + '</span></td>' +
           '  <td data-label="Teléfono">' + escapeHtml(req.phone || '') + '</td>' +
           '  <td data-label="Servicio"><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(req.serviceTitle || 'General') + '</span></td>' +
@@ -4892,9 +4894,9 @@
       email: "Asunto: Temporada de Huracanes 2026: Asegura la continuidad de tu empresa con Futunet\n\nEstimado cliente corporativo,\n\nLas interrupciones eléctricas son la principal causa de fallas en servidores y pérdidas financieras durante el invierno ciclónico. Futunet te ofrece:\n1. UPS de Doble Conversión (1KVA a 10KVA) con bypass automático.\n2. Inversores y baterías de ciclo profundo.\n3. Sistemas de paneles solares híbridos.\n\nContáctanos hoy y asegura continuidad operativa."
     },
     julio: {
-      whatsapp: "¡Hola! En el mes de los padres, regala potencia. Conoce nuestras laptops de alto rendimiento, routers WiFi 6 y gadgets inteligentes.",
-      social: "¿Papá trabaja duro o le apasiona el gaming? 🎮💼 Este mes de los padres regálale la potencia y conectividad que se merece: routers de largo alcance WiFi 6, audífonos premium o laptops potentes. Visita nuestro catálogo Futunet en Santiago. #DiaDeLosPadres #PapáSmart #GamingRD",
-      email: "Asunto: Sorprende a Papá con lo mejor de la tecnología Futunet\n\nEstimado cliente,\n\nCelebra el día de los padres con tecnología de punta. Hemos seleccionado los mejores equipos para teletrabajo exigente, entretenimiento y redes estables. Cotiza online hoy."
+      whatsapp: "¡Hola! En el mes de los padres, regala potencia y conectividad. Obtén un 10% de descuento en laptops de alto rendimiento y routers WiFi 6 usando el código PAPASMART2026. ¡Visítanos!",
+      social: "¿Papá trabaja duro o le apasiona el gaming? 🎮💼 Celebra el Día de los Padres regalándole la potencia y conectividad que se merece. Usa el código PAPASMART2026 y obtén 10% de descuento en laptops seleccionadas y routers WiFi 6 de largo alcance. Visita nuestro catálogo Futunet en Santiago. ¡Promoción válida todo julio! #DiaDeLosPadres #PapáSmart #GamingRD #Futunet",
+      email: "Asunto: Sorprende a Papá con tecnología de punta - 10% de Descuento con el código PAPASMART2026\n\nEstimado cliente,\n\nCelebra el mes de los padres con el regalo perfecto. En Futunet hemos seleccionado laptops de alto rendimiento para productividad o gaming, y routers WiFi 6 de última generación. Usa el código PAPASMART2026 en tu cotización para obtener un 10% de descuento inmediato. Válido del 1 al 31 de julio de 2026. ¡Cotiza hoy mismo!"
     },
     agosto: {
       whatsapp: "¡Hola! Prepárate para el regreso a clases. Descubre ofertas en laptops estudiantiles, impresoras con tanques de tinta e internet de fibra óptica Lite.",
@@ -4959,6 +4961,13 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-06-01');
       setVal('banner-end-date', '2026-06-30');
+    } else if (presetName === 'Papá Smart & Gaming') {
+      setVal('banner-title', '🎮 Mes del Padre con <strong>Rendimiento y Potencia</strong>');
+      setVal('banner-subtitle', 'Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código PAPASMART2026.');
+      setVal('banner-link', 'catalogo.html?cat=equipos');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-07-01');
+      setVal('banner-end-date', '2026-07-31');
     }
   }
 

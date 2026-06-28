@@ -13,6 +13,22 @@
   let hasInitializedCartCount = false;
   let lastCartItemCount = 0;
 
+  let activeCoupon = null;
+  const COUPONS = {
+    PAPASMART2026: {
+      code: 'PAPASMART2026',
+      discount: 0.10,
+      departments: ['equipos', 'redes'],
+      description: '10% de descuento en Cómputo y Conectividad (Julio 2026)'
+    },
+    RESPALDO2026: {
+      code: 'RESPALDO2026',
+      discount: 0.10,
+      departments: ['energia'],
+      description: '10% de descuento en Energía y Respaldo (Junio 2026)'
+    }
+  };
+
   // Utilidades internas si no existen globalmente
   function escapeHTML(str) {
     const div = document.createElement('div');
@@ -309,6 +325,7 @@
     const lines = ['Hola Futunet, quiero solicitar este carrito:'];
     let total = 0;
     let totalLease = 0;
+    let discountAmount = 0;
 
     items.forEach((product, index) => {
       const qty = cartState.items[product.id]?.qty || 0;
@@ -330,10 +347,27 @@
       }
     });
 
+    if (activeCoupon) {
+      items.forEach(product => {
+        const qty = cartState.items[product.id]?.qty || 0;
+        const unitPrice = parsePriceToNumber(product.price);
+        const isLease = String(product.price).includes('/ mes');
+        if (!isLease && activeCoupon.departments.includes(product.department)) {
+          discountAmount += (unitPrice * qty) * activeCoupon.discount;
+        }
+      });
+    }
+
     if (total > 0 || totalLease > 0) {
       lines.push('');
       if (total > 0) {
-        lines.push(`Total Compra (CapEx): ${formatCurrency(total)}`);
+        if (discountAmount > 0) {
+          lines.push(`Subtotal Compra: ${formatCurrency(total)}`);
+          lines.push(`Descuento (Cupón ${activeCoupon.code}): -${formatCurrency(discountAmount)}`);
+          lines.push(`Total Compra (CapEx): ${formatCurrency(total - discountAmount)}`);
+        } else {
+          lines.push(`Total Compra (CapEx): ${formatCurrency(total)}`);
+        }
       }
       if (totalLease > 0) {
         lines.push(`Total Leasing Mensual (OpEx): ${formatCurrency(totalLease)} / mes`);
@@ -441,6 +475,34 @@
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
     const pmDisplay = paymentMethod === 'bank_transfer' ? 'Transferencia Bancaria' : 'WhatsApp (Pedido Rápido)';
 
+    const items = getCartItems();
+    let total = 0;
+    let totalLease = 0;
+    let discountAmount = 0;
+
+    items.forEach(product => {
+      const qty = cartState.items[product.id]?.qty || 0;
+      const unitPrice = parsePriceToNumber(product.price);
+      const lineTotal = unitPrice * qty;
+      const isLease = String(product.price).includes('/ mes');
+      if (isLease) {
+        totalLease += lineTotal;
+      } else {
+        total += lineTotal;
+      }
+    });
+
+    if (activeCoupon) {
+      items.forEach(product => {
+        const qty = cartState.items[product.id]?.qty || 0;
+        const unitPrice = parsePriceToNumber(product.price);
+        const isLease = String(product.price).includes('/ mes');
+        if (!isLease && activeCoupon.departments.includes(product.department)) {
+          discountAmount += (unitPrice * qty) * activeCoupon.discount;
+        }
+      });
+    }
+
     summaryCard.innerHTML = `
       <div class="summary-field"><strong>Nombre:</strong> <span>${escapeHTML(name)}</span></div>
       <div class="summary-field"><strong>Teléfono:</strong> <span>${escapeHTML(phone)}</span></div>
@@ -448,6 +510,48 @@
       <div class="summary-field"><strong>Dirección:</strong> <span>${escapeHTML(address)}</span></div>
       ${notes ? `<div class="summary-field"><strong>Notas:</strong> <span>${escapeHTML(notes)}</span></div>` : ''}
       <div class="summary-field"><strong>Método de Pago:</strong> <span class="badge-payment-method">${escapeHTML(pmDisplay)}</span></div>
+      
+      <hr style="border:none; border-top:1px solid #e2e8f0; margin:12px 0;">
+      
+      <div class="summary-field"><strong>Resumen del Carrito:</strong></div>
+      ${items.map(p => `
+        <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#475569; margin-bottom:4px; padding-left:8px;">
+          <span>${escapeHTML(p.title)} (x${cartState.items[p.id].qty})</span>
+          <span>${p.price}</span>
+        </div>
+      `).join('')}
+      
+      <hr style="border:none; border-top:1px solid #e2e8f0; margin:12px 0;">
+      
+      ${total > 0 ? `
+        <div class="summary-field">
+          <strong>Subtotal Compra:</strong>
+          <span>${formatCurrency(total)}</span>
+        </div>
+      ` : ''}
+      
+      ${discountAmount > 0 ? `
+        <div class="summary-field" style="color:#2ecc71;">
+          <strong>Descuento (${escapeHTML(activeCoupon.code)}):</strong>
+          <span>-${formatCurrency(discountAmount)}</span>
+        </div>
+        <div class="summary-field" style="font-size:1.1rem; color:#0A70A2;">
+          <strong>Total Compra:</strong>
+          <strong>${formatCurrency(total - discountAmount)}</strong>
+        </div>
+      ` : total > 0 ? `
+        <div class="summary-field" style="font-size:1.1rem; color:#0A70A2;">
+          <strong>Total Compra:</strong>
+          <strong>${formatCurrency(total)}</strong>
+        </div>
+      ` : ''}
+      
+      ${totalLease > 0 ? `
+        <div class="summary-field" style="color:#e67e22; font-size:0.95rem; margin-top:4px;">
+          <strong>Leasing Mensual:</strong>
+          <span>${formatCurrency(totalLease)} / mes</span>
+        </div>
+      ` : ''}
     `;
 
     const bankSection = document.getElementById('checkout-step3-bank-details');
@@ -521,6 +625,14 @@
               <div class="checkout-form-group full-width">
                 <label for="chk-notes">Notas / Referencias (Opcional)</label>
                 <textarea id="chk-notes" placeholder="Ej. Casa de dos niveles frente al parque..." rows="1"></textarea>
+              </div>
+              <div class="checkout-form-group full-width" style="margin-top: 8px;">
+                <label for="chk-coupon">Código de Descuento (Opcional)</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. PAPASMART2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
+                </div>
+                <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>
               </div>
             </div>
           </div>
@@ -615,6 +727,48 @@
 
     // Bind events
     document.getElementById('close-checkout-modal').addEventListener('click', closeCheckoutModal);
+
+    // Coupon logic
+    const btnApplyCoupon = document.getElementById('btn-apply-coupon');
+    const couponInput = document.getElementById('chk-coupon');
+    const couponFeedback = document.getElementById('coupon-feedback');
+
+    if (btnApplyCoupon && couponInput && couponFeedback) {
+      btnApplyCoupon.addEventListener('click', () => {
+        const code = couponInput.value.trim().toUpperCase();
+        if (!code) {
+          activeCoupon = null;
+          couponFeedback.textContent = '';
+          return;
+        }
+
+        const coupon = COUPONS[code];
+        if (!coupon) {
+          activeCoupon = null;
+          couponFeedback.textContent = '❌ Código de cupón inválido o expirado.';
+          couponFeedback.style.color = '#e74c3c';
+          return;
+        }
+
+        const items = getCartItems();
+        const hasQualifyingItems = items.some(p => {
+          const isLease = String(p.price).includes('/ mes');
+          return !isLease && coupon.departments.includes(p.department);
+        });
+
+        if (!hasQualifyingItems) {
+          activeCoupon = null;
+          couponFeedback.textContent = `⚠️ El cupón no aplica a los productos en tu carrito.`;
+          couponFeedback.style.color = '#f39c12';
+          return;
+        }
+
+        activeCoupon = coupon;
+        couponFeedback.textContent = `✓ Cupón ${coupon.code} aplicado: ${coupon.description}`;
+        couponFeedback.style.color = '#2ecc71';
+        showCartToast(`Cupón ${coupon.code} aplicado con éxito.`, 'success');
+      });
+    }
 
     // Navigation buttons
     const btnPrev = document.getElementById('btn-prev-checkout');
@@ -806,6 +960,9 @@
     // Reset form
     document.getElementById('cart-checkout-form').reset();
     removeCheckoutFile();
+    activeCoupon = null;
+    const couponFeedback = document.getElementById('coupon-feedback');
+    if (couponFeedback) couponFeedback.textContent = '';
     
     // Check if user is logged in and autofill
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
@@ -958,6 +1115,19 @@
         downloadUrl = await uploadTask.ref.getDownloadURL();
       }
       
+      // Calcular descuento para enviar al backend
+      let discountAmount = 0;
+      if (activeCoupon) {
+        items.forEach(product => {
+          const qty = cartState.items[product.id]?.qty || 0;
+          const unitPrice = parsePriceToNumber(product.price);
+          const isLease = String(product.price).includes('/ mes');
+          if (!isLease && activeCoupon.departments.includes(product.department)) {
+            discountAmount += (unitPrice * qty) * activeCoupon.discount;
+          }
+        });
+      }
+
       // Construir payload para el API del backend
       const orderPayload = {
         user_id: user ? user.uid : 'guest',
@@ -967,6 +1137,8 @@
         shipping_address: address,
         shipping_notes: notes,
         payment_method: paymentMethod,
+        coupon_code: activeCoupon ? activeCoupon.code : null,
+        discount_amount: discountAmount,
         items: items.map(p => ({
           id: p.id,
           title: p.title,

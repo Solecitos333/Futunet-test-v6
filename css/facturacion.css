@@ -21,6 +21,8 @@
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #3b82f6;
+  --card-bg: #ffffff;
+  --text-color: #1e293b;
 }
 
 /* ─── Base Reset ─── */
@@ -389,6 +391,18 @@ body {
 .badge-pending { background: #fffbeb; color: var(--warning); }
 .badge-cancelled { background: #fef2f2; color: var(--danger); }
 .badge-overdue { background: #fff1f2; color: #991b1b; }
+.admin-code-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  font-family: monospace;
+}
 
 /* ─── Actions Button Group ─── */
 .table-actions {
@@ -1344,6 +1358,13 @@ body {
 .pos-btn-card:hover {
   background: rgba(59, 130, 246, 0.08);
 }
+.pos-btn-nfc {
+  border-color: #38bdf8;
+  color: #38bdf8;
+}
+.pos-btn-nfc:hover {
+  background: rgba(56, 189, 248, 0.08);
+}
 
 /* Catalog section style */
 .pos-catalog-panel {
@@ -1494,8 +1515,8 @@ body {
   animation: pulseRing 2.2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
 }
 .ring-1 { animation-delay: 0s; width: 70px; height: 70px; }
-.ring-2 { animation-delay: 0.5s; width: 70px; height: 70px; }
-.ring-3 { animation-delay: 1s; width: 70px; height: 70px; }
+.ring-2 { animation-delay: 0.7s; width: 70px; height: 70px; }
+.ring-3 { animation-delay: 1.4s; width: 70px; height: 70px; }
 
 @keyframes pulseRing {
   0% { transform: scale(1); opacity: 0.8; }
@@ -1595,16 +1616,114 @@ body {
 
 /* Ticket Print Format Overrides */
 .printable-invoice-wrapper.print-format-ticket .invoice-signatures-area {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 15px !important;
-  margin-top: 25px !important;
-  padding: 0 !important;
+  display: none !important;
 }
-.printable-invoice-wrapper.print-format-ticket .signature-line {
-  margin-top: 20px !important;
+
+/* ─── TOAST NOTIFICATIONS ─── */
+.erp-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  color: #1e293b;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05);
+  font-size: 0.88rem;
+  font-weight: 500;
+  border-left: 4px solid var(--primary);
+  animation: toastSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, toastFadeOut 0.3s 2.7s ease forwards;
+  opacity: 0;
+  pointer-events: auto;
 }
-.printable-invoice-wrapper.print-format-ticket .signature-box span {
-  font-size: 7.5pt !important;
+.erp-toast.toast-success {
+  border-left-color: var(--success);
+}
+.erp-toast.toast-warning {
+  border-left-color: var(--warning);
+}
+.erp-toast.toast-danger {
+  border-left-color: var(--danger);
+}
+.erp-toast.toast-info {
+  border-left-color: var(--info);
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toastFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); visibility: hidden; }
+}
+
+/* Skeleton Loader */
+@keyframes skeleton-loading {
+  0% {
+    background-color: var(--bg-light);
+    opacity: 0.6;
+  }
+  50% {
+    background-color: var(--border-color);
+    opacity: 1;
+  }
+  100% {
+    background-color: var(--bg-light);
+    opacity: 0.6;
+  }
+}
+
+.skeleton-row td {
+  padding: 16px;
+  vertical-align: middle;
+}
+
+.skeleton-line {
+  height: 16px;
+  border-radius: 6px;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+}
+
+/* Client Profile Panel */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+  .profile-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .profile-stats-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Kitchen Ticket Print Media Styles */
+@media print {
+  body.printing-kitchen-ticket .admin-layout,
+  body.printing-kitchen-ticket .admin-modal,
+  body.printing-kitchen-ticket .admin-overlay,
+  body.printing-kitchen-ticket #toast-container {
+    display: none !important;
+  }
+  body.printing-kitchen-ticket #kitchen-ticket-print {
+    display: block !important;
+    width: 80mm !important;
+    font-family: monospace !important;
+    font-size: 10pt !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
+  }
 }
 

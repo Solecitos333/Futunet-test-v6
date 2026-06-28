@@ -31,37 +31,37 @@ Futunet opera en tres pilares de alta demanda:
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 31 de Mayo - 7 de Junio de 2026)
+## ⚡ Plan de Acción Semanal (Semana Actual: 28 de Junio - 5 de Julio de 2026)
 
 ### 📌 Contexto del Período
-* **Hoy (31 de Mayo)**: Cierre de la festividad de **Día de las Madres** en República Dominicana.
-* **Mañana (1 de Junio)**: Inicio de la **Temporada Ciclónica (Huracanes) en el Caribe**, la cual genera una altísima preocupación en empresas por caídas de energía y desconexión de servidores.
-* **Zona Geográfica**: Santiago y el Cibao (mercado local).
+* **Hoy (28 de Junio)**: Cierre de la campaña de **Respaldo Energético** como foco principal, aunque se mantiene activa como secundaria debido a que la Temporada Ciclónica continúa (Junio-Noviembre).
+* **Esta Semana (1 de Julio)**: Inicio de la campaña de **Día de los Padres** ("Papá Smart & Gaming"), enfocada en laptops de alto rendimiento, gadgets tecnológicos y routers WiFi 6 de largo alcance.
+* **Zona Geográfica**: Santiago y la región del Cibao.
 
 ### 1. Transición Estratégica de UI/UX (Home Page & Banner Rotativo)
-* **Acción**: Apagar de forma programada los banners del Día de las Madres y encender la campaña **"Temporada de Respaldo Energético"** en la primera posición del slider principal.
-* **Propuesta de Banner UI/UX (Campaña de Junio)**:
-  * **Fondo**: Imagen de alta calidad de un rack de servidores organizado con una UPS Online encendida o paneles solares instalados en una empresa corporativa local.
-  * **Título**: `¿Tu negocio está lista para la temporada ciclónica?`
-  * **Subtítulo**: `Garantiza la continuidad de tu empresa con UPS de doble conversión, inversores y paneles solares con instalación inmediata.`
-  * **Etiqueta (Label)**: `⚡ Prevención y Energía`
+* **Acción**: Mover el banner de la Temporada de Respaldo Energético a posiciones secundarias y encender la campaña **"Papá Smart & Gaming"** en la primera posición del slider principal de banners.
+* **Propuesta de Banner UI/UX (Campaña de Julio)**:
+  * **Fondo**: Imagen de alta calidad de una laptop gaming y router WiFi 6 premium con luces ambientales RGB en Santiago (`img/banners/papa_smart_gaming.png`).
+  * **Título**: `Regala potencia y conectividad en el Mes del Padre`
+  * **Subtítulo**: `Laptops de alto rendimiento, routers WiFi 6 y gadgets con 10% de descuento usando el código PAPASMART2026.`
+  * **Etiqueta (Label)**: `🎮 Papá Smart & Gaming`
   * **CTAs**: 
-    * Botón Principal: `Ver soluciones de energía` -> Enlace a `catalogo.html?cat=energia`
-    * Botón Secundario: `Consultar por WhatsApp` -> Mensaje personalizado: *"Hola Futunet, quiero cotizar un sistema de respaldo de energía y UPS para mi negocio ante la temporada de huracanes."*
+    * Botón Principal: `Ver Equipos y Laptops` -> Enlace a `catalogo.html?cat=equipos`
+    * Botón Secundario: `Consultar por WhatsApp` -> Mensaje personalizado: *"Hola Futunet, quiero cotizar laptops y routers WiFi 6 para regalar en el día de los padres con el código PAPASMART2026."*
 
 ### 2. Estrategia de Contenidos (Content Manager)
-* **Redes Sociales & Sitio Web**: Publicar un artículo corto en el blog o sección de noticias o como banner secundario sobre: *"5 pasos para proteger la infraestructura tecnológica de tu empresa durante la temporada de lluvias en Santiago"*.
+* **Redes Sociales & Sitio Web**: Publicar contenido y posts semanales sobre: *"Guía de regalos tecnológicos: Laptops de alto rendimiento para padres profesionales y gamers en Santiago"*.
 * **Productos a Destacar en el Home**:
-  * UPS de 1KVA / 2KVA / 3KVA (Doble conversión).
-  * Inversores de onda senoidal pura (para equipos electrónicos delicados).
-  * Reguladores de voltaje de grado industrial.
-  * Baterías de ciclo profundo para respaldo prolongado.
+  * Laptops ASUS ROG / TUF, Dell G15 o Lenovo Legion (Gaming y alto rendimiento).
+  * Laptops de productividad avanzada (Dell Latitude / HP ProBook).
+  * Routers Mesh WiFi 6 de largo alcance (TP-Link Deco, Ubiquiti UniFi, MikroTik).
+  * Teclados mecánicos y accesorios gamer (Logitech).
 
 ### 3. Activación de Disparador Comercial (Marketing)
-* **Código de Descuento Activo**: `RESPALDO2026`
-  * **Valor**: 10% de descuento en la categoría de "Energía y respaldo" (UPS, inversores).
-  * **Vigencia**: 1 de Junio al 15 de Junio de 2026.
-  * **Mensaje Clave**: *"No dejes que un apagón detenga tu empresa. Usa el código RESPALDO2026 al cotizar."*
+* **Código de Descuento Activo**: `PAPASMART2026`
+  * **Valor**: 10% de descuento en las categorías de "Equipos de Oficina / Cómputo" y "Redes / Routers WiFi".
+  * **Vigencia**: 1 de Julio al 31 de Julio de 2026.
+  * **Mensaje Clave**: *"Sorprende a papá con la máxima velocidad y rendimiento. Usa el código PAPASMART2026 al cotizar."*
 
 ---
 

@@ -9,15 +9,72 @@ window.ERPBilling = (function () {
   // Tenant Config
   const activeCompanyCode = (localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
   const isCreaticos = activeCompanyCode === 'CREATICOS';
+  const isPanitas = activeCompanyCode === 'PANITAS';
 
-  const collectionClients = isCreaticos ? 'creaticos_clients' : 'futunet_clients';
-  const collectionInvoices = isCreaticos ? 'creaticos_invoices' : 'futunet_invoices';
-  const collectionPayments = isCreaticos ? 'creaticos_payments' : 'futunet_payments';
-  const collectionSettings = isCreaticos ? 'creaticos_settings' : 'futunet_settings';
-  const collectionCashSessions = isCreaticos ? 'creaticos_cash_sessions' : 'futunet_cash_sessions';
+  const collectionClients = isCreaticos ? 'creaticos_clients' : (isPanitas ? 'panitas_clients' : 'futunet_clients');
+  const collectionInvoices = isCreaticos ? 'creaticos_invoices' : (isPanitas ? 'panitas_invoices' : 'futunet_invoices');
+  const collectionPayments = isCreaticos ? 'creaticos_payments' : (isPanitas ? 'panitas_payments' : 'futunet_payments');
+  const collectionSettings = isCreaticos ? 'creaticos_settings' : (isPanitas ? 'panitas_settings' : 'futunet_settings');
+  const collectionCashSessions = isCreaticos ? 'creaticos_cash_sessions' : (isPanitas ? 'panitas_cash_sessions' : 'futunet_cash_sessions');
+  const collectionProducts = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
 
   // Firestore DB reference
   function getDB() { return window.FutunetFirebase.db; }
+
+  // HTML escaping helper for XSS prevention
+  function escapeHTML(str) {
+    if (str === undefined || str === null) return '';
+    if (typeof str !== 'string') return String(str);
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Attribute escaping helper for attribute breakouts
+  function escapeAttr(str) {
+    if (str === undefined || str === null) return '';
+    if (typeof str !== 'string') return String(str);
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // Toast notification system
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `erp-toast toast-${type}`;
+    
+    // Select icon based on type
+    let icon = '';
+    if (type === 'success') {
+      icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>`;
+    } else if (type === 'danger') {
+      icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`;
+    } else if (type === 'warning') {
+      icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`;
+    } else {
+      icon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>`;
+    }
+
+    toast.innerHTML = `${icon}<span>${escapeHTML(message)}</span>`;
+    container.appendChild(toast);
+
+    // Auto remove from DOM after anim ends (3s)
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 3000);
+  }
 
   // System State Caches
   let settings = null;
@@ -70,6 +127,9 @@ window.ERPBilling = (function () {
       await checkActiveCashSession();
       initDashboard();
       setupEventListeners();
+      if (isPanitas) {
+        refreshActiveTables();
+      }
     } catch (err) {
       console.error('Error initializing ERP Billing:', err);
       alert('Error al inicializar la base de datos de facturación: ' + err.message);
@@ -86,6 +146,13 @@ window.ERPBilling = (function () {
       root.style.setProperty('--bg-layout', 'linear-gradient(180deg, #f8faff 0%, #eef2ff 100%)');
       root.style.setProperty('--card-shadow', '0 10px 30px -10px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(99, 102, 241, 0.03)');
       root.style.setProperty('--input-focus', 'rgba(99, 102, 241, 0.15)');
+    } else if (isPanitas) {
+      root.style.setProperty('--primary', '#ea580c');
+      root.style.setProperty('--primary-hover', '#c2410c');
+      root.style.setProperty('--primary-rgb', '234, 88, 12');
+      root.style.setProperty('--bg-layout', 'linear-gradient(180deg, #fffaf5 0%, #ffedd5 100%)');
+      root.style.setProperty('--card-shadow', '0 10px 30px -10px rgba(234, 88, 12, 0.08), 0 1px 3px rgba(234, 88, 12, 0.03)');
+      root.style.setProperty('--input-focus', 'rgba(234, 88, 12, 0.15)');
     } else {
       root.style.setProperty('--primary', '#0a70a2');
       root.style.setProperty('--primary-hover', '#085d88');
@@ -98,19 +165,37 @@ window.ERPBilling = (function () {
     // Set page title
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) {
-      pageTitle.textContent = isCreaticos ? 'Sistema de Facturación — Creaticos Group' : 'Sistema de Facturación — Futunet Suministros';
+      if (isCreaticos) {
+        pageTitle.textContent = 'Sistema de Facturación — Creaticos Group';
+      } else if (isPanitas) {
+        pageTitle.textContent = 'Sistema de Facturación — Los Panitas By Nechy';
+      } else {
+        pageTitle.textContent = 'Sistema de Facturación — Futunet Suministros';
+      }
     }
 
     // Set sidebar logos/names
     const sbLogo = document.getElementById('sidebar-brand-logo');
-    if (sbLogo) sbLogo.src = isCreaticos ? 'img/logo-creaticos-icon.png' : 'img/logo-navbar.webp';
+    if (sbLogo) {
+      if (isCreaticos) sbLogo.src = 'img/logo-creaticos-icon.png';
+      else if (isPanitas) sbLogo.src = 'img/logo-panitas.png';
+      else sbLogo.src = 'img/logo-navbar.webp';
+    }
     
     const sbName = document.getElementById('sidebar-brand-name');
-    if (sbName) sbName.textContent = isCreaticos ? 'Creaticos Group' : 'Futunet Suministros';
+    if (sbName) {
+      if (isCreaticos) sbName.textContent = 'Creaticos Group';
+      else if (isPanitas) sbName.textContent = 'Los Panitas';
+      else sbName.textContent = 'Futunet Suministros';
+    }
 
     // Set view/printable logo
     const viewLogoEl = document.getElementById('view-company-logo');
-    if (viewLogoEl) viewLogoEl.src = isCreaticos ? 'img/logo-creaticos-full.png' : 'img/futunet-logo-clean.png';
+    if (viewLogoEl) {
+      if (isCreaticos) viewLogoEl.src = 'img/logo-creaticos-full.png';
+      else if (isPanitas) viewLogoEl.src = 'img/logo-panitas.png';
+      else viewLogoEl.src = 'img/futunet-logo-clean.png';
+    }
 
     // Show/hide division selector
     const divisionGroup = document.getElementById('division-form-group');
@@ -122,13 +207,20 @@ window.ERPBilling = (function () {
     const pSourceFilter = document.getElementById('products-source-filter');
     if (pSourceFilter) {
       pSourceFilter.value = isCreaticos ? 'creaticos' : 'futunet';
-      pSourceFilter.style.display = isCreaticos ? 'inline-block' : 'none';
+      pSourceFilter.style.display = (isCreaticos || isPanitas) ? 'none' : 'inline-block';
     }
 
     // Show/hide POS categories
     const posCategoriesList = document.getElementById('pos-categories-list');
     if (posCategoriesList) {
-      posCategoriesList.style.display = isCreaticos ? 'flex' : 'none';
+      posCategoriesList.style.display = (isCreaticos || isPanitas) ? 'flex' : 'none';
+      if (isPanitas) {
+        posCategoriesList.innerHTML = `
+          <button type="button" class="pos-category-btn is-active" id="pos-cat-all" onclick="ERPBilling.filterPosCategory('all')">Todos</button>
+          <button type="button" class="pos-category-btn" id="pos-cat-comida" onclick="ERPBilling.filterPosCategory('comida')">Comida</button>
+          <button type="button" class="pos-category-btn" id="pos-cat-bebidas" onclick="ERPBilling.filterPosCategory('bebidas')">Bebidas</button>
+        `;
+      }
     }
 
     // Show/hide product source group
@@ -137,11 +229,28 @@ window.ERPBilling = (function () {
       productSourceGroup.style.display = isCreaticos ? 'block' : 'none';
     }
 
-    // Adjust POS categories button labels and defaults
+    // Adjust POS categories button display
     const posCatCreaticos = document.getElementById('pos-cat-creaticos');
     const posCatFutunet = document.getElementById('pos-cat-futunet');
     if (posCatCreaticos) posCatCreaticos.style.display = isCreaticos ? 'inline-block' : 'none';
     if (posCatFutunet) posCatFutunet.style.display = isCreaticos ? 'inline-block' : 'none';
+
+    // Show/hide restaurant fields and mesas container
+    const restFields = document.getElementById('pos-restaurant-fields');
+    if (restFields) restFields.style.display = isPanitas ? 'block' : 'none';
+
+    const restTables = document.getElementById('pos-restaurant-tables-container');
+    if (restTables) restTables.style.display = isPanitas ? 'block' : 'none';
+
+    // Dynamic titles for Dashboard and Settings
+    const dashboardTitle = document.getElementById('dashboard-panel-title');
+    if (dashboardTitle) {
+      dashboardTitle.textContent = isCreaticos ? 'Dashboard Creaticos Group' : (isPanitas ? 'Dashboard Los Panitas' : 'Dashboard Futunet');
+    }
+    const settingsTitle = document.getElementById('settings-panel-title');
+    if (settingsTitle) {
+      settingsTitle.textContent = isCreaticos ? 'Configuración de Creaticos Group' : (isPanitas ? 'Configuración de Los Panitas' : 'Configuración de Futunet');
+    }
   }
 
   // Load Settings (Ensure default document in Firestore if not existing)
@@ -210,6 +319,31 @@ window.ERPBilling = (function () {
           ncfB12Seq: 1,
           defaultTax: 18
         };
+      } else if (isPanitas) {
+        settings = {
+          name: 'Los Panitas By Nechy',
+          rnc: 'N/D',
+          phone: '829-459-7437',
+          email: '',
+          address: 'C/7, detrás Bomba Texaco, al lado McDonald\'s, Las Colinas, Stgo',
+          invoicePrefix: 'PAN-',
+          nextInvoiceNum: 1001,
+          quotePrefix: 'COT-',
+          nextQuoteNum: 1001,
+          proformaPrefix: 'PROF-',
+          nextProformaNum: 1001,
+          ncfB01Prefix: 'B0100000',
+          ncfB01Seq: 1,
+          ncfB02Prefix: 'B0200000',
+          ncfB02Seq: 1,
+          ncfB14Prefix: 'B1400000',
+          ncfB14Seq: 1,
+          ncfB15Prefix: 'B1500000',
+          ncfB15Seq: 1,
+          ncfB12Prefix: 'B1200000',
+          ncfB12Seq: 1,
+          defaultTax: 0
+        };
       } else {
         settings = {
           name: 'Futunet Suministros',
@@ -258,38 +392,91 @@ window.ERPBilling = (function () {
     if (nameEl) nameEl.textContent = settings.name;
   }
 
+  function showTableSkeletons() {
+    const invoicesBody = document.getElementById('invoices-table-body');
+    const clientsBody = document.getElementById('clients-table-body');
+    const productsBody = document.getElementById('products-table-body');
+
+    if (invoicesBody) {
+      invoicesBody.innerHTML = `
+        <tr class="skeleton-row">
+          <td><div class="skeleton-line" style="width: 80px;"></div></td>
+          <td><div class="skeleton-line" style="width: 140px;"></div></td>
+          <td><div class="skeleton-line" style="width: 100px;"></div></td>
+          <td><div class="skeleton-line" style="width: 90px;"></div></td>
+          <td><div class="skeleton-line" style="width: 110px;"></div></td>
+          <td><div class="skeleton-line" style="width: 70px;"></div></td>
+          <td><div class="skeleton-line" style="width: 60px;"></div></td>
+          <td><div class="skeleton-line" style="width: 80px;"></div></td>
+        </tr>
+      `.repeat(4);
+    }
+    if (clientsBody) {
+      clientsBody.innerHTML = `
+        <tr class="skeleton-row">
+          <td><div class="skeleton-line" style="width: 150px;"></div></td>
+          <td><div class="skeleton-line" style="width: 100px;"></div></td>
+          <td><div class="skeleton-line" style="width: 90px;"></div></td>
+          <td><div class="skeleton-line" style="width: 120px;"></div></td>
+          <td><div class="skeleton-line" style="width: 180px;"></div></td>
+          <td><div class="skeleton-line" style="width: 80px;"></div></td>
+        </tr>
+      `.repeat(4);
+    }
+    if (productsBody) {
+      productsBody.innerHTML = `
+        <tr class="skeleton-row">
+          <td><div class="skeleton-line" style="width: 180px;"></div></td>
+          <td><div class="skeleton-line" style="width: 80px;"></div></td>
+          <td><div class="skeleton-line" style="width: 100px;"></div></td>
+          <td><div class="skeleton-line" style="width: 120px;"></div></td>
+          <td><div class="skeleton-line" style="width: 80px;"></div></td>
+        </tr>
+      `.repeat(4);
+    }
+  }
+
   // Fetch all collections in background
   async function fetchAllData() {
+    showTableSkeletons();
     const clientsSnap = await getDB().collection(collectionClients).get();
     clients = [];
     clientsSnap.forEach(doc => {
       clients.push({ id: doc.id, ...doc.data() });
     });
 
-    const productsSnap = await getDB().collection('creaticos_products').get();
-    creaticosProducts = [];
-    productsSnap.forEach(doc => {
-      creaticosProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: true });
-    });
+    if (isPanitas) {
+      const panitasSnap = await getDB().collection(collectionProducts).get();
+      products = [];
+      panitasSnap.forEach(doc => {
+        products.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+      });
+    } else {
+      const productsSnap = await getDB().collection('creaticos_products').get();
+      creaticosProducts = [];
+      productsSnap.forEach(doc => {
+        creaticosProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: true });
+      });
 
-    const futunetSnap = await getDB().collection('products').get();
-    futunetProducts = [];
-    futunetSnap.forEach(doc => {
-      futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
-    });
+      const futunetSnap = await getDB().collection('products').get();
+      futunetProducts = [];
+      futunetSnap.forEach(doc => {
+        futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+      });
 
-    // Update active products based on filter selection
-    const sourceEl = document.getElementById('products-source-filter');
-    const source = sourceEl ? sourceEl.value : (isCreaticos ? 'creaticos' : 'futunet');
-    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+      // Update active products based on filter selection
+      const sourceEl = document.getElementById('products-source-filter');
+      const source = sourceEl ? sourceEl.value : (isCreaticos ? 'creaticos' : 'futunet');
+      products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+    }
 
-    const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').get();
+    const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').limit(200).get();
     invoices = [];
     invoicesSnap.forEach(doc => {
       invoices.push({ id: doc.id, ...doc.data() });
     });
 
-    const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').get();
+    const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').limit(200).get();
     payments = [];
     paymentsSnap.forEach(doc => {
       payments.push({ id: doc.id, ...doc.data() });
@@ -308,6 +495,13 @@ window.ERPBilling = (function () {
       if (posDropdown && !e.target.closest('#pos-client-search')) {
         posDropdown.style.display = 'none';
       }
+      // Close all row autocomplete lists
+      const rowLists = document.querySelectorAll('.row-autocomplete-list');
+      rowLists.forEach(list => {
+        if (!e.target.closest('tr') || e.target.closest('tr').id !== list.closest('tr').id) {
+          list.style.display = 'none';
+        }
+      });
     });
 
     // Barcode scanner keyboard wedge global listener
@@ -422,7 +616,7 @@ window.ERPBilling = (function () {
               sugBox.style.background = 'rgba(16, 185, 129, 0.1)';
               sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
               sugBox.style.color = '#10b981';
-              sugBox.innerHTML = `💡 DGII: ${fullName} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
+              sugBox.innerHTML = `💡 DGII: ${escapeHTML(fullName)} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
               sugBox.onclick = function() {
                 const nameEl = document.getElementById(cfg.nameId);
                 const idEl = document.getElementById(cfg.idId);
@@ -524,8 +718,8 @@ window.ERPBilling = (function () {
         tr.style.cursor = 'pointer';
         tr.onclick = () => viewInvoice(inv.id);
         tr.innerHTML = `
-          <td><strong>${inv.invoiceNumber}</strong></td>
-          <td>${inv.clientName}</td>
+          <td><strong>${escapeHTML(inv.invoiceNumber)}</strong></td>
+          <td>${escapeHTML(inv.clientName)}</td>
           <td style="text-align:right;">${formatMoney(inv.total)}</td>
         `;
         recentBody.appendChild(tr);
@@ -746,7 +940,7 @@ window.ERPBilling = (function () {
         }
 
         actionsHtml += `
-          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="ERPBilling.cancelInvoice('${inv.id}', '${inv.invoiceNumber}')">
+          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="ERPBilling.cancelInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
         `;
@@ -755,12 +949,12 @@ window.ERPBilling = (function () {
       actionsHtml += `</div>`;
 
       tr.innerHTML = `
-        <td><strong>${inv.invoiceNumber}</strong></td>
-        <td>${inv.clientName}</td>
-        <td>${formatDate(inv.date)}</td>
-        <td>${formatDate(inv.dueDate)}</td>
-        <td>${inv.ncf || '<span style="color:#cbd5e1;font-size:0.8rem;">Ninguno</span>'}</td>
-        <td>${formatMoney(inv.total)}</td>
+        <td><strong>${escapeHTML(inv.invoiceNumber)}</strong></td>
+        <td>${escapeHTML(inv.clientName)}</td>
+        <td>${escapeHTML(formatDate(inv.date))}</td>
+        <td>${escapeHTML(formatDate(inv.dueDate))}</td>
+        <td>${inv.ncf ? escapeHTML(inv.ncf) : '<span style="color:#cbd5e1;font-size:0.8rem;">Ninguno</span>'}</td>
+        <td>${escapeHTML(formatMoney(inv.total))}</td>
         <td>${statusBadge}</td>
         <td>${actionsHtml}</td>
       `;
@@ -833,6 +1027,16 @@ window.ERPBilling = (function () {
       handleDocTypeChange('invoice');
     }
 
+    // Reset payment terms, notes, and discount
+    const paymentTermsSelect = document.getElementById('form-invoice-payment-terms');
+    if (paymentTermsSelect) paymentTermsSelect.value = 'Contado';
+
+    const invoiceNotesInput = document.getElementById('form-invoice-notes');
+    if (invoiceNotesInput) invoiceNotesInput.value = '';
+
+    const discountPctInput = document.getElementById('form-invoice-discount-pct');
+    if (discountPctInput) discountPctInput.value = 0;
+
     // Clean body table
     const tbody = document.getElementById('invoice-form-items-body');
     if (tbody) tbody.innerHTML = '';
@@ -888,6 +1092,7 @@ window.ERPBilling = (function () {
 
     let rowTaxAmount = 0.00;
     let overrideStr = 'false';
+    let taxPercent = settings ? Number(settings.defaultTax) : 18;
     if (itemData) {
       const price = Number(itemData.price) || 0;
       const qty = Number(itemData.qty) || 1;
@@ -896,17 +1101,19 @@ window.ERPBilling = (function () {
         // Old document percentage format (e.g. 18 or 16), calculate it
         rowTaxAmount = price * qty * (taxVal / 100);
         overrideStr = 'false';
+        taxPercent = taxVal;
       } else {
         // New document amount format
         rowTaxAmount = taxVal;
         overrideStr = 'true';
+        taxPercent = price * qty > 0 ? Math.round((taxVal / (price * qty)) * 100) : (settings ? Number(settings.defaultTax) : 18);
       }
     }
 
     tr.innerHTML = `
       <td>
         <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
-          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." oninput="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? itemData.description : ''}" required autocomplete="off" />
+          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." oninput="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
           <input type="hidden" class="row-product-id" value="${itemData ? itemData.productId : 'custom'}" />
           <div class="autocomplete-dropdown row-autocomplete-list" style="display:none; position:absolute; left:0; right:0; z-index:100; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px;"></div>
         </div>
@@ -918,7 +1125,10 @@ window.ERPBilling = (function () {
         <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" oninput="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" />
+        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" oninput="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
+      </td>
+      <td>
+        <input type="number" class="form-input row-discount" min="0" max="100" value="${itemData && itemData.discount ? itemData.discount : '0'}" oninput="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />
       </td>
       <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">RD$ 0.00</td>
       <td>
@@ -930,13 +1140,6 @@ window.ERPBilling = (function () {
 
     tbody.appendChild(tr);
     
-    const list = tr.querySelector('.row-autocomplete-list');
-    document.addEventListener('click', function (e) {
-      if (list && !e.target.closest('#' + rowId)) {
-        list.style.display = 'none';
-      }
-    });
-
     calculateInvoiceFormTotals();
   }
 
@@ -1076,17 +1279,23 @@ window.ERPBilling = (function () {
     const rows = tbody.querySelectorAll('tr');
 
     let subtotal = 0;
+    let totalDiscount = 0;
     let totalItbis = 0;
 
     rows.forEach(tr => {
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
       const lineItbis = Number(tr.querySelector('.row-tax').value) || 0;
+      const discountInput = tr.querySelector('.row-discount');
+      const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
 
       const lineSubtotal = price * qty;
-      const lineTotal = lineSubtotal + lineItbis;
+      const lineDiscount = lineSubtotal * (discountPct / 100);
+      const lineNet = lineSubtotal - lineDiscount;
+      const lineTotal = lineNet + lineItbis;
 
       subtotal += lineSubtotal;
+      totalDiscount += lineDiscount;
       totalItbis += lineItbis;
 
       // Update text in row total column
@@ -1094,13 +1303,21 @@ window.ERPBilling = (function () {
       if (totalCol) totalCol.textContent = formatMoney(lineTotal);
     });
 
-    const grandTotal = subtotal + totalItbis;
+    // Apply global discount if set
+    const globalDiscountPctInput = document.getElementById('form-invoice-discount-pct');
+    const globalDiscountPct = globalDiscountPctInput ? (Number(globalDiscountPctInput.value) || 0) : 0;
+    const globalDiscountAmount = (subtotal - totalDiscount) * (globalDiscountPct / 100);
+    totalDiscount += globalDiscountAmount;
+
+    const grandTotal = subtotal - totalDiscount + totalItbis;
 
     const subtotalEl = document.getElementById('form-summary-subtotal');
+    const discountEl = document.getElementById('form-summary-discount');
     const itbisEl = document.getElementById('form-summary-itbis');
     const totalEl = document.getElementById('form-summary-total');
 
     if (subtotalEl) subtotalEl.textContent = formatMoney(subtotal);
+    if (discountEl) discountEl.textContent = formatMoney(totalDiscount);
     if (itbisEl) itbisEl.textContent = formatMoney(totalItbis);
     if (totalEl) totalEl.textContent = formatMoney(grandTotal);
   }
@@ -1142,7 +1359,7 @@ window.ERPBilling = (function () {
       item.className = 'autocomplete-item';
       item.style.fontWeight = 'bold';
       item.style.color = 'var(--primary)';
-      item.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="16" x2="22" y1="11" y2="11"/></svg> + Registrar "${val}" como nuevo cliente</span>`;
+      item.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="16" x2="22" y1="11" y2="11"/></svg> + Registrar "${escapeHTML(val)}" como nuevo cliente</span>`;
       item.onclick = function() {
         dropdown.style.display = 'none';
         openNewClientForm(val);
@@ -1234,6 +1451,7 @@ window.ERPBilling = (function () {
     const items = [];
     let subtotal = 0;
     let totalItbis = 0;
+    let totalRowDiscount = 0;
 
     for (let tr of rows) {
       const searchInput = tr.querySelector('.row-product-search');
@@ -1242,13 +1460,17 @@ window.ERPBilling = (function () {
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
       const lineTax = Number(tr.querySelector('.row-tax').value) || 0;
+      
+      const discountInput = tr.querySelector('.row-discount');
+      const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
 
       if (!description) {
-        alert('Todos los ítems agregados deben tener una descripción.');
+        showToast('Todos los ítems agregados deben tener una descripción.', 'danger');
         return;
       }
 
       const lineSub = price * qty;
+      const lineDiscount = lineSub * (discountPct / 100);
 
       items.push({
         productId: productIdInput ? productIdInput.value : 'custom',
@@ -1256,14 +1478,21 @@ window.ERPBilling = (function () {
         price: price,
         qty: qty,
         tax: lineTax,
-        total: lineSub + lineTax
+        discount: discountPct,
+        total: lineSub - lineDiscount + lineTax
       });
 
       subtotal += lineSub;
       totalItbis += lineTax;
+      totalRowDiscount += lineDiscount;
     }
 
-    const total = subtotal + totalItbis;
+    const globalDiscountPctEl = document.getElementById('form-invoice-discount-pct');
+    const globalDiscountPct = globalDiscountPctEl ? (Number(globalDiscountPctEl.value) || 0) : 0;
+    const globalDiscountAmount = (subtotal - totalRowDiscount) * (globalDiscountPct / 100);
+    const totalDiscountAmount = totalRowDiscount + globalDiscountAmount;
+    
+    const grandTotal = subtotal - totalDiscountAmount + totalItbis;
     
     // Generate document ID number
     let invoiceNum = '';
@@ -1278,7 +1507,7 @@ window.ERPBilling = (function () {
         paidAmount = originalDoc.paidAmount || 0;
         status = originalDoc.status || 'pending';
         if (docType !== 'quote' && docType !== 'proforma') {
-          if (paidAmount >= total) {
+          if (paidAmount >= grandTotal) {
             status = 'paid';
           } else {
             status = 'pending';
@@ -1298,6 +1527,12 @@ window.ERPBilling = (function () {
     }
 
     // Document Data
+    const paymentTermsEl = document.getElementById('form-invoice-payment-terms');
+    const paymentTerms = paymentTermsEl ? paymentTermsEl.value : 'Contado';
+
+    const invoiceNotesEl = document.getElementById('form-invoice-notes');
+    const invoiceNotes = invoiceNotesEl ? invoiceNotesEl.value.trim() : '';
+
     const invoiceData = {
       docType: docType,
       invoiceNumber: invoiceNum,
@@ -1311,10 +1546,14 @@ window.ERPBilling = (function () {
       ncf: (docType === 'quote' || docType === 'proforma') ? '' : ncf,
       items: items,
       subtotal: subtotal,
+      discountPct: globalDiscountPct,
+      discountAmount: totalDiscountAmount,
       itbis: totalItbis,
-      total: total,
+      total: grandTotal,
       paidAmount: paidAmount,
       status: status,
+      paymentTerms: paymentTerms,
+      notes: invoiceNotes,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -1322,33 +1561,71 @@ window.ERPBilling = (function () {
       // Save updates to Firestore
       await getDB().collection(collectionInvoices).doc(editingInvoiceId).update(invoiceData);
     } else {
-      // Save new document to Firestore
-      invoiceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-      await getDB().collection(collectionInvoices).add(invoiceData);
+      // Save new document to Firestore using a transaction for NCF and invoice sequences
+      const dbRef = getDB();
+      const settingsDocRef = dbRef.collection(collectionSettings).doc('general');
+      const invoicesCollRef = dbRef.collection(collectionInvoices);
 
-      // Update settings sequences
-      const settingsUpdates = {};
-      
-      if (docType === 'quote') {
-        settingsUpdates.nextQuoteNum = (settings.nextQuoteNum || 1001) + 1;
-      } else if (docType === 'proforma') {
-        settingsUpdates.nextProformaNum = (settings.nextProformaNum || 1001) + 1;
-      } else {
-        settingsUpdates.nextInvoiceNum = settings.nextInvoiceNum + 1;
-        if (ncfType === 'B01') {
-          settingsUpdates.ncfB01Seq = settings.ncfB01Seq + 1;
-        } else if (ncfType === 'B02') {
-          settingsUpdates.ncfB02Seq = settings.ncfB02Seq + 1;
-        } else if (ncfType === 'B14') {
-          settingsUpdates.ncfB14Seq = (settings.ncfB14Seq || 1) + 1;
-        } else if (ncfType === 'B15') {
-          settingsUpdates.ncfB15Seq = (settings.ncfB15Seq || 1) + 1;
-        } else if (ncfType === 'B12') {
-          settingsUpdates.ncfB12Seq = (settings.ncfB12Seq || 1) + 1;
+      await dbRef.runTransaction(async (transaction) => {
+        const settingsDoc = await transaction.get(settingsDocRef);
+        if (!settingsDoc.exists) {
+          throw new Error("El documento de configuración de la empresa no existe.");
         }
-      }
+        
+        const freshSettings = settingsDoc.data();
+        let freshInvoiceNum = '';
+        let freshNcf = '';
+        const settingsUpdates = {};
 
-      await getDB().collection(collectionSettings).doc('general').update(settingsUpdates);
+        if (docType === 'quote') {
+          freshInvoiceNum = (freshSettings.quotePrefix || 'COT-') + String(freshSettings.nextQuoteNum || 1001);
+          settingsUpdates.nextQuoteNum = (freshSettings.nextQuoteNum || 1001) + 1;
+        } else if (docType === 'proforma') {
+          freshInvoiceNum = (freshSettings.proformaPrefix || 'PROF-') + String(freshSettings.nextProformaNum || 1001);
+          settingsUpdates.nextProformaNum = (freshSettings.nextProformaNum || 1001) + 1;
+        } else {
+          freshInvoiceNum = (freshSettings.invoicePrefix || 'CRE-') + String(freshSettings.nextInvoiceNum || 1001);
+          settingsUpdates.nextInvoiceNum = (freshSettings.nextInvoiceNum || 1001) + 1;
+
+          if (ncfType !== 'none' && ncfType !== 'manual') {
+            let prefix = '';
+            let seq = 1;
+            if (ncfType === 'B01') {
+              prefix = freshSettings.ncfB01Prefix || 'B0100000';
+              seq = freshSettings.ncfB01Seq || 1;
+              settingsUpdates.ncfB01Seq = seq + 1;
+            } else if (ncfType === 'B02') {
+              prefix = freshSettings.ncfB02Prefix || 'B0200000';
+              seq = freshSettings.ncfB02Seq || 1;
+              settingsUpdates.ncfB02Seq = seq + 1;
+            } else if (ncfType === 'B14') {
+              prefix = freshSettings.ncfB14Prefix || 'B1400000';
+              seq = freshSettings.ncfB14Seq || 1;
+              settingsUpdates.ncfB14Seq = seq + 1;
+            } else if (ncfType === 'B15') {
+              prefix = freshSettings.ncfB15Prefix || 'B1500000';
+              seq = freshSettings.ncfB15Seq || 1;
+              settingsUpdates.ncfB15Seq = seq + 1;
+            } else if (ncfType === 'B12') {
+              prefix = freshSettings.ncfB12Prefix || 'B1200000';
+              seq = freshSettings.ncfB12Seq || 1;
+              settingsUpdates.ncfB12Seq = seq + 1;
+            }
+            freshNcf = prefix + String(seq).padStart(8, '0');
+          } else if (ncfType === 'manual') {
+            freshNcf = ncf; // Keep the manually entered NCF
+          }
+        }
+
+        invoiceData.invoiceNumber = freshInvoiceNum;
+        invoiceData.ncf = (docType === 'quote' || docType === 'proforma') ? '' : freshNcf;
+        invoiceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
+        // Perform writes in the transaction
+        const newInvoiceDocRef = invoicesCollRef.doc();
+        transaction.set(newInvoiceDocRef, invoiceData);
+        transaction.update(settingsDocRef, settingsUpdates);
+      });
     }
 
     // Clear form fields
@@ -1369,7 +1646,12 @@ window.ERPBilling = (function () {
       alert('No tienes permisos (Admin) para anular facturas.');
       return;
     }
-    if (!confirm(`¿Está seguro de que desea ANULAR la factura ${number}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
+    let actualNumber = number;
+    if (!actualNumber) {
+      const inv = invoices.find(i => i.id === id);
+      actualNumber = inv ? inv.invoiceNumber : 'desconocida';
+    }
+    if (!confirm(`¿Está seguro de que desea ANULAR la factura ${actualNumber}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
       return;
     }
 
@@ -1381,7 +1663,7 @@ window.ERPBilling = (function () {
       // Write Audit Log
       await getDB().collection('audit_logs').add({
         action: `Anulación Factura ${activeCompanyCode}`,
-        details: `Factura ${number} anulada en el panel de ${activeCompanyCode}`,
+        details: `Factura ${actualNumber} anulada en el panel de ${activeCompanyCode}`,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         userId: firebase.auth().currentUser.uid,
         userEmail: firebase.auth().currentUser.email
@@ -1496,25 +1778,38 @@ window.ERPBilling = (function () {
         lineTaxAmount = taxVal;
       }
 
+      const lineDiscountPct = line.discount || 0;
+      const lineDiscountStr = lineDiscountPct > 0 ? `${lineDiscountPct}%` : '—';
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${line.description}</td>
-        <td style="text-align:right;">${formatMoney(price)}</td>
-        <td style="text-align:center;">${qty}</td>
-        <td style="text-align:right;">${formatMoney(lineTaxAmount)}</td>
-        <td style="text-align:right;">${formatMoney(line.total)}</td>
+        <td>${escapeHTML(line.description)}</td>
+        <td style="text-align:right;">${escapeHTML(formatMoney(price))}</td>
+        <td style="text-align:center;">${escapeHTML(qty)}</td>
+        <td style="text-align:right;">${escapeHTML(formatMoney(lineTaxAmount))}</td>
+        <td style="text-align:center;">${escapeHTML(lineDiscountStr)}</td>
+        <td style="text-align:right;">${escapeHTML(formatMoney(line.total))}</td>
       `;
       itemsTbody.appendChild(tr);
     });
 
     // Populate mathematical totals
     const balance = Number(inv.total) - Number(inv.paidAmount || 0);
+    const discountAmount = inv.discountAmount || 0;
 
     document.getElementById('view-summary-subtotal').textContent = formatMoney(inv.subtotal);
+    document.getElementById('view-summary-discount').textContent = formatMoney(discountAmount);
     document.getElementById('view-summary-itbis').textContent = formatMoney(inv.itbis);
     document.getElementById('view-summary-total').textContent = formatMoney(inv.total);
     document.getElementById('view-summary-paid').textContent = formatMoney(inv.paidAmount);
     document.getElementById('view-summary-balance').textContent = formatMoney(balance);
+
+    // Populate payment terms and notes
+    const viewTermsEl = document.getElementById('view-invoice-payment-terms');
+    if (viewTermsEl) viewTermsEl.textContent = inv.paymentTerms || 'Contado';
+    
+    const viewNotesEl = document.getElementById('view-invoice-notes');
+    if (viewNotesEl) viewNotesEl.textContent = inv.notes || '';
 
     // Populate payment logs
     const paymentList = document.getElementById('view-invoice-payments-body');
@@ -1526,7 +1821,7 @@ window.ERPBilling = (function () {
     } else {
       invPayments.forEach(p => {
         const li = document.createElement('li');
-        li.innerHTML = `<strong>${formatDate(p.timestamp)}</strong>: ${formatMoney(p.amount)} vía ${p.method} ${p.notes ? `(${p.notes})` : ''}`;
+        li.innerHTML = `<strong>${formatDate(p.timestamp)}</strong>: ${formatMoney(p.amount)} vía ${escapeHTML(p.method)} ${p.notes ? `(${escapeHTML(p.notes)})` : ''}`;
         paymentList.appendChild(li);
       });
     }
@@ -1657,11 +1952,14 @@ window.ERPBilling = (function () {
     switchPanel('clients');
 
     const searchVal = document.getElementById('clients-search').value.toLowerCase();
+    const cleanSearchVal = searchVal.replace(/[^0-9]/g, '');
     
     const filtered = clients.filter(c => {
-      return c.name.toLowerCase().includes(searchVal) ||
-             (c.rnc && c.rnc.toLowerCase().includes(searchVal)) ||
-             (c.email && c.email.toLowerCase().includes(searchVal));
+      const matchName = c.name.toLowerCase().includes(searchVal);
+      const cleanRnc = c.rnc ? c.rnc.replace(/[^0-9]/g, '') : '';
+      const matchRnc = cleanRnc && (cleanRnc.includes(cleanSearchVal) || c.rnc.toLowerCase().includes(searchVal));
+      const matchEmail = c.email && c.email.toLowerCase().includes(searchVal);
+      return matchName || (cleanSearchVal.length > 0 && matchRnc) || matchEmail;
     });
 
     const tbody = document.getElementById('clients-table-body');
@@ -1675,17 +1973,20 @@ window.ERPBilling = (function () {
     filtered.forEach(c => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><strong>${c.name}</strong></td>
-        <td>${c.rnc || '<span style="color:#cbd5e1;">Sin registro</span>'}</td>
-        <td>${c.phone || '—'}</td>
-        <td>${c.email || '—'}</td>
-        <td>${c.address || '—'}</td>
+        <td><strong>${escapeHTML(c.name)}</strong></td>
+        <td>${c.rnc ? escapeHTML(c.rnc) : '<span style="color:#cbd5e1;">Sin registro</span>'}</td>
+        <td>${c.phone ? escapeHTML(c.phone) : '—'}</td>
+        <td>${c.email ? escapeHTML(c.email) : '—'}</td>
+        <td>${c.address ? escapeHTML(c.address) : '—'}</td>
         <td>
           <div class="table-actions">
+            <button class="table-btn table-btn-secondary" title="Ver Perfil" onclick="ERPBilling.viewClientProfile('${c.id}')" style="color: var(--primary);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            </button>
             <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditClientForm('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteClient('${c.id}', '${c.name}')">
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteClient('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -1693,6 +1994,136 @@ window.ERPBilling = (function () {
       `;
       tbody.appendChild(tr);
     });
+  }
+
+  async function viewClientProfile(clientId) {
+    const client = clients.find(c => c.id === clientId);
+    if (!client) return;
+
+    switchPanel('client-profile');
+
+    // Populate general client info
+    document.getElementById('profile-client-name').textContent = client.name;
+    document.getElementById('profile-client-rnc').textContent = client.rnc || 'N/D';
+    document.getElementById('profile-client-phone').textContent = client.phone || 'N/D';
+    document.getElementById('profile-client-email').textContent = client.email || 'N/D';
+    document.getElementById('profile-client-address').textContent = client.address || 'N/D';
+
+    // RNC badge
+    const badge = document.getElementById('profile-client-rnc-badge');
+    if (badge) {
+      badge.textContent = client.rnc ? (client.rnc.length === 9 ? 'RNC Jurídico' : 'Cédula Física') : 'Sin Registro';
+    }
+
+    // Avatar
+    const avatar = document.getElementById('profile-avatar');
+    if (avatar) {
+      avatar.textContent = (client.name || '?').charAt(0).toUpperCase();
+    }
+
+    // Filter invoices for this client
+    const clientInvoices = invoices.filter(inv => inv.clientId === clientId);
+
+    let totalPurchases = 0;
+    let totalPaid = 0;
+
+    const tbody = document.getElementById('profile-invoices-body');
+    tbody.innerHTML = '';
+
+    if (clientInvoices.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-muted);">Este cliente no tiene facturas registradas.</td></tr>';
+    } else {
+      clientInvoices.forEach(inv => {
+        const isCancelled = inv.status === 'cancelled';
+        const isQuote = inv.docType === 'quote';
+        const isProforma = inv.docType === 'proforma';
+
+        if (!isCancelled && !isQuote && !isProforma) {
+          totalPurchases += Number(inv.total) || 0;
+          totalPaid += Number(inv.paidAmount || 0);
+        }
+
+        const balance = (Number(inv.total) || 0) - (Number(inv.paidAmount || 0));
+
+        let statusClass = 'badge-pending';
+        let statusText = 'Pendiente';
+        if (isCancelled) {
+          statusClass = 'badge-cancelled';
+          statusText = 'Anulada';
+        } else if (isQuote) {
+          statusClass = 'badge-pending';
+          statusText = 'Cotización';
+        } else if (isProforma) {
+          statusClass = 'badge-pending';
+          statusText = 'Proforma';
+        } else if (inv.status === 'paid') {
+          statusClass = 'badge-paid';
+          statusText = 'Pagada';
+        } else {
+          const isOverdue = new Date(inv.dueDate) < new Date();
+          if (isOverdue) {
+            statusClass = 'badge-overdue';
+            statusText = 'Vencida';
+          }
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${escapeHTML(inv.invoiceNumber)}</strong></td>
+          <td>${escapeHTML(formatDate(inv.date))}</td>
+          <td>${inv.ncf ? escapeHTML(inv.ncf) : '—'}</td>
+          <td>${escapeHTML(formatMoney(inv.total))}</td>
+          <td style="color:var(--success); font-weight:500;">${escapeHTML(formatMoney(inv.paidAmount || 0))}</td>
+          <td style="color:${balance > 0 ? '#ef4444' : 'inherit'}; font-weight:600;">${escapeHTML(formatMoney(balance))}</td>
+          <td><span class="admin-badge ${statusClass}">${statusText}</span></td>
+          <td>
+            <button class="table-btn table-btn-secondary" title="Ver Factura" onclick="ERPBilling.viewInvoice('${inv.id}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    const totalBalance = Math.max(0, totalPurchases - totalPaid);
+
+    document.getElementById('profile-stats-purchases').textContent = formatMoney(totalPurchases);
+    document.getElementById('profile-stats-paid').textContent = formatMoney(totalPaid);
+    document.getElementById('profile-stats-balance').textContent = formatMoney(totalBalance);
+
+    // Render Credit products list
+    const creditBody = document.getElementById('profile-credit-products-body');
+    if (creditBody) {
+      creditBody.innerHTML = '';
+      
+      const unpaidInvoices = clientInvoices.filter(inv => {
+        const isCancelled = inv.status === 'cancelled';
+        const isQuote = inv.docType === 'quote';
+        const isProforma = inv.docType === 'proforma';
+        const isUnpaid = inv.status === 'unpaid' || (Number(inv.total || 0) > Number(inv.paidAmount || 0));
+        return !isCancelled && !isQuote && !isProforma && isUnpaid;
+      });
+
+      if (unpaidInvoices.length === 0) {
+        creditBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-muted);">No hay artículos a crédito pendientes.</td></tr>';
+      } else {
+        unpaidInvoices.forEach(inv => {
+          (inv.items || []).forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong>${escapeHTML(item.description || item.name || 'Artículo')}</strong></td>
+              <td>${escapeHTML(item.qty)}</td>
+              <td>${escapeHTML(formatMoney(item.price))}</td>
+              <td>${escapeHTML(formatMoney(item.total || (item.price * item.qty)))}</td>
+              <td>${escapeHTML(formatDate(inv.date))}</td>
+              <td><span style="cursor:pointer; color:var(--primary); text-decoration:underline;" onclick="ERPBilling.viewInvoice('${inv.id}')">${escapeHTML(inv.invoiceNumber)}</span></td>
+            `;
+            creditBody.appendChild(tr);
+          });
+        });
+      }
+    }
   }
 
   function openNewClientForm(prefilledName = '') {
@@ -1793,7 +2224,12 @@ window.ERPBilling = (function () {
       alert('No tienes permisos (Admin) para eliminar clientes.');
       return;
     }
-    if (!confirm(`¿Está seguro de que desea eliminar al cliente "${name}"? Las facturas asociadas seguirán existiendo.`)) {
+    let actualName = name;
+    if (!actualName) {
+      const client = clients.find(c => c.id === id);
+      actualName = client ? client.name : 'desconocido';
+    }
+    if (!confirm(`¿Está seguro de que desea eliminar al cliente "${actualName}"? Las facturas asociadas seguirán existiendo.`)) {
       return;
     }
 
@@ -1859,18 +2295,18 @@ window.ERPBilling = (function () {
 
       tr.innerHTML = `
         <td>
-          <strong>${name}</strong>
+          <strong>${escapeHTML(name)}</strong>
           ${codesHtml}
         </td>
-        <td>${desc}</td>
-        <td>${formatMoney(price)}</td>
-        <td>${tax}</td>
+        <td>${escapeHTML(desc)}</td>
+        <td>${escapeHTML(formatMoney(price))}</td>
+        <td>${escapeHTML(tax)}</td>
         <td>
           <div class="table-actions">
             <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditProductForm('${p.id}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteProduct('${p.id}', '${name.replace(/'/g, "\\'")}', ${isCreaticosVal})">
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteProduct('${p.id}', '', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -1929,7 +2365,7 @@ window.ERPBilling = (function () {
   }
 
   function openEditProductForm(productId, isCreaticos) {
-    const activeProducts = isCreaticos ? creaticosProducts : futunetProducts;
+    const activeProducts = isPanitas ? products : (isCreaticos ? creaticosProducts : futunetProducts);
     const p = activeProducts.find(item => item.id === productId);
     if (!p) return;
 
@@ -2016,10 +2452,10 @@ window.ERPBilling = (function () {
         };
 
         if (id) {
-          await getDB().collection('products').doc(id).update(prodData);
+          await getDB().collection(collectionProducts).doc(id).update(prodData);
         } else {
           prodData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          await getDB().collection('products').add(prodData);
+          await getDB().collection(collectionProducts).add(prodData);
         }
       }
 
@@ -2041,6 +2477,9 @@ window.ERPBilling = (function () {
           if (isCreaticos) {
             savedProd = creaticosProducts.find(p => p.name === savedName);
             if (savedProd) compositeId = 'creaticos_' + savedProd.id;
+          } else if (isPanitas) {
+            savedProd = products.find(p => p.title === savedName);
+            if (savedProd) compositeId = 'panitas_' + savedProd.id;
           } else {
             savedProd = futunetProducts.find(p => p.title === savedName);
             if (savedProd) compositeId = 'futunet_' + savedProd.id;
@@ -2080,12 +2519,18 @@ window.ERPBilling = (function () {
       alert('No tienes permisos (Admin) para eliminar ítems.');
       return;
     }
-    if (!confirm(`¿Está seguro de que desea eliminar el ítem "${name}"?`)) {
+    let actualName = name;
+    if (!actualName) {
+      const list = isPanitas ? products : (isCreaticos ? creaticosProducts : futunetProducts);
+      const prod = list.find(p => p.id === id);
+      actualName = prod ? (prod.name || prod.title) : 'desconocido';
+    }
+    if (!confirm(`¿Está seguro de que desea eliminar el ítem "${actualName}"?`)) {
       return;
     }
 
     try {
-      const coll = isCreaticos ? 'creaticos_products' : 'products';
+      const coll = isCreaticos ? 'creaticos_products' : collectionProducts;
       await getDB().collection(coll).doc(id).delete();
       await fetchAllData();
       renderProductsTable();
@@ -2234,7 +2679,83 @@ window.ERPBilling = (function () {
       renderPosCart();
     }
 
+    if (tabGroup === 'invoices' && tabName === 'sessions') {
+      renderSessionsHistoryTable();
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function renderSessionsHistoryTable() {
+    const tbody = document.getElementById('sessions-table-body');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-muted);">Cargando historial de cajas...</td></tr>';
+    
+    try {
+      const snap = await getDB().collection(collectionCashSessions)
+        .orderBy('openedAt', 'desc')
+        .limit(50)
+        .get();
+        
+      tbody.innerHTML = '';
+      
+      if (snap.empty) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-muted);">No hay sesiones de caja registradas.</td></tr>';
+        return;
+      }
+      
+      snap.forEach(doc => {
+        const s = doc.data();
+        const openedAtDate = s.openedAt ? new Date(s.openedAt.seconds * 1000) : null;
+        const closedAtDate = s.closedAt ? new Date(s.closedAt.seconds * 1000) : null;
+        
+        const openedStr = openedAtDate ? openedAtDate.toLocaleString('es-DO', { hour12: true }) : 'N/D';
+        const closedStr = closedAtDate ? closedAtDate.toLocaleString('es-DO', { hour12: true }) : 'En Curso';
+        
+        const cajero = s.openedBy || 'N/D';
+        const base = Number(s.initialCash) || 0;
+        
+        const totalSalesCash = Number(s.salesCash || 0);
+        const expectedCash = base + totalSalesCash;
+        
+        const realCash = s.closedAt ? (Number(s.realCashCount) || 0) : null;
+        const diff = s.closedAt ? (realCash - expectedCash) : 0;
+        
+        let diffStr = '—';
+        let diffColor = 'inherit';
+        if (s.closedAt) {
+          diffStr = formatMoney(diff);
+          if (diff > 0) {
+            diffStr = `+${diffStr}`;
+            diffColor = 'var(--success)';
+          } else if (diff < 0) {
+            diffColor = '#ef4444';
+          }
+        }
+        
+        const status = s.closedAt ? 'Cerrada' : 'Abierta';
+        const statusColor = s.closedAt ? 'var(--text-muted)' : 'var(--success)';
+        const notes = s.closeNotes || '—';
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHTML(openedStr)}</td>
+          <td>${escapeHTML(closedStr)}</td>
+          <td>${escapeHTML(cajero)}</td>
+          <td>${escapeHTML(formatMoney(base))}</td>
+          <td>${escapeHTML(formatMoney(expectedCash))}</td>
+          <td>${realCash !== null ? escapeHTML(formatMoney(realCash)) : '—'}</td>
+          <td style="color:${diffColor}; font-weight:600;">${escapeHTML(diffStr)}</td>
+          <td><span style="color:${statusColor}; font-weight:600;">${escapeHTML(status)}</span></td>
+          <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${escapeHTML(notes)}">${escapeHTML(notes)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (e) {
+      console.error(e);
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:#ef4444;">Error al cargar historial: ${escapeHTML(e.message)}</td></tr>`;
+    }
   }
 
   // ─── TOUCH POS (PUNTO DE VENTA) METHODS ───
@@ -2246,11 +2767,26 @@ window.ERPBilling = (function () {
     const searchVal = document.getElementById('pos-product-search') ? document.getElementById('pos-product-search').value.toLowerCase() : '';
 
     let list = [];
-    if (posActiveCategory === 'all' || posActiveCategory === 'creaticos') {
-      list = list.concat(creaticosProducts);
-    }
-    if (posActiveCategory === 'all' || posActiveCategory === 'futunet') {
-      list = list.concat(futunetProducts);
+    if (isPanitas) {
+      list = products;
+      if (posActiveCategory !== 'all') {
+        list = list.filter(p => {
+          const category = String(p.category || 'comida').toLowerCase();
+          if (posActiveCategory === 'comida') {
+            return category.includes('comida') || category.includes('plato') || category.includes('hamburg') || category.includes('hot') || category.includes('sándwich') || category.includes('sandwich');
+          } else if (posActiveCategory === 'bebidas') {
+            return category.includes('bebida') || category.includes('jugo') || category.includes('refresco') || category.includes('agua') || category.includes('trago');
+          }
+          return category === posActiveCategory;
+        });
+      }
+    } else {
+      if (posActiveCategory === 'all' || posActiveCategory === 'creaticos') {
+        list = list.concat(creaticosProducts);
+      }
+      if (posActiveCategory === 'all' || posActiveCategory === 'futunet') {
+        list = list.concat(futunetProducts);
+      }
     }
 
     if (searchVal) {
@@ -2270,8 +2806,8 @@ window.ERPBilling = (function () {
 
     list.forEach(p => {
       const isCr = p._isCreaticos;
-      const badgeClass = isCr ? 'badge-creaticos' : 'badge-futunet';
-      const badgeLabel = isCr ? 'Creaticos' : 'Futunet';
+      const badgeClass = isPanitas ? 'badge-futunet' : (isCr ? 'badge-creaticos' : 'badge-futunet');
+      const badgeLabel = isPanitas ? (p.category || 'Comida') : (isCr ? 'Creaticos' : 'Futunet');
       const name = p.name || p.title || '';
       const code = p.sku || p.reference || 'S/C';
       const price = Number(p.price);
@@ -2282,11 +2818,11 @@ window.ERPBilling = (function () {
       card.innerHTML = `
         <div class="pos-prod-info">
           <span class="pos-prod-badge ${badgeClass}">${badgeLabel}</span>
-          <h4 class="pos-prod-title" title="${name}">${name}</h4>
-          <span class="pos-prod-code">Cod: ${code}</span>
+          <h4 class="pos-prod-title" title="${escapeHTML(name)}">${escapeHTML(name)}</h4>
+          <span class="pos-prod-code">Cod: ${escapeHTML(code)}</span>
         </div>
         <div class="pos-prod-footer">
-          <span class="pos-prod-price">${formatMoney(price)}</span>
+          <span class="pos-prod-price">${escapeHTML(formatMoney(price))}</span>
         </div>
       `;
       grid.appendChild(card);
@@ -2312,15 +2848,15 @@ window.ERPBilling = (function () {
 
       itemEl.innerHTML = `
         <div class="pos-item-info">
-          <div class="pos-item-title">${item.name}</div>
-          <div class="pos-item-meta">${formatMoney(item.price)} c/u${sourceBadge}</div>
+          <div class="pos-item-title">${escapeHTML(item.name)}</div>
+          <div class="pos-item-meta">${escapeHTML(formatMoney(item.price))} c/u${sourceBadge}</div>
         </div>
         <div class="pos-item-qty-controls">
           <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, -1)">-</button>
           <span class="pos-qty-val">${item.qty}</span>
           <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, 1)">+</button>
         </div>
-        <div class="pos-item-price">${formatMoney(sub)}</div>
+        <div class="pos-item-price">${escapeHTML(formatMoney(sub))}</div>
         <button type="button" class="pos-btn-icon" onclick="ERPBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
@@ -2398,6 +2934,303 @@ window.ERPBilling = (function () {
     playBeepTone(400, 0.08);
   }
 
+  function printKitchenTicket() {
+    const table = document.getElementById('pos-restaurant-table').value.trim();
+    const clientName = document.getElementById('pos-restaurant-client-name').value.trim();
+    if (!table) {
+      showToast('Por favor, especifique la mesa antes de imprimir el ticket de cocina.', 'warning');
+      return;
+    }
+    if (posCart.length === 0) {
+      showToast('El carrito está vacío.', 'warning');
+      return;
+    }
+
+    const ticketEl = document.getElementById('kitchen-ticket-print');
+    if (!ticketEl) return;
+
+    let itemsHtml = '';
+    posCart.forEach(item => {
+      itemsHtml += `
+        <div style="display:flex; justify-content:space-between; font-size:12pt; border-bottom:1px dashed #ccc; padding:4px 0;">
+          <span style="font-weight:bold;">${item.qty}x ${escapeHTML(item.name)}</span>
+        </div>
+      `;
+    });
+
+    const now = new Date();
+    ticketEl.innerHTML = `
+      <div style="text-align:center; font-family:monospace; width: 100%;">
+        <h2 style="margin: 0 0 10px; font-size: 16pt; letter-spacing: 1px;">ORDEN DE COCINA</h2>
+        <div style="font-size: 14pt; margin-bottom: 10px; border:2px solid #000; padding:5px; font-weight:bold;">
+          MESA: ${escapeHTML(table)}
+        </div>
+        <div style="font-size: 11pt; margin-bottom: 10px;">
+          Cliente: ${escapeHTML(clientName || 'Consumidor Final')}
+        </div>
+        <div style="font-size: 9pt; margin-bottom: 15px; color:#555;">
+          Fecha: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
+        </div>
+        <div style="text-align:left; margin-bottom:15px; border-top:2px solid #000; padding-top:10px;">
+          ${itemsHtml}
+        </div>
+        <div style="font-size: 10pt; margin-top:20px; font-weight:bold;">
+          ¡Buen Provecho!
+        </div>
+      </div>
+    `;
+
+    document.body.classList.add('printing-kitchen-ticket');
+    window.print();
+    document.body.classList.remove('printing-kitchen-ticket');
+  }
+
+  async function saveTableOrder() {
+    const table = document.getElementById('pos-restaurant-table').value.trim();
+    const clientName = document.getElementById('pos-restaurant-client-name').value.trim();
+    if (!table) {
+      showToast('Por favor, especifique la mesa para guardar la orden.', 'warning');
+      return;
+    }
+    if (posCart.length === 0) {
+      showToast('El carrito está vacío.', 'warning');
+      return;
+    }
+
+    try {
+      const orderData = {
+        table: table,
+        clientName: clientName || 'Consumidor Final',
+        items: posCart.map(item => ({
+          productId: item.productId,
+          name: item.name,
+          price: item.price,
+          qty: item.qty,
+          tax: item.tax || 0
+        })),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      await getDB().collection('panitas_table_orders').doc(table).set(orderData);
+      showToast(`Orden de ${table} guardada con éxito.`, 'success');
+      clearPosCart();
+      await refreshActiveTables();
+    } catch (e) {
+      console.error('Error saving table order:', e);
+      showToast('Error al guardar la orden de la mesa.', 'danger');
+    }
+  }
+
+  async function refreshActiveTables() {
+    const listEl = document.getElementById('pos-restaurant-tables-list');
+    if (!listEl) return;
+
+    try {
+      const snap = await getDB().collection('panitas_table_orders').orderBy('updatedAt', 'desc').get();
+      listEl.innerHTML = '';
+
+      if (snap.empty) {
+        listEl.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No hay mesas activas.</div>';
+        return;
+      }
+
+      snap.forEach(doc => {
+        const order = doc.data();
+        let total = 0;
+        order.items.forEach(item => {
+          total += item.price * item.qty * (1 + (item.tax || 0) / 100);
+        });
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'admin-btn';
+        btn.style.cssText = 'background:#ffedd5; border:1px solid #fed7aa; color:#ea580c; border-radius:10px; padding: 6px 12px; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;';
+        btn.onclick = () => loadTableOrder(order.table);
+        btn.innerHTML = `
+          <span>🍽️ ${escapeHTML(order.table)} (${escapeHTML(order.clientName)})</span>
+          <strong style="color:#c2410c;">${formatMoney(total)}</strong>
+        `;
+        listEl.appendChild(btn);
+      });
+    } catch (e) {
+      console.error('Error refreshing active tables:', e);
+      listEl.innerHTML = '<div style="font-size:0.8rem; color:#ef4444;">Error al cargar mesas activas.</div>';
+    }
+  }
+
+  async function loadTableOrder(tableName) {
+    try {
+      const doc = await getDB().collection('panitas_table_orders').doc(tableName).get();
+      if (!doc.exists) {
+        showToast('La orden no existe.', 'danger');
+        return;
+      }
+
+      const order = doc.data();
+      posCart = order.items.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        price: item.price,
+        qty: item.qty,
+        tax: item.tax || 0
+      }));
+
+      renderPosCart();
+
+      const tableInput = document.getElementById('pos-restaurant-table');
+      const clientNameInput = document.getElementById('pos-restaurant-client-name');
+      if (tableInput) tableInput.value = order.table;
+      if (clientNameInput) clientNameInput.value = order.clientName;
+
+      showToast(`Orden de ${tableName} cargada en el carrito.`, 'success');
+    } catch (e) {
+      console.error('Error loading table order:', e);
+      showToast('Error al cargar la orden de la mesa.', 'danger');
+    }
+  }
+
+  function openGeneralAbonoModal() {
+    const clientId = document.getElementById('form-abono-client-id');
+    const nameEl = document.getElementById('abono-client-name');
+    const debtEl = document.getElementById('abono-client-debt');
+    const amountInput = document.getElementById('form-abono-amount');
+    const notesInput = document.getElementById('form-abono-notes');
+
+    // Retrieve active client details from profile view
+    const clientName = document.getElementById('profile-client-name').textContent;
+    const balanceText = document.getElementById('profile-stats-balance').textContent;
+    const balanceVal = Number(balanceText.replace(/[^0-9.]/g, '')) || 0;
+
+    // Prefill form
+    const currentClientId = clients.find(c => c.name === clientName)?.id || '';
+    if (!currentClientId) {
+      showToast('Error al identificar el cliente activo.', 'danger');
+      return;
+    }
+
+    if (clientId) clientId.value = currentClientId;
+    if (nameEl) nameEl.textContent = clientName;
+    if (debtEl) debtEl.textContent = formatMoney(balanceVal);
+    if (amountInput) amountInput.value = balanceVal.toFixed(2);
+    if (notesInput) notesInput.value = '';
+
+    openModal('modal-general-abono');
+  }
+
+  async function submitGeneralAbono(e) {
+    e.preventDefault();
+
+    const clientId = document.getElementById('form-abono-client-id').value;
+    const amountVal = Number(document.getElementById('form-abono-amount').value) || 0;
+    const method = document.getElementById('form-abono-method').value;
+    const notes = document.getElementById('form-abono-notes').value.trim();
+
+    if (!clientId || amountVal <= 0) {
+      showToast('Por favor, ingrese un monto válido.', 'warning');
+      return;
+    }
+
+    try {
+      // Fetch all invoices for this client
+      const snap = await getDB().collection(collectionInvoices)
+        .where('clientId', '==', clientId)
+        .where('docType', '==', 'invoice')
+        .get();
+
+      let clientInvoices = [];
+      snap.forEach(doc => {
+        const data = doc.data();
+        const total = Number(data.total) || 0;
+        const paid = Number(data.paidAmount) || 0;
+        const pending = total - paid;
+        if (data.status !== 'cancelled' && pending > 0) {
+          clientInvoices.push({ id: doc.id, pending: pending, ...data });
+        }
+      });
+
+      // Sort invoices oldest first
+      clientInvoices.sort((a, b) => {
+        const dateA = a.date || '';
+        const dateB = b.date || '';
+        return dateA.localeCompare(dateB);
+      });
+
+      if (clientInvoices.length === 0) {
+        showToast('El cliente no tiene deudas pendientes.', 'warning');
+        closeModal('modal-general-abono');
+        return;
+      }
+
+      let remainingAbono = amountVal;
+      const db = getDB();
+
+      // We will perform updates in a Batch
+      const batch = db.batch();
+
+      for (let inv of clientInvoices) {
+        if (remainingAbono <= 0) break;
+
+        const payAmountForThisInvoice = Math.min(remainingAbono, inv.pending);
+        const newPaidAmount = (Number(inv.paidAmount) || 0) + payAmountForThisInvoice;
+        const fullyPaid = newPaidAmount >= inv.total;
+
+        // Update Invoice
+        const invRef = db.collection(collectionInvoices).doc(inv.id);
+        batch.update(invRef, {
+          paidAmount: newPaidAmount,
+          status: fullyPaid ? 'paid' : 'partial',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Add Payment Doc
+        const paymentRef = db.collection(collectionPayments).doc();
+        batch.set(paymentRef, {
+          invoiceId: inv.id,
+          amount: payAmountForThisInvoice,
+          method: method,
+          notes: (notes ? notes + ' - ' : '') + 'Abono general prorrateado',
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // If Cash Register session is active, increment session cash/card/nfc/transfer totals
+        if (activeCashSession) {
+          const sessRef = db.collection(collectionCashSessions).doc(activeCashSession.id);
+          const updates = {};
+          if (method === 'Efectivo') {
+            updates.salesCash = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
+          } else if (method === 'Tarjeta') {
+            updates.salesCard = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
+          } else if (method === 'Transferencia') {
+            updates.salesTransfer = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
+          }
+          batch.update(sessRef, updates);
+        }
+
+        remainingAbono -= payAmountForThisInvoice;
+      }
+
+      await batch.commit();
+
+      showToast(`Abono de RD$ ${amountVal.toFixed(2)} registrado con éxito.`, 'success');
+      closeModal('modal-general-abono');
+
+      // Refresh data and UI
+      await fetchAllData();
+      
+      // Update local cash session state if active
+      if (activeCashSession) {
+        const sessDoc = await getDB().collection(collectionCashSessions).doc(activeCashSession.id).get();
+        activeCashSession = { id: sessDoc.id, ...sessDoc.data() };
+        updateCashSessionUI();
+      }
+
+      await viewClientProfile(clientId);
+    } catch (err) {
+      console.error('Error submitting general abono:', err);
+      showToast('Error al registrar el abono del cliente.', 'danger');
+    }
+  }
+
   function clearPosCart() {
     posCart = [];
     renderPosCart();
@@ -2409,6 +3242,12 @@ window.ERPBilling = (function () {
     posClient = { id: '', name: 'Consumidor Final', rnc: '' };
     posNcfType = 'none';
     posDocType = 'invoice';
+    if (isPanitas) {
+      const restTable = document.getElementById('pos-restaurant-table');
+      const restClient = document.getElementById('pos-restaurant-client-name');
+      if (restTable) restTable.value = '';
+      if (restClient) restClient.value = '';
+    }
   }
 
   function filterPosCategory(cat) {
@@ -2438,10 +3277,13 @@ window.ERPBilling = (function () {
       return;
     }
 
-    const matches = clients.filter(c => 
-      c.name.toLowerCase().includes(val.toLowerCase()) || 
-      (c.rnc && c.rnc.includes(val))
-    );
+    const cleanVal = val.replace(/[^0-9]/g, '');
+    const matches = clients.filter(c => {
+      const matchName = c.name.toLowerCase().includes(val.toLowerCase());
+      const cleanRnc = c.rnc ? c.rnc.replace(/[^0-9]/g, '') : '';
+      const matchRnc = cleanRnc && (cleanRnc.includes(cleanVal) || c.rnc.includes(val));
+      return matchName || (cleanVal.length > 0 && matchRnc);
+    });
 
     if (matches.length === 0) {
       listEl.style.display = 'none';
@@ -2524,7 +3366,8 @@ window.ERPBilling = (function () {
     if (!btn || !label) return;
 
     if (activeCashSession) {
-      label.textContent = `Caja Abierta: ${formatMoney(activeCashSession.initialCash + (activeCashSession.salesCash || 0))}`;
+      const totalSession = activeCashSession.initialCash + (activeCashSession.salesCash || 0) + (activeCashSession.salesCard || 0) + (activeCashSession.salesNfc || 0) + (activeCashSession.salesTransfer || 0);
+      label.textContent = `Caja Abierta: ${formatMoney(totalSession)}`;
       btn.style.background = 'rgba(16, 185, 129, 0.15)';
       btn.style.color = '#10b981';
       btn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
@@ -2677,6 +3520,60 @@ window.ERPBilling = (function () {
     downloadCSV(`Facturas_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
   }
 
+  function exportDGII607ToCSV() {
+    const validInvoices = invoices.filter(inv => inv.docType === 'invoice' && inv.status !== 'cancelled');
+    if (validInvoices.length === 0) {
+      showToast('No hay facturas válidas registradas para exportar Formato 607.', 'warning');
+      return;
+    }
+
+    let csv = 'RNC o Cedula,Tipo Identificacion,NCF,NCF Modificado,Tipo Ingreso,Fecha Comprobante,Fecha Retencion,Monto Facturado,ITBIS Facturado,ITBIS Retenido por Terceros,ITBIS Percibido,Retencion Impuesto sobre la Renta,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Monto Efectivo,Monto Tarjeta Credito,Monto Transferencia Cheque,Monto Venta a Credito\n';
+    
+    validInvoices.forEach(inv => {
+      const rawRnc = (inv.clientRnc || '').replace(/[^0-9]/g, '');
+      let tipoId = 3; // Pasaporte/Otro/Consumidor Final
+      if (rawRnc.length === 9) tipoId = 1; // RNC
+      else if (rawRnc.length === 11) tipoId = 2; // Cédula
+
+      const ncf = inv.ncf || '';
+      const dateStr = (inv.date || '').replace(/[^0-9]/g, ''); // YYYYMMDD
+      
+      const subtotal = Number(inv.subtotal) || 0;
+      const itbis = Number(inv.itbis) || 0;
+      const total = Number(inv.total) || 0;
+
+      let cashAmt = 0;
+      let cardAmt = 0;
+      let transferAmt = 0;
+      let creditAmt = 0;
+
+      if (inv.status === 'paid') {
+        if (inv.paymentTerms === 'Contado') {
+          cashAmt = total;
+        } else {
+          transferAmt = total;
+        }
+      } else {
+        creditAmt = total;
+      }
+
+      csv += `"${rawRnc}",${tipoId},"${ncf}","",01,"${dateStr}","",${subtotal.toFixed(2)},${itbis.toFixed(2)},0.00,0.00,0.00,0.00,0.00,0.00,${cashAmt.toFixed(2)},${cardAmt.toFixed(cardAmt)},${transferAmt.toFixed(2)},${creditAmt.toFixed(2)}\n`;
+    });
+
+    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`DGII_607_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+    showToast('Reporte DGII 607 exportado con éxito.', 'success');
+  }
+
+  function exportDGII606ToCSV() {
+    let csv = 'RNC o Cedula,Tipo Identificacion,Tipo Gasto,NCF,NCF Modificado,Fecha Comprobante,Fecha Pago,Monto Facturado,ITBIS Facturado,ITBIS Retenido,ITBIS Sujeto a Proporcionalidad,ITBIS Total Gasto,ITBIS por Adelantar,Retencion Renta,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Forma Pago\n';
+    csv += `"999999999",1,01,"B0100000001","",20260101,20260101,1000.00,180.00,0.00,0.00,180.00,180.00,0.00,0.00,0.00,0.00,0.00,01\n`;
+
+    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`DGII_606_Plantilla_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+    showToast('Plantilla DGII 606 exportada con éxito.', 'success');
+  }
+
   function exportClientsToCSV() {
     if (clients.length === 0) {
       alert('No hay clientes registrados para exportar.');
@@ -2713,13 +3610,13 @@ window.ERPBilling = (function () {
 
   async function checkoutPos(method) {
     if (!activeCashSession) {
-      alert('Debes abrir una sesión de caja antes de realizar un cobro.');
+      showToast('Debes abrir una sesión de caja antes de realizar un cobro.', 'warning');
       handleCashSessionAction();
       return;
     }
 
     if (posCart.length === 0) {
-      alert('El carrito está vacío.');
+      showToast('El carrito está vacío.', 'warning');
       return;
     }
 
@@ -2733,6 +3630,21 @@ window.ERPBilling = (function () {
     });
     const total = subtotal + itbis;
 
+    if (method === 'cash') {
+      document.getElementById('pos-cash-total-to-pay').textContent = formatMoney(total);
+      document.getElementById('pos-cash-amount-received').value = total.toFixed(2);
+      document.getElementById('pos-cash-change-due').textContent = formatMoney(0);
+      openModal('modal-pos-cash-payment');
+      setTimeout(() => {
+        const input = document.getElementById('pos-cash-amount-received');
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }, 300);
+      return;
+    }
+
     if (method === 'nfc') {
       document.getElementById('nfc-payment-amount').textContent = formatMoney(total);
       document.getElementById('nfc-payment-status').textContent = 'ESPERANDO DISPOSITIVO O TARJETA...';
@@ -2745,57 +3657,59 @@ window.ERPBilling = (function () {
       return;
     }
 
+    if (method === 'credit') {
+      if (!posClient || !posClient.id) {
+        showToast('Debe seleccionar un cliente registrado para realizar una venta a crédito.', 'warning');
+        return;
+      }
+      if (!confirm(`¿Desea registrar esta venta a crédito para ${posClient.name}?`)) {
+        return;
+      }
+    }
+
     await processPosSale(method);
+  }
+
+  function calculatePosCashChange() {
+    const totalText = document.getElementById('pos-cash-total-to-pay').textContent;
+    const totalNum = Number(totalText.replace(/[^0-9.]/g, '')) || 0;
+    const received = Number(document.getElementById('pos-cash-amount-received').value) || 0;
+    const change = Math.max(0, received - totalNum);
+    
+    document.getElementById('pos-cash-change-due').textContent = formatMoney(change);
+
+    const submitBtn = document.getElementById('pos-cash-submit-btn');
+    if (submitBtn) {
+      if (received < totalNum) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }
+    }
+  }
+
+  async function confirmPosCashPayment(e) {
+    if (e) e.preventDefault();
+    
+    const totalText = document.getElementById('pos-cash-total-to-pay').textContent;
+    const totalNum = Number(totalText.replace(/[^0-9.]/g, '')) || 0;
+    const received = Number(document.getElementById('pos-cash-amount-received').value) || 0;
+    
+    if (received < totalNum) {
+      showToast('Efectivo recibido es insuficiente.', 'danger');
+      return;
+    }
+
+    closeModal('modal-pos-cash-payment');
+    await processPosSale('cash');
   }
 
   async function processPosSale(method) {
     let docType = posDocType;
     let ncfType = posNcfType;
-    let status = (docType === 'quote' || docType === 'proforma') ? docType : 'paid';
-    
-    let invoiceNum = '';
-    const settingsUpdates = {};
-
-    if (docType === 'quote') {
-      invoiceNum = (settings.quotePrefix || 'COT-') + String(settings.nextQuoteNum || 1001);
-      settingsUpdates.nextQuoteNum = (settings.nextQuoteNum || 1001) + 1;
-    } else if (docType === 'proforma') {
-      invoiceNum = (settings.proformaPrefix || 'PROF-') + String(settings.nextProformaNum || 1001);
-      settingsUpdates.nextProformaNum = (settings.nextProformaNum || 1001) + 1;
-    } else {
-      invoiceNum = (settings.invoicePrefix || 'CRE-') + String(settings.nextInvoiceNum || 1001);
-      settingsUpdates.nextInvoiceNum = (settings.nextInvoiceNum || 1001) + 1;
-    }
-
-    let ncf = '';
-    if (docType === 'invoice' && ncfType !== 'none') {
-      let prefix = '';
-      let seq = 1;
-
-      if (ncfType === 'B01') {
-        prefix = settings.ncfB01Prefix || 'B0100000';
-        seq = settings.ncfB01Seq || 1;
-        settingsUpdates.ncfB01Seq = seq + 1;
-      } else if (ncfType === 'B02') {
-        prefix = settings.ncfB02Prefix || 'B0200000';
-        seq = settings.ncfB02Seq || 1;
-        settingsUpdates.ncfB02Seq = seq + 1;
-      } else if (ncfType === 'B14') {
-        prefix = settings.ncfB14Prefix || 'B1400000';
-        seq = settings.ncfB14Seq || 1;
-        settingsUpdates.ncfB14Seq = seq + 1;
-      } else if (ncfType === 'B15') {
-        prefix = settings.ncfB15Prefix || 'B1500000';
-        seq = settings.ncfB15Seq || 1;
-        settingsUpdates.ncfB15Seq = seq + 1;
-      } else if (ncfType === 'B12') {
-        prefix = settings.ncfB12Prefix || 'B1200000';
-        seq = settings.ncfB12Seq || 1;
-        settingsUpdates.ncfB12Seq = seq + 1;
-      }
-
-      ncf = prefix + String(seq).padStart(8, '0');
-    }
+    let status = (docType === 'quote' || docType === 'proforma') ? docType : (method === 'credit' ? 'unpaid' : 'paid');
 
     let subtotal = 0;
     let itbis = 0;
@@ -2808,6 +3722,7 @@ window.ERPBilling = (function () {
       let cleanProdId = item.productId;
       if (cleanProdId.startsWith('creaticos_')) cleanProdId = cleanProdId.substring('creaticos_'.length);
       else if (cleanProdId.startsWith('futunet_')) cleanProdId = cleanProdId.substring('futunet_'.length);
+      else if (cleanProdId.startsWith('panitas_')) cleanProdId = cleanProdId.substring('panitas_'.length);
 
       return {
         productId: cleanProdId,
@@ -2820,13 +3735,10 @@ window.ERPBilling = (function () {
     });
 
     const total = subtotal + itbis;
-    const paidAmount = (docType === 'invoice') ? total : 0;
+    const paidAmount = (docType === 'invoice') ? (method === 'credit' ? 0 : total) : 0;
 
     const invoiceData = {
-      invoiceNumber: invoiceNum,
       docType: docType,
-      ncfType: (docType === 'quote' || docType === 'proforma') ? 'none' : ncfType,
-      ncf: ncf,
       clientId: posClient.id || 'anonymous',
       clientName: posClient.name,
       clientRnc: posClient.rnc,
@@ -2838,19 +3750,110 @@ window.ERPBilling = (function () {
       paidAmount: paidAmount,
       status: status,
       items: items,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      paymentTerm: method === 'credit' ? 'Crédito' : 'Contado',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     try {
       const collectionName = collectionInvoices;
       const settingsColl = collectionSettings;
       const paymentsColl = collectionPayments;
+      const dbRef = getDB();
+      const settingsDocRef = dbRef.collection(settingsColl).doc('general');
+      const invoicesCollRef = dbRef.collection(collectionName);
+      
+      let createdDocId = '';
 
-      const docRef = await getDB().collection(collectionName).add(invoiceData);
+      await dbRef.runTransaction(async (transaction) => {
+        // Stock Validation & Decrement
+        for (let item of posCart) {
+          let cleanProdId = item.productId;
+          if (cleanProdId.startsWith('creaticos_')) cleanProdId = cleanProdId.substring('creaticos_'.length);
+          else if (cleanProdId.startsWith('futunet_')) cleanProdId = cleanProdId.substring('futunet_'.length);
+          else if (cleanProdId.startsWith('panitas_')) cleanProdId = cleanProdId.substring('panitas_'.length);
 
+          const productDocRef = dbRef.collection(collectionProducts).doc(cleanProdId);
+          const productDoc = await transaction.get(productDocRef);
+
+          if (productDoc.exists) {
+            const data = productDoc.data();
+            if (data.stock !== undefined && data.stock !== null) {
+              const currentStock = Number(data.stock) || 0;
+              if (currentStock < item.qty) {
+                throw new Error(`Stock insuficiente para "${data.name || data.title}". Disponible: ${currentStock}, Solicitado: ${item.qty}`);
+              }
+              transaction.update(productDocRef, {
+                stock: currentStock - item.qty
+              });
+            }
+          }
+        }
+
+        const settingsDoc = await transaction.get(settingsDocRef);
+        if (!settingsDoc.exists) {
+          throw new Error("El documento de configuración de la empresa no existe.");
+        }
+        const freshSettings = settingsDoc.data();
+        let freshInvoiceNum = '';
+        let freshNcf = '';
+        const settingsUpdates = {};
+
+        if (docType === 'quote') {
+          freshInvoiceNum = (freshSettings.quotePrefix || 'COT-') + String(freshSettings.nextQuoteNum || 1001);
+          settingsUpdates.nextQuoteNum = (freshSettings.nextQuoteNum || 1001) + 1;
+        } else if (docType === 'proforma') {
+          freshInvoiceNum = (freshSettings.proformaPrefix || 'PROF-') + String(freshSettings.nextProformaNum || 1001);
+          settingsUpdates.nextProformaNum = (freshSettings.nextProformaNum || 1001) + 1;
+        } else {
+          freshInvoiceNum = (freshSettings.invoicePrefix || 'CRE-') + String(freshSettings.nextInvoiceNum || 1001);
+          settingsUpdates.nextInvoiceNum = (freshSettings.nextInvoiceNum || 1001) + 1;
+
+          if (ncfType !== 'none') {
+            let prefix = '';
+            let seq = 1;
+
+            if (ncfType === 'B01') {
+              prefix = freshSettings.ncfB01Prefix || 'B0100000';
+              seq = freshSettings.ncfB01Seq || 1;
+              settingsUpdates.ncfB01Seq = seq + 1;
+            } else if (ncfType === 'B02') {
+              prefix = freshSettings.ncfB02Prefix || 'B0200000';
+              seq = freshSettings.ncfB02Seq || 1;
+              settingsUpdates.ncfB02Seq = seq + 1;
+            } else if (ncfType === 'B14') {
+              prefix = freshSettings.ncfB14Prefix || 'B1400000';
+              seq = freshSettings.ncfB14Seq || 1;
+              settingsUpdates.ncfB14Seq = seq + 1;
+            } else if (ncfType === 'B15') {
+              prefix = freshSettings.ncfB15Prefix || 'B1500000';
+              seq = freshSettings.ncfB15Seq || 1;
+              settingsUpdates.ncfB15Seq = seq + 1;
+            } else if (ncfType === 'B12') {
+              prefix = freshSettings.ncfB12Prefix || 'B1200000';
+              seq = freshSettings.ncfB12Seq || 1;
+              settingsUpdates.ncfB12Seq = seq + 1;
+            }
+
+            freshNcf = prefix + String(seq).padStart(8, '0');
+          }
+        }
+
+        invoiceData.invoiceNumber = freshInvoiceNum;
+        invoiceData.ncf = (docType === 'quote' || docType === 'proforma') ? '' : freshNcf;
+
+        // Perform writes in transaction
+        const newInvoiceDocRef = invoicesCollRef.doc();
+        createdDocId = newInvoiceDocRef.id;
+        
+        transaction.set(newInvoiceDocRef, invoiceData);
+        transaction.update(settingsDocRef, settingsUpdates);
+      });
+
+      // After transaction succeeds, register payments if needed
       if (docType === 'invoice' && paidAmount > 0) {
         const paymentData = {
-          invoiceId: docRef.id,
+          invoiceId: createdDocId,
           amount: paidAmount,
           method: method === 'cash' ? 'Efectivo' : 'Tarjeta',
           notes: 'Pago POS ' + (method === 'nfc' ? 'Contactless NFC' : ''),
@@ -2859,20 +3862,22 @@ window.ERPBilling = (function () {
         await getDB().collection(paymentsColl).add(paymentData);
       }
 
-      await getDB().collection(settingsColl).doc('general').update(settingsUpdates);
-
       // Update Cash Register session totals if active
-      if (activeCashSession && docType === 'invoice' && paidAmount > 0) {
+      if (activeCashSession && docType === 'invoice') {
         const sessRef = getDB().collection(collectionCashSessions).doc(activeCashSession.id);
         const updates = {
           transactionsCount: firebase.firestore.FieldValue.increment(1)
         };
-        if (method === 'cash') {
-          updates.salesCash = firebase.firestore.FieldValue.increment(paidAmount);
-        } else if (method === 'nfc') {
-          updates.salesNfc = firebase.firestore.FieldValue.increment(paidAmount);
-        } else {
-          updates.salesCard = firebase.firestore.FieldValue.increment(paidAmount);
+        if (method === 'credit') {
+          updates.salesCredit = firebase.firestore.FieldValue.increment(total);
+        } else if (paidAmount > 0) {
+          if (method === 'cash') {
+            updates.salesCash = firebase.firestore.FieldValue.increment(paidAmount);
+          } else if (method === 'nfc') {
+            updates.salesNfc = firebase.firestore.FieldValue.increment(paidAmount);
+          } else {
+            updates.salesCard = firebase.firestore.FieldValue.increment(paidAmount);
+          }
         }
         await sessRef.update(updates);
         
@@ -2886,11 +3891,25 @@ window.ERPBilling = (function () {
       await fetchAllData();
       renderInvoicesTable();
 
-      alert('Transacción procesada con éxito. Emitiendo ticket...');
+      showToast('Transacción procesada con éxito. Emitiendo ticket...', 'success');
       
-      const invoiceId = docRef.id;
+      const invoiceId = createdDocId;
+      
+      // Delete table order if active in restaurant mode
+      if (isPanitas) {
+        const tableInput = document.getElementById('pos-restaurant-table');
+        const table = tableInput ? tableInput.value.trim() : '';
+        if (table) {
+          try {
+            await getDB().collection('panitas_table_orders').doc(table).delete();
+            await refreshActiveTables();
+          } catch (errTable) {
+            console.error('Error cleaning table order:', errTable);
+          }
+        }
+      }
+
       clearPosCart();
-      
       await viewInvoice(invoiceId);
       const printFormatSelect = document.getElementById('print-format-select');
       if (printFormatSelect) {
@@ -2904,7 +3923,7 @@ window.ERPBilling = (function () {
 
     } catch (err) {
       console.error(err);
-      alert('Error al registrar venta POS: ' + err.message);
+      showToast('Error al registrar venta POS: ' + err.message, 'danger');
     }
   }
 
@@ -2923,7 +3942,7 @@ window.ERPBilling = (function () {
       
       setTimeout(async () => {
         closeModal('modal-nfc-payment');
-        await processPosSale('card');
+        await processPosSale('nfc');
       }, 1200);
     }, 1800);
   }
@@ -3032,6 +4051,32 @@ window.ERPBilling = (function () {
     }, 300);
   }
 
+  function downloadInvoicePDF() {
+    const element = document.getElementById('invoice-print-area');
+    if (!element) return;
+
+    const invoiceNum = document.getElementById('view-invoice-number').textContent || 'Invoice';
+    
+    const opt = {
+      margin:       [10, 10, 10, 10],
+      filename:     `Factura_${invoiceNum}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+    };
+
+    showToast('Generando PDF para descarga...', 'info');
+    
+    html2pdf().set(opt).from(element).save()
+      .then(() => {
+        showToast('PDF descargado con éxito.', 'success');
+      })
+      .catch((err) => {
+        console.error(err);
+        showToast('Error al generar PDF: ' + err.message, 'danger');
+      });
+  }
+
   function handlePrintFormatChange(format) {
     const printArea = document.getElementById('invoice-print-area');
     if (!printArea) return;
@@ -3096,6 +4141,16 @@ window.ERPBilling = (function () {
     if (ncfInput) {
       ncfInput.value = inv.ncf || '';
     }
+
+    // Populate discount, terms, notes
+    const paymentTermsSelect = document.getElementById('form-invoice-payment-terms');
+    if (paymentTermsSelect) paymentTermsSelect.value = inv.paymentTerms || 'Contado';
+
+    const invoiceNotesInput = document.getElementById('form-invoice-notes');
+    if (invoiceNotesInput) invoiceNotesInput.value = inv.notes || '';
+
+    const discountPctInput = document.getElementById('form-invoice-discount-pct');
+    if (discountPctInput) discountPctInput.value = inv.discountPct || 0;
 
     // Populate items
     const tbody = document.getElementById('invoice-form-items-body');
@@ -3178,9 +4233,16 @@ window.ERPBilling = (function () {
     const price = Number(tr.querySelector('.row-price').value) || 0;
     const qty = Number(tr.querySelector('.row-qty').value) || 1;
     const taxInput = tr.querySelector('.row-tax');
+    const discountInput = tr.querySelector('.row-discount');
     
+    const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
+    const lineSubtotal = price * qty;
+    const discountAmount = lineSubtotal * (discountPct / 100);
+    const netAmount = lineSubtotal - discountAmount;
+
     if (taxInput && taxInput.dataset.override !== 'true') {
-      taxInput.value = (price * qty * 0.18).toFixed(2);
+      const taxPercent = Number(taxInput.dataset.percent) || (settings ? Number(settings.defaultTax) : 18);
+      taxInput.value = (netAmount * (taxPercent / 100)).toFixed(2);
     }
     calculateInvoiceFormTotals();
   }
@@ -3282,6 +4344,7 @@ window.ERPBilling = (function () {
     cancelInvoice: cancelInvoice,
     convertQuoteToInvoice: convertQuoteToInvoice,
     printInvoiceDirectly: printInvoiceDirectly,
+    downloadInvoicePDF: downloadInvoicePDF,
     convertQuoteFromList: convertQuoteFromList,
     openRegisterPaymentFromList: openRegisterPaymentFromList,
     handlePrintFormatChange: handlePrintFormatChange,
@@ -3305,14 +4368,23 @@ window.ERPBilling = (function () {
     addPosCartItem: addPosCartItem,
     changePosCartItemQty: changePosCartItemQty,
     removePosCartItem: removePosCartItem,
+    calculatePosCashChange: calculatePosCashChange,
+    confirmPosCashPayment: confirmPosCashPayment,
     handleCashSessionAction: handleCashSessionAction,
     openCashSession: openCashSession,
     closeCashSession: closeCashSession,
     calculateCashDifference: calculateCashDifference,
     checkActiveCashSession: checkActiveCashSession,
+    renderSessionsHistoryTable: renderSessionsHistoryTable,
     exportInvoicesToCSV: exportInvoicesToCSV,
+    exportDGII606ToCSV: exportDGII606ToCSV,
+    exportDGII607ToCSV: exportDGII607ToCSV,
     exportClientsToCSV: exportClientsToCSV,
     exportProductsToCSV: exportProductsToCSV,
+    printKitchenTicket: printKitchenTicket,
+    saveTableOrder: saveTableOrder,
+    refreshActiveTables: refreshActiveTables,
+    loadTableOrder: loadTableOrder,
 
     // Payments
     openRegisterPaymentModal: openRegisterPaymentModal,
@@ -3320,12 +4392,15 @@ window.ERPBilling = (function () {
 
     // Clients
     renderClientsTable: renderClientsTable,
+    viewClientProfile: viewClientProfile,
     openNewClientForm: openNewClientForm,
     openEditClientForm: openEditClientForm,
     openNewClientModal: openNewClientForm, // backward compatibility
     openEditClientModal: openEditClientForm, // backward compatibility
     saveClient: saveClient,
     deleteClient: deleteClient,
+    openGeneralAbonoModal: openGeneralAbonoModal,
+    submitGeneralAbono: submitGeneralAbono,
 
     // Products
     renderProductsTable: renderProductsTable,
@@ -3342,6 +4417,7 @@ window.ERPBilling = (function () {
     saveSettings: saveSettings,
 
     // General modals
-    closeModal: closeModal
+    closeModal: closeModal,
+    showToast: showToast
   };
 })();

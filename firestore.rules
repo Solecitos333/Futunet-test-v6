@@ -210,6 +210,9 @@ service cloud.firestore {
     match /creaticos_settings/{settingId} {
       allow read, write: if isAdminOrAbove();
     }
+    match /creaticos_cash_sessions/{sessionId} {
+      allow read, write: if isAdminOrAbove();
+    }
 
     // ─── FUTUNET BILLING Collections ───
     match /futunet_invoices/{invoiceId} {
@@ -222,6 +225,32 @@ service cloud.firestore {
       allow read, write: if isAdminOrAbove();
     }
     match /futunet_settings/{settingId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /cash_sessions/{sessionId} {
+      allow read, write: if isAdminOrAbove();
+    }
+
+    // ─── PANITAS BILLING Collections ───
+    match /panitas_invoices/{invoiceId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_clients/{clientId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_payments/{paymentId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_products/{productId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_settings/{settingId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_cash_sessions/{sessionId} {
+      allow read, write: if isAdminOrAbove();
+    }
+    match /panitas_table_orders/{tableId} {
       allow read, write: if isAdminOrAbove();
     }
 

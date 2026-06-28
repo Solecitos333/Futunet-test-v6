@@ -223,11 +223,11 @@
         var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(o.total);
         
         var methodMap = { whatsapp: 'WhatsApp', bank_transfer: 'Transferencia' };
-        var method = methodMap[o.paymentMethod] || o.paymentMethod || 'WhatsApp';
+        var method = escapeHtml(methodMap[o.paymentMethod] || o.paymentMethod || 'WhatsApp');
 
         var statusMap = { pending: 'Pendiente', processing: 'Procesando', shipped: 'Enviado', delivered: 'Entregado' };
-        var statusLabel = statusMap[o.status] || o.status || 'Pendiente';
-        var statusClass = 'up-badge up-badge-' + (o.status || 'pending');
+        var statusLabel = escapeHtml(statusMap[o.status] || o.status || 'Pendiente');
+        var statusClass = 'up-badge up-badge-' + escapeHtml(o.status || 'pending');
 
         html += '<tr class="up-table-row">' +
           '  <td class="up-table-cell up-order-id">#' + o.id.substring(0, 8) + '</td>' +
