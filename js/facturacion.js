@@ -88,6 +88,7 @@ window.ERPBilling = (function () {
   
   let currentInvoiceItems = [];
   let dashboardChart = null;
+  let categoryChart = null;
   let returnToInvoice = false;
   let returnToPos = false;
   let posCart = [];
@@ -385,11 +386,45 @@ window.ERPBilling = (function () {
     const addressEl = document.getElementById('view-company-address');
     const nameEl = document.getElementById('view-company-name');
 
-    if (rncEl) rncEl.textContent = settings.rnc;
-    if (phoneEl) phoneEl.textContent = settings.phone;
-    if (emailEl) emailEl.textContent = settings.email;
-    if (addressEl) addressEl.textContent = settings.address;
-    if (nameEl) nameEl.textContent = settings.name;
+    if (rncEl) rncEl.textContent = settings.rnc || '';
+    if (phoneEl) phoneEl.textContent = settings.phone || '';
+    if (emailEl) emailEl.textContent = settings.email || '';
+    if (addressEl) addressEl.textContent = settings.address || '';
+    if (nameEl && !isCreaticos) nameEl.textContent = settings.name || '';
+
+    // Ticket Slogan
+    const sloganEl = document.getElementById('view-company-slogan');
+    if (sloganEl) {
+      if (settings.ticketSlogan) {
+        sloganEl.textContent = settings.ticketSlogan;
+        sloganEl.style.display = 'block';
+      } else {
+        sloganEl.style.display = 'none';
+      }
+    }
+
+    // Ticket Instagram
+    const igWrapper = document.getElementById('view-company-instagram-wrapper');
+    const igEl = document.getElementById('view-company-instagram');
+    if (igWrapper && igEl) {
+      if (settings.ticketInstagram) {
+        igEl.textContent = '@' + settings.ticketInstagram.replace(/^@/, '');
+        igWrapper.style.display = 'block';
+      } else {
+        igWrapper.style.display = 'none';
+      }
+    }
+
+    // Ticket Footer Message
+    const ticketFooterEl = document.getElementById('view-ticket-footer-message');
+    if (ticketFooterEl) {
+      if (settings.ticketFooter) {
+        ticketFooterEl.textContent = settings.ticketFooter;
+        ticketFooterEl.style.display = 'block';
+      } else {
+        ticketFooterEl.style.display = 'none';
+      }
+    }
   }
 
   function showTableSkeletons() {
@@ -728,6 +763,8 @@ window.ERPBilling = (function () {
 
     // Build statistics charts
     renderMonthlyChart();
+    renderCategoryChart();
+    renderPaymentBreakdown();
   }
 
   function renderMonthlyChart() {
@@ -799,6 +836,138 @@ window.ERPBilling = (function () {
         }
       }
     });
+  }
+
+  function renderCategoryChart() {
+    const ctx = document.getElementById('chart-category-distribution');
+    if (!ctx) return;
+
+    if (categoryChart) {
+      categoryChart.destroy();
+    }
+
+    const categorySales = {};
+
+    invoices.forEach(inv => {
+      if (inv.status === 'cancelled') return;
+      if (Array.isArray(inv.items)) {
+        inv.items.forEach(item => {
+          const prod = products.find(p => p.id === item.productId) ||
+                       creaticosProducts.find(p => p.id === item.productId) ||
+                       futunetProducts.find(p => p.id === item.productId);
+          
+          let category = 'Otros';
+          if (prod && prod.category) {
+            category = prod.category;
+          } else if (isPanitas) {
+            category = 'Comida';
+          } else {
+            const isCr = creaticosProducts.some(p => p.id === item.productId);
+            category = isCr ? 'Servicios Creaticos' : 'Servicios Futunet';
+          }
+          
+          category = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+
+          const amount = Number(item.total || (item.price * item.qty)) || 0;
+          categorySales[category] = (categorySales[category] || 0) + amount;
+        });
+      }
+    });
+
+    const labels = Object.keys(categorySales);
+    const data = Object.values(categorySales);
+
+    if (labels.length === 0) {
+      labels.push('Sin Ventas');
+      data.push(0);
+    }
+
+    const bgColors = [
+      'rgba(249, 115, 22, 0.85)',
+      'rgba(99, 102, 241, 0.85)',
+      'rgba(34, 197, 94, 0.85)',
+      'rgba(239, 68, 68, 0.85)',
+      'rgba(168, 85, 247, 0.85)',
+      'rgba(234, 179, 8, 0.85)'
+    ];
+    const borderColors = [
+      'rgb(249, 115, 22)',
+      'rgb(99, 102, 241)',
+      'rgb(34, 197, 94)',
+      'rgb(239, 68, 68)',
+      'rgb(168, 85, 247)',
+      'rgb(234, 179, 8)'
+    ];
+
+    categoryChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: bgColors.slice(0, labels.length),
+          borderColor: borderColors.slice(0, labels.length),
+          borderWidth: 1.5
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 12,
+              font: { size: 10 }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function renderPaymentBreakdown() {
+    let cashSales = 0;
+    let cardSales = 0;
+    let transferSales = 0;
+    let creditSales = 0;
+
+    payments.forEach(pay => {
+      const method = String(pay.method || 'Efectivo').toLowerCase();
+      const amount = Number(pay.amount || 0);
+
+      if (method.includes('efectivo')) {
+        cashSales += amount;
+      } else if (method.includes('tarjeta')) {
+        cardSales += amount;
+      } else if (method.includes('transferencia')) {
+        transferSales += amount;
+      } else {
+        cashSales += amount;
+      }
+    });
+
+    invoices.forEach(inv => {
+      if (inv.status === 'cancelled') return;
+      if (inv.paymentTerm === 'Crédito') {
+        const total = Number(inv.total || 0);
+        const paid = Number(inv.paidAmount || 0);
+        const balance = total - paid;
+        if (balance > 0) {
+          creditSales += balance;
+        }
+      }
+    });
+
+    const cashEl = document.getElementById('db-ops-cash');
+    const cardEl = document.getElementById('db-ops-card');
+    const transferEl = document.getElementById('db-ops-transfer');
+    const creditEl = document.getElementById('db-ops-credit');
+
+    if (cashEl) cashEl.textContent = formatMoney(cashSales);
+    if (cardEl) cardEl.textContent = formatMoney(cardSales);
+    if (transferEl) transferEl.textContent = formatMoney(transferSales);
+    if (creditEl) creditEl.textContent = formatMoney(creditSales);
   }
 
   // ═══════════════════════════════════════════
@@ -2573,6 +2742,11 @@ window.ERPBilling = (function () {
     
     document.getElementById('set-proforma-prefix').value = settings.proformaPrefix || 'PROF-';
     document.getElementById('set-proforma-seq').value = settings.nextProformaNum || 1001;
+
+    // Ticket Customization
+    document.getElementById('set-ticket-slogan').value = settings.ticketSlogan || '';
+    document.getElementById('set-ticket-instagram').value = settings.ticketInstagram || '';
+    document.getElementById('set-ticket-footer').value = settings.ticketFooter || '';
   }
 
   async function saveSettings(e) {
@@ -2610,11 +2784,15 @@ window.ERPBilling = (function () {
       nextQuoteNum: Number(document.getElementById('set-quote-seq').value) || 1001,
       
       proformaPrefix: document.getElementById('set-proforma-prefix').value.trim(),
-      nextProformaNum: Number(document.getElementById('set-proforma-seq').value) || 1001
+      nextProformaNum: Number(document.getElementById('set-proforma-seq').value) || 1001,
+
+      ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
+      ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
+      ticketFooter: document.getElementById('set-ticket-footer').value.trim()
     };
 
     try {
-      await getDB().collection(collectionSettings).doc('general').update(updated);
+      await getDB().collection(collectionSettings).doc('general').set(updated, { merge: true });
       
       // Reload settings in cache
       await loadSettings();
@@ -2814,11 +2992,34 @@ window.ERPBilling = (function () {
 
       const card = document.createElement('div');
       card.className = 'pos-product-card';
+      
+      let stockHtml = '';
+      let isOutOfStock = false;
+      if (p.stock !== undefined && p.stock !== null) {
+        const stockNum = Number(p.stock);
+        if (stockNum <= 0) {
+          isOutOfStock = true;
+          stockHtml = `<span class="pos-prod-stock" style="font-size:0.7rem; font-weight:700; color:#ef4444; background:#fee2e2; padding:2px 6px; border-radius:4px; margin-left:auto;">Agotado</span>`;
+        } else if (stockNum < 5) {
+          stockHtml = `<span class="pos-prod-stock" style="font-size:0.7rem; font-weight:700; color:#ea580c; background:#ffedd5; padding:2px 6px; border-radius:4px; margin-left:auto;">Stock: ${stockNum}</span>`;
+        } else {
+          stockHtml = `<span class="pos-prod-stock" style="font-size:0.7rem; font-weight:600; color:#16a34a; background:#dcfce7; padding:2px 6px; border-radius:4px; margin-left:auto;">Stock: ${stockNum}</span>`;
+        }
+      }
+
+      if (isOutOfStock) {
+        card.style.opacity = '0.6';
+        card.style.cursor = 'not-allowed';
+      }
+
       card.onclick = () => addPosCartItem(p);
       card.innerHTML = `
         <div class="pos-prod-info">
-          <span class="pos-prod-badge ${badgeClass}">${badgeLabel}</span>
-          <h4 class="pos-prod-title" title="${escapeHTML(name)}">${escapeHTML(name)}</h4>
+          <div style="display:flex; align-items:center; width:100%; gap:4px; margin-bottom:4px;">
+            <span class="pos-prod-badge ${badgeClass}">${badgeLabel}</span>
+            ${stockHtml}
+          </div>
+          <h4 class="pos-prod-title" title="${escapeHTML(name)}" style="margin-top:0;">${escapeHTML(name)}</h4>
           <span class="pos-prod-code">Cod: ${escapeHTML(code)}</span>
         </div>
         <div class="pos-prod-footer">
@@ -2897,11 +3098,20 @@ window.ERPBilling = (function () {
       return;
     }
 
+    if (p.stock !== undefined && p.stock !== null && Number(p.stock) <= 0) {
+      showToast(`El producto "${p.name || p.title}" está agotado.`, 'warning');
+      return;
+    }
+
     const isCr = p._isCreaticos;
     const pId = isCr ? 'creaticos_' + p.id : 'futunet_' + p.id;
     
     const existingIndex = posCart.findIndex(item => item.productId === pId);
     if (existingIndex > -1) {
+      if (p.stock !== undefined && p.stock !== null && posCart[existingIndex].qty >= Number(p.stock)) {
+        showToast(`Stock insuficiente. Disponible: ${p.stock}`, 'warning');
+        return;
+      }
       posCart[existingIndex].qty += 1;
     } else {
       posCart.push({
@@ -2919,8 +3129,20 @@ window.ERPBilling = (function () {
 
   function changePosCartItemQty(index, delta) {
     if (index < 0 || index >= posCart.length) return;
-    posCart[index].qty += delta;
-    if (posCart[index].qty <= 0) {
+    const item = posCart[index];
+    if (delta > 0) {
+      const originalId = item.productId.replace(/^(creaticos_|futunet_)/, '');
+      const prod = products.find(p => p.id === originalId) || 
+                   creaticosProducts.find(p => p.id === originalId) || 
+                   futunetProducts.find(p => p.id === originalId);
+      if (prod && prod.stock !== undefined && prod.stock !== null && item.qty >= Number(prod.stock)) {
+        showToast(`Stock insuficiente. Disponible: ${prod.stock}`, 'warning');
+        return;
+      }
+    }
+    
+    item.qty += delta;
+    if (item.qty <= 0) {
       posCart.splice(index, 1);
     }
     renderPosCart();

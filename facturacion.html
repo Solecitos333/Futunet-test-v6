@@ -170,6 +170,45 @@
             </div>
           </div>
         </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;" class="db-grid-container">
+          <!-- Ventas por Categoría -->
+          <div class="admin-table-card" style="padding: 24px;">
+            <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-size: 1rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+              Ventas por Categoría
+            </h3>
+            <div style="position: relative; height: 260px; width: 100%; display: flex; justify-content: center; align-items: center;">
+              <canvas id="chart-category-distribution" style="max-height: 250px; max-width: 250px;"></canvas>
+            </div>
+          </div>
+
+          <!-- Resumen de Turnos y Actividad -->
+          <div class="admin-table-card" style="padding: 24px; display: flex; flex-direction: column;">
+            <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-size: 1rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Rendimiento Operativo / Métodos de Pago
+            </h3>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 15px; justify-content: center;">
+              <div style="display: flex; justify-content: space-between; border-bottom: 1.5px dashed var(--border-color); padding-bottom: 10px;">
+                <span style="font-weight: 500; color: var(--text-muted); font-size: 0.88rem;">Ventas en Efectivo:</span>
+                <strong id="db-ops-cash" style="color: var(--text-color); font-size: 0.95rem;">RD$ 0.00</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1.5px dashed var(--border-color); padding-bottom: 10px;">
+                <span style="font-weight: 500; color: var(--text-muted); font-size: 0.88rem;">Ventas con Tarjeta:</span>
+                <strong id="db-ops-card" style="color: var(--text-color); font-size: 0.95rem;">RD$ 0.00</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1.5px dashed var(--border-color); padding-bottom: 10px;">
+                <span style="font-weight: 500; color: var(--text-muted); font-size: 0.88rem;">Ventas por Transferencia:</span>
+                <strong id="db-ops-transfer" style="color: var(--text-color); font-size: 0.95rem;">RD$ 0.00</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-bottom: 5px;">
+                <span style="font-weight: 500; color: var(--text-muted); font-size: 0.88rem;">Ventas a Crédito:</span>
+                <strong id="db-ops-credit" style="color: #ea580c; font-size: 0.95rem;">RD$ 0.00</strong>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ═══ PANEL: INVOICES (FACTURAS Y COTIZACIONES) ═══ -->
@@ -659,10 +698,12 @@
               <img src="img/logo-creaticos-full.png" alt="Creaticos Logo" id="view-company-logo" />
               <div class="company-info">
                 <h2 id="view-company-name">Creaticos Group</h2>
+                <p id="view-company-slogan" style="font-style: italic; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; display: none;"></p>
                 <p><strong>RNC:</strong> <span id="view-company-rnc">Cargando...</span></p>
                 <p><strong>Teléfono:</strong> <span id="view-company-phone">Cargando...</span></p>
                 <p><strong>Correo:</strong> <span id="view-company-email">Cargando...</span></p>
                 <p><strong>Dirección:</strong> <span id="view-company-address">Cargando...</span></p>
+                <p id="view-company-instagram-wrapper" style="display: none;"><strong>Instagram:</strong> <span id="view-company-instagram"></span></p>
               </div>
             </div>
             
@@ -760,6 +801,8 @@
               <span>Recibido Por (Firma y Sello)</span>
             </div>
           </div>
+          <!-- Custom Ticket Footer Message -->
+          <div id="view-ticket-footer-message" style="display: none; text-align: center; margin-top: 15px; border-top: 1px dashed var(--border-color); padding-top: 10px; font-style: italic; font-size: 0.85rem; padding-bottom: 5px;"></div>
         </div>
       </div>
 
@@ -1217,6 +1260,23 @@
               <div class="form-group">
                 <label for="set-proforma-seq">Siguiente Núm. Proforma</label>
                 <input type="number" id="set-proforma-seq" class="form-input" min="1" placeholder="Ej. 1001" />
+              </div>
+            </div>
+            
+            <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Personalización de Ticket de Venta (80mm)</h3>
+            
+            <div class="form-grid-3">
+              <div class="form-group">
+                <label for="set-ticket-slogan">Eslogan Comercial del Ticket</label>
+                <input type="text" id="set-ticket-slogan" class="form-input" placeholder="Ej. ¡La mejor comida de Santiago!" />
+              </div>
+              <div class="form-group">
+                <label for="set-ticket-instagram">Instagram de la Empresa (@)</label>
+                <input type="text" id="set-ticket-instagram" class="form-input" placeholder="Ej. lospanitas_rd" />
+              </div>
+              <div class="form-group">
+                <label for="set-ticket-footer">Mensaje en el Pie del Ticket</label>
+                <input type="text" id="set-ticket-footer" class="form-input" placeholder="Ej. ¡Gracias por su visita, vuelva pronto!" />
               </div>
             </div>
 

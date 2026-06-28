@@ -1618,6 +1618,12 @@ body {
 .printable-invoice-wrapper.print-format-ticket .invoice-signatures-area {
   display: none !important;
 }
+.printable-invoice-wrapper #view-ticket-footer-message {
+  display: none !important;
+}
+.printable-invoice-wrapper.print-format-ticket #view-ticket-footer-message {
+  display: block !important;
+}
 
 /* ─── TOAST NOTIFICATIONS ─── */
 .erp-toast {
