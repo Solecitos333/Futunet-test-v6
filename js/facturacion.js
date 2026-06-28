@@ -2747,6 +2747,9 @@ window.ERPBilling = (function () {
     document.getElementById('set-ticket-slogan').value = settings.ticketSlogan || '';
     document.getElementById('set-ticket-instagram').value = settings.ticketInstagram || '';
     document.getElementById('set-ticket-footer').value = settings.ticketFooter || '';
+
+    // RNC API Key
+    document.getElementById('set-rnc-api-key').value = settings.rncApiKey || '';
   }
 
   async function saveSettings(e) {
@@ -2788,7 +2791,9 @@ window.ERPBilling = (function () {
 
       ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
       ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
-      ticketFooter: document.getElementById('set-ticket-footer').value.trim()
+      ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
+
+      rncApiKey: document.getElementById('set-rnc-api-key').value.trim()
     };
 
     try {
@@ -4504,13 +4509,27 @@ window.ERPBilling = (function () {
       btn.disabled = true;
     }
 
+    const apiKey = (settings && settings.rncApiKey) ? settings.rncApiKey.trim() : '';
+    if (!apiKey) {
+      alert('Por favor, configure su Token de Megaplus API en los Ajustes de la empresa (sección Servicios Externos) para habilitar la consulta automática de RNC.');
+      if (btn) {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+      return;
+    }
+
     try {
-      const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+      const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc + '&token=' + apiKey);
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Error al consultar RNC');
+      if (!res.ok) throw new Error('Error al consultar RNC en el servidor externo.');
       const data = await res.json();
       
-      if (data && !data.error && data.nombre_razon_social) {
+      if (data && data.error) {
+        throw new Error(data.error);
+      }
+
+      if (data && data.nombre_razon_social) {
         const nombre = data.nombre_razon_social;
         const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
         const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
@@ -4534,7 +4553,7 @@ window.ERPBilling = (function () {
       }
     } catch (e) {
       console.error('RNC Lookup Error:', e);
-      alert('Error de conexión o RNC no encontrado. Por favor, digite los datos manualmente.');
+      alert('Error en consulta RNC: ' + e.message);
     } finally {
       if (btn) {
         btn.innerHTML = originalText;
