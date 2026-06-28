@@ -1689,6 +1689,8 @@ body {
   height: 16px;
   border-radius: 6px;
   animation: skeleton-loading 1.5s infinite ease-in-out;
+  will-change: opacity, background-color;
+  backface-visibility: hidden;
 }
 
 /* Client Profile Panel */

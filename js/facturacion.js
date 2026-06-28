@@ -474,48 +474,58 @@ window.ERPBilling = (function () {
   // Fetch all collections in background
   async function fetchAllData() {
     showTableSkeletons();
-    const clientsSnap = await getDB().collection(collectionClients).get();
-    clients = [];
-    clientsSnap.forEach(doc => {
-      clients.push({ id: doc.id, ...doc.data() });
-    });
-
-    if (isPanitas) {
-      const panitasSnap = await getDB().collection(collectionProducts).get();
-      products = [];
-      panitasSnap.forEach(doc => {
-        products.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
-      });
-    } else {
-      const productsSnap = await getDB().collection('creaticos_products').get();
-      creaticosProducts = [];
-      productsSnap.forEach(doc => {
-        creaticosProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: true });
+    try {
+      const clientsSnap = await getDB().collection(collectionClients).get();
+      clients = [];
+      clientsSnap.forEach(doc => {
+        clients.push({ id: doc.id, ...doc.data() });
       });
 
-      const futunetSnap = await getDB().collection('products').get();
-      futunetProducts = [];
-      futunetSnap.forEach(doc => {
-        futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+      if (isPanitas) {
+        const panitasSnap = await getDB().collection(collectionProducts).get();
+        products = [];
+        panitasSnap.forEach(doc => {
+          products.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+        });
+      } else {
+        const productsSnap = await getDB().collection('creaticos_products').get();
+        creaticosProducts = [];
+        productsSnap.forEach(doc => {
+          creaticosProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: true });
+        });
+
+        const futunetSnap = await getDB().collection('products').get();
+        futunetProducts = [];
+        futunetSnap.forEach(doc => {
+          futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+        });
+
+        // Update active products based on filter selection
+        const sourceEl = document.getElementById('products-source-filter');
+        const source = sourceEl ? sourceEl.value : (isCreaticos ? 'creaticos' : 'futunet');
+        products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+      }
+
+      const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').limit(200).get();
+      invoices = [];
+      invoicesSnap.forEach(doc => {
+        invoices.push({ id: doc.id, ...doc.data() });
       });
 
-      // Update active products based on filter selection
-      const sourceEl = document.getElementById('products-source-filter');
-      const source = sourceEl ? sourceEl.value : (isCreaticos ? 'creaticos' : 'futunet');
-      products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+      const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').limit(200).get();
+      payments = [];
+      paymentsSnap.forEach(doc => {
+        payments.push({ id: doc.id, ...doc.data() });
+      });
+    } finally {
+      // Clear skeletons to stop infinite CPU-intensive background animations
+      const invoicesBody = document.getElementById('invoices-table-body');
+      const clientsBody = document.getElementById('clients-table-body');
+      const productsBody = document.getElementById('products-table-body');
+      if (invoicesBody) invoicesBody.innerHTML = '';
+      if (clientsBody) clientsBody.innerHTML = '';
+      if (productsBody) productsBody.innerHTML = '';
     }
-
-    const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').limit(200).get();
-    invoices = [];
-    invoicesSnap.forEach(doc => {
-      invoices.push({ id: doc.id, ...doc.data() });
-    });
-
-    const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').limit(200).get();
-    payments = [];
-    paymentsSnap.forEach(doc => {
-      payments.push({ id: doc.id, ...doc.data() });
-    });
   }
 
   // Setup general DOM action listeners
