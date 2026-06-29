@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/main.css?v=3.1" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.5" />
-  <link rel="stylesheet" href="css/sections.css?v=3.3" />
+  <link rel="stylesheet" href="css/main.css?v=3.2" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
+  <link rel="stylesheet" href="css/sections.css?v=3.5" />
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
   <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
   <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
@@ -22,10 +22,10 @@
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript></noscript>
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
   <style>
     .about-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-    
+
     .about-hero {
       position: relative; height: 360px; display: flex; align-items: center;
       background-size: cover; background-position: center; color: #fff; overflow: hidden;
@@ -45,7 +45,7 @@
 
     .about-section { padding: 70px 0; }
     .about-history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-    
+
     .about-history-text h2 {
       font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #0a101d; margin: 0 0 20px;
       line-height: 1.25;
@@ -137,7 +137,7 @@
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
-        
+
         <!-- Buscador compacto visible al hacer scroll -->
         <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
           <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
@@ -147,7 +147,7 @@
 
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          
+
           <!-- Pestaña Servicios con Mega Menu -->
           <li class="has-mega">
             <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
@@ -261,7 +261,7 @@
           <!-- Botón Mi Cuenta con Auth dinámico -->
           <div class="navbar-auth-container"></div>
           <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
-            <svg width="15" height="15"><use href="#wa-icon"/></svg>
+            <i data-lucide="message-circle" aria-hidden="true"></i>
             829-741-1041
           </a>
         </div>
@@ -271,10 +271,10 @@
         </button>
       </div>
     </nav>
-    
+
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      
+
       <!-- Acordeones móviles nativos usando details -->
       <details class="mobile-details">
         <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
@@ -283,17 +283,17 @@
           <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
           <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-          
+
           <div class="mobile-details-section">Servicios Empresas</div>
           <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
           <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
           <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
           <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
-          
+
           <div class="mobile-details-section">Equipamiento B2B</div>
           <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
           <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
-          
+
           <div class="mobile-details-section">Entretenimiento</div>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
         </div>
@@ -420,7 +420,7 @@
       <div class="container" style="text-align: center;">
         <h3 class="related-services-title" style="margin-bottom: 15px;">¿Listo para transformar tu infraestructura?</h3>
         <p style="color: #64748b; font-size: 1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6;">Ya sea que necesites fibra óptica de alta velocidad, cableado certificado, seguridad inteligente o energía de respaldo, en Futunet tenemos la solución.</p>
-        
+
         <div class="related-services-grid" style="max-width: 900px; margin: 0 auto;">
           <a href="index.html#servicios" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
             <div class="related-service-icon"><i class="fas fa-cogs"></i></div>
@@ -428,14 +428,14 @@
             <p>Navega por nuestro portafolio de servicios de instalación técnica profesional.</p>
             <span class="related-service-btn">Explorar Servicios <i class="fas fa-arrow-right"></i></span>
           </a>
-          
+
           <a href="catalogo.html" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
             <div class="related-service-icon"><i class="fas fa-shopping-bag"></i></div>
             <h4>Ver Catálogo</h4>
             <p>Explora equipos de red, cámaras, UPS y más listos para cotizar en línea.</p>
             <span class="related-service-btn">Ver Productos <i class="fas fa-arrow-right"></i></span>
           </a>
-          
+
           <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
             <div class="related-service-icon" style="color: #25D366; background: rgba(37, 211, 102, 0.1);"><i class="fab fa-whatsapp"></i></div>
             <h4>WhatsApp Directo</h4>
@@ -484,7 +484,12 @@
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
-  </footer>
+
+      <nav class="footer-legal" aria-label="Enlaces legales">
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="terminos.html">Términos de uso</a>
+      </nav>
+    </footer>
 
   <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
     <a href="catalogo.html" class="mobile-bottom-bar__action">
@@ -502,9 +507,9 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
-  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
+  <script defer src="js/chatbot.js?v=20260628"></script>
   <script src="js/main.js?v=3.2"></script>
 </body>
 </html>

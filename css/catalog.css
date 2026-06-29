@@ -214,6 +214,11 @@
   transition: transform .6s cubic-bezier(.4,0,.2,1);
 }
 .product-card:hover .product-img-wrapper img { transform: scale(1.06); }
+.product-card__image-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
 
 .product-badge {
   position: absolute; top: 8px; left: 8px;
@@ -262,6 +267,19 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.product-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.product-title a:hover,
+.product-title a:focus-visible {
+  color: var(--brand);
+}
+.product-card__image-link:focus-visible,
+.product-title a:focus-visible {
+  outline: 3px solid rgba(11, 126, 181, 0.35);
+  outline-offset: 3px;
 }
 .product-meta {
   font-size: .72rem;

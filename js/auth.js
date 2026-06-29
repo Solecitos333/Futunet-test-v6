@@ -23,34 +23,24 @@
   function getDB() { return window.FutunetFirebase.db; }
 
   // ─── Create/ensure user document in Firestore ───
-  // Usa una transacción para evitar condiciones de carrera al determinar el primer superadmin.
+  // El registro público siempre crea usuarios sin privilegios.
+  // Los administradores se aprovisionan exclusivamente desde un entorno confiable.
   async function ensureUserDoc(uid, data) {
     try {
       var userRef = getDB().collection('users').doc(uid);
-      var setupRef = getDB().collection('config').doc('setup');
       var role = ROLES.USER;
 
-      await getDB().runTransaction(async function (tx) {
-        var setupDoc = await tx.get(setupRef);
-        if (!setupDoc.exists) {
-          role = ROLES.SUPERADMIN;
-          tx.set(setupRef, {
-            initialized: true,
-            initializedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            initializedBy: uid
-          });
-        }
-        tx.set(userRef, {
-          displayName: data.displayName || '',
-          email: data.email || '',
-          phone: data.phone || '',
-          address: '',
-          role: role,
-          status: data.status || 'active',
-          favorites: [],
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-        });
+      await userRef.set({
+        displayName: data.displayName || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        address: '',
+        role: role,
+        roles: [ROLES.USER],
+        status: data.status || 'active',
+        favorites: [],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
@@ -319,7 +309,7 @@
     return userLevel >= 0 && userLevel <= requiredLevel;
   }
 
-  function isSuperAdmin() { return getUserRole() === ROLES.SUPERADMIN; }
+  function isSuperAdmin() { return hasRole(ROLES.SUPERADMIN); }
   function isAdmin() { return hasRole(ROLES.ADMIN); }
   function isEditor() { return hasRole(ROLES.EDITOR); }
   function isLoggedIn() {

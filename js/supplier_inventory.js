@@ -796,6 +796,18 @@
     return value || 'Cotizar';
   }
 
+  function inferBrand(source, item, title) {
+    const explicitBrand = normalizeCopy(item.brand || '');
+    const genericBrands = ['usadas', 'usados', 'genérico', 'generico', 'sin marca'];
+    if (source !== 'selektronic' || !genericBrands.includes(explicitBrand.toLowerCase())) {
+      return explicitBrand || 'Genérico';
+    }
+
+    const normalizedTitle = String(title || '').toUpperCase();
+    const knownBrands = ['LENOVO', 'GIGABYTE', 'INTEL', 'DELL', 'HP', 'ACER', 'ASUS'];
+    return knownBrands.find((brand) => new RegExp(`\\b${brand}\\b`).test(normalizedTitle)) || 'Reacondicionado';
+  }
+
   function normalizeSpecs(item) {
     if (Array.isArray(item.specs) && item.specs.length) {
       return item.specs.map(normalizeCopy).filter(Boolean).slice(0, 6);
@@ -832,7 +844,7 @@
 
     const category = inferCategory(item, policy);
     const department = inferDepartment(item, policy);
-    const brand = normalizeCopy(item.brand || 'Genérico');
+    const brand = inferBrand(source, item, title);
     const desc = normalizeCopy(
       item.desc ||
         item.summary ||
@@ -867,10 +879,16 @@
 
   function mergeIntoCatalog(products) {
     if (typeof mockDatabase === 'undefined' || !Array.isArray(mockDatabase) || !products.length) return;
-    const existingIds = new Set(mockDatabase.map((item) => item.id));
+    const existingById = new Map(mockDatabase.map((item) => [item.id, item]));
     products.forEach((product) => {
-      if (!existingIds.has(product.id)) {
+      const existing = existingById.get(product.id);
+      if (existing) {
+        // El feed local contiene normalizaciones editoriales (marca, textos y galería)
+        // que también deben corregir documentos antiguos ya sincronizados en Firestore.
+        Object.assign(existing, product);
+      } else {
         mockDatabase.unshift(product);
+        existingById.set(product.id, product);
       }
     });
   }

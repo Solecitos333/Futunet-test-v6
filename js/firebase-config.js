@@ -6,6 +6,12 @@
 (function () {
   'use strict';
 
+  if (typeof firebase === 'undefined') {
+    console.error('No se pudo cargar el SDK de Firebase.');
+    window.dispatchEvent(new CustomEvent('futunet:firebase-error'));
+    return;
+  }
+
   const firebaseConfig = {
     apiKey: "AIzaSyC5hG5oVqO0aIBf57X8VYY_U25VhCH0lI4",
     authDomain: "futunet-web.firebaseapp.com",
@@ -30,6 +36,10 @@
     config: firebaseConfig
   };
 
+  window.dispatchEvent(new CustomEvent('futunet:firebase-ready', {
+    detail: window.FutunetFirebase
+  }));
+
   // Enable Firestore offline persistence (best-effort)
   firebase.firestore().enablePersistence({ synchronizeTabs: true }).catch(function (err) {
     if (err.code === 'failed-precondition') {
@@ -39,5 +49,5 @@
     }
   });
 
-  console.log('%c🔥 Firebase initialized', 'color: #0B7EB5; font-weight: bold;');
+  console.log('%c🔥 Firebase inicializado', 'color: #0B7EB5; font-weight: bold;');
 })();

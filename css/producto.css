@@ -11,6 +11,11 @@
   gap: 20px;
 }
 
+.product-detail-shell[hidden],
+.product-detail-empty[hidden] {
+  display: none !important;
+}
+
 .product-breadcrumb {
   display: flex;
   flex-wrap: wrap;

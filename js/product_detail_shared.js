@@ -1,11 +1,11 @@
 ﻿(function () {
   const DEPARTMENT_LABELS = {
-    all: 'Catalogo',
-    seguridad: 'Seguridad electronica',
+    all: 'Catálogo',
+    seguridad: 'Seguridad electrónica',
     redes: 'Redes y datos',
-    energia: 'Energia y climatizacion',
-    equipos: 'Computacion',
-    oficina: 'Papeleria y mobiliario',
+    energia: 'Energía y climatización',
+    equipos: 'Computación',
+    oficina: 'Papelería y mobiliario',
     infra: 'Infraestructura'
   };
 
@@ -106,9 +106,17 @@
     return 'catalogo.html';
   }
 
-  function getProductCode(productId) {
-    const raw = String(productId || '').replace(/^prod_/, '').toUpperCase();
-    return raw ? `FT-${raw.slice(0, 8)}` : 'FT-ITEM';
+  function getProductCode(product) {
+    const explicitCode = normalizeCopy(product?.sku || product?.code || '');
+    if (explicitCode && explicitCode.toUpperCase() !== 'FT-SUPPLIER') return explicitCode.toUpperCase();
+
+    const raw = String(product?.id || 'item');
+    let hash = 2166136261;
+    for (let index = 0; index < raw.length; index += 1) {
+      hash ^= raw.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `FT-${(hash >>> 0).toString(36).toUpperCase().padStart(7, '0')}`;
   }
 
   function toSentenceCase(label) {
@@ -206,6 +214,7 @@
     );
     const specsModel = buildSpecsModel(product, override);
     const description = normalizeCopy(product.desc);
+    const priceValue = Number.parseFloat(String(product.price || '').replace(/[^0-9.-]+/g, '')) || 0;
 
     return {
       id: product.id,
@@ -219,13 +228,15 @@
       description,
       summary: normalizeCopy(override.summary || description),
       price: normalizeCopy(product.price || 'Cotizar'),
+      priceValue,
+      requiresQuote: serviceItem || priceValue <= 0,
       img: normalizeCopy(product.img),
       gallery,
       availabilityLabel: serviceItem ? 'A medida' : 'Disponible',
-      productCode: getProductCode(product.id),
+      productCode: getProductCode(product),
       specTabLabel: normalizeCopy(override.specTabLabel || (serviceItem ? 'Alcance' : 'Especificaciones')),
-      descriptionTabLabel: 'Descripcion',
-      primaryActionLabel: serviceItem ? 'Solicitar servicio' : 'Agregar al carrito',
+      descriptionTabLabel: 'Descripción',
+      primaryActionLabel: serviceItem || priceValue <= 0 ? 'Solicitar cotización' : 'Agregar al carrito',
       quoteActionLabel: serviceItem ? 'Solicitar por WhatsApp' : 'Cotizar por WhatsApp',
       detailActionLabel: serviceItem ? 'Ver detalle del servicio' : 'Ver ficha completa',
       showSpecsTable: specsModel.showTable,

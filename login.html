@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Iniciar Sesión — Futunet</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="description" content="Accede a tu cuenta Futunet para gestionar pedidos, guardar carritos y más." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -118,6 +119,11 @@
             </div>
           </div>
 
+          <label style="display:flex;align-items:flex-start;gap:10px;margin:4px 0 16px;color:#52616d;font-size:.82rem;line-height:1.45;">
+            <input type="checkbox" id="register-terms" required style="width:18px;height:18px;margin-top:1px;flex:0 0 auto;" />
+            <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">términos de uso</a> y confirmo que leí la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</span>
+          </label>
+
           <button type="submit" class="auth-btn auth-btn-primary" id="register-btn">
             <span>Crear cuenta</span>
           </button>
@@ -188,8 +194,8 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -278,23 +284,23 @@
       // ─── Redirect logic ───
       function redirectByRole(userData) {
         if (!userData) { window.location.href = 'index.html'; return; }
-        
+
         // Revisar si existe un parámetro de redirección en la URL
         var params = new URLSearchParams(window.location.search);
         var redirectUrl = params.get('redirect');
         if (redirectUrl) {
           // Evitar Open Redirects y XSS: validar que sea una ruta interna/relativa y no use esquemas potencialmente dañinos
           var cleanRedirect = redirectUrl.trim().toLowerCase();
-          if (!cleanRedirect.startsWith('http://') && 
-              !cleanRedirect.startsWith('https://') && 
-              !cleanRedirect.startsWith('//') && 
-              !cleanRedirect.startsWith('javascript:') && 
+          if (!cleanRedirect.startsWith('http://') &&
+              !cleanRedirect.startsWith('https://') &&
+              !cleanRedirect.startsWith('//') &&
+              !cleanRedirect.startsWith('javascript:') &&
               !cleanRedirect.startsWith('data:')) {
             window.location.href = redirectUrl;
             return;
           }
         }
-        
+
         var role = userData.role;
         if (role === 'superadmin' || role === 'admin' || role === 'editor') {
           window.location.href = 'admin.html';
@@ -373,7 +379,7 @@
               msgEl.innerHTML = 'Tu correo electrónico no ha sido verificado. Revisa tu bandeja de entrada y haz clic en el enlace para activar tu cuenta. ' +
                 '<br><a href="#" id="resend-verification" style="color:#0A70A2;text-decoration:underline;font-weight:600;margin-top:8px;display:inline-block;">¿No recibiste el correo? Reenviar enlace</a>';
               msgEl.className = 'auth-message is-visible error';
-              
+
               document.getElementById('resend-verification').addEventListener('click', async function(ev) {
                 ev.preventDefault();
                 var linkBtn = this;
@@ -404,9 +410,16 @@
         var name = document.getElementById('register-name').value.trim();
         var email = document.getElementById('register-email').value.trim();
         var password = document.getElementById('register-password').value;
+        var acceptedTerms = document.getElementById('register-terms').checked;
 
         if (name.length < 2) {
           showMessage('register-message', 'Ingresa tu nombre completo.', 'error');
+          setLoading('register-btn', false);
+          return;
+        }
+
+        if (!acceptedTerms) {
+          showMessage('register-message', 'Debes aceptar los términos y la política de privacidad para crear una cuenta.', 'error');
           setLoading('register-btn', false);
           return;
         }
@@ -424,7 +437,7 @@
           showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
           document.getElementById('register-form').reset();
           setLoading('register-btn', false);
-          
+
           setTimeout(function () {
             showPanel('panel-login');
             showMessage('login-message', 'Te hemos enviado un correo de verificación. Confírmalo e inicia sesión aquí.', 'success');
@@ -449,7 +462,13 @@
       }
 
       document.getElementById('google-login-btn').addEventListener('click', handleGoogleSignIn);
-      document.getElementById('google-register-btn').addEventListener('click', handleGoogleSignIn);
+      document.getElementById('google-register-btn').addEventListener('click', function () {
+        if (!document.getElementById('register-terms').checked) {
+          showMessage('register-message', 'Debes aceptar los términos y la política de privacidad para crear una cuenta.', 'error');
+          return;
+        }
+        handleGoogleSignIn();
+      });
 
       // ─── Reset Password ───
       document.getElementById('reset-form').addEventListener('submit', async function (e) {

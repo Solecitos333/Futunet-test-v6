@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="page-title">Sistema de Facturación</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="description" content="Sistema de facturación interno y administración." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -105,7 +106,7 @@
         <div class="admin-topbar">
           <h1 id="dashboard-panel-title">Dashboard Creaticos</h1>
         </div>
-        
+
         <div class="admin-stats">
           <div class="admin-stat-card">
             <div class="admin-stat-icon stat-icon-blue">
@@ -285,7 +286,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div style="overflow-x:auto;">
               <table class="admin-table">
                 <thead>
@@ -315,7 +316,7 @@
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;" id="invoice-form-title">Crear Nueva Factura</h3>
             <form id="invoice-editor-form" onsubmit="ERPBilling.saveInvoice(event)">
               <input type="hidden" id="form-invoice-id" />
-              
+
               <div class="form-grid-3" style="grid-template-columns: 1fr 2fr; margin-bottom: 20px;">
                 <div class="form-group">
                   <label for="form-invoice-doc-type">Tipo de Documento *</label>
@@ -337,7 +338,7 @@
                   <input type="hidden" id="form-invoice-client-id" />
                   <div class="autocomplete-dropdown" id="client-autocomplete-dropdown"></div>
                 </div>
-                
+
                 <div class="form-group">
                   <label for="form-invoice-client-rnc" style="display:flex; justify-content:space-between; align-items:center;">
                     <span>RNC / Cédula</span>
@@ -695,7 +696,7 @@
         <div class="printable-invoice-wrapper" id="invoice-print-area">
           <div class="invoice-header">
             <div class="company-branding">
-              <img src="img/logo-creaticos-full.png" alt="Creaticos Logo" id="view-company-logo" />
+              <img src="img/logo-creaticos-full.webp" alt="Creaticos Logo" id="view-company-logo" />
               <div class="company-info">
                 <h2 id="view-company-name">Creaticos Group</h2>
                 <p id="view-company-slogan" style="font-style: italic; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; display: none;"></p>
@@ -706,7 +707,7 @@
                 <p id="view-company-instagram-wrapper" style="display: none;"><strong>Instagram:</strong> <span id="view-company-instagram"></span></p>
               </div>
             </div>
-            
+
             <div class="billing-meta-box">
               <h3>FACTURA</h3>
               <p><strong>No. Factura:</strong> <span id="view-invoice-number">...</span></p>
@@ -726,7 +727,7 @@
               <p><strong>Correo:</strong> <span id="view-client-email">...</span></p>
               <p><strong>Dirección:</strong> <span id="view-client-address">...</span></p>
             </div>
-            
+
             <div class="billing-terms">
               <h4>Condiciones y Notas</h4>
               <p><strong>Términos de Pago:</strong> <span id="view-invoice-payment-terms">Al Contado</span></p>
@@ -789,7 +790,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Space for signatures and seals -->
           <div class="invoice-signatures-area">
             <div class="signature-box">
@@ -826,9 +827,9 @@
               <h2 id="profile-client-name" style="margin: 0; font-size: 1.3rem;">Cliente Ejemplo</h2>
               <span id="profile-client-rnc-badge" class="admin-badge" style="margin-top: 6px; display: inline-block;">RNC/Cédula</span>
             </div>
-            
+
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;" />
-            
+
             <div style="font-size: 0.85rem; line-height: 1.6;">
               <p><strong>RNC / Cédula:</strong> <span id="profile-client-rnc">999999999</span></p>
               <p><strong>Teléfono:</strong> <span id="profile-client-phone">809-555-5555</span></p>
@@ -1057,7 +1058,7 @@
             <form id="product-editor-form" onsubmit="ERPBilling.saveProduct(event)">
               <input type="hidden" id="form-product-id" />
               <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;" id="product-form-title">Detalles del Ítem</h3>
-              
+
               <div class="form-group" style="margin-bottom:15px;" id="form-product-source-group">
                 <label for="form-product-source">Destino / Catálogo *</label>
                 <select id="form-product-source" class="form-input" onchange="ERPBilling.handleModalSourceChange()">
@@ -1099,7 +1100,7 @@
                 <label for="form-product-barcode">Código de Barra</label>
                 <input type="text" id="form-product-barcode" class="form-input" placeholder="Ej. 742111..." />
               </div>
-              
+
               <!-- Futunet-only fields (conditionally shown) -->
               <div id="futunet-only-fields" style="display:none; margin-top:15px; border-top:1px dashed var(--border-color); padding-top:15px;">
                 <div class="form-group" style="margin-bottom:15px;">
@@ -1138,7 +1139,7 @@
         <div class="invoice-form-container" style="max-width:700px;">
           <form id="settings-editor-form" onsubmit="ERPBilling.saveSettings(event)">
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Datos de Identificación de la Empresa</h3>
-            
+
             <div class="form-grid-3" style="grid-template-columns: 1fr 1fr;">
               <div class="form-group">
                 <label for="set-company-name">Nombre / Razón Social *</label>
@@ -1167,7 +1168,7 @@
             </div>
 
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Configuración de Comprobantes Fiscales (NCF)</h3>
-            
+
             <div class="form-grid-3">
               <div class="form-group">
                 <label for="set-ncf-b01-prefix">Prefijo B01 (Crédito Fiscal)</label>
@@ -1240,7 +1241,7 @@
             </div>
 
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Configuración de Cotizaciones y Proformas</h3>
-            
+
             <div class="form-grid-3">
               <div class="form-group">
                 <label for="set-quote-prefix">Prefijo de Cotización</label>
@@ -1262,9 +1263,9 @@
                 <input type="number" id="set-proforma-seq" class="form-input" min="1" placeholder="Ej. 1001" />
               </div>
             </div>
-            
+
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Personalización de Ticket de Venta (80mm)</h3>
-            
+
             <div class="form-grid-3">
               <div class="form-group">
                 <label for="set-ticket-slogan">Eslogan Comercial del Ticket</label>
@@ -1281,7 +1282,7 @@
             </div>
 
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Servicios Externos (Consulta RNC DGII)</h3>
-            
+
             <div class="form-grid-3" style="grid-template-columns: 2fr 1fr; gap: 20px;">
               <div class="form-group">
                 <label for="set-rnc-api-key">Token de Acceso Megaplus API</label>
@@ -1330,12 +1331,12 @@
               <strong style="color:var(--danger)" id="payment-info-balance">RD$ 0.00</strong>
             </div>
           </div>
-          
+
           <div class="form-group" style="margin-bottom:15px;">
             <label for="form-payment-amount">Monto a Cobrar (RD$) *</label>
             <input type="number" id="form-payment-amount" class="form-input" step="0.01" min="0.01" required />
           </div>
-          
+
           <div class="form-group" style="margin-bottom:15px;">
             <label for="form-payment-method">Método de Pago *</label>
             <select id="form-payment-method" class="form-input" required>
@@ -1495,12 +1496,12 @@
               <strong style="color:var(--primary)" id="cash-close-expected-cash">RD$ 0.00</strong>
             </div>
           </div>
-          
+
           <div class="form-group" style="margin-bottom:15px;">
             <label for="form-cash-close-real">Efectivo Real Contado en Caja (RD$) *</label>
             <input type="number" id="form-cash-close-real" class="form-input" min="0" step="0.01" required oninput="ERPBilling.calculateCashDifference()" />
           </div>
-          
+
           <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;">
             <span>Diferencia (Sobrante/Faltante):</span>
             <strong id="cash-close-difference">RD$ 0.00</strong>
@@ -1534,12 +1535,12 @@
             <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">TOTAL A COBRAR</div>
             <strong style="font-size:1.8rem; color:var(--primary);" id="pos-cash-total-to-pay">RD$ 0.00</strong>
           </div>
-          
+
           <div class="form-group" style="margin-bottom:15px;">
             <label for="pos-cash-amount-received">Efectivo Recibido (RD$) *</label>
             <input type="number" id="pos-cash-amount-received" class="form-input" step="0.01" min="0" required oninput="ERPBilling.calculatePosCashChange()" style="font-size: 1.3rem; font-weight: 700; text-align: center; height: 48px;" />
           </div>
-          
+
           <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:15px; text-align:center;">
             <div style="font-size:0.75rem; color:#16a34a; font-weight:600; margin-bottom:3px;">CAMBIO A DEVOLVER</div>
             <strong style="font-size:1.6rem; color:var(--success);" id="pos-cash-change-due">RD$ 0.00</strong>
@@ -1613,8 +1614,8 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
   <script defer src="js/facturacion.js?v=20260627"></script>
 
@@ -1633,7 +1634,7 @@
         var role = document.getElementById('admin-role');
         if (avatar) avatar.textContent = (userData.displayName || '?').charAt(0).toUpperCase();
         if (name) name.textContent = userData.displayName || userData.email || '';
-        
+
         // Map display role
         const rawRole = userData.role || 'user';
         let displayRole = 'Operador ERP';
@@ -1645,9 +1646,9 @@
         const roles = Array.isArray(userData.roles) ? userData.roles : [rawRole];
         const activeCompany = (localStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
         const tenantAdminRole = activeCompany + '_admin';
-        const isUserAdmin = roles.includes('superadmin') || 
-                            roles.includes('admin') || 
-                            roles.includes('erp_admin') || 
+        const isUserAdmin = roles.includes('superadmin') ||
+                            roles.includes('admin') ||
+                            roles.includes('erp_admin') ||
                             roles.includes(tenantAdminRole);
 
         const settingsBtn = document.getElementById('sidebar-nav-settings');
@@ -1667,7 +1668,7 @@
           const select = document.getElementById('superadmin-company-select');
           if (switcher && select) {
             switcher.style.display = 'block';
-            
+
             // Set current active value
             const activeCode = (localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
             if (activeCode === 'CREATICOS' || activeCode === 'FUTUNETSRL' || activeCode === 'PANITAS') {
@@ -1707,7 +1708,7 @@
           navItems.forEach(function (i) { i.classList.remove('is-active'); });
           panels.forEach(function (p) { p.classList.remove('is-active'); });
           this.classList.add('is-active');
-          
+
           var panel = document.getElementById('panel-' + target);
           if (panel) panel.classList.add('is-active');
 

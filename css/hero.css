@@ -279,31 +279,43 @@
 }
 .hero-carousel-dot {
   position: relative;
-  overflow: hidden;
-  width: 11px; height: 11px;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
   border-radius: 50%;
-  border: 2px solid var(--brand);
+  border: 0;
   background: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.3s ease;
-  opacity: 0.5;
+}
+.hero-carousel-dot::before {
+  content: '';
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 2px solid var(--brand);
+  opacity: .5;
+  transition: all .3s ease;
 }
 .hero-carousel-dot.active {
+  background: transparent;
+}
+.hero-carousel-dot.active::before {
   background: var(--brand);
   opacity: 1;
   transform: scale(1.2);
 }
-.hero-carousel-dot:hover:not(.active) {
+.hero-carousel-dot:hover:not(.active)::before {
   transform: scale(1.15);
   opacity: 0.9;
 }
 
 /* ── Dots color override for banner slides ── */
-.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-dot {
+.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-dot::before {
   border-color: rgba(255, 255, 255, 0.4);
 }
-.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-dot.active {
+.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-dot.active::before {
   background: #fff;
   border-color: #fff;
 }
@@ -313,8 +325,9 @@
   .hero-carousel-arrow {
     display: none;
   }
-  .hero-carousel-dots { bottom: 14px; gap: 7px; }
-  .hero-carousel-dot { width: 9px; height: 9px; }
+  .hero-carousel-dots { bottom: 4px; gap: 0; }
+  .hero-carousel-dot { width: 44px; height: 44px; }
+  .hero-carousel-dot::before { width: 9px; height: 9px; }
 
   .hero-carousel-slide--banner {
     align-items: center;
@@ -863,6 +876,15 @@
     gap: 0;
   }
 
+  .hero-search-block .smart-search-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .chip {
+    min-height: 44px;
+  }
+
   .hero-brand-mark {
     width: clamp(230px, 64vw, 300px);
     margin-bottom: 14px;
@@ -927,6 +949,8 @@
     right: 6px;
     width: 36px;
     height: 36px;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 11px;
     box-shadow: 0 7px 16px rgba(11,126,181,0.18);
   }
@@ -979,7 +1003,7 @@
   }
   .hero-chips::-webkit-scrollbar { display: none; }
   .chip {
-    min-height: 40px;
+    min-height: 44px;
     width: 100%;
     min-width: 0;
     padding: 7px 9px;
@@ -1016,7 +1040,7 @@
   .chip {
     padding: 5px 6px;
     font-size: 0.58rem;
-    min-height: 36px;
+    min-height: 44px;
     border-radius: 10px;
   }
 }

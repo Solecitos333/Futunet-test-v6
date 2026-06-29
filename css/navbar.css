@@ -738,6 +738,13 @@
     font-size: 0.8rem !important;
     gap: 4px !important;
     height: auto !important;
+    min-height: 44px;
+  }
+
+  .nav-logo {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
   }
   .nav-auth-login svg,
   .nav-auth-login [data-lucide] {

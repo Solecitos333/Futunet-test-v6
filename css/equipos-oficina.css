@@ -293,7 +293,7 @@
 
 .estimator-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: 45px;
   margin-top: 45px;
   align-items: stretch;
@@ -301,7 +301,7 @@
 
 @media (max-width: 1023px) {
   .estimator-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 35px;
   }
 }
@@ -316,6 +316,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -386,6 +388,7 @@
 /* Contenido del Paso */
 .estimator-step-content {
   flex: 1;
+  min-width: 0;
   display: none;
 }
 
@@ -423,8 +426,12 @@
 
 @media (max-width: 640px) {
   .workstation-options {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
+  }
+
+  .workstation-options > .workstation-card {
+    grid-column: 1 / -1 !important;
   }
 }
 
@@ -440,6 +447,8 @@
   gap: 14px;
   position: relative;
   user-select: none;
+  min-width: 0;
+  width: 100%;
 }
 
 .workstation-card:hover {
@@ -475,6 +484,7 @@
 
 .workstation-card-info {
   flex: 1;
+  min-width: 0;
 }
 
 .workstation-card-title {
@@ -554,6 +564,8 @@
   color: #fff;
   position: sticky;
   top: 100px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 1023px) {
@@ -1152,4 +1164,3 @@
   background: rgba(10, 112, 162, 0.18) !important;
   border-color: rgba(34, 164, 224, 0.4) !important;
 }
-

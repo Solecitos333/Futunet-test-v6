@@ -534,6 +534,7 @@
 
 .home-plan-btn {
   width: 100%;
+  min-height: 44px;
   padding: 12px;
   border-radius: 50px;
   border: 1.5px solid var(--brand);
@@ -688,20 +689,37 @@
   }
   
   .plans-dot {
-    width: 8px;
-    height: 8px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: #cbd5e1;
+    background: transparent;
     transition: all 0.3s;
     cursor: pointer;
     border: none;
     padding: 0;
   }
+
+  .plans-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    transition: all .3s;
+  }
   
   .plans-dot.active {
-    background: #0A70A2;
+    background: transparent;
+    width: 44px;
+  }
+
+  .plans-dot.active::before {
     width: 22px;
     border-radius: 4px;
+    background: #0A70A2;
   }
 }
 

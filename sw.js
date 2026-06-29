@@ -1,9 +1,10 @@
-const CACHE_NAME = 'futunet-cache-v6';
+const CACHE_NAME = 'futunet-cache-v7';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
   './',
   './index.html',
+  './offline.html',
   './catalogo.html',
   './internet.html',
   './energia-climatizacion.html',
@@ -55,7 +56,7 @@ const CRITICAL_ASSETS = [
 // Assets opcionales (si fallan, no se rompe la instalación)
 const OPTIONAL_ASSETS = [
   './producto.html',
-  './auth-guard.js'
+  './js/auth-guard.js'
 ];
 
 // Install Event — cachear assets críticos
@@ -105,12 +106,31 @@ self.addEventListener('fetch', event => {
     event.request.url.includes('identitytoolkit.googleapis.com') ||
     event.request.url.includes('admin.html') ||
     event.request.url.includes('mi-cuenta.html') ||
+    event.request.url.includes('facturacion.html') ||
+    event.request.url.includes('login.html') ||
     event.request.url.includes('backup_data.js') ||
     event.request.url.includes('admin-panel.js') ||
     // Excluir archivos de configuración de Firebase del caché por seguridad
     event.request.url.includes('firebase-config.js') ||
     event.request.url.includes('auth.js')
   ) {
+    return;
+  }
+
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          return (await caches.match(event.request)) || caches.match('./offline.html');
+        })
+    );
     return;
   }
 
@@ -144,12 +164,7 @@ self.addEventListener('fetch', event => {
         }
 
         return networkResponse;
-      }).catch(() => {
-        // Return offline fallback for HTML pages
-        if (event.request.headers.get('Accept').includes('text/html')) {
-          return caches.match('./index.html');
-        }
-      });
+      }).catch(() => Response.error());
     })
   );
 });

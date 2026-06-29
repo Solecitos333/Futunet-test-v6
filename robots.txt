@@ -5,6 +5,8 @@ Allow: /
 Disallow: /admin.html
 Disallow: /mi-cuenta.html
 Disallow: /login.html
+Disallow: /facturacion.html
+Disallow: /marca-template.html
 Disallow: /js/admin-panel.js
 Disallow: /js/user-panel.js
 

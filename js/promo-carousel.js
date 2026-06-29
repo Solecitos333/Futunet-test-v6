@@ -29,7 +29,8 @@
   try {
     if (window.FutunetFirebase && window.FutunetFirebase.db) {
       const db = window.FutunetFirebase.db;
-      const snapshot = await db.collection('banners').where('isActive', '==', true).orderBy('order').get();
+      // Ordenar en el cliente evita depender de un índice compuesto solo para este carrusel.
+      const snapshot = await db.collection('banners').where('isActive', '==', true).get();
       if (!snapshot.empty) {
         const now = new Date();
         snapshot.forEach(doc => {
@@ -50,6 +51,7 @@
             dynamicBanners.push({ id: doc.id, ...data });
           }
         });
+        dynamicBanners.sort((a, b) => Number(a.order || 0) - Number(b.order || 0));
       }
     }
   } catch (e) {

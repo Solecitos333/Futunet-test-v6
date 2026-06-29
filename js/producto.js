@@ -14,6 +14,33 @@
     if (window.lucide) window.lucide.createIcons();
   }
 
+  function setMetaContent(selector, content) {
+    const element = document.querySelector(selector);
+    if (element) element.setAttribute('content', content);
+  }
+
+  function updateDocumentMetadata(detail) {
+    const canonicalUrl = `https://futunet.com.do/producto.html?id=${encodeURIComponent(detail.id)}`;
+    const description = (detail.summary || detail.description || `Consulta ${detail.title} en Futunet`).slice(0, 160);
+    const imageUrl = new URL(detail.img || 'img/logo.webp', 'https://futunet.com.do/').href;
+    const canonical = document.querySelector('link[rel="canonical"]');
+    const robots = document.querySelector('meta[name="robots"]');
+
+    document.title = `${detail.title} | Futunet`;
+    if (canonical) canonical.href = canonicalUrl;
+    if (robots) robots.content = 'index, follow, max-image-preview:large';
+    setMetaContent('meta[name="description"]', description);
+    setMetaContent('meta[property="og:type"]', 'product');
+    setMetaContent('meta[property="og:title"]', `${detail.title} | Futunet`);
+    setMetaContent('meta[property="og:description"]', description);
+    setMetaContent('meta[property="og:image"]', imageUrl);
+    setMetaContent('meta[property="og:image:alt"]', detail.title);
+    setMetaContent('meta[property="og:url"]', canonicalUrl);
+    setMetaContent('meta[name="twitter:title"]', `${detail.title} | Futunet`);
+    setMetaContent('meta[name="twitter:description"]', description);
+    setMetaContent('meta[name="twitter:image"]', imageUrl);
+  }
+
   function getCurrentReturnUrl() {
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
@@ -219,7 +246,7 @@
     currentDetail = detail;
     selectedQuantity = 1;
 
-    document.title = `${detail.title} | Futunet`;
+    updateDocumentMetadata(detail);
 
     const returnUrl = getCurrentReturnUrl();
     const backButton = document.getElementById('product-back-btn');
@@ -273,8 +300,11 @@
         "brand": {
           "@type": "Brand",
           "name": detail.brand
-        },
-        "offers": {
+        }
+      };
+
+      if (priceVal > 0) {
+        schema.offers = {
           "@type": "Offer",
           "url": window.location.href,
           "priceCurrency": "DOP",
@@ -288,8 +318,8 @@
             "@type": "LocalBusiness",
             "name": "Futunet"
           }
-        }
-      };
+        };
+      }
 
       script.textContent = JSON.stringify(schema);
       document.head.appendChild(script);
@@ -306,15 +336,15 @@
     const primaryAction = document.getElementById('product-primary-action');
     const quoteAction = document.getElementById('product-quote-action');
 
-    if (qtyBox) qtyBox.hidden = detail.isService;
+    if (qtyBox) qtyBox.hidden = detail.requiresQuote;
 
     if (primaryAction) {
-      primaryAction.innerHTML = detail.isService
-        ? '<i data-lucide="message-circle"></i> Solicitar servicio'
+      primaryAction.innerHTML = detail.requiresQuote
+        ? '<i data-lucide="message-circle"></i> Solicitar cotización'
         : '<i data-lucide="shopping-cart"></i> Agregar al carrito';
       primaryAction.onclick = () => {
         const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
-        if (detail.isService) {
+        if (detail.requiresQuote) {
           window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`, '_blank');
           return;
         }
@@ -326,7 +356,7 @@
     }
 
     if (quoteAction) {
-      if (detail.isService) {
+      if (detail.requiresQuote) {
         quoteAction.hidden = true;
       } else {
         quoteAction.hidden = false;
@@ -346,6 +376,13 @@
     const emptyState = document.getElementById('product-detail-empty');
     if (detailShell) detailShell.hidden = true;
     if (emptyState) emptyState.hidden = false;
+    document.title = 'Producto no encontrado | Futunet';
+    const robots = document.querySelector('meta[name="robots"]');
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (robots) robots.content = 'noindex, follow';
+    if (canonical) canonical.href = 'https://futunet.com.do/producto.html';
+    const jsonLd = document.getElementById('product-jsonld');
+    if (jsonLd) jsonLd.remove();
   }
 
   function showDetailShell() {

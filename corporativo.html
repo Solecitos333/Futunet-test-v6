@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/main.css?v=3.1" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.5" />
-  <link rel="stylesheet" href="css/sections.css?v=3.3" />
-  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
+  <link rel="stylesheet" href="css/main.css?v=3.2" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
+  <link rel="stylesheet" href="css/sections.css?v=3.5" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.1" />
   <link rel="stylesheet" href="css/portal-rapido.css?v=1.0" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
@@ -26,10 +26,10 @@
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript></noscript>
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
   <style>
     .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-    
+
     .service-hero {
       position: relative; height: 380px; display: flex; align-items: center;
       background-size: cover; background-position: center; color: #fff; overflow: hidden;
@@ -48,7 +48,7 @@
 
     .service-section { padding: 60px 0; }
     .service-grid-info { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; }
-    
+
     @media (max-width: 768px) {
       .service-hero { height: 280px; }
       .service-hero-title { font-size: 1.8rem; }
@@ -58,7 +58,7 @@
 
     .service-details h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0 0 20px; }
     .service-details p { color: #394c60; font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
-    
+
     .features-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 30px; }
     @media (max-width: 480px) { .features-list { grid-template-columns: 1fr; } }
     .feature-item {
@@ -97,9 +97,9 @@
 
     /* Custom Styles for Hero Badge and FAQ */
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 15px; 
-      background: rgba(10, 112, 162, 0.15); border: 1px solid rgba(10, 112, 162, 0.3); 
-      padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; 
+      display: inline-flex; align-items: center; gap: 6px; margin-bottom: 15px;
+      background: rgba(10, 112, 162, 0.15); border: 1px solid rgba(10, 112, 162, 0.3);
+      padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
       color: #0A70A2; text-transform: uppercase; letter-spacing: 1px; backdrop-filter: blur(4px);
     }
     .hero-badge .dot {
@@ -190,7 +190,7 @@
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
-        
+
         <!-- Buscador compacto visible al hacer scroll -->
         <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
           <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
@@ -200,7 +200,7 @@
 
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          
+
           <!-- Pestaña Servicios con Mega Menu -->
           <li class="has-mega">
             <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
@@ -324,10 +324,10 @@
         </button>
       </div>
     </nav>
-    
+
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      
+
       <!-- Acordeones móviles nativos -->
       <details class="mobile-details">
         <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
@@ -336,17 +336,17 @@
           <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
           <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-          
+
           <div class="mobile-details-section">Servicios Empresas</div>
           <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
           <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
           <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
           <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
-          
+
           <div class="mobile-details-section">Equipamiento B2B</div>
           <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
           <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
-          
+
           <div class="mobile-details-section">Entretenimiento</div>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
         </div>
@@ -414,7 +414,7 @@
               <span>Comprobantes fiscales para tus reportes tributarios en todos los servicios.</span>
             </div>
           </button>
-    
+
           <button
             class="trust-item trust-toggle reveal"
             type="button"
@@ -429,7 +429,7 @@
               <span>Instalación prioritaria de fibra en tu negocio en 24/48 horas hábiles.</span>
             </div>
           </button>
-    
+
           <button
             class="trust-item trust-toggle reveal"
             type="button"
@@ -441,10 +441,10 @@
             <div class="trust-icon"><i data-lucide="wrench"></i></div>
             <div class="trust-text">
               <strong>Soporte Profesional SLA</strong>
-              <span>Técnicos calificados in-situ con contratos de nivel de servicio garantizados.</span>
+              <span>Técnicos calificados in-situ con condiciones de servicio definidas por contrato.</span>
             </div>
           </button>
-    
+
           <button
             class="trust-item trust-toggle reveal"
             type="button"
@@ -475,7 +475,7 @@
           <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Conectividad de alto rendimiento</h2>
           <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Planes de fibra simétrica comercial optimizados para Pymes y oficinas en Santiago, con la mejor relación costo-beneficio del mercado.</p>
         </div>
-    
+
         <!-- Planes Pyme Simétricos -->
         <div class="home-plans-grid" id="panel-pyme" style="display: grid;">
           <!-- Plan Platino 200M -->
@@ -503,7 +503,7 @@
               </button>
             </div>
           </div>
-    
+
           <!-- Plan Ultra 300M (Popular) -->
           <div class="home-plan-card popular">
             <span class="home-plan-badge">Recomendado</span>
@@ -517,7 +517,7 @@
                 <li><i class="fas fa-check"></i> Fibra simétrica de ultra velocidad</li>
                 <li><i class="fas fa-check"></i> 300 Mbps de subida y 300 Mbps de bajada</li>
                 <li><i class="fas fa-check"></i> Router Mesh WiFi corporativo incluido</li>
-                <li><i class="fas fa-check"></i> Soporte VIP 24/7 y monitoreo</li>
+                <li><i class="fas fa-check"></i> Soporte prioritario y monitoreo</li>
               </ul>
               <div class="home-plan-price-block">
                 <span class="home-plan-price-label">Renta mensual</span>
@@ -530,7 +530,7 @@
               </button>
             </div>
           </div>
-    
+
           <!-- Plan Élite 500M -->
           <div class="home-plan-card">
             <div class="home-plan-header">
@@ -568,7 +568,7 @@
           <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Soluciones integrales de infraestructura</h2>
           <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Proyectos llave en mano de ingeniería, redes y soporte técnico para oficinas, naves comerciales y locales.</p>
         </div>
-    
+
         <div class="categories-grid reveal">
           <a href="redes-datos.html" class="category-card">
             <img src="img/redes.jpg" alt="Conectividad &amp; Redes" loading="lazy" decoding="async" />
@@ -581,7 +581,7 @@
               <div class="category-card-icon"><i data-lucide="network"></i></div>
             </div>
           </a>
-    
+
           <a href="seguridad-electronica.html" class="category-card">
             <img src="img/camaras.jpg" alt="Cámaras IP &amp; Seguridad" loading="lazy" decoding="async" />
             <div class="category-card-content">
@@ -593,7 +593,7 @@
               <div class="category-card-icon"><i data-lucide="shield-check"></i></div>
             </div>
           </a>
-    
+
           <a href="energia-climatizacion.html" class="category-card">
             <img src="img/ups.jpg" alt="Climatización &amp; Respaldo" loading="lazy" decoding="async" />
             <div class="category-card-content">
@@ -605,7 +605,7 @@
               <div class="category-card-icon"><i data-lucide="zap"></i></div>
             </div>
           </a>
-    
+
           <a href="infraestructura-remozamiento.html" class="category-card">
             <img src="img/sheetrock.jpg" alt="Infraestructura &amp; Remozamiento" loading="lazy" decoding="async" />
             <div class="category-card-content">
@@ -617,7 +617,7 @@
               <div class="category-card-icon"><i data-lucide="hammer"></i></div>
             </div>
           </a>
-    
+
           <a href="equipos-oficina.html" class="category-card">
             <img src="img/laptops.jpg" alt="Equipamiento B2B &amp; Computo" loading="lazy" decoding="async" />
             <div class="category-card-content">
@@ -629,7 +629,7 @@
               <div class="category-card-icon"><i data-lucide="monitor"></i></div>
             </div>
           </a>
-    
+
           <a href="mobiliario-suministros.html" class="category-card">
             <img src="img/mobiliario.jpg" alt="Mobiliario &amp; Suministros" loading="lazy" decoding="async" />
             <div class="category-card-content">
@@ -733,7 +733,7 @@
             <div class="request-card">
               <h3>Contacto B2B</h3>
               <p>Envíanos los requerimientos de tu local o proyecto corporativo y te enviaremos una propuesta formal en 24 horas.</p>
-              
+
               <form id="service-request-form">
                 <input type="hidden" id="req-service-type" value="Corporativo B2B" />
                 <div class="request-form-group">
@@ -763,7 +763,7 @@
                   <label class="request-form-label" for="req-message">Especificaciones de tu requerimiento</label>
                   <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe brevemente tus necesidades (ej: cotizar plan de 200 Megas, cámaras para almacén y cableado estructurado)..."></textarea>
                 </div>
-                
+
                 <button type="submit" class="request-btn-submit" id="req-submit-btn">
                   <i data-lucide="send"></i> Solicitar Propuesta Corporativa
                 </button>
@@ -784,7 +784,7 @@
           <h2 class="section-title" style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; letter-spacing: -0.04em; color: #0a101d; margin-top: 10px;">Preguntas Frecuentes Corporativas</h2>
           <p class="section-sub" style="color: #475569; max-width: 600px; margin: 10px auto 0; font-size: 0.95rem; line-height: 1.6;">Respuestas a dudas comerciales sobre comprobantes fiscales, SLA e instalaciones en Santiago.</p>
         </div>
-    
+
         <div class="faqs-container" style="max-width: 800px; margin: 0 auto;">
           <div class="faq-item">
             <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
@@ -795,7 +795,7 @@
               <p>Sí, por supuesto. Futunet es una empresa formalmente constituida en la República Dominicana. Emitimos facturas con comprobante fiscal (NCF) válido para crédito fiscal para todos los planes de internet B2B, enlaces de datos y equipamiento informático.</p>
             </div>
           </div>
-    
+
           <div class="faq-item">
             <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
               <span>¿Cuál es el tiempo de respuesta del soporte técnico B2B?</span>
@@ -805,7 +805,7 @@
               <p>Los clientes corporativos cuentan con una línea prioritaria en el 829-741-1041. El soporte técnico remoto es inmediato. Para asistencias físicas in-situ en Santiago de los Caballeros, nuestro tiempo de respuesta está estipulado por contrato en un plazo promedio de 2 a 4 horas hábiles.</p>
             </div>
           </div>
-    
+
           <div class="faq-item">
             <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
               <span>¿Qué tipo de red de internet de fibra óptica utilizan?</span>
@@ -815,7 +815,7 @@
               <p>Nuestros planes de internet Pyme utilizan una red compartida simétrica (red de reuso) de fibra óptica de alto rendimiento. Esto nos permite garantizar velocidades simétricas reales (misma velocidad de subida y bajada) y una estabilidad excepcional a tarifas altamente competitivas para negocios locales.</p>
             </div>
           </div>
-    
+
           <div class="faq-item">
             <button class="faq-trigger" type="button" aria-expanded="false" onclick="toggleLocalFaq(this)">
               <span>¿Ofrecen facilidades de pago o financiamiento para proyectos corporativos?</span>
@@ -886,7 +886,12 @@
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
-  </footer>
+
+      <nav class="footer-legal" aria-label="Enlaces legales">
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="terminos.html">Términos de uso</a>
+      </nav>
+    </footer>
 
   <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
     <a href="catalogo.html" class="mobile-bottom-bar__action">
@@ -904,9 +909,9 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
-  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
+  <script defer src="js/chatbot.js?v=20260628"></script>
   <script src="js/main.js?v=3.2"></script>
   <script defer src="js/service-page.js"></script>
   <script>
@@ -914,20 +919,20 @@
       var messageArea = document.getElementById('req-message');
       var nameInput = document.getElementById('req-name');
       var profileSelect = document.getElementById('req-profile');
-      
+
       if (profileSelect) {
         profileSelect.value = 'pyme';
       }
-      
+
       if (messageArea) {
         messageArea.value = 'Hola, me interesa contratar el plan Pyme Simétrico ' + planName + ' (' + speed + ') de RD$ ' + price.toLocaleString('es-DO') + '/mes para mi negocio. Por favor, contáctenme con los detalles de instalación.';
       }
-      
+
       var formCard = document.querySelector('.request-card');
       if (formCard) {
         formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      
+
       if (nameInput) {
         setTimeout(function() {
           nameInput.focus();
@@ -939,7 +944,7 @@
       var item = btn.parentElement;
       var answer = item.querySelector('.faq-answer');
       var isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      
+
       // Cerrar otros
       document.querySelectorAll('#faqs-pyme .faq-item').forEach(function(el) {
         if (el !== item) {
@@ -948,7 +953,7 @@
           el.querySelector('.faq-answer').style.maxHeight = null;
         }
       });
-      
+
       if (isExpanded) {
         item.classList.remove('active');
         btn.setAttribute('aria-expanded', 'false');

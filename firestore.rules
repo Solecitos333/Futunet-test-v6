@@ -3,7 +3,7 @@ rules_version = '2';
 // ═══════════════════════════════════════════════════
 // FUTUNET - Firestore Security Rules
 // ═══════════════════════════════════════════════════
-// 
+//
 // INSTRUCCIONES: Copia todo este contenido y pégalo en:
 // Firebase Console → Firestore Database → Rules
 //
@@ -26,23 +26,30 @@ service cloud.firestore {
     function isEmailVerified() {
       return isSignedIn() && request.auth.token.email_verified == true;
     }
-    
-    function getUserRole() {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+
+    function userHasAnyRole(allowedRoles) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return userData.role in allowedRoles ||
+             (userData.roles is list && userData.roles.hasAny(allowedRoles));
     }
-    
+
+    function documentHasRole(userData, roleName) {
+      return userData.role == roleName ||
+             (userData.roles is list && roleName in userData.roles);
+    }
+
     function isSuperAdmin() {
-      return isEmailVerified() && getUserRole() == 'superadmin';
+      return isEmailVerified() && userHasAnyRole(['superadmin']);
     }
-    
+
     function isAdminOrAbove() {
-      return isEmailVerified() && getUserRole() in ['superadmin', 'admin'];
+      return isEmailVerified() && userHasAnyRole(['superadmin', 'admin']);
     }
-    
+
     function isEditorOrAbove() {
-      return isEmailVerified() && getUserRole() in ['superadmin', 'admin', 'editor'];
+      return isEmailVerified() && userHasAnyRole(['superadmin', 'admin', 'editor']);
     }
-    
+
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
@@ -51,32 +58,31 @@ service cloud.firestore {
     match /users/{userId} {
       // Logged-in users can read their own data, admins/editors can read all (if email verified)
       allow read: if isEmailVerified() && (isOwner(userId) || isEditorOrAbove());
-      
+
       // Allow list access only to admins and above (mitigates global users disclosure)
       allow list: if isAdminOrAbove();
-      
-      // Allow creating own user document (registration)
-      // Fallback for first-user setup: allows superadmin if /config/setup does not exist
-      // Nota: no exige email verificado en creación, ya que al registrarse el email aún no ha sido confirmado.
-      allow create: if (isSignedIn() && isOwner(userId) && (
-        request.resource.data.role == 'user' ||
-        (!exists(/databases/$(database)/documents/config/setup) && request.resource.data.role == 'superadmin')
-      )) || isSuperAdmin();
-      
+
+      // El registro público solo puede crear usuarios sin privilegios.
+      // El primer administrador debe aprovisionarse mediante Firebase Admin o consola segura.
+      allow create: if (isSignedIn() && isOwner(userId) &&
+        request.resource.data.role == 'user' &&
+        request.resource.data.roles is list &&
+        request.resource.data.roles.hasOnly(['user'])) || isSuperAdmin();
+
       // Users can update their own profile (only basic non-sensitive fields and if email verified)
       allow update: if isEmailVerified() && isOwner(userId) && (
         !request.resource.data.diff(resource.data).affectedKeys().hasAny([
-          'role', 'status', 'isInternetClient', 'clientCode', 'internetPlan', 
+          'role', 'roles', 'status', 'companyCode', 'isInternetClient', 'clientCode', 'internetPlan',
           'internetStatus', 'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
         ])
       );
-      
+
       // Admins can update any user (change roles, status, etc.)
       // But only superadmin can modify another superadmin
       allow update: if isAdminOrAbove() && (
-        resource.data.role != 'superadmin' || isSuperAdmin()
+        !documentHasRole(resource.data, 'superadmin') || isSuperAdmin()
       );
-      
+
       // Only superadmin can delete users
       allow delete: if isSuperAdmin();
     }
@@ -85,10 +91,10 @@ service cloud.firestore {
     match /products/{productId} {
       // Anyone can read products (public catalog)
       allow read: if true;
-      
+
       // Only editors and above can create/update products
       allow create, update: if isEditorOrAbove();
-      
+
       // Only admins can delete products
       allow delete: if isAdminOrAbove();
     }
@@ -99,7 +105,7 @@ service cloud.firestore {
       allow read: if isEmailVerified() && (
         cartId == request.auth.uid || isEditorOrAbove()
       );
-      
+
       // Users can create/update/delete their own carts (if email verified)
       allow create, update, delete: if isEmailVerified() && cartId == request.auth.uid;
     }
@@ -110,13 +116,13 @@ service cloud.firestore {
       allow read: if isEmailVerified() && (
         resource.data.userId == request.auth.uid || isEditorOrAbove()
       );
-      
+
       // Client-side document creation is blocked (orders are created securely via backend API)
       allow create: if false;
-      
+
       // Only admins/editors can update order status
       allow update: if isEditorOrAbove();
-      
+
       // Only superadmin can delete orders
       allow delete: if isSuperAdmin();
     }
@@ -125,7 +131,7 @@ service cloud.firestore {
     match /discounts/{code} {
       // Anyone signed in with email verified can read discounts (to validate codes)
       allow read: if isEmailVerified();
-      
+
       // Only admins can manage discounts
       allow create, update, delete: if isAdminOrAbove();
     }
@@ -134,7 +140,7 @@ service cloud.firestore {
     match /config/{docId} {
       // Anyone can read config (site settings are public)
       allow read: if true;
-      
+
       // Only admin or above can change config
       allow write: if isAdminOrAbove();
     }
@@ -171,7 +177,7 @@ service cloud.firestore {
     match /audit_logs/{logId} {
       // Admins/editors can read and write all logs
       allow read: if isEditorOrAbove();
-      
+
       // Signed-in users with email verified can create audit logs representing their own actions
       allow create: if isEmailVerified() && (
         isEditorOrAbove() || (
@@ -278,7 +284,7 @@ service cloud.firestore {
     // ─── INTERNET PAYMENTS Collection ───
     match /internet_payments/{paymentId} {
       // Validate payment submission fields and enforce status pending (if email verified)
-      allow create: if isEmailVerified() && 
+      allow create: if isEmailVerified() &&
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.status == 'pending' &&
                     request.resource.data.amount is number &&
@@ -299,7 +305,7 @@ service cloud.firestore {
     // ─── INTERNET TICKETS Collection ───
     match /internet_tickets/{ticketId} {
       // Validate technical support ticket fields and enforce status pending (if email verified)
-      allow create: if isEmailVerified() && 
+      allow create: if isEmailVerified() &&
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.status == 'pending' &&
                     request.resource.data.timestamp == request.time &&

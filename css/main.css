@@ -52,7 +52,8 @@
 
 /* ── 2. RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 14.5px; scroll-padding-top: 100px; }
+html { scroll-behavior: smooth; font-size: 14.5px; scroll-padding-top: 100px; overflow-x: clip; }
+body { overflow-x: clip; }
 body {
   font-family: 'Outfit', sans-serif;
   background:
@@ -786,6 +787,29 @@ body.is-loading {
     padding: 0 36px 0 12px;
     --promo-bar-height: 38px;
   }
+}
+
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin-top: 22px;
+  padding: 20px 16px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.62);
+  font-size: .82rem;
+}
+
+.footer-legal a {
+  color: rgba(255,255,255,.82);
+  text-decoration: none;
+}
+
+.footer-legal a:hover,
+.footer-legal a:focus-visible {
+  color: #fff;
+  text-decoration: underline;
 }
 
 /* ── 19. RESPONSIVE — Small Mobile (≤389px) ── */
@@ -1615,4 +1639,3 @@ body.is-loading {
     padding-bottom: calc(16px + var(--mobile-safe-bottom));
   }
 }
-

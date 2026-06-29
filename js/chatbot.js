@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { label: 'Servicios', key: 'servicios' }
     ],
     catalogo: [
-      { label: 'Catalogo completo', key: 'catalogo' },
+      { label: 'Catálogo completo', key: 'catalogo' },
       { label: 'Hablar con un agente', key: 'agente' }
     ]
   };
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="chatbot-title">Asistente Futunet</div>
             <div class="chatbot-status">
               <span class="chatbot-status-dot"></span>
-              <span>En linea 24/7</span>
+              <span>En línea</span>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.main
       },
       proyectores: {
-        text: 'Puedo llevarte directo a los proyectores disponibles en el catalogo y tambien ayudarte a cotizar uno por WhatsApp.',
+        text: 'Puedo llevarte directo a los proyectores disponibles en el catálogo y también ayudarte a cotizar uno por WhatsApp.',
         actions: [
           { kind: 'catalog', label: 'Ver proyectores', query: 'proyector' },
           { kind: 'wa', label: 'Cotizar proyector', message: 'Hola Futunet, estoy interesado en un proyector.' }
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.catalogo
       },
       servicios: {
-        text: 'Futunet tambien ofrece servicios. Si quieres, te llevo al catalogo o te paso directo con un asesor para cotizar.',
+        text: 'Futunet también ofrece servicios. Si quieres, te llevo al catálogo o te paso directo con un asesor para cotizar.',
         actions: [
           { kind: 'catalog', label: 'Ver servicios', query: 'servicios' },
           { kind: 'wa', label: 'Cotizar servicio', message: 'Hola Futunet, quiero cotizar un servicio.' }
@@ -263,9 +263,9 @@ document.addEventListener('DOMContentLoaded', () => {
         chips: QUICK_ACTIONS.catalogo
       },
       catalogo: {
-        text: 'Te llevo al catalogo completo para que explores todo con calma.',
+        text: 'Te llevo al catálogo completo para que explores todo con calma.',
         actions: [
-          { kind: 'catalog', label: 'Abrir catalogo', query: '' }
+          { kind: 'catalog', label: 'Abrir catálogo', query: '' }
         ],
         chips: QUICK_ACTIONS.main
       },

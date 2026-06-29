@@ -22,10 +22,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/main.css?v=3.1" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.5" />
-  <link rel="stylesheet" href="css/catalog.css?v=3.0" />
-  <link rel="stylesheet" href="css/sections.css?v=3.3" />
+  <link rel="stylesheet" href="css/main.css?v=3.2" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
+  <link rel="stylesheet" href="css/catalog.css?v=3.1" />
+  <link rel="stylesheet" href="css/sections.css?v=3.5" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
@@ -84,7 +84,7 @@
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
-        
+
         <!-- Buscador compacto visible al hacer scroll -->
         <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
           <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
@@ -94,7 +94,7 @@
 
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          
+
           <!-- Pestaña Servicios con Mega Menu -->
           <li class="has-mega">
             <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
@@ -218,10 +218,10 @@
         </button>
       </div>
     </nav>
-    
+
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      
+
       <!-- Acordeones móviles nativos usando details -->
       <details class="mobile-details">
         <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
@@ -230,17 +230,17 @@
           <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
           <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-          
+
           <div class="mobile-details-section">Servicios Empresas</div>
           <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
           <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
           <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
           <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
-          
+
           <div class="mobile-details-section">Equipamiento B2B</div>
           <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
           <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
-          
+
           <div class="mobile-details-section">Entretenimiento</div>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
         </div>
@@ -442,9 +442,14 @@
         <span>Santiago, República Dominicana</span>
       </div>
     </div>
-  </footer>
 
-  <script defer src="js/chatbot.js"></script>
+      <nav class="footer-legal" aria-label="Enlaces legales">
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="terminos.html">Términos de uso</a>
+      </nav>
+    </footer>
+
+  <script defer src="js/chatbot.js?v=20260628"></script>
 
   <div id="product-modal" class="modal-overlay" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
@@ -454,7 +459,7 @@
       <div class="modal-body">
         <div class="modal-gallery">
           <div class="main-img-wrapper">
-            <img id="modal-main-img" src="" alt="" />
+            <img id="modal-main-img" src="img/placeholder.svg" alt="Vista previa del producto" />
           </div>
           <div id="modal-thumbnails" class="modal-thumbnails"></div>
         </div>
@@ -530,12 +535,12 @@
   </button>
 
   <script defer src="js/config.js"></script>
-  <script defer src="js/cart.js"></script>
+  <script defer src="js/cart.js?v=20260628"></script>
   <script defer src="js/main.js?v=3.2"></script>
-  <script defer src="js/inventory_data.js"></script>
-  <script defer src="js/supplier_inventory.js"></script>
+  <script defer src="js/inventory_data.js?v=20260628"></script>
+  <script defer src="js/supplier_inventory.js?v=20260628"></script>
   <script defer src="js/image_fixes.js?v=v9"></script>
-  <script defer src="js/catalog.js"></script>
+  <script defer src="js/catalog.js?v=20260628"></script>
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
@@ -546,8 +551,8 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
 </body>
 </html>
 

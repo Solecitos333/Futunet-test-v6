@@ -2467,6 +2467,7 @@
   display: flex; align-items: center; justify-content: center; padding: 16px;
   opacity: 0; pointer-events: none; transition: opacity 0.25s;
 }
+.modal-overlay[hidden] { display: none !important; }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
 .modal-box {
   background: #ffffff; border-radius: 24px;
@@ -2597,7 +2598,7 @@
 .speedtest-card-bg {
   position: absolute;
   inset: 0;
-  background-image: url('../img/fibra-optica.png');
+  background-image: url('../img/fibra-optica.webp');
   background-size: cover;
   background-position: center;
   transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -2734,5 +2735,4 @@
     margin: 0 !important;
   }
 }
-
 

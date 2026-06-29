@@ -19,12 +19,16 @@
       code: 'PAPASMART2026',
       discount: 0.10,
       departments: ['equipos', 'redes'],
+      validFrom: '2026-07-01',
+      validUntil: '2026-07-31',
       description: '10% de descuento en Cómputo y Conectividad (Julio 2026)'
     },
     RESPALDO2026: {
       code: 'RESPALDO2026',
       discount: 0.10,
       departments: ['energia'],
+      validFrom: '2026-06-01',
+      validUntil: '2026-06-30',
       description: '10% de descuento en Energía y Respaldo (Junio 2026)'
     }
   };
@@ -72,7 +76,7 @@
         category: 'Equipos de Oficina',
         brand: 'FUTUNET B2B',
         price: 'RD$ 0',
-        img: 'images/oficina/sim_office_pro.png',
+        img: 'images/oficina/sim_office_pro.webp',
         description: 'Combo configurado a medida en el Estimador Tecnológico.',
         specs: []
       };
@@ -321,7 +325,7 @@
     return drawer.classList.contains('is-open') ? closeCartDrawer() : openCartDrawer();
   }
 
-  function buildCheckoutMessage(items) {
+  function buildCheckoutMessage(items, serverSummary = null) {
     const lines = ['Hola Futunet, quiero solicitar este carrito:'];
     let total = 0;
     let totalLease = 0;
@@ -358,13 +362,21 @@
       });
     }
 
+    if (serverSummary) {
+      total = Number(serverSummary.subtotal ?? total);
+      totalLease = Number(serverSummary.lease_total ?? totalLease);
+      discountAmount = Number(serverSummary.discount_amount ?? 0);
+    }
+
+    const appliedCouponCode = serverSummary?.coupon_code || activeCoupon?.code || '';
+
     if (total > 0 || totalLease > 0) {
       lines.push('');
       if (total > 0) {
         if (discountAmount > 0) {
           lines.push(`Subtotal Compra: ${formatCurrency(total)}`);
-          lines.push(`Descuento (Cupón ${activeCoupon.code}): -${formatCurrency(discountAmount)}`);
-          lines.push(`Total Compra (CapEx): ${formatCurrency(total - discountAmount)}`);
+          lines.push(`Descuento${appliedCouponCode ? ` (Cupón ${appliedCouponCode})` : ''}: -${formatCurrency(discountAmount)}`);
+          lines.push(`Total Compra (CapEx): ${formatCurrency(serverSummary?.total ?? (total - discountAmount))}`);
         } else {
           lines.push(`Total Compra (CapEx): ${formatCurrency(total)}`);
         }
@@ -575,11 +587,15 @@
     const modal = document.createElement('div');
     modal.id = 'cart-checkout-modal';
     modal.className = 'cart-checkout-modal-overlay';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('aria-labelledby', 'cart-checkout-title');
     modal.innerHTML = `
       <div class="cart-checkout-modal-card">
         <div class="cart-checkout-modal-header">
-          <h3>Detalles de Entrega y Pago</h3>
-          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal">&times;</button>
+          <h3 id="cart-checkout-title">Detalles de Entrega y Pago</h3>
+          <button type="button" class="cart-checkout-modal-close" id="close-checkout-modal" aria-label="Cerrar pago">&times;</button>
         </div>
         
         <!-- Wizard Progress Navigation -->
@@ -746,6 +762,14 @@
         if (!coupon) {
           activeCoupon = null;
           couponFeedback.textContent = '❌ Código de cupón inválido o expirado.';
+          couponFeedback.style.color = '#e74c3c';
+          return;
+        }
+
+        const today = new Date().toISOString().slice(0, 10);
+        if (today < coupon.validFrom || today > coupon.validUntil) {
+          activeCoupon = null;
+          couponFeedback.textContent = '❌ Este cupón todavía no está activo o ya expiró.';
           couponFeedback.style.color = '#e74c3c';
           return;
         }
@@ -956,6 +980,8 @@
     
     const modal = document.getElementById('cart-checkout-modal');
     modal.classList.add('is-active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
     
     // Reset form
     document.getElementById('cart-checkout-form').reset();
@@ -1023,7 +1049,9 @@
     const modal = document.getElementById('cart-checkout-modal');
     if (modal) {
       modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
     }
+    document.body.style.overflow = '';
 
     if (checkoutModalCleanup) {
       checkoutModalCleanup();
@@ -1115,17 +1143,11 @@
         downloadUrl = await uploadTask.ref.getDownloadURL();
       }
       
-      // Calcular descuento para enviar al backend
-      let discountAmount = 0;
-      if (activeCoupon) {
-        items.forEach(product => {
-          const qty = cartState.items[product.id]?.qty || 0;
-          const unitPrice = parsePriceToNumber(product.price);
-          const isLease = String(product.price).includes('/ mes');
-          if (!isLease && activeCoupon.departments.includes(product.department)) {
-            discountAmount += (unitPrice * qty) * activeCoupon.discount;
-          }
-        });
+      const form = e.currentTarget;
+      if (!form.dataset.requestId) {
+        form.dataset.requestId = window.crypto?.randomUUID
+          ? window.crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
       }
 
       // Construir payload para el API del backend
@@ -1137,8 +1159,8 @@
         shipping_address: address,
         shipping_notes: notes,
         payment_method: paymentMethod,
+        request_id: form.dataset.requestId,
         coupon_code: activeCoupon ? activeCoupon.code : null,
-        discount_amount: discountAmount,
         items: items.map(p => ({
           id: p.id,
           title: p.title,
@@ -1146,6 +1168,7 @@
           qty: cartState.items[p.id].qty,
           brand: p.brand || '',
           category: p.category || '',
+          department: p.department || '',
           is_lease: String(p.price).includes('/ mes')
         })),
         payment_voucher_url: downloadUrl,
@@ -1191,7 +1214,7 @@
         // Método WhatsApp
         showCartToast(resData.message || 'Pedido registrado. Abriendo WhatsApp...', 'success');
         
-        const message = buildCheckoutMessage(items);
+        const message = buildCheckoutMessage(items, resData);
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
         
         // Esperar un momento breve para que el usuario pueda ver el Toast de éxito
@@ -1204,6 +1227,7 @@
         updateCartCount();
         closeCheckoutModal();
       }
+      delete form.dataset.requestId;
     } catch (err) {
       console.error('Error during checkout processing:', err);
       showCartToast('Error al procesar el pedido: ' + err.message, 'error');

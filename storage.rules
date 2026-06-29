@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEditorOrAbove() {
+      let userData = firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+      return isSignedIn() && (
+        userData.role in ['superadmin', 'admin', 'editor'] ||
+        (userData.roles is list && userData.roles.hasAny(['superadmin', 'admin', 'editor']))
+      );
+    }
+
+    function isSafeUpload(maxBytes) {
+      return request.resource.size <= maxBytes &&
+             request.resource.contentType.matches('image/(jpeg|png|webp)|application/pdf');
+    }
+
+    match /vouchers/{userId}/{fileName} {
+      allow write: if isSignedIn() && request.auth.uid == userId && isSafeUpload(5 * 1024 * 1024);
+      allow read: if isSignedIn() && (request.auth.uid == userId || isEditorOrAbove());
+    }
+
+    match /products/{fileName} {
+      allow read: if true;
+      allow write: if isEditorOrAbove() && isSafeUpload(8 * 1024 * 1024);
+    }
+
+    match /brands/{fileName} {
+      allow read: if true;
+      allow write: if isEditorOrAbove() && isSafeUpload(5 * 1024 * 1024);
+    }
+
+    match /banners/{fileName} {
+      allow read: if true;
+      allow write: if isEditorOrAbove() && isSafeUpload(8 * 1024 * 1024);
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

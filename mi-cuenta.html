@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mi Cuenta — Futunet</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="description" content="Gestiona tu cuenta Futunet: perfil, carritos guardados, favoritos y más." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/main.css?v=3.1" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.5" />
+  <link rel="stylesheet" href="css/main.css?v=3.2" />
+  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
@@ -22,7 +23,7 @@
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript></noscript>
+  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
   <style>
     /* ─── User Panel Styles (inline for this page) ─── */
     .up-page {
@@ -237,23 +238,23 @@
       .up-header { flex-direction: column; text-align: center; padding: 22px 18px; }
       .up-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
       .up-header-info h1 { font-size: 1.1rem; }
-      
-      .up-tabs { 
-        gap: 6px; padding: 4px; 
-        overflow-x: auto; 
+
+      .up-tabs {
+        gap: 6px; padding: 4px;
+        overflow-x: auto;
         justify-content: flex-start;
         -webkit-overflow-scrolling: touch;
       }
       .up-tab { padding: 10px 16px; font-size: 0.82rem; flex-shrink: 0; }
       .up-tab svg { display: none; }
-      
+
       .up-card { padding: 20px 16px; border-radius: 16px; }
       .up-form-group input { font-size: 16px; padding: 14px 16px; } /* Prevents iOS zoom */
-      
+
       .up-cart-card { flex-direction: column; gap: 12px; align-items: stretch; }
       .up-cart-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
       .up-btn-sm { text-align: center; padding: 10px 0; font-size: 0.85rem; }
-      
+
       .up-btn-save { width: 100%; }
       .up-btn-save-cart { width: 100%; justify-content: center; }
     }
@@ -323,7 +324,7 @@
         <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
           <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         </a>
-        
+
         <!-- Buscador compacto visible al hacer scroll -->
         <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
           <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
@@ -333,7 +334,7 @@
 
         <ul class="nav-menu">
           <li><a href="index.html#inicio">Inicio</a></li>
-          
+
           <!-- Pestaña Servicios con Mega Menu -->
           <li class="has-mega">
             <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
@@ -457,10 +458,10 @@
         </button>
       </div>
     </nav>
-    
+
     <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
       <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-      
+
       <!-- Acordeones móviles nativos usando details -->
       <details class="mobile-details">
         <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
@@ -469,17 +470,17 @@
           <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
           <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-          
+
           <div class="mobile-details-section">Servicios Empresas</div>
           <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
           <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
           <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
           <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
-          
+
           <div class="mobile-details-section">Equipamiento B2B</div>
           <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
           <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
-          
+
           <div class="mobile-details-section">Entretenimiento</div>
           <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
         </div>
@@ -669,10 +670,10 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js"></script>
-  <script defer src="js/auth.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
-  <script defer src="js/chatbot.js"></script>
+  <script defer src="js/chatbot.js?v=20260628"></script>
   <script defer src="js/main.js?v=3.2"></script>
   <script defer src="js/user-panel.js"></script>
   <script>

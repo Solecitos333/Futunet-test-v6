@@ -193,7 +193,7 @@ window.ERPBilling = (function () {
     // Set view/printable logo
     const viewLogoEl = document.getElementById('view-company-logo');
     if (viewLogoEl) {
-      if (isCreaticos) viewLogoEl.src = 'img/logo-creaticos-full.png';
+      if (isCreaticos) viewLogoEl.src = 'img/logo-creaticos-full.webp';
       else if (isPanitas) viewLogoEl.src = 'img/logo-panitas.png';
       else viewLogoEl.src = 'img/futunet-logo-clean.png';
     }
@@ -350,7 +350,7 @@ window.ERPBilling = (function () {
           name: 'Futunet Suministros',
           rnc: '132-70207-7',
           phone: '829-741-1041',
-          email: 'info@futunet.com.do',
+          email: 'ventas@futunet.com.do',
           address: 'Calle 7 Las Colinas, Santiago',
           invoicePrefix: 'FUT-',
           nextInvoiceNum: 1001,

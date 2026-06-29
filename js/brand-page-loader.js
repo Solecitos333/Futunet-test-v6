@@ -15,23 +15,23 @@ const BRAND_PREVIEW_IMAGES = {
   'hp':                'img/brands-preview/hp.webp',
   'tp-link':           'img/brands-preview/tplink.webp',
   'logitech':          'img/brands-preview/logitech.webp',
-  'cisco':             'img/brands-preview/cisco.png',
-  'dahua':             'img/brands-preview/dahua.png',
-  'ezviz':             'img/brands-preview/ezviz.png',
-  'ubiquiti':          'img/brands-preview/ubiquiti.png',
-  'mikrotik':          'img/brands-preview/mikrotik.png',
-  'zkteco':            'img/brands-preview/zkteco.png',
-  'juniper':           'img/brands-preview/juniper.png',
-  'lg':                'img/brands-preview/lg.png',
-  'linksys':           'img/brands-preview/linksys.png',
-  'netgear':           'img/brands-preview/netgear.png',
-  'panasonic':         'img/brands-preview/panasonic.png',
-  'paradox':           'img/brands-preview/paradox.png',
-  'schneider electric':'img/brands-preview/schneiderelectric.png',
-  'siemens':           'img/brands-preview/siemens.png',
-  'tesla':             'img/brands-preview/tesla.png',
-  'uniview':           'img/brands-preview/uniview.png',
-  'victron energy':    'img/brands-preview/victronenergy.png',
+  'cisco':             'img/brands-preview/cisco.webp',
+  'dahua':             'img/brands-preview/dahua.webp',
+  'ezviz':             'img/brands-preview/ezviz.webp',
+  'ubiquiti':          'img/brands-preview/ubiquiti.webp',
+  'mikrotik':          'img/brands-preview/mikrotik.webp',
+  'zkteco':            'img/brands-preview/zkteco.webp',
+  'juniper':           'img/brands-preview/juniper.webp',
+  'lg':                'img/brands-preview/lg.webp',
+  'linksys':           'img/brands-preview/linksys.webp',
+  'netgear':           'img/brands-preview/netgear.webp',
+  'panasonic':         'img/brands-preview/panasonic.webp',
+  'paradox':           'img/brands-preview/paradox.webp',
+  'schneider electric':'img/brands-preview/schneiderelectric.webp',
+  'siemens':           'img/brands-preview/siemens.webp',
+  'tesla':             'img/brands-preview/tesla.webp',
+  'uniview':           'img/brands-preview/uniview.webp',
+  'victron energy':    'img/brands-preview/victronenergy.webp',
   'mitsubishi':        'img/brands-preview/mitsubishi.png',
 };
 
@@ -58,7 +58,7 @@ const BRAND_SERVICE_MAPPING = {
   'hp': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'HP provee laptops robustas, ordenadores de escritorio e impresoras comerciales.' },
   'lenovo': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'Lenovo es el líder de fiabilidad y laptops ThinkPad para oficinas de alto ritmo.' },
   'epson': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-laptop', text: 'Epson es la marca que integra nuestros sistemas de impresión y proyectores.' },
-  'logitech': { name: 'Equipos de Oficina', url: 'fa-laptop', icon: 'fa-keyboard', text: 'Logitech provee los mejores teclados, mouses y periféricos de videollamada.' },
+  'logitech': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-keyboard', text: 'Logitech ofrece teclados, mouses y periféricos para colaboración y videollamadas.' },
   'lg': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-desktop', text: 'LG equipa salas de conferencias y oficinas con pantallas y monitores premium.' },
   'samsung': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-hdd', text: 'Samsung destaca en almacenamiento SSD ultra-rápido y monitores de oficina.' },
   'siemens': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-network-wired', text: 'Siemens es ideal para control industrial e infraestructura automatizada de oficinas.' },
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           Sin productos en stock
         </h3>
         <p style="color: #64748b; max-width: 480px; margin: 0 auto 20px; font-size: 0.95rem; line-height: 1.6;">
-          Actualmente no tenemos artículos de <strong>${escapeHTML(brandName)}</strong> en el catálogo en línea. Sin embargo, somos distribuidores oficiales y podemos importar y cotizar cualquier equipo bajo pedido.
+          Actualmente no tenemos artículos de <strong>${escapeHTML(brandName)}</strong> publicados en el catálogo en línea. Podemos consultar disponibilidad y preparar una cotización bajo pedido.
         </p>
         <div class="empty-state-actions" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
           <a class="btn btn-wa" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quisiera%20cotizar%20equipos%20de%20la%20marca%20${encodeURIComponent(brandName)}." target="_blank" style="display: inline-flex; align-items: center; gap: 8px;">

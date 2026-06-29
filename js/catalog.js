@@ -207,7 +207,7 @@ function buildSubcategoryGrid(categoriesGroups, compact = false) {
       meta: getCategoryCountLabel(catName, categoriesGroups[catName]),
       image: getFallbackImg(catName),
       onSelect: () => setCategory(catName),
-      ariaLabel: `Abrir subcategoria ${catName}`
+      ariaLabel: `Abrir subcategoría ${catName}`
     })),
     compact
   );
@@ -278,22 +278,22 @@ function renderCompactMobileCatalogView() {
               filterCat(deptKey, null);
               scrollCatalogToTop();
             },
-            ariaLabel: `Abrir area ${getDeptDisplayName(deptKey)}`
+            ariaLabel: `Abrir área ${getDeptDisplayName(deptKey)}`
           };
         })
         .filter(Boolean);
 
       updateCatalogContextBar({
-        title: 'Areas del catalogo',
-        description: 'Entra por departamento y luego navega por subcategorias con una vista mas limpia.',
-        resultsLabel: `${deptItems.length} areas`,
-        activeLabel: `${db.length} articulos listos para explorar`,
+        title: 'Áreas del catálogo',
+        description: 'Entra por departamento y luego navega por subcategorías con una vista más limpia.',
+        resultsLabel: `${deptItems.length} áreas`,
+        activeLabel: `${db.length} artículos listos para explorar`,
         canReset: false
       });
 
       renderMobileVisualBrowserSection({
-        title: 'Explora por area',
-        description: 'Toca un departamento para abrir sus subcategorias y navegar de forma mas ordenada.',
+        title: 'Explora por área',
+        description: 'Toca un departamento para abrir sus subcategorías y navegar de forma más ordenada.',
         items: deptItems
       });
       return true;
@@ -309,21 +309,21 @@ function renderCompactMobileCatalogView() {
 
     updateCatalogContextBar({
       title: getDeptDisplayName(state.dept),
-      description: 'Selecciona una subcategoria y luego entra a sus productos con una vista mas clara.',
-      resultsLabel: `${sortedCategories.length} subcategorias`,
-      activeLabel: `${db.length} articulos en ${getDeptDisplayName(state.dept)}`,
+      description: 'Selecciona una subcategoría y luego entra a sus productos con una vista más clara.',
+      resultsLabel: `${sortedCategories.length} subcategorías`,
+      activeLabel: `${db.length} artículos en ${getDeptDisplayName(state.dept)}`,
       canReset: true
     });
 
     renderMobileVisualBrowserSection({
-      title: 'Explora por subcategoria',
+      title: 'Explora por subcategoría',
       description: 'Entra al grupo exacto que necesitas antes de ver los productos.',
       items: sortedCategories.map(([categoryName, products]) => ({
         title: categoryName,
         meta: getCategoryCountLabel(categoryName, products.length),
         image: getFallbackImg(categoryName),
         onSelect: () => setCategory(categoryName),
-        ariaLabel: `Abrir subcategoria ${categoryName}`
+        ariaLabel: `Abrir subcategoría ${categoryName}`
       }))
     });
     return true;
@@ -1159,23 +1159,6 @@ function renderLoadMoreButton(shown, total) {
 
 // renderProductsGridLegacy removed to optimize code size.
 
-function shouldIgnoreProductCardActivation(event, card) {
-  const interactiveTarget = event.target.closest(
-    'button, a, input, select, textarea, summary, [data-inline-change], .inline-add-btn, [data-cart-change], [data-cart-remove], [data-product-add], .product-actions, .inline-cart-control, .inline-qty-readout'
-  );
-
-  return Boolean(interactiveTarget && card.contains(interactiveTarget) && interactiveTarget !== card);
-}
-
-function bindProductCardActivation(card, productId) {
-  card.addEventListener('click', (event) => {
-    if (shouldIgnoreProductCardActivation(event, card)) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-  });
-}
-
 function renderProductsGrid(productsList, options = {}) {
   const fragment = document.createDocumentFragment();
   const target = options.target || null;
@@ -1184,33 +1167,33 @@ function renderProductsGrid(productsList, options = {}) {
 
   productsList.forEach((product, idx) => {
     const serviceItem = isServiceItem(product);
+    const purchasableProduct = !serviceItem && parsePrice(product.price) > 0;
     const badgeText = serviceItem ? 'SERVICIO' : product.brand;
     const actionText = compactCard
       ? 'Ver'
       : serviceItem
         ? 'Ver Detalles del Servicio'
-        : 'Ver Ficha Tecnica';
+        : 'Ver ficha técnica';
     const metaText = serviceItem
       ? `${getDeptDisplayName(product.department)} · Servicio`
       : `${product.brand} · ${product.category}`;
-    const availabilityText = serviceItem ? 'A medida' : 'Disponible';
-    const card = document.createElement('a');
-    card.href = 'producto.html?id=' + product.id;
+    const availabilityText = serviceItem ? 'A medida' : purchasableProduct ? 'Disponible' : 'Bajo cotización';
+    const productUrl = 'producto.html?id=' + encodeURIComponent(product.id);
+    const card = document.createElement('article');
     card.className = `product-card reveal in${serviceItem ? ' product-card--service' : ''}${previewCard ? ' product-card--preview-mobile' : compactCard ? ' product-card--compact-mobile' : ''}`;
     card.style.animationDelay = `${idx * 40}ms`;
-    card.setAttribute('aria-label', `Ver detalles de ${product.title}`);
-
-    bindProductCardActivation(card, product.id);
 
     card.innerHTML = `
-      <div class="product-img-wrapper${previewCard ? ' product-img-wrapper--preview-mobile' : compactCard ? ' product-img-wrapper--compact-mobile' : ''}">
-        <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300">
-        <span class="product-badge">${escapeHTML(badgeText)}</span>
-        ${previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
-      </div>
+      <a class="product-card__image-link" href="${productUrl}" aria-label="Ver detalles de ${escapeHTML(product.title)}">
+        <div class="product-img-wrapper${previewCard ? ' product-img-wrapper--preview-mobile' : compactCard ? ' product-img-wrapper--compact-mobile' : ''}">
+          <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300">
+          <span class="product-badge">${escapeHTML(badgeText)}</span>
+          ${previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
+        </div>
+      </a>
       <div class="product-info${previewCard ? ' product-info--preview-mobile' : compactCard ? ' product-info--compact-mobile' : ''}">
         <div class="product-meta${previewCard ? ' product-meta--preview-mobile' : compactCard ? ' product-meta--compact-mobile' : ''}">${escapeHTML(metaText)}</div>
-        <h4 class="product-title${previewCard ? ' product-title--preview-mobile' : compactCard ? ' product-title--compact-mobile' : ''}">${escapeHTML(product.title)}</h4>
+        <h4 class="product-title${previewCard ? ' product-title--preview-mobile' : compactCard ? ' product-title--compact-mobile' : ''}"><a href="${productUrl}">${escapeHTML(product.title)}</a></h4>
         <div class="product-price${previewCard ? ' product-price--preview-mobile' : compactCard ? ' product-price--compact-mobile' : ''}">${escapeHTML(product.price)}</div>
         ${compactCard ? '' : `<p class="product-desc">${escapeHTML(product.desc)}</p>`}
         ${previewCard ? '' : `
@@ -1218,9 +1201,9 @@ function renderProductsGrid(productsList, options = {}) {
           <button class="product-view-btn${compactCard ? ' product-view-btn--compact-mobile' : ''}" type="button">
             <i data-lucide="eye"></i> ${actionText}
           </button>
-          <div class="product-add-container${compactCard ? ' product-add-container--compact-mobile' : ''}" data-product-add="${escapeHTML(product.id)}" data-product-add-variant="${compactCard ? 'compact' : 'default'}">
+          ${purchasableProduct ? `<div class="product-add-container${compactCard ? ' product-add-container--compact-mobile' : ''}" data-product-add="${escapeHTML(product.id)}" data-product-add-variant="${compactCard ? 'compact' : 'default'}">
             ${renderInlineAddButtonHTML(product.id, compactCard ? 'compact' : 'default')}
-          </div>
+          </div>` : ''}
         </div>
         `}
       </div>
@@ -1235,9 +1218,8 @@ function renderProductsGrid(productsList, options = {}) {
 
     const actionButton = card.querySelector('.product-view-btn');
     if (actionButton) {
-      actionButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        window.location.href = 'producto.html?id=' + product.id;
+      actionButton.addEventListener('click', () => {
+        window.location.href = productUrl;
       });
     }
 
@@ -1318,9 +1300,10 @@ function openProductModal(id) {
   const product = mockDatabase.find(p => p.id === id);
   if (!product) return;
   const serviceItem = isServiceItem(product);
+  const purchasableProduct = !serviceItem && parsePrice(product.price) > 0;
   closeMobileFilters();
   lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-  setModalCartProduct(id);
+  if (purchasableProduct) setModalCartProduct(id);
 
   document.getElementById('modal-title').textContent = product.title;
   document.getElementById('modal-price').textContent = product.price;
@@ -1382,6 +1365,8 @@ function openProductModal(id) {
   btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem); };
   const btnAddCart = document.getElementById('modal-add-cart-btn');
   if (btnAddCart) {
+    btnAddCart.hidden = !purchasableProduct;
+    if (!purchasableProduct) delete btnAddCart.dataset.productId;
     btnAddCart.setAttribute('aria-label', `Agregar ${product.title} al carrito`);
   }
 
