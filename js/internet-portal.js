@@ -11,6 +11,26 @@
   var userData = null;
   var selectedFile = null;
 
+  function setInternetMode(mode) {
+    document.body.classList.remove('internet-mode-public', 'internet-mode-client', 'internet-mode-prospect');
+    document.body.classList.add('internet-mode-' + mode);
+  }
+
+  function configureGlobalLogout() {
+    var button = document.getElementById('portal-global-logout');
+    if (!button || button.dataset.ready === 'true') return;
+    button.dataset.ready = 'true';
+    button.addEventListener('click', function () {
+      FutunetAuth.signOut().then(function () { window.location.reload(); });
+    });
+  }
+
+  function getActiveCatalogPlan(planId) {
+    if (!window.FutunetInternetCatalog) return null;
+    var plan = window.FutunetInternetCatalog.findById(String(planId || ''));
+    return plan && plan.active ? plan : null;
+  }
+
   // Inicialización
   // Helper para ocultar la pantalla de carga del portal
   function hidePortalLoading() {
@@ -20,6 +40,7 @@
 
   // Inicialización
   function init() {
+    configureGlobalLogout();
     // Modo Solo Planes por query param ?view=planes
     var urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('view') === 'planes') {
@@ -134,6 +155,7 @@
 
   // Muestra landing pública
   function showPublicView() {
+    setInternetMode('public');
     hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'block';
     document.getElementById('internet-portal-view').style.display = 'none';
@@ -145,6 +167,7 @@
 
   // Muestra Web App de autogestión
   function showPortalView() {
+    setInternetMode('client');
     hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'none';
     document.getElementById('internet-portal-view').style.display = 'block';
@@ -155,22 +178,18 @@
     var subnav = document.querySelector('.service-subnav');
     if (subnav) subnav.style.display = 'none';
 
+    setText('portal-view-title', 'Tu servicio de Internet');
+    setText('portal-view-subtitle', 'Consulta tu plan, registra pagos y solicita soporte desde un solo lugar.');
+
     // Rellenar datos
     setText('client-name', 'Hola, ' + (userData.displayName || 'Cliente'));
     setText('client-code', 'CÓDIGO: ' + (userData.clientCode || 'FT-INTERNET-' + currentUser.uid.substring(0, 6).toUpperCase()));
     
-    // Mapeo de planes
-    var plans = {
-      '20mb': { name: 'Plan Bronce 20 Mbps Simétrico', price: 'RD$ 1,000.00' },
-      '50mb': { name: 'Plan Plata 50 Mbps Simétrico', price: 'RD$ 1,500.00' },
-      '100mb': { name: 'Plan Oro 100 Mbps Simétrico', price: 'RD$ 1,900.00' },
-      '200mb': { name: 'Plan Platino 200 Mbps Simétrico', price: 'RD$ 2,400.00' },
-      '300mb': { name: 'Plan Ultra 300 Mbps Simétrico', price: 'RD$ 3,200.00' },
-      '400mb': { name: 'Plan Pro 400 Mbps Simétrico', price: 'RD$ 4,100.00' },
-      '500mb': { name: 'Plan Élite 500 Mbps Simétrico', price: 'RD$ 4,500.00' }
-    };
     var planId = userData.internetPlan || '100mb';
-    var planInfo = plans[planId] || { name: 'Plan Personalizado ' + planId, price: 'A cotizar' };
+    var catalogPlan = window.FutunetInternetCatalog && window.FutunetInternetCatalog.findById(planId);
+    var planInfo = catalogPlan
+      ? { name: catalogPlan.fullName + ' · Fibra simétrica', price: window.FutunetInternetCatalog.formatMoney(catalogPlan.price) }
+      : { name: 'Plan Personalizado ' + planId, price: 'A cotizar' };
     
     setText('portal-plan-name', planInfo.name);
     setText('portal-plan-price', planInfo.price);
@@ -185,19 +204,13 @@
       if (status === 'inactive') statusEl.textContent = 'Servicio Inactivo';
     }
 
-    // Configurar logout
-    var logoutBtn = document.getElementById('portal-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.onclick = function () {
-        FutunetAuth.signOut().then(function () {
-          window.location.reload();
-        });
-      };
-    }
+    loadPortalActivity();
+
   }
 
   // Muestra vista si está logueado pero no tiene internet asociado
   function showNoClientView() {
+    setInternetMode('prospect');
     hidePortalLoading();
     document.getElementById('internet-public-view').style.display = 'none';
     document.getElementById('internet-portal-view').style.display = 'block';
@@ -207,6 +220,9 @@
     if (container) container.classList.add('wide');
     var subnav = document.querySelector('.service-subnav');
     if (subnav) subnav.style.display = 'none';
+
+    setText('portal-view-title', 'Activa tu nueva conexión');
+    setText('portal-view-subtitle', 'Elige un plan y completa los datos necesarios para coordinar la instalación.');
 
     // Inicializar al primer paso del stepper
     goToHiringStep(1);
@@ -224,13 +240,87 @@
       }, 100);
     }
 
-    var logoutBtn = document.getElementById('no-client-logout-btn');
-    if (logoutBtn) {
-      logoutBtn.onclick = function () {
-        FutunetAuth.signOut().then(function () {
-          window.location.reload();
-        });
-      };
+  }
+
+  function timestampValue(value) {
+    if (!value) return 0;
+    if (typeof value.toDate === 'function') return value.toDate().getTime();
+    if (Number.isFinite(value.seconds)) return value.seconds * 1000;
+    var parsed = new Date(value).getTime();
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function formatActivityDate(value) {
+    var timestamp = timestampValue(value);
+    return timestamp
+      ? new Date(timestamp).toLocaleDateString('es-DO', { day: '2-digit', month: 'short', year: 'numeric' })
+      : 'Fecha pendiente';
+  }
+
+  function activityStatusLabel(status) {
+    var labels = {
+      pending: 'Pendiente', approved: 'Aprobado', rejected: 'Rechazado',
+      open: 'Abierto', in_progress: 'En proceso', resolved: 'Resuelto', closed: 'Cerrado'
+    };
+    return labels[status] || 'En revisión';
+  }
+
+  function renderPortalActivity(containerId, items, type) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    if (!items.length) {
+      var empty = document.createElement('p');
+      empty.className = 'portal-activity-empty';
+      empty.textContent = type === 'payment'
+        ? 'Aún no has reportado comprobantes.'
+        : 'No tienes solicitudes de soporte registradas.';
+      container.appendChild(empty);
+      return;
+    }
+    items.forEach(function (item) {
+      var row = document.createElement('div');
+      row.className = 'portal-activity-row';
+      var copy = document.createElement('div');
+      var title = document.createElement('strong');
+      var meta = document.createElement('span');
+      var badge = document.createElement('span');
+      badge.className = 'portal-activity-status status-' + String(item.status || 'pending').replace(/[^a-z_]/g, '');
+      badge.textContent = activityStatusLabel(item.status);
+      if (type === 'payment') {
+        title.textContent = 'RD$ ' + Number(item.amount || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 });
+        meta.textContent = (item.bank || 'Transferencia') + ' · ' + formatActivityDate(item.timestamp);
+      } else {
+        title.textContent = item.type === 'change_plan' ? 'Cambio de plan' : 'Soporte técnico';
+        meta.textContent = formatActivityDate(item.timestamp);
+      }
+      copy.appendChild(title);
+      copy.appendChild(meta);
+      row.appendChild(copy);
+      row.appendChild(badge);
+      container.appendChild(row);
+    });
+  }
+
+  async function loadPortalActivity() {
+    if (!db || !currentUser) return;
+    try {
+      var results = await Promise.all([
+        db.collection('internet_payments').where('userId', '==', currentUser.uid).limit(8).get(),
+        db.collection('internet_tickets').where('userId', '==', currentUser.uid).limit(8).get()
+      ]);
+      var payments = results[0].docs.map(function (doc) { return { id: doc.id, ...doc.data() }; });
+      var tickets = results[1].docs.map(function (doc) { return { id: doc.id, ...doc.data() }; });
+      payments.sort(function (a, b) { return timestampValue(b.timestamp) - timestampValue(a.timestamp); });
+      tickets.sort(function (a, b) { return timestampValue(b.timestamp) - timestampValue(a.timestamp); });
+      renderPortalActivity('portal-payments-list', payments.slice(0, 4), 'payment');
+      renderPortalActivity('portal-tickets-list', tickets.slice(0, 4), 'ticket');
+    } catch (error) {
+      console.error('Error loading Internet portal activity:', error);
+      ['portal-payments-list', 'portal-tickets-list'].forEach(function (id) {
+        var element = document.getElementById(id);
+        if (element) element.innerHTML = '<p class="portal-activity-empty">No pudimos cargar la actividad reciente.</p>';
+      });
     }
   }
 
@@ -594,6 +684,14 @@
         var notes = document.getElementById('p-hir-notes').value.trim();
         var planName = document.getElementById('p-hir-plan-name').value;
         var planId = document.getElementById('p-hir-plan-id').value;
+        var selectedPlan = getActiveCatalogPlan(planId);
+        if (!selectedPlan) {
+          if (window.showToast) window.showToast('El plan seleccionado ya no está disponible. Elige otro plan.', 'error');
+          if (btn) btn.disabled = false;
+          window.prevHiringStep(1);
+          return;
+        }
+        planName = selectedPlan.fullName;
 
         // Validaciones de longitud para alinearse con Firestore rules
         if (name.length > 100) {
@@ -716,6 +814,14 @@
         var schedule = document.getElementById('p-guest-schedule').value;
         var address = document.getElementById('p-guest-address').value.trim();
         var planName = document.getElementById('p-guest-plan-name').value;
+        var planId = document.getElementById('p-guest-plan-id').value;
+        var selectedPlan = getActiveCatalogPlan(planId);
+        if (!selectedPlan) {
+          if (window.showToast) window.showToast('El plan seleccionado ya no está disponible. Elige otro plan.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+        planName = selectedPlan.fullName;
 
         // Validaciones de longitud para alinearse con Firestore rules
         if (name.length > 100) {
@@ -783,6 +889,13 @@
 
   // Modal de Canales de Contratación (B2C)
   window.openHiringChannelsModal = function (name, id, price) {
+    var catalogPlan = getActiveCatalogPlan(id);
+    if (!catalogPlan) {
+      if (window.showToast) window.showToast('Este plan ya no está disponible.', 'error');
+      return;
+    }
+    name = catalogPlan.fullName;
+    price = catalogPlan.price;
     var planTitleEl = document.getElementById('hiring-channels-plan-title');
     var planPriceEl = document.getElementById('hiring-channels-plan-price');
     if (planTitleEl) planTitleEl.textContent = name;
@@ -926,8 +1039,10 @@
 
     cards.forEach(function (card) {
       if (card.getAttribute('data-category') === category) {
+        card.removeAttribute('hidden');
         card.style.display = '';
       } else {
+        card.setAttribute('hidden', '');
         card.style.display = 'none';
       }
     });
@@ -979,21 +1094,17 @@
   }
 
   // ─── CALCULADORA DE MEGAS (ACTIVIDADES Y DISPOSITIVOS) ───
-  var plansList = [
-    { id: '20mb', speed: 20, name: 'Plan Bronce Simétrico', desc: 'Ideal para familias pequeñas, streaming de video HD y navegación fluida con velocidad simétrica.', price: 1000 },
-    { id: '50mb', speed: 50, name: 'Plan Plata Simétrico', desc: 'Perfecto para teletrabajo, múltiples streamings HD y descargas rápidas con velocidad simétrica.', price: 1500 },
-    { id: '100mb', speed: 100, name: 'Plan Oro Simétrico', desc: 'Ideal para hogares conectados, streaming 4K, descargas pesadas y gaming con velocidad simétrica.', price: 1900 },
-    { id: '150mb', speed: 150, name: 'Plan Titanio Simétrico', desc: 'Excelente potencia intermedia para familias activas, múltiples conexiones, gaming y streaming UHD.', price: 2200 },
-    { id: '200mb', speed: 200, name: 'Plan Platino Simétrico', desc: 'Ideal para teletrabajo intensivo, gaming competitivo y muchos dispositivos concurrentes.', price: 2400 },
-    { id: '300mb', speed: 300, name: 'Plan Ultra Simétrico', desc: 'Velocidad premium para creadores de contenido, streaming 4K/8K y domótica completa.', price: 3200 },
-    { id: '400mb', speed: 400, name: 'Plan Pro Simétrico', desc: 'Velocidad ultra-rápida para máxima demanda y descargas de gran volumen.', price: 4100 },
-    { id: '500mb', speed: 500, name: 'Plan Élite Simétrico', desc: 'La máxima potencia disponible. Conectividad empresarial de ultra velocidad.', price: 4500 }
-  ];
+  var plansList = window.FutunetInternetCatalog
+    ? window.FutunetInternetCatalog.activePlans().map(function (plan) {
+        return { id: plan.id, speed: plan.speed, name: plan.name, desc: plan.description, price: plan.price };
+      })
+    : [{ id: '100mb', speed: 100, name: 'Plan Oro', desc: 'Fibra óptica simétrica.', price: 1900 }];
 
   var currentRecommendedPlan = plansList[0];
 
   window.toggleCalcActivity = function (el) {
     el.classList.toggle('active');
+    el.setAttribute('aria-pressed', String(el.classList.contains('active')));
     window.updateMegasCalc();
   };
 
