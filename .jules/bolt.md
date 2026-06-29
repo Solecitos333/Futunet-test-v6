@@ -1,0 +1,3 @@
+## 2024-05-18 - [Optimization of Catalog Search Scoring]
+**Learning:** In frontend search operations looping over thousands of products on each keystroke, re-computing expensive regex operations (like string normalization removing accents) inside `Array.map` kills performance. Using `Array.map().filter().sort().map()` allocates three intermediate arrays and compounds the overhead.
+**Action:** When filtering objects, dynamically cache properties using a `WeakMap` mapped to the object reference instead of creating intermediate mapped clones or eagerly replacing properties on the data structures. Replace array chaining `.map().filter()` with an imperative single-pass loop to halve the loop overhead and reduce memory allocation.
