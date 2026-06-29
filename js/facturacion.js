@@ -3561,6 +3561,10 @@ window.ERPBilling = (function () {
     }
 
     try {
+      // Check if order already exists to preserve status
+      const existingDoc = await getDB().collection('panitas_table_orders').doc(table).get();
+      const existingData = existingDoc.exists ? existingDoc.data() : {};
+
       const orderData = {
         table: table,
         clientName: clientName || 'Consumidor Final',
@@ -3571,6 +3575,8 @@ window.ERPBilling = (function () {
           qty: item.qty,
           tax: item.tax || 0
         })),
+        status: existingData.status || 'pending',
+        waiterName: currentUser ? (currentUser.displayName || currentUser.email || 'Mesero') : 'Mesero',
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
@@ -3589,36 +3595,87 @@ window.ERPBilling = (function () {
     if (!listEl) return;
 
     try {
-      const snap = await getDB().collection('panitas_table_orders').orderBy('updatedAt', 'desc').get();
+      const snap = await getDB().collection('panitas_table_orders').get();
       listEl.innerHTML = '';
 
-      if (snap.empty) {
-        listEl.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted);">No hay mesas activas.</div>';
-        return;
+      const activeOrders = {};
+      snap.forEach(doc => {
+        activeOrders[doc.id] = { id: doc.id, ...doc.data() };
+      });
+
+      const defaultTables = [
+        'Mesa 1', 'Mesa 2', 'Mesa 3', 'Mesa 4',
+        'Mesa 5', 'Mesa 6', 'Mesa 7', 'Mesa 8',
+        'Mesa 9', 'Mesa 10', 'Mesa 11', 'Mesa 12'
+      ];
+
+      const rendered = new Set();
+
+      function renderTableCard(tableName, order) {
+        rendered.add(tableName);
+        const card = document.createElement('div');
+        card.style.cssText = 'border-radius:12px; padding:12px; text-align:center; cursor:pointer; transition: all 0.2s; display:flex; flex-direction:column; justify-content:space-between; gap:6px; font-weight:600; font-size:0.8rem;';
+        
+        if (order) {
+          let total = 0;
+          order.items.forEach(item => {
+            total += item.price * item.qty * (1 + (item.tax || 0) / 100);
+          });
+          const status = order.status || 'pending';
+          let statusLabel = 'Pendiente';
+          let statusBg = '#ea580c';
+          if (status === 'preparing') { statusLabel = 'Preparando'; statusBg = '#3b82f6'; }
+          else if (status === 'ready') { statusLabel = 'Listo'; statusBg = '#22c55e'; }
+
+          card.style.background = '#fef2f2';
+          card.style.border = '1.5px solid #fca5a5';
+          card.style.color = '#991b1b';
+          card.onclick = () => loadTableOrder(tableName);
+
+          card.innerHTML = `
+            <div style="font-size:0.85rem; font-weight:700;">🍽️ ${escapeHTML(tableName)}</div>
+            <div style="font-size:0.75rem; color:#7f1d1d; opacity:0.85; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHTML(order.clientName)}</div>
+            <div style="font-size:0.85rem; font-weight:800; color:#b91c1c; margin:2px 0;">${formatMoney(total)}</div>
+            <span style="background:${statusBg}; color:white; font-size:0.65rem; padding:2px 6px; border-radius:6px; align-self:center; font-weight:700; text-transform:uppercase;">${statusLabel}</span>
+          `;
+        } else {
+          card.style.background = '#f0fdf4';
+          card.style.border = '1.5px solid #bbf7d0';
+          card.style.color = '#166534';
+          card.onclick = () => selectFreeTable(tableName);
+
+          card.innerHTML = `
+            <div style="font-size:0.85rem; font-weight:700;">🍽️ ${escapeHTML(tableName)}</div>
+            <div style="font-size:0.7rem; color:#15803d; opacity:0.75; font-weight:500;">Disponible</div>
+            <div style="font-size:0.85rem; font-weight:700; visibility:hidden; margin:2px 0;">RD$ 0</div>
+            <span style="background:#22c55e; color:white; font-size:0.65rem; padding:2px 6px; border-radius:6px; align-self:center; font-weight:700; text-transform:uppercase; visibility:hidden;">—</span>
+          `;
+        }
+        listEl.appendChild(card);
       }
 
-      snap.forEach(doc => {
-        const order = doc.data();
-        let total = 0;
-        order.items.forEach(item => {
-          total += item.price * item.qty * (1 + (item.tax || 0) / 100);
-        });
+      defaultTables.forEach(t => {
+        renderTableCard(t, activeOrders[t]);
+      });
 
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'admin-btn';
-        btn.style.cssText = 'background:#ffedd5; border:1px solid #fed7aa; color:#ea580c; border-radius:10px; padding: 6px 12px; font-size:0.8rem; display:inline-flex; align-items:center; gap:6px; cursor:pointer; font-weight:600;';
-        btn.onclick = () => loadTableOrder(order.table);
-        btn.innerHTML = `
-          <span>🍽️ ${escapeHTML(order.table)} (${escapeHTML(order.clientName)})</span>
-          <strong style="color:#c2410c;">${formatMoney(total)}</strong>
-        `;
-        listEl.appendChild(btn);
+      Object.keys(activeOrders).forEach(t => {
+        if (!rendered.has(t)) {
+          renderTableCard(t, activeOrders[t]);
+        }
       });
     } catch (e) {
       console.error('Error refreshing active tables:', e);
-      listEl.innerHTML = '<div style="font-size:0.8rem; color:#ef4444;">Error al cargar mesas activas.</div>';
+      listEl.innerHTML = '<div style="font-size:0.8rem; color:#ef4444; grid-column: 1/-1;">Error al cargar plano de mesas.</div>';
     }
+  }
+
+  function selectFreeTable(tableName) {
+    const tableInput = document.getElementById('pos-restaurant-table');
+    const nameInput = document.getElementById('pos-restaurant-client-name');
+    if (tableInput) tableInput.value = tableName;
+    if (nameInput) nameInput.value = '';
+    clearPosCart();
+    showToast(`Mesa ${tableName} seleccionada para nueva orden.`, 'success');
   }
 
   async function loadTableOrder(tableName) {
@@ -3649,6 +3706,126 @@ window.ERPBilling = (function () {
     } catch (e) {
       console.error('Error loading table order:', e);
       showToast('Error al cargar la orden de la mesa.', 'danger');
+    }
+  }
+
+  async function refreshKds() {
+    const gridEl = document.getElementById('kds-orders-grid');
+    if (!gridEl) return;
+
+    gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-muted);">Cargando comandas de cocina...</div>';
+
+    try {
+      const snap = await getDB().collection('panitas_table_orders').orderBy('updatedAt', 'asc').get();
+      gridEl.innerHTML = '';
+
+      // Only show orders that are pending, preparing or ready (not completed/delivered)
+      const activeOrders = [];
+      snap.forEach(doc => {
+        const order = doc.data();
+        const status = order.status || 'pending';
+        if (['pending', 'preparing', 'ready'].includes(status)) {
+          activeOrders.push({ table: doc.id, ...order });
+        }
+      });
+
+      if (activeOrders.length === 0) {
+        gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:60px; color:var(--text-muted); font-size:1.1rem;">🍳 Cocina limpia. No hay comandas activas.</div>';
+        return;
+      }
+
+      activeOrders.forEach(order => {
+        const table = order.table;
+        const status = order.status || 'pending';
+        
+        let statusLabel = 'Pendiente';
+        let statusColor = '#ea580c';
+        let statusBg = '#ffedd5';
+        if (status === 'preparing') {
+          statusLabel = 'Preparando';
+          statusColor = '#2563eb';
+          statusBg = '#dbeafe';
+        } else if (status === 'ready') {
+          statusLabel = 'Listo';
+          statusColor = '#16a34a';
+          statusBg = '#dcfce7';
+        }
+
+        // Format duration since last update
+        const dateVal = order.updatedAt ? (order.updatedAt.toDate ? order.updatedAt.toDate() : new Date(order.updatedAt)) : new Date();
+        const diffMs = new Date() - dateVal;
+        const diffMins = Math.max(0, Math.floor(diffMs / 60000));
+        const timeText = diffMins === 0 ? 'Hace un momento' : `Hace ${diffMins} min`;
+
+        const card = document.createElement('div');
+        card.className = 'kds-card';
+        card.style.cssText = 'background:#fff; border: 1.5px solid var(--border-color); border-radius:16px; padding:20px; box-shadow:0 4px 6px -1px rgb(0 0 0 / 0.05); display:flex; flex-direction:column; gap:15px;';
+        
+        let itemsList = '';
+        order.items.forEach(item => {
+          itemsList += `
+            <li style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px dashed var(--border-color); padding-bottom:6px;">
+              <span style="font-weight:600; color:var(--text-main); font-size:0.9rem;">
+                <span style="color:var(--primary); font-size:1rem; margin-right:6px;">${item.qty}x</span> ${escapeHTML(item.name)}
+              </span>
+            </li>
+          `;
+        });
+
+        let actionButtons = '';
+        if (status === 'pending') {
+          actionButtons = `
+            <button class="admin-btn admin-btn-primary" onclick="ERPBilling.updateKdsStatus('${table}', 'preparing')" style="flex:1; background:#2563eb; font-size:0.8rem; height:34px; border-radius:8px;">👨‍🍳 Preparar</button>
+          `;
+        } else if (status === 'preparing') {
+          actionButtons = `
+            <button class="admin-btn admin-btn-primary" onclick="ERPBilling.updateKdsStatus('${table}', 'ready')" style="flex:1; background:#16a34a; font-size:0.8rem; height:34px; border-radius:8px;">✅ Listo</button>
+          `;
+        } else if (status === 'ready') {
+          actionButtons = `
+            <button class="admin-btn admin-btn-ghost" onclick="ERPBilling.updateKdsStatus('${table}', 'delivered')" style="flex:1; border: 1.5px solid #22c55e; color:#15803d; font-size:0.8rem; height:34px; border-radius:8px; font-weight:700;">🍽️ Servido / Entregar</button>
+          `;
+        }
+
+        card.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border-color); padding-bottom:10px;">
+            <div>
+              <h3 style="font-size:1.15rem; font-weight:800; color:var(--primary); margin:0;">${escapeHTML(table)}</h3>
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">${timeText} (${escapeHTML(order.clientName)})</span>
+            </div>
+            <span style="background:${statusBg}; color:${statusColor}; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:8px; text-transform:uppercase;">${statusLabel}</span>
+          </div>
+          <div style="flex-grow:1; margin-top:5px;">
+            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
+              ${itemsList}
+            </ul>
+          </div>
+          <div style="display:flex; gap:10px; border-top:1.5px solid var(--border-color); padding-top:12px;">
+            ${actionButtons}
+          </div>
+        `;
+
+        gridEl.appendChild(card);
+      });
+
+    } catch (e) {
+      console.error('Error refreshing KDS:', e);
+      gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#ef4444;">Error al cargar comandas de cocina.</div>';
+    }
+  }
+
+  async function updateKdsStatus(tableId, nextStatus) {
+    try {
+      await getDB().collection('panitas_table_orders').doc(tableId).update({
+        status: nextStatus,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      showToast(`Mesa ${tableId} marcada como ${nextStatus === 'preparing' ? 'En Preparación' : (nextStatus === 'ready' ? 'Listo' : 'Entregado')}.`, 'success');
+      await refreshKds();
+      await refreshActiveTables();
+    } catch (e) {
+      console.error('Error updating KDS status:', e);
+      showToast('Error al actualizar estado en cocina.', 'danger');
     }
   }
 
@@ -5030,6 +5207,9 @@ window.ERPBilling = (function () {
     saveTableOrder: saveTableOrder,
     refreshActiveTables: refreshActiveTables,
     loadTableOrder: loadTableOrder,
+    selectFreeTable: selectFreeTable,
+    refreshKds: refreshKds,
+    updateKdsStatus: updateKdsStatus,
 
     // Payments
     openRegisterPaymentModal: openRegisterPaymentModal,

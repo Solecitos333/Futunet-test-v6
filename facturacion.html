@@ -71,6 +71,10 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" x2="7.01" y1="7" y2="7"/></svg>
           Productos / Servicios
         </button>
+        <button class="admin-nav-item" data-nav="kds" id="sidebar-nav-kds" style="display: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M12 17v4M8 21h8"/></svg>
+          Cocina (KDS)
+        </button>
 
         <div class="admin-nav-label" id="sidebar-nav-settings-label">Configuración</div>
         <button class="admin-nav-item" data-nav="settings" id="sidebar-nav-settings">
@@ -609,7 +613,7 @@
                   <span>🛒 MESAS ACTIVAS / ORDENES RETENIDAS</span>
                   <button type="button" style="border:none; background:none; font-size:0.7rem; color:var(--primary); cursor:pointer; font-weight:600;" onclick="ERPBilling.refreshActiveTables()">🔄 Actualizar</button>
                 </div>
-                <div id="pos-restaurant-tables-list" style="display:flex; gap:10px; flex-wrap:wrap; width: 100%;">
+                <div id="pos-restaurant-tables-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px; width: 100%;">
                   <div style="font-size:0.8rem; color:var(--text-muted);">No hay mesas activas.</div>
                 </div>
               </div>
@@ -1302,6 +1306,26 @@
         </div>
       </div>
 
+      <!-- ═══ PANEL: KITCHEN DISPLAY SYSTEM (KDS) ═══ -->
+      <div class="admin-panel" id="panel-kds">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div>
+            <h1 class="admin-title">Cocina (KDS)</h1>
+            <p class="admin-subtitle">Monitoreo y preparación de comandas en vivo</p>
+          </div>
+          <div style="display:flex; gap:10px;">
+            <button type="button" class="admin-btn admin-btn-ghost" onclick="ERPBilling.refreshKds()" style="display:inline-flex; align-items:center; gap:6px; border: 1.5px solid var(--border-color); border-radius:10px; padding: 6px 12px; font-size:0.8rem; font-weight:600;">
+              🔄 Actualizar
+            </button>
+          </div>
+        </div>
+
+        <!-- Live order grid -->
+        <div id="kds-orders-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+          <div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-muted);">Cargando comandas de cocina...</div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -1662,6 +1686,10 @@
         if (settingsBtn) settingsBtn.style.display = isUserAdmin ? 'flex' : 'none';
         if (settingsLabel) settingsLabel.style.display = isUserAdmin ? 'block' : 'none';
 
+        // Show/hide KDS button for restaurant tenants
+        const kdsBtn = document.getElementById('sidebar-nav-kds');
+        if (kdsBtn) kdsBtn.style.display = activeCompany === 'panitas' ? 'flex' : 'none';
+
         // Hide return to global admin button if restricted to tenant
         const backToAdminBtn = document.getElementById('sidebar-nav-back-admin');
         if (backToAdminBtn) {
@@ -1723,6 +1751,8 @@
             ERPBilling.renderProductsTable();
           } else if (target === 'settings') {
             ERPBilling.loadSettingsForm();
+          } else if (target === 'kds') {
+            ERPBilling.refreshKds();
           }
 
           // Close mobile sidebar
