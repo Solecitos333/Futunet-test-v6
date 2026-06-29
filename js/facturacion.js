@@ -2132,6 +2132,18 @@ window.ERPBilling = (function () {
       formatSelect.value = 'letter';
     }
     handlePrintFormatChange('letter');
+    
+    // Adjust compact print layout classes based on items count
+    const printArea = document.getElementById('invoice-print-area');
+    if (printArea) {
+      printArea.classList.remove('print-compact-medium', 'print-compact-high');
+      const itemsCount = inv.items ? inv.items.length : 0;
+      if (itemsCount > 12) {
+        printArea.classList.add('print-compact-high');
+      } else if (itemsCount > 7) {
+        printArea.classList.add('print-compact-medium');
+      }
+    }
 
     // Fetch client contact details if available
     let client = clients.find(c => c.id === inv.clientId);

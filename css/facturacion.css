@@ -878,8 +878,61 @@ body {
     max-width: 100% !important;
   }
   
-  .invoice-header, .invoice-billing-details, .invoice-items-preview-table, .invoice-preview-summary-box {
-    page-break-inside: avoid;
+  .invoice-header, .invoice-billing-details, .invoice-items-preview-table, .invoice-footer-wrapper {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Compact layouts for large item lists to fit on a single page */
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium {
+    font-size: 10pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-header {
+    margin-bottom: 12px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-billing-details {
+    margin-bottom: 12px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table {
+    margin-bottom: 15px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table th {
+    padding: 6px 8px !important;
+    font-size: 8pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table td {
+    padding: 6px 8px !important;
+    font-size: 8.5pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-signatures-area {
+    margin-top: 30px !important;
+  }
+
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high {
+    font-size: 9.5pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-header {
+    margin-bottom: 8px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-billing-details {
+    margin-bottom: 8px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table {
+    margin-bottom: 10px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table th {
+    padding: 4px 6px !important;
+    font-size: 7.5pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table td {
+    padding: 4px 6px !important;
+    font-size: 8pt !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-signatures-area {
+    margin-top: 20px !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .signature-line {
+    margin-top: 30px !important;
   }
   
   /* Ensure backgrounds render appropriately in PDFs */
