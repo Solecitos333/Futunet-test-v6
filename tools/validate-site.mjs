@@ -28,8 +28,25 @@ async function validateReference(sourceFile, rawReference) {
 for (const fileName of htmlFiles) {
   const fullPath = path.join(projectRoot, fileName);
   const content = await fs.readFile(fullPath, 'utf8');
+  const markupOnly = content.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   if (content.includes('</noscript></noscript>')) errors.push(`${fileName}: cierre noscript duplicado`);
   if (/\b(?:src|href)\s*=\s*["']\s*["']/i.test(content)) errors.push(`${fileName}: referencia src/href vacía`);
+
+  const ids = [...markupOnly.matchAll(/\bid\s*=\s*["']([^"']+)["']/gi)].map(match => match[1]);
+  const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
+  if (duplicateIds.length) errors.push(`${fileName}: IDs duplicados (${duplicateIds.join(', ')})`);
+
+  let formDepth = 0;
+  for (const match of markupOnly.matchAll(/<\/?form\b[^>]*>/gi)) {
+    if (/^<\/form/i.test(match[0])) {
+      formDepth--;
+      if (formDepth < 0) errors.push(`${fileName}: cierre de formulario sin apertura`);
+    } else {
+      formDepth++;
+      if (formDepth > 1) errors.push(`${fileName}: formularios anidados`);
+    }
+  }
+  if (formDepth !== 0) errors.push(`${fileName}: etiquetas form desbalanceadas`);
 
   const attributePattern = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
   for (const match of content.matchAll(attributePattern)) {

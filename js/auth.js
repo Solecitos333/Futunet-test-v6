@@ -89,8 +89,8 @@
     
     currentUserData = await fetchUserData(cred.user.uid);
 
-    // Check if email is verified OR if the user account is active in Firestore
-    if (!cred.user.emailVerified && (!currentUserData || currentUserData.status !== 'active')) {
+    // Firestore exige correo verificado para cualquier operación privada.
+    if (!cred.user.emailVerified) {
       await getAuth().signOut();
       currentUserData = null;
       var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
@@ -100,17 +100,37 @@
 
     // Verify companyCode if provided
     if (companyCode) {
-      const codeUpper = companyCode.trim().toUpperCase();
-      if (!currentUserData.companyCode) {
-        // Self-heal: set the company code entered by the user
-        currentUserData.companyCode = codeUpper;
-        await getDB().collection('users').doc(cred.user.uid).update({ companyCode: codeUpper });
-      } else if (currentUserData.companyCode.toUpperCase() !== codeUpper) {
+      const codeUpper = companyCode.trim().toUpperCase() === 'FUTUNET' ? 'FUTUNETSRL' : companyCode.trim().toUpperCase();
+      const supportedCompanies = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+      const roles = Array.from(new Set([
+        currentUserData ? (currentUserData.role || 'user') : 'user',
+        ...((currentUserData && Array.isArray(currentUserData.roles)) ? currentUserData.roles : [])
+      ]));
+      const isPlatformSuperAdmin = roles.includes('superadmin') && currentUserData && !currentUserData.companyCode;
+
+      if (!supportedCompanies.includes(codeUpper)) {
+        await getAuth().signOut();
+        currentUserData = null;
+        var unsupportedErr = new Error('El código de empresa no corresponde a una empresa habilitada.');
+        unsupportedErr.code = 'auth/unsupported-company-code';
+        throw unsupportedErr;
+      }
+
+      if ((!currentUserData || !currentUserData.companyCode) && !isPlatformSuperAdmin) {
+        await getAuth().signOut();
+        currentUserData = null;
+        var unassignedErr = new Error('Esta cuenta todavía no ha sido asignada a una empresa. Solicita acceso a un administrador.');
+        unassignedErr.code = 'auth/company-not-assigned';
+        throw unassignedErr;
+      } else if (currentUserData.companyCode &&
+                 (currentUserData.companyCode.toUpperCase() === 'FUTUNET' ? 'FUTUNETSRL' : currentUserData.companyCode.toUpperCase()) !== codeUpper) {
         await getAuth().signOut();
         currentUserData = null;
         var err = new Error('El código de empresa es incorrecto para este usuario.');
         err.code = 'auth/invalid-company-code';
         throw err;
+      } else if (isPlatformSuperAdmin) {
+        localStorage.setItem('active_company_code', codeUpper);
       }
     }
 

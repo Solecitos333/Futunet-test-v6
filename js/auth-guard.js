@@ -72,8 +72,21 @@
      */
     requireErpAccess: function (minRole, callback) {
       this.requireAuth(function (user, userData) {
-        const roles = (userData && Array.isArray(userData.roles)) ? userData.roles : [userData ? (userData.role || 'user') : 'user'];
-        const activeCompany = (localStorage.getItem('active_company_code') || '').toLowerCase();
+        const roles = Array.from(new Set([
+          userData ? (userData.role || 'user') : 'user',
+          ...((userData && Array.isArray(userData.roles)) ? userData.roles : [])
+        ]));
+        const assignedCompany = userData && userData.companyCode
+          ? String(userData.companyCode).toLowerCase().replace(/^futunet$/, 'futunetsrl')
+          : '';
+        const activeCompany = assignedCompany || (localStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
+        const supportedCompanies = ['creaticos', 'futunetsrl', 'panitas'];
+
+        if (!supportedCompanies.includes(activeCompany)) {
+          window.location.href = 'mi-cuenta.html';
+          return;
+        }
+        if (assignedCompany) localStorage.setItem('active_company_code', activeCompany.toUpperCase());
 
         // Platform superadmins can access any ERP
         if (roles.includes('superadmin') && userData && !userData.companyCode) {

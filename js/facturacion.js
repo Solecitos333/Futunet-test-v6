@@ -6,17 +6,44 @@
 window.ERPBilling = (function () {
   'use strict';
 
-  // Tenant Config
-  const activeCompanyCode = (localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
-  const isCreaticos = activeCompanyCode === 'CREATICOS';
-  const isPanitas = activeCompanyCode === 'PANITAS';
+  const BillingCore = window.ERPBillingCore;
+  if (!BillingCore) throw new Error('No se pudo cargar el núcleo de cálculos de facturación.');
 
-  const collectionClients = isCreaticos ? 'creaticos_clients' : (isPanitas ? 'panitas_clients' : 'futunet_clients');
-  const collectionInvoices = isCreaticos ? 'creaticos_invoices' : (isPanitas ? 'panitas_invoices' : 'futunet_invoices');
-  const collectionPayments = isCreaticos ? 'creaticos_payments' : (isPanitas ? 'panitas_payments' : 'futunet_payments');
-  const collectionSettings = isCreaticos ? 'creaticos_settings' : (isPanitas ? 'panitas_settings' : 'futunet_settings');
-  const collectionCashSessions = isCreaticos ? 'creaticos_cash_sessions' : (isPanitas ? 'panitas_cash_sessions' : 'futunet_cash_sessions');
-  const collectionProducts = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
+  // Tenant Config
+  const SUPPORTED_COMPANIES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+  let activeCompanyCode = 'CREATICOS';
+  let isCreaticos = true;
+  let isPanitas = false;
+  let collectionClients = '';
+  let collectionInvoices = '';
+  let collectionPayments = '';
+  let collectionSettings = '';
+  let collectionSecrets = '';
+  let collectionCashSessions = '';
+  let collectionProducts = '';
+
+  function configureTenant(userData) {
+    const rawAssignedCode = userData && userData.companyCode ? String(userData.companyCode).toUpperCase() : '';
+    const assignedCode = rawAssignedCode === 'FUTUNET' ? 'FUTUNETSRL' : rawAssignedCode;
+    const requestedCode = assignedCode || String(localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
+    if (!SUPPORTED_COMPANIES.includes(requestedCode)) {
+      throw new Error('La empresa seleccionada no está habilitada en este sistema.');
+    }
+
+    activeCompanyCode = requestedCode;
+    localStorage.setItem('active_company_code', activeCompanyCode);
+    isCreaticos = activeCompanyCode === 'CREATICOS';
+    isPanitas = activeCompanyCode === 'PANITAS';
+
+    const prefix = isCreaticos ? 'creaticos' : (isPanitas ? 'panitas' : 'futunet');
+    collectionClients = `${prefix}_clients`;
+    collectionInvoices = `${prefix}_invoices`;
+    collectionPayments = `${prefix}_payments`;
+    collectionSettings = `${prefix}_settings`;
+    collectionSecrets = `${prefix}_secrets`;
+    collectionCashSessions = `${prefix}_cash_sessions`;
+    collectionProducts = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
+  }
 
   // Firestore DB reference
   function getDB() { return window.FutunetFirebase.db; }
@@ -96,6 +123,9 @@ window.ERPBilling = (function () {
   let posNcfType = 'none';
   let posDocType = 'invoice';
   let posActiveCategory = 'all';
+  let currentProfileClientId = '';
+  let isProcessingPosSale = false;
+  let lastFocusedBeforeModal = null;
 
   // Pagination for Invoices
   let invoiceCurrentPage = 1;
@@ -104,6 +134,7 @@ window.ERPBilling = (function () {
   // Edit State
   let editingInvoiceId = null;
   let editingInvoiceNumber = null;
+  let conversionSourceId = null;
   let isInitializingForm = false;
 
   // Security Context
@@ -111,8 +142,12 @@ window.ERPBilling = (function () {
   let isUserAdmin = false;
 
   async function init(userData) {
+    configureTenant(userData);
     currentUser = userData;
-    const roles = (userData && Array.isArray(userData.roles)) ? userData.roles : [userData ? (userData.role || 'user') : 'user'];
+    const roles = Array.from(new Set([
+      userData ? (userData.role || 'user') : 'user',
+      ...((userData && Array.isArray(userData.roles)) ? userData.roles : [])
+    ]));
     const activeCompany = activeCompanyCode.toLowerCase();
     const tenantAdminRole = activeCompany + '_admin';
     isUserAdmin = roles.includes('superadmin') || 
@@ -120,9 +155,16 @@ window.ERPBilling = (function () {
                   roles.includes('erp_admin') || 
                   roles.includes(tenantAdminRole);
 
+    document.querySelectorAll('[data-rnc-lookup]').forEach(button => {
+      button.hidden = !isUserAdmin;
+    });
+    const productFormTab = document.getElementById('subtab-btn-products-form');
+    if (productFormTab) productFormTab.hidden = !isUserAdmin;
+
     console.log('%c✏️ Initializing ERP Billing System for ' + activeCompanyCode + '...', 'color: #0a70a2; font-weight: bold;');
     try {
       applyTenantTheme();
+      initializeModalAccessibility();
       await loadSettings();
       await fetchAllData();
       await checkActiveCashSession();
@@ -254,6 +296,29 @@ window.ERPBilling = (function () {
     }
   }
 
+  const NCF_FIELDS = {
+    B01: { prefix: 'ncfB01Prefix', sequence: 'ncfB01Seq' },
+    B02: { prefix: 'ncfB02Prefix', sequence: 'ncfB02Seq' },
+    B12: { prefix: 'ncfB12Prefix', sequence: 'ncfB12Seq' },
+    B14: { prefix: 'ncfB14Prefix', sequence: 'ncfB14Seq' },
+    B15: { prefix: 'ncfB15Prefix', sequence: 'ncfB15Seq' }
+  };
+
+  function normalizeNcfSettings(target) {
+    Object.entries(NCF_FIELDS).forEach(([type, fields]) => {
+      target[fields.prefix] = BillingCore.normalizeNcfPrefix(target[fields.prefix], type);
+      const sequence = Number(target[fields.sequence]);
+      target[fields.sequence] = Number.isInteger(sequence) && sequence > 0 ? sequence : 1;
+    });
+    return target;
+  }
+
+  function buildNcfFromSettings(sourceSettings, type) {
+    const fields = NCF_FIELDS[type];
+    if (!fields) return '';
+    return BillingCore.buildNcf(type, sourceSettings[fields.prefix], sourceSettings[fields.sequence]);
+  }
+
   // Load Settings (Ensure default document in Firestore if not existing)
   async function loadSettings() {
     const docRef = getDB().collection(collectionSettings).doc('general');
@@ -264,22 +329,22 @@ window.ERPBilling = (function () {
         // Ensure name is updated to Creaticos Group in Firestore if it was the old one
         if (settings.name === 'Creaticos Papelería y Sublimados' || settings.name === 'Creaticos Papelería') {
           settings.name = 'Creaticos Group';
-          await docRef.update({ name: 'Creaticos Group' });
+          if (isUserAdmin) await docRef.update({ name: 'Creaticos Group' });
         }
         // Ensure RNC is updated to the real one
         if (settings.rnc === '131-78945-2') {
           settings.rnc = '133-73669-1';
-          await docRef.update({ rnc: '133-73669-1' });
+          if (isUserAdmin) await docRef.update({ rnc: '133-73669-1' });
         }
       } else {
         // Futunet migration check
         if (settings.name === 'Futunet' || settings.name === 'Futunet Suministros SRL') {
           settings.name = 'Futunet Suministros';
-          await docRef.update({ name: 'Futunet Suministros' });
+          if (isUserAdmin) await docRef.update({ name: 'Futunet Suministros' });
         }
         if (settings.rnc === '131-78945-2') {
           settings.rnc = '132-70207-7';
-          await docRef.update({ rnc: '132-70207-7' });
+          if (isUserAdmin) await docRef.update({ rnc: '132-70207-7' });
         }
       }
       // Backward compatibility for quote settings
@@ -287,11 +352,11 @@ window.ERPBilling = (function () {
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
       if (settings.proformaPrefix === undefined) settings.proformaPrefix = 'PROF-';
       if (settings.nextProformaNum === undefined) settings.nextProformaNum = 1001;
-      if (settings.ncfB14Prefix === undefined) settings.ncfB14Prefix = 'B1400000';
+      if (settings.ncfB14Prefix === undefined) settings.ncfB14Prefix = 'B14';
       if (settings.ncfB14Seq === undefined) settings.ncfB14Seq = 1;
-      if (settings.ncfB15Prefix === undefined) settings.ncfB15Prefix = 'B1500000';
+      if (settings.ncfB15Prefix === undefined) settings.ncfB15Prefix = 'B15';
       if (settings.ncfB15Seq === undefined) settings.ncfB15Seq = 1;
-      if (settings.ncfB12Prefix === undefined) settings.ncfB12Prefix = 'B1200000';
+      if (settings.ncfB12Prefix === undefined) settings.ncfB12Prefix = 'B12';
       if (settings.ncfB12Seq === undefined) settings.ncfB12Seq = 1;
     } else {
       // Default initial settings based on tenant
@@ -308,15 +373,15 @@ window.ERPBilling = (function () {
           nextQuoteNum: 1001,
           proformaPrefix: 'PROF-',
           nextProformaNum: 1001,
-          ncfB01Prefix: 'B0100000',
+          ncfB01Prefix: 'B01',
           ncfB01Seq: 1,
-          ncfB02Prefix: 'B0200000',
+          ncfB02Prefix: 'B02',
           ncfB02Seq: 1,
-          ncfB14Prefix: 'B1400000',
+          ncfB14Prefix: 'B14',
           ncfB14Seq: 1,
-          ncfB15Prefix: 'B1500000',
+          ncfB15Prefix: 'B15',
           ncfB15Seq: 1,
-          ncfB12Prefix: 'B1200000',
+          ncfB12Prefix: 'B12',
           ncfB12Seq: 1,
           defaultTax: 18
         };
@@ -333,15 +398,15 @@ window.ERPBilling = (function () {
           nextQuoteNum: 1001,
           proformaPrefix: 'PROF-',
           nextProformaNum: 1001,
-          ncfB01Prefix: 'B0100000',
+          ncfB01Prefix: 'B01',
           ncfB01Seq: 1,
-          ncfB02Prefix: 'B0200000',
+          ncfB02Prefix: 'B02',
           ncfB02Seq: 1,
-          ncfB14Prefix: 'B1400000',
+          ncfB14Prefix: 'B14',
           ncfB14Seq: 1,
-          ncfB15Prefix: 'B1500000',
+          ncfB15Prefix: 'B15',
           ncfB15Seq: 1,
-          ncfB12Prefix: 'B1200000',
+          ncfB12Prefix: 'B12',
           ncfB12Seq: 1,
           defaultTax: 0
         };
@@ -358,15 +423,15 @@ window.ERPBilling = (function () {
           nextQuoteNum: 1001,
           proformaPrefix: 'PROF-',
           nextProformaNum: 1001,
-          ncfB01Prefix: 'B0100000',
+          ncfB01Prefix: 'B01',
           ncfB01Seq: 1,
-          ncfB02Prefix: 'B0200000',
+          ncfB02Prefix: 'B02',
           ncfB02Seq: 1,
-          ncfB14Prefix: 'B1400000',
+          ncfB14Prefix: 'B14',
           ncfB14Seq: 1,
-          ncfB15Prefix: 'B1500000',
+          ncfB15Prefix: 'B15',
           ncfB15Seq: 1,
-          ncfB12Prefix: 'B1200000',
+          ncfB12Prefix: 'B12',
           ncfB12Seq: 1,
           defaultTax: 18
         };
@@ -374,6 +439,29 @@ window.ERPBilling = (function () {
       // Save it directly to Firestore so the document is created
       await docRef.set(settings);
     }
+    normalizeNcfSettings(settings);
+
+    const legacyRncApiKey = String(settings.rncApiKey || '').trim();
+    settings.rncApiKey = '';
+    if (isUserAdmin) {
+      try {
+        const secretRef = getDB().collection(collectionSecrets).doc('general');
+        const secretDoc = await secretRef.get();
+        const storedSecret = secretDoc.exists ? String(secretDoc.data().rncApiKey || '').trim() : '';
+        settings.rncApiKey = storedSecret || legacyRncApiKey;
+
+        if (legacyRncApiKey) {
+          if (!storedSecret) {
+            await secretRef.set({ rncApiKey: legacyRncApiKey }, { merge: true });
+          }
+          await docRef.update({ rncApiKey: firebase.firestore.FieldValue.delete() });
+        }
+      } catch (secretError) {
+        console.warn('No se pudo cargar o migrar el token privado de consulta RNC.', secretError);
+        settings.rncApiKey = legacyRncApiKey;
+      }
+    }
+
     updateBrandingText();
   }
 
@@ -487,7 +575,7 @@ window.ERPBilling = (function () {
         panitasSnap.forEach(doc => {
           products.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
         });
-      } else {
+      } else if (isCreaticos) {
         const productsSnap = await getDB().collection('creaticos_products').get();
         creaticosProducts = [];
         productsSnap.forEach(doc => {
@@ -504,15 +592,23 @@ window.ERPBilling = (function () {
         const sourceEl = document.getElementById('products-source-filter');
         const source = sourceEl ? sourceEl.value : (isCreaticos ? 'creaticos' : 'futunet');
         products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+      } else {
+        const futunetSnap = await getDB().collection('products').get();
+        futunetProducts = [];
+        creaticosProducts = [];
+        futunetSnap.forEach(doc => {
+          futunetProducts.push({ id: doc.id, ...doc.data(), _isCreaticos: false });
+        });
+        products = futunetProducts;
       }
 
-      const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').limit(200).get();
+      const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').get();
       invoices = [];
       invoicesSnap.forEach(doc => {
         invoices.push({ id: doc.id, ...doc.data() });
       });
 
-      const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').limit(200).get();
+      const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').get();
       payments = [];
       paymentsSnap.forEach(doc => {
         payments.push({ id: doc.id, ...doc.data() });
@@ -547,6 +643,32 @@ window.ERPBilling = (function () {
           list.style.display = 'none';
         }
       });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      const modal = document.querySelector('.admin-modal.is-open');
+      if (!modal) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal(modal.id);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const focusable = getModalFocusable(modal);
+      if (focusable.length === 0) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
 
     // Barcode scanner keyboard wedge global listener
@@ -587,6 +709,9 @@ window.ERPBilling = (function () {
 
   // Set up listeners for automatic RNC lookup
   function setupRncAutoLookup() {
+    if (!isUserAdmin) return;
+    const apiKey = settings && settings.rncApiKey ? String(settings.rncApiKey).trim() : '';
+    if (!apiKey) return;
     const inputs = [
       { rncId: 'form-invoice-client-rnc', nameId: 'form-invoice-client-name', idId: 'form-invoice-client-id', context: 'invoice-form' },
       { rncId: 'form-client-rnc', nameId: 'form-client-name', idId: 'form-client-id', context: 'client-form' }
@@ -649,7 +774,7 @@ window.ERPBilling = (function () {
         if (lookupTimeout) clearTimeout(lookupTimeout);
         lookupTimeout = setTimeout(async function() {
           try {
-            const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc);
+            const url = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + '&token=' + encodeURIComponent(apiKey);
             const res = await fetch(url);
             if (!res.ok) throw new Error('Error API');
             const data = await res.json();
@@ -710,19 +835,15 @@ window.ERPBilling = (function () {
 
   // Format Dates
   function formatDate(timestamp) {
-    if (!timestamp) return '';
-    // Handle Firestore timestamp vs JS Date/string
-    let date = timestamp;
-    if (timestamp.seconds) {
-      date = new Date(timestamp.seconds * 1000);
-    } else if (typeof timestamp === 'string') {
-      date = new Date(timestamp);
-    }
-    return date.toLocaleDateString('es-DO', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
+    return BillingCore.formatDate(timestamp, 'es-DO');
+  }
+
+  function isRevenueInvoice(invoice) {
+    return invoice && invoice.docType === 'invoice' && invoice.status !== 'cancelled';
+  }
+
+  function invoiceBalance(invoice) {
+    return Math.max(0, BillingCore.roundMoney(Number(invoice.total || 0) - Number(invoice.paidAmount || 0)));
   }
 
   // ═══════════════════════════════════════════
@@ -736,13 +857,13 @@ window.ERPBilling = (function () {
 
     // Filter cancelled invoices from total calculations
     invoices.forEach(inv => {
-      if (inv.status !== 'cancelled') {
+      if (isRevenueInvoice(inv)) {
         totalBilled += Number(inv.total || 0);
         totalPaid += Number(inv.paidAmount || 0);
       }
     });
 
-    const totalPending = totalBilled - totalPaid;
+    const totalPending = Math.max(0, BillingCore.roundMoney(totalBilled - totalPaid));
 
     // Set stats text
     document.getElementById('stat-total-billed').textContent = formatMoney(totalBilled);
@@ -754,7 +875,7 @@ window.ERPBilling = (function () {
     const recentBody = document.getElementById('db-recent-invoices-body');
     recentBody.innerHTML = '';
     
-    const recent = invoices.slice(0, 5);
+    const recent = invoices.filter(isRevenueInvoice).slice(0, 5);
     if (recent.length === 0) {
       recentBody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px;">No hay facturas registradas</td></tr>`;
     } else {
@@ -800,12 +921,12 @@ window.ERPBilling = (function () {
     }
 
     invoices.forEach(inv => {
-      if (inv.status === 'cancelled') return;
+      if (!isRevenueInvoice(inv)) return;
       let date = null;
       if (inv.createdAt && inv.createdAt.seconds) {
         date = new Date(inv.createdAt.seconds * 1000);
       } else if (inv.date) {
-        date = new Date(inv.date);
+        date = BillingCore.parseDateOnly(inv.date);
       }
       if (date) {
         const key = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
@@ -859,12 +980,15 @@ window.ERPBilling = (function () {
     const categorySales = {};
 
     invoices.forEach(inv => {
-      if (inv.status === 'cancelled') return;
+      if (!isRevenueInvoice(inv)) return;
       if (Array.isArray(inv.items)) {
         inv.items.forEach(item => {
-          const prod = products.find(p => p.id === item.productId) ||
-                       creaticosProducts.find(p => p.id === item.productId) ||
-                       futunetProducts.find(p => p.id === item.productId);
+          const productId = String(item.productId || '');
+          const sourceMatch = /^(creaticos|futunet|panitas)_(.+)$/.exec(productId);
+          const rawProductId = sourceMatch ? sourceMatch[2] : productId;
+          const prod = products.find(p => p.id === rawProductId) ||
+                       creaticosProducts.find(p => p.id === rawProductId) ||
+                       futunetProducts.find(p => p.id === rawProductId);
           
           let category = 'Otros';
           if (prod && prod.category) {
@@ -872,7 +996,8 @@ window.ERPBilling = (function () {
           } else if (isPanitas) {
             category = 'Comida';
           } else {
-            const isCr = creaticosProducts.some(p => p.id === item.productId);
+            const isCr = (sourceMatch && sourceMatch[1] === 'creaticos') ||
+                         creaticosProducts.some(p => p.id === rawProductId);
             category = isCr ? 'Servicios Creaticos' : 'Servicios Futunet';
           }
           
@@ -942,7 +1067,9 @@ window.ERPBilling = (function () {
     let transferSales = 0;
     let creditSales = 0;
 
+    const validInvoiceIds = new Set(invoices.filter(isRevenueInvoice).map(invoice => invoice.id));
     payments.forEach(pay => {
+      if (!validInvoiceIds.has(pay.invoiceId)) return;
       const method = String(pay.method || 'Efectivo').toLowerCase();
       const amount = Number(pay.amount || 0);
 
@@ -958,8 +1085,9 @@ window.ERPBilling = (function () {
     });
 
     invoices.forEach(inv => {
-      if (inv.status === 'cancelled') return;
-      if (inv.paymentTerm === 'Crédito') {
+      if (!isRevenueInvoice(inv)) return;
+      const paymentTerms = inv.paymentTerms || inv.paymentTerm || '';
+      if (paymentTerms === 'Crédito') {
         const total = Number(inv.total || 0);
         const paid = Number(inv.paidAmount || 0);
         const balance = total - paid;
@@ -997,7 +1125,9 @@ window.ERPBilling = (function () {
       // 1. Status Filter
       let matchStatus = true;
       if (statusFilter !== 'all') {
-        matchStatus = (inv.status === statusFilter);
+        matchStatus = statusFilter === 'quote' || statusFilter === 'proforma'
+          ? inv.docType === statusFilter
+          : inv.status === statusFilter;
       }
 
       // 2. NCF Filter
@@ -1014,17 +1144,17 @@ window.ERPBilling = (function () {
       let matchDate = true;
       let invDate = null;
       if (inv.date) {
-        invDate = new Date(inv.date);
+        invDate = BillingCore.parseDateOnly(inv.date);
       }
       if (invDate) {
         invDate.setHours(0,0,0,0);
         if (startDateVal) {
-          const startDate = new Date(startDateVal);
+          const startDate = BillingCore.parseDateOnly(startDateVal);
           startDate.setHours(0,0,0,0);
           if (invDate < startDate) matchDate = false;
         }
         if (endDateVal) {
-          const endDate = new Date(endDateVal);
+          const endDate = BillingCore.parseDateOnly(endDateVal);
           endDate.setHours(0,0,0,0);
           if (invDate > endDate) matchDate = false;
         }
@@ -1075,16 +1205,23 @@ window.ERPBilling = (function () {
         statusBadge = '<span class="admin-badge" style="background:#fef3c7; color:#d97706; border: 1px solid #fde68a;">Proforma</span>';
       } else if (inv.status === 'paid') {
         statusBadge = '<span class="admin-badge badge-paid">Pagada</span>';
-      } else if (inv.status === 'pending') {
-        const isOverdue = new Date(inv.dueDate) < new Date() && inv.paidAmount < inv.total;
-        statusBadge = isOverdue 
+      } else if (inv.status === 'pending' || inv.status === 'unpaid' || inv.status === 'partial') {
+        const balanceValue = invoiceBalance(inv);
+        const overdue = BillingCore.isOverdue(inv.dueDate, balanceValue);
+        statusBadge = overdue
           ? '<span class="admin-badge badge-overdue">Vencida</span>' 
-          : '<span class="admin-badge badge-pending">Pendiente</span>';
+          : inv.status === 'partial'
+            ? '<span class="admin-badge badge-partial">Abono parcial</span>'
+            : inv.status === 'unpaid'
+              ? '<span class="admin-badge badge-credit">A crédito</span>'
+              : '<span class="admin-badge badge-pending">Pendiente</span>';
       } else if (inv.status === 'cancelled') {
         statusBadge = '<span class="admin-badge badge-cancelled">Anulada</span>';
+      } else if (inv.status === 'converted') {
+        statusBadge = '<span class="admin-badge badge-converted">Convertida</span>';
       }
 
-      const balance = Number(inv.total) - Number(inv.paidAmount || 0);
+      const balance = invoiceBalance(inv);
 
       let actionsHtml = `
         <div class="table-actions">
@@ -1096,9 +1233,10 @@ window.ERPBilling = (function () {
           </button>
       `;
 
-      if (inv.status !== 'cancelled') {
-        // Edit button is available for all documents (quotes, proformas, invoices)
-        actionsHtml += `
+      if (inv.status !== 'cancelled' && inv.status !== 'converted') {
+        const canEdit = inv.docType === 'quote' || inv.docType === 'proforma' ||
+          (inv.docType === 'invoice' && !inv.ncf && Number(inv.paidAmount || 0) === 0);
+        if (canEdit) actionsHtml += `
           <button class="table-btn table-btn-secondary" title="Editar" onclick="ERPBilling.editQuote('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
           </button>
@@ -1110,7 +1248,7 @@ window.ERPBilling = (function () {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           `;
-        } else if (inv.status === 'pending' && balance > 0) {
+        } else if (inv.docType === 'invoice' && balance > 0) {
           actionsHtml += `
             <button class="table-btn table-btn-success" title="Registrar Cobro" onclick="ERPBilling.openRegisterPaymentFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
@@ -1118,7 +1256,7 @@ window.ERPBilling = (function () {
           `;
         }
 
-        actionsHtml += `
+        if (isUserAdmin && inv.docType === 'invoice') actionsHtml += `
           <button class="table-btn table-btn-danger" title="Anular Factura" onclick="ERPBilling.cancelInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
@@ -1176,6 +1314,7 @@ window.ERPBilling = (function () {
   function clearInvoiceForm() {
     editingInvoiceId = null;
     editingInvoiceNumber = null;
+    conversionSourceId = null;
 
     document.getElementById('form-invoice-id').value = '';
     document.getElementById('form-invoice-client-name').value = '';
@@ -1184,12 +1323,12 @@ window.ERPBilling = (function () {
     
     // Set default dates
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = BillingCore.toLocalDateInput(today);
     document.getElementById('form-invoice-date').value = todayStr;
     
     const dueDate = new Date();
     dueDate.setDate(today.getDate() + 15);
-    document.getElementById('form-invoice-due-date').value = dueDate.toISOString().split('T')[0];
+    document.getElementById('form-invoice-due-date').value = BillingCore.toLocalDateInput(dueDate);
 
     document.getElementById('form-invoice-ncf-type').value = 'none';
     document.getElementById('form-invoice-ncf').value = '';
@@ -1273,20 +1412,10 @@ window.ERPBilling = (function () {
     let overrideStr = 'false';
     let taxPercent = settings ? Number(settings.defaultTax) : 18;
     if (itemData) {
-      const price = Number(itemData.price) || 0;
-      const qty = Number(itemData.qty) || 1;
-      const taxVal = Number(itemData.tax) || 0;
-      if (taxVal > 0 && taxVal <= 100) {
-        // Old document percentage format (e.g. 18 or 16), calculate it
-        rowTaxAmount = price * qty * (taxVal / 100);
-        overrideStr = 'false';
-        taxPercent = taxVal;
-      } else {
-        // New document amount format
-        rowTaxAmount = taxVal;
-        overrideStr = 'true';
-        taxPercent = price * qty > 0 ? Math.round((taxVal / (price * qty)) * 100) : (settings ? Number(settings.defaultTax) : 18);
-      }
+      const resolvedTax = BillingCore.resolveLineTax(itemData);
+      rowTaxAmount = resolvedTax.amount;
+      overrideStr = resolvedTax.mode === 'amount' ? 'true' : 'false';
+      taxPercent = resolvedTax.rate;
     }
 
     tr.innerHTML = `
@@ -1347,10 +1476,12 @@ window.ERPBilling = (function () {
       return;
     }
 
-    const allProds = [].concat(
-      creaticosProducts.map(p => ({ ...p, _src: 'creaticos' })),
-      futunetProducts.map(p => ({ ...p, _src: 'futunet' }))
-    );
+    const allProds = isPanitas
+      ? products.map(p => ({ ...p, _src: 'panitas' }))
+      : [].concat(
+          creaticosProducts.map(p => ({ ...p, _src: 'creaticos' })),
+          futunetProducts.map(p => ({ ...p, _src: 'futunet' }))
+        );
 
     const seen = new Set();
     const uniqueProds = allProds.filter(p => {
@@ -1385,7 +1516,7 @@ window.ERPBilling = (function () {
 
       const pName = p.name || p.title || '';
       const pPrice = isNaN(Number(p.price)) ? 0 : Number(p.price);
-      const srcLabel = p._src === 'creaticos' ? 'Creaticos' : 'Futunet';
+      const srcLabel = p._src === 'creaticos' ? 'Creaticos' : (p._src === 'panitas' ? 'Los Panitas' : 'Futunet');
       const codeLabel = p.sku ? ` [SKU: ${p.sku}]` : '';
 
       item.textContent = `${pName} (${formatMoney(pPrice)}) - ${srcLabel}${codeLabel}`;
@@ -1403,6 +1534,7 @@ window.ERPBilling = (function () {
           const qty = Number(tr.querySelector('.row-qty').value) || 1;
           taxInput.value = (pPrice * qty * (productTaxPercent / 100)).toFixed(2);
           taxInput.dataset.override = 'false';
+          taxInput.dataset.percent = String(productTaxPercent);
         }
 
         listEl.style.display = 'none';
@@ -1425,6 +1557,8 @@ window.ERPBilling = (function () {
       listEl.style.display = 'none';
     };
     listEl.appendChild(customItem);
+
+    if (!isUserAdmin) return;
 
     const createItem = document.createElement('div');
     createItem.className = 'autocomplete-item';
@@ -1570,32 +1704,29 @@ window.ERPBilling = (function () {
       ncfInput.value = '';
       ncfInput.removeAttribute('readonly');
       ncfInput.focus();
-    } else if (type === 'B01') {
+    } else if (NCF_FIELDS[type]) {
       ncfInput.setAttribute('readonly', 'true');
-      const sequence = String(settings.ncfB01Seq).padStart(8, '0');
-      ncfInput.value = settings.ncfB01Prefix + sequence;
-    } else if (type === 'B02') {
-      ncfInput.setAttribute('readonly', 'true');
-      const sequence = String(settings.ncfB02Seq).padStart(8, '0');
-      ncfInput.value = settings.ncfB02Prefix + sequence;
-    } else if (type === 'B14') {
-      ncfInput.setAttribute('readonly', 'true');
-      const sequence = String(settings.ncfB14Seq || 1).padStart(8, '0');
-      ncfInput.value = (settings.ncfB14Prefix || 'B1400000') + sequence;
-    } else if (type === 'B15') {
-      ncfInput.setAttribute('readonly', 'true');
-      const sequence = String(settings.ncfB15Seq || 1).padStart(8, '0');
-      ncfInput.value = (settings.ncfB15Prefix || 'B1500000') + sequence;
-    } else if (type === 'B12') {
-      ncfInput.setAttribute('readonly', 'true');
-      const sequence = String(settings.ncfB12Seq || 1).padStart(8, '0');
-      ncfInput.value = (settings.ncfB12Prefix || 'B1200000') + sequence;
+      try {
+        ncfInput.value = buildNcfFromSettings(settings, type);
+      } catch (error) {
+        ncfInput.value = '';
+        showToast(error.message, 'danger');
+      }
     }
   }
 
   // Submit and Save Invoice
   async function saveInvoice(e) {
     e.preventDefault();
+    const submitButton = e.submitter || document.querySelector('#invoice-editor-form button[type="submit"]');
+    if (submitButton && submitButton.disabled) return;
+    const originalButtonText = submitButton ? submitButton.textContent : '';
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Guardando...';
+    }
+
+    try {
 
     const docType = document.getElementById('form-invoice-doc-type').value;
     let clientId = document.getElementById('form-invoice-client-id').value;
@@ -1614,6 +1745,23 @@ window.ERPBilling = (function () {
     const dueDate = document.getElementById('form-invoice-due-date').value;
     const ncfType = document.getElementById('form-invoice-ncf-type').value;
     const ncf = document.getElementById('form-invoice-ncf').value.trim();
+
+    if (!['invoice', 'quote', 'proforma'].includes(docType) || !date || !dueDate) {
+      showToast('Completa el tipo de documento y las fechas requeridas.', 'danger');
+      return;
+    }
+    if (dueDate < date) {
+      showToast('La fecha de vencimiento no puede ser anterior a la fecha de emisión.', 'danger');
+      return;
+    }
+    if (docType === 'invoice' && ncfType === 'manual' && !BillingCore.isValidNcf(ncf)) {
+      showToast('El NCF manual debe tener 11 posiciones, o 13 si es electrónico.', 'danger');
+      return;
+    }
+    if (docType === 'invoice' && ncfType === 'manual' && invoices.some(invoice => invoice.id !== editingInvoiceId && invoice.ncf === ncf)) {
+      showToast('Ese NCF ya está asociado a otro documento.', 'danger');
+      return;
+    }
     
     const divisionEl = document.getElementById('form-invoice-division');
     const division = divisionEl ? divisionEl.value : 'general';
@@ -1636,15 +1784,20 @@ window.ERPBilling = (function () {
       const searchInput = tr.querySelector('.row-product-search');
       const productIdInput = tr.querySelector('.row-product-id');
       const description = searchInput ? searchInput.value.trim() : '';
-      const price = Number(tr.querySelector('.row-price').value) || 0;
-      const qty = Number(tr.querySelector('.row-qty').value) || 1;
-      const lineTax = Number(tr.querySelector('.row-tax').value) || 0;
+      const price = Number(tr.querySelector('.row-price').value);
+      const qty = Number(tr.querySelector('.row-qty').value);
+      const lineTax = Number(tr.querySelector('.row-tax').value);
       
       const discountInput = tr.querySelector('.row-discount');
-      const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
+      const discountPct = discountInput ? Number(discountInput.value) : 0;
 
       if (!description) {
         showToast('Todos los ítems agregados deben tener una descripción.', 'danger');
+        return;
+      }
+      if (!Number.isFinite(price) || price < 0 || !Number.isFinite(qty) || qty <= 0 ||
+          !Number.isFinite(lineTax) || lineTax < 0 || !Number.isFinite(discountPct) || discountPct < 0 || discountPct > 100) {
+        showToast('Revisa precio, cantidad, ITBIS y descuento de cada artículo.', 'danger');
         return;
       }
 
@@ -1657,6 +1810,8 @@ window.ERPBilling = (function () {
         price: price,
         qty: qty,
         tax: lineTax,
+        taxMode: tr.querySelector('.row-tax').dataset.override === 'true' ? 'amount' : 'rate',
+        taxRate: Number(tr.querySelector('.row-tax').dataset.percent) || 0,
         discount: discountPct,
         total: lineSub - lineDiscount + lineTax
       });
@@ -1672,6 +1827,20 @@ window.ERPBilling = (function () {
     const totalDiscountAmount = totalRowDiscount + globalDiscountAmount;
     
     const grandTotal = subtotal - totalDiscountAmount + totalItbis;
+    if (!Number.isFinite(grandTotal) || grandTotal <= 0) {
+      showToast('El total del documento debe ser mayor que cero.', 'danger');
+      return;
+    }
+
+    const cleanClientId = clientRnc.replace(/\D/g, '');
+    if (docType === 'invoice' && ['B01', 'B12', 'B14', 'B15'].includes(ncfType) && ![9, 11].includes(cleanClientId.length)) {
+      showToast('Este tipo de comprobante requiere un RNC o cédula válido.', 'danger');
+      return;
+    }
+    if (docType === 'invoice' && ncfType === 'B02' && grandTotal >= 250000 && ![9, 11].includes(cleanClientId.length)) {
+      showToast('Las facturas de consumo desde RD$250,000 requieren la identificación del cliente.', 'danger');
+      return;
+    }
     
     // Generate document ID number
     let invoiceNum = '';
@@ -1683,6 +1852,14 @@ window.ERPBilling = (function () {
       status = docType === 'quote' ? 'quote' : (docType === 'proforma' ? 'proforma' : 'pending');
       const originalDoc = invoices.find(i => i.id === editingInvoiceId);
       if (originalDoc) {
+        if (originalDoc.docType !== docType) {
+          showToast('El tipo de un documento existente no puede cambiarse. Usa la opción Convertir.', 'danger');
+          return;
+        }
+        if (originalDoc.docType === 'invoice' && (originalDoc.ncf || Number(originalDoc.paidAmount || 0) > 0)) {
+          showToast('Una factura fiscal o con cobros no puede editarse. Debe anularse mediante el proceso correspondiente.', 'danger');
+          return;
+        }
         paidAmount = originalDoc.paidAmount || 0;
         status = originalDoc.status || 'pending';
         if (docType !== 'quote' && docType !== 'proforma') {
@@ -1703,6 +1880,11 @@ window.ERPBilling = (function () {
       } else {
         invoiceNum = settings.invoicePrefix + String(settings.nextInvoiceNum);
       }
+    }
+
+    if (paidAmount > grandTotal + 0.01) {
+      showToast('El nuevo total no puede ser menor que los cobros ya registrados.', 'danger');
+      return;
     }
 
     // Document Data
@@ -1735,6 +1917,7 @@ window.ERPBilling = (function () {
       notes: invoiceNotes,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
+    if (conversionSourceId) invoiceData.sourceDocumentId = conversionSourceId;
 
     if (editingInvoiceId) {
       // Save updates to Firestore
@@ -1744,6 +1927,7 @@ window.ERPBilling = (function () {
       const dbRef = getDB();
       const settingsDocRef = dbRef.collection(collectionSettings).doc('general');
       const invoicesCollRef = dbRef.collection(collectionInvoices);
+      const conversionSourceRef = conversionSourceId ? invoicesCollRef.doc(conversionSourceId) : null;
 
       await dbRef.runTransaction(async (transaction) => {
         const settingsDoc = await transaction.get(settingsDocRef);
@@ -1751,6 +1935,17 @@ window.ERPBilling = (function () {
           throw new Error("El documento de configuración de la empresa no existe.");
         }
         
+        const conversionSourceDoc = conversionSourceRef ? await transaction.get(conversionSourceRef) : null;
+        const conversionSourceData = conversionSourceDoc && conversionSourceDoc.exists ? conversionSourceDoc.data() : null;
+        if (conversionSourceDoc && (
+          !conversionSourceData
+          || !['quote', 'proforma'].includes(conversionSourceData.docType)
+          || conversionSourceData.convertedTo
+          || conversionSourceData.status === 'converted'
+        )) {
+          throw new Error('La cotización o proforma ya fue convertida por otro proceso.');
+        }
+
         const freshSettings = settingsDoc.data();
         let freshInvoiceNum = '';
         let freshNcf = '';
@@ -1766,31 +1961,10 @@ window.ERPBilling = (function () {
           freshInvoiceNum = (freshSettings.invoicePrefix || 'CRE-') + String(freshSettings.nextInvoiceNum || 1001);
           settingsUpdates.nextInvoiceNum = (freshSettings.nextInvoiceNum || 1001) + 1;
 
-          if (ncfType !== 'none' && ncfType !== 'manual') {
-            let prefix = '';
-            let seq = 1;
-            if (ncfType === 'B01') {
-              prefix = freshSettings.ncfB01Prefix || 'B0100000';
-              seq = freshSettings.ncfB01Seq || 1;
-              settingsUpdates.ncfB01Seq = seq + 1;
-            } else if (ncfType === 'B02') {
-              prefix = freshSettings.ncfB02Prefix || 'B0200000';
-              seq = freshSettings.ncfB02Seq || 1;
-              settingsUpdates.ncfB02Seq = seq + 1;
-            } else if (ncfType === 'B14') {
-              prefix = freshSettings.ncfB14Prefix || 'B1400000';
-              seq = freshSettings.ncfB14Seq || 1;
-              settingsUpdates.ncfB14Seq = seq + 1;
-            } else if (ncfType === 'B15') {
-              prefix = freshSettings.ncfB15Prefix || 'B1500000';
-              seq = freshSettings.ncfB15Seq || 1;
-              settingsUpdates.ncfB15Seq = seq + 1;
-            } else if (ncfType === 'B12') {
-              prefix = freshSettings.ncfB12Prefix || 'B1200000';
-              seq = freshSettings.ncfB12Seq || 1;
-              settingsUpdates.ncfB12Seq = seq + 1;
-            }
-            freshNcf = prefix + String(seq).padStart(8, '0');
+          if (NCF_FIELDS[ncfType]) {
+            const fields = NCF_FIELDS[ncfType];
+            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix], freshSettings[fields.sequence]);
+            settingsUpdates[fields.sequence] = Number(freshSettings[fields.sequence] || 1) + 1;
           } else if (ncfType === 'manual') {
             freshNcf = ncf; // Keep the manually entered NCF
           }
@@ -1804,6 +1978,13 @@ window.ERPBilling = (function () {
         const newInvoiceDocRef = invoicesCollRef.doc();
         transaction.set(newInvoiceDocRef, invoiceData);
         transaction.update(settingsDocRef, settingsUpdates);
+        if (conversionSourceRef) {
+          transaction.update(conversionSourceRef, {
+            status: 'converted',
+            convertedTo: newInvoiceDocRef.id,
+            convertedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
       });
     }
 
@@ -1817,6 +1998,16 @@ window.ERPBilling = (function () {
     // Go to Invoices list
     switchSubTab('invoices', 'list');
     renderInvoicesTable();
+    showToast('Documento guardado correctamente.', 'success');
+    } catch (error) {
+      console.error('Error saving invoice:', error);
+      showToast('No se pudo guardar el documento: ' + error.message, 'danger');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText || 'Guardar Documento';
+      }
+    }
   }
 
   // Cancel/Anular Invoice
@@ -1825,28 +2016,35 @@ window.ERPBilling = (function () {
       alert('No tienes permisos (Admin) para anular facturas.');
       return;
     }
-    let actualNumber = number;
-    if (!actualNumber) {
-      const inv = invoices.find(i => i.id === id);
-      actualNumber = inv ? inv.invoiceNumber : 'desconocida';
+    const invoice = invoices.find(i => i.id === id);
+    if (!invoice) return;
+    if (Number(invoice.paidAmount || 0) > 0) {
+      showToast('No se puede anular una factura con cobros. Registra primero la devolución o nota de crédito correspondiente.', 'danger');
+      return;
     }
+    let actualNumber = number || invoice.invoiceNumber || 'desconocida';
     if (!confirm(`¿Está seguro de que desea ANULAR la factura ${actualNumber}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
       return;
     }
 
     try {
-      await getDB().collection(collectionInvoices).doc(id).update({
-        status: 'cancelled'
+      const db = getDB();
+      const batch = db.batch();
+      batch.update(db.collection(collectionInvoices).doc(id), {
+        status: 'cancelled',
+        cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+        cancelledBy: firebase.auth().currentUser.uid
       });
 
-      // Write Audit Log
-      await getDB().collection('audit_logs').add({
+      const auditRef = db.collection('audit_logs').doc();
+      batch.set(auditRef, {
         action: `Anulación Factura ${activeCompanyCode}`,
         details: `Factura ${actualNumber} anulada en el panel de ${activeCompanyCode}`,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         userId: firebase.auth().currentUser.uid,
         userEmail: firebase.auth().currentUser.email
       });
+      await batch.commit();
 
       await fetchAllData();
       renderInvoicesTable();
@@ -1911,7 +2109,10 @@ window.ERPBilling = (function () {
     statusEl.className = 'admin-badge';
     statusEl.removeAttribute('style');
 
-    if (inv.docType === 'quote') {
+    if (inv.status === 'converted') {
+      statusEl.classList.add('badge-converted');
+      statusEl.textContent = 'Convertida';
+    } else if (inv.docType === 'quote') {
       statusEl.style.background = '#e0f2fe';
       statusEl.style.color = '#0369a1';
       statusEl.style.border = '1px solid #bae6fd';
@@ -1924,10 +2125,10 @@ window.ERPBilling = (function () {
     } else if (inv.status === 'paid') {
       statusEl.classList.add('badge-paid');
       statusEl.textContent = 'Pagada';
-    } else if (inv.status === 'pending') {
-      const isOverdue = new Date(inv.dueDate) < new Date() && inv.paidAmount < inv.total;
-      statusEl.classList.add(isOverdue ? 'badge-overdue' : 'badge-pending');
-      statusEl.textContent = isOverdue ? 'Vencida' : 'Pendiente';
+    } else if (inv.status === 'pending' || inv.status === 'partial' || inv.status === 'unpaid') {
+      const overdue = BillingCore.isOverdue(inv.dueDate, invoiceBalance(inv));
+      statusEl.classList.add(overdue ? 'badge-overdue' : (inv.status === 'partial' ? 'badge-partial' : (inv.status === 'unpaid' ? 'badge-credit' : 'badge-pending')));
+      statusEl.textContent = overdue ? 'Vencida' : (inv.status === 'partial' ? 'Abono parcial' : (inv.status === 'unpaid' ? 'A crédito' : 'Pendiente'));
     } else if (inv.status === 'cancelled') {
       statusEl.classList.add('badge-cancelled');
       statusEl.textContent = 'Anulada';
@@ -1945,17 +2146,9 @@ window.ERPBilling = (function () {
     itemsTbody.innerHTML = '';
     
     inv.items.forEach(line => {
-      let lineTaxAmount = 0;
       const price = Number(line.price) || 0;
       const qty = Number(line.qty) || 1;
-      const taxVal = Number(line.tax) || 0;
-      if (taxVal > 0 && taxVal <= 100) {
-        // Old document percentage format (e.g. 18 or 16), calculate it
-        lineTaxAmount = price * qty * (taxVal / 100);
-      } else {
-        // New document amount format
-        lineTaxAmount = taxVal;
-      }
+      const lineTaxAmount = BillingCore.resolveLineTax(line).amount;
 
       const lineDiscountPct = line.discount || 0;
       const lineDiscountStr = lineDiscountPct > 0 ? `${lineDiscountPct}%` : '—';
@@ -1973,7 +2166,7 @@ window.ERPBilling = (function () {
     });
 
     // Populate mathematical totals
-    const balance = Number(inv.total) - Number(inv.paidAmount || 0);
+    const balance = invoiceBalance(inv);
     const discountAmount = inv.discountAmount || 0;
 
     document.getElementById('view-summary-subtotal').textContent = formatMoney(inv.subtotal);
@@ -1985,7 +2178,7 @@ window.ERPBilling = (function () {
 
     // Populate payment terms and notes
     const viewTermsEl = document.getElementById('view-invoice-payment-terms');
-    if (viewTermsEl) viewTermsEl.textContent = inv.paymentTerms || 'Contado';
+    if (viewTermsEl) viewTermsEl.textContent = inv.paymentTerms || inv.paymentTerm || 'Contado';
     
     const viewNotesEl = document.getElementById('view-invoice-notes');
     if (viewNotesEl) viewNotesEl.textContent = inv.notes || '';
@@ -2011,7 +2204,7 @@ window.ERPBilling = (function () {
     
     if (inv.docType === 'quote' || inv.docType === 'proforma') {
       payBtn.style.display = 'none';
-      if (convertBtn && inv.status !== 'cancelled') {
+      if (convertBtn && inv.status !== 'cancelled' && inv.status !== 'converted' && !inv.convertedTo) {
         convertBtn.style.display = 'inline-flex';
         convertBtn.setAttribute('data-quote-id', inv.id);
       } else if (convertBtn) {
@@ -2019,7 +2212,7 @@ window.ERPBilling = (function () {
       }
     } else {
       if (convertBtn) convertBtn.style.display = 'none';
-      if (inv.status === 'pending' && balance > 0) {
+      if (inv.status !== 'cancelled' && balance > 0) {
         payBtn.style.display = 'inline-flex';
         // Pass data values to modal trigger
         payBtn.setAttribute('data-inv-id', inv.id);
@@ -2056,13 +2249,22 @@ window.ERPBilling = (function () {
     const method = document.getElementById('form-payment-method').value;
     const notes = document.getElementById('form-payment-notes').value.trim();
 
-    if (amount <= 0) {
+    if (!Number.isFinite(amount) || amount <= 0) {
       alert('El monto debe ser superior a cero.');
+      return;
+    }
+    if (!['Efectivo', 'Tarjeta', 'Transferencia'].includes(method)) {
+      showToast('Selecciona un método de pago válido.', 'danger');
       return;
     }
 
     try {
-      // 1. Save payment registry document
+      const db = getDB();
+      const invRef = db.collection(collectionInvoices).doc(invoiceId);
+      const paymentRef = db.collection(collectionPayments).doc();
+      const sessionRef = activeCashSession
+        ? db.collection(collectionCashSessions).doc(activeCashSession.id)
+        : null;
       const paymentData = {
         invoiceId: invoiceId,
         amount: amount,
@@ -2071,30 +2273,29 @@ window.ERPBilling = (function () {
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       };
 
-      await getDB().collection(collectionPayments).add(paymentData);
-
-      // 2. Fetch current invoice paid amount
-      const invRef = getDB().collection(collectionInvoices).doc(invoiceId);
-      const invSnap = await invRef.get();
-      if (invSnap.exists) {
+      await db.runTransaction(async transaction => {
+        const invSnap = await transaction.get(invRef);
+        if (!invSnap.exists) throw new Error('La factura ya no existe.');
         const inv = invSnap.data();
-        const newPaidAmount = Number(inv.paidAmount || 0) + amount;
-        
-        let status = 'pending';
-        // Check if balance paid in full (floating point precision safe)
-        if (Math.abs(inv.total - newPaidAmount) < 0.05 || newPaidAmount >= inv.total) {
-          status = 'paid';
+        if (inv.docType !== 'invoice' || inv.status === 'cancelled') {
+          throw new Error('Este documento no admite cobros.');
         }
+        const total = Number(inv.total || 0);
+        const previousPaid = Number(inv.paidAmount || 0);
+        const balance = BillingCore.roundMoney(total - previousPaid);
+        if (amount > balance + 0.01) {
+          throw new Error(`El monto excede el balance pendiente de ${formatMoney(balance)}.`);
+        }
+        const newPaidAmount = BillingCore.roundMoney(previousPaid + amount);
 
-        // Update invoice document
-        await invRef.update({
+        transaction.set(paymentRef, paymentData);
+        transaction.update(invRef, {
           paidAmount: newPaidAmount,
-          status: status
+          status: BillingCore.paymentStatus(total, newPaidAmount),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Update Cash Register session totals if active
-        if (activeCashSession) {
-          const sessRef = getDB().collection(collectionCashSessions).doc(activeCashSession.id);
+        if (sessionRef) {
           const updates = {};
           if (method === 'Efectivo') {
             updates.salesCash = firebase.firestore.FieldValue.increment(amount);
@@ -2103,13 +2304,14 @@ window.ERPBilling = (function () {
           } else if (method === 'Transferencia') {
             updates.salesTransfer = firebase.firestore.FieldValue.increment(amount);
           }
-          await sessRef.update(updates);
-
-          // Refresh local cache of cash session
-          const freshDoc = await sessRef.get();
-          activeCashSession = { id: freshDoc.id, ...freshDoc.data() };
-          updateCashSessionUI();
+          transaction.update(sessionRef, updates);
         }
+      });
+
+      if (sessionRef) {
+        const freshDoc = await sessionRef.get();
+        activeCashSession = { id: freshDoc.id, ...freshDoc.data() };
+        updateCashSessionUI();
       }
 
       // Reload references
@@ -2120,7 +2322,7 @@ window.ERPBilling = (function () {
       viewInvoice(invoiceId);
     } catch (err) {
       console.error(err);
-      alert('Error al registrar el cobro en la base de datos.');
+      alert('No se pudo registrar el cobro: ' + err.message);
     }
   }
 
@@ -2178,6 +2380,7 @@ window.ERPBilling = (function () {
   async function viewClientProfile(clientId) {
     const client = clients.find(c => c.id === clientId);
     if (!client) return;
+    currentProfileClientId = clientId;
 
     switchPanel('client-profile');
 
@@ -2222,7 +2425,7 @@ window.ERPBilling = (function () {
           totalPaid += Number(inv.paidAmount || 0);
         }
 
-        const balance = (Number(inv.total) || 0) - (Number(inv.paidAmount || 0));
+        const balance = invoiceBalance(inv);
 
         let statusClass = 'badge-pending';
         let statusText = 'Pendiente';
@@ -2238,9 +2441,14 @@ window.ERPBilling = (function () {
         } else if (inv.status === 'paid') {
           statusClass = 'badge-paid';
           statusText = 'Pagada';
+        } else if (inv.status === 'partial') {
+          statusClass = 'badge-partial';
+          statusText = 'Abono parcial';
+        } else if (inv.status === 'unpaid') {
+          statusClass = 'badge-credit';
+          statusText = 'A crédito';
         } else {
-          const isOverdue = new Date(inv.dueDate) < new Date();
-          if (isOverdue) {
+          if (BillingCore.isOverdue(inv.dueDate, balance)) {
             statusClass = 'badge-overdue';
             statusText = 'Vencida';
           }
@@ -2353,11 +2561,31 @@ window.ERPBilling = (function () {
     e.preventDefault();
 
     const id = document.getElementById('form-client-id').value;
+    const name = document.getElementById('form-client-name').value.trim();
+    const rnc = document.getElementById('form-client-rnc').value.trim();
+    const email = document.getElementById('form-client-email').value.trim();
+    const cleanRnc = rnc.replace(/\D/g, '');
+    if (!name || name.length > 150) {
+      showToast('El nombre del cliente es obligatorio y debe ser válido.', 'danger');
+      return;
+    }
+    if (rnc && ![9, 11].includes(cleanRnc.length)) {
+      showToast('El RNC o cédula debe contener 9 u 11 dígitos.', 'danger');
+      return;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Introduce un correo electrónico válido.', 'danger');
+      return;
+    }
+    if (cleanRnc && clients.some(client => client.id !== id && String(client.rnc || '').replace(/\D/g, '') === cleanRnc)) {
+      showToast('Ya existe otro cliente registrado con ese RNC o cédula.', 'danger');
+      return;
+    }
     const clientData = {
-      name: document.getElementById('form-client-name').value.trim(),
-      rnc: document.getElementById('form-client-rnc').value.trim(),
+      name: name,
+      rnc: rnc,
       phone: document.getElementById('form-client-phone').value.trim(),
-      email: document.getElementById('form-client-email').value.trim(),
+      email: email,
       address: document.getElementById('form-client-address').value.trim(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -2431,7 +2659,13 @@ window.ERPBilling = (function () {
     const sourceEl = document.getElementById('products-source-filter');
     const source = sourceEl ? sourceEl.value : 'creaticos';
     
-    products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+    if (isPanitas) {
+      // La colección activa de Panitas ya fue cargada en products.
+    } else if (isCreaticos) {
+      products = source === 'creaticos' ? creaticosProducts : futunetProducts;
+    } else {
+      products = futunetProducts;
+    }
 
     const searchVal = document.getElementById('products-search').value.toLowerCase();
     
@@ -2467,10 +2701,18 @@ window.ERPBilling = (function () {
       let codesHtml = '';
       if (p.sku || p.reference || p.ref) {
         const codes = [];
-        if (p.sku) codes.push(`SKU: <span class="admin-code-badge">${p.sku}</span>`);
-        if (p.reference || p.ref) codes.push(`Ref: <span class="admin-code-badge">${p.reference || p.ref}</span>`);
+        if (p.sku) codes.push(`SKU: <span class="admin-code-badge">${escapeHTML(p.sku)}</span>`);
+        if (p.reference || p.ref) codes.push(`Ref: <span class="admin-code-badge">${escapeHTML(p.reference || p.ref)}</span>`);
         codesHtml = `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:flex; gap:8px;">${codes.join(' | ')}</div>`;
       }
+
+      const productActions = isUserAdmin ? `
+            <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditProductForm('${escapeAttr(p.id)}', ${isCreaticosVal})">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+            </button>
+            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteProduct('${escapeAttr(p.id)}', '', ${isCreaticosVal})">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </button>` : '<span class="admin-readonly-label">Solo lectura</span>';
 
       tr.innerHTML = `
         <td>
@@ -2482,12 +2724,7 @@ window.ERPBilling = (function () {
         <td>${escapeHTML(tax)}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditProductForm('${p.id}', ${isCreaticosVal})">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-            </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteProduct('${p.id}', '', ${isCreaticosVal})">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-            </button>
+            ${productActions}
           </div>
         </td>
       `;
@@ -2513,6 +2750,10 @@ window.ERPBilling = (function () {
   }
 
   function openNewProductForm() {
+    if (!isUserAdmin) {
+      showToast('Solo un administrador ERP puede crear productos.', 'danger');
+      return;
+    }
     const titleEl = document.getElementById('product-form-title');
     if (titleEl) titleEl.textContent = 'Agregar Producto / Servicio';
 
@@ -2544,6 +2785,10 @@ window.ERPBilling = (function () {
   }
 
   function openEditProductForm(productId, isCreaticos) {
+    if (!isUserAdmin) {
+      showToast('Solo un administrador ERP puede modificar productos.', 'danger');
+      return;
+    }
     const activeProducts = isPanitas ? products : (isCreaticos ? creaticosProducts : futunetProducts);
     const p = activeProducts.find(item => item.id === productId);
     if (!p) return;
@@ -2583,6 +2828,11 @@ window.ERPBilling = (function () {
   async function saveProduct(e) {
     e.preventDefault();
 
+    if (!isUserAdmin) {
+      showToast('Solo un administrador ERP puede modificar productos.', 'danger');
+      return;
+    }
+
     const id = document.getElementById('form-product-id').value;
     const source = document.getElementById('form-product-source').value;
     const isCreaticos = source === 'creaticos';
@@ -2593,11 +2843,16 @@ window.ERPBilling = (function () {
 
     try {
       if (isCreaticos) {
+        const priceValue = Number(document.getElementById('form-product-price').value);
+        const taxValue = Number(document.getElementById('form-product-tax').value);
+        if (!Number.isFinite(priceValue) || priceValue < 0 || !Number.isFinite(taxValue) || taxValue < 0 || taxValue > 100) {
+          throw new Error('El precio o el ITBIS del producto no es válido.');
+        }
         const prodData = {
           name: document.getElementById('form-product-name').value.trim(),
           description: document.getElementById('form-product-description').value.trim(),
-          price: Number(document.getElementById('form-product-price').value) || 0,
-          tax: Number(document.getElementById('form-product-tax').value) || 0,
+          price: priceValue,
+          tax: taxValue,
           sku: skuVal,
           reference: referenceVal,
           barcode: barcodeVal
@@ -2611,9 +2866,12 @@ window.ERPBilling = (function () {
       } else {
         const nameVal = document.getElementById('form-product-name').value.trim();
         const descVal = document.getElementById('form-product-description').value.trim();
-        const priceVal = Number(document.getElementById('form-product-price').value) || 0;
-        const stockVal = parseInt(document.getElementById('form-product-stock').value) || 0;
+        const priceVal = Number(document.getElementById('form-product-price').value);
+        const stockVal = Number(document.getElementById('form-product-stock').value);
         const categoryVal = document.getElementById('form-product-category').value;
+        if (!Number.isFinite(priceVal) || priceVal < 0 || !Number.isInteger(stockVal) || stockVal < 0) {
+          throw new Error('El precio o el inventario del producto no es válido.');
+        }
 
         const prodData = {
           title: nameVal,
@@ -2630,11 +2888,12 @@ window.ERPBilling = (function () {
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
+        const targetCollection = isPanitas ? 'panitas_products' : 'products';
         if (id) {
-          await getDB().collection(collectionProducts).doc(id).update(prodData);
+          await getDB().collection(targetCollection).doc(id).update(prodData);
         } else {
           prodData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          await getDB().collection(collectionProducts).add(prodData);
+          await getDB().collection(targetCollection).add(prodData);
         }
       }
 
@@ -2709,7 +2968,7 @@ window.ERPBilling = (function () {
     }
 
     try {
-      const coll = isCreaticos ? 'creaticos_products' : collectionProducts;
+      const coll = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
       await getDB().collection(coll).doc(id).delete();
       await fetchAllData();
       renderProductsTable();
@@ -2736,11 +2995,11 @@ window.ERPBilling = (function () {
     document.getElementById('set-ncf-b02-prefix').value = settings.ncfB02Prefix;
     document.getElementById('set-ncf-b02-seq').value = settings.ncfB02Seq;
     
-    document.getElementById('set-ncf-b14-prefix').value = settings.ncfB14Prefix || 'B1400000';
+    document.getElementById('set-ncf-b14-prefix').value = settings.ncfB14Prefix || 'B14';
     document.getElementById('set-ncf-b14-seq').value = settings.ncfB14Seq || 1;
-    document.getElementById('set-ncf-b15-prefix').value = settings.ncfB15Prefix || 'B1500000';
+    document.getElementById('set-ncf-b15-prefix').value = settings.ncfB15Prefix || 'B15';
     document.getElementById('set-ncf-b15-seq').value = settings.ncfB15Seq || 1;
-    document.getElementById('set-ncf-b12-prefix').value = settings.ncfB12Prefix || 'B1200000';
+    document.getElementById('set-ncf-b12-prefix').value = settings.ncfB12Prefix || 'B12';
     document.getElementById('set-ncf-b12-seq').value = settings.ncfB12Seq || 1;
 
     document.getElementById('set-invoice-prefix').value = settings.invoicePrefix;
@@ -2770,6 +3029,8 @@ window.ERPBilling = (function () {
       return;
     }
 
+    const rawDefaultTax = Number(document.getElementById('set-default-tax').value);
+    const rncApiKey = document.getElementById('set-rnc-api-key').value.trim();
     const updated = {
       name: document.getElementById('set-company-name').value.trim(),
       rnc: document.getElementById('set-company-rnc').value.trim(),
@@ -2791,7 +3052,7 @@ window.ERPBilling = (function () {
 
       invoicePrefix: document.getElementById('set-invoice-prefix').value.trim(),
       nextInvoiceNum: Number(document.getElementById('set-invoice-seq').value) || 1001,
-      defaultTax: Number(document.getElementById('set-default-tax').value) || 18,
+      defaultTax: rawDefaultTax,
       
       quotePrefix: document.getElementById('set-quote-prefix').value.trim(),
       nextQuoteNum: Number(document.getElementById('set-quote-seq').value) || 1001,
@@ -2801,13 +3062,30 @@ window.ERPBilling = (function () {
 
       ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
       ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
-      ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
-
-      rncApiKey: document.getElementById('set-rnc-api-key').value.trim()
+      ticketFooter: document.getElementById('set-ticket-footer').value.trim()
     };
 
+    const sequenceFields = [
+      'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq',
+      'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum'
+    ];
+    const prefixesAreValid = Object.entries(NCF_FIELDS).every(([type, fields]) => updated[fields.prefix].toUpperCase() === type);
+    const sequencesAreValid = sequenceFields.every(field => Number.isInteger(updated[field]) && updated[field] > 0 && updated[field] <= 99999999);
+    if (!prefixesAreValid || !sequencesAreValid || ![0, 16, 18].includes(rawDefaultTax)) {
+      showToast('Revisa los prefijos NCF, las secuencias y el ITBIS predeterminado.', 'danger');
+      return;
+    }
+    normalizeNcfSettings(updated);
+
     try {
-      await getDB().collection(collectionSettings).doc('general').set(updated, { merge: true });
+      const db = getDB();
+      const batch = db.batch();
+      batch.set(db.collection(collectionSettings).doc('general'), {
+        ...updated,
+        rncApiKey: firebase.firestore.FieldValue.delete()
+      }, { merge: true });
+      batch.set(db.collection(collectionSecrets).doc('general'), { rncApiKey: rncApiKey }, { merge: true });
+      await batch.commit();
       
       // Reload settings in cache
       await loadSettings();
@@ -2823,10 +3101,42 @@ window.ERPBilling = (function () {
   // ═══════════════════════════════════════════
   // 8. MODALS OPEN/CLOSE HELPERS
   // ═══════════════════════════════════════════
+  function getModalFocusable(modal) {
+    return Array.from(modal.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+      .filter(element => !element.hidden && element.getAttribute('aria-hidden') !== 'true');
+  }
+
+  function initializeModalAccessibility() {
+    document.querySelectorAll('.admin-modal').forEach(modal => {
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.inert = true;
+      modal.tabIndex = -1;
+      const title = modal.querySelector('.admin-modal-header h2');
+      if (title) {
+        if (!title.id) title.id = `${modal.id}-title`;
+        modal.setAttribute('aria-labelledby', title.id);
+      }
+      modal.querySelectorAll('.admin-modal-close').forEach(button => {
+        button.type = 'button';
+        if (!button.getAttribute('aria-label')) button.setAttribute('aria-label', 'Cerrar ventana');
+      });
+    });
+  }
+
   function openModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
+      lastFocusedBeforeModal = document.activeElement;
       modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.inert = false;
+      document.body.classList.add('erp-modal-open');
+      requestAnimationFrame(() => {
+        const focusable = getModalFocusable(modal);
+        (focusable[0] || modal).focus();
+      });
     }
   }
 
@@ -2834,6 +3144,13 @@ window.ERPBilling = (function () {
     const modal = document.getElementById(modalId);
     if (modal) {
       modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.inert = true;
+      if (!document.querySelector('.admin-modal.is-open')) document.body.classList.remove('erp-modal-open');
+      if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+        lastFocusedBeforeModal.focus();
+      }
+      lastFocusedBeforeModal = null;
     }
   }
 
@@ -2912,7 +3229,7 @@ window.ERPBilling = (function () {
         const totalSalesCash = Number(s.salesCash || 0);
         const expectedCash = base + totalSalesCash;
         
-        const realCash = s.closedAt ? (Number(s.realCashCount) || 0) : null;
+        const realCash = s.closedAt ? Number(s.realCash ?? s.realCashCount ?? 0) : null;
         const diff = s.closedAt ? (realCash - expectedCash) : 0;
         
         let diffStr = '—';
@@ -2929,7 +3246,7 @@ window.ERPBilling = (function () {
         
         const status = s.closedAt ? 'Cerrada' : 'Abierta';
         const statusColor = s.closedAt ? 'var(--text-muted)' : 'var(--success)';
-        const notes = s.closeNotes || '—';
+        const notes = s.notes || s.closeNotes || '—';
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -3031,7 +3348,7 @@ window.ERPBilling = (function () {
       card.innerHTML = `
         <div class="pos-prod-info">
           <div style="display:flex; align-items:center; width:100%; gap:4px; margin-bottom:4px;">
-            <span class="pos-prod-badge ${badgeClass}">${badgeLabel}</span>
+            <span class="pos-prod-badge ${badgeClass}">${escapeHTML(badgeLabel)}</span>
             ${stockHtml}
           </div>
           <h4 class="pos-prod-title" title="${escapeHTML(name)}" style="margin-top:0;">${escapeHTML(name)}</h4>
@@ -3060,7 +3377,7 @@ window.ERPBilling = (function () {
       const itemEl = document.createElement('div');
       itemEl.className = 'pos-cart-item';
       const sub = item.price * item.qty;
-      const sourceBadge = item.isCreaticos ? ' (C)' : ' (F)';
+      const sourceBadge = item.source === 'panitas' ? ' (P)' : (item.isCreaticos ? ' (C)' : ' (F)');
 
       itemEl.innerHTML = `
         <div class="pos-item-info">
@@ -3118,8 +3435,16 @@ window.ERPBilling = (function () {
       return;
     }
 
-    const isCr = p._isCreaticos;
-    const pId = isCr ? 'creaticos_' + p.id : 'futunet_' + p.id;
+    const unitPrice = Number(p.price);
+    const taxRate = p.tax !== undefined ? Number(p.tax) : (settings ? Number(settings.defaultTax) : 18);
+    if (!Number.isFinite(unitPrice) || unitPrice < 0 || !Number.isFinite(taxRate) || taxRate < 0 || taxRate > 100) {
+      showToast(`El producto "${p.name || p.title}" tiene precio o impuesto inválido.`, 'danger');
+      return;
+    }
+
+    const isCr = Boolean(p._isCreaticos);
+    const sourcePrefix = isPanitas ? 'panitas' : (isCr ? 'creaticos' : 'futunet');
+    const pId = sourcePrefix + '_' + p.id;
     
     const existingIndex = posCart.findIndex(item => item.productId === pId);
     if (existingIndex > -1) {
@@ -3132,10 +3457,11 @@ window.ERPBilling = (function () {
       posCart.push({
         productId: pId,
         name: p.name || p.title || '',
-        price: Number(p.price),
+        price: unitPrice,
         qty: 1,
-        tax: p.tax !== undefined ? Number(p.tax) : (settings ? Number(settings.defaultTax) : 18),
-        isCreaticos: isCr
+        tax: taxRate,
+        isCreaticos: isCr,
+        source: sourcePrefix
       });
     }
     renderPosCart();
@@ -3146,7 +3472,7 @@ window.ERPBilling = (function () {
     if (index < 0 || index >= posCart.length) return;
     const item = posCart[index];
     if (delta > 0) {
-      const originalId = item.productId.replace(/^(creaticos_|futunet_)/, '');
+      const originalId = item.productId.replace(/^(creaticos_|futunet_|panitas_)/, '');
       const prod = products.find(p => p.id === originalId) || 
                    creaticosProducts.find(p => p.id === originalId) || 
                    futunetProducts.find(p => p.id === originalId);
@@ -3339,7 +3665,7 @@ window.ERPBilling = (function () {
     const balanceVal = Number(balanceText.replace(/[^0-9.]/g, '')) || 0;
 
     // Prefill form
-    const currentClientId = clients.find(c => c.name === clientName)?.id || '';
+    const currentClientId = currentProfileClientId;
     if (!currentClientId) {
       showToast('Error al identificar el cliente activo.', 'danger');
       return;
@@ -3348,7 +3674,10 @@ window.ERPBilling = (function () {
     if (clientId) clientId.value = currentClientId;
     if (nameEl) nameEl.textContent = clientName;
     if (debtEl) debtEl.textContent = formatMoney(balanceVal);
-    if (amountInput) amountInput.value = balanceVal.toFixed(2);
+    if (amountInput) {
+      amountInput.value = balanceVal.toFixed(2);
+      amountInput.max = balanceVal.toFixed(2);
+    }
     if (notesInput) notesInput.value = '';
 
     openModal('modal-general-abono');
@@ -3362,8 +3691,12 @@ window.ERPBilling = (function () {
     const method = document.getElementById('form-abono-method').value;
     const notes = document.getElementById('form-abono-notes').value.trim();
 
-    if (!clientId || amountVal <= 0) {
+    if (!clientId || !Number.isFinite(amountVal) || amountVal <= 0) {
       showToast('Por favor, ingrese un monto válido.', 'warning');
+      return;
+    }
+    if (!['Efectivo', 'Tarjeta', 'Transferencia'].includes(method)) {
+      showToast('Selecciona un método de pago válido.', 'warning');
       return;
     }
 
@@ -3371,7 +3704,6 @@ window.ERPBilling = (function () {
       // Fetch all invoices for this client
       const snap = await getDB().collection(collectionInvoices)
         .where('clientId', '==', clientId)
-        .where('docType', '==', 'invoice')
         .get();
 
       let clientInvoices = [];
@@ -3380,7 +3712,7 @@ window.ERPBilling = (function () {
         const total = Number(data.total) || 0;
         const paid = Number(data.paidAmount) || 0;
         const pending = total - paid;
-        if (data.status !== 'cancelled' && pending > 0) {
+        if (data.docType === 'invoice' && data.status !== 'cancelled' && pending > 0) {
           clientInvoices.push({ id: doc.id, pending: pending, ...data });
         }
       });
@@ -3398,55 +3730,61 @@ window.ERPBilling = (function () {
         return;
       }
 
-      let remainingAbono = amountVal;
-      const db = getDB();
-
-      // We will perform updates in a Batch
-      const batch = db.batch();
-
-      for (let inv of clientInvoices) {
-        if (remainingAbono <= 0) break;
-
-        const payAmountForThisInvoice = Math.min(remainingAbono, inv.pending);
-        const newPaidAmount = (Number(inv.paidAmount) || 0) + payAmountForThisInvoice;
-        const fullyPaid = newPaidAmount >= inv.total;
-
-        // Update Invoice
-        const invRef = db.collection(collectionInvoices).doc(inv.id);
-        batch.update(invRef, {
-          paidAmount: newPaidAmount,
-          status: fullyPaid ? 'paid' : 'partial',
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        // Add Payment Doc
-        const paymentRef = db.collection(collectionPayments).doc();
-        batch.set(paymentRef, {
-          invoiceId: inv.id,
-          amount: payAmountForThisInvoice,
-          method: method,
-          notes: (notes ? notes + ' - ' : '') + 'Abono general prorrateado',
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        // If Cash Register session is active, increment session cash/card/nfc/transfer totals
-        if (activeCashSession) {
-          const sessRef = db.collection(collectionCashSessions).doc(activeCashSession.id);
-          const updates = {};
-          if (method === 'Efectivo') {
-            updates.salesCash = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
-          } else if (method === 'Tarjeta') {
-            updates.salesCard = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
-          } else if (method === 'Transferencia') {
-            updates.salesTransfer = firebase.firestore.FieldValue.increment(payAmountForThisInvoice);
-          }
-          batch.update(sessRef, updates);
-        }
-
-        remainingAbono -= payAmountForThisInvoice;
+      const totalDebt = BillingCore.roundMoney(clientInvoices.reduce((sum, invoice) => sum + invoice.pending, 0));
+      if (amountVal > totalDebt + 0.01) {
+        showToast(`El abono excede la deuda pendiente de ${formatMoney(totalDebt)}.`, 'danger');
+        return;
       }
 
-      await batch.commit();
+      const db = getDB();
+      const invoiceRefs = clientInvoices.map(invoice => db.collection(collectionInvoices).doc(invoice.id));
+      const sessionRef = activeCashSession ? db.collection(collectionCashSessions).doc(activeCashSession.id) : null;
+
+      await db.runTransaction(async transaction => {
+        const freshInvoices = [];
+        for (const invoiceRef of invoiceRefs) {
+          const snapshot = await transaction.get(invoiceRef);
+          if (!snapshot.exists) continue;
+          const data = snapshot.data();
+          const pending = BillingCore.roundMoney(Number(data.total || 0) - Number(data.paidAmount || 0));
+          if (data.docType === 'invoice' && data.status !== 'cancelled' && pending > 0) {
+            freshInvoices.push({ id: snapshot.id, ref: invoiceRef, pending, ...data });
+          }
+        }
+
+        const freshDebt = BillingCore.roundMoney(freshInvoices.reduce((sum, invoice) => sum + invoice.pending, 0));
+        if (amountVal > freshDebt + 0.01) {
+          throw new Error(`El abono excede la deuda pendiente actual de ${formatMoney(freshDebt)}.`);
+        }
+
+        let remainingAbono = amountVal;
+        for (const invoice of freshInvoices) {
+          if (remainingAbono <= 0.009) break;
+          const paymentAmount = BillingCore.roundMoney(Math.min(remainingAbono, invoice.pending));
+          const newPaidAmount = BillingCore.roundMoney(Number(invoice.paidAmount || 0) + paymentAmount);
+          transaction.update(invoice.ref, {
+            paidAmount: newPaidAmount,
+            status: BillingCore.paymentStatus(invoice.total, newPaidAmount),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          transaction.set(db.collection(collectionPayments).doc(), {
+            invoiceId: invoice.id,
+            amount: paymentAmount,
+            method: method,
+            notes: (notes ? notes + ' - ' : '') + 'Abono general prorrateado',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          remainingAbono = BillingCore.roundMoney(remainingAbono - paymentAmount);
+        }
+
+        if (sessionRef) {
+          const sessionUpdates = {};
+          if (method === 'Efectivo') sessionUpdates.salesCash = firebase.firestore.FieldValue.increment(amountVal);
+          else if (method === 'Tarjeta') sessionUpdates.salesCard = firebase.firestore.FieldValue.increment(amountVal);
+          else sessionUpdates.salesTransfer = firebase.firestore.FieldValue.increment(amountVal);
+          transaction.update(sessionRef, sessionUpdates);
+        }
+      });
 
       showToast(`Abono de RD$ ${amountVal.toFixed(2)} registrado con éxito.`, 'success');
       closeModal('modal-general-abono');
@@ -3578,13 +3916,12 @@ window.ERPBilling = (function () {
     try {
       const email = currentUser.email || '';
       const snap = await getDB().collection(collectionCashSessions)
-        .where('status', '==', 'open')
         .where('openedBy', '==', email)
-        .limit(1)
         .get();
 
-      if (!snap.empty) {
-        const doc = snap.docs[0];
+      const openDoc = snap.docs.find(doc => doc.data().status === 'open');
+      if (openDoc) {
+        const doc = openDoc;
         activeCashSession = { id: doc.id, ...doc.data() };
       } else {
         activeCashSession = null;
@@ -3603,8 +3940,9 @@ window.ERPBilling = (function () {
     if (!btn || !label) return;
 
     if (activeCashSession) {
-      const totalSession = activeCashSession.initialCash + (activeCashSession.salesCash || 0) + (activeCashSession.salesCard || 0) + (activeCashSession.salesNfc || 0) + (activeCashSession.salesTransfer || 0);
-      label.textContent = `Caja Abierta: ${formatMoney(totalSession)}`;
+      const totalSales = (activeCashSession.salesCash || 0) + (activeCashSession.salesCard || 0) +
+        (activeCashSession.salesNfc || 0) + (activeCashSession.salesTransfer || 0) + (activeCashSession.salesCredit || 0);
+      label.textContent = `Caja abierta · Ventas ${formatMoney(totalSales)}`;
       btn.style.background = 'rgba(16, 185, 129, 0.15)';
       btn.style.color = '#10b981';
       btn.style.borderColor = 'rgba(16, 185, 129, 0.3)';
@@ -3645,10 +3983,26 @@ window.ERPBilling = (function () {
     if (!currentUser) return;
 
     const amountInput = document.getElementById('form-cash-open-amount');
-    const initialCash = Number(amountInput ? amountInput.value : 0) || 0;
+    const initialCash = Number(amountInput ? amountInput.value : 0);
+    if (!Number.isFinite(initialCash) || initialCash < 0) {
+      showToast('El fondo inicial debe ser un monto válido mayor o igual a cero.', 'danger');
+      return;
+    }
 
     try {
       const email = currentUser.email || '';
+      const existing = await getDB().collection(collectionCashSessions)
+        .where('openedBy', '==', email)
+        .get();
+      const existingOpenDoc = existing.docs.find(doc => doc.data().status === 'open');
+      if (existingOpenDoc) {
+        const doc = existingOpenDoc;
+        activeCashSession = { id: doc.id, ...doc.data() };
+        updateCashSessionUI();
+        closeModal('modal-cash-open');
+        showToast('Ya existe una sesión de caja abierta para este usuario.', 'warning');
+        return;
+      }
       const docData = {
         openedBy: email,
         openedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -3675,9 +4029,14 @@ window.ERPBilling = (function () {
   function calculateCashDifference() {
     if (!activeCashSession) return;
     const realInput = document.getElementById('form-cash-close-real');
-    const realVal = Number(realInput ? realInput.value : 0) || 0;
+    const realVal = Number(realInput ? realInput.value : 0);
     const expected = activeCashSession.initialCash + (activeCashSession.salesCash || 0);
     const diff = realVal - expected;
+
+    if (!Number.isFinite(realVal) || realVal < 0) {
+      showToast('El efectivo contado debe ser un monto válido mayor o igual a cero.', 'danger');
+      return;
+    }
 
     const diffEl = document.getElementById('cash-close-difference');
     if (diffEl) {
@@ -3698,8 +4057,13 @@ window.ERPBilling = (function () {
 
     const realInput = document.getElementById('form-cash-close-real');
     const notesInput = document.getElementById('form-cash-close-notes');
-    const realVal = Number(realInput ? realInput.value : 0) || 0;
+    const realVal = Number(realInput ? realInput.value : NaN);
     const notes = notesInput ? notesInput.value.trim() : '';
+
+    if (!Number.isFinite(realVal) || realVal < 0) {
+      showToast('El efectivo contado debe ser un monto vÃ¡lido mayor o igual a cero.', 'danger');
+      return;
+    }
 
     const expected = activeCashSession.initialCash + (activeCashSession.salesCash || 0);
     const diff = realVal - expected;
@@ -3735,6 +4099,7 @@ window.ERPBilling = (function () {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
   }
 
@@ -3746,69 +4111,63 @@ window.ERPBilling = (function () {
 
     let csv = 'No. Factura,Tipo,NCF,Cliente,RNC/Cédula,Fecha Emisión,Subtotal,ITBIS,Total,Pagado,Estado\n';
     invoices.forEach(inv => {
-      const ncf = inv.ncf || 'N/D';
-      const rnc = inv.clientRnc || 'N/D';
-      const cleanName = (inv.clientName || 'Consumidor Final').replace(/"/g, '""');
-      
-      csv += `"${inv.invoiceNumber}","${inv.docType}","${ncf}","${cleanName}","${rnc}","${inv.date}",${inv.subtotal || 0},${inv.itbis || 0},${inv.total || 0},${inv.paidAmount || 0},"${inv.status}"\n`;
+      csv += [
+        BillingCore.csvCell(inv.invoiceNumber),
+        BillingCore.csvCell(inv.docType),
+        BillingCore.csvCell(inv.ncf || 'N/D'),
+        BillingCore.csvCell(inv.clientName || 'Consumidor Final'),
+        BillingCore.csvCell(inv.clientRnc || 'N/D'),
+        BillingCore.csvCell(inv.date),
+        Number(inv.subtotal || 0).toFixed(2),
+        Number(inv.itbis || 0).toFixed(2),
+        Number(inv.total || 0).toFixed(2),
+        Number(inv.paidAmount || 0).toFixed(2),
+        BillingCore.csvCell(inv.status)
+      ].join(',') + '\n';
     });
 
     const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`Facturas_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+    downloadCSV(`Facturas_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
   function exportDGII607ToCSV() {
-    const validInvoices = invoices.filter(inv => inv.docType === 'invoice' && inv.status !== 'cancelled');
-    if (validInvoices.length === 0) {
-      showToast('No hay facturas válidas registradas para exportar Formato 607.', 'warning');
+    const eligibleInvoices = invoices.filter(isRevenueInvoice);
+    const groups = eligibleInvoices.reduce((result, invoice) => {
+      const classification = BillingCore.classify607Invoice(invoice);
+      result[classification] = (result[classification] || 0) + 1;
+      return result;
+    }, {});
+    const detailInvoices = eligibleInvoices.filter(invoice => BillingCore.classify607Invoice(invoice) === 'detail');
+
+    if (detailInvoices.length === 0) {
+      showToast('No hay comprobantes físicos válidos para el detalle 607. Revisa NCF y facturas de consumo.', 'warning');
       return;
     }
 
-    let csv = 'RNC o Cedula,Tipo Identificacion,NCF,NCF Modificado,Tipo Ingreso,Fecha Comprobante,Fecha Retencion,Monto Facturado,ITBIS Facturado,ITBIS Retenido por Terceros,ITBIS Percibido,Retencion Impuesto sobre la Renta,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Monto Efectivo,Monto Tarjeta Credito,Monto Transferencia Cheque,Monto Venta a Credito\n';
-    
-    validInvoices.forEach(inv => {
-      const rawRnc = (inv.clientRnc || '').replace(/[^0-9]/g, '');
-      let tipoId = 3; // Pasaporte/Otro/Consumidor Final
-      if (rawRnc.length === 9) tipoId = 1; // RNC
-      else if (rawRnc.length === 11) tipoId = 2; // Cédula
-
-      const ncf = inv.ncf || '';
-      const dateStr = (inv.date || '').replace(/[^0-9]/g, ''); // YYYYMMDD
-      
-      const subtotal = Number(inv.subtotal) || 0;
-      const itbis = Number(inv.itbis) || 0;
-      const total = Number(inv.total) || 0;
-
-      let cashAmt = 0;
-      let cardAmt = 0;
-      let transferAmt = 0;
-      let creditAmt = 0;
-
-      if (inv.status === 'paid') {
-        if (inv.paymentTerms === 'Contado') {
-          cashAmt = total;
-        } else {
-          transferAmt = total;
-        }
-      } else {
-        creditAmt = total;
-      }
-
-      csv += `"${rawRnc}",${tipoId},"${ncf}","",01,"${dateStr}","",${subtotal.toFixed(2)},${itbis.toFixed(2)},0.00,0.00,0.00,0.00,0.00,0.00,${cashAmt.toFixed(2)},${cardAmt.toFixed(cardAmt)},${transferAmt.toFixed(2)},${creditAmt.toFixed(2)}\n`;
+    let officialCsv = 'RNC o Cedula,Tipo Identificacion,NCF,NCF Modificado,Tipo Ingreso,Fecha Comprobante,Fecha Retencion,Monto Facturado,ITBIS Facturado,ITBIS Retenido por Terceros,ITBIS Percibido,Retencion Renta por Terceros,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Monto Efectivo,Monto Cheque Transferencia Deposito,Monto Tarjeta Debito Credito,Monto Venta a Credito,Bonos o Certificados de Regalo,Permuta,Otras Formas de Venta\n';
+    detailInvoices.forEach(invoice => {
+      const record = BillingCore.build607Record(invoice, payments);
+      officialCsv += record.map((value, index) => {
+        if ([0, 2, 3, 5, 6].includes(index)) return BillingCore.csvCell(value);
+        if (index >= 7) return Number(value || 0).toFixed(2);
+        return String(value);
+      }).join(',') + '\n';
     });
 
     const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`DGII_607_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
-    showToast('Reporte DGII 607 exportado con éxito.', 'success');
+    downloadCSV(`DGII_607_${companyName}_${BillingCore.toLocalDateInput()}.csv`, officialCsv);
+    const excluded = Number(groups['consumer-summary'] || 0) + Number(groups.electronic || 0) + Number(groups.invalid || 0);
+    const note = excluded > 0
+      ? ` Se excluyeron ${excluded} registros: consumo bajo RD$250,000, e-NCF o NCF inválidos.`
+      : '';
+    showToast(`Borrador 607 generado. Debe prevalidarse con la herramienta oficial DGII.${note}`, excluded ? 'warning' : 'success');
   }
 
   function exportDGII606ToCSV() {
-    let csv = 'RNC o Cedula,Tipo Identificacion,Tipo Gasto,NCF,NCF Modificado,Fecha Comprobante,Fecha Pago,Monto Facturado,ITBIS Facturado,ITBIS Retenido,ITBIS Sujeto a Proporcionalidad,ITBIS Total Gasto,ITBIS por Adelantar,Retencion Renta,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Forma Pago\n';
-    csv += `"999999999",1,01,"B0100000001","",20260101,20260101,1000.00,180.00,0.00,0.00,180.00,180.00,0.00,0.00,0.00,0.00,0.00,01\n`;
-
-    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`DGII_606_Plantilla_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
-    showToast('Plantilla DGII 606 exportada con éxito.', 'success');
+    const blankCsv = 'RNC o Cedula,Tipo Identificacion,Tipo Gasto,NCF,NCF Modificado,Fecha Comprobante,Fecha Pago,Monto Facturado,ITBIS Facturado,ITBIS Retenido,ITBIS Sujeto a Proporcionalidad,ITBIS Total Gasto,ITBIS por Adelantar,Retencion Renta,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Forma Pago\n';
+    const blankCompanyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    downloadCSV(`DGII_606_Plantilla_${blankCompanyName}_${BillingCore.toLocalDateInput()}.csv`, blankCsv);
+    showToast('Se descargó una plantilla 606 vacía. Este sistema aún no registra compras; no la remitas sin completarla y prevalidarla.', 'warning');
   }
 
   function exportClientsToCSV() {
@@ -3819,13 +4178,11 @@ window.ERPBilling = (function () {
 
     let csv = 'Nombre,RNC/Cédula,Teléfono,Email,Dirección\n';
     clients.forEach(c => {
-      const cleanName = (c.name || '').replace(/"/g, '""');
-      const cleanAddr = (c.address || '').replace(/"/g, '""');
-      csv += `"${cleanName}","${c.rnc || ''}","${c.phone || ''}","${c.email || ''}","${cleanAddr}"\n`;
+      csv += [c.name, c.rnc, c.phone, c.email, c.address].map(BillingCore.csvCell).join(',') + '\n';
     });
 
     const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`Clientes_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+    downloadCSV(`Clientes_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
   function exportProductsToCSV() {
@@ -3836,13 +4193,18 @@ window.ERPBilling = (function () {
 
     let csv = 'Código/ID,Descripción,Precio,Impuesto (%),Origen\n';
     products.forEach(p => {
-      const cleanDesc = (p.name || p.title || p.description || '').replace(/"/g, '""');
       const origin = p._isCreaticos ? 'Creaticos' : 'Futunet';
-      csv += `"${p.id}","${cleanDesc}",${p.price || 0},${p.tax || 0},"${origin}"\n`;
+      csv += [
+        BillingCore.csvCell(p.id),
+        BillingCore.csvCell(p.name || p.title || p.description || ''),
+        Number(p.price || 0).toFixed(2),
+        Number(p.tax || 0).toFixed(2),
+        BillingCore.csvCell(origin)
+      ].join(',') + '\n';
     });
 
     const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`Productos_${companyName}_${new Date().toISOString().split('T')[0]}.csv`, csv);
+    downloadCSV(`Productos_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
   async function checkoutPos(method) {
@@ -3944,6 +4306,15 @@ window.ERPBilling = (function () {
   }
 
   async function processPosSale(method) {
+    if (isProcessingPosSale) {
+      showToast('La venta ya se está procesando.', 'warning');
+      return;
+    }
+    if (!['cash', 'card', 'nfc', 'credit'].includes(method)) {
+      showToast('Método de pago no válido.', 'danger');
+      return;
+    }
+    isProcessingPosSale = true;
     let docType = posDocType;
     let ncfType = posNcfType;
     let status = (docType === 'quote' || docType === 'proforma') ? docType : (method === 'credit' ? 'unpaid' : 'paid');
@@ -3956,75 +4327,84 @@ window.ERPBilling = (function () {
       subtotal += lineSub;
       itbis += lineTax;
       
-      let cleanProdId = item.productId;
-      if (cleanProdId.startsWith('creaticos_')) cleanProdId = cleanProdId.substring('creaticos_'.length);
-      else if (cleanProdId.startsWith('futunet_')) cleanProdId = cleanProdId.substring('futunet_'.length);
-      else if (cleanProdId.startsWith('panitas_')) cleanProdId = cleanProdId.substring('panitas_'.length);
-
       return {
-        productId: cleanProdId,
+        productId: item.productId,
+        productSource: item.source,
         description: item.name,
         price: item.price,
         qty: item.qty,
-        tax: item.tax,
+        tax: lineTax,
+        taxMode: 'rate',
+        taxRate: item.tax,
         total: lineSub + lineTax
       };
     });
 
-    const total = subtotal + itbis;
+    const total = BillingCore.roundMoney(subtotal + itbis);
     const paidAmount = (docType === 'invoice') ? (method === 'credit' ? 0 : total) : 0;
+    const cleanClientRnc = String(posClient.rnc || '').replace(/\D/g, '');
+    if (docType === 'invoice' && ['B01', 'B12', 'B14', 'B15'].includes(ncfType) && ![9, 11].includes(cleanClientRnc.length)) {
+      isProcessingPosSale = false;
+      showToast('Este comprobante requiere seleccionar un cliente con RNC o cédula válido.', 'danger');
+      return;
+    }
+    if (docType === 'invoice' && ncfType === 'B02' && total >= 250000 && ![9, 11].includes(cleanClientRnc.length)) {
+      isProcessingPosSale = false;
+      showToast('Las facturas de consumo desde RD$250,000 requieren identificar al cliente.', 'danger');
+      return;
+    }
+
+    const localDate = BillingCore.toLocalDateInput();
 
     const invoiceData = {
       docType: docType,
       clientId: posClient.id || 'anonymous',
       clientName: posClient.name,
       clientRnc: posClient.rnc,
-      date: new Date().toISOString().split('T')[0],
-      dueDate: new Date().toISOString().split('T')[0],
+      date: localDate,
+      dueDate: localDate,
       subtotal: subtotal,
+      discountPct: 0,
+      discountAmount: 0,
       itbis: itbis,
       total: total,
       paidAmount: paidAmount,
       status: status,
+      ncfType: (docType === 'quote' || docType === 'proforma') ? 'none' : ncfType,
+      ncf: '',
       items: items,
-      paymentTerm: method === 'credit' ? 'Crédito' : 'Contado',
+      paymentTerms: method === 'credit' ? 'Crédito' : 'Contado',
+      paymentMethod: method,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     try {
-      const collectionName = collectionInvoices;
-      const settingsColl = collectionSettings;
-      const paymentsColl = collectionPayments;
       const dbRef = getDB();
-      const settingsDocRef = dbRef.collection(settingsColl).doc('general');
-      const invoicesCollRef = dbRef.collection(collectionName);
-      
-      let createdDocId = '';
+      const settingsDocRef = dbRef.collection(collectionSettings).doc('general');
+      const invoicesCollRef = dbRef.collection(collectionInvoices);
+      const newInvoiceDocRef = invoicesCollRef.doc();
+      const createdDocId = newInvoiceDocRef.id;
+      const paymentRef = docType === 'invoice' && paidAmount > 0
+        ? dbRef.collection(collectionPayments).doc()
+        : null;
+      const sessionRef = activeCashSession && docType === 'invoice'
+        ? dbRef.collection(collectionCashSessions).doc(activeCashSession.id)
+        : null;
 
       await dbRef.runTransaction(async (transaction) => {
-        // Stock Validation & Decrement
-        for (let item of posCart) {
-          let cleanProdId = item.productId;
-          if (cleanProdId.startsWith('creaticos_')) cleanProdId = cleanProdId.substring('creaticos_'.length);
-          else if (cleanProdId.startsWith('futunet_')) cleanProdId = cleanProdId.substring('futunet_'.length);
-          else if (cleanProdId.startsWith('panitas_')) cleanProdId = cleanProdId.substring('panitas_'.length);
-
-          const productDocRef = dbRef.collection(collectionProducts).doc(cleanProdId);
+        // Firestore exige completar todas las lecturas antes de cualquier escritura.
+        const stockDocuments = [];
+        for (let item of (docType === 'invoice' ? posCart : [])) {
+          const match = /^(creaticos|futunet|panitas)_(.+)$/.exec(item.productId);
+          if (!match) throw new Error(`El producto "${item.name}" no tiene un origen válido.`);
+          const sourceCollection = match[1] === 'creaticos'
+            ? 'creaticos_products'
+            : (match[1] === 'panitas' ? 'panitas_products' : 'products');
+          const productDocRef = dbRef.collection(sourceCollection).doc(match[2]);
           const productDoc = await transaction.get(productDocRef);
-
-          if (productDoc.exists) {
-            const data = productDoc.data();
-            if (data.stock !== undefined && data.stock !== null) {
-              const currentStock = Number(data.stock) || 0;
-              if (currentStock < item.qty) {
-                throw new Error(`Stock insuficiente para "${data.name || data.title}". Disponible: ${currentStock}, Solicitado: ${item.qty}`);
-              }
-              transaction.update(productDocRef, {
-                stock: currentStock - item.qty
-              });
-            }
-          }
+          if (!productDoc.exists) throw new Error(`El producto "${item.name}" ya no existe.`);
+          stockDocuments.push({ item, ref: productDocRef, data: productDoc.data() });
         }
 
         const settingsDoc = await transaction.get(settingsDocRef);
@@ -4046,80 +4426,59 @@ window.ERPBilling = (function () {
           freshInvoiceNum = (freshSettings.invoicePrefix || 'CRE-') + String(freshSettings.nextInvoiceNum || 1001);
           settingsUpdates.nextInvoiceNum = (freshSettings.nextInvoiceNum || 1001) + 1;
 
-          if (ncfType !== 'none') {
-            let prefix = '';
-            let seq = 1;
-
-            if (ncfType === 'B01') {
-              prefix = freshSettings.ncfB01Prefix || 'B0100000';
-              seq = freshSettings.ncfB01Seq || 1;
-              settingsUpdates.ncfB01Seq = seq + 1;
-            } else if (ncfType === 'B02') {
-              prefix = freshSettings.ncfB02Prefix || 'B0200000';
-              seq = freshSettings.ncfB02Seq || 1;
-              settingsUpdates.ncfB02Seq = seq + 1;
-            } else if (ncfType === 'B14') {
-              prefix = freshSettings.ncfB14Prefix || 'B1400000';
-              seq = freshSettings.ncfB14Seq || 1;
-              settingsUpdates.ncfB14Seq = seq + 1;
-            } else if (ncfType === 'B15') {
-              prefix = freshSettings.ncfB15Prefix || 'B1500000';
-              seq = freshSettings.ncfB15Seq || 1;
-              settingsUpdates.ncfB15Seq = seq + 1;
-            } else if (ncfType === 'B12') {
-              prefix = freshSettings.ncfB12Prefix || 'B1200000';
-              seq = freshSettings.ncfB12Seq || 1;
-              settingsUpdates.ncfB12Seq = seq + 1;
-            }
-
-            freshNcf = prefix + String(seq).padStart(8, '0');
+          if (NCF_FIELDS[ncfType]) {
+            const fields = NCF_FIELDS[ncfType];
+            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix], freshSettings[fields.sequence]);
+            settingsUpdates[fields.sequence] = Number(freshSettings[fields.sequence] || 1) + 1;
           }
         }
 
         invoiceData.invoiceNumber = freshInvoiceNum;
         invoiceData.ncf = (docType === 'quote' || docType === 'proforma') ? '' : freshNcf;
 
-        // Perform writes in transaction
-        const newInvoiceDocRef = invoicesCollRef.doc();
-        createdDocId = newInvoiceDocRef.id;
-        
+        stockDocuments.forEach(({ item, ref, data }) => {
+          if (data.stock !== undefined && data.stock !== null) {
+            const currentStock = Number(data.stock) || 0;
+            if (currentStock < item.qty) {
+              throw new Error(`Stock insuficiente para "${data.name || data.title}". Disponible: ${currentStock}, Solicitado: ${item.qty}`);
+            }
+            transaction.update(ref, {
+              stock: currentStock - item.qty,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+        });
+
         transaction.set(newInvoiceDocRef, invoiceData);
         transaction.update(settingsDocRef, settingsUpdates);
-      });
 
-      // After transaction succeeds, register payments if needed
-      if (docType === 'invoice' && paidAmount > 0) {
-        const paymentData = {
+        if (paymentRef) {
+          transaction.set(paymentRef, {
           invoiceId: createdDocId,
           amount: paidAmount,
           method: method === 'cash' ? 'Efectivo' : 'Tarjeta',
           notes: 'Pago POS ' + (method === 'nfc' ? 'Contactless NFC' : ''),
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        await getDB().collection(paymentsColl).add(paymentData);
-      }
-
-      // Update Cash Register session totals if active
-      if (activeCashSession && docType === 'invoice') {
-        const sessRef = getDB().collection(collectionCashSessions).doc(activeCashSession.id);
-        const updates = {
-          transactionsCount: firebase.firestore.FieldValue.increment(1)
-        };
-        if (method === 'credit') {
-          updates.salesCredit = firebase.firestore.FieldValue.increment(total);
-        } else if (paidAmount > 0) {
-          if (method === 'cash') {
-            updates.salesCash = firebase.firestore.FieldValue.increment(paidAmount);
-          } else if (method === 'nfc') {
-            updates.salesNfc = firebase.firestore.FieldValue.increment(paidAmount);
-          } else {
-            updates.salesCard = firebase.firestore.FieldValue.increment(paidAmount);
-          }
+          });
         }
-        await sessRef.update(updates);
-        
-        // Refresh local cache of cash session
-        const freshDoc = await sessRef.get();
+
+        if (sessionRef) {
+          const sessionUpdates = { transactionsCount: firebase.firestore.FieldValue.increment(1) };
+          if (method === 'credit') {
+            sessionUpdates.salesCredit = firebase.firestore.FieldValue.increment(total);
+          } else if (method === 'cash') {
+            sessionUpdates.salesCash = firebase.firestore.FieldValue.increment(paidAmount);
+          } else if (method === 'nfc') {
+            sessionUpdates.salesNfc = firebase.firestore.FieldValue.increment(paidAmount);
+          } else if (method === 'card') {
+            sessionUpdates.salesCard = firebase.firestore.FieldValue.increment(paidAmount);
+          }
+          transaction.update(sessionRef, sessionUpdates);
+        }
+      });
+
+      if (sessionRef) {
+        const freshDoc = await sessionRef.get();
         activeCashSession = { id: freshDoc.id, ...freshDoc.data() };
         updateCashSessionUI();
       }
@@ -4161,6 +4520,8 @@ window.ERPBilling = (function () {
     } catch (err) {
       console.error(err);
       showToast('Error al registrar venta POS: ' + err.message, 'danger');
+    } finally {
+      isProcessingPosSale = false;
     }
   }
 
@@ -4327,6 +4688,14 @@ window.ERPBilling = (function () {
   function editQuote(id) {
     const inv = invoices.find(i => i.id === id);
     if (!inv) return;
+    if (inv.status === 'converted') {
+      showToast('Este documento ya fue convertido a factura.', 'warning');
+      return;
+    }
+    if (inv.docType === 'invoice' && (inv.ncf || Number(inv.paidAmount || 0) > 0)) {
+      showToast('Una factura fiscal o con cobros no puede editarse.', 'danger');
+      return;
+    }
 
     editingInvoiceId = id;
     editingInvoiceNumber = inv.invoiceNumber;
@@ -4407,9 +4776,14 @@ window.ERPBilling = (function () {
   function convertQuoteFromList(id) {
     const inv = invoices.find(i => i.id === id);
     if (!inv) return;
+    if (!['quote', 'proforma'].includes(inv.docType) || inv.status === 'converted' || inv.convertedTo) {
+      showToast('Este documento no puede convertirse nuevamente.', 'warning');
+      return;
+    }
 
     switchPanel('invoices');
     switchSubTab('invoices', 'form');
+    conversionSourceId = id;
     const isProforma = inv.docType === 'proforma';
     document.getElementById('invoice-form-title').textContent = isProforma ? 'Convertir Proforma a Factura' : 'Convertir Cotización a Factura';
     
@@ -4419,10 +4793,10 @@ window.ERPBilling = (function () {
     document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
     
     const today = new Date();
-    document.getElementById('form-invoice-date').value = today.toISOString().split('T')[0];
+    document.getElementById('form-invoice-date').value = BillingCore.toLocalDateInput(today);
     const dueDate = new Date();
     dueDate.setDate(today.getDate() + 15);
-    document.getElementById('form-invoice-due-date').value = dueDate.toISOString().split('T')[0];
+    document.getElementById('form-invoice-due-date').value = BillingCore.toLocalDateInput(dueDate);
 
     const docTypeSelect = document.getElementById('form-invoice-doc-type');
     if (docTypeSelect) {
@@ -4433,24 +4807,43 @@ window.ERPBilling = (function () {
     const tbody = document.getElementById('invoice-form-items-body');
     tbody.innerHTML = '';
 
+    const paymentTermsSelect = document.getElementById('form-invoice-payment-terms');
+    if (paymentTermsSelect) paymentTermsSelect.value = inv.paymentTerms || inv.paymentTerm || 'Contado';
+    const notesInput = document.getElementById('form-invoice-notes');
+    if (notesInput) notesInput.value = inv.notes || '';
+    const discountInput = document.getElementById('form-invoice-discount-pct');
+    if (discountInput) discountInput.value = inv.discountPct || 0;
+
     inv.items.forEach(item => {
       addInvoiceFormItemRow({
         productId: item.productId,
         description: item.description,
         price: item.price,
         qty: item.qty,
-        tax: item.tax
+        tax: item.tax,
+        taxMode: item.taxMode,
+        taxRate: item.taxRate,
+        discount: item.discount
       });
     });
+    calculateInvoiceFormTotals();
   }
 
   function openRegisterPaymentFromList(id) {
     const inv = invoices.find(i => i.id === id);
     if (!inv) return;
+    if (inv.docType !== 'invoice' || inv.status === 'cancelled') {
+      showToast('Este documento no admite cobros.', 'warning');
+      return;
+    }
 
     const total = Number(inv.total);
     const paid = Number(inv.paidAmount || 0);
-    const balance = total - paid;
+    const balance = invoiceBalance(inv);
+    if (balance <= 0) {
+      showToast('La factura no tiene balance pendiente.', 'info');
+      return;
+    }
 
     document.getElementById('form-payment-invoice-id').value = id;
     document.getElementById('payment-info-total').textContent = formatMoney(total);
@@ -4530,7 +4923,8 @@ window.ERPBilling = (function () {
     }
 
     try {
-      const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://rnc.megaplus.com.do/api/consulta?rnc=' + cleanRnc + '&token=' + apiKey);
+      // El token se envía únicamente al proveedor configurado; no pasa por proxies públicos.
+      const url = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + '&token=' + encodeURIComponent(apiKey);
       const res = await fetch(url);
       if (!res.ok) throw new Error('Error al consultar RNC en el servidor externo.');
       const data = await res.json();

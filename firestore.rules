@@ -54,6 +54,111 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    function canAdminTenant(companyCodes, tenantAdminRole) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return isEmailVerified() && (
+        documentHasRole(userData, 'superadmin') ||
+        (userData.companyCode in companyCodes && (
+          documentHasRole(userData, 'admin') ||
+          documentHasRole(userData, 'erp_admin') ||
+          documentHasRole(userData, tenantAdminRole)
+        ))
+      );
+    }
+
+    function canOperateTenant(companyCodes, tenantAdminRole, tenantOperatorRole, tenantUserRole, tenantUsuarioRole) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return isEmailVerified() && (
+        documentHasRole(userData, 'superadmin') ||
+        (userData.companyCode in companyCodes && (
+          documentHasRole(userData, 'admin') ||
+          documentHasRole(userData, 'erp_admin') ||
+          documentHasRole(userData, 'editor') ||
+          documentHasRole(userData, 'erp_operator') ||
+          documentHasRole(userData, tenantAdminRole) ||
+          documentHasRole(userData, tenantOperatorRole) ||
+          documentHasRole(userData, tenantUserRole) ||
+          documentHasRole(userData, tenantUsuarioRole)
+        ))
+      );
+    }
+
+    function isCreaticosAdmin() {
+      return canAdminTenant(['CREATICOS'], 'creaticos_admin');
+    }
+
+    function isCreaticosOperator() {
+      return canOperateTenant(['CREATICOS'], 'creaticos_admin', 'creaticos_operator', 'creaticos_user', 'creaticos_usuario');
+    }
+
+    function isFutunetAdmin() {
+      return canAdminTenant(['FUTUNETSRL', 'FUTUNET'], 'futunetsrl_admin');
+    }
+
+    function isFutunetOperator() {
+      return canOperateTenant(['FUTUNETSRL', 'FUTUNET'], 'futunetsrl_admin', 'futunetsrl_operator', 'futunetsrl_user', 'futunetsrl_usuario');
+    }
+
+    function isPanitasAdmin() {
+      return canAdminTenant(['PANITAS'], 'panitas_admin');
+    }
+
+    function isPanitasOperator() {
+      return canOperateTenant(['PANITAS'], 'panitas_admin', 'panitas_operator', 'panitas_user', 'panitas_usuario');
+    }
+
+    function isAnyTenantAdmin() {
+      return isCreaticosAdmin() || isFutunetAdmin() || isPanitasAdmin();
+    }
+
+    function isValidBillingInvoice() {
+      let data = request.resource.data;
+      return data.docType in ['invoice', 'quote', 'proforma'] &&
+             data.invoiceNumber is string && data.invoiceNumber.size() > 0 && data.invoiceNumber.size() <= 50 &&
+             data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 150 &&
+             data.clientRnc is string && data.clientRnc.size() <= 30 &&
+             data.date is string && data.date.size() == 10 &&
+             data.dueDate is string && data.dueDate.size() == 10 &&
+             data.items is list && data.items.size() > 0 && data.items.size() <= 200 &&
+             data.subtotal is number && data.subtotal >= 0 &&
+             data.itbis is number && data.itbis >= 0 &&
+             data.total is number && data.total > 0 &&
+             data.paidAmount is number && data.paidAmount >= 0 && data.paidAmount <= data.total + 0.01 &&
+             data.status in ['pending', 'partial', 'unpaid', 'paid', 'cancelled', 'quote', 'proforma', 'converted'] &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
+             data.ncf is string && data.ncf.size() <= 19;
+    }
+
+    function hasValidNewBillingNcf() {
+      let ncf = request.resource.data.ncf;
+      return ncf == '' || ncf.matches('^B[0-9]{10}$') || ncf.matches('^E[0-9]{12}$');
+    }
+
+    function preservesBillingIdentity() {
+      return request.resource.data.invoiceNumber == resource.data.invoiceNumber &&
+             request.resource.data.docType == resource.data.docType &&
+             request.resource.data.ncf == resource.data.ncf &&
+             request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    function isValidBillingPayment() {
+      let data = request.resource.data;
+      return data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 150 &&
+             data.amount is number && data.amount > 0 &&
+             data.method is string && data.method in ['Efectivo', 'Tarjeta', 'Transferencia'] &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
+             data.timestamp == request.time;
+    }
+
+    function isValidBillingClient() {
+      let data = request.resource.data;
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 150 &&
+             data.rnc is string && data.rnc.size() <= 30 &&
+             data.phone is string && data.phone.size() <= 30 &&
+             data.email is string && data.email.size() <= 150 &&
+             data.address is string && data.address.size() <= 300;
+    }
+
     // ─── USERS Collection ───
     match /users/{userId} {
       // Logged-in users can read their own data, admins/editors can read all (if email verified)
@@ -93,10 +198,14 @@ service cloud.firestore {
       allow read: if true;
 
       // Only editors and above can create/update products
-      allow create, update: if isEditorOrAbove();
+      allow create: if isEditorOrAbove() || isFutunetAdmin() || isCreaticosAdmin();
+      allow update: if isEditorOrAbove() || isFutunetAdmin() || isCreaticosAdmin() || (
+        (isFutunetOperator() || isCreaticosOperator()) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+      );
 
       // Only admins can delete products
-      allow delete: if isAdminOrAbove();
+      allow delete: if isAdminOrAbove() || isFutunetAdmin() || isCreaticosAdmin();
     }
 
     // ─── CARTS Collection ───
@@ -180,7 +289,14 @@ service cloud.firestore {
 
       // Signed-in users with email verified can create audit logs representing their own actions
       allow create: if isEmailVerified() && (
-        isEditorOrAbove() || (
+        isEditorOrAbove() ||
+        (isAnyTenantAdmin() &&
+          request.resource.data.userId == request.auth.uid &&
+          request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
+          request.resource.data.action is string && request.resource.data.action.size() <= 100 &&
+          request.resource.data.details is string && request.resource.data.details.size() <= 500 &&
+          request.resource.data.timestamp == request.time
+        ) || (
           request.resource.data.userId == request.auth.uid &&
           request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
           request.resource.data.action in ['Inicio de sesión', 'Reporte de pago', 'Pedido por Transferencia'] &&
@@ -202,62 +318,135 @@ service cloud.firestore {
 
     // ─── CREATICOS BILLING Collections ───
     match /creaticos_invoices/{invoiceId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && isValidBillingInvoice() && hasValidNewBillingNcf();
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && (
+        isCreaticosAdmin() || (isCreaticosOperator() && request.resource.data.status != 'cancelled')
+      );
+      allow delete: if isCreaticosAdmin();
     }
     match /creaticos_clients/{clientId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isCreaticosOperator();
+      allow create, update: if isCreaticosOperator() && isValidBillingClient();
+      allow delete: if isCreaticosAdmin();
     }
     match /creaticos_payments/{paymentId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && isValidBillingPayment();
+      allow update, delete: if isCreaticosAdmin();
     }
     match /creaticos_products/{productId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isCreaticosOperator();
+      allow create, delete: if isCreaticosAdmin();
+      allow update: if isCreaticosAdmin() || (
+        isCreaticosOperator() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+      );
     }
     match /creaticos_settings/{settingId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isCreaticosOperator();
+      allow create, delete: if isCreaticosAdmin();
+      allow update: if isCreaticosAdmin() || (
+        isCreaticosOperator() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum',
+          'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
+        ])
+      );
+    }
+    match /creaticos_secrets/{secretId} {
+      allow read, write: if isCreaticosAdmin();
     }
     match /creaticos_cash_sessions/{sessionId} {
-      allow read, write: if isAdminOrAbove();
+      allow read, create, update: if isCreaticosOperator();
+      allow delete: if isCreaticosAdmin();
     }
 
     // ─── FUTUNET BILLING Collections ───
     match /futunet_invoices/{invoiceId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && isValidBillingInvoice() && hasValidNewBillingNcf();
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && (
+        isFutunetAdmin() || (isFutunetOperator() && request.resource.data.status != 'cancelled')
+      );
+      allow delete: if isFutunetAdmin();
     }
     match /futunet_clients/{clientId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isFutunetOperator();
+      allow create, update: if isFutunetOperator() && isValidBillingClient();
+      allow delete: if isFutunetAdmin();
     }
     match /futunet_payments/{paymentId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && isValidBillingPayment();
+      allow update, delete: if isFutunetAdmin();
     }
     match /futunet_settings/{settingId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isFutunetOperator();
+      allow create, delete: if isFutunetAdmin();
+      allow update: if isFutunetAdmin() || (
+        isFutunetOperator() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum',
+          'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
+        ])
+      );
     }
-    match /cash_sessions/{sessionId} {
-      allow read, write: if isAdminOrAbove();
+    match /futunet_secrets/{secretId} {
+      allow read, write: if isFutunetAdmin();
+    }
+    match /futunet_cash_sessions/{sessionId} {
+      allow read, create, update: if isFutunetOperator();
+      allow delete: if isFutunetAdmin();
     }
 
     // ─── PANITAS BILLING Collections ───
     match /panitas_invoices/{invoiceId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isPanitasOperator();
+      allow create: if isPanitasOperator() && isValidBillingInvoice() && hasValidNewBillingNcf();
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && (
+        isPanitasAdmin() || (isPanitasOperator() && request.resource.data.status != 'cancelled')
+      );
+      allow delete: if isPanitasAdmin();
     }
     match /panitas_clients/{clientId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isPanitasOperator();
+      allow create, update: if isPanitasOperator() && isValidBillingClient();
+      allow delete: if isPanitasAdmin();
     }
     match /panitas_payments/{paymentId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isPanitasOperator();
+      allow create: if isPanitasOperator() && isValidBillingPayment();
+      allow update, delete: if isPanitasAdmin();
     }
     match /panitas_products/{productId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isPanitasOperator();
+      allow create, delete: if isPanitasAdmin();
+      allow update: if isPanitasAdmin() || (
+        isPanitasOperator() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+      );
     }
     match /panitas_settings/{settingId} {
-      allow read, write: if isAdminOrAbove();
+      allow read: if isPanitasOperator();
+      allow create, delete: if isPanitasAdmin();
+      allow update: if isPanitasAdmin() || (
+        isPanitasOperator() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum',
+          'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
+        ])
+      );
+    }
+    match /panitas_secrets/{secretId} {
+      allow read, write: if isPanitasAdmin();
     }
     match /panitas_cash_sessions/{sessionId} {
-      allow read, write: if isAdminOrAbove();
+      allow read, create, update: if isPanitasOperator();
+      allow delete: if isPanitasAdmin();
     }
     match /panitas_table_orders/{tableId} {
-      allow read, write: if isAdminOrAbove();
+      allow read, create, update, delete: if isPanitasOperator();
     }
 
     // ─── SERVICE REQUESTS Collection ───
