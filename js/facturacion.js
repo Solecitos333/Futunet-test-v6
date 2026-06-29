@@ -5442,27 +5442,46 @@ window.ERPBilling = (function () {
     }
 
     const apiKey = (settings && settings.rncApiKey) ? settings.rncApiKey.trim() : '';
-    if (!apiKey) {
-      alert('Por favor, configure su Token de Megaplus API en los Ajustes de la empresa (sección Servicios Externos) para habilitar la consulta automática de RNC.');
-      if (btn) {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+    const targetUrl = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + (apiKey ? '&token=' + encodeURIComponent(apiKey) : '');
+    
+    // We try to access through various public CORS proxies for redundancy, falling back to a direct call
+    const proxies = [
+      url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
+      url => 'https://corsproxy.io/?' + encodeURIComponent(url),
+      url => 'https://api.codetabs.com/v1/proxy?url=' + encodeURIComponent(url),
+      url => url // direct fallback
+    ];
+
+    let data = null;
+    let lastError = null;
+
+    for (let i = 0; i < proxies.length; i++) {
+      try {
+        const proxyUrl = proxies[i](targetUrl);
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        data = await res.json();
+        if (data && data.error && data.mensaje && data.mensaje.includes('Token')) {
+          // If a configured token failed specifically, abort proxy rotation to prevent masking key errors
+          throw new Error(data.mensaje);
+        }
+        break; // Success!
+      } catch (err) {
+        console.warn(`Proxy RNC #${i} falló:`, err);
+        lastError = err;
       }
-      return;
     }
 
     try {
-      // El token se envía únicamente al proveedor configurado; no pasa por proxies públicos.
-      const url = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + '&token=' + encodeURIComponent(apiKey);
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Error al consultar RNC en el servidor externo.');
-      const data = await res.json();
-      
-      if (data && data.error) {
-        throw new Error(data.error);
+      if (!data) {
+        throw lastError || new Error('No se pudo establecer conexión con los servidores de consulta de la DGII.');
       }
 
-      if (data && data.nombre_razon_social) {
+      if (data.error) {
+        throw new Error(data.mensaje || data.error);
+      }
+
+      if (data.nombre_razon_social) {
         const nombre = data.nombre_razon_social;
         const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
         const fullName = nombre + (data.nombre_comercial && data.nombre_comercial !== nombre ? nombreComercial : '');
