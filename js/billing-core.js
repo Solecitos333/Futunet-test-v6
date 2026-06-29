@@ -6,6 +6,18 @@
   'use strict';
 
   const NCF_TYPES = ['B01', 'B02', 'B12', 'B14', 'B15'];
+  const RESTAURANT_ORDER_STATUSES = ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'closed', 'cancelled'];
+  const RESTAURANT_ACTIVE_STATUSES = ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'delivered'];
+  const RESTAURANT_STATUS_TRANSITIONS = {
+    pending: ['preparing', 'closed', 'cancelled'],
+    preparing: ['pending', 'ready', 'closed', 'cancelled'],
+    ready: ['pending', 'served', 'closed', 'cancelled'],
+    served: ['pending_payment', 'closed', 'cancelled'],
+    pending_payment: ['closed', 'cancelled'],
+    delivered: ['closed', 'cancelled'],
+    closed: ['pending'],
+    cancelled: ['pending']
+  };
 
   function toNumber(value, fallback = 0) {
     const number = Number(value);
@@ -116,6 +128,86 @@
     return 'pending';
   }
 
+  function normalizeTableName(value) {
+    const name = String(value || '').replace(/\s+/g, ' ').trim();
+    if (!name || name.length > 50) {
+      throw new Error('La mesa debe tener entre 1 y 50 caracteres.');
+    }
+    if (!/^[\p{L}\p{N}\s#()._-]+$/u.test(name)) {
+      throw new Error('La mesa contiene caracteres no permitidos.');
+    }
+    return name;
+  }
+
+  function normalizeRestaurantTables(value) {
+    const source = Array.isArray(value) ? value : String(value || '').split(/[\n,]+/);
+    const result = [];
+    const seen = new Set();
+    source.forEach(item => {
+      const normalized = normalizeTableName(item);
+      const key = normalized.toLocaleLowerCase('es-DO');
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push(normalized);
+      }
+    });
+    if (result.length < 1 || result.length > 50) {
+      throw new Error('Configura entre 1 y 50 mesas.');
+    }
+    return result;
+  }
+
+  function restaurantItemsFingerprint(items) {
+    if (!Array.isArray(items)) return '[]';
+    return JSON.stringify(items.map(item => ({
+      productId: String(item.productId || ''),
+      name: String(item.name || ''),
+      price: roundMoney(item.price),
+      qty: Math.max(0, toNumber(item.qty)),
+      tax: Math.max(0, toNumber(item.tax)),
+      notes: String(item.notes || ''),
+      modifiers: Array.isArray(item.modifiers) ? item.modifiers.map(String) : [],
+      allergyWarning: Boolean(item.allergyWarning)
+    })));
+  }
+
+  function restaurantItemsChanged(previousItems, nextItems) {
+    return restaurantItemsFingerprint(previousItems) !== restaurantItemsFingerprint(nextItems);
+  }
+
+  function canTransitionRestaurantOrder(fromStatus, toStatus) {
+    const from = String(fromStatus || '');
+    const to = String(toStatus || '');
+    if (from === to) return RESTAURANT_ORDER_STATUSES.includes(from);
+    return Boolean(RESTAURANT_STATUS_TRANSITIONS[from] && RESTAURANT_STATUS_TRANSITIONS[from].includes(to));
+  }
+
+  function isActiveRestaurantOrder(order) {
+    return Boolean(order && RESTAURANT_ACTIVE_STATUSES.includes(String(order.status || 'pending')));
+  }
+
+  function restaurantOrderTotal(items) {
+    if (!Array.isArray(items)) return 0;
+    return roundMoney(items.reduce((sum, item) => {
+      const base = Math.max(0, toNumber(item.price)) * Math.max(0, toNumber(item.qty));
+      return sum + base + (base * Math.max(0, toNumber(item.tax)) / 100);
+    }, 0));
+  }
+
+  function restaurantStatusMeta(status) {
+    const values = {
+      pending: { label: 'Pendiente', tone: 'warning' },
+      preparing: { label: 'Preparando', tone: 'info' },
+      ready: { label: 'Lista', tone: 'success' },
+      served: { label: 'Servida', tone: 'purple' },
+      delivered: { label: 'Servida', tone: 'purple' },
+      pending_payment: { label: 'Por cobrar', tone: 'purple' },
+      closed: { label: 'Cerrada', tone: 'neutral' },
+      cancelled: { label: 'Cancelada', tone: 'danger' }
+    };
+    return values[status] || values.pending;
+  }
+
   function csvCell(value) {
     let text = value === undefined || value === null ? '' : String(value);
     if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
@@ -142,7 +234,7 @@
     if (allocated === 0 && toNumber(invoice.paidAmount) > 0) {
       const legacyPaid = Math.min(total, Math.max(0, roundMoney(invoice.paidAmount)));
       const legacyMethod = String(invoice.paymentMethod || invoice.paymentTerms || invoice.paymentTerm || '').toLowerCase();
-      if (legacyMethod.includes('transfer')) buckets.transfer = legacyPaid;
+      if (legacyMethod.includes('transfer') || legacyMethod.includes('cheque')) buckets.transfer = legacyPaid;
       else if (legacyMethod.includes('tarjeta') || legacyMethod.includes('nfc')) buckets.card = legacyPaid;
       else buckets.cash = legacyPaid;
       allocated = legacyPaid;
@@ -204,6 +296,8 @@
 
   return {
     NCF_TYPES,
+    RESTAURANT_ORDER_STATUSES,
+    RESTAURANT_ACTIVE_STATUSES,
     roundMoney,
     toLocalDateInput,
     parseDateOnly,
@@ -214,6 +308,14 @@
     isValidNcf,
     resolveLineTax,
     paymentStatus,
+    normalizeTableName,
+    normalizeRestaurantTables,
+    restaurantItemsFingerprint,
+    restaurantItemsChanged,
+    canTransitionRestaurantOrder,
+    isActiveRestaurantOrder,
+    restaurantOrderTotal,
+    restaurantStatusMeta,
     csvCell,
     paymentBucketsFor607,
     classify607Invoice,

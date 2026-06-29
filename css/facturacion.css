@@ -1871,3 +1871,190 @@ body.erp-modal-open {
   transform: scale(1.03);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
 }
+
+.restaurant-order-metadata {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.7fr) minmax(180px, 1.3fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.restaurant-order-metadata label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.restaurant-order-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.restaurant-order-actions .admin-btn,
+.restaurant-cancel-button {
+  min-height: 44px;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.75rem;
+}
+
+.restaurant-refresh-button {
+  min-height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.restaurant-table-card {
+  min-height: 126px;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  font: inherit;
+}
+
+.restaurant-table-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px -6px rgb(15 23 42 / 0.25);
+}
+
+.restaurant-table-card.is-free {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #166534;
+}
+
+.restaurant-table-card.is-occupied {
+  background: #fff7ed;
+  border: 1.5px solid #fdba74;
+  color: #9a3412;
+}
+
+.restaurant-table-card.status-preparing { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+.restaurant-table-card.status-ready { background: #ecfdf5; border-color: #6ee7b7; color: #047857; }
+.restaurant-table-card.status-served,
+.restaurant-table-card.status-delivered,
+.restaurant-table-card.status-pending_payment { background: #faf5ff; border-color: #d8b4fe; color: #7e22ce; }
+
+.restaurant-table-client {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+.restaurant-table-total { font-size: 0.9rem; font-weight: 800; }
+
+.restaurant-status-badge {
+  align-self: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tone-warning { background: #ffedd5; color: #9a3412; }
+.tone-info { background: #dbeafe; color: #1d4ed8; }
+.tone-success { background: #dcfce7; color: #166534; }
+.tone-purple { background: #f3e8ff; color: #7e22ce; }
+.tone-danger { background: #fee2e2; color: #991b1b; }
+.tone-neutral { background: #e2e8f0; color: #334155; }
+
+.kds-panel-header,
+.kds-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kds-panel-header {
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.kds-connection-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.kds-connection-status.is-online { background: #dcfce7; color: #166534; }
+.kds-connection-status.is-offline { background: #fee2e2; color: #991b1b; }
+.kds-connection-status.is-connecting { background: #fef3c7; color: #92400e; }
+
+.kds-refresh-button { min-height: 40px; border: 1.5px solid var(--border-color); border-radius: 10px; }
+
+.kds-card {
+  background: #fff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px -5px rgb(15 23 42 / 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kds-card.priority-high { border-left: 6px solid #f59e0b; }
+.kds-card.priority-urgent,
+.kds-card.is-delayed { border-left: 6px solid #dc2626; }
+
+.kds-card-header { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+.kds-card-header h3 { margin: 0; color: var(--primary); font-size: 1.15rem; }
+.kds-card-header p { margin: 3px 0 0; color: var(--text-muted); font-size: 0.75rem; }
+.kds-card-meta { display: flex; justify-content: space-between; color: var(--text-muted); font-size: 0.76rem; }
+.kds-card-meta strong { color: #b91c1c; }
+.kds-order-note,
+.kds-item-note { margin: 4px 0 0; padding: 7px 9px; border-radius: 8px; background: #fff7ed; color: #9a3412; font-size: 0.78rem; font-weight: 700; }
+.kds-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.kds-items li { padding-bottom: 8px; border-bottom: 1px dashed var(--border-color); }
+.kds-items li:last-child { border-bottom: 0; }
+.kds-card-actions { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color); }
+.kds-action-button { width: 100%; min-height: 44px; justify-content: center; }
+.restaurant-empty-state { grid-column: 1 / -1; padding: 50px 20px; text-align: center; color: var(--text-muted); }
+.restaurant-empty-state.is-error { color: var(--danger); }
+.pos-item-kitchen-note { min-width: 180px; margin-top: 6px; min-height: 34px; font-size: 0.72rem; }
+.pos-item-allergy { display: inline-flex; align-items: center; gap: 6px; margin-top: 5px; color: #b91c1c; font-size: 0.7rem; font-weight: 700; }
+.pos-item-allergy input { width: 16px; height: 16px; accent-color: #dc2626; }
+.settings-section-title { margin: 0 0 16px; padding-bottom: 8px; border-bottom: 1.5px solid var(--border-color); color: var(--primary); font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; }
+.form-help { display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.75rem; }
+
+.restaurant-table-card:focus-visible,
+.restaurant-refresh-button:focus-visible,
+.kds-action-button:focus-visible,
+.kds-refresh-button:focus-visible {
+  outline: 3px solid rgba(var(--primary-rgb), 0.35);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .restaurant-order-metadata,
+  .restaurant-order-actions { grid-template-columns: 1fr; }
+  .kds-panel-header { align-items: flex-start; flex-direction: column; }
+  .kds-panel-actions { width: 100%; justify-content: space-between; }
+  #kds-orders-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kds-card,
+  .restaurant-table-card,
+  #pos-restaurant-tables-list > div { transition: none !important; transform: none !important; }
+}

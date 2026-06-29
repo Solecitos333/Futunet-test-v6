@@ -107,6 +107,13 @@ service cloud.firestore {
       return canOperateTenant(['PANITAS'], 'panitas_admin', 'panitas_operator', 'panitas_user', 'panitas_usuario');
     }
 
+    function isPanitasKitchen() {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return isEmailVerified() &&
+             userData.companyCode == 'PANITAS' &&
+             documentHasRole(userData, 'panitas_kitchen');
+    }
+
     function isAnyTenantAdmin() {
       return isCreaticosAdmin() || isFutunetAdmin() || isPanitasAdmin();
     }
@@ -145,7 +152,7 @@ service cloud.firestore {
       let data = request.resource.data;
       return data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 150 &&
              data.amount is number && data.amount > 0 &&
-             data.method is string && data.method in ['Efectivo', 'Tarjeta', 'Transferencia'] &&
+             data.method is string && data.method in ['Efectivo', 'Tarjeta', 'Transferencia', 'Cheque'] &&
              (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
              data.timestamp == request.time;
     }
@@ -157,6 +164,89 @@ service cloud.firestore {
              data.phone is string && data.phone.size() <= 30 &&
              data.email is string && data.email.size() <= 150 &&
              data.address is string && data.address.size() <= 300;
+    }
+
+    function isValidRestaurantOrder(tableId) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+               'table', 'clientName', 'items', 'notes', 'priority', 'status', 'waiterName',
+               'createdBy', 'updatedBy', 'revision', 'cycle', 'createdAt', 'statusChangedAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'table', 'clientName', 'items', 'notes', 'priority', 'status', 'waiterName',
+               'createdBy', 'updatedBy', 'revision', 'cycle', 'createdAt', 'statusChangedAt', 'updatedAt',
+               'linkedInvoiceId', 'closedAt', 'closedBy', 'cancellationReason', 'cancelledAt', 'cancelledBy'
+             ]) &&
+             data.table == tableId && data.table is string && data.table.size() > 0 && data.table.size() <= 50 &&
+             data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 150 &&
+             data.items is list && data.items.size() > 0 && data.items.size() <= 100 &&
+             data.notes is string && data.notes.size() <= 500 &&
+             data.priority in ['normal', 'high', 'urgent'] &&
+             data.status in ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'closed', 'cancelled'] &&
+             data.waiterName is string && data.waiterName.size() > 0 && data.waiterName.size() <= 150 &&
+             data.createdBy is string && data.createdBy.size() > 0 &&
+             data.updatedBy == request.auth.uid &&
+             data.revision is int && data.revision > 0 &&
+             data.cycle is int && data.cycle > 0 &&
+             data.createdAt is timestamp && data.statusChangedAt is timestamp && data.updatedAt == request.time &&
+             (data.status != 'closed' || (
+               data.linkedInvoiceId is string && data.linkedInvoiceId.size() > 0 &&
+               data.closedAt == request.time && data.closedBy == request.auth.uid &&
+               existsAfter(/databases/$(database)/documents/panitas_invoices/$(data.linkedInvoiceId))
+             )) &&
+             (data.status != 'cancelled' || (
+               data.cancellationReason is string && data.cancellationReason.size() > 2 && data.cancellationReason.size() <= 500 &&
+               data.cancelledAt == request.time && data.cancelledBy == request.auth.uid
+             ));
+    }
+
+    function isValidRestaurantTransition() {
+      let before = resource.data.status;
+      let after = request.resource.data.status;
+      return before == after ||
+             (before == 'pending' && after in ['preparing', 'closed', 'cancelled']) ||
+             (before == 'preparing' && after in ['pending', 'ready', 'closed', 'cancelled']) ||
+             (before == 'ready' && after in ['pending', 'served', 'closed', 'cancelled']) ||
+             (before == 'served' && after in ['pending_payment', 'closed', 'cancelled']) ||
+             (before == 'pending_payment' && after in ['closed', 'cancelled']) ||
+             (before == 'delivered' && after in ['closed', 'cancelled']) ||
+             (before in ['closed', 'cancelled'] && after == 'pending');
+    }
+
+    function isValidRestaurantOrderVersion() {
+      let data = request.resource.data;
+      let isLegacy = !('revision' in resource.data) || !('cycle' in resource.data) || !('createdAt' in resource.data);
+      let startsNewCycle = resource.data.status in ['closed', 'cancelled'] && data.status == 'pending';
+      return (isLegacy && data.revision == 1 && data.cycle == 1) ||
+             (!isLegacy && data.revision == resource.data.revision + 1 && (
+               (startsNewCycle && data.cycle == resource.data.cycle + 1 && data.createdAt == request.time && data.createdBy == request.auth.uid) ||
+               (!startsNewCycle && data.cycle == resource.data.cycle && data.createdAt == resource.data.createdAt && data.createdBy == resource.data.createdBy)
+             ));
+    }
+
+    function protectsPreparedRestaurantItems() {
+      return request.resource.data.items == resource.data.items ||
+             resource.data.status == 'pending' ||
+             request.resource.data.status in ['pending', 'closed', 'cancelled'];
+    }
+
+    function isValidRestaurantOrderEvent() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['orderId', 'table', 'fromStatus', 'toStatus', 'action', 'revision', 'cycle', 'userId', 'userEmail', 'timestamp']) &&
+             data.keys().hasOnly(['orderId', 'table', 'fromStatus', 'toStatus', 'action', 'revision', 'cycle', 'userId', 'userEmail', 'timestamp']) &&
+             data.orderId is string && data.orderId.size() > 0 && data.orderId.size() <= 50 &&
+             data.table == data.orderId &&
+             data.fromStatus is string && data.fromStatus.size() <= 30 &&
+             data.toStatus in ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'closed', 'cancelled'] &&
+             data.action in ['created', 'items_updated', 'details_updated', 'status_changed', 'cancelled', 'invoiced_and_closed'] &&
+             data.revision is int && data.revision > 0 && data.cycle is int && data.cycle > 0 &&
+             data.userId == request.auth.uid && data.userEmail is string && data.userEmail.size() <= 150 &&
+             data.timestamp == request.time &&
+             existsAfter(/databases/$(database)/documents/panitas_table_orders/$(data.orderId)) &&
+             getAfter(/databases/$(database)/documents/panitas_table_orders/$(data.orderId)).data.table == data.table &&
+             getAfter(/databases/$(database)/documents/panitas_table_orders/$(data.orderId)).data.status == data.toStatus &&
+             getAfter(/databases/$(database)/documents/panitas_table_orders/$(data.orderId)).data.revision == data.revision &&
+             getAfter(/databases/$(database)/documents/panitas_table_orders/$(data.orderId)).data.cycle == data.cycle;
     }
 
     // ─── USERS Collection ───
@@ -428,7 +518,7 @@ service cloud.firestore {
       );
     }
     match /panitas_settings/{settingId} {
-      allow read: if isPanitasOperator();
+      allow read: if isPanitasOperator() || isPanitasKitchen();
       allow create, delete: if isPanitasAdmin();
       allow update: if isPanitasAdmin() || (
         isPanitasOperator() &&
@@ -446,7 +536,39 @@ service cloud.firestore {
       allow delete: if isPanitasAdmin();
     }
     match /panitas_table_orders/{tableId} {
-      allow read, create, update, delete: if isPanitasOperator();
+      allow read: if isPanitasOperator() || isPanitasKitchen();
+      allow create: if isPanitasOperator() &&
+                       isValidRestaurantOrder(tableId) &&
+                       request.resource.data.status == 'pending' &&
+                       request.resource.data.createdBy == request.auth.uid &&
+                       request.resource.data.revision == 1 &&
+                       request.resource.data.cycle == 1 &&
+                       request.resource.data.createdAt == request.time &&
+                       request.resource.data.statusChangedAt == request.time;
+      allow update: if (isPanitasOperator() || (
+                         isPanitasKitchen() && (
+                           !('revision' in resource.data) ||
+                           request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                             'status', 'revision', 'cycle', 'updatedBy', 'statusChangedAt', 'updatedAt'
+                           ])
+                         )
+                       )) &&
+                       isValidRestaurantOrder(tableId) &&
+                       isValidRestaurantTransition() &&
+                       isValidRestaurantOrderVersion() &&
+                       protectsPreparedRestaurantItems() &&
+                       (!('statusChangedAt' in resource.data) || (
+                         request.resource.data.status == resource.data.status
+                           ? request.resource.data.statusChangedAt == resource.data.statusChangedAt
+                           : request.resource.data.statusChangedAt == request.time
+                       ));
+      allow delete: if isPanitasAdmin();
+    }
+    match /panitas_order_events/{eventId} {
+      allow read: if isPanitasOperator() || isPanitasKitchen();
+      allow create: if (isPanitasOperator() || isPanitasKitchen()) && isValidRestaurantOrderEvent();
+      allow update: if false;
+      allow delete: if isPanitasAdmin();
     }
 
     // ─── SERVICE REQUESTS Collection ───

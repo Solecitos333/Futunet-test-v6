@@ -6,7 +6,11 @@
     "rules": "storage.rules"
   },
   "hosting": {
-    "public": ".",
+    "public": "dist",
+    "predeploy": [
+      "node tools/prepare-hosting.mjs",
+      "node tools/validate-hosting.mjs"
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -18,7 +22,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate"
+            "value": "no-cache, max-age=0, must-revalidate"
           },
           {
             "key": "Strict-Transport-Security",
@@ -33,29 +37,42 @@
             "value": "nosniff"
           },
           {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          },
-          {
             "key": "Referrer-Policy",
             "value": "strict-origin-when-cross-origin"
           },
           {
             "key": "Permissions-Policy",
-            "value": "camera=(), microphone=(), geolocation=()"
+            "value": "camera=(), microphone=(), geolocation=(self)"
+          },
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
+          },
+          {
+            "key": "Cross-Origin-Resource-Policy",
+            "value": "same-origin"
           },
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https://*.firebasestorage.app https://lh3.googleusercontent.com https://firebasestorage.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://wa.me https://api.futunet.com.do http://localhost:8000 http://127.0.0.1:8000; frame-src 'self' https://*.firebaseapp.com https://*.firebase.com; object-src 'none';"
+            "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://*.firebasestorage.app https://lh3.googleusercontent.com https://firebasestorage.googleapis.com https://images.unsplash.com https://wsrv.nl https://*.tile.openstreetmap.org; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com wss://*.firebaseio.com https://rnc.megaplus.com.do https://api.futunet.com.do https://futunet-backend.onrender.com; frame-src 'self' https://*.firebaseapp.com https://*.firebase.com https://www.google.com https://maps.google.com https://www.speedtest.net; form-action 'self';"
           }
         ]
       },
       {
-        "source": "index.html",
+        "source": "**/*.@(css|js|png|jpg|jpeg|webp|svg|ico|woff|woff2)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "no-cache, no-store, must-revalidate"
+            "value": "public, max-age=3600, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
           }
         ]
       }

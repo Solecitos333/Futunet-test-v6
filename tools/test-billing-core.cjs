@@ -60,3 +60,38 @@ test('separa facturas de consumo menores al umbral y e-NCF del detalle 607', () 
   assert.equal(core.classify607Invoice({ docType: 'invoice', status: 'paid', ncf: 'E320000000001', total: 1000 }), 'electronic');
   assert.equal(core.classify607Invoice({ docType: 'invoice', status: 'paid', ncf: 'B0200000001', total: 250000, clientRnc: '' }), 'invalid');
 });
+
+test('normaliza mesas y rechaza identificadores inseguros', () => {
+  assert.equal(core.normalizeTableName('  Mesa   4  '), 'Mesa 4');
+  assert.deepEqual(core.normalizeRestaurantTables('Mesa 1\nMesa 2\nmesa 1'), ['Mesa 1', 'Mesa 2']);
+  assert.throws(() => core.normalizeTableName("Mesa 1');alert(1)//"));
+  assert.throws(() => core.normalizeTableName('Salón/Mesa 1'));
+});
+
+test('controla la máquina de estados de cocina', () => {
+  assert.equal(core.canTransitionRestaurantOrder('pending', 'preparing'), true);
+  assert.equal(core.canTransitionRestaurantOrder('pending', 'ready'), false);
+  assert.equal(core.canTransitionRestaurantOrder('preparing', 'pending'), true);
+  assert.equal(core.canTransitionRestaurantOrder('ready', 'served'), true);
+  assert.equal(core.canTransitionRestaurantOrder('served', 'closed'), true);
+  assert.equal(core.canTransitionRestaurantOrder('closed', 'pending'), true);
+  assert.equal(core.canTransitionRestaurantOrder('closed', 'ready'), false);
+});
+
+test('detecta modificaciones de cocina y calcula el total de la orden', () => {
+  const original = [{ productId: 'p1', name: 'Chimi', price: 100, qty: 2, tax: 18, notes: '' }];
+  const modified = [{ ...original[0], notes: 'Sin cebolla' }];
+  assert.equal(core.restaurantItemsChanged(original, original), false);
+  assert.equal(core.restaurantItemsChanged(original, modified), true);
+  assert.equal(core.restaurantOrderTotal(original), 236);
+});
+
+test('clasifica estados activos y medios de pago con cheque', () => {
+  assert.equal(core.isActiveRestaurantOrder({ status: 'served' }), true);
+  assert.equal(core.isActiveRestaurantOrder({ status: 'closed' }), false);
+  const buckets = core.paymentBucketsFor607({ id: 'i1', total: 1000 }, [
+    { invoiceId: 'i1', method: 'Cheque', amount: 1000 }
+  ]);
+  assert.equal(buckets.transfer, 1000);
+  assert.equal(buckets.credit, 0);
+});

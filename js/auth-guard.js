@@ -105,6 +105,7 @@
         const tenantOperatorRole = activeCompany + '_operator';
         const tenantUserRole = activeCompany + '_user';
         const tenantUsuarioRole = activeCompany + '_usuario';
+        const tenantKitchenRole = activeCompany + '_kitchen';
 
         const hasAdminPrivilege = roles.includes('superadmin') || 
                                   roles.includes('admin') || 
@@ -116,7 +117,8 @@
                                      roles.includes('erp_operator') || 
                                      roles.includes(tenantOperatorRole) ||
                                      roles.includes(tenantUserRole) ||
-                                     roles.includes(tenantUsuarioRole);
+                                     roles.includes(tenantUsuarioRole) ||
+                                     (activeCompany === 'panitas' && roles.includes(tenantKitchenRole));
 
         if (minRole === 'erp_admin') {
           if (!hasAdminPrivilege) {

@@ -1,0 +1,9 @@
+{
+  "name": "futunet-catalog-and-billing",
+  "private": true,
+  "scripts": {
+    "build:hosting": "node tools/prepare-hosting.mjs && node tools/validate-hosting.mjs",
+    "test": "node --test tools/test-billing-core.cjs tools/test-billing-contracts.cjs",
+    "validate": "node tools/validate-site.mjs && npm run build:hosting"
+  }
+}

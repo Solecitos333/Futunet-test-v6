@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v7';
+const CACHE_NAME = 'futunet-cache-v8';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -98,16 +98,23 @@ self.addEventListener('activate', event => {
 
 // Fetch Event
 self.addEventListener('fetch', event => {
+  const requestUrl = new URL(event.request.url);
+  const normalizedPath = requestUrl.pathname.replace(/\/+$/, '') || '/';
+  const privatePaths = new Set([
+    '/admin', '/admin.html',
+    '/mi-cuenta', '/mi-cuenta.html',
+    '/facturacion', '/facturacion.html',
+    '/login', '/login.html'
+  ]);
+
   // Skip cross-origin requests, POST requests, and firebase/firestore API calls
   if (
     event.request.method !== 'GET' ||
+    requestUrl.origin !== self.location.origin ||
+    privatePaths.has(normalizedPath) ||
     event.request.url.includes('firestore.googleapis.com') ||
     event.request.url.includes('firebaseinstallations.googleapis.com') ||
     event.request.url.includes('identitytoolkit.googleapis.com') ||
-    event.request.url.includes('admin.html') ||
-    event.request.url.includes('mi-cuenta.html') ||
-    event.request.url.includes('facturacion.html') ||
-    event.request.url.includes('login.html') ||
     event.request.url.includes('backup_data.js') ||
     event.request.url.includes('admin-panel.js') ||
     // Excluir archivos de configuración de Firebase del caché por seguridad

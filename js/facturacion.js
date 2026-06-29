@@ -11,6 +11,7 @@ window.ERPBilling = (function () {
 
   // Tenant Config
   const SUPPORTED_COMPANIES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+  const DEFAULT_RESTAURANT_TABLES = Array.from({ length: 12 }, (_, index) => `Mesa ${index + 1}`);
   let activeCompanyCode = 'CREATICOS';
   let isCreaticos = true;
   let isPanitas = false;
@@ -126,6 +127,10 @@ window.ERPBilling = (function () {
   let currentProfileClientId = '';
   let isProcessingPosSale = false;
   let lastFocusedBeforeModal = null;
+  let restaurantOrders = [];
+  let restaurantOrdersLoaded = false;
+  let unsubscribeRestaurantOrders = null;
+  let restaurantClockTimer = null;
 
   // Pagination for Invoices
   let invoiceCurrentPage = 1;
@@ -140,6 +145,7 @@ window.ERPBilling = (function () {
   // Security Context
   let currentUser = null;
   let isUserAdmin = false;
+  let isKitchenOnly = false;
 
   async function init(userData) {
     configureTenant(userData);
@@ -154,6 +160,13 @@ window.ERPBilling = (function () {
                   roles.includes('admin') || 
                   roles.includes('erp_admin') || 
                   roles.includes(tenantAdminRole);
+    const hasGeneralErpAccess = isUserAdmin ||
+      roles.includes('editor') ||
+      roles.includes('erp_operator') ||
+      roles.includes(`${activeCompany}_operator`) ||
+      roles.includes(`${activeCompany}_user`) ||
+      roles.includes(`${activeCompany}_usuario`);
+    isKitchenOnly = isPanitas && roles.includes('panitas_kitchen') && !hasGeneralErpAccess;
 
     document.querySelectorAll('[data-rnc-lookup]').forEach(button => {
       button.hidden = !isUserAdmin;
@@ -166,12 +179,17 @@ window.ERPBilling = (function () {
       applyTenantTheme();
       initializeModalAccessibility();
       await loadSettings();
+      if (isKitchenOnly) {
+        setupEventListeners();
+        startRestaurantRealtime();
+        return;
+      }
       await fetchAllData();
       await checkActiveCashSession();
       initDashboard();
       setupEventListeners();
       if (isPanitas) {
-        refreshActiveTables();
+        startRestaurantRealtime();
       }
     } catch (err) {
       console.error('Error initializing ERP Billing:', err);
@@ -285,6 +303,9 @@ window.ERPBilling = (function () {
     const restTables = document.getElementById('pos-restaurant-tables-container');
     if (restTables) restTables.style.display = isPanitas ? 'block' : 'none';
 
+    const restSettings = document.getElementById('restaurant-settings-group');
+    if (restSettings) restSettings.style.display = isPanitas ? 'block' : 'none';
+
     // Dynamic titles for Dashboard and Settings
     const dashboardTitle = document.getElementById('dashboard-panel-title');
     if (dashboardTitle) {
@@ -358,6 +379,13 @@ window.ERPBilling = (function () {
       if (settings.ncfB15Seq === undefined) settings.ncfB15Seq = 1;
       if (settings.ncfB12Prefix === undefined) settings.ncfB12Prefix = 'B12';
       if (settings.ncfB12Seq === undefined) settings.ncfB12Seq = 1;
+      if (isPanitas) {
+        try {
+          settings.restaurantTables = BillingCore.normalizeRestaurantTables(settings.restaurantTables || DEFAULT_RESTAURANT_TABLES);
+        } catch (error) {
+          settings.restaurantTables = DEFAULT_RESTAURANT_TABLES.slice();
+        }
+      }
     } else {
       // Default initial settings based on tenant
       if (isCreaticos) {
@@ -408,7 +436,8 @@ window.ERPBilling = (function () {
           ncfB15Seq: 1,
           ncfB12Prefix: 'B12',
           ncfB12Seq: 1,
-          defaultTax: 0
+          defaultTax: 0,
+          restaurantTables: DEFAULT_RESTAURANT_TABLES.slice()
         };
       } else {
         settings = {
@@ -436,8 +465,9 @@ window.ERPBilling = (function () {
           defaultTax: 18
         };
       }
-      // Save it directly to Firestore so the document is created
-      await docRef.set(settings);
+      // Solo un administrador puede inicializar la configuración persistente.
+      // Los demás perfiles pueden abrir el sistema con valores seguros de respaldo.
+      if (isUserAdmin) await docRef.set(settings);
     }
     normalizeNcfSettings(settings);
 
@@ -626,6 +656,41 @@ window.ERPBilling = (function () {
 
   // Setup general DOM action listeners
   function setupEventListeners() {
+    const cartItems = document.getElementById('pos-cart-items-list');
+    if (cartItems) {
+      cartItems.addEventListener('input', event => {
+        const noteInput = event.target.closest('[data-pos-item-note]');
+        if (noteInput) {
+          const index = Number(noteInput.getAttribute('data-pos-item-note'));
+          if (Number.isInteger(index) && posCart[index]) {
+            posCart[index].notes = noteInput.value.slice(0, 300);
+          }
+          return;
+        }
+        const allergyInput = event.target.closest('[data-pos-item-allergy]');
+        if (allergyInput) {
+          const index = Number(allergyInput.getAttribute('data-pos-item-allergy'));
+          if (Number.isInteger(index) && posCart[index]) {
+            posCart[index].allergyWarning = allergyInput.checked;
+          }
+        }
+      });
+    }
+
+    const refreshTablesButton = document.getElementById('btn-refresh-restaurant-tables');
+    if (refreshTablesButton) refreshTablesButton.addEventListener('click', refreshActiveTables);
+    const refreshKdsButton = document.getElementById('btn-refresh-kds');
+    if (refreshKdsButton) refreshKdsButton.addEventListener('click', refreshKds);
+    const cancelTableButton = document.getElementById('btn-cancel-table-order');
+    if (cancelTableButton) cancelTableButton.addEventListener('click', cancelCurrentTableOrder);
+
+    window.addEventListener('online', () => {
+      if (!unsubscribeRestaurantOrders && isPanitas) startRestaurantRealtime();
+      else updateRestaurantConnectionUI();
+    });
+    window.addEventListener('offline', () => updateRestaurantConnectionUI('offline'));
+    window.addEventListener('beforeunload', stopRestaurantRealtime);
+
     // Autocomplete list close on click outside
     document.addEventListener('click', function (e) {
       const dropdown = document.getElementById('client-autocomplete-dropdown');
@@ -2253,7 +2318,7 @@ window.ERPBilling = (function () {
       alert('El monto debe ser superior a cero.');
       return;
     }
-    if (!['Efectivo', 'Tarjeta', 'Transferencia'].includes(method)) {
+    if (!['Efectivo', 'Tarjeta', 'Transferencia', 'Cheque'].includes(method)) {
       showToast('Selecciona un método de pago válido.', 'danger');
       return;
     }
@@ -2301,7 +2366,7 @@ window.ERPBilling = (function () {
             updates.salesCash = firebase.firestore.FieldValue.increment(amount);
           } else if (method === 'Tarjeta') {
             updates.salesCard = firebase.firestore.FieldValue.increment(amount);
-          } else if (method === 'Transferencia') {
+          } else if (method === 'Transferencia' || method === 'Cheque') {
             updates.salesTransfer = firebase.firestore.FieldValue.increment(amount);
           }
           transaction.update(sessionRef, updates);
@@ -3012,6 +3077,11 @@ window.ERPBilling = (function () {
     document.getElementById('set-proforma-prefix').value = settings.proformaPrefix || 'PROF-';
     document.getElementById('set-proforma-seq').value = settings.nextProformaNum || 1001;
 
+    const restaurantTablesInput = document.getElementById('set-restaurant-tables');
+    if (restaurantTablesInput) {
+      restaurantTablesInput.value = getConfiguredRestaurantTables().join('\n');
+    }
+
     // Ticket Customization
     document.getElementById('set-ticket-slogan').value = settings.ticketSlogan || '';
     document.getElementById('set-ticket-instagram').value = settings.ticketInstagram || '';
@@ -3031,6 +3101,15 @@ window.ERPBilling = (function () {
 
     const rawDefaultTax = Number(document.getElementById('set-default-tax').value);
     const rncApiKey = document.getElementById('set-rnc-api-key').value.trim();
+    let restaurantTables = settings.restaurantTables || DEFAULT_RESTAURANT_TABLES;
+    if (isPanitas) {
+      try {
+        restaurantTables = BillingCore.normalizeRestaurantTables(document.getElementById('set-restaurant-tables').value);
+      } catch (error) {
+        showToast(error.message, 'danger');
+        return;
+      }
+    }
     const updated = {
       name: document.getElementById('set-company-name').value.trim(),
       rnc: document.getElementById('set-company-rnc').value.trim(),
@@ -3062,7 +3141,8 @@ window.ERPBilling = (function () {
 
       ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
       ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
-      ticketFooter: document.getElementById('set-ticket-footer').value.trim()
+      ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
+      ...(isPanitas ? { restaurantTables } : {})
     };
 
     const sequenceFields = [
@@ -3089,6 +3169,7 @@ window.ERPBilling = (function () {
       
       // Reload settings in cache
       await loadSettings();
+      if (isPanitas) renderActiveTables();
       alert('Configuración guardada exitosamente.');
       
       initDashboard();
@@ -3383,6 +3464,10 @@ window.ERPBilling = (function () {
         <div class="pos-item-info">
           <div class="pos-item-title">${escapeHTML(item.name)}</div>
           <div class="pos-item-meta">${escapeHTML(formatMoney(item.price))} c/u${sourceBadge}</div>
+          ${isPanitas ? `
+            <input type="text" class="form-input pos-item-kitchen-note" data-pos-item-note="${index}" value="${escapeAttr(item.notes || '')}" maxlength="300" placeholder="Nota para cocina (sin cebolla, alergia...)" aria-label="Nota de cocina para ${escapeAttr(item.name)}" />
+            <label class="pos-item-allergy"><input type="checkbox" data-pos-item-allergy="${index}" ${item.allergyWarning ? 'checked' : ''} /> Aviso de alergia</label>
+          ` : ''}
         </div>
         <div class="pos-item-qty-controls">
           <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, -1)">-</button>
@@ -3498,10 +3583,17 @@ window.ERPBilling = (function () {
   }
 
   function printKitchenTicket() {
-    const table = document.getElementById('pos-restaurant-table').value.trim();
+    const rawTable = document.getElementById('pos-restaurant-table').value.trim();
     const clientName = document.getElementById('pos-restaurant-client-name').value.trim();
-    if (!table) {
+    if (!rawTable) {
       showToast('Por favor, especifique la mesa antes de imprimir el ticket de cocina.', 'warning');
+      return;
+    }
+    let table = '';
+    try {
+      table = BillingCore.normalizeTableName(rawTable);
+    } catch (error) {
+      showToast(error.message, 'danger');
       return;
     }
     if (posCart.length === 0) {
@@ -3511,12 +3603,15 @@ window.ERPBilling = (function () {
 
     const ticketEl = document.getElementById('kitchen-ticket-print');
     if (!ticketEl) return;
+    const generalNotes = document.getElementById('pos-restaurant-order-notes').value.trim().slice(0, 500);
+    const priority = document.getElementById('pos-restaurant-priority').value;
 
     let itemsHtml = '';
     posCart.forEach(item => {
       itemsHtml += `
-        <div style="display:flex; justify-content:space-between; font-size:12pt; border-bottom:1px dashed #ccc; padding:4px 0;">
-          <span style="font-weight:bold;">${item.qty}x ${escapeHTML(item.name)}</span>
+        <div style="font-size:12pt; border-bottom:1px dashed #ccc; padding:4px 0;">
+          <div style="font-weight:bold;">${item.qty}x ${escapeHTML(item.name)}</div>
+          ${item.notes ? `<div style="font-size:10pt; font-weight:bold; margin-top:3px;">${item.allergyWarning ? '⚠️ ALERGIA · ' : 'NOTA: '}${escapeHTML(item.notes)}</div>` : ''}
         </div>
       `;
     });
@@ -3531,6 +3626,8 @@ window.ERPBilling = (function () {
         <div style="font-size: 11pt; margin-bottom: 10px;">
           Cliente: ${escapeHTML(clientName || 'Consumidor Final')}
         </div>
+        ${priority !== 'normal' ? `<div style="font-size:12pt; font-weight:bold; border:2px solid #000; padding:4px; margin-bottom:10px;">${priority === 'urgent' ? 'URGENTE' : 'PRIORIDAD'}</div>` : ''}
+        ${generalNotes ? `<div style="font-size:11pt; text-align:left; font-weight:bold; margin-bottom:10px;">NOTA GENERAL: ${escapeHTML(generalNotes)}</div>` : ''}
         <div style="font-size: 9pt; margin-bottom: 15px; color:#555;">
           Fecha: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}
         </div>
@@ -3548,284 +3645,467 @@ window.ERPBilling = (function () {
     document.body.classList.remove('printing-kitchen-ticket');
   }
 
-  async function saveTableOrder() {
-    const table = document.getElementById('pos-restaurant-table').value.trim();
-    const clientName = document.getElementById('pos-restaurant-client-name').value.trim();
-    if (!table) {
-      showToast('Por favor, especifique la mesa para guardar la orden.', 'warning');
-      return;
+  function restaurantEventData(table, fromStatus, toStatus, action, revision, cycle) {
+    return {
+      orderId: table,
+      table,
+      fromStatus: fromStatus || '',
+      toStatus,
+      action,
+      revision,
+      cycle,
+      userId: currentUser.uid,
+      userEmail: currentUser.email || '',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+  }
+
+  function getConfiguredRestaurantTables() {
+    try {
+      return BillingCore.normalizeRestaurantTables(settings && settings.restaurantTables
+        ? settings.restaurantTables
+        : DEFAULT_RESTAURANT_TABLES);
+    } catch (error) {
+      return DEFAULT_RESTAURANT_TABLES.slice();
     }
+  }
+
+  function updateRestaurantConnectionUI(state = 'auto') {
+    const statusEl = document.getElementById('kds-connection-status');
+    if (!statusEl) return;
+    const isOffline = state === 'offline' || !navigator.onLine;
+    const hasError = state === 'error';
+    const isLive = !isOffline && !hasError && (
+      state === 'connected' || (state === 'auto' && Boolean(unsubscribeRestaurantOrders) && restaurantOrdersLoaded)
+    );
+    statusEl.className = `kds-connection-status ${isLive ? 'is-online' : (isOffline || hasError ? 'is-offline' : 'is-connecting')}`;
+    statusEl.textContent = isLive
+      ? 'En vivo'
+      : (isOffline ? 'Sin conexión' : (hasError ? 'Error de sincronización' : 'Conectando...'));
+  }
+
+  function stopRestaurantRealtime() {
+    if (unsubscribeRestaurantOrders) unsubscribeRestaurantOrders();
+    unsubscribeRestaurantOrders = null;
+    if (restaurantClockTimer) clearInterval(restaurantClockTimer);
+    restaurantClockTimer = null;
+  }
+
+  function startRestaurantRealtime() {
+    stopRestaurantRealtime();
+    updateRestaurantConnectionUI('connecting');
+    unsubscribeRestaurantOrders = getDB().collection('panitas_table_orders')
+      .onSnapshot(snapshot => {
+        restaurantOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        restaurantOrdersLoaded = true;
+        updateRestaurantConnectionUI('connected');
+        renderActiveTables();
+        renderKds();
+      }, error => {
+        console.error('Error in restaurant realtime listener:', error);
+        unsubscribeRestaurantOrders = null;
+        updateRestaurantConnectionUI('error');
+        showToast('Se perdió la sincronización de comandas. Usa Actualizar para reintentar.', 'danger');
+      });
+    restaurantClockTimer = setInterval(() => {
+      const kdsPanel = document.getElementById('panel-kds');
+      if (kdsPanel && kdsPanel.classList.contains('is-active')) renderKds();
+    }, 30000);
+  }
+
+  async function saveTableOrder() {
+    if (!currentUser || !currentUser.uid) return;
     if (posCart.length === 0) {
       showToast('El carrito está vacío.', 'warning');
       return;
     }
 
     try {
-      // Check if order already exists to preserve status
-      const existingDoc = await getDB().collection('panitas_table_orders').doc(table).get();
-      const existingData = existingDoc.exists ? existingDoc.data() : {};
+      const tableInput = document.getElementById('pos-restaurant-table');
+      const table = BillingCore.normalizeTableName(tableInput.value);
+      tableInput.value = table;
+      const clientName = document.getElementById('pos-restaurant-client-name').value.trim().slice(0, 150) || 'Consumidor Final';
+      const notes = document.getElementById('pos-restaurant-order-notes').value.trim().slice(0, 500);
+      const priority = document.getElementById('pos-restaurant-priority').value;
+      if (!['normal', 'high', 'urgent'].includes(priority)) throw new Error('Prioridad de orden no válida.');
 
-      const orderData = {
-        table: table,
-        clientName: clientName || 'Consumidor Final',
-        items: posCart.map(item => ({
-          productId: item.productId,
-          name: item.name,
-          price: item.price,
-          qty: item.qty,
-          tax: item.tax || 0
-        })),
-        status: existingData.status || 'pending',
-        waiterName: currentUser ? (currentUser.displayName || currentUser.email || 'Mesero') : 'Mesero',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
+      const items = posCart.map(item => ({
+        productId: String(item.productId || '').slice(0, 150),
+        name: String(item.name || '').trim().slice(0, 150),
+        price: BillingCore.roundMoney(item.price),
+        qty: Number(item.qty),
+        tax: Number(item.tax || 0),
+        notes: String(item.notes || '').trim().slice(0, 300),
+        modifiers: Array.isArray(item.modifiers) ? item.modifiers.map(String).slice(0, 10) : [],
+        allergyWarning: Boolean(item.allergyWarning)
+      }));
+      if (items.some(item => !item.name || !Number.isFinite(item.price) || item.price < 0 || !Number.isInteger(item.qty) || item.qty < 1 || !Number.isFinite(item.tax) || item.tax < 0 || item.tax > 100)) {
+        throw new Error('La orden contiene artículos inválidos.');
+      }
 
-      await getDB().collection('panitas_table_orders').doc(table).set(orderData);
-      showToast(`Orden de ${table} guardada con éxito.`, 'success');
+      const db = getDB();
+      const orderRef = db.collection('panitas_table_orders').doc(table);
+      const eventRef = db.collection('panitas_order_events').doc();
+
+      await db.runTransaction(async transaction => {
+        const snapshot = await transaction.get(orderRef);
+        const existing = snapshot.exists ? snapshot.data() : null;
+        const previousStatus = existing ? (existing.status || 'pending') : '';
+        const startsNewCycle = !existing || ['closed', 'cancelled'].includes(previousStatus);
+        if (existing && ['served', 'pending_payment'].includes(previousStatus)) {
+          throw new Error('La orden ya fue servida. Debe cobrarse o cancelarse antes de editarla.');
+        }
+
+        const itemsChanged = existing ? BillingCore.restaurantItemsChanged(existing.items, items) : true;
+        const nextStatus = startsNewCycle || (itemsChanged && previousStatus !== 'pending') ? 'pending' : (previousStatus || 'pending');
+        if (existing && !startsNewCycle && !BillingCore.canTransitionRestaurantOrder(previousStatus, nextStatus)) {
+          throw new Error(`No se puede cambiar la orden de ${previousStatus} a ${nextStatus}.`);
+        }
+
+        const revision = Number(existing && existing.revision || 0) + 1;
+        const cycle = startsNewCycle ? Number(existing && existing.cycle || 0) + 1 : Number(existing.cycle || 1);
+        const statusChanged = startsNewCycle || previousStatus !== nextStatus;
+        const now = firebase.firestore.FieldValue.serverTimestamp();
+        const orderData = {
+          table,
+          clientName,
+          items,
+          notes,
+          priority,
+          status: nextStatus,
+          waiterName: currentUser.displayName || currentUser.email || 'Mesero',
+          createdBy: startsNewCycle ? currentUser.uid : (existing.createdBy || currentUser.uid),
+          updatedBy: currentUser.uid,
+          revision,
+          cycle,
+          createdAt: startsNewCycle ? now : (existing.createdAt || now),
+          statusChangedAt: statusChanged ? now : (existing.statusChangedAt || existing.updatedAt || now),
+          updatedAt: now
+        };
+
+        transaction.set(orderRef, orderData);
+        transaction.set(eventRef, restaurantEventData(
+          table,
+          previousStatus,
+          nextStatus,
+          startsNewCycle ? 'created' : (itemsChanged ? 'items_updated' : 'details_updated'),
+          revision,
+          cycle
+        ));
+      });
+
+      showToast(`Orden de ${table} guardada y sincronizada con cocina.`, 'success');
       clearPosCart();
-      await refreshActiveTables();
-    } catch (e) {
-      console.error('Error saving table order:', e);
-      showToast('Error al guardar la orden de la mesa.', 'danger');
+    } catch (error) {
+      console.error('Error saving table order:', error);
+      showToast('No se pudo guardar la orden: ' + error.message, 'danger');
     }
+  }
+
+  async function refreshRestaurantOrders() {
+    const snapshot = await getDB().collection('panitas_table_orders').get();
+    restaurantOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    restaurantOrdersLoaded = true;
+    renderActiveTables();
+    renderKds();
   }
 
   async function refreshActiveTables() {
-    const listEl = document.getElementById('pos-restaurant-tables-list');
-    if (!listEl) return;
-
     try {
-      const snap = await getDB().collection('panitas_table_orders').get();
-      listEl.innerHTML = '';
-
-      const activeOrders = {};
-      snap.forEach(doc => {
-        activeOrders[doc.id] = { id: doc.id, ...doc.data() };
-      });
-
-      const defaultTables = [
-        'Mesa 1', 'Mesa 2', 'Mesa 3', 'Mesa 4',
-        'Mesa 5', 'Mesa 6', 'Mesa 7', 'Mesa 8',
-        'Mesa 9', 'Mesa 10', 'Mesa 11', 'Mesa 12'
-      ];
-
-      const rendered = new Set();
-
-      function renderTableCard(tableName, order) {
-        rendered.add(tableName);
-        const card = document.createElement('div');
-        card.style.cssText = 'border-radius:12px; padding:12px; text-align:center; cursor:pointer; transition: all 0.2s; display:flex; flex-direction:column; justify-content:space-between; gap:6px; font-weight:600; font-size:0.8rem;';
-        
-        if (order) {
-          let total = 0;
-          order.items.forEach(item => {
-            total += item.price * item.qty * (1 + (item.tax || 0) / 100);
-          });
-          const status = order.status || 'pending';
-          let statusLabel = 'Pendiente';
-          let statusBg = '#ea580c';
-          if (status === 'preparing') { statusLabel = 'Preparando'; statusBg = '#3b82f6'; }
-          else if (status === 'ready') { statusLabel = 'Listo'; statusBg = '#22c55e'; }
-
-          card.style.background = '#fef2f2';
-          card.style.border = '1.5px solid #fca5a5';
-          card.style.color = '#991b1b';
-          card.onclick = () => loadTableOrder(tableName);
-
-          card.innerHTML = `
-            <div style="font-size:0.85rem; font-weight:700;">🍽️ ${escapeHTML(tableName)}</div>
-            <div style="font-size:0.75rem; color:#7f1d1d; opacity:0.85; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHTML(order.clientName)}</div>
-            <div style="font-size:0.85rem; font-weight:800; color:#b91c1c; margin:2px 0;">${formatMoney(total)}</div>
-            <span style="background:${statusBg}; color:white; font-size:0.65rem; padding:2px 6px; border-radius:6px; align-self:center; font-weight:700; text-transform:uppercase;">${statusLabel}</span>
-          `;
-        } else {
-          card.style.background = '#f0fdf4';
-          card.style.border = '1.5px solid #bbf7d0';
-          card.style.color = '#166534';
-          card.onclick = () => selectFreeTable(tableName);
-
-          card.innerHTML = `
-            <div style="font-size:0.85rem; font-weight:700;">🍽️ ${escapeHTML(tableName)}</div>
-            <div style="font-size:0.7rem; color:#15803d; opacity:0.75; font-weight:500;">Disponible</div>
-            <div style="font-size:0.85rem; font-weight:700; visibility:hidden; margin:2px 0;">RD$ 0</div>
-            <span style="background:#22c55e; color:white; font-size:0.65rem; padding:2px 6px; border-radius:6px; align-self:center; font-weight:700; text-transform:uppercase; visibility:hidden;">—</span>
-          `;
-        }
-        listEl.appendChild(card);
-      }
-
-      defaultTables.forEach(t => {
-        renderTableCard(t, activeOrders[t]);
-      });
-
-      Object.keys(activeOrders).forEach(t => {
-        if (!rendered.has(t)) {
-          renderTableCard(t, activeOrders[t]);
-        }
-      });
-    } catch (e) {
-      console.error('Error refreshing active tables:', e);
-      listEl.innerHTML = '<div style="font-size:0.8rem; color:#ef4444; grid-column: 1/-1;">Error al cargar plano de mesas.</div>';
+      await refreshRestaurantOrders();
+      if (!unsubscribeRestaurantOrders) startRestaurantRealtime();
+      updateRestaurantConnectionUI();
+    } catch (error) {
+      console.error('Error refreshing active tables:', error);
+      updateRestaurantConnectionUI('error');
+      const listEl = document.getElementById('pos-restaurant-tables-list');
+      if (listEl) listEl.innerHTML = '<div class="restaurant-empty-state is-error">Error al cargar el plano de mesas.</div>';
     }
+  }
+
+  function renderActiveTables() {
+    const listEl = document.getElementById('pos-restaurant-tables-list');
+    if (!listEl || !restaurantOrdersLoaded) return;
+    listEl.innerHTML = '';
+
+    const activeOrders = new Map();
+    restaurantOrders.filter(BillingCore.isActiveRestaurantOrder).forEach(order => activeOrders.set(order.table || order.id, order));
+    const configuredTables = getConfiguredRestaurantTables();
+    const allTables = [...configuredTables];
+    activeOrders.forEach((order, table) => { if (!allTables.includes(table)) allTables.push(table); });
+
+    allTables.forEach(tableName => {
+      const order = activeOrders.get(tableName);
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = `restaurant-table-card ${order ? 'is-occupied' : 'is-free'} ${order ? `status-${order.status || 'pending'}` : ''}`;
+      if (order) {
+        const meta = BillingCore.restaurantStatusMeta(order.status || 'pending');
+        card.setAttribute('aria-label', `${tableName}, ${meta.label}, ${formatMoney(BillingCore.restaurantOrderTotal(order.items))}`);
+        card.innerHTML = `
+          <strong>🍽️ ${escapeHTML(tableName)}</strong>
+          <span class="restaurant-table-client">${escapeHTML(order.clientName || 'Consumidor Final')}</span>
+          <span class="restaurant-table-total">${formatMoney(BillingCore.restaurantOrderTotal(order.items))}</span>
+          <span class="restaurant-status-badge tone-${meta.tone}">${escapeHTML(meta.label)}</span>
+        `;
+        card.addEventListener('click', () => loadTableOrder(tableName));
+      } else {
+        card.setAttribute('aria-label', `${tableName}, disponible`);
+        card.innerHTML = `<strong>🍽️ ${escapeHTML(tableName)}</strong><span>Disponible</span>`;
+        card.addEventListener('click', () => selectFreeTable(tableName));
+      }
+      listEl.appendChild(card);
+    });
+  }
+
+  function confirmDiscardCurrentCart(nextTable) {
+    const currentTable = document.getElementById('pos-restaurant-table').value.trim();
+    return posCart.length === 0 || currentTable === nextTable || confirm('Hay una venta u orden sin guardar. ¿Deseas descartarla para cambiar de mesa?');
   }
 
   function selectFreeTable(tableName) {
+    if (!confirmDiscardCurrentCart(tableName)) return;
     const tableInput = document.getElementById('pos-restaurant-table');
     const nameInput = document.getElementById('pos-restaurant-client-name');
+    if (posCart.length) clearPosCart();
     if (tableInput) tableInput.value = tableName;
     if (nameInput) nameInput.value = '';
-    clearPosCart();
-    showToast(`Mesa ${tableName} seleccionada para nueva orden.`, 'success');
+    document.getElementById('pos-restaurant-order-notes').value = '';
+    document.getElementById('pos-restaurant-priority').value = 'normal';
+    showToast(`${tableName} seleccionada para una nueva orden.`, 'success');
   }
 
   async function loadTableOrder(tableName) {
+    if (!confirmDiscardCurrentCart(tableName)) return;
     try {
-      const doc = await getDB().collection('panitas_table_orders').doc(tableName).get();
-      if (!doc.exists) {
-        showToast('La orden no existe.', 'danger');
-        return;
+      let order = restaurantOrders.find(item => (item.table || item.id) === tableName);
+      if (!order) {
+        const snapshot = await getDB().collection('panitas_table_orders').doc(tableName).get();
+        if (!snapshot.exists) throw new Error('La orden ya no existe.');
+        order = { id: snapshot.id, ...snapshot.data() };
       }
+      if (!BillingCore.isActiveRestaurantOrder(order)) throw new Error('La orden ya está cerrada o cancelada.');
 
-      const order = doc.data();
-      posCart = order.items.map(item => ({
+      posCart = (Array.isArray(order.items) ? order.items : []).map(item => ({
         productId: item.productId,
         name: item.name,
-        price: item.price,
-        qty: item.qty,
-        tax: item.tax || 0
+        price: Number(item.price),
+        qty: Number(item.qty),
+        tax: Number(item.tax || 0),
+        notes: item.notes || '',
+        modifiers: Array.isArray(item.modifiers) ? item.modifiers : [],
+        allergyWarning: Boolean(item.allergyWarning),
+        source: String(item.productId || '').split('_')[0],
+        isCreaticos: String(item.productId || '').startsWith('creaticos_')
       }));
-
       renderPosCart();
 
-      const tableInput = document.getElementById('pos-restaurant-table');
-      const clientNameInput = document.getElementById('pos-restaurant-client-name');
-      if (tableInput) tableInput.value = order.table;
-      if (clientNameInput) clientNameInput.value = order.clientName;
-
-      showToast(`Orden de ${tableName} cargada en el carrito.`, 'success');
-    } catch (e) {
-      console.error('Error loading table order:', e);
-      showToast('Error al cargar la orden de la mesa.', 'danger');
+      document.getElementById('pos-restaurant-table').value = order.table || tableName;
+      document.getElementById('pos-restaurant-client-name').value = order.clientName || '';
+      document.getElementById('pos-restaurant-order-notes').value = order.notes || '';
+      document.getElementById('pos-restaurant-priority').value = order.priority || 'normal';
+      showToast(`Orden de ${tableName} cargada.`, 'success');
+    } catch (error) {
+      console.error('Error loading table order:', error);
+      showToast('No se pudo cargar la orden: ' + error.message, 'danger');
     }
+  }
+
+  function orderMinutesInStatus(order) {
+    const rawDate = order.statusChangedAt || order.updatedAt || order.createdAt;
+    const date = rawDate && rawDate.toDate ? rawDate.toDate() : new Date(rawDate || Date.now());
+    return Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+  }
+
+  function renderKds() {
+    const gridEl = document.getElementById('kds-orders-grid');
+    if (!gridEl || !restaurantOrdersLoaded) return;
+    gridEl.innerHTML = '';
+    const kitchenOrders = restaurantOrders
+      .filter(order => ['pending', 'preparing', 'ready'].includes(order.status || 'pending'))
+      .sort((a, b) => {
+        const priorityRank = { urgent: 0, high: 1, normal: 2 };
+        const rank = (priorityRank[a.priority || 'normal'] ?? 2) - (priorityRank[b.priority || 'normal'] ?? 2);
+        if (rank !== 0) return rank;
+        const aDate = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        const bDate = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return aDate - bDate;
+      });
+
+    if (kitchenOrders.length === 0) {
+      gridEl.innerHTML = '<div class="restaurant-empty-state">🍳 Cocina al día. No hay comandas activas.</div>';
+      return;
+    }
+
+    kitchenOrders.forEach(order => {
+      const table = order.table || order.id;
+      const status = order.status || 'pending';
+      const meta = BillingCore.restaurantStatusMeta(status);
+      const minutes = orderMinutesInStatus(order);
+      const card = document.createElement('article');
+      card.className = `kds-card status-${status} priority-${order.priority || 'normal'} ${minutes >= 20 ? 'is-delayed' : ''}`;
+
+      const items = Array.isArray(order.items) ? order.items : [];
+      const itemsList = items.map(item => `
+        <li>
+          <div><strong>${escapeHTML(item.qty)}x</strong> ${escapeHTML(item.name || 'Artículo')}</div>
+          ${item.notes ? `<p class="kds-item-note">${item.allergyWarning ? '⚠️ ' : ''}${escapeHTML(item.notes)}</p>` : ''}
+        </li>
+      `).join('');
+
+      card.innerHTML = `
+        <header class="kds-card-header">
+          <div><h3>${escapeHTML(table)}</h3><p>${escapeHTML(order.clientName || 'Consumidor Final')} · ${escapeHTML(order.waiterName || 'Mesero')}</p></div>
+          <span class="restaurant-status-badge tone-${meta.tone}">${escapeHTML(meta.label)}</span>
+        </header>
+        <div class="kds-card-meta"><span>${minutes === 0 ? 'Hace un momento' : `Hace ${minutes} min`}</span>${order.priority && order.priority !== 'normal' ? `<strong>${order.priority === 'urgent' ? 'URGENTE' : 'PRIORIDAD'}</strong>` : ''}</div>
+        ${order.notes ? `<p class="kds-order-note">Nota general: ${escapeHTML(order.notes)}</p>` : ''}
+        <ul class="kds-items">${itemsList}</ul>
+        <div class="kds-card-actions"></div>
+      `;
+
+      const actions = card.querySelector('.kds-card-actions');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'admin-btn admin-btn-primary kds-action-button';
+      if (status === 'pending') {
+        button.textContent = '👨‍🍳 Comenzar preparación';
+        button.addEventListener('click', () => updateKdsStatus(table, 'preparing'));
+      } else if (status === 'preparing') {
+        button.textContent = '✅ Marcar como lista';
+        button.addEventListener('click', () => updateKdsStatus(table, 'ready'));
+      } else {
+        button.textContent = '🍽️ Marcar como servida';
+        button.addEventListener('click', () => updateKdsStatus(table, 'served'));
+      }
+      actions.appendChild(button);
+      gridEl.appendChild(card);
+    });
   }
 
   async function refreshKds() {
     const gridEl = document.getElementById('kds-orders-grid');
-    if (!gridEl) return;
-
-    gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-muted);">Cargando comandas de cocina...</div>';
-
+    if (gridEl) gridEl.innerHTML = '<div class="restaurant-empty-state">Actualizando comandas...</div>';
     try {
-      const snap = await getDB().collection('panitas_table_orders').orderBy('updatedAt', 'asc').get();
-      gridEl.innerHTML = '';
-
-      // Only show orders that are pending, preparing or ready (not completed/delivered)
-      const activeOrders = [];
-      snap.forEach(doc => {
-        const order = doc.data();
-        const status = order.status || 'pending';
-        if (['pending', 'preparing', 'ready'].includes(status)) {
-          activeOrders.push({ table: doc.id, ...order });
-        }
-      });
-
-      if (activeOrders.length === 0) {
-        gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:60px; color:var(--text-muted); font-size:1.1rem;">🍳 Cocina limpia. No hay comandas activas.</div>';
-        return;
-      }
-
-      activeOrders.forEach(order => {
-        const table = order.table;
-        const status = order.status || 'pending';
-        
-        let statusLabel = 'Pendiente';
-        let statusColor = '#ea580c';
-        let statusBg = '#ffedd5';
-        if (status === 'preparing') {
-          statusLabel = 'Preparando';
-          statusColor = '#2563eb';
-          statusBg = '#dbeafe';
-        } else if (status === 'ready') {
-          statusLabel = 'Listo';
-          statusColor = '#16a34a';
-          statusBg = '#dcfce7';
-        }
-
-        // Format duration since last update
-        const dateVal = order.updatedAt ? (order.updatedAt.toDate ? order.updatedAt.toDate() : new Date(order.updatedAt)) : new Date();
-        const diffMs = new Date() - dateVal;
-        const diffMins = Math.max(0, Math.floor(diffMs / 60000));
-        const timeText = diffMins === 0 ? 'Hace un momento' : `Hace ${diffMins} min`;
-
-        const card = document.createElement('div');
-        card.className = 'kds-card';
-        card.style.cssText = 'background:#fff; border: 1.5px solid var(--border-color); border-radius:16px; padding:20px; box-shadow:0 4px 6px -1px rgb(0 0 0 / 0.05); display:flex; flex-direction:column; gap:15px;';
-        
-        let itemsList = '';
-        order.items.forEach(item => {
-          itemsList += `
-            <li style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px dashed var(--border-color); padding-bottom:6px;">
-              <span style="font-weight:600; color:var(--text-main); font-size:0.9rem;">
-                <span style="color:var(--primary); font-size:1rem; margin-right:6px;">${item.qty}x</span> ${escapeHTML(item.name)}
-              </span>
-            </li>
-          `;
-        });
-
-        let actionButtons = '';
-        if (status === 'pending') {
-          actionButtons = `
-            <button class="admin-btn admin-btn-primary" onclick="ERPBilling.updateKdsStatus('${table}', 'preparing')" style="flex:1; background:#2563eb; font-size:0.8rem; height:34px; border-radius:8px;">👨‍🍳 Preparar</button>
-          `;
-        } else if (status === 'preparing') {
-          actionButtons = `
-            <button class="admin-btn admin-btn-primary" onclick="ERPBilling.updateKdsStatus('${table}', 'ready')" style="flex:1; background:#16a34a; font-size:0.8rem; height:34px; border-radius:8px;">✅ Listo</button>
-          `;
-        } else if (status === 'ready') {
-          actionButtons = `
-            <button class="admin-btn admin-btn-ghost" onclick="ERPBilling.updateKdsStatus('${table}', 'delivered')" style="flex:1; border: 1.5px solid #22c55e; color:#15803d; font-size:0.8rem; height:34px; border-radius:8px; font-weight:700;">🍽️ Servido / Entregar</button>
-          `;
-        }
-
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid var(--border-color); padding-bottom:10px;">
-            <div>
-              <h3 style="font-size:1.15rem; font-weight:800; color:var(--primary); margin:0;">${escapeHTML(table)}</h3>
-              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:500;">${timeText} (${escapeHTML(order.clientName)})</span>
-            </div>
-            <span style="background:${statusBg}; color:${statusColor}; font-size:0.7rem; font-weight:700; padding:4px 8px; border-radius:8px; text-transform:uppercase;">${statusLabel}</span>
-          </div>
-          <div style="flex-grow:1; margin-top:5px;">
-            <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
-              ${itemsList}
-            </ul>
-          </div>
-          <div style="display:flex; gap:10px; border-top:1.5px solid var(--border-color); padding-top:12px;">
-            ${actionButtons}
-          </div>
-        `;
-
-        gridEl.appendChild(card);
-      });
-
-    } catch (e) {
-      console.error('Error refreshing KDS:', e);
-      gridEl.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px; color:#ef4444;">Error al cargar comandas de cocina.</div>';
+      await refreshRestaurantOrders();
+      if (!unsubscribeRestaurantOrders) startRestaurantRealtime();
+      updateRestaurantConnectionUI();
+    } catch (error) {
+      console.error('Error refreshing KDS:', error);
+      updateRestaurantConnectionUI('error');
+      if (gridEl) gridEl.innerHTML = '<div class="restaurant-empty-state is-error">No se pudieron cargar las comandas.</div>';
     }
   }
 
   async function updateKdsStatus(tableId, nextStatus) {
+    if (!currentUser || !currentUser.uid) return;
     try {
-      await getDB().collection('panitas_table_orders').doc(tableId).update({
-        status: nextStatus,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      const table = BillingCore.normalizeTableName(tableId);
+      if (!['preparing', 'ready', 'served'].includes(nextStatus)) throw new Error('Estado de cocina no permitido.');
+      const db = getDB();
+      const orderRef = db.collection('panitas_table_orders').doc(table);
+      const eventRef = db.collection('panitas_order_events').doc();
+      await db.runTransaction(async transaction => {
+        const snapshot = await transaction.get(orderRef);
+        if (!snapshot.exists) throw new Error('La comanda ya no existe.');
+        const order = snapshot.data();
+        const previousStatus = order.status || 'pending';
+        if (!BillingCore.canTransitionRestaurantOrder(previousStatus, nextStatus)) {
+          throw new Error(`La comanda cambió a ${BillingCore.restaurantStatusMeta(previousStatus).label}. Actualiza la pantalla.`);
+        }
+        const isLegacy = !Number.isInteger(order.revision) || !Number.isInteger(order.cycle) || !order.createdAt;
+        const revision = isLegacy ? 1 : order.revision + 1;
+        const cycle = isLegacy ? 1 : order.cycle;
+        const now = firebase.firestore.FieldValue.serverTimestamp();
+        transaction.set(orderRef, {
+          table,
+          clientName: String(order.clientName || 'Consumidor Final').slice(0, 150),
+          items: Array.isArray(order.items) && order.items.length ? order.items : [{
+            productId: 'legacy', name: 'Orden migrada', price: 0, qty: 1, tax: 0,
+            notes: '', modifiers: [], allergyWarning: false
+          }],
+          notes: String(order.notes || '').slice(0, 500),
+          priority: ['normal', 'high', 'urgent'].includes(order.priority) ? order.priority : 'normal',
+          status: nextStatus,
+          waiterName: String(order.waiterName || currentUser.displayName || currentUser.email || 'Mesero').slice(0, 150),
+          createdBy: order.createdBy || currentUser.uid,
+          createdAt: order.createdAt || order.updatedAt || now,
+          revision,
+          cycle,
+          updatedBy: currentUser.uid,
+          statusChangedAt: now,
+          updatedAt: now
+        });
+        transaction.set(eventRef, restaurantEventData(table, previousStatus, nextStatus, 'status_changed', revision, cycle));
       });
-      showToast(`Mesa ${tableId} marcada como ${nextStatus === 'preparing' ? 'En Preparación' : (nextStatus === 'ready' ? 'Listo' : 'Entregado')}.`, 'success');
-      await refreshKds();
-      await refreshActiveTables();
-    } catch (e) {
-      console.error('Error updating KDS status:', e);
-      showToast('Error al actualizar estado en cocina.', 'danger');
+      showToast(`${table}: ${BillingCore.restaurantStatusMeta(nextStatus).label}.`, 'success');
+    } catch (error) {
+      console.error('Error updating KDS status:', error);
+      showToast('No se pudo actualizar la comanda: ' + error.message, 'danger');
+    }
+  }
+
+  async function cancelCurrentTableOrder() {
+    if (!currentUser || !currentUser.uid) return;
+    const rawTable = document.getElementById('pos-restaurant-table').value.trim();
+    if (!rawTable) {
+      showToast('Selecciona una mesa con una orden activa.', 'warning');
+      return;
+    }
+    const reasonInput = prompt('Indica el motivo de cancelación de la orden:');
+    if (reasonInput === null) return;
+    const reason = reasonInput.trim().slice(0, 500);
+    if (reason.length < 3) {
+      showToast('El motivo de cancelación debe tener al menos 3 caracteres.', 'warning');
+      return;
+    }
+
+    try {
+      const table = BillingCore.normalizeTableName(rawTable);
+      const db = getDB();
+      const orderRef = db.collection('panitas_table_orders').doc(table);
+      const eventRef = db.collection('panitas_order_events').doc();
+      await db.runTransaction(async transaction => {
+        const snapshot = await transaction.get(orderRef);
+        if (!snapshot.exists) throw new Error('La orden ya no existe.');
+        const order = snapshot.data();
+        const previousStatus = order.status || 'pending';
+        if (!BillingCore.canTransitionRestaurantOrder(previousStatus, 'cancelled')) {
+          throw new Error('La orden ya fue cerrada o cancelada.');
+        }
+        const isLegacy = !Number.isInteger(order.revision) || !Number.isInteger(order.cycle) || !order.createdAt;
+        const revision = isLegacy ? 1 : order.revision + 1;
+        const cycle = isLegacy ? 1 : order.cycle;
+        const now = firebase.firestore.FieldValue.serverTimestamp();
+        transaction.set(orderRef, {
+          table,
+          clientName: String(order.clientName || 'Consumidor Final').slice(0, 150),
+          items: Array.isArray(order.items) && order.items.length ? order.items : [{
+            productId: 'legacy', name: 'Orden migrada', price: 0, qty: 1, tax: 0,
+            notes: '', modifiers: [], allergyWarning: false
+          }],
+          notes: String(order.notes || '').slice(0, 500),
+          priority: ['normal', 'high', 'urgent'].includes(order.priority) ? order.priority : 'normal',
+          status: 'cancelled',
+          waiterName: String(order.waiterName || currentUser.displayName || currentUser.email || 'Mesero').slice(0, 150),
+          createdBy: order.createdBy || currentUser.uid,
+          createdAt: order.createdAt || order.updatedAt || now,
+          updatedBy: currentUser.uid,
+          revision,
+          cycle,
+          statusChangedAt: now,
+          updatedAt: now,
+          cancellationReason: reason,
+          cancelledAt: now,
+          cancelledBy: currentUser.uid
+        });
+        transaction.set(eventRef, restaurantEventData(table, previousStatus, 'cancelled', 'cancelled', revision, cycle));
+      });
+      clearPosCart();
+      showToast(`${table} fue cancelada y registrada en auditoría.`, 'success');
+    } catch (error) {
+      console.error('Error cancelling table order:', error);
+      showToast('No se pudo cancelar la orden: ' + error.message, 'danger');
     }
   }
 
@@ -3872,7 +4152,7 @@ window.ERPBilling = (function () {
       showToast('Por favor, ingrese un monto válido.', 'warning');
       return;
     }
-    if (!['Efectivo', 'Tarjeta', 'Transferencia'].includes(method)) {
+    if (!['Efectivo', 'Tarjeta', 'Transferencia', 'Cheque'].includes(method)) {
       showToast('Selecciona un método de pago válido.', 'warning');
       return;
     }
@@ -3997,8 +4277,12 @@ window.ERPBilling = (function () {
     if (isPanitas) {
       const restTable = document.getElementById('pos-restaurant-table');
       const restClient = document.getElementById('pos-restaurant-client-name');
+      const restNotes = document.getElementById('pos-restaurant-order-notes');
+      const restPriority = document.getElementById('pos-restaurant-priority');
       if (restTable) restTable.value = '';
       if (restClient) restClient.value = '';
+      if (restNotes) restNotes.value = '';
+      if (restPriority) restPriority.value = 'normal';
     }
   }
 
@@ -4238,7 +4522,7 @@ window.ERPBilling = (function () {
     const notes = notesInput ? notesInput.value.trim() : '';
 
     if (!Number.isFinite(realVal) || realVal < 0) {
-      showToast('El efectivo contado debe ser un monto vÃ¡lido mayor o igual a cero.', 'danger');
+      showToast('El efectivo contado debe ser un monto válido mayor o igual a cero.', 'danger');
       return;
     }
 
@@ -4513,6 +4797,7 @@ window.ERPBilling = (function () {
         tax: lineTax,
         taxMode: 'rate',
         taxRate: item.tax,
+        notes: String(item.notes || '').slice(0, 300),
         total: lineSub + lineTax
       };
     });
@@ -4556,6 +4841,20 @@ window.ERPBilling = (function () {
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
+    let restaurantTable = '';
+    if (isPanitas && docType === 'invoice') {
+      const rawTable = document.getElementById('pos-restaurant-table').value.trim();
+      if (rawTable) {
+        try {
+          restaurantTable = BillingCore.normalizeTableName(rawTable);
+        } catch (error) {
+          isProcessingPosSale = false;
+          showToast(error.message, 'danger');
+          return;
+        }
+      }
+    }
+
     try {
       const dbRef = getDB();
       const settingsDocRef = dbRef.collection(collectionSettings).doc('general');
@@ -4567,6 +4866,12 @@ window.ERPBilling = (function () {
         : null;
       const sessionRef = activeCashSession && docType === 'invoice'
         ? dbRef.collection(collectionCashSessions).doc(activeCashSession.id)
+        : null;
+      const restaurantOrderRef = restaurantTable
+        ? dbRef.collection('panitas_table_orders').doc(restaurantTable)
+        : null;
+      const restaurantEventRef = restaurantOrderRef
+        ? dbRef.collection('panitas_order_events').doc()
         : null;
 
       await dbRef.runTransaction(async (transaction) => {
@@ -4588,6 +4893,7 @@ window.ERPBilling = (function () {
         if (!settingsDoc.exists) {
           throw new Error("El documento de configuración de la empresa no existe.");
         }
+        const restaurantOrderSnapshot = restaurantOrderRef ? await transaction.get(restaurantOrderRef) : null;
         const freshSettings = settingsDoc.data();
         let freshInvoiceNum = '';
         let freshNcf = '';
@@ -4652,6 +4958,66 @@ window.ERPBilling = (function () {
           }
           transaction.update(sessionRef, sessionUpdates);
         }
+
+        if (restaurantOrderSnapshot && restaurantOrderSnapshot.exists) {
+          const order = restaurantOrderSnapshot.data();
+          const previousStatus = order.status || 'pending';
+          if (!BillingCore.isActiveRestaurantOrder(order)) {
+            throw new Error('La orden de la mesa ya fue cerrada o cancelada por otro usuario.');
+          }
+          const billedRestaurantItems = posCart.map(item => ({
+            productId: String(item.productId || '').slice(0, 150),
+            name: String(item.name || '').trim().slice(0, 150),
+            price: BillingCore.roundMoney(item.price),
+            qty: Number(item.qty),
+            tax: Number(item.tax || 0),
+            notes: String(item.notes || '').trim().slice(0, 300),
+            modifiers: Array.isArray(item.modifiers) ? item.modifiers.map(String).slice(0, 10) : [],
+            allergyWarning: Boolean(item.allergyWarning)
+          }));
+          if (BillingCore.restaurantItemsChanged(order.items, billedRestaurantItems)) {
+            throw new Error('La comanda cambió desde que fue cargada. Actualiza la mesa antes de cobrar.');
+          }
+          const revision = Number(order.revision || 0) + 1;
+          const cycle = Number(order.cycle || 1);
+          const now = firebase.firestore.FieldValue.serverTimestamp();
+          transaction.set(restaurantOrderRef, {
+            table: restaurantTable,
+            clientName: String(order.clientName || 'Consumidor Final').slice(0, 150),
+            items: Array.isArray(order.items) && order.items.length ? order.items : [{
+              productId: 'legacy',
+              name: 'Orden migrada',
+              price: total,
+              qty: 1,
+              tax: 0,
+              notes: '',
+              modifiers: [],
+              allergyWarning: false
+            }],
+            notes: String(order.notes || '').slice(0, 500),
+            priority: ['normal', 'high', 'urgent'].includes(order.priority) ? order.priority : 'normal',
+            status: 'closed',
+            waiterName: String(order.waiterName || currentUser.displayName || currentUser.email || 'Mesero').slice(0, 150),
+            createdBy: order.createdBy || currentUser.uid,
+            updatedBy: currentUser.uid,
+            revision,
+            cycle,
+            createdAt: order.createdAt || now,
+            statusChangedAt: now,
+            updatedAt: now,
+            linkedInvoiceId: createdDocId,
+            closedAt: now,
+            closedBy: currentUser.uid
+          });
+          transaction.set(restaurantEventRef, restaurantEventData(
+            restaurantTable,
+            previousStatus,
+            'closed',
+            'invoiced_and_closed',
+            revision,
+            cycle
+          ));
+        }
       });
 
       if (sessionRef) {
@@ -4668,20 +5034,6 @@ window.ERPBilling = (function () {
       
       const invoiceId = createdDocId;
       
-      // Delete table order if active in restaurant mode
-      if (isPanitas) {
-        const tableInput = document.getElementById('pos-restaurant-table');
-        const table = tableInput ? tableInput.value.trim() : '';
-        if (table) {
-          try {
-            await getDB().collection('panitas_table_orders').doc(table).delete();
-            await refreshActiveTables();
-          } catch (errTable) {
-            console.error('Error cleaning table order:', errTable);
-          }
-        }
-      }
-
       clearPosCart();
       await viewInvoice(invoiceId);
       const printFormatSelect = document.getElementById('print-format-select');

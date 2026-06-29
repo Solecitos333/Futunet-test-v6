@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/facturacion.css?v=1.2" />
+  <link rel="stylesheet" href="css/facturacion.css?v=2.0" />
   <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <meta name="theme-color" content="#0f1923" />
@@ -530,7 +530,21 @@
                       <input type="text" id="pos-restaurant-client-name" class="form-input" placeholder="Ej. Juan Pérez" style="height:32px; font-size:0.8rem; padding: 6px 10px;" />
                     </div>
                   </div>
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;">
+                  <div class="restaurant-order-metadata">
+                    <div class="form-group" style="margin:0;">
+                      <label for="pos-restaurant-priority">Prioridad</label>
+                      <select id="pos-restaurant-priority" class="form-input">
+                        <option value="normal">Normal</option>
+                        <option value="high">Prioridad alta</option>
+                        <option value="urgent">Urgente</option>
+                      </select>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label for="pos-restaurant-order-notes">Nota general para cocina</label>
+                      <input type="text" id="pos-restaurant-order-notes" class="form-input" maxlength="500" placeholder="Ej. Entregar todo junto" />
+                    </div>
+                  </div>
+                  <div class="restaurant-order-actions">
                     <button type="button" class="admin-btn admin-btn-secondary" onclick="ERPBilling.printKitchenTicket()" style="height:30px; font-size:0.75rem; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#fff;">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
                       Comanda Cocina
@@ -538,6 +552,9 @@
                     <button type="button" class="admin-btn admin-btn-primary" onclick="ERPBilling.saveTableOrder()" style="height:30px; font-size:0.75rem; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; gap:6px; background:var(--primary);">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                       Retener Orden
+                    </button>
+                    <button type="button" id="btn-cancel-table-order" class="admin-btn admin-btn-danger restaurant-cancel-button">
+                      Cancelar orden
                     </button>
                   </div>
                 </div>
@@ -611,7 +628,7 @@
               <div id="pos-restaurant-tables-container" style="display:none; margin-bottom:15px; border-bottom:1px solid var(--border-color); padding-bottom:15px; width: 100%;">
                 <div style="font-size:0.75rem; font-weight:600; color:var(--text-muted); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
                   <span>🛒 MESAS ACTIVAS / ORDENES RETENIDAS</span>
-                  <button type="button" style="border:none; background:none; font-size:0.7rem; color:var(--primary); cursor:pointer; font-weight:600;" onclick="ERPBilling.refreshActiveTables()">🔄 Actualizar</button>
+                  <button type="button" id="btn-refresh-restaurant-tables" class="restaurant-refresh-button">🔄 Actualizar</button>
                 </div>
                 <div id="pos-restaurant-tables-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap:10px; width: 100%;">
                   <div style="font-size:0.8rem; color:var(--text-muted);">No hay mesas activas.</div>
@@ -1270,6 +1287,15 @@
               </div>
             </div>
 
+            <section id="restaurant-settings-group" style="display:none; margin-top:25px;">
+              <h3 class="settings-section-title">Configuración del salón y mesas</h3>
+              <div class="form-group">
+                <label for="set-restaurant-tables">Mesas disponibles</label>
+                <textarea id="set-restaurant-tables" class="form-input" rows="5" maxlength="1000" placeholder="Una mesa por línea. Ej.: Mesa 1"></textarea>
+                <small class="form-help">Configura entre 1 y 50 mesas. También puedes incluir Barra, Terraza o Delivery.</small>
+              </div>
+            </section>
+
             <h3 style="font-family:'Space Grotesk',sans-serif; margin-top: 25px; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Personalización de Ticket de Venta (80mm)</h3>
 
             <div class="form-grid-3">
@@ -1308,13 +1334,14 @@
 
       <!-- ═══ PANEL: KITCHEN DISPLAY SYSTEM (KDS) ═══ -->
       <div class="admin-panel" id="panel-kds">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div class="kds-panel-header">
           <div>
             <h1 class="admin-title">Cocina (KDS)</h1>
             <p class="admin-subtitle">Monitoreo y preparación de comandas en vivo</p>
           </div>
-          <div style="display:flex; gap:10px;">
-            <button type="button" class="admin-btn admin-btn-ghost" onclick="ERPBilling.refreshKds()" style="display:inline-flex; align-items:center; gap:6px; border: 1.5px solid var(--border-color); border-radius:10px; padding: 6px 12px; font-size:0.8rem; font-weight:600;">
+          <div class="kds-panel-actions">
+            <span id="kds-connection-status" class="kds-connection-status is-offline" role="status">Conectando...</span>
+            <button type="button" id="btn-refresh-kds" class="admin-btn admin-btn-ghost kds-refresh-button">
               🔄 Actualizar
             </button>
           </div>
@@ -1514,7 +1541,7 @@
               <strong id="cash-close-sales-nfc">RD$ 0.00</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-              <span style="color:var(--text-muted)">Transferencias Contables:</span>
+              <span style="color:var(--text-muted)">Transferencias / Cheques:</span>
               <strong id="cash-close-sales-transfer">RD$ 0.00</strong>
             </div>
             <div style="display:flex; justify-content:space-between; border-top:1px dashed var(--border-color); padding-top:6px; margin-top:6px;">
@@ -1614,6 +1641,7 @@
               <option value="Efectivo">Efectivo</option>
               <option value="Tarjeta">Tarjeta</option>
               <option value="Transferencia">Transferencia Bancaria</option>
+              <option value="Cheque">Cheque</option>
             </select>
           </div>
           <div class="form-group">
@@ -1647,7 +1675,7 @@
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
   <script defer src="js/billing-core.js?v=20260629"></script>
-  <script defer src="js/facturacion.js?v=20260629"></script>
+  <script defer src="js/facturacion.js?v=20260629-final"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -1676,6 +1704,11 @@
         const roles = Array.from(new Set([rawRole].concat(Array.isArray(userData.roles) ? userData.roles : [])));
         const activeCompany = (localStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
         const tenantAdminRole = activeCompany + '_admin';
+        const isKitchenOnly = activeCompany === 'panitas' &&
+                              roles.includes('panitas_kitchen') &&
+                              !roles.some(function (item) {
+                                return ['superadmin', 'admin', 'erp_admin', 'editor', 'erp_operator', 'panitas_admin', 'panitas_operator', 'panitas_user', 'panitas_usuario'].includes(item);
+                              });
         const isUserAdmin = roles.includes('superadmin') ||
                             roles.includes('admin') ||
                             roles.includes('erp_admin') ||
@@ -1689,6 +1722,17 @@
         // Show/hide KDS button for restaurant tenants
         const kdsBtn = document.getElementById('sidebar-nav-kds');
         if (kdsBtn) kdsBtn.style.display = activeCompany === 'panitas' ? 'flex' : 'none';
+        if (isKitchenOnly) {
+          if (role) role.textContent = 'Cocina';
+          document.querySelectorAll('[data-nav]').forEach(function (item) {
+            item.style.display = item.getAttribute('data-nav') === 'kds' ? 'flex' : 'none';
+            item.classList.toggle('is-active', item.getAttribute('data-nav') === 'kds');
+          });
+          document.querySelectorAll('.admin-panel').forEach(function (panel) {
+            panel.classList.toggle('is-active', panel.id === 'panel-kds');
+          });
+          if (settingsLabel) settingsLabel.style.display = 'none';
+        }
 
         // Hide return to global admin button if restricted to tenant
         const backToAdminBtn = document.getElementById('sidebar-nav-back-admin');
