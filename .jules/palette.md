@@ -1,0 +1,3 @@
+## 2024-06-29 - Missing ARIA Labels in Dynamic Template Variants
+**Learning:** Dynamically generated HTML components using template literals in JavaScript often lack proper accessibility coverage (like `aria-label`s on icon-only buttons). This is especially common when there are multiple conditional view variants (e.g., 'compact' vs 'regular' layouts) where one branch might have the labels while the other misses them.
+**Action:** When adding accessibility fixes to dynamically generated UI components, always ensure that all conditional view variants and branches of the template logic are audited and updated for consistency.
