@@ -1,0 +1,3 @@
+## 2024-08-01 - Missing accessibility labels on dynamically generated conditional variants
+**Learning:** When auditing dynamically generated HTML components (like cart controls using template literals), accessibility tags like `aria-label`s are often missed on icon-only/symbol-only buttons (`+`, `-`) in non-default view variants (e.g. 'compact' vs 'regular' layouts or across different modules like POS vs Cart). Static analysis fails to catch these as they are dynamically inserted.
+**Action:** When adding or verifying accessibility attributes on dynamic elements, proactively trace all conditional logic branches generating alternative view variations for the same UI component and ensure uniform accessibility coverage across all of them.
