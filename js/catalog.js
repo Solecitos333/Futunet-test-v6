@@ -76,15 +76,29 @@ function fuzzyMatch(normalizedTarget, normalizedQuery) {
   });
 }
 
+// Use WeakMap to cache string normalization, avoiding redundant CPU work per keystroke
+const normalizeCache = new WeakMap();
+function getNormalized(obj, key) {
+  let objCache = normalizeCache.get(obj);
+  if (!objCache) {
+    objCache = {};
+    normalizeCache.set(obj, objCache);
+  }
+  if (objCache[key] === undefined) {
+    objCache[key] = normalizeSearch(obj[key]);
+  }
+  return objCache[key];
+}
+
 /**
  * Filtra un producto contra un query normalizado.
  * Devuelve un score (0 = no match, mayor = mejor match).
  */
 function scoreProductMatch(product, normalizedQuery) {
-  const title = normalizeSearch(product.title);
-  const desc = normalizeSearch(product.desc);
-  const category = normalizeSearch(product.category);
-  const brand = normalizeSearch(product.brand);
+  const title = getNormalized(product, 'title');
+  const desc = getNormalized(product, 'desc');
+  const category = getNormalized(product, 'category');
+  const brand = getNormalized(product, 'brand');
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -234,11 +248,18 @@ function renderCompactMobileCatalogView() {
 
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(r => r.product);
+    const scored = [];
+    // Imperative for loop avoids multiple intermediate array allocations from map/filter chaining
+    for (let i = 0; i < mockDatabase.length; i++) {
+      const p = mockDatabase[i];
+      const score = scoreProductMatch(p, q);
+      if (score > 0) scored.push({ product: p, score });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    const results = new Array(scored.length);
+    for (let i = 0; i < scored.length; i++) {
+      results[i] = scored[i].product;
+    }
 
     updateCatalogContextBar({
       title: 'Resultados',
@@ -846,11 +867,18 @@ function renderUI() {
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    let results = mockDatabase
-      .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map(r => r.product);
+    const scored = [];
+    // Imperative for loop avoids multiple intermediate array allocations from map/filter chaining
+    for (let i = 0; i < mockDatabase.length; i++) {
+      const p = mockDatabase[i];
+      const score = scoreProductMatch(p, q);
+      if (score > 0) scored.push({ product: p, score });
+    }
+    scored.sort((a, b) => b.score - a.score);
+    let results = new Array(scored.length);
+    for (let i = 0; i < scored.length; i++) {
+      results[i] = scored[i].product;
+    }
 
     // Apply Price Range Filter
     results = results.filter(p => {
