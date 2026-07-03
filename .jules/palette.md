@@ -1,0 +1,3 @@
+## 2024-10-31 - Missing aria-labels in dynamic template literals
+**Learning:** Dynamically generated HTML components in JavaScript (e.g., cart and product quantity controls using template literals in `js/catalog.js`, `js/cart.js`, and `js/facturacion.js`) easily drift out of sync regarding accessibility attributes. Conditional layouts (like "compact" vs "regular" views) often implement duplicate HTML structures, leading to missing `aria-label`s on icon-only buttons (`+` and `-`) in one variant while the other has them.
+**Action:** When auditing or adding accessibility attributes to UI components, ensure all conditional rendering branches and view variants for that component in the JavaScript template strings are updated simultaneously to maintain consistent coverage.
