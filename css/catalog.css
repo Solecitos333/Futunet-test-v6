@@ -2662,3 +2662,165 @@
   font-weight: 600;
   color: var(--text-secondary);
 }
+
+/* Tarjetas sin precio público: presentación limpia y orientada a cotización. */
+.product-card--quote-only {
+  align-self: stretch;
+  height: 100%;
+  border: 1px solid rgba(11, 126, 181, 0.12);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(23, 42, 58, 0.08);
+}
+
+.product-card--quote-only::before {
+  height: 4px;
+  background: linear-gradient(90deg, #0b7eb5, #14a68a);
+  opacity: 0.82;
+  transform: scaleX(1);
+}
+
+.product-card--quote-only:hover {
+  border-color: rgba(11, 126, 181, 0.24);
+  box-shadow: 0 22px 48px rgba(23, 42, 58, 0.14);
+}
+
+.product-card--quote-only .product-img-wrapper {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: #f1f4f6;
+}
+
+.product-card--quote-only .product-img-wrapper img {
+  object-fit: cover;
+  transform-origin: center;
+}
+
+.product-card--quote-only .product-info {
+  min-height: 250px;
+  padding: 20px;
+}
+
+.product-card--quote-only .product-meta {
+  width: fit-content;
+  margin-bottom: 12px;
+  padding: 6px 9px;
+  border: 1px solid rgba(11, 126, 181, 0.12);
+  border-radius: 999px;
+  background: rgba(11, 126, 181, 0.06);
+  color: #356378;
+  font-size: 0.66rem;
+  letter-spacing: 0.07em;
+}
+
+.product-card--quote-only .product-title {
+  min-height: 4.2em;
+  margin-bottom: 10px;
+  color: #142536;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  -webkit-line-clamp: 3;
+}
+
+.product-card--quote-only .product-desc {
+  min-height: 4.65em;
+  margin-bottom: 18px;
+  color: #66788a;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  -webkit-line-clamp: 3;
+}
+
+.product-card--quote-only .product-actions {
+  width: 100%;
+}
+
+.product-quote-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 1px solid #0b7eb5;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #0b7eb5, #087aa4);
+  box-shadow: 0 10px 22px rgba(11, 126, 181, 0.18);
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 750;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.product-quote-btn:hover,
+.product-quote-btn:focus-visible {
+  background: linear-gradient(135deg, #086e9f, #087c69);
+  box-shadow: 0 14px 28px rgba(11, 126, 181, 0.24);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.product-quote-btn:focus-visible {
+  outline: 3px solid rgba(11, 126, 181, 0.24);
+  outline-offset: 3px;
+}
+
+.product-quote-btn svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.product-card--computer-quote .product-img-wrapper img {
+  object-fit: contain;
+  padding: 12px;
+}
+
+@media (max-width: 767px) {
+  .product-card--quote-only {
+    border-radius: 16px;
+  }
+
+  .product-card--quote-only .product-img-wrapper,
+  .product-card--quote-only .product-img-wrapper--compact-mobile {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .product-card--quote-only .product-info,
+  .product-card--quote-only .product-info--compact-mobile {
+    min-height: 192px;
+    padding: 13px;
+  }
+
+  .product-card--quote-only .product-meta {
+    margin-bottom: 8px;
+    padding: 5px 7px;
+    font-size: 0.56rem;
+  }
+
+  .product-card--quote-only .product-title,
+  .product-card--quote-only .product-title--compact-mobile {
+    min-height: 4.05em;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    -webkit-line-clamp: 3;
+  }
+
+  .product-card--quote-only .product-actions--compact-mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .product-quote-btn--compact-mobile {
+    min-height: 40px;
+    padding: 9px 8px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+  }
+}

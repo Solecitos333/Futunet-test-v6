@@ -1,12 +1,12 @@
 ﻿(function () {
   const DEPARTMENT_LABELS = {
     all: 'Catálogo',
-    seguridad: 'Seguridad electrónica',
-    redes: 'Redes y datos',
-    energia: 'Energía y climatización',
-    equipos: 'Computación',
-    oficina: 'Papelería y mobiliario',
-    infra: 'Infraestructura'
+    seguridad: 'Cámaras y Seguridad',
+    redes: 'Internet y Redes',
+    energia: 'Energía y Climatización',
+    equipos: 'Computadoras y Tecnología',
+    oficina: 'Oficina y Papelería',
+    infra: 'Remodelación de Oficina'
   };
 
   const SPEC_PREFIX_PATTERNS = [
@@ -84,6 +84,16 @@
       String(product.brand || '').toLowerCase() === 'servicios' ||
       String(product.category || '').toLowerCase() === 'servicios'
     );
+  }
+
+  function isQuoteOnlyProduct(product) {
+    if (!product || isServiceItem(product)) return false;
+    const category = normalizeCopy(product.category).toLowerCase();
+    return category === 'computadoras' ||
+      category === 'laptops' ||
+      category === 'mobiliario' ||
+      String(product.id || '').startsWith('mob_oficina_') ||
+      String(product.id || '').startsWith('laptop_selektronic_');
   }
 
   function findProductById(productId) {
@@ -207,6 +217,7 @@
 
     const override = (window.FutunetProductOverrides && window.FutunetProductOverrides[product.id]) || {};
     const serviceItem = isServiceItem(product);
+    const quoteOnlyProduct = isQuoteOnlyProduct(product);
     const gallery = dedupe(
       [product.img].concat(Array.isArray(product.gallery) ? product.gallery : [])
         .map(normalizeCopy)
@@ -214,12 +225,15 @@
     );
     const specsModel = buildSpecsModel(product, override);
     const description = normalizeCopy(product.desc);
-    const priceValue = Number.parseFloat(String(product.price || '').replace(/[^0-9.-]+/g, '')) || 0;
+    const priceValue = quoteOnlyProduct
+      ? 0
+      : Number.parseFloat(String(product.price || '').replace(/[^0-9.-]+/g, '')) || 0;
 
     return {
       id: product.id,
       product,
       isService: serviceItem,
+      isQuoteOnly: quoteOnlyProduct,
       brand: normalizeCopy(serviceItem ? 'SERVICIO' : product.brand),
       category: normalizeCopy(product.category),
       department: String(product.department || '').toLowerCase(),
@@ -227,16 +241,16 @@
       title: normalizeCopy(product.title),
       description,
       summary: normalizeCopy(override.summary || description),
-      price: normalizeCopy(product.price || 'Cotizar'),
+      price: quoteOnlyProduct ? 'Consultar precio' : normalizeCopy(product.price || 'Cotizar'),
       priceValue,
-      requiresQuote: serviceItem || priceValue <= 0,
+      requiresQuote: serviceItem || quoteOnlyProduct || priceValue <= 0,
       img: normalizeCopy(product.img),
       gallery,
-      availabilityLabel: serviceItem ? 'A medida' : 'Disponible',
+      availabilityLabel: serviceItem ? 'A medida' : quoteOnlyProduct ? 'Sujeto a disponibilidad' : 'Disponible',
       productCode: getProductCode(product),
       specTabLabel: normalizeCopy(override.specTabLabel || (serviceItem ? 'Alcance' : 'Especificaciones')),
       descriptionTabLabel: 'Descripción',
-      primaryActionLabel: serviceItem || priceValue <= 0 ? 'Solicitar cotización' : 'Agregar al carrito',
+      primaryActionLabel: quoteOnlyProduct ? 'Consultar precio' : serviceItem || priceValue <= 0 ? 'Solicitar cotización' : 'Agregar al carrito',
       quoteActionLabel: serviceItem ? 'Solicitar por WhatsApp' : 'Cotizar por WhatsApp',
       detailActionLabel: serviceItem ? 'Ver detalle del servicio' : 'Ver ficha completa',
       showSpecsTable: specsModel.showTable,
@@ -250,6 +264,7 @@
     getCatalogData,
     getDepartmentLabel,
     isServiceItem,
+    isQuoteOnlyProduct,
     findProductById,
     buildProductDetailUrl,
     getSafeReturnUrl,

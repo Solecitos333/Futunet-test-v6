@@ -549,6 +549,195 @@
       desc: 'Equipo reacondicionado, ideal para oficina.',
       specs: ['Equipo Usado / Reacondicionado', 'Garantía limitada', 'Sujeto a disponibilidad']
     },
+    {
+      id: 'laptop_selektronic_dell_5410_i5',
+      title: 'Laptop Dell Latitude 5410 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/01-dell-latitude-5410.webp', gallery: ['img/productos/laptops/01-dell-latitude-5410.webp'],
+      desc: 'Laptop empresarial reacondicionada de décima generación, compacta y preparada para trabajo de oficina.',
+      specs: ['Procesador: Intel Core i5 de 10.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5410-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_7400_i5',
+      title: 'Laptop Dell Latitude 7400 Core i5, 8 GB RAM, SSD de 120/256 GB y HDD de 500 GB',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/02-dell-latitude-7400.webp', gallery: ['img/productos/laptops/02-dell-latitude-7400.webp'],
+      desc: 'Laptop empresarial reacondicionada de octava generación con almacenamiento combinado sujeto a configuración disponible.',
+      specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 120/256 GB + HDD de 500 GB', 'Condición: Reacondicionada', 'Configuración sujeta a inventario', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-7400-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_5330_i7',
+      title: 'Laptop Dell Latitude 5330 Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/03-dell-latitude-5330.webp', gallery: ['img/productos/laptops/03-dell-latitude-5330.webp'],
+      desc: 'Laptop empresarial reacondicionada de duodécima generación con formato portátil de 13.3 pulgadas.',
+      specs: ['Procesador: Intel Core i7 de 12.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-5330-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_5490_i5_gen8',
+      title: 'Laptop Dell Latitude 5490 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas, generación 8',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/04-dell-latitude-5490-gen8.webp', gallery: ['img/productos/laptops/04-dell-latitude-5490-gen8.webp'],
+      desc: 'Laptop empresarial reacondicionada para productividad diaria y trabajo de oficina.',
+      specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5490-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_7390_i7',
+      title: 'Laptop Dell Latitude 7390 Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/05-dell-latitude-7390.webp', gallery: ['img/productos/laptops/05-dell-latitude-7390.webp'],
+      desc: 'Laptop empresarial reacondicionada de octava generación con diseño compacto de 13.3 pulgadas.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-7390-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_7390_touch_i7',
+      title: 'Laptop Dell Latitude 7390 Touch Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/06-dell-latitude-7390-touch.webp', gallery: ['img/productos/laptops/06-dell-latitude-7390-touch.webp'],
+      desc: 'Versión táctil reacondicionada de la Latitude 7390, orientada a movilidad y productividad empresarial.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-7390-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_5401_i7',
+      title: 'Laptop Dell Latitude 5401 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/07-dell-latitude-5401.webp', gallery: ['img/productos/laptops/07-dell-latitude-5401.webp'],
+      desc: 'Laptop empresarial reacondicionada de novena generación con pantalla de 14 pulgadas.',
+      specs: ['Procesador: Intel Core i7 de 9.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5401-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_3380',
+      title: 'Laptop Dell Latitude 3380, 4 GB RAM, SSD de 120/128 GB, 13.3 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/08-dell-latitude-3380.webp', gallery: ['img/productos/laptops/08-dell-latitude-3380.webp'],
+      desc: 'Laptop compacta reacondicionada para tareas educativas, navegación y ofimática básica.',
+      specs: ['Generación del procesador: 6.ª', 'Memoria RAM: 4 GB', 'Almacenamiento: SSD de 120/128 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-3380-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_precision_7510',
+      title: 'Laptop Dell Precision 7510 Core i7, 16 GB RAM, 256 GB SSD, 15.6 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/09-dell-precision-7510.webp', gallery: ['img/productos/laptops/09-dell-precision-7510.webp'],
+      desc: 'Estación de trabajo móvil reacondicionada con gráficos profesionales para aplicaciones técnicas.',
+      specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Gráficos profesionales AMD', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/precision-m7510-workstation/overview'
+    },
+    {
+      id: 'laptop_selektronic_hp_zbook_15_g5',
+      title: 'Laptop HP ZBook 15 G5 Core i7, 32 GB RAM, 256 GB SSD, 15.6 pulgadas',
+      brand: 'HP', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/10-hp-zbook-15-g5.webp', gallery: ['img/productos/laptops/10-hp-zbook-15-g5.webp'],
+      desc: 'Estación de trabajo móvil reacondicionada con memoria ampliada para aplicaciones profesionales exigentes.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 32 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://support.hp.com/lamerica_nsc_cnt_amer-es/product/product-specs/undefined/18865644/'
+    },
+    {
+      id: 'laptop_selektronic_lenovo_p53s',
+      title: 'Laptop Lenovo ThinkPad P53s Core i7, 20 GB RAM, 256 GB SSD, 15.6 pulgadas',
+      brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/11-lenovo-thinkpad-p53s.webp', gallery: ['img/productos/laptops/11-lenovo-thinkpad-p53s.webp'],
+      desc: 'Estación de trabajo móvil reacondicionada para productividad avanzada y flujos profesionales.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 20 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/p53s/22ws2wpp53s'
+    },
+    {
+      id: 'laptop_selektronic_dell_5400_i7',
+      title: 'Laptop Dell Latitude 5400 Core i7, 16 GB RAM, 256 GB SSD, 14 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/12-dell-latitude-5400.webp', gallery: ['img/productos/laptops/12-dell-latitude-5400.webp'],
+      desc: 'Laptop empresarial reacondicionada de octava generación con memoria de 16 GB.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5400-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_lenovo_x1_carbon_gen6',
+      title: 'Laptop Lenovo ThinkPad X1 Carbon Gen 6 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
+      brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/13-lenovo-x1-carbon-gen6.webp', gallery: ['img/productos/laptops/13-lenovo-x1-carbon-gen6.webp'],
+      desc: 'Ultrabook empresarial reacondicionada, ligera y orientada a profesionales en movimiento.',
+      specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Modelo: X1 Carbon de 6.ª generación', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.lenovo.com/us/en/laptops/thinkpad/thinkpad-x/thinkpad-x1-carbon-6th-gen-/p/20KH002KUS'
+    },
+    {
+      id: 'laptop_selektronic_dell_e5450_i7',
+      title: 'Laptop Dell Latitude E5450 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/14-dell-latitude-e5450.webp', gallery: ['img/productos/laptops/14-dell-latitude-e5450.webp'],
+      desc: 'Laptop empresarial reacondicionada para ofimática, navegación y operaciones administrativas.',
+      specs: ['Procesador: Intel Core i7 de 4.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-e5450-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_lenovo_p50',
+      title: 'Laptop Lenovo ThinkPad P50 Core i7, 8 GB RAM, 128 GB SSD, 15.6 pulgadas',
+      brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/15-lenovo-thinkpad-p50.webp', gallery: ['img/productos/laptops/15-lenovo-thinkpad-p50.webp'],
+      desc: 'Estación de trabajo móvil reacondicionada con gráficos dedicados para aplicaciones profesionales.',
+      specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 15.6 pulgadas', 'Gráficos dedicados: 2 GB', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.lenovo.com/gb/en/p/laptops/thinkpad/thinkpadp/thinkpad-p50/22tp2wpwp50'
+    },
+    {
+      id: 'laptop_selektronic_dell_e5570_touch',
+      title: 'Laptop Dell Latitude E5570 Touch Core i7, 16 GB RAM, 256 GB SSD, 15.6 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/16-dell-latitude-e5570.webp', gallery: ['img/productos/laptops/16-dell-latitude-e5570.webp'],
+      desc: 'Laptop empresarial táctil reacondicionada con gráficos dedicados y pantalla de 15.6 pulgadas.',
+      specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 15.6 pulgadas', 'Gráficos dedicados: 2 GB', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-e5570-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_5480_i5',
+      title: 'Laptop Dell Latitude 5480 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/17-dell-latitude-5480.webp', gallery: ['img/productos/laptops/17-dell-latitude-5480.webp'],
+      desc: 'Laptop empresarial reacondicionada de séptima generación para productividad cotidiana.',
+      specs: ['Procesador: Intel Core i5 de 7.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5480-laptop/overview'
+    },
+    {
+      id: 'laptop_selektronic_dell_chromebook_3180',
+      title: 'Laptop Dell Chromebook 11 3180, 4 GB RAM, 16 GB eMMC, 11.6 pulgadas',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/18-dell-chromebook-3180.webp', gallery: ['img/productos/laptops/18-dell-chromebook-3180.webp'],
+      desc: 'Chromebook reacondicionada y compacta para navegación, educación y trabajo en la nube.',
+      specs: ['Procesador: Intel Celeron N3060', 'Memoria RAM: 4 GB', 'Almacenamiento: 16 GB eMMC', 'Pantalla: 11.6 pulgadas', 'Sistema: Chrome OS', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/manuals/en-us/chromebook-11-3180-laptop/chrome3180_om_pub/product-specification'
+    },
+    {
+      id: 'laptop_selektronic_lenovo_x380_yoga',
+      title: 'Laptop Lenovo ThinkPad X380 Yoga 2 en 1 Touch Core i5, 8 GB RAM, 256 GB SSD',
+      brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/19-lenovo-x380-yoga.webp', gallery: ['img/productos/laptops/19-lenovo-x380-yoga.webp'],
+      desc: 'Convertible empresarial reacondicionada con pantalla táctil de 13.3 pulgadas y formato 2 en 1.',
+      specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 13.3 pulgadas', 'Formato: 2 en 1', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.lenovo.com/nl/nl/p/laptops/thinkpad/thinkpadx/thinkpad-x380-yoga/22tp2txx380'
+    },
+    {
+      id: 'laptop_selektronic_lenovo_e14_i5',
+      title: 'Laptop Lenovo ThinkPad E14 Core i5, 8 GB RAM, 256 GB SSD, 14 pulgadas',
+      brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/20-lenovo-thinkpad-e14.webp', gallery: ['img/productos/laptops/20-lenovo-thinkpad-e14.webp'],
+      desc: 'Laptop empresarial reacondicionada de décima generación para productividad y trabajo híbrido.',
+      specs: ['Procesador: Intel Core i5 de 10.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://psref.lenovo.com/syspool/Sys/PDF/ThinkPad/ThinkPad_E14/ThinkPad_E14_Spec.html'
+    },
+    {
+      id: 'laptop_selektronic_dell_5490_i5_gen7',
+      title: 'Laptop Dell Latitude 5490 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas, generación 7',
+      brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
+      img: 'img/productos/laptops/21-dell-latitude-5490-gen7.webp', gallery: ['img/productos/laptops/21-dell-latitude-5490-gen7.webp'],
+      desc: 'Laptop empresarial reacondicionada de séptima generación para tareas administrativas y trabajo de oficina.',
+      specs: ['Procesador: Intel Core i5 de 7.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5490-laptop/overview'
+    },
 ],
 
     improoficinas: [
@@ -557,156 +746,169 @@
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Silla Ergonómica Ejecutiva',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo blanco con panel frontal',
+        desc: 'Superficie amplia, pasacables integrado y panel frontal para mayor privacidad.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-1.jpeg',
         gallery: ['img/productos/mobiliario/mob-1.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Escritorio ejecutivo', 'Panel frontal', 'Pasacables integrado']
       },
       {
         id: 'mob_oficina_2',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Escritorio de Oficina Moderno',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio gerencial en L con credenza lateral',
+        desc: 'Cubierta acabado madera, estructura gris y módulo lateral de almacenamiento.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-2.jpeg',
         gallery: ['img/productos/mobiliario/mob-2.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 48%',
+        specs: ['Configuración en L', 'Credenza lateral', 'Acabado madera y gris']
       },
       {
         id: 'mob_oficina_3',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Archivador Metálico de 3 Gavetas',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo con retorno auxiliar',
+        desc: 'Diseño gerencial con superficie principal, retorno lateral y acabado combinado.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-3.jpeg',
         gallery: ['img/productos/mobiliario/mob-3.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 48%',
+        specs: ['Retorno lateral', 'Superficie ejecutiva', 'Acabado combinado']
       },
       {
         id: 'mob_oficina_4',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Mesa de Reuniones Circular',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Estación ejecutiva en L con pedestal',
+        desc: 'Escritorio acabado madera con estructura metálica y gavetas laterales.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-4.jpeg',
         gallery: ['img/productos/mobiliario/mob-4.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Configuración en L', 'Pedestal con gavetas', 'Estructura metálica']
       },
       {
         id: 'mob_oficina_5',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Sillón de Visita Reclinable',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio operativo rectangular gris',
+        desc: 'Estación compacta con superficie texturizada y estructura metálica.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-5.jpeg',
         gallery: ['img/productos/mobiliario/mob-5.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 48%',
+        specs: ['Formato rectangular', 'Superficie texturizada', 'Estructura metálica']
       },
       {
         id: 'mob_oficina_6',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Estación de Trabajo Modular',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo blanco con cubierta de vidrio',
+        desc: 'Diseño contemporáneo con vidrio, pasacables y módulo lateral.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-6.jpeg',
         gallery: ['img/productos/mobiliario/mob-6.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 49%',
+        specs: ['Cubierta de vidrio', 'Pasacables', 'Módulo lateral']
       },
       {
         id: 'mob_oficina_7',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Librero de Madera',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo negro con cubierta de vidrio',
+        desc: 'Superficie de vidrio negro y almacenamiento lateral integrado.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-7.jpeg',
         gallery: ['img/productos/mobiliario/mob-7.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Cubierta de vidrio negro', 'Almacenamiento lateral', 'Diseño ejecutivo']
       },
       {
         id: 'mob_oficina_8',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Silla Secretarial Ajustable',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio gerencial en L con vidrio y madera',
+        desc: 'Combinación de vidrio negro, detalles de madera y estructura metálica.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-8.jpeg',
         gallery: ['img/productos/mobiliario/mob-8.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 47%',
+        specs: ['Configuración en L', 'Vidrio negro y madera', 'Estructura metálica']
       },
       {
         id: 'mob_oficina_9',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Mesa de Centro para Recepción',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo blanco con panel metálico',
+        desc: 'Cubierta de vidrio blanco, pasacables y panel frontal perforado.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-9.jpeg',
         gallery: ['img/productos/mobiliario/mob-9.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Cubierta de vidrio blanco', 'Panel frontal perforado', 'Pasacables']
       },
       {
         id: 'mob_oficina_10',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Escritorio Gerencial en L',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio modular en L blanco y gris',
+        desc: 'Retorno lateral, compartimientos abiertos y pedestal de tres gavetas.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-10.jpeg',
         gallery: ['img/productos/mobiliario/mob-10.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Configuración modular en L', 'Compartimientos abiertos', 'Pedestal de tres gavetas']
       },
       {
         id: 'mob_oficina_11',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Sofá de Espera 2 Cuerpos',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo acabado madera con patas metálicas',
+        desc: 'Superficie amplia, panel frontal y estructura metálica moderna.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-11.jpeg',
         gallery: ['img/productos/mobiliario/mob-11.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Acabado madera', 'Panel frontal', 'Patas metálicas']
       },
       {
         id: 'mob_oficina_12',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Gabinete de Almacenamiento',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo blanco y madera con cubierta de vidrio',
+        desc: 'Cubierta de vidrio, estructura blanca y panel frontal acabado madera.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-12.jpeg',
         gallery: ['img/productos/mobiliario/mob-12.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Cubierta de vidrio', 'Estructura blanca', 'Panel frontal acabado madera']
       },
       {
         id: 'mob_oficina_13',
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Silla Alta para Mostrador',
-        desc: 'Mobiliario de alta calidad para optimizar tu espacio de trabajo.',
+        title: 'Escritorio ejecutivo negro con cubierta de vidrio',
+        desc: 'Diseño sobrio con panel frontal metálico y estructura negra.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-13.jpeg',
         gallery: ['img/productos/mobiliario/mob-13.jpeg'],
-        specs: ['Diseño ergonómico', 'Materiales de alta durabilidad', 'Instalación disponible']
+        imagePosition: '50% 50%',
+        specs: ['Cubierta de vidrio negro', 'Panel frontal metálico', 'Estructura negra']
       }
     ]
   };
@@ -861,6 +1063,8 @@
       price: normalizePrice(item.price),
       img: gallery[0],
       gallery,
+      imagePosition: normalizeCopy(item.imagePosition || '50% 50%'),
+      sourceUrl: normalizeCopy(item.sourceUrl || ''),
       specs: normalizeSpecs(item),
       supplier: source,
       supplierLabel: policy.label,

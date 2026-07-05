@@ -6,7 +6,7 @@ var FUTUNET_LAYOUT = {
   sections: [
     { id: 'inicio', name: 'Banner Rotativo', visible: true, title: 'La tecnología del<br><span class="hero-title-accent">futuro</span>', subtitle: '' },
     { id: 'portal-rapido', name: 'Portal Rápido', visible: true, title: 'Hola, ¿en qué podemos ayudarte hoy?', subtitle: 'Accede rápidamente a nuestros servicios, contrata fibra óptica y gestiona tus necesidades tecnológicas en Santiago.' },
-    { id: 'productos-categoria', name: 'Productos por Categoría', visible: true, title: 'Productos por categoría', subtitle: 'Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.' },
+    { id: 'productos-categoria', name: 'Accesos por Categoría', visible: true, title: 'Encuentra lo que necesitas', subtitle: '' },
     { id: 'destacados-catalogo', name: 'Artículos Destacados', visible: true, title: 'Artículos destacados del catálogo', subtitle: 'Descubre productos listos para cotizar y entra directo al detalle que más se parezca a lo que estás buscando.' },
     { id: 'servicios', name: 'Nuestros Servicios / Soluciones', visible: true, title: 'Soluciones para vender, operar y proteger mejor', subtitle: 'Explora las áreas en las que acompañamos a empresas, instituciones y hogares con equipos, instalación y soporte.' },
     { id: 'equipa-oficina', name: 'Equipa tu Oficina', visible: true, title: 'Equipa tu oficina', subtitle: 'Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.' },

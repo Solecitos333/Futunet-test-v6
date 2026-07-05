@@ -120,8 +120,13 @@ var FUTUNET_CONFIG = {
     var footerLinks = document.querySelectorAll('footer a, .footer a, .contact-details a');
     footerLinks.forEach(function (el) {
       if (el.textContent.includes('Orbis Espinal') || el.textContent.includes('Asesor')) {
-        var iconHtml = el.querySelector('i') ? el.querySelector('i').outerHTML + ' ' : '';
-        el.innerHTML = iconHtml + escapeHtml(FUTUNET_CONFIG.ADVISOR_NAME);
+        var iconEl = el.querySelector('i');
+        el.textContent = '';
+        if (iconEl) {
+          el.appendChild(iconEl);
+          el.appendChild(document.createTextNode(' '));
+        }
+        el.appendChild(document.createTextNode(FUTUNET_CONFIG.ADVISOR_NAME));
       }
     });
 
@@ -171,10 +176,14 @@ var FUTUNET_CONFIG = {
     }
   }
 
-  function escapeHtml(s) {
-    var d = document.createElement('div');
-    d.textContent = s || '';
-    return d.innerHTML;
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function sanitizeUrl(url) {

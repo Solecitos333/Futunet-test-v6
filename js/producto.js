@@ -4,10 +4,14 @@
   let currentDetail = null;
   let selectedQuantity = 1;
 
-  function escapeHTML(value) {
-    const div = document.createElement('div');
-    div.textContent = value;
-    return div.innerHTML;
+  function escapeHTML(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function refreshIcons() {
@@ -59,6 +63,15 @@
   function getQuoteMessage(detail) {
     if (!detail) return '';
 
+    if (detail.isQuoteOnly) {
+      return [
+        'Hola Futunet, quiero consultar el precio y la disponibilidad de:',
+        detail.title,
+        '',
+        'Favor compartirme la información actualizada de este producto.'
+      ].join('\n');
+    }
+
     if (detail.isService) {
       return [
         'Hola Futunet, me interesa este servicio:',
@@ -84,7 +97,7 @@
     const copyBtn = document.getElementById('product-copy-link-btn');
     const whatsappShareBtn = document.getElementById('product-whatsapp-share-btn');
     const shareUrl = window.location.href;
-    const shareText = `${detail.title} - ${detail.price}`;
+    const shareText = detail.isQuoteOnly ? detail.title : `${detail.title} - ${detail.price}`;
 
     if (shareBtn) {
       shareBtn.onclick = async () => {
@@ -144,6 +157,7 @@
     const images = detail.gallery.length ? detail.gallery : [detail.img];
     mainImg.src = images[0] || 'img/placeholder.svg';
     mainImg.alt = detail.title;
+    mainImg.style.objectPosition = (detail.product && detail.product.imagePosition) || '50% 50%';
     mainImg.onerror = function () {
       this.onerror = null;
       this.src = 'img/placeholder.svg';
@@ -340,7 +354,7 @@
 
     if (primaryAction) {
       primaryAction.innerHTML = detail.requiresQuote
-        ? '<i data-lucide="message-circle"></i> Solicitar cotización'
+        ? `<i data-lucide="message-circle"></i> ${detail.isQuoteOnly ? 'Consultar precio' : 'Solicitar cotización'}`
         : '<i data-lucide="shopping-cart"></i> Agregar al carrito';
       primaryAction.onclick = () => {
         const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';

@@ -73,10 +73,17 @@
     });
   }
 
+  function isQuoteOnly(item) {
+    if (!item) return false;
+    const category = String(item.category || '').toLowerCase();
+    const id = String(item.id || '');
+    return category === 'computadoras' || category === 'mobiliario' || id.startsWith('mob_oficina_');
+  }
+
   function buildCard(item) {
     const title = normalizeText(item.title);
     const meta = normalizeText(item.brand || item.category || 'Catálogo');
-    const price = normalizeText(item.price || 'Cotizar');
+    const price = isQuoteOnly(item) ? 'Consultar precio' : normalizeText(item.price || 'Cotizar');
 
     return `
       <a class="showcase-card" href="catalogo.html?q=${encodeURIComponent(item.title)}" aria-label="Ver ${title} en el catálogo">

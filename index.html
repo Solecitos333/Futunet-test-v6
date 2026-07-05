@@ -417,10 +417,10 @@
                 </a>
               </div>
               <div class="hero-chips">
-                <a href="catalogo.html?cat=seguridad" class="chip"><span class="chip-icon"><i data-lucide="shield-check"></i></span> Seguridad electrónica</a>
+                <a href="catalogo.html?cat=seguridad" class="chip"><span class="chip-icon"><i data-lucide="shield-check"></i></span> Cámaras y Seguridad</a>
                 <a href="catalogo.html?cat=redes" class="chip"><span class="chip-icon"><i data-lucide="wifi"></i></span> Redes y energía</a>
                 <a href="catalogo.html?cat=equipos" class="chip"><span class="chip-icon"><i data-lucide="monitor"></i></span> Equipos de oficina</a>
-                <a href="catalogo.html?cat=infra" class="chip"><span class="chip-icon"><i data-lucide="building-2"></i></span> Infraestructura</a>
+                <a href="catalogo.html?cat=infra" class="chip"><span class="chip-icon"><i data-lucide="building-2"></i></span> Remodelación de Oficina</a>
               </div>
             </div>
           </div>
@@ -869,24 +869,53 @@
 
   <hr class="section-divider" />
 
-  <!-- ═══ PRODUCTOS POR CATEGORÍA (Tabs + Carrusel) ═══ -->
+  <!-- ═══ ACCESOS RÁPIDOS POR CATEGORÍA ═══ -->
   <section id="productos-categoria" class="section catshowcase-section">
-    <div class="container">
-      <div class="text-center reveal">
-        <span class="section-label">Descubre nuestro inventario</span>
-        <h2 class="section-title">Productos por categoría</h2>
-        <p class="section-sub">Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.</p>
+    <div class="container catshowcase-container">
+      <div class="catshowcase-heading reveal">
+        <div>
+          <span class="catshowcase-eyebrow">Explora</span>
+          <h2 class="section-title">Encuentra lo que necesitas</h2>
+          <span class="catshowcase-accent" aria-hidden="true"></span>
+        </div>
+        <a class="catshowcase-all" href="catalogo.html">
+          Ver todo el catálogo
+          <i data-lucide="arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
-      <div class="category-tabs reveal" aria-label="Filtrar por categoría"></div>
-      <div class="catshowcase-wrapper reveal">
-        <button class="catshowcase-arrow catshowcase-arrow--prev" aria-label="Anterior">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <div class="catshowcase-grid" id="catshowcase-grid"></div>
-        <button class="catshowcase-arrow catshowcase-arrow--next" aria-label="Siguiente">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-      </div>
+
+      <nav class="catshowcase-categories reveal" aria-label="Categorías del catálogo">
+        <a class="catshowcase-category" href="catalogo.html?cat=seguridad">
+          <span class="catshowcase-category__icon"><i data-lucide="shield-check" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Seguridad electrónica</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+        <a class="catshowcase-category" href="catalogo.html?cat=redes">
+          <span class="catshowcase-category__icon"><i data-lucide="network" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Redes y conectividad</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+        <a class="catshowcase-category" href="catalogo.html?cat=energia">
+          <span class="catshowcase-category__icon"><i data-lucide="battery-charging" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Energía y climatización</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+        <a class="catshowcase-category" href="catalogo.html?cat=equipos">
+          <span class="catshowcase-category__icon"><i data-lucide="monitor" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Computación</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+        <a class="catshowcase-category" href="catalogo.html?cat=oficina">
+          <span class="catshowcase-category__icon"><i data-lucide="briefcase-business" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Papelería y mobiliario</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+        <a class="catshowcase-category" href="catalogo.html?cat=infra">
+          <span class="catshowcase-category__icon"><i data-lucide="building-2" aria-hidden="true"></i></span>
+          <span class="catshowcase-category__label">Infraestructura</span>
+          <i class="catshowcase-category__arrow" data-lucide="arrow-up-right" aria-hidden="true"></i>
+        </a>
+      </nav>
     </div>
   </section>
 
@@ -1056,6 +1085,29 @@
             <span class="office-card__btn">Ver Productos</span>
           </div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- ═══ PRODUCTOS POR CATEGORÍA (Carrusel dinámico) ═══ -->
+  <section id="productos-carrusel" class="section catshowcase-carousel-section" hidden>
+    <div class="container">
+      <div class="text-center reveal">
+        <span class="section-label">Descubre nuestro inventario</span>
+        <h2 class="section-title">Productos por categoría</h2>
+        <p class="section-sub">Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.</p>
+      </div>
+      <div class="category-tabs reveal" aria-label="Filtrar por categoría"></div>
+      <div class="catshowcase-wrapper reveal">
+        <button class="catshowcase-arrow catshowcase-arrow--prev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="catshowcase-grid" id="catshowcase-grid"></div>
+        <button class="catshowcase-arrow catshowcase-arrow--next" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
       </div>
     </div>
   </section>
@@ -1461,11 +1513,11 @@
         <div class="footer-col">
           <div class="footer-heading">Soluciones</div>
           <ul>
-            <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
-            <li><a href="redes-datos.html">Redes y datos</a></li>
+            <li><a href="seguridad-electronica.html">Cámaras y Seguridad</a></li>
+            <li><a href="redes-datos.html">Internet y Redes</a></li>
             <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
             <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
-            <li><a href="infraestructura-remozamiento.html">Infraestructura</a></li>
+            <li><a href="infraestructura-remozamiento.html">Remodelación de Oficina</a></li>
             <li><a href="catalogo.html">Ver catálogo</a></li>
           </ul>
         </div>
@@ -1511,12 +1563,12 @@
   <script defer src="js/chatbot.js?v=20260628"></script>
   <script defer src="js/main.js?v=3.2"></script>
   <script defer src="js/inventory_data.js?v=20260628"></script>
-  <script defer src="js/supplier_inventory.js?v=20260628"></script>
+  <script defer src="js/supplier_inventory.js?v=20260705-laptops"></script>
   <script defer src="js/image_fixes.js?v=v9"></script>
-  <script defer src="js/catalog.js?v=20260628"></script>
+  <script defer src="js/catalog.js?v=20260705-laptops"></script>
+  <script defer src="js/category-showcase.js?v=20260705-release"></script>
   <script defer src="js/home_showcase.js"></script>
   <script defer src="js/promo-carousel.js?v=20260628"></script>
-  <script defer src="js/category-showcase.js"></script>
   <script defer src="js/brands-preview.js"></script>
   <script defer src="js/form.js"></script>
   <script>

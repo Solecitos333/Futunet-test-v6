@@ -2974,7 +2974,15 @@
   function setText(id, text) { var el = document.getElementById(id); if (el) el.textContent = text; }
   function setVal(id, val) { var el = document.getElementById(id); if (el) el.value = val; }
   function getVal(id) { var el = document.getElementById(id); return el ? el.value : ''; }
-  function escapeHtml(s) { var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
   function escapeAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function formatPrice(p) {
     if (p == null || p === '' || p === 'Contactar') return '<span style="color:#0A70A2;font-weight:600;">Contactar</span>';

@@ -17,9 +17,13 @@
  * Escapa caracteres HTML especiales para prevenir XSS
  */
 function escapeHTML(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  if (str === undefined || str === null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /**
@@ -533,6 +537,16 @@ function isServiceItem(product) {
   );
 }
 
+function isQuoteOnlyCatalogItem(product) {
+  if (!product || isServiceItem(product)) return false;
+  const category = normalizeSearch(product.category);
+  return category === 'computadoras' ||
+    category === 'laptops' ||
+    category === 'mobiliario' ||
+    String(product.id || '').startsWith('mob_oficina_') ||
+    String(product.id || '').startsWith('laptop_selektronic_');
+}
+
 function getCategoryCountLabel(categoryName, count) {
   if (String(categoryName || '').toLowerCase() === 'servicios') {
     return `${count} servicio${count !== 1 ? 's' : ''} disponibles`;
@@ -567,12 +581,12 @@ function getDeptCountLabel(count) {
 // Nombres legibles de departamentos
 const deptNames = {
   all: 'Catálogo Completo',
-  seguridad: 'Seguridad Electrónica',
-  redes: 'Redes & Datos',
-  energia: 'Energía & Climatización',
-  equipos: 'Computación',
-  oficina: 'Papelería y Mobiliario',
-  infra: 'Infraestructura'
+  seguridad: 'Cámaras y Seguridad',
+  redes: 'Internet y Redes',
+  energia: 'Energía y Climatización',
+  equipos: 'Computadoras y Tecnología',
+  oficina: 'Oficina y Papelería',
+  infra: 'Remodelación de Oficina'
 };
 
 const mobileDeptOrder = ['seguridad', 'redes', 'energia', 'equipos', 'oficina', 'infra'];
@@ -1167,40 +1181,57 @@ function renderProductsGrid(productsList, options = {}) {
 
   productsList.forEach((product, idx) => {
     const serviceItem = isServiceItem(product);
-    const purchasableProduct = !serviceItem && parsePrice(product.price) > 0;
+    const furnitureItem = !serviceItem && (
+      product.category === 'Mobiliario' || String(product.id || '').startsWith('mob_oficina_')
+    );
+    const computerItem = !serviceItem && normalizeSearch(product.category) === 'computadoras';
+    const laptopItem = !serviceItem && normalizeSearch(product.category) === 'laptops';
+    const quoteOnlyItem = isQuoteOnlyCatalogItem(product);
+    const purchasableProduct = !serviceItem && !quoteOnlyItem && parsePrice(product.price) > 0;
     const badgeText = serviceItem ? 'SERVICIO' : product.brand;
     const actionText = compactCard
       ? 'Ver'
       : serviceItem
         ? 'Ver Detalles del Servicio'
         : 'Ver ficha técnica';
-    const metaText = serviceItem
+    const metaText = furnitureItem
+      ? 'Mobiliario de oficina'
+      : serviceItem
       ? `${getDeptDisplayName(product.department)} · Servicio`
       : `${product.brand} · ${product.category}`;
     const availabilityText = serviceItem ? 'A medida' : purchasableProduct ? 'Disponible' : 'Bajo cotización';
     const productUrl = 'producto.html?id=' + encodeURIComponent(product.id);
+    const whatsappNumber = typeof FUTUNET_CONFIG !== 'undefined' && FUTUNET_CONFIG.WHATSAPP_NUMBER
+      ? FUTUNET_CONFIG.WHATSAPP_NUMBER
+      : '18297411041';
+    const quoteMessage = `Hola Futunet, quiero consultar el precio y la disponibilidad de: *${product.title}*.`;
+    const quoteUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(quoteMessage)}`;
     const card = document.createElement('article');
-    card.className = `product-card reveal in${serviceItem ? ' product-card--service' : ''}${previewCard ? ' product-card--preview-mobile' : compactCard ? ' product-card--compact-mobile' : ''}`;
+    card.className = `product-card reveal in${serviceItem ? ' product-card--service' : ''}${quoteOnlyItem ? ' product-card--quote-only' : ''}${furnitureItem ? ' product-card--furniture' : ''}${computerItem || laptopItem ? ' product-card--computer-quote' : ''}${previewCard ? ' product-card--preview-mobile' : compactCard ? ' product-card--compact-mobile' : ''}`;
     card.style.animationDelay = `${idx * 40}ms`;
 
     card.innerHTML = `
       <a class="product-card__image-link" href="${productUrl}" aria-label="Ver detalles de ${escapeHTML(product.title)}">
         <div class="product-img-wrapper${previewCard ? ' product-img-wrapper--preview-mobile' : compactCard ? ' product-img-wrapper--compact-mobile' : ''}">
           <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300">
-          <span class="product-badge">${escapeHTML(badgeText)}</span>
-          ${previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
+          ${quoteOnlyItem ? '' : `<span class="product-badge">${escapeHTML(badgeText)}</span>`}
+          ${quoteOnlyItem || previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
         </div>
       </a>
       <div class="product-info${previewCard ? ' product-info--preview-mobile' : compactCard ? ' product-info--compact-mobile' : ''}">
         <div class="product-meta${previewCard ? ' product-meta--preview-mobile' : compactCard ? ' product-meta--compact-mobile' : ''}">${escapeHTML(metaText)}</div>
         <h4 class="product-title${previewCard ? ' product-title--preview-mobile' : compactCard ? ' product-title--compact-mobile' : ''}"><a href="${productUrl}">${escapeHTML(product.title)}</a></h4>
-        <div class="product-price${previewCard ? ' product-price--preview-mobile' : compactCard ? ' product-price--compact-mobile' : ''}">${escapeHTML(product.price)}</div>
+        ${quoteOnlyItem ? '' : `<div class="product-price${previewCard ? ' product-price--preview-mobile' : compactCard ? ' product-price--compact-mobile' : ''}">${escapeHTML(product.price)}</div>`}
         ${compactCard ? '' : `<p class="product-desc">${escapeHTML(product.desc)}</p>`}
         ${previewCard ? '' : `
         <div class="product-actions${compactCard ? ' product-actions--compact-mobile' : ''}">
+          ${quoteOnlyItem ? `
+          <a class="product-quote-btn${compactCard ? ' product-quote-btn--compact-mobile' : ''}" href="${escapeHTML(quoteUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Consultar precio de ${escapeHTML(product.title)} por WhatsApp">
+            <i data-lucide="message-circle"></i> Consultar precio
+          </a>` : `
           <button class="product-view-btn${compactCard ? ' product-view-btn--compact-mobile' : ''}" type="button">
             <i data-lucide="eye"></i> ${actionText}
-          </button>
+          </button>`}
           ${purchasableProduct ? `<div class="product-add-container${compactCard ? ' product-add-container--compact-mobile' : ''}" data-product-add="${escapeHTML(product.id)}" data-product-add-variant="${compactCard ? 'compact' : 'default'}">
             ${renderInlineAddButtonHTML(product.id, compactCard ? 'compact' : 'default')}
           </div>` : ''}
@@ -1211,6 +1242,7 @@ function renderProductsGrid(productsList, options = {}) {
 
     const imgEl = card.querySelector('.product-img-wrapper img');
     if (imgEl) {
+      if (product.imagePosition) imgEl.style.objectPosition = product.imagePosition;
       imgEl.addEventListener('error', function onError() {
         handleImageError(this, product.id, 0);
       }, { once: true });
@@ -1300,17 +1332,18 @@ function openProductModal(id) {
   const product = mockDatabase.find(p => p.id === id);
   if (!product) return;
   const serviceItem = isServiceItem(product);
-  const purchasableProduct = !serviceItem && parsePrice(product.price) > 0;
+  const quoteOnlyItem = isQuoteOnlyCatalogItem(product);
+  const purchasableProduct = !serviceItem && !quoteOnlyItem && parsePrice(product.price) > 0;
   closeMobileFilters();
   lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   if (purchasableProduct) setModalCartProduct(id);
 
   document.getElementById('modal-title').textContent = product.title;
-  document.getElementById('modal-price').textContent = product.price;
+  document.getElementById('modal-price').textContent = quoteOnlyItem ? 'Consultar precio' : product.price;
   document.getElementById('modal-brand').textContent = serviceItem ? 'SERVICIO' : product.brand;
   const availabilityPill = document.getElementById('modal-availability');
   if (availabilityPill) {
-    availabilityPill.textContent = serviceItem ? 'A medida' : 'Disponible';
+    availabilityPill.textContent = serviceItem ? 'A medida' : quoteOnlyItem ? 'Sujeto a disponibilidad' : 'Disponible';
     availabilityPill.classList.toggle('modal-availability-pill--service', serviceItem);
   }
   document.getElementById('modal-desc').textContent = product.desc;
@@ -1327,6 +1360,7 @@ function openProductModal(id) {
 
   const mainImg = document.getElementById('modal-main-img');
   mainImg.src = product.img;
+  mainImg.style.objectPosition = product.imagePosition || '50% 50%';
   mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
 
   const thumbsContainer = document.getElementById('modal-thumbnails');
@@ -1361,8 +1395,8 @@ function openProductModal(id) {
   }
 
   const btnQuote = document.getElementById('modal-quote-btn');
-  btnQuote.innerHTML = `<i data-lucide="message-circle"></i> ${serviceItem ? 'Solicitar este servicio' : 'Cotizar Modelo Exacto'}`;
-  btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem); };
+  btnQuote.innerHTML = `<i data-lucide="message-circle"></i> ${serviceItem ? 'Solicitar este servicio' : quoteOnlyItem ? 'Consultar precio' : 'Cotizar Modelo Exacto'}`;
+  btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem, quoteOnlyItem); };
   const btnAddCart = document.getElementById('modal-add-cart-btn');
   if (btnAddCart) {
     btnAddCart.hidden = !purchasableProduct;
@@ -1413,12 +1447,17 @@ document.addEventListener('click', (e) => {
   if (modal && e.target === modal) closeProductModal();
 });
 
-function requestQuote(product, brand, price, serviceItem = false) {
+function requestQuote(product, brand, price, serviceItem = false, quoteOnlyItem = false) {
   const isService = serviceItem || String(brand || '').toLowerCase() === 'servicios';
-  const text = isService
+  const text = quoteOnlyItem
+    ? `Hola Futunet, quiero consultar el precio y la disponibilidad de: *${product}*.`
+    : isService
     ? `Hola Futunet, deseo solicitar el servicio: *${product}* con precio de referencia ${price}. Favor brindarme información y disponibilidad.`
     : `Hola Futunet, deseo comprar o cotizar el producto: *${product}* (Marca: ${brand}) listado al precio de: ${price}. Favor brindarme información.`;
-  window.open(`https://wa.me/18297411041?text=${encodeURIComponent(text)}`, '_blank');
+  const phone = typeof FUTUNET_CONFIG !== 'undefined' && FUTUNET_CONFIG.WHATSAPP_NUMBER
+    ? FUTUNET_CONFIG.WHATSAPP_NUMBER
+    : '18297411041';
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 
@@ -1506,7 +1545,7 @@ function initSmartSearch(inputId, dropdownId) {
                 `    <span class="search-item-name">${escapeHTML(m.title)}</span>` +
                 `    <span class="search-item-brand">${escapeHTML(m.brand)}</span>` +
                 `  </div>` +
-                `  <span class="search-item-price">${escapeHTML(m.price)}</span>` +
+                (isQuoteOnlyCatalogItem(m) ? '' : `  <span class="search-item-price">${escapeHTML(m.price)}</span>`) +
                 `</div>`;
       });
     }
