@@ -1760,10 +1760,11 @@
   function getDefaultLayout() {
     return [
       { id: 'inicio', name: 'Banner Rotativo', visible: true, title: 'La tecnología del<br><span class="hero-title-accent">futuro</span>', subtitle: '' },
-      { id: 'productos-categoria', name: 'Productos por Categoría', visible: true, title: 'Productos por categoría', subtitle: 'Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.' },
+      { id: 'productos-categoria', name: 'Accesos por Categoría', visible: true, title: 'Encuentra lo que necesitas', subtitle: '' },
       { id: 'destacados-catalogo', name: 'Artículos Destacados', visible: true, title: 'Artículos destacados del catálogo', subtitle: 'Descubre productos listos para cotizar y entra directo al detalle que más se parezca a lo que estás buscando.' },
       { id: 'servicios', name: 'Nuestros Servicios / Soluciones', visible: true, title: 'Soluciones para vender, operar y proteger mejor', subtitle: 'Explora las áreas en las que acompañamos a empresas, instituciones y hogares con equipos, instalación y soporte.' },
       { id: 'equipa-oficina', name: 'Equipa tu Oficina', visible: true, title: 'Equipa tu oficina', subtitle: 'Encuentra desde computadoras hasta mobiliario. Todo para que tu espacio de trabajo funcione al máximo.' },
+      { id: 'productos-carrusel', name: 'Carrusel de Categorías', visible: true, title: 'Productos por categoría', subtitle: 'Explora nuestro catálogo organizado por departamento y encuentra lo que necesitas.' },
       { id: 'marcas', name: 'Logos de Marcas', visible: true, title: 'Marcas con las que trabajamos', subtitle: 'Pasa el cursor sobre una marca para descubrir sus productos destacados.' },
       { id: 'nosotros', name: 'Quiénes Somos', visible: true, title: 'Tecnología con criterio, servicio con respaldo', subtitle: '' },
       { id: 'proyecto-cta', name: 'Llamado a la Acción (Proyecto)', visible: true, title: '¿Tienes un proyecto en mente?', subtitle: 'Cuéntanos lo que necesitas y te ayudamos a aterrizar una solución realista, clara y lista para cotizar.' },
