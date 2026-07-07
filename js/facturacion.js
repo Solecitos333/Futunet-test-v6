@@ -3482,12 +3482,12 @@ window.ERPBilling = (function () {
           ` : ''}
         </div>
         <div class="pos-item-qty-controls">
-          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, -1)">-</button>
+          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, -1)" aria-label="Disminuir cantidad">-</button>
           <span class="pos-qty-val">${item.qty}</span>
-          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, 1)">+</button>
+          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, 1)" aria-label="Aumentar cantidad">+</button>
         </div>
         <div class="pos-item-price">${escapeHTML(formatMoney(sub))}</div>
-        <button type="button" class="pos-btn-icon" onclick="ERPBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
+        <button type="button" class="pos-btn-icon" onclick="ERPBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item" aria-label="Quitar item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       `;
