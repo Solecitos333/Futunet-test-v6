@@ -1,0 +1,3 @@
+## 2024-07-04 - Cache normalized strings with WeakMap and replace expensive map-filter chains
+**Learning:** The `normalizeSearch` function uses expensive regex and string replacements. Calling it repeatedly in loops for searching (like in `.map().filter().sort().map()` or iterating over the database) causes performance bottlenecks.
+**Action:** Use a `WeakMap` to lazy-cache normalized strings tied to the object reference (`getNormalized`), avoiding mutations, and replace expensive chained array methods with single-pass imperative `for` loops for measurable performance gains without sacrificing much readability.
