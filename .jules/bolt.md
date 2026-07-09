@@ -1,0 +1,3 @@
+## 2024-06-12 - Optimize search loops and cache string normalization
+**Learning:** Search performance in `js/catalog.js` was bound by expensive array iterations (`.map().filter().sort().map()`) creating numerous intermediate array objects and repeatedly triggering `normalizeSearch()` on every keystroke during filter loops. Mutating objects to cache strings can be risky or throw errors on frozen objects.
+**Action:** Replace the chained array methods with a single-pass `for` loop that performs scoring and filtering together, reducing array allocations from three to one. Use a `WeakMap` inside a new `getNormalized(obj, key)` helper function to lazily cache normalized strings without modifying the underlying objects, preventing errors and redundant calculations.
