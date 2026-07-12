@@ -54,12 +54,14 @@
   <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <link rel="stylesheet" href="css/b2b-subpage-base.css?v=1.0" />
+  <link rel="stylesheet" href="css/b2b-subpage-base.css?v=2.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
 </head>
 <body class="is-loading">
+  <a class="skip-link" href="#service-page-container">Saltar al contenido</a>
   <div id="page-preloader" class="page-preloader" aria-hidden="true">
     <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="972" height="303" />
     <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
@@ -290,145 +292,318 @@
     </div>
   </header>
 
-  <main id="service-page-container" class="service-page" data-service-id="oficina">
-    <!-- Hero Banner -->
-    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/mobiliario.jpg');">
+  <main id="service-page-container" class="service-page premium-service premium-service--office" data-service-id="oficina" tabindex="-1">
+    <section class="premium-service__hero" aria-labelledby="service-title">
+      <div class="premium-service__hero-media" aria-hidden="true">
+        <img src="img/productos/mobiliario/mob-4.jpeg" alt="" width="1280" height="960" fetchpriority="high" />
+      </div>
       <div class="container">
-        <div class="service-hero-content">
-          <h1 class="service-hero-title" id="service-title">Mobiliario y Suministros</h1>
-          <p class="service-hero-desc" id="service-subtitle">Equipamos y organizamos tu espacio de trabajo con criterio, orden y ergonomía.</p>
+        <div class="premium-service__hero-copy">
+          <span class="premium-eyebrow">Mobiliario corporativo · organización · reposición</span>
+          <h1 id="service-title">Mobiliario y <span>suministros</span></h1>
+          <p class="premium-service__hero-desc" id="service-subtitle">Equipamos oficinas y espacios de atención con estaciones, sillas, almacenamiento y suministros seleccionados según el uso, la cantidad y el presupuesto.</p>
+          <div class="premium-service__hero-actions">
+            <a class="premium-action premium-action--primary" href="#cotizar">
+              <i data-lucide="clipboard-list" aria-hidden="true"></i>
+              Preparar mi requerimiento
+            </a>
+            <a class="premium-action premium-action--ghost" href="catalogo.html?cat=oficina">
+              <i data-lucide="grid-2x2" aria-hidden="true"></i>
+              Explorar catálogo
+            </a>
+          </div>
+          <ul class="premium-service__hero-notes" aria-label="Aspectos del servicio">
+            <li><i data-lucide="users" aria-hidden="true"></i> Hogar, oficina y empresa</li>
+            <li><i data-lucide="package-check" aria-hidden="true"></i> Compra por unidad o volumen</li>
+            <li><i data-lucide="map-pin" aria-hidden="true"></i> Atención desde Santiago</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- Main Content Grid -->
-    <section class="service-section">
+    <nav class="premium-quicknav" aria-label="Secciones de mobiliario y suministros">
+      <div class="container premium-quicknav__inner">
+        <a href="#resumen"><i data-lucide="home" aria-hidden="true"></i> Resumen</a>
+        <a href="#colecciones">Colecciones</a>
+        <a href="#compra">Cómo comprar</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#preguntas">Preguntas</a>
+        <a href="#cotizar"><i data-lucide="clipboard-pen-line" aria-hidden="true"></i> Cotizar</a>
+      </div>
+    </nav>
+
+    <section class="premium-section" id="resumen">
       <div class="container">
-        <div class="service-grid-info">
-          <!-- Text and Specs -->
-          <div class="service-details">
-            <h3>Espacios de trabajo altamente productivos</h3>
-            <p id="service-long-description">
-              Diseñamos la distribución física y suministramos mobiliario corporativo ergonómico de alta calidad (escritorios operativos, sillas ejecutivas con soporte lumbar, archivadores metálicos) y consumibles generales de oficina. Ayudamos a tu equipo a trabajar con comodidad y eficiencia.
-            </p>
-
-            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
-            <div class="features-list" id="service-features-list">
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="armchair"></i></div>
-                <div class="feature-text">
-                  <h4>Sillas Ergonómicas</h4>
-                  <p>Sillas giratorias con regulación de altura y soporte lumbar.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="layout"></i></div>
-                <div class="feature-text">
-                  <h4>Escritorios & Estaciones</h4>
-                  <p>Módulos de trabajo individuales y mesas de conferencia.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="folder-archive"></i></div>
-                <div class="feature-text">
-                  <h4>Archivo & Almacén</h4>
-                  <p>Credenzas, cajoneras móviles y estanterías resistentes.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="package-open"></i></div>
-                <div class="feature-text">
-                  <h4>Suministros de Oficina</h4>
-                  <p>Suministro constante de papelería, cartuchos de tinta y más.</p>
-                </div>
-              </div>
+        <div class="premium-intro">
+          <div class="premium-intro__copy">
+            <div class="premium-heading">
+              <span class="premium-kicker">Espacios que trabajan contigo</span>
+              <h2>Más que llenar una oficina: equiparla con criterio.</h2>
             </div>
+            <p id="service-long-description">Una oficina funcional combina ergonomía, circulación, almacenamiento y herramientas de uso diario. Por eso organizamos el requerimiento por tipo de puesto, cantidad de personas, áreas compartidas y frecuencia de reposición.</p>
+            <p>Puedes solicitar un artículo específico, equipar una nueva área o preparar una lista completa para comparar alternativas dentro de un presupuesto definido.</p>
           </div>
+          <aside class="premium-intro__aside">
+            <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+            <h3>Empieza por el uso, no solo por el producto.</h3>
+            <p>La función de cada área ayuda a elegir dimensiones, almacenamiento, nivel de ajuste y materiales adecuados antes de comprar.</p>
+          </aside>
+        </div>
 
-          <!-- Sticky Lead Form -->
-          <div>
-            <div class="request-card">
-              <h3>Solicitar Cotización</h3>
-              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
-
-              <form id="service-request-form">
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-name">Nombre Completo</label>
-                  <input type="text" id="req-name" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-email">Correo Electrónico</label>
-                  <input type="email" id="req-email" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
-                  <input type="text" id="req-company" class="request-form-input" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
-                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: cotización de 3 sillas ergonómicas y 2 escritorios)..."></textarea>
-                </div>
-
-                <button type="submit" class="request-btn-submit" id="req-submit-btn">
-                  <i data-lucide="send"></i> Enviar Solicitud
-                </button>
-              </form>
+        <div class="features-list premium-capabilities" id="service-features-list">
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="armchair" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Sillas y ergonomía</h4>
+              <p>Opciones operativas, ejecutivas y de visita seleccionadas según el tiempo y el tipo de uso.</p>
             </div>
-          </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="panel-top" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Escritorios y estaciones</h4>
+              <p>Puestos individuales, configuraciones compartidas, mesas auxiliares y soluciones para supervisión.</p>
+            </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="presentation" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Reunión y recepción</h4>
+              <p>Mesas, asientos y piezas para espacios de colaboración, espera y atención al público.</p>
+            </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="archive" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Archivo y suministros</h4>
+              <p>Cajoneras, credenzas, estanterías, papelería y artículos de reposición para la operación diaria.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- Linked Products Section -->
+    <section class="premium-section premium-section--soft" id="colecciones">
+      <div class="container">
+        <div class="premium-heading">
+          <span class="premium-kicker">Líneas de mobiliario</span>
+          <h2>Configura cada zona según lo que debe resolver.</h2>
+          <p>Fotografías del inventario local de referencia. Disponibilidad, medidas, terminaciones y precio se confirman al cotizar.</p>
+        </div>
+        <div class="premium-collections">
+          <article class="premium-collection-card">
+            <img src="img/productos/mobiliario/mob-1.jpeg" alt="Escritorio ejecutivo blanco con almacenamiento lateral" width="960" height="1280" loading="lazy" />
+            <div class="premium-collection-card__copy">
+              <span>Dirección y supervisión</span>
+              <h3>Escritorios ejecutivos</h3>
+              <p>Superficies amplias, gestión de cableado y almacenamiento integrado.</p>
+            </div>
+          </article>
+          <article class="premium-collection-card">
+            <img src="img/productos/mobiliario/mob-4.jpeg" alt="Estación operativa con escritorio, silla y cajonera" width="1280" height="960" loading="lazy" />
+            <div class="premium-collection-card__copy">
+              <span>Operación diaria</span>
+              <h3>Estaciones de trabajo</h3>
+              <p>Configuraciones individuales o por equipos.</p>
+            </div>
+          </article>
+          <article class="premium-collection-card">
+            <img src="img/productos/mobiliario/mob-7.jpeg" alt="Mesa de vidrio negra con sillas de oficina" width="1280" height="1280" loading="lazy" />
+            <div class="premium-collection-card__copy">
+              <span>Colaboración</span>
+              <h3>Reunión y atención</h3>
+              <p>Mesas y asientos para conversar, presentar y decidir.</p>
+            </div>
+          </article>
+          <article class="premium-collection-card">
+            <img src="img/productos/mobiliario/mob-10.jpeg" alt="Escritorio esquinero con cajonera y silla" width="1280" height="960" loading="lazy" />
+            <div class="premium-collection-card__copy">
+              <span>Organización</span>
+              <h3>Archivo y almacenamiento</h3>
+              <p>Cajoneras, credenzas y piezas para mantener cada puesto despejado.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section" id="compra">
+      <div class="container">
+        <div class="premium-heading premium-heading--center">
+          <span class="premium-kicker">Compra más clara</span>
+          <h2>Del artículo puntual al equipamiento por volumen.</h2>
+          <p>El mismo proceso puede adaptarse a una necesidad individual, una renovación parcial o una oficina completa.</p>
+        </div>
+        <div class="premium-benefits">
+          <article class="premium-benefit">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            <h3>Compra individual</h3>
+            <p>Solicita una pieza concreta y confirma disponibilidad, medidas, color y condiciones.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="list-ordered" aria-hidden="true"></i>
+            <h3>Lista por área</h3>
+            <p>Agrupa mobiliario y suministros por recepción, administración, reunión o dirección.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="building-2" aria-hidden="true"></i>
+            <h3>Equipamiento por puestos</h3>
+            <p>Organiza requerimientos repetibles según cantidad de colaboradores y tipo de función.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="repeat-2" aria-hidden="true"></i>
+            <h3>Reposición de suministros</h3>
+            <p>Prepara listas recurrentes de papelería y consumibles para simplificar nuevas cotizaciones.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section premium-section--dark" id="proceso">
+      <div class="container">
+        <div class="premium-heading">
+          <span class="premium-kicker">Cómo avanzamos</span>
+          <h2>Cuatro pasos para aterrizar el requerimiento.</h2>
+          <p>Una cotización útil necesita cantidad, uso, espacio disponible y prioridades, no solo una lista de nombres.</p>
+        </div>
+        <div class="premium-process">
+          <article class="premium-process__step">
+            <h3>Perfil del espacio</h3>
+            <p>Identificamos áreas, cantidad de usuarios, tareas y piezas que ya existen.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Lista priorizada</h3>
+            <p>Separamos lo indispensable, lo complementario y las opciones que conviene comparar.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Alternativas</h3>
+            <p>Revisamos disponibilidad, medidas, terminaciones y rangos según el presupuesto.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Confirmación</h3>
+            <p>La propuesta final consolida productos, cantidades y condiciones aplicables a la compra.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section" id="preguntas">
+      <div class="container">
+        <div class="premium-heading premium-heading--center">
+          <span class="premium-kicker">Preguntas frecuentes</span>
+          <h2>Antes de preparar tu lista.</h2>
+        </div>
+        <div class="premium-faqs">
+          <details>
+            <summary>¿Puedo cotizar varias opciones del mismo tipo de silla o escritorio?</summary>
+            <p>Sí. Indica la cantidad, el uso previsto y el presupuesto aproximado para comparar alternativas que respondan al mismo requerimiento.</p>
+          </details>
+          <details>
+            <summary>¿Trabajan pedidos para oficinas completas?</summary>
+            <p>Sí. Conviene organizar el pedido por áreas y puestos para validar cantidades, medidas, prioridades y disponibilidad.</p>
+          </details>
+          <details>
+            <summary>¿La disponibilidad del catálogo es inmediata?</summary>
+            <p>La disponibilidad puede variar. Cada producto, terminación y cantidad se confirma al momento de preparar la cotización.</p>
+          </details>
+          <details>
+            <summary>¿También ofrecen computadoras, impresoras y redes?</summary>
+            <p>Sí. Futunet puede complementar el mobiliario con equipos de oficina, conectividad y otras soluciones tecnológicas.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section premium-section--dark" id="cotizar">
+      <div class="container premium-quote-shell">
+        <div class="premium-quote-copy">
+          <span class="premium-kicker">Tu requerimiento</span>
+          <h2>Cuéntanos qué áreas necesitas equipar.</h2>
+          <p>Incluye cantidad de personas, tipos de espacios, piezas prioritarias y cualquier medida o fecha que debamos considerar.</p>
+          <ul class="premium-quote-points">
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Número de puestos o piezas</li>
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Uso y dimensiones disponibles</li>
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Rango o prioridad del presupuesto</li>
+          </ul>
+        </div>
+        <div class="request-card">
+          <h3>Solicitar cotización</h3>
+          <p>Completa los datos para organizar tu lista y recomendar el siguiente paso.</p>
+          <form id="service-request-form">
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-name">Nombre completo</label>
+              <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+              <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-email">Correo electrónico</label>
+              <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
+              <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-profile">Tamaño del requerimiento</label>
+              <select id="req-profile" class="request-form-input">
+                <option value="">Selecciona una opción</option>
+                <option value="pyme">Hasta 10 puestos o piezas</option>
+                <option value="corporativo">Más de 10 puestos o piezas</option>
+              </select>
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-message">Productos, cantidades y contexto</label>
+              <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: 8 estaciones operativas, 8 sillas ajustables y una mesa de reunión para oficina en Santiago."></textarea>
+            </div>
+            <button type="submit" class="request-btn-submit" id="req-submit-btn">
+              <i data-lucide="send" aria-hidden="true"></i>
+              Enviar solicitud
+            </button>
+            <p class="premium-form-note"><i data-lucide="shield-check" aria-hidden="true"></i> Usaremos estos datos para responder a tu solicitud. Consulta nuestra <a href="privacidad.html">política de privacidad</a>.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="service-products-section" id="related-products-section" style="display:none;">
       <div class="container">
-        <h3>Equipos relacionados de nuestro catálogo</h3>
-        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
-        <div class="products-grid-wrapper" id="service-products-grid">
-          <!-- Dynamically filled by script -->
-        </div>
+        <h3>Artículos relacionados del catálogo</h3>
+        <p>Productos disponibles bajo cotización, sujetos a confirmación de stock y condiciones.</p>
+        <div class="products-grid-wrapper" id="service-products-grid"></div>
       </div>
     </section>
 
-    <!-- Sección de Servicios Relacionados -->
-    <section class="related-services-section reveal">
+    <section class="premium-section premium-section--soft" aria-labelledby="office-related-title">
       <div class="container">
-        <h3 class="related-services-title">También podría interesarte...</h3>
-        <div class="related-services-grid">
-          <a href="equipos-oficina.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-laptop"></i>
-            </div>
-            <h4>Equipos de Oficina y Cómputo</h4>
-            <p>Laptops corporativas, equipos de escritorio, servidores e impresoras de alta demanda para equipar tu oficina.</p>
-            <span class="related-service-btn">Ver Soluciones <i class="fas fa-arrow-right"></i></span>
+        <div class="premium-heading">
+          <span class="premium-kicker">Completa tu oficina</span>
+          <h2 id="office-related-title">Mobiliario, equipos y conectividad en una misma conversación.</h2>
+        </div>
+        <div class="premium-related">
+          <a href="equipos-oficina.html">
+            <i data-lucide="laptop" aria-hidden="true"></i>
+            <h3>Equipos de oficina</h3>
+            <p>Laptops, computadoras, impresión, almacenamiento y licenciamiento.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
-
-          <a href="redes-datos.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-network-wired"></i>
-            </div>
-            <h4>Redes y Cableado Estructurado</h4>
-            <p>Diseño e instalación de redes inalámbricas corporativas, racks de telecomunicaciones y cableado estructurado certificado.</p>
-            <span class="related-service-btn">Ver Soluciones <i class="fas fa-arrow-right"></i></span>
+          <a href="redes-datos.html">
+            <i data-lucide="network" aria-hidden="true"></i>
+            <h3>Redes y datos</h3>
+            <p>Cableado y WiFi para conectar los nuevos puestos de trabajo.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
-
-          <a href="catalogo.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-store"></i>
-            </div>
-            <h4>Catálogo de Productos</h4>
-            <p>Explora todo nuestro catálogo en línea y cotiza directamente el hardware y mobiliario que necesitas.</p>
-            <span class="related-service-btn">Ver Catálogo <i class="fas fa-arrow-right"></i></span>
+          <a href="infraestructura-remozamiento.html">
+            <i data-lucide="paint-roller" aria-hidden="true"></i>
+            <h3>Infraestructura y remozamiento</h3>
+            <p>Adecuación física antes de instalar y distribuir el mobiliario.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
         </div>
       </div>
     </section>
-
   </main>
 
     <!-- Footer -->
@@ -494,8 +669,8 @@
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
   <script defer src="js/chatbot.js?v=20260628"></script>
-  <script src="js/main.js?v=3.2"></script>
-  <script defer src="js/service-page.js"></script>
+  <script src="js/main.js?v=20260712"></script>
+  <script defer src="js/service-page.js?v=20260712"></script>
 </body>
 </html>
 

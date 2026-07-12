@@ -1,0 +1,92 @@
+/* Ajustes transversales y no invasivos para las páginas de servicios ricas. */
+
+.service-page-wrapper .service-subnav,
+.service-page-wrapper .service-subnav.sticky {
+  position: sticky !important;
+  top: 68px;
+  left: auto;
+  width: auto;
+  transform: none !important;
+}
+
+.service-page-wrapper .service-subnav.nav-hidden,
+.service-page-wrapper .service-subnav.sticky.nav-hidden {
+  top: 0;
+  transform: none !important;
+}
+
+.service-page-wrapper section[id] {
+  scroll-margin-top: 148px;
+}
+
+.service-page-wrapper .option-card input[type="radio"] {
+  position: absolute !important;
+  display: block !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  white-space: nowrap !important;
+}
+
+.service-page-wrapper .option-card:focus-within,
+.service-page-wrapper .workstation-card:focus-visible {
+  outline: 3px solid rgba(11, 126, 181, .38);
+  outline-offset: 4px;
+}
+
+.service-page-wrapper .workstation-card[role="radio"] {
+  cursor: pointer;
+}
+
+.service-page-wrapper .estimator-card,
+.service-page-wrapper .request-card,
+.service-page-wrapper .about-card {
+  color: #465a70;
+}
+
+@media (max-width: 1023px) {
+  .service-page-wrapper .service-subnav,
+  .service-page-wrapper .service-subnav.sticky {
+    top: 64px;
+  }
+
+  .service-page-wrapper .service-subnav.nav-hidden,
+  .service-page-wrapper .service-subnav.sticky.nav-hidden {
+    top: 0;
+  }
+
+  .service-page-wrapper section[id] {
+    scroll-margin-top: 132px;
+  }
+}
+
+@media (max-width: 768px) {
+  .service-page-wrapper .request-card {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .service-page-wrapper .brands-track,
+  .service-page-wrapper .brands-slider-track,
+  .service-page-wrapper .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .service-page-wrapper *,
+  .service-page-wrapper *::before,
+  .service-page-wrapper *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

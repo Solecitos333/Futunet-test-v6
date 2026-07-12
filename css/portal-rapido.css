@@ -109,6 +109,15 @@
   border-top: 1px solid var(--border);
 }
 
+.home-plans-disclaimer {
+  max-width: 760px;
+  margin: 26px auto 0;
+  color: #5e7186;
+  font-size: .82rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
 @media (max-width: 640px) {
   .home-plans-disclosure {
     border-radius: 18px;

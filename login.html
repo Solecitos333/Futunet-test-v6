@@ -43,8 +43,9 @@
 
         <form id="login-form" autocomplete="on">
           <div class="auth-form-group">
-            <label class="auth-label" for="login-company">Código de Empresa</label>
-            <input class="auth-input" type="text" id="login-company" name="company" placeholder="Ej. FUTUNETSRL o CREATICOS" required style="text-transform: uppercase;" />
+            <label class="auth-label" for="login-company">Código de empresa <span style="font-weight:500; color:#64748b;">(opcional)</span></label>
+            <input class="auth-input" type="text" id="login-company" name="company" placeholder="Solo para accesos corporativos o ERP" autocomplete="organization" style="text-transform: uppercase;" />
+            <small style="display:block; margin-top:6px; color:#64748b; line-height:1.45;">Si creaste una cuenta personal o de cliente, deja este campo vacío.</small>
           </div>
 
           <div class="auth-form-group">
@@ -291,15 +292,22 @@
         var params = new URLSearchParams(window.location.search);
         var redirectUrl = params.get('redirect');
         if (redirectUrl) {
-          // Evitar Open Redirects y XSS: validar que sea una ruta interna/relativa y no use esquemas potencialmente dañinos
-          var cleanRedirect = redirectUrl.trim().toLowerCase();
-          if (!cleanRedirect.startsWith('http://') &&
-              !cleanRedirect.startsWith('https://') &&
-              !cleanRedirect.startsWith('//') &&
-              !cleanRedirect.startsWith('javascript:') &&
-              !cleanRedirect.startsWith('data:')) {
-            window.location.href = redirectUrl;
-            return;
+          try {
+            var redirectTarget = new URL(redirectUrl, window.location.href);
+            var redirectFile = (redirectTarget.pathname.split('/').pop() || '').toLowerCase();
+            var allowedRedirects = [
+              'index.html', 'internet.html', 'mi-cuenta.html', 'catalogo.html', 'producto.html',
+              'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
+              'energia-climatizacion.html', 'equipos-oficina.html',
+              'mobiliario-suministros.html', 'infraestructura-remozamiento.html'
+            ];
+
+            if (redirectTarget.origin === window.location.origin && allowedRedirects.includes(redirectFile)) {
+              window.location.assign(redirectTarget.href);
+              return;
+            }
+          } catch (redirectError) {
+            console.warn('Redirección ignorada por formato inválido.');
           }
         }
 
@@ -369,8 +377,9 @@
             setLoading('login-btn', false);
             return;
           }
-          // Save the validated active company code in localStorage
-          localStorage.setItem('active_company_code', companyCode);
+          // Conservar el contexto corporativo solo cuando el usuario lo indicó.
+          if (companyCode) localStorage.setItem('active_company_code', companyCode);
+          else localStorage.removeItem('active_company_code');
           showMessage('login-message', '¡Bienvenido! Redirigiendo...', 'success');
           setTimeout(function () { redirectByRole(userData); }, 800);
         } catch (err) {

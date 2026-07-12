@@ -554,7 +554,8 @@
       id: 'laptop_selektronic_dell_5410_i5',
       title: 'Laptop Dell Latitude 5410 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/01-dell-latitude-5410.webp', gallery: ['img/productos/laptops/01-dell-latitude-5410.webp'],
+      img: 'img/productos/laptops/01-dell-latitude-5410.webp', gallery: ['img/productos/laptops/01-dell-latitude-5410.webp', 'img/productos/laptops/01-dell-latitude-5410-02.webp', 'img/productos/laptops/01-dell-latitude-5410-03.webp'],
+      imageSources: ['https://c1.neweggimages.com/productimage/nb640/34-833-765-04.jpg', 'https://i.ebayimg.com/images/g/OxwAAOSw0vxi1xWC/s-l500.jpg', 'https://coretekcomputers.com/cdn/shop/products/54108_1024x1024.jpg?v=1608152010'],
       desc: 'Laptop empresarial reacondicionada de décima generación, compacta y preparada para trabajo de oficina.',
       specs: ['Procesador: Intel Core i5 de 10.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5410-laptop/overview'
@@ -563,7 +564,8 @@
       id: 'laptop_selektronic_dell_7400_i5',
       title: 'Laptop Dell Latitude 7400 Core i5, 8 GB RAM, SSD de 120/256 GB y HDD de 500 GB',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/02-dell-latitude-7400.webp', gallery: ['img/productos/laptops/02-dell-latitude-7400.webp'],
+      img: 'img/productos/laptops/02-dell-latitude-7400.webp', gallery: ['img/productos/laptops/02-dell-latitude-7400.webp', 'img/productos/laptops/02-dell-latitude-7400-02.webp', 'img/productos/laptops/02-dell-latitude-7400-03.webp'],
+      imageSources: ['https://m.media-amazon.com/images/I/41wlAKXkewL.jpg', 'https://systemliquidation.com/cdn/shop/files/dell_7400_4_535x.png?v=1745943368', 'https://cdn11.bigcommerce.com/s-w5trgcbv/images/stencil/608x608/products/13422/77238/Dell_Latitude_7400_Front_Center__61314.1736258950.jpg?c=2'],
       desc: 'Laptop empresarial reacondicionada de octava generación con almacenamiento combinado sujeto a configuración disponible.',
       specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 120/256 GB + HDD de 500 GB', 'Condición: Reacondicionada', 'Configuración sujeta a inventario', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-7400-laptop/overview'
@@ -572,7 +574,8 @@
       id: 'laptop_selektronic_dell_5330_i7',
       title: 'Laptop Dell Latitude 5330 Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/03-dell-latitude-5330.webp', gallery: ['img/productos/laptops/03-dell-latitude-5330.webp'],
+      img: 'img/productos/laptops/03-dell-latitude-5330.webp', gallery: ['img/productos/laptops/03-dell-latitude-5330.webp', 'img/productos/laptops/03-dell-latitude-5330-02.webp', 'img/productos/laptops/03-dell-latitude-5330-03.webp'],
+      imageSources: ['https://cdn.cs.1worldsync.com/83/23/83238b5a-10f2-48de-ad3c-d831025b26e0.jpg', 'https://www.notebookcheck.net/fileadmin/_processed_/6/9/csm_Latitude_5330_Module_1_3_56f0a4e33d.jpg', 'https://m.media-amazon.com/images/I/71ENi73duuL.jpg'],
       desc: 'Laptop empresarial reacondicionada de duodécima generación con formato portátil de 13.3 pulgadas.',
       specs: ['Procesador: Intel Core i7 de 12.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-5330-laptop/overview'
@@ -581,7 +584,8 @@
       id: 'laptop_selektronic_dell_5490_i5_gen8',
       title: 'Laptop Dell Latitude 5490 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas, generación 8',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/04-dell-latitude-5490-gen8.webp', gallery: ['img/productos/laptops/04-dell-latitude-5490-gen8.webp'],
+      img: 'img/productos/laptops/04-dell-latitude-5490-gen8.webp', gallery: ['img/productos/laptops/04-dell-latitude-5490-gen8.webp', 'img/productos/laptops/04-dell-latitude-5490-gen8-02.webp', 'img/productos/laptops/04-dell-latitude-5490-gen8-03.webp'],
+      imageSources: ['https://i.ebayimg.com/images/g/T0wAAOSwjZBoLM6n/s-l500.jpg', 'https://m.media-amazon.com/images/I/71C3nDouAcL.jpg', 'https://coretekcomputers.com/cdn/shop/products/5490_A3_ad0b0d49-e3f7-4874-a939-19eae548a5df_1024x1024.png?v=1602266406'],
       desc: 'Laptop empresarial reacondicionada para productividad diaria y trabajo de oficina.',
       specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5490-laptop/overview'
@@ -590,7 +594,8 @@
       id: 'laptop_selektronic_dell_7390_i7',
       title: 'Laptop Dell Latitude 7390 Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/05-dell-latitude-7390.webp', gallery: ['img/productos/laptops/05-dell-latitude-7390.webp'],
+      img: 'img/productos/laptops/05-dell-latitude-7390.webp', gallery: ['img/productos/laptops/05-dell-latitude-7390.webp', 'img/productos/laptops/05-dell-latitude-7390-02.webp', 'img/productos/laptops/05-dell-latitude-7390-03.webp'],
+      imageSources: ['https://c1.neweggimages.com/productimage/nb640/ADK7D22060616NYFT2C.jpg', 'https://i5.walmartimages.com/seo/Restored-Dell-Latitude-7390-2-in-1-Business-Laptop-13-3-FHD-1920-X-1080-Touchscreen-Intel-Core-i5-16GB-RAM-512GB-SSD-Refurbished_6428969d-bebe-42d8-96cd-35dabe7d4e02.a5a67d97b17cee8ed9fadc50309aa01b.jpeg', 'https://images.pcliquidations.com/images/isaac/151/151334t550.jpg'],
       desc: 'Laptop empresarial reacondicionada de octava generación con diseño compacto de 13.3 pulgadas.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-7390-laptop/overview'
@@ -599,7 +604,8 @@
       id: 'laptop_selektronic_dell_7390_touch_i7',
       title: 'Laptop Dell Latitude 7390 Touch Core i7, 16 GB RAM, 256 GB SSD, 13.3 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/06-dell-latitude-7390-touch.webp', gallery: ['img/productos/laptops/06-dell-latitude-7390-touch.webp'],
+      img: 'img/productos/laptops/06-dell-latitude-7390-touch.webp', gallery: ['img/productos/laptops/06-dell-latitude-7390-touch.webp', 'img/productos/laptops/06-dell-latitude-7390-touch-02.webp', 'img/productos/laptops/06-dell-latitude-7390-touch-03.webp'],
+      imageSources: ['https://c1.neweggimages.com/productimage/nb640/ADK7D22060616NYFT2C.jpg', 'https://i5.walmartimages.com/seo/Restored-Dell-Latitude-7390-2-in-1-Business-Laptop-13-3-FHD-1920-X-1080-Touchscreen-Intel-Core-i5-16GB-RAM-512GB-SSD-Refurbished_6428969d-bebe-42d8-96cd-35dabe7d4e02.a5a67d97b17cee8ed9fadc50309aa01b.jpeg', 'https://images.pcliquidations.com/images/isaac/151/151334t550.jpg'],
       desc: 'Versión táctil reacondicionada de la Latitude 7390, orientada a movilidad y productividad empresarial.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-7390-laptop/overview'
@@ -608,7 +614,8 @@
       id: 'laptop_selektronic_dell_5401_i7',
       title: 'Laptop Dell Latitude 5401 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/07-dell-latitude-5401.webp', gallery: ['img/productos/laptops/07-dell-latitude-5401.webp'],
+      img: 'img/productos/laptops/07-dell-latitude-5401.webp', gallery: ['img/productos/laptops/07-dell-latitude-5401.webp', 'img/productos/laptops/07-dell-latitude-5401-02.webp', 'img/productos/laptops/07-dell-latitude-5401-03.webp'],
+      imageSources: ['https://m.media-amazon.com/images/I/41I97t7DEZL.jpg', 'https://c1.neweggimages.com/productimage/nb640/A24G_1_201907131965542505.jpg', 'https://cdn.cs.1worldsync.com/ef/36/ef367e26-25d4-4671-9d2b-d39a8b9ce3d2.jpg'],
       desc: 'Laptop empresarial reacondicionada de novena generación con pantalla de 14 pulgadas.',
       specs: ['Procesador: Intel Core i7 de 9.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5401-laptop/overview'
@@ -617,7 +624,8 @@
       id: 'laptop_selektronic_dell_3380',
       title: 'Laptop Dell Latitude 3380, 4 GB RAM, SSD de 120/128 GB, 13.3 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/08-dell-latitude-3380.webp', gallery: ['img/productos/laptops/08-dell-latitude-3380.webp'],
+      img: 'img/productos/laptops/08-dell-latitude-3380.webp', gallery: ['img/productos/laptops/08-dell-latitude-3380.webp', 'img/productos/laptops/08-dell-latitude-3380-02.webp', 'img/productos/laptops/08-dell-latitude-3380-03.webp'],
+      imageSources: ['https://systemliquidation.com/cdn/shop/files/Untitleddesign_44_56efffbd-c55e-4bfc-9bf3-caec1a42fd04_535x.png?v=1745943033', 'https://m.media-amazon.com/images/I/419B-w5cczL.jpg', 'https://srtrader.net/wp-content/uploads/2023/06/dell-3380-7th-gen3.png'],
       desc: 'Laptop compacta reacondicionada para tareas educativas, navegación y ofimática básica.',
       specs: ['Generación del procesador: 6.ª', 'Memoria RAM: 4 GB', 'Almacenamiento: SSD de 120/128 GB', 'Pantalla: 13.3 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-13-3380-laptop/overview'
@@ -626,7 +634,8 @@
       id: 'laptop_selektronic_dell_precision_7510',
       title: 'Laptop Dell Precision 7510 Core i7, 16 GB RAM, 256 GB SSD, 15.6 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/09-dell-precision-7510.webp', gallery: ['img/productos/laptops/09-dell-precision-7510.webp'],
+      img: 'img/productos/laptops/09-dell-precision-7510.webp', gallery: ['img/productos/laptops/09-dell-precision-7510.webp', 'img/productos/laptops/09-dell-precision-7510-02.webp', 'img/productos/laptops/09-dell-precision-7510-03.webp'],
+      imageSources: ['https://images-na.ssl-images-amazon.com/images/I/61fTZQHT1ML.jpg', 'https://i.ebayimg.com/images/g/UJEAAeSwMm1qOCq8/s-l960.webp', 'https://coretekcomputers.com/cdn/shop/products/DellPrecision75104_1024x1024.jpg?v=1594266960'],
       desc: 'Estación de trabajo móvil reacondicionada con gráficos profesionales para aplicaciones técnicas.',
       specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Gráficos profesionales AMD', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/precision-m7510-workstation/overview'
@@ -635,7 +644,8 @@
       id: 'laptop_selektronic_hp_zbook_15_g5',
       title: 'Laptop HP ZBook 15 G5 Core i7, 32 GB RAM, 256 GB SSD, 15.6 pulgadas',
       brand: 'HP', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/10-hp-zbook-15-g5.webp', gallery: ['img/productos/laptops/10-hp-zbook-15-g5.webp'],
+      img: 'img/productos/laptops/10-hp-zbook-15-g5.webp', gallery: ['img/productos/laptops/10-hp-zbook-15-g5.webp', 'img/productos/laptops/10-hp-zbook-15-g5-02.webp', 'img/productos/laptops/10-hp-zbook-15-g5-03.webp'],
+      imageSources: ['https://www.notebookcheck.net/uploads/tx_nbc2/HPZBook15G5__7_.JPG', 'https://c1.neweggimages.com/productimage/nb640/ADT2S230726zBqcz.jpg', 'https://m.media-amazon.com/images/I/41oLaQLM8gL.jpg'],
       desc: 'Estación de trabajo móvil reacondicionada con memoria ampliada para aplicaciones profesionales exigentes.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 32 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://support.hp.com/lamerica_nsc_cnt_amer-es/product/product-specs/undefined/18865644/'
@@ -644,7 +654,8 @@
       id: 'laptop_selektronic_lenovo_p53s',
       title: 'Laptop Lenovo ThinkPad P53s Core i7, 20 GB RAM, 256 GB SSD, 15.6 pulgadas',
       brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/11-lenovo-thinkpad-p53s.webp', gallery: ['img/productos/laptops/11-lenovo-thinkpad-p53s.webp'],
+      img: 'img/productos/laptops/11-lenovo-thinkpad-p53s.webp', gallery: ['img/productos/laptops/11-lenovo-thinkpad-p53s.webp', 'img/productos/laptops/11-lenovo-thinkpad-p53s-02.webp', 'img/productos/laptops/11-lenovo-thinkpad-p53s-03.webp'],
+      imageSources: ['https://m.media-amazon.com/images/I/51yh-t8wIIL.jpg', 'https://systemliquidation.com/cdn/shop/files/Lenovo_P53s_2_535x.png?v=1778598177', 'https://images-na.ssl-images-amazon.com/images/I/51-pPJqvlIL.jpg'],
       desc: 'Estación de trabajo móvil reacondicionada para productividad avanzada y flujos profesionales.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 20 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 15.6 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.lenovo.com/us/en/p/laptops/thinkpad/thinkpadp/p53s/22ws2wpp53s'
@@ -653,7 +664,8 @@
       id: 'laptop_selektronic_dell_5400_i7',
       title: 'Laptop Dell Latitude 5400 Core i7, 16 GB RAM, 256 GB SSD, 14 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/12-dell-latitude-5400.webp', gallery: ['img/productos/laptops/12-dell-latitude-5400.webp'],
+      img: 'img/productos/laptops/12-dell-latitude-5400.webp', gallery: ['img/productos/laptops/12-dell-latitude-5400.webp', 'img/productos/laptops/12-dell-latitude-5400-02.webp', 'img/productos/laptops/12-dell-latitude-5400-03.webp'],
+      imageSources: ['https://cdn.mos.cms.futurecdn.net/95WEqd8io6SteTDNTDzuXo.jpg', 'https://c1.neweggimages.com/productimage/nb640/34-343-982-05.jpg', 'https://systemliquidation.com/cdn/shop/products/DELL5400_3_3c55c18a-2bdb-4e63-978b-d24d2aabd96a_535x.png?v=1745943234'],
       desc: 'Laptop empresarial reacondicionada de octava generación con memoria de 16 GB.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5400-laptop/overview'
@@ -662,7 +674,8 @@
       id: 'laptop_selektronic_lenovo_x1_carbon_gen6',
       title: 'Laptop Lenovo ThinkPad X1 Carbon Gen 6 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
       brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/13-lenovo-x1-carbon-gen6.webp', gallery: ['img/productos/laptops/13-lenovo-x1-carbon-gen6.webp'],
+      img: 'img/productos/laptops/13-lenovo-x1-carbon-gen6.webp', gallery: ['img/productos/laptops/13-lenovo-x1-carbon-gen6.webp', 'img/productos/laptops/13-lenovo-x1-carbon-gen6-02.webp', 'img/productos/laptops/13-lenovo-x1-carbon-gen6-03.webp'],
+      imageSources: ['https://images-na.ssl-images-amazon.com/images/I/71AT5YblvJL.jpg', 'https://coretekcomputers.com/cdn/shop/products/X1Carbon6thGen2_1024x1024.jpg?v=1642325148', 'https://legacy-us-images.foundryco.app/images/article/2018/08/right-ports-2-2-100769116-large.jpg'],
       desc: 'Ultrabook empresarial reacondicionada, ligera y orientada a profesionales en movimiento.',
       specs: ['Procesador: Intel Core i7 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Modelo: X1 Carbon de 6.ª generación', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.lenovo.com/us/en/laptops/thinkpad/thinkpad-x/thinkpad-x1-carbon-6th-gen-/p/20KH002KUS'
@@ -671,7 +684,8 @@
       id: 'laptop_selektronic_dell_e5450_i7',
       title: 'Laptop Dell Latitude E5450 Core i7, 8 GB RAM, 256 GB SSD, 14 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/14-dell-latitude-e5450.webp', gallery: ['img/productos/laptops/14-dell-latitude-e5450.webp'],
+      img: 'img/productos/laptops/14-dell-latitude-e5450.webp', gallery: ['img/productos/laptops/14-dell-latitude-e5450.webp', 'img/productos/laptops/14-dell-latitude-e5450-02.webp', 'img/productos/laptops/14-dell-latitude-e5450-03.webp'],
+      imageSources: ['https://oliveinnovative.com/wp-content/uploads/2020/12/61l2za2YdCL._AC_SL1500_.jpg', 'https://coretekcomputers.com/cdn/shop/products/E5450_2_d177e2c0-0aa3-42c7-a346-3338308256dd_1024x1024.jpg?v=1585341693', 'https://i.ebayimg.com/images/g/4nIAAeSwFc5qQqlD/s-l960.webp'],
       desc: 'Laptop empresarial reacondicionada para ofimática, navegación y operaciones administrativas.',
       specs: ['Procesador: Intel Core i7 de 4.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-e5450-laptop/overview'
@@ -680,7 +694,8 @@
       id: 'laptop_selektronic_lenovo_p50',
       title: 'Laptop Lenovo ThinkPad P50 Core i7, 8 GB RAM, 128 GB SSD, 15.6 pulgadas',
       brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/15-lenovo-thinkpad-p50.webp', gallery: ['img/productos/laptops/15-lenovo-thinkpad-p50.webp'],
+      img: 'img/productos/laptops/15-lenovo-thinkpad-p50.webp', gallery: ['img/productos/laptops/15-lenovo-thinkpad-p50.webp', 'img/productos/laptops/15-lenovo-thinkpad-p50-02.webp', 'img/productos/laptops/15-lenovo-thinkpad-p50-03.webp'],
+      imageSources: ['https://systemliquidation.com/cdn/shop/files/Lenovo_P50_2_535x.png?v=1778531536', 'https://i.ebayimg.com/images/g/Uf0AAeSwo9lqUxiV/s-l960.webp', 'https://designandmotion.net/blog/wp-content/uploads/2016/06/Thinkpad_P50_Close-up_Shot_0004.png'],
       desc: 'Estación de trabajo móvil reacondicionada con gráficos dedicados para aplicaciones profesionales.',
       specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 15.6 pulgadas', 'Gráficos dedicados: 2 GB', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.lenovo.com/gb/en/p/laptops/thinkpad/thinkpadp/thinkpad-p50/22tp2wpwp50'
@@ -689,7 +704,8 @@
       id: 'laptop_selektronic_dell_e5570_touch',
       title: 'Laptop Dell Latitude E5570 Touch Core i7, 16 GB RAM, 256 GB SSD, 15.6 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/16-dell-latitude-e5570.webp', gallery: ['img/productos/laptops/16-dell-latitude-e5570.webp'],
+      img: 'img/productos/laptops/16-dell-latitude-e5570.webp', gallery: ['img/productos/laptops/16-dell-latitude-e5570.webp', 'img/productos/laptops/16-dell-latitude-e5570-02.webp', 'img/productos/laptops/16-dell-latitude-e5570-03.webp'],
+      imageSources: ['https://images.pcliquidations.com/images/isaac/151/151379t550.jpg', 'https://m.media-amazon.com/images/I/41CVYsfsYdL.jpg', 'https://c1.neweggimages.com/productimage/nb640/ACPJ_1_201810232011086786.jpg'],
       desc: 'Laptop empresarial táctil reacondicionada con gráficos dedicados y pantalla de 15.6 pulgadas.',
       specs: ['Procesador: Intel Core i7 de 6.ª generación', 'Memoria RAM: 16 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 15.6 pulgadas', 'Gráficos dedicados: 2 GB', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-e5570-laptop/overview'
@@ -698,7 +714,8 @@
       id: 'laptop_selektronic_dell_5480_i5',
       title: 'Laptop Dell Latitude 5480 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/17-dell-latitude-5480.webp', gallery: ['img/productos/laptops/17-dell-latitude-5480.webp'],
+      img: 'img/productos/laptops/17-dell-latitude-5480.webp', gallery: ['img/productos/laptops/17-dell-latitude-5480.webp', 'img/productos/laptops/17-dell-latitude-5480-02.webp', 'img/productos/laptops/17-dell-latitude-5480-03.webp'],
+      imageSources: ['https://coretekcomputers.com/cdn/shop/products/5480_0_1024x1024.jpg?v=1589835820', 'https://c1.neweggimages.com/productimage/nb640/AF9SS2204070VNWTZ98.jpg', 'https://www.laptoparena.net/images/DELL_Latitude_5480_992c95.jpg'],
       desc: 'Laptop empresarial reacondicionada de séptima generación para productividad cotidiana.',
       specs: ['Procesador: Intel Core i5 de 7.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5480-laptop/overview'
@@ -707,7 +724,8 @@
       id: 'laptop_selektronic_dell_chromebook_3180',
       title: 'Laptop Dell Chromebook 11 3180, 4 GB RAM, 16 GB eMMC, 11.6 pulgadas',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/18-dell-chromebook-3180.webp', gallery: ['img/productos/laptops/18-dell-chromebook-3180.webp'],
+      img: 'img/productos/laptops/18-dell-chromebook-3180.webp', gallery: ['img/productos/laptops/18-dell-chromebook-3180.webp', 'img/productos/laptops/18-dell-chromebook-3180-02.webp', 'img/productos/laptops/18-dell-chromebook-3180-03.webp'],
+      imageSources: ['https://m.media-amazon.com/images/I/61qyoO6XzrL.jpg', 'https://coretekcomputers.com/cdn/shop/products/DELL31808_1024x1024.jpg?v=1595477478', 'https://cdn.cs.1worldsync.com/a9/a9/a9a99849-6636-4ab6-8faa-5f4f16ccdee8.jpg'],
       desc: 'Chromebook reacondicionada y compacta para navegación, educación y trabajo en la nube.',
       specs: ['Procesador: Intel Celeron N3060', 'Memoria RAM: 4 GB', 'Almacenamiento: 16 GB eMMC', 'Pantalla: 11.6 pulgadas', 'Sistema: Chrome OS', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/manuals/en-us/chromebook-11-3180-laptop/chrome3180_om_pub/product-specification'
@@ -716,7 +734,8 @@
       id: 'laptop_selektronic_lenovo_x380_yoga',
       title: 'Laptop Lenovo ThinkPad X380 Yoga 2 en 1 Touch Core i5, 8 GB RAM, 256 GB SSD',
       brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/19-lenovo-x380-yoga.webp', gallery: ['img/productos/laptops/19-lenovo-x380-yoga.webp'],
+      img: 'img/productos/laptops/19-lenovo-x380-yoga.webp', gallery: ['img/productos/laptops/19-lenovo-x380-yoga.webp', 'img/productos/laptops/19-lenovo-x380-yoga-02.webp', 'img/productos/laptops/19-lenovo-x380-yoga-03.webp'],
+      imageSources: ['https://www.notebookcheck.net/uploads/tx_nbc2/LenovoThinkPadX380Yoga__6__01.JPG', 'https://i.pcmag.com/imagery/reviews/02C1t0ewRwNQL5UxxA0l0bB-1.fit_lim.size_810x456.v_1569469936.jpg', 'https://c1.neweggimages.com/productimage/nb640/A6ABD21102111ZT80.jpg'],
       desc: 'Convertible empresarial reacondicionada con pantalla táctil de 13.3 pulgadas y formato 2 en 1.',
       specs: ['Procesador: Intel Core i5 de 8.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla táctil: 13.3 pulgadas', 'Formato: 2 en 1', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.lenovo.com/nl/nl/p/laptops/thinkpad/thinkpadx/thinkpad-x380-yoga/22tp2txx380'
@@ -725,7 +744,8 @@
       id: 'laptop_selektronic_lenovo_e14_i5',
       title: 'Laptop Lenovo ThinkPad E14 Core i5, 8 GB RAM, 256 GB SSD, 14 pulgadas',
       brand: 'Lenovo', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/20-lenovo-thinkpad-e14.webp', gallery: ['img/productos/laptops/20-lenovo-thinkpad-e14.webp'],
+      img: 'img/productos/laptops/20-lenovo-thinkpad-e14.webp', gallery: ['img/productos/laptops/20-lenovo-thinkpad-e14.webp', 'img/productos/laptops/20-lenovo-thinkpad-e14-02.webp', 'img/productos/laptops/20-lenovo-thinkpad-e14-03.webp'],
+      imageSources: ['https://techtoschool.com/cdn/shop/files/Product_Listing_12_2048x2048.png?v=1726853187', 'https://m.media-amazon.com/images/I/616jSAon1fL.jpg', 'https://i.ebayimg.com/images/g/I0YAAeSw4ABp9q0P/s-l500.jpg'],
       desc: 'Laptop empresarial reacondicionada de décima generación para productividad y trabajo híbrido.',
       specs: ['Procesador: Intel Core i5 de 10.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 256 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://psref.lenovo.com/syspool/Sys/PDF/ThinkPad/ThinkPad_E14/ThinkPad_E14_Spec.html'
@@ -734,7 +754,8 @@
       id: 'laptop_selektronic_dell_5490_i5_gen7',
       title: 'Laptop Dell Latitude 5490 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas, generación 7',
       brand: 'Dell', category: 'Laptops', price: 'Consultar precio',
-      img: 'img/productos/laptops/21-dell-latitude-5490-gen7.webp', gallery: ['img/productos/laptops/21-dell-latitude-5490-gen7.webp'],
+      img: 'img/productos/laptops/21-dell-latitude-5490-gen7.webp', gallery: ['img/productos/laptops/21-dell-latitude-5490-gen7.webp', 'img/productos/laptops/21-dell-latitude-5490-gen7-02.webp', 'img/productos/laptops/21-dell-latitude-5490-gen7-03.webp'],
+      imageSources: ['https://i.ebayimg.com/images/g/T0wAAOSwjZBoLM6n/s-l500.jpg', 'https://m.media-amazon.com/images/I/71C3nDouAcL.jpg', 'https://coretekcomputers.com/cdn/shop/products/5490_A3_ad0b0d49-e3f7-4874-a939-19eae548a5df_1024x1024.png?v=1602266406'],
       desc: 'Laptop empresarial reacondicionada de séptima generación para tareas administrativas y trabajo de oficina.',
       specs: ['Procesador: Intel Core i5 de 7.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5490-laptop/overview'
@@ -1058,7 +1079,7 @@
 
   function normalizeSpecs(item) {
     if (Array.isArray(item.specs) && item.specs.length) {
-      return item.specs.map(normalizeCopy).filter(Boolean).slice(0, 6);
+      return item.specs.map(normalizeCopy).filter(Boolean).slice(0, 40);
     }
 
     const fallbackSpecs = [];
@@ -1109,8 +1130,12 @@
       price: normalizePrice(item.price),
       img: gallery[0],
       gallery,
+      imageSources: Array.isArray(item.imageSources) ? item.imageSources.map((source) => ({ ...source })) : [],
       imagePosition: normalizeCopy(item.imagePosition || '50% 50%'),
       sourceUrl: normalizeCopy(item.sourceUrl || ''),
+      availability: normalizeCopy(item.availability || ''),
+      stock: Number.isFinite(Number(item.stock)) ? Number(item.stock) : undefined,
+      warranty: normalizeCopy(item.warranty || ''),
       specs: normalizeSpecs(item),
       supplier: source,
       supplierLabel: policy.label,

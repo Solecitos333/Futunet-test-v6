@@ -136,7 +136,8 @@
       var doc = await db.collection('carts').doc(cartId).get();
       if (!doc.exists) { showToast('Carrito no encontrado', 'error'); return; }
       var cart = doc.data();
-      localStorage.setItem('futunetCatalogCart', JSON.stringify(cart.items || {}));
+      localStorage.setItem('futunetCatalogCart', JSON.stringify({ items: cart.items || {} }));
+      window.dispatchEvent(new CustomEvent('futunet-cart-updated'));
       showToast('Carrito cargado. Ve al catálogo para verlo.', 'success');
     } catch (err) {
       showToast('Error al cargar el carrito', 'error');
@@ -156,8 +157,11 @@
 
   // ─── Save current cart ───
   window.saveCurrentCart = async function () {
-    var cartData = JSON.parse(localStorage.getItem('futunetCatalogCart') || '{}');
-    if (Object.keys(cartData).length === 0) {
+    var storedCart = JSON.parse(localStorage.getItem('futunetCatalogCart') || '{}');
+    var cartItems = storedCart && storedCart.items && typeof storedCart.items === 'object'
+      ? storedCart.items
+      : storedCart;
+    if (!cartItems || Object.keys(cartItems).length === 0) {
       showToast('Tu carrito está vacío', 'error');
       return;
     }
@@ -169,7 +173,7 @@
       await db.collection('carts').add({
         userId: currentUser.uid,
         name: name.trim(),
-        items: cartData,
+        items: cartItems,
         savedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       showToast('Carrito guardado exitosamente', 'success');

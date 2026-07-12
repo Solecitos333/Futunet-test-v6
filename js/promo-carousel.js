@@ -169,6 +169,7 @@
   let current = 0;
   let autoTimer = null;
   const AUTO_INTERVAL = 6000;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let progressVal = 0;
   let isPaused = false;
   let startX = 0;
@@ -220,8 +221,20 @@
   if (nextBtn) nextBtn.addEventListener('click', next);
 
   carousel.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') prev();
-    if (e.key === 'ArrowRight') next();
+    const target = e.target;
+    const isEditable = target && (
+      target.matches('input, textarea, select, [contenteditable="true"]') ||
+      target.getAttribute('role') === 'textbox'
+    );
+    if (isEditable) return;
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prev();
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      next();
+    }
   });
 
   function updateProgressBar() {
@@ -232,7 +245,7 @@
 
   function startAutoPlay() {
     stopAutoPlay();
-    if (isSearching) return;
+    if (isSearching || reduceMotion) return;
     isPaused = false;
 
     let startTime = Date.now() - (progressVal / 100) * AUTO_INTERVAL;
@@ -290,18 +303,15 @@
     startAutoPlay();
   }, { passive: true });
 
-  document.addEventListener('focusin', (e) => {
-    if (e.target && e.target.type === 'search') {
-      isSearching = true;
-      stopAutoPlay();
-    }
+  carousel.addEventListener('focusin', () => {
+    isSearching = true;
+    stopAutoPlay();
   });
 
-  document.addEventListener('focusout', (e) => {
-    if (e.target && e.target.type === 'search') {
-      isSearching = false;
-      startAutoPlay();
-    }
+  carousel.addEventListener('focusout', (e) => {
+    if (e.relatedTarget && carousel.contains(e.relatedTarget)) return;
+    isSearching = false;
+    startAutoPlay();
   });
 
   goTo(0);

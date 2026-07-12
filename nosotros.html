@@ -20,87 +20,11 @@
   <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
-  <style>
-    .about-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
-
-    .about-hero {
-      position: relative; height: 360px; display: flex; align-items: center;
-      background-size: cover; background-position: center; color: #fff; overflow: hidden;
-      background-image: url('img/hero-tech-bg.webp');
-    }
-    .about-hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(9,16,24,0.3) 0%, rgba(9,16,24,0.85) 100%);
-      z-index: 1;
-    }
-    .about-hero-content { position: relative; z-index: 2; width: 100%; max-width: 900px; padding: 0 20px; }
-    .about-hero-title {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; margin: 0 0 10px;
-      letter-spacing: -0.03em;
-    }
-    .about-hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.9); max-width: 600px; line-height: 1.5; margin: 0; }
-
-    .about-section { padding: 70px 0; }
-    .about-history-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-
-    .about-history-text h2 {
-      font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #0a101d; margin: 0 0 20px;
-      line-height: 1.25;
-    }
-    .about-history-text p {
-      color: #394c60; font-size: 0.98rem; line-height: 1.7; margin-bottom: 20px;
-    }
-
-    .about-history-img {
-      border-radius: 28px; overflow: hidden; border: 1px solid rgba(10,112,162,0.08);
-      box-shadow: 0 20px 48px rgba(10,112,162,0.06); aspect-ratio: 4/3;
-    }
-    .about-history-img img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
-
-    /* Mision y Vision */
-    .mission-vision-section { background: #f8fafc; padding: 80px 0; }
-    .mission-vision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-    .mv-card {
-      background: #ffffff; padding: 40px; border-radius: 24px; border: 1px solid rgba(10,112,162,0.05);
-      box-shadow: 0 10px 30px rgba(10,112,162,0.02); display: flex; flex-direction: column; gap: 20px;
-    }
-    .mv-icon-box {
-      width: 48px; height: 48px; border-radius: 14px; background: rgba(10,112,162,0.08);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2;
-    }
-    .mv-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #0a101d; margin: 0; }
-    .mv-card p { color: #475569; font-size: 0.96rem; line-height: 1.7; margin: 0; }
-
-    /* Valores */
-    .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; margin-top: 50px; }
-    .value-card {
-      padding: 30px; border: 1px solid rgba(10,112,162,0.06); border-radius: 20px;
-      background: #ffffff; box-shadow: 0 8px 24px rgba(10,112,162,0.02); transition: all 0.3s;
-    }
-    .value-card:hover {
-      transform: translateY(-4px); box-shadow: 0 16px 36px rgba(10,112,162,0.06); border-color: rgba(10,112,162,0.15);
-    }
-    .value-card-icon {
-      width: 40px; height: 40px; border-radius: 50%; background: rgba(10,112,162,0.06);
-      display: flex; align-items: center; justify-content: center; color: #0A70A2; margin-bottom: 20px;
-    }
-    .value-card h4 { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: #0a101d; margin: 0 0 10px; }
-    .value-card p { font-size: 0.88rem; color: #64748b; line-height: 1.5; margin: 0; }
-
-    @media (max-width: 768px) {
-      .about-hero { height: 260px; }
-      .about-hero-title { font-size: 1.8rem; }
-      .about-hero-desc { font-size: 0.9rem; }
-      .about-history-grid { grid-template-columns: 1fr; gap: 30px; }
-      .about-history-img { order: -1; }
-      .mission-vision-grid { grid-template-columns: 1fr; gap: 30px; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/nosotros.css?v=2.0" />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Quiénes Somos — Futunet" />
@@ -108,6 +32,7 @@
   <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
   <!-- El header será inyectado por replace_headers.js -->
     <header class="site-header" role="banner">
@@ -329,123 +254,224 @@
     </div>
   </header>
 
-  <main class="about-page">
-    <!-- Hero Banner -->
-    <section class="about-hero">
+  <main id="main-content" class="about-page about-premium" tabindex="-1">
+    <section class="about-hero" aria-labelledby="about-title">
+      <div class="about-hero__media" aria-hidden="true">
+        <img src="img/hero-tech-bg.webp" alt="" width="880" height="880" fetchpriority="high" />
+      </div>
       <div class="container">
-        <div class="about-hero-content">
-          <h1 class="about-hero-title">Quiénes Somos</h1>
-          <p class="about-hero-desc">Innovación, criterio técnico y garantía real. Conoce la trayectoria y el compromiso de Futunet con el desarrollo tecnológico de la República Dominicana.</p>
+        <div class="about-hero__copy">
+          <span class="about-eyebrow">Futunet · Santiago, República Dominicana</span>
+          <h1 id="about-title">Tecnología con <span>contexto local.</span></h1>
+          <p>Integramos conectividad, seguridad, energía, equipos e infraestructura para que hogares y empresas puedan resolver más con un solo equipo de trabajo.</p>
+          <div class="about-hero__actions">
+            <a class="about-btn about-btn--primary" href="#como-trabajamos">
+              <i data-lucide="route" aria-hidden="true"></i>
+              Cómo trabajamos
+            </a>
+            <a class="about-btn about-btn--ghost" href="index.html#contacto">
+              <i data-lucide="message-circle" aria-hidden="true"></i>
+              Hablar con Futunet
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Historia -->
+    <section class="about-assurances" aria-label="Principios de servicio">
+      <div class="container about-assurances__grid">
+        <article class="about-assurance">
+          <i data-lucide="map-pin" aria-hidden="true"></i>
+          <div><strong>Atención local</strong><span>Desde Santiago para hogares y organizaciones.</span></div>
+        </article>
+        <article class="about-assurance">
+          <i data-lucide="messages-square" aria-hidden="true"></i>
+          <div><strong>Comunicación directa</strong><span>Contexto claro antes de proponer una solución.</span></div>
+        </article>
+        <article class="about-assurance">
+          <i data-lucide="layers-3" aria-hidden="true"></i>
+          <div><strong>Visión integral</strong><span>Producto, instalación e infraestructura conectados.</span></div>
+        </article>
+        <article class="about-assurance">
+          <i data-lucide="life-buoy" aria-hidden="true"></i>
+          <div><strong>Acompañamiento</strong><span>Orientación antes, durante y después de la entrega.</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-section" id="historia">
+      <div class="container about-story">
+        <div class="about-story__visual">
+          <img src="img/laptops.jpg" alt="Equipos tecnológicos en un espacio de trabajo, imagen de referencia" width="880" height="880" loading="lazy" />
+          <div class="about-story__badge">
+            <strong>Una conversación, varias capacidades</strong>
+            <span>Conectividad, tecnología e infraestructura pensadas como un conjunto.</span>
+          </div>
+        </div>
+        <div class="about-story__copy">
+          <div class="about-heading">
+            <span class="about-kicker">Quiénes somos</span>
+            <h2>Un integrador que empieza por entender la necesidad.</h2>
+          </div>
+          <p>Futunet trabaja desde Santiago con una idea sencilla: una decisión tecnológica mejora cuando el producto, la instalación y el soporte se evalúan dentro del mismo contexto.</p>
+          <p>Por eso nuestro alcance reúne internet, redes, seguridad electrónica, energía, climatización, equipos, mobiliario y adecuación física. No todos los proyectos necesitan todo; el valor está en saber qué piezas sí deben coordinarse.</p>
+          <p>Atendemos necesidades de hogares, negocios e instituciones, procurando que cada propuesta describa lo que incluye, lo que depende de un levantamiento y las condiciones que deben confirmarse.</p>
+          <div class="about-story__note">
+            <i data-lucide="info" aria-hidden="true"></i>
+            <p>Las imágenes de esta página son ilustrativas. Los alcances y equipos se confirman de acuerdo con cada solicitud y disponibilidad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section about-section--soft" id="capacidades">
+      <div class="container">
+        <div class="about-heading about-heading--center">
+          <span class="about-kicker">Qué conectamos</span>
+          <h2>Capacidades que pueden trabajar juntas.</h2>
+          <p>Explora cada área o cuéntanos el resultado que buscas para orientar la conversación.</p>
+        </div>
+        <div class="about-capabilities">
+          <a class="about-capability" href="internet.html">
+            <span class="about-capability__icon"><i data-lucide="wifi" aria-hidden="true"></i></span>
+            <h3>Internet y conectividad</h3>
+            <p>Planes, cobertura, instalación y atención para hogares y negocios.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+          <a class="about-capability" href="seguridad-electronica.html">
+            <span class="about-capability__icon"><i data-lucide="shield-check" aria-hidden="true"></i></span>
+            <h3>Seguridad electrónica</h3>
+            <p>Videovigilancia, acceso, alarmas y soluciones de protección.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+          <a class="about-capability" href="redes-datos.html">
+            <span class="about-capability__icon"><i data-lucide="network" aria-hidden="true"></i></span>
+            <h3>Redes y datos</h3>
+            <p>Cableado, WiFi, racks y conectividad interna para operar mejor.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+          <a class="about-capability" href="energia-climatizacion.html">
+            <span class="about-capability__icon"><i data-lucide="zap" aria-hidden="true"></i></span>
+            <h3>Energía y climatización</h3>
+            <p>Respaldo, generación solar, protección y confort térmico.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+          <a class="about-capability" href="equipos-oficina.html">
+            <span class="about-capability__icon"><i data-lucide="laptop" aria-hidden="true"></i></span>
+            <h3>Equipos y productividad</h3>
+            <p>Cómputo, impresión, almacenamiento y herramientas de trabajo.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+          <a class="about-capability" href="infraestructura-remozamiento.html">
+            <span class="about-capability__icon"><i data-lucide="building-2" aria-hidden="true"></i></span>
+            <h3>Infraestructura y espacios</h3>
+            <p>Adecuación física, mobiliario y preparación técnica de áreas.</p>
+            <span>Explorar <i data-lucide="arrow-right" aria-hidden="true"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section about-section--dark" aria-labelledby="purpose-title">
+      <div class="container">
+        <div class="about-heading">
+          <span class="about-kicker">Dirección</span>
+          <h2 id="purpose-title">Qué buscamos aportar.</h2>
+        </div>
+        <div class="about-philosophy">
+          <article>
+            <i data-lucide="target" aria-hidden="true"></i>
+            <h3>Nuestra misión</h3>
+            <p>Ayudar a hogares y organizaciones a adoptar soluciones tecnológicas útiles, con orientación clara, implementación coordinada y atención cercana.</p>
+          </article>
+          <article>
+            <i data-lucide="telescope" aria-hidden="true"></i>
+            <h3>Nuestra visión</h3>
+            <p>Ser una opción confiable en República Dominicana para integrar conectividad, tecnología e infraestructura alrededor de necesidades reales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="como-trabajamos">
+      <div class="container">
+        <div class="about-heading">
+          <span class="about-kicker">Cómo trabajamos</span>
+          <h2>Un proceso sencillo para decisiones complejas.</h2>
+          <p>La profundidad cambia según el proyecto, pero la conversación siempre debe dejar claro el objetivo, el alcance y el siguiente paso.</p>
+        </div>
+        <div class="about-method">
+          <article>
+            <h3>Escuchamos</h3>
+            <p>Partimos del problema, del entorno y de las prioridades, no de una lista genérica de productos.</p>
+          </article>
+          <article>
+            <h3>Evaluamos</h3>
+            <p>Identificamos información faltante, factibilidad, dependencias y si hace falta un levantamiento.</p>
+          </article>
+          <article>
+            <h3>Proponemos</h3>
+            <p>Organizamos alternativas y un alcance entendible para que la decisión tenga contexto.</p>
+          </article>
+          <article>
+            <h3>Acompañamos</h3>
+            <p>Coordinamos la entrega o implementación y mantenemos un canal para el seguimiento.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section about-section--soft" id="valores">
+      <div class="container">
+        <div class="about-heading about-heading--center">
+          <span class="about-kicker">Principios</span>
+          <h2>La forma de trabajar también importa.</h2>
+        </div>
+        <div class="about-values">
+          <article class="about-value">
+            <i data-lucide="badge-check" aria-hidden="true"></i>
+            <h3>Claridad</h3>
+            <p>Explicar qué incluye la propuesta, qué debe validarse y cuáles son sus límites.</p>
+          </article>
+          <article class="about-value">
+            <i data-lucide="handshake" aria-hidden="true"></i>
+            <h3>Responsabilidad</h3>
+            <p>Comunicar condiciones y próximos pasos con expectativas realistas.</p>
+          </article>
+          <article class="about-value">
+            <i data-lucide="brain-circuit" aria-hidden="true"></i>
+            <h3>Criterio técnico</h3>
+            <p>Relacionar la recomendación con el entorno y el uso previsto.</p>
+          </article>
+          <article class="about-value">
+            <i data-lucide="heart-handshake" aria-hidden="true"></i>
+            <h3>Cercanía</h3>
+            <p>Mantener una atención humana y accesible durante la relación con el cliente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="about-section">
       <div class="container">
-        <div class="about-history-grid">
-          <div class="about-history-text">
-            <h2>Nuestra Historia</h2>
-            <p>
-              Establecidos en Santiago de los Caballeros, Futunet nació con la clara visión de llenar la brecha existente en servicios tecnológicos de alto nivel con un soporte humano real, directo y profesional. Empezamos aportando soluciones de cableado y redes para locales locales, y hoy somos un integrador multiservicio de referencia.
-            </p>
-            <p>
-              A lo largo de nuestra trayectoria, hemos consolidado un catálogo que cubre telecomunicaciones (fibra óptica simétrica), seguridad electrónica, climatización, energía renovable, suministro de cómputo y remozamiento de infraestructura corporativa. Creemos en la honestidad comercial, en tiempos de entrega realistas y en un servicio posventa que brinda paz mental a nuestros clientes.
-            </p>
+        <div class="about-contact">
+          <div>
+            <h2>¿Tienes una necesidad y no sabes por dónde empezar?</h2>
+            <p>Cuéntanos el contexto. Podemos ayudarte a identificar si necesitas un producto, una visita técnica o una solución coordinada.</p>
           </div>
-          <div class="about-history-img">
-            <img src="img/hero-tech-bg.webp" alt="Oficinas e ingeniería Futunet" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mision & Vision -->
-    <section class="mission-vision-section">
-      <div class="container">
-        <div class="mission-vision-grid">
-          <div class="mv-card">
-            <div class="mv-icon-box"><i data-lucide="target" style="width:24px; height:24px;"></i></div>
-            <h3>Nuestra Misión</h3>
-            <p>
-              Conectar y equipar a hogares y empresas dominicanas con soluciones tecnológicas integrales de alto estándar, brindando un soporte técnico ágil, transparente y de excelente calidad humana.
-            </p>
-          </div>
-          <div class="mv-card">
-            <div class="mv-icon-box"><i data-lucide="eye" style="width:24px; height:24px;"></i></div>
-            <h3>Nuestra Visión</h3>
-            <p>
-              Ser el socio estratégico de telecomunicaciones e infraestructura de referencia en la región norte y todo el país, reconocidos por nuestra ética comercial, criterio técnico y compromiso con la productividad de nuestros clientes.
-            </p>
+          <div class="about-contact__actions">
+            <a class="about-btn about-btn--primary" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quiero%20orientaci%C3%B3n%20para%20una%20soluci%C3%B3n." target="_blank" rel="noopener noreferrer">
+              <i data-lucide="message-circle" aria-hidden="true"></i>
+              Escribir por WhatsApp
+            </a>
+            <a class="about-btn about-btn--ghost" href="index.html#contacto">
+              Ver contacto
+              <i data-lucide="arrow-right" aria-hidden="true"></i>
+            </a>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Valores -->
-    <section class="about-section">
-      <div class="container">
-        <div style="text-align: center; max-width: 600px; margin: 0 auto 50px;">
-          <h2 style="font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:#0a101d;">Nuestros Valores</h2>
-          <p style="color:#64748b; font-size:0.95rem;">Los pilares éticos sobre los que construimos relaciones comerciales duraderas y seguras.</p>
-        </div>
-
-        <div class="values-grid">
-          <div class="value-card">
-            <div class="value-card-icon"><i data-lucide="shield-check"></i></div>
-            <h4>Compromiso & Respaldo</h4>
-            <p>Cada proyecto que ejecutamos cuenta con garantía real y soporte posventa de alta respuesta.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-card-icon"><i data-lucide="cpu"></i></div>
-            <h4>Innovación Técnica</h4>
-            <p>Trabajamos con fabricantes oficiales para proveer hardware moderno y metodologías eficientes.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-card-icon"><i data-lucide="zoom-in"></i></div>
-            <h4>Transparencia Total</h4>
-            <p>Cotizaciones claras, presupuestos realistas y comunicación sin tecnicismos complejos.</p>
-          </div>
-          <div class="value-card">
-            <div class="value-card-icon"><i data-lucide="heart"></i></div>
-            <h4>Calidad Humana</h4>
-            <p>Nos enfocamos en escuchar a nuestros clientes, resolviendo sus necesidades con empatía y cercanía.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección de Cierre / CTA -->
-    <section class="related-services-section reveal" style="background: radial-gradient(circle at top right, rgba(11, 126, 181, 0.05), transparent 45%), #f8fafc; border-top: 1px solid rgba(11, 126, 181, 0.06); padding: 80px 0;">
-      <div class="container" style="text-align: center;">
-        <h3 class="related-services-title" style="margin-bottom: 15px;">¿Listo para transformar tu infraestructura?</h3>
-        <p style="color: #64748b; font-size: 1rem; max-width: 600px; margin: 0 auto 40px; line-height: 1.6;">Ya sea que necesites fibra óptica de alta velocidad, cableado certificado, seguridad inteligente o energía de respaldo, en Futunet tenemos la solución.</p>
-
-        <div class="related-services-grid" style="max-width: 900px; margin: 0 auto;">
-          <a href="index.html#servicios" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
-            <div class="related-service-icon"><i class="fas fa-cogs"></i></div>
-            <h4>Ver Servicios</h4>
-            <p>Navega por nuestro portafolio de servicios de instalación técnica profesional.</p>
-            <span class="related-service-btn">Explorar Servicios <i class="fas fa-arrow-right"></i></span>
-          </a>
-
-          <a href="catalogo.html" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
-            <div class="related-service-icon"><i class="fas fa-shopping-bag"></i></div>
-            <h4>Ver Catálogo</h4>
-            <p>Explora equipos de red, cámaras, UPS y más listos para cotizar en línea.</p>
-            <span class="related-service-btn">Ver Productos <i class="fas fa-arrow-right"></i></span>
-          </a>
-
-          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="related-service-card" style="align-items: center; text-align: center; padding: 30px 20px;">
-            <div class="related-service-icon" style="color: #25D366; background: rgba(37, 211, 102, 0.1);"><i class="fab fa-whatsapp"></i></div>
-            <h4>WhatsApp Directo</h4>
-            <p>Comunícate de inmediato con uno de nuestros técnicos asesores locales.</p>
-            <span class="related-service-btn" style="color: #25D366;">Escribir por WhatsApp <i class="fas fa-arrow-right"></i></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <!-- Footer -->
@@ -510,6 +536,6 @@
   <script defer src="js/firebase-config.js?v=20260628"></script>
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/chatbot.js?v=20260628"></script>
-  <script src="js/main.js?v=3.2"></script>
+  <script src="js/main.js?v=20260712"></script>
 </body>
 </html>

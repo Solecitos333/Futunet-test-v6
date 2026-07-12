@@ -75,7 +75,7 @@ test('SEO comunica una oferta agregada sin precios de planes duplicados', () => 
 });
 
 test('la experiencia renovada está disponible en el app shell offline', () => {
-  assert.match(serviceWorker, /futunet-cache-v10/);
+  assert.match(serviceWorker, /futunet-cache-v12/);
   assert.match(serviceWorker, /css\/internet-elite\.css/);
   assert.match(serviceWorker, /js\/internet-plans\.js/);
 });

@@ -775,6 +775,39 @@ function initTopMenuHighlight() {
   }
 }
 
+function initEstimatorAccessibility() {
+  const cards = Array.from(document.querySelectorAll('.workstation-card'));
+  if (!cards.length) return;
+
+  const syncGroup = (name) => {
+    cards.forEach((card) => {
+      const input = card.querySelector('input[type="radio"]');
+      if (!input || input.name !== name) return;
+      card.setAttribute('aria-checked', input.checked ? 'true' : 'false');
+    });
+  };
+
+  cards.forEach((card) => {
+    const input = card.querySelector('input[type="radio"]');
+    if (!input) return;
+
+    card.setAttribute('role', 'radio');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-checked', input.checked ? 'true' : 'false');
+    input.setAttribute('tabindex', '-1');
+
+    card.addEventListener('click', () => {
+      window.requestAnimationFrame(() => syncGroup(input.name));
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      card.click();
+    });
+  });
+}
+
 // =============================================================
 // BOOTSTRAPPING CENTRALIZADO - UNICO LISTENER DOMContentLoaded
 // =============================================================
@@ -803,6 +836,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   initFooterYear();
   initTopMenuHighlight();
+  initEstimatorAccessibility();
 });
 
 /* -------------------------------------------------------------
@@ -874,6 +908,7 @@ function normalizeSiteNavigation() {
         <nav class="site-utility-links" aria-label="Navegación de utilidad">
           <a href="index.html">Hogar</a>
           <a href="corporativo.html">Empresas</a>
+          <a href="nosotros.html">Nosotros</a>
           <a href="login.html">Área de clientes</a>
           <a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer">Ubicación</a>
           <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
@@ -913,7 +948,7 @@ function normalizeSiteNavigation() {
           </div>
         </li>
         <li class="has-mega">
-          <a href="index.html#soluciones" class="mega-trigger" aria-haspopup="true">Soluciones <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <a href="index.html#servicios" class="mega-trigger" aria-haspopup="true">Soluciones <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
           <div class="mega-menu-container">
             <div class="mega-menu-grid mega-menu-grid--two">
               <div class="mega-menu-col">
@@ -970,7 +1005,7 @@ function normalizeSiteNavigation() {
                   <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer">Medir velocidad</a></li>
                   <li><a href="login.html">Área de clientes</a></li>
                   <li><a href="login.html?redirect=internet.html">Reportar avería</a></li>
-                  <li><a href="login.html?redirect=facturacion.html">Ver factura y reportar pago</a></li>
+                  <li><a href="login.html?redirect=internet.html">Ver factura y reportar pago</a></li>
                 </ul>
               </div>
             </div>
@@ -1035,12 +1070,13 @@ function normalizeSiteNavigation() {
         <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Medir velocidad</a>
         <a href="login.html" data-close-mobile-menu>Área de clientes</a>
         <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
-        <a href="login.html?redirect=facturacion.html" data-close-mobile-menu>Ver factura y reportar pago</a>
+        <a href="login.html?redirect=internet.html" data-close-mobile-menu>Ver factura y reportar pago</a>
       </div>
     </details>
     <a href="index.html#contacto" class="mobile-menu__quote" data-close-mobile-menu>Cotizar proyecto</a>
     <div class="mobile-menu__utility">
       <a href="corporativo.html" data-close-mobile-menu>Empresas</a>
+      <a href="nosotros.html" data-close-mobile-menu>Nosotros</a>
       <a href="login.html" data-close-mobile-menu>Área de clientes</a>
       <a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Ubicación</a>
     </div>
@@ -1052,7 +1088,7 @@ function normalizeSiteNavigation() {
   const filename = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const activeGroup = filename === 'internet.html' ? 'internet.html'
     : filename === 'catalogo.html' || filename === 'producto.html' || filename.startsWith('marca-') ? 'catalogo.html'
-    : ['seguridad-electronica.html', 'redes-datos.html', 'energia-climatizacion.html', 'equipos-oficina.html', 'mobiliario-suministros.html', 'infraestructura-remozamiento.html', 'corporativo.html'].includes(filename) ? 'index.html#soluciones'
+    : ['seguridad-electronica.html', 'redes-datos.html', 'energia-climatizacion.html', 'equipos-oficina.html', 'mobiliario-suministros.html', 'infraestructura-remozamiento.html', 'corporativo.html'].includes(filename) ? 'index.html#servicios'
     : filename === 'index.html' ? 'index.html' : '';
 
   if (activeGroup) {

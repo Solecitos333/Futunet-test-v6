@@ -31,37 +31,41 @@ Futunet opera en tres pilares de alta demanda:
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 28 de Junio - 5 de Julio de 2026)
+## ⚡ Plan de Acción Semanal (Semana Actual: 12 de Julio - 19 de Julio de 2026)
 
 ### 📌 Contexto del Período
-* **Hoy (28 de Junio)**: Cierre de la campaña de **Respaldo Energético** como foco principal, aunque se mantiene activa como secundaria debido a que la Temporada Ciclónica continúa (Junio-Noviembre).
-* **Esta Semana (1 de Julio)**: Inicio de la campaña de **Día de los Padres** ("Papá Smart & Gaming"), enfocada en laptops de alto rendimiento, gadgets tecnológicos y routers WiFi 6 de largo alcance.
-* **Zona Geográfica**: Santiago y la región del Cibao.
+* **Semana Clave**: Nos encontramos en la segunda/tercera semana de Julio, período crítico de compras previo al Día de los Padres en la República Dominicana (último domingo de Julio, 26 de Julio).
+* **Foco de Campaña**: **"Papá Smart & Gaming"** – Combinación de alto rendimiento profesional (Home Office) y ocio (Gaming) con el cupón `PAPASMART2026` (10% Off).
+* **Foco Secundario**: **Respaldo Energético** – La temporada ciclónica sigue activa en el Caribe; se mantiene la promoción de UPS online e inversores como producto complementario esencial para proteger los equipos nuevos de papá.
 
 ### 1. Transición Estratégica de UI/UX (Home Page & Banner Rotativo)
-* **Acción**: Mover el banner de la Temporada de Respaldo Energético a posiciones secundarias y encender la campaña **"Papá Smart & Gaming"** en la primera posición del slider principal de banners.
-* **Propuesta de Banner UI/UX (Campaña de Julio)**:
-  * **Fondo**: Imagen de alta calidad de una laptop gaming y router WiFi 6 premium con luces ambientales RGB en Santiago (`img/banners/papa_smart_gaming.png`).
-  * **Título**: `Regala potencia y conectividad en el Mes del Padre`
-  * **Subtítulo**: `Laptops de alto rendimiento, routers WiFi 6 y gadgets con 10% de descuento usando el código PAPASMART2026.`
-  * **Etiqueta (Label)**: `🎮 Papá Smart & Gaming`
-  * **CTAs**: 
-    * Botón Principal: `Ver Equipos y Laptops` -> Enlace a `catalogo.html?cat=equipos`
-    * Botón Secundario: `Consultar por WhatsApp` -> Mensaje personalizado: *"Hola Futunet, quiero cotizar laptops y routers WiFi 6 para regalar en el día de los padres con el código PAPASMART2026."*
+* **Configuración del Slider Principal (Home)**:
+  * **Banner 1 (Foco Primario)**: "Papá Smart & Gaming"
+    * *Título*: `Mes del Padre con Rendimiento y Potencia`
+    * *Subtítulo*: `Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código PAPASMART2026.`
+    * *Acción*: Dirigir a `catalogo.html?cat=equipos`.
+  * **Banner 2 (Foco Secundario)**: "Respaldo Energético"
+    * *Título*: `⚡ Protege los regalos de Papá esta Temporada Ciclónica`
+    * *Subtítulo*: `UPS online de doble conversión, inversores y paneles solares con instalación prioritaria en Santiago.`
+    * *Acción*: Dirigir a `catalogo.html?cat=energia` (o WhatsApp directo).
+  * **Banner 3**: "Internet Residencial Fibra Óptica"
+    * *Título*: `Conexión sin límites para Papá`
+    * *Subtítulo*: `Planes de fibra óptica simétrica con instalación prioritaria y router premium WiFi 6.`
+    * *Acción*: Dirigir a `internet.html`.
 
 ### 2. Estrategia de Contenidos (Content Manager)
-* **Redes Sociales & Sitio Web**: Publicar contenido y posts semanales sobre: *"Guía de regalos tecnológicos: Laptops de alto rendimiento para padres profesionales y gamers en Santiago"*.
-* **Productos a Destacar en el Home**:
-  * Laptops ASUS ROG / TUF, Dell G15 o Lenovo Legion (Gaming y alto rendimiento).
-  * Laptops de productividad avanzada (Dell Latitude / HP ProBook).
-  * Routers Mesh WiFi 6 de largo alcance (TP-Link Deco, Ubiquiti UniFi, MikroTik).
-  * Teclados mecánicos y accesorios gamer (Logitech).
+* **Estrategia Semanal**: *"Guía de Regalos: Armándole la cueva tecnológica a Papá"*.
+* **Productos Destacados en Catálogo y Home**:
+  * Laptops premium de oficina y gaming (ASUS TUF/ROG, Lenovo Legion, Dell Inspiron/Latitude).
+  * Routers de última generación y Sistemas Mesh WiFi 6 (TP-Link Deco) para garantizar conectividad total en el hogar.
+  * Periféricos: Teclados mecánicos, mouses inalámbricos ergonómicos, y audífonos con cancelación de ruido.
+  * UPS de 1KVA y 2KVA para la protección del escritorio de papá.
 
 ### 3. Activación de Disparador Comercial (Marketing)
 * **Código de Descuento Activo**: `PAPASMART2026`
-  * **Valor**: 10% de descuento en las categorías de "Equipos de Oficina / Cómputo" y "Redes / Routers WiFi".
-  * **Vigencia**: 1 de Julio al 31 de Julio de 2026.
-  * **Mensaje Clave**: *"Sorprende a papá con la máxima velocidad y rendimiento. Usa el código PAPASMART2026 al cotizar."*
+  * **Beneficio**: 10% de descuento directo en laptops, computadoras de escritorio, y routers/repetidores WiFi.
+  * **Vigencia**: Todo el mes de Julio de 2026 (1 al 31 de Julio).
+  * **Mensaje Clave**: *"¿Papá trabaja duro o le apasiona el gaming? 🎮💼 Regálale el rendimiento que merece con 10% de descuento en Santiago."*
 
 ---
 

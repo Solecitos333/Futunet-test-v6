@@ -309,11 +309,21 @@ function renderCompactMobileCatalogView() {
 
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    const results = mockDatabase
+    let results = mockDatabase
       .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
       .map(r => r.product);
+
+    if (state.dept !== 'all') results = results.filter(p => p.department === state.dept);
+    if (state.category !== 'all') results = results.filter(p => p.category === state.category);
+    if (state.brand !== 'all') results = results.filter(p => p.brand === state.brand);
+    results = results.filter((product) => {
+      if (isServiceItem(product)) return true;
+      const price = parsePrice(product.price);
+      return price >= state.minPrice && price <= state.maxPrice;
+    });
+    results = sortCatalogProducts(applyAvailabilityFilter(results));
 
     updateCatalogContextBar({
       title: 'Resultados',
@@ -338,6 +348,13 @@ function renderCompactMobileCatalogView() {
 
   let db = mockDatabase;
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
+  if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
+  db = db.filter((product) => {
+    if (isServiceItem(product)) return true;
+    const price = parsePrice(product.price);
+    return price >= state.minPrice && price <= state.maxPrice;
+  });
+  db = sortCatalogProducts(applyAvailabilityFilter(db));
 
   if (state.category === 'all') {
     if (state.dept === 'all') {
@@ -1167,6 +1184,39 @@ function resetPriceSliders() {
   }
 }
 
+function syncPriceControlsFromState() {
+  const sliderMin = Math.max(0, Math.min(150000, Number(state.minPrice) || 0));
+  const sliderMax = state.maxPrice >= 9999999
+    ? 150000
+    : Math.max(sliderMin + 5000, Math.min(150000, Number(state.maxPrice) || 150000));
+  const formatValue = (value) => value >= 150000
+    ? 'RD$ 150,000+'
+    : new Intl.NumberFormat('es-DO', {
+        style: 'currency',
+        currency: 'DOP',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+
+  [['price-min', sliderMin], ['mobile-price-min', sliderMin], ['price-max', sliderMax], ['mobile-price-max', sliderMax]]
+    .forEach(([id, value]) => {
+      const input = document.getElementById(id);
+      if (input) input.value = value;
+    });
+  [['price-min-val', sliderMin], ['mobile-price-min-val', sliderMin], ['price-max-val', sliderMax], ['mobile-price-max-val', sliderMax]]
+    .forEach(([id, value]) => {
+      const label = document.getElementById(id);
+      if (label) label.textContent = formatValue(value);
+    });
+
+  const minPercent = (sliderMin / 150000) * 100;
+  const maxPercent = (sliderMax / 150000) * 100;
+  ['price-track', 'mobile-price-track'].forEach((id) => {
+    const track = document.getElementById(id);
+    if (track) track.style.background = `linear-gradient(to right, #e5eef8 ${minPercent}%, var(--brand) ${minPercent}%, var(--brand) ${maxPercent}%, #e5eef8 ${maxPercent}%)`;
+  });
+}
+
 function clearSearch() {
   state.searchQuery = null;
   state.dept = 'all';
@@ -1894,40 +1944,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     const brand = params.get('brand');
     const availability = params.get('availability');
     const sort = params.get('sort');
+    const minParam = Number(params.get('min'));
+    const maxParam = Number(params.get('max'));
 
-    if (availability) {
-      state.availability = availability;
-      const availabilityFilter = document.querySelector('[data-catalog-availability-filter]');
-      if (availabilityFilter) availabilityFilter.value = availability;
-    }
-    if (sort) {
-      state.sort = sort;
-      const sortFilter = document.querySelector('[data-catalog-sort]');
-      if (sortFilter) sortFilter.value = sort;
-    }
+    state.dept = params.get('cat') || 'all';
+    state.category = params.get('category') || 'all';
+    state.brand = brand || 'all';
+    state.availability = availability || 'all';
+    state.sort = sort || 'relevance';
+    state.searchQuery = q || null;
+    state.minPrice = Number.isFinite(minParam) && minParam >= 0 ? minParam : 0;
+    state.maxPrice = Number.isFinite(maxParam) && maxParam > 0 ? maxParam : 9999999;
 
-    if (q) {
-      state.searchQuery = q;
-      logSearchQuery(q);
-      syncFilterButtons('all');
-      const initialInput = document.getElementById('search-catalog-page');
-      if (initialInput) initialInput.value = q;
-      if (brand) {
-        state.brand = brand;
-        const brandFilter = document.querySelector('[data-catalog-brand-filter]');
-        if (brandFilter) brandFilter.value = brand;
-      }
-      renderUI();
-    } else if (brand) {
-      state.brand = brand;
-      const brandFilter = document.querySelector('[data-catalog-brand-filter]');
-      if (brandFilter) brandFilter.value = brand;
-      syncFilterButtons('all');
-      renderUI();
-    } else {
-      const cat = params.get('cat') || 'all';
-      filterCat(cat, null);
-    }
+    syncFilterButtons(state.dept);
+    syncPriceControlsFromState();
+
+    const initialInput = document.getElementById('search-catalog-page');
+    if (initialInput && q) initialInput.value = q;
+    const brandControl = document.querySelector('[data-catalog-brand-filter]');
+    if (brandControl) brandControl.value = state.brand;
+    const availabilityControl = document.querySelector('[data-catalog-availability-filter]');
+    if (availabilityControl) availabilityControl.value = state.availability;
+    const sortControl = document.querySelector('[data-catalog-sort]');
+    if (sortControl) sortControl.value = state.sort;
+    if (q) logSearchQuery(q);
+
+    renderUI();
   }
 
   initPageCart();

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v10';
+const CACHE_NAME = 'futunet-cache-v12';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -13,6 +13,7 @@ const CRITICAL_ASSETS = [
   './mobiliario-suministros.html',
   './redes-datos.html',
   './seguridad-electronica.html',
+  './nosotros.html',
   './manifest.json',
   './css/main.css',
   './css/navbar.css',
@@ -26,6 +27,9 @@ const CRITICAL_ASSETS = [
   './css/equipos-oficina.css',
   './css/redes-datos.css',
   './css/seguridad-electronica.css',
+  './css/b2b-subpage-base.css',
+  './css/nosotros.css',
+  './css/service-polish.css',
   './css/internet.css',
   './css/internet-elite.css',
   './css/producto.css',

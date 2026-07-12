@@ -54,12 +54,14 @@
   <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <link rel="stylesheet" href="css/b2b-subpage-base.css?v=1.0" />
+  <link rel="stylesheet" href="css/b2b-subpage-base.css?v=2.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
 </head>
 <body class="is-loading">
+  <a class="skip-link" href="#service-page-container">Saltar al contenido</a>
   <div id="page-preloader" class="page-preloader" aria-hidden="true">
     <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="972" height="303" />
     <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
@@ -290,145 +292,321 @@
     </div>
   </header>
 
-  <main id="service-page-container" class="service-page" data-service-id="infra">
-    <!-- Hero Banner -->
-    <section class="service-hero" id="service-hero-banner" style="background-image: url('img/sheetrock.jpg');">
+  <main id="service-page-container" class="service-page premium-service premium-service--infra" data-service-id="infra" tabindex="-1">
+    <section class="premium-service__hero" aria-labelledby="service-title">
+      <div class="premium-service__hero-media" aria-hidden="true">
+        <img src="img/sheetrock.jpg" alt="" width="880" height="880" fetchpriority="high" />
+      </div>
       <div class="container">
-        <div class="service-hero-content">
-          <h1 class="service-hero-title" id="service-title">Infraestructura y Remozamiento</h1>
-          <p class="service-hero-desc" id="service-subtitle">Remozamiento físico, pintura profesional y divisiones para tus espacios de trabajo.</p>
+        <div class="premium-service__hero-copy">
+          <span class="premium-eyebrow">Espacios comerciales · oficinas · instituciones</span>
+          <h1 id="service-title">Infraestructura y <span>remozamiento</span></h1>
+          <p class="premium-service__hero-desc" id="service-subtitle">Planificamos y coordinamos la adecuación de tus espacios: divisiones, plafones, pintura, cristal, electricidad e iluminación con un alcance claro desde el inicio.</p>
+          <div class="premium-service__hero-actions">
+            <a class="premium-action premium-action--primary" href="#cotizar">
+              <i data-lucide="clipboard-check" aria-hidden="true"></i>
+              Solicitar levantamiento
+            </a>
+            <a class="premium-action premium-action--ghost" href="#capacidades">
+              <i data-lucide="layout-grid" aria-hidden="true"></i>
+              Ver capacidades
+            </a>
+          </div>
+          <ul class="premium-service__hero-notes" aria-label="Aspectos del servicio">
+            <li><i data-lucide="map-pin" aria-hidden="true"></i> Atención desde Santiago</li>
+            <li><i data-lucide="list-checks" aria-hidden="true"></i> Alcance por partidas</li>
+            <li><i data-lucide="users" aria-hidden="true"></i> Coordinación integral</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- Main Content Grid -->
-    <section class="service-section">
+    <nav class="premium-quicknav" aria-label="Secciones de infraestructura">
+      <div class="container premium-quicknav__inner">
+        <a href="#resumen"><i data-lucide="home" aria-hidden="true"></i> Resumen</a>
+        <a href="#capacidades">Capacidades</a>
+        <a href="#proceso">Proceso</a>
+        <a href="#galeria">Áreas de trabajo</a>
+        <a href="#preguntas">Preguntas</a>
+        <a href="#cotizar"><i data-lucide="clipboard-pen-line" aria-hidden="true"></i> Cotizar</a>
+      </div>
+    </nav>
+
+    <section class="premium-section" id="resumen">
       <div class="container">
-        <div class="service-grid-info">
-          <!-- Text and Specs -->
-          <div class="service-details">
-            <h3>Renovación física y adecuación de locales comerciales y oficinas</h3>
-            <p id="service-long-description">
-              Ofrecemos servicios de remodelación física, pintura profesional para interiores y exteriores, levantamiento de paredes en Sheetrock, diseño e instalación de divisiones de cristal templado, y distribución de sistemas eléctricos de iluminación decorativa y corporativa. Reformamos tus espacios para que proyecten una imagen corporativa impecable.
-            </p>
-
-            <h3 style="margin-top:40px;">¿Qué incluye nuestro alcance?</h3>
-            <div class="features-list" id="service-features-list">
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="split"></i></div>
-                <div class="feature-text">
-                  <h4>Divisiones de Cristal</h4>
-                  <p>Muros en cristal templado con perfiles de aluminio y puertas pivotantes.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="layers"></i></div>
-                <div class="feature-text">
-                  <h4>Sheetrock & Plafón</h4>
-                  <p>Instalación de paneles de yeso para divisiones y techos suspendidos.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="paint-bucket"></i></div>
-                <div class="feature-text">
-                  <h4>Pintura Profesional</h4>
-                  <p>Acabado de alta calidad con pinturas lavables y de larga duración.</p>
-                </div>
-              </div>
-              <div class="feature-item">
-                <div class="feature-icon-wrapper"><i data-lucide="lightbulb"></i></div>
-                <div class="feature-text">
-                  <h4>Electricidad & Luces</h4>
-                  <p>Instalación de luces LED empotradas, tomacorrientes e interruptores.</p>
-                </div>
-              </div>
+        <div class="premium-intro">
+          <div class="premium-intro__copy">
+            <div class="premium-heading">
+              <span class="premium-kicker">De la idea a un espacio funcional</span>
+              <h2>Un proyecto coordinado, no una suma de trabajos aislados.</h2>
             </div>
+            <p id="service-long-description">Adecuamos oficinas, locales comerciales y áreas institucionales combinando obra liviana, acabados y puntos eléctricos. El objetivo es que cada decisión —desde una pared hasta la iluminación— responda al uso real del espacio.</p>
+            <p>Antes de cotizar definimos qué se interviene, qué debe conservarse, los accesos disponibles, los horarios permitidos y el resultado esperado. Así la propuesta puede organizarse por partidas y prioridades.</p>
           </div>
+          <aside class="premium-intro__aside">
+            <i data-lucide="scan-line" aria-hidden="true"></i>
+            <h3>El levantamiento define el proyecto.</h3>
+            <p>Medidas, fotografías, condiciones del lugar y restricciones operativas permiten preparar una propuesta más precisa y reducir cambios durante la ejecución.</p>
+          </aside>
+        </div>
 
-          <!-- Sticky Lead Form -->
-          <div>
-            <div class="request-card">
-              <h3>Solicitar Cotización</h3>
-              <p>Envíanos los detalles de tu requerimiento y te responderemos en un plazo máximo de 24 horas.</p>
-
-              <form id="service-request-form">
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-name">Nombre Completo</label>
-                  <input type="text" id="req-name" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-                  <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-email">Correo Electrónico</label>
-                  <input type="email" id="req-email" class="request-form-input" required />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-company">Empresa (Opcional)</label>
-                  <input type="text" id="req-company" class="request-form-input" />
-                </div>
-                <div class="request-form-group">
-                  <label class="request-form-label" for="req-message">Detalles del Proyecto / Necesidad</label>
-                  <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe qué necesitas (ej: pintura y colocación de 3 paredes de sheetrock en oficina)..."></textarea>
-                </div>
-
-                <button type="submit" class="request-btn-submit" id="req-submit-btn">
-                  <i data-lucide="send"></i> Enviar Solicitud
-                </button>
-              </form>
+        <div class="features-list premium-capabilities" id="service-features-list">
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="panels-top-left" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Sheetrock y plafones</h4>
+              <p>Divisiones livianas, cierres, cielos rasos y preparación de superficies según la distribución prevista.</p>
             </div>
-          </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="panel-top" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Cristal y aluminio</h4>
+              <p>Separaciones visuales, puertas y frentes para áreas que necesitan privacidad sin perder amplitud.</p>
+            </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="paint-bucket" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Pintura y acabados</h4>
+              <p>Preparación, corrección y aplicación de terminaciones para interiores y exteriores.</p>
+            </div>
+          </article>
+          <article class="feature-item">
+            <div class="feature-icon-wrapper"><i data-lucide="lightbulb" aria-hidden="true"></i></div>
+            <div class="feature-text">
+              <h4>Electricidad e iluminación</h4>
+              <p>Redistribución de puntos, tomacorrientes, luminarias y canalizaciones coordinadas con el nuevo espacio.</p>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- Linked Products Section -->
+    <section class="premium-section premium-section--soft" id="capacidades">
+      <div class="container">
+        <div class="premium-heading premium-heading--center">
+          <span class="premium-kicker">Capacidades</span>
+          <h2>Intervenciones pensadas para trabajar mejor.</h2>
+          <p>Podemos abordar una partida puntual o coordinar varias especialidades dentro de una misma adecuación.</p>
+        </div>
+        <div class="premium-benefits">
+          <article class="premium-benefit">
+            <i data-lucide="ruler" aria-hidden="true"></i>
+            <h3>Redistribución</h3>
+            <p>Nuevas áreas operativas, oficinas privadas, recepción, salas de reunión y zonas de servicio.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+            <h3>Renovación visual</h3>
+            <p>Correcciones, pintura, revestimientos ligeros y terminaciones coherentes con la imagen del negocio.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="cable" aria-hidden="true"></i>
+            <h3>Preparación técnica</h3>
+            <p>Canalizaciones y puntos para energía, iluminación, redes, cámaras y equipos de oficina.</p>
+          </article>
+          <article class="premium-benefit">
+            <i data-lucide="calendar-check-2" aria-hidden="true"></i>
+            <h3>Trabajo por etapas</h3>
+            <p>Priorización de partidas para intervenir áreas sin perder de vista el alcance total del proyecto.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section" id="proceso">
+      <div class="container">
+        <div class="premium-heading">
+          <span class="premium-kicker">Método de trabajo</span>
+          <h2>Cuatro etapas para mantener el proyecto bajo control.</h2>
+          <p>Cada espacio tiene restricciones distintas. El proceso permite convertirlas en decisiones concretas antes de ejecutar.</p>
+        </div>
+        <div class="premium-process">
+          <article class="premium-process__step">
+            <h3>Levantamiento</h3>
+            <p>Revisamos medidas, condiciones, accesos, uso del espacio y necesidades prioritarias.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Alcance y propuesta</h3>
+            <p>Organizamos las partidas, materiales de referencia y consideraciones necesarias para cotizar.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Coordinación</h3>
+            <p>Definimos secuencia de trabajo, áreas disponibles y comunicación durante la intervención.</p>
+          </article>
+          <article class="premium-process__step">
+            <h3>Revisión y entrega</h3>
+            <p>Validamos el alcance ejecutado y repasamos observaciones antes del cierre del proyecto.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section premium-section--soft" id="galeria">
+      <div class="container">
+        <div class="premium-heading">
+          <span class="premium-kicker">Áreas de trabajo</span>
+          <h2>Una solución para cada capa del espacio.</h2>
+          <p>Imágenes de referencia para visualizar los tipos de intervención. El diseño final depende del levantamiento y la propuesta aprobada.</p>
+        </div>
+        <div class="premium-gallery">
+          <figure>
+            <img src="img/sheetrock.jpg" alt="Instalación de paneles de yeso en un espacio comercial" width="880" height="880" loading="lazy" />
+            <figcaption><span>Divisiones y plafones</span><i data-lucide="layers-3" aria-hidden="true"></i></figcaption>
+          </figure>
+          <figure>
+            <img src="img/cristal.jpg" alt="Divisiones de cristal en una oficina contemporánea" width="880" height="880" loading="lazy" />
+            <figcaption><span>Cristal y distribución</span><i data-lucide="panels-top-left" aria-hidden="true"></i></figcaption>
+          </figure>
+          <figure>
+            <img src="img/pintura.jpg" alt="Aplicación de pintura en el interior de una oficina" width="880" height="880" loading="lazy" />
+            <figcaption><span>Pintura y terminación</span><i data-lucide="paint-roller" aria-hidden="true"></i></figcaption>
+          </figure>
+          <figure>
+            <img src="img/hero-tech-bg.webp" alt="Espacio de trabajo terminado y equipado" width="880" height="880" loading="lazy" />
+            <figcaption><span>Espacio listo para operar</span><i data-lucide="building-2" aria-hidden="true"></i></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section premium-section--dark" aria-labelledby="infra-use-title">
+      <div class="container">
+        <div class="premium-heading">
+          <span class="premium-kicker">Dónde aporta valor</span>
+          <h2 id="infra-use-title">Adecuaciones para distintos contextos.</h2>
+          <p>El alcance se adapta al uso, la operación y el nivel de intervención que necesita cada espacio.</p>
+        </div>
+        <div class="premium-use-cases">
+          <article class="premium-use-card">
+            <i data-lucide="store" aria-hidden="true"></i>
+            <h3>Locales comerciales</h3>
+            <p>Remozamiento, exhibición, recepción, circulación y preparación de puntos técnicos para abrir o renovar.</p>
+          </article>
+          <article class="premium-use-card">
+            <i data-lucide="briefcase-business" aria-hidden="true"></i>
+            <h3>Oficinas y negocios</h3>
+            <p>Áreas operativas, despachos, salas de reunión y una distribución coherente con el flujo del equipo.</p>
+          </article>
+          <article class="premium-use-card">
+            <i data-lucide="school" aria-hidden="true"></i>
+            <h3>Instituciones</h3>
+            <p>Intervenciones por zonas, priorización de espacios y coordinación alrededor de horarios de uso.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section" id="preguntas">
+      <div class="container">
+        <div class="premium-heading premium-heading--center">
+          <span class="premium-kicker">Preguntas frecuentes</span>
+          <h2>Lo que conviene definir antes de empezar.</h2>
+        </div>
+        <div class="premium-faqs">
+          <details>
+            <summary>¿Pueden cotizar solo una parte del remozamiento?</summary>
+            <p>Sí. El levantamiento puede enfocarse en una intervención puntual —por ejemplo, divisiones o pintura— o en varias partidas coordinadas.</p>
+          </details>
+          <details>
+            <summary>¿Qué información ayuda a preparar la evaluación?</summary>
+            <p>Ubicación, fotografías actuales, medidas aproximadas, uso previsto, horario disponible para trabajar y la fecha objetivo del proyecto.</p>
+          </details>
+          <details>
+            <summary>¿La propuesta incluye materiales y mano de obra?</summary>
+            <p>El alcance debe indicar con claridad qué materiales, trabajos y condiciones están incluidos. Las alternativas se presentan según la necesidad levantada.</p>
+          </details>
+          <details>
+            <summary>¿Pueden coordinar redes, cámaras o equipos después del remozamiento?</summary>
+            <p>Sí. Futunet también trabaja redes, seguridad electrónica y equipamiento, de modo que esos puntos pueden contemplarse desde la adecuación.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="premium-section premium-section--dark" id="cotizar">
+      <div class="container premium-quote-shell">
+        <div class="premium-quote-copy">
+          <span class="premium-kicker">Próximo paso</span>
+          <h2>Cuéntanos qué espacio quieres transformar.</h2>
+          <p>Comparte el contexto inicial. El equipo revisará la solicitud y te indicará qué información o levantamiento hace falta para avanzar.</p>
+          <ul class="premium-quote-points">
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Describe el área y su uso actual</li>
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Indica ubicación y fecha objetivo</li>
+            <li><i data-lucide="check-circle-2" aria-hidden="true"></i> Menciona las partidas prioritarias</li>
+          </ul>
+        </div>
+        <div class="request-card">
+          <h3>Solicitar evaluación</h3>
+          <p>Completa los datos básicos para que podamos contextualizar tu proyecto.</p>
+          <form id="service-request-form">
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-name">Nombre completo</label>
+              <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+              <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-email">Correo electrónico</label>
+              <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
+              <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
+            </div>
+            <div class="request-form-group">
+              <label class="request-form-label" for="req-message">Detalles del espacio</label>
+              <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: oficina en Santiago, dos divisiones de sheetrock, pintura e iluminación para un área aproximada de 80 m²."></textarea>
+            </div>
+            <button type="submit" class="request-btn-submit" id="req-submit-btn">
+              <i data-lucide="send" aria-hidden="true"></i>
+              Enviar solicitud
+            </button>
+            <p class="premium-form-note"><i data-lucide="shield-check" aria-hidden="true"></i> Usaremos estos datos para responder a tu solicitud. Consulta nuestra <a href="privacidad.html">política de privacidad</a>.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="service-products-section" id="related-products-section" style="display:none;">
       <div class="container">
-        <h3>Equipos relacionados de nuestro catálogo</h3>
-        <p>Selecciona los componentes recomendados para tu proyecto. Puedes agregarlos al carrito y cotizarlos juntos.</p>
-        <div class="products-grid-wrapper" id="service-products-grid">
-          <!-- Dynamically filled by script -->
-        </div>
+        <h3>Productos relacionados con tu proyecto</h3>
+        <p>Materiales y equipos disponibles bajo cotización, según el alcance definido.</p>
+        <div class="products-grid-wrapper" id="service-products-grid"></div>
       </div>
     </section>
 
-    <!-- Sección de Servicios Relacionados -->
-    <section class="related-services-section reveal">
+    <section class="premium-section premium-section--soft" aria-labelledby="infra-related-title">
       <div class="container">
-        <h3 class="related-services-title">También podría interesarte...</h3>
-        <div class="related-services-grid">
-          <a href="energia-climatizacion.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-solar-panel"></i>
-            </div>
-            <h4>Energía y Climatización</h4>
-            <p>Sistemas solares fotovoltaicos, respaldo UPS para equipos críticos e inversores para asegurar energía ininterrumpida.</p>
-            <span class="related-service-btn">Ver Soluciones <i class="fas fa-arrow-right"></i></span>
+        <div class="premium-heading">
+          <span class="premium-kicker">Soluciones conectadas</span>
+          <h2 id="infra-related-title">Completa el espacio con la capa tecnológica.</h2>
+        </div>
+        <div class="premium-related">
+          <a href="redes-datos.html">
+            <i data-lucide="network" aria-hidden="true"></i>
+            <h3>Redes y datos</h3>
+            <p>Cableado, WiFi y racks coordinados con la nueva distribución.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
-
-          <a href="redes-datos.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-network-wired"></i>
-            </div>
-            <h4>Redes y Cableado Estructurado</h4>
-            <p>Diseño e instalación de redes inalámbricas corporativas, racks de telecomunicaciones y cableado estructurado certificado.</p>
-            <span class="related-service-btn">Ver Soluciones <i class="fas fa-arrow-right"></i></span>
+          <a href="seguridad-electronica.html">
+            <i data-lucide="shield-check" aria-hidden="true"></i>
+            <h3>Seguridad electrónica</h3>
+            <p>Cámaras, acceso y protección previstos desde la adecuación.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
-
-          <a href="corporativo.html" class="related-service-card">
-            <div class="related-service-icon">
-              <i class="fas fa-building"></i>
-            </div>
-            <h4>Soluciones Corporativas</h4>
-            <p>Enlaces de datos, internet simétrico B2B, telefonía IP y consultoría tecnológica especializada para tu empresa.</p>
-            <span class="related-service-btn">Ver Soluciones <i class="fas fa-arrow-right"></i></span>
+          <a href="mobiliario-suministros.html">
+            <i data-lucide="armchair" aria-hidden="true"></i>
+            <h3>Mobiliario y suministros</h3>
+            <p>Estaciones, sillas y almacenamiento para terminar de equipar.</p>
+            <span>Ver solución <i data-lucide="arrow-right" aria-hidden="true"></i></span>
           </a>
         </div>
       </div>
     </section>
-
   </main>
 
     <!-- Footer -->
@@ -494,8 +672,8 @@
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
   <script defer src="js/chatbot.js?v=20260628"></script>
-  <script src="js/main.js?v=3.2"></script>
-  <script defer src="js/service-page.js"></script>
+  <script src="js/main.js?v=20260712"></script>
+  <script defer src="js/service-page.js?v=20260712"></script>
 </body>
 </html>
 

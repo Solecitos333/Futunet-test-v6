@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/navbar.css?v=3.6" />
   <link rel="stylesheet" href="css/sections.css?v=3.5" />
   <link rel="stylesheet" href="css/catalog.css?v=20260705-release.1" />
-  <link rel="stylesheet" href="css/portal-rapido.css?v=1.0" />
+  <link rel="stylesheet" href="css/portal-rapido.css?v=20260712" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
@@ -25,7 +25,6 @@
   <link rel="manifest" href="manifest.json" />
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
   <style>
     .service-page { padding-top: 80px; min-height: 100vh; background: #ffffff; }
@@ -156,6 +155,7 @@
   <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
 
   <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
     <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
@@ -382,7 +382,7 @@
     </div>
   </header>
 
-  <main class="service-page">
+  <main id="main-content" class="service-page" tabindex="-1">
     <!-- Hero Banner -->
     <section class="service-hero" style="background-image: url('img/hero-tech-bg.webp');">
       <div class="container">
@@ -912,8 +912,8 @@
   <script defer src="js/firebase-config.js?v=20260628"></script>
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/chatbot.js?v=20260628"></script>
-  <script src="js/main.js?v=3.2"></script>
-  <script defer src="js/service-page.js"></script>
+  <script src="js/main.js?v=20260712"></script>
+  <script defer src="js/service-page.js?v=20260712"></script>
   <script>
     function selectB2bPlan(planName, speed, price) {
       var messageArea = document.getElementById('req-message');

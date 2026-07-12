@@ -107,7 +107,7 @@
           energia: 'Energía y respaldo',
           equipos: 'Laptops corporativas',
           oficina: 'Mobiliario',
-          infra: 'remozamiento profesional'
+          infra: 'Remozamiento Profesional'
         };
         var defaultCategory = catMapping[serviceId];
         if (defaultCategory) {

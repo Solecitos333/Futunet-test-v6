@@ -53,30 +53,32 @@
       storage = window.FutunetFirebase.storage;
     }
 
-    // Escuchar cambios de Auth de forma segura
-    FutunetAuth.authReady.then(function () {
-      FutunetAuth.onAuthChanged(async function (user, fullUserData) {
-        if (user) {
-          currentUser = user;
-          userData = fullUserData;
-          if (userData) {
-            // Verificar si es un cliente de internet configurado administrativamente
-            if (userData.isInternetClient) {
-              showPortalView();
+    // La landing pública es el estado base: la autenticación mejora la vista,
+    // pero un fallo de Firebase/CDN nunca debe dejar al visitante en un loader eterno.
+    showPublicView();
+    if (window.FutunetAuth && FutunetAuth.authReady) {
+      FutunetAuth.authReady.then(function () {
+        FutunetAuth.onAuthChanged(async function (user, fullUserData) {
+          if (user) {
+            currentUser = user;
+            userData = fullUserData;
+            if (userData) {
+              if (userData.isInternetClient) showPortalView();
+              else showNoClientView();
             } else {
-              showNoClientView();
+              await loadPortalUser();
             }
           } else {
-            // Fallback en caso de que no se hayan devuelto los datos completos en el listener
-            await loadPortalUser();
+            currentUser = null;
+            userData = null;
+            showPublicView();
           }
-        } else {
-          currentUser = null;
-          userData = null;
-          showPublicView();
-        }
+        });
+      }).catch(function (error) {
+        console.warn('No se pudo resolver la sesión del portal; se mantiene la vista pública.', error);
+        showPublicView();
       });
-    });
+    }
 
     // Detectar instalación PWA e inicializar triggers
     setupPwaInstructions();
