@@ -110,6 +110,8 @@ const state = {
   dept: 'all',
   category: 'all',
   brand: 'all',
+  availability: 'all',
+  sort: 'relevance',
   searchQuery: null,
   page: 0,
   pageSize: 20,
@@ -118,6 +120,75 @@ const state = {
   minPrice: 0,
   maxPrice: 9999999
 };
+
+function getExplicitAvailability(product) {
+  const raw = normalizeSearch(product?.availability || product?.stockStatus || product?.status || '');
+  const stock = Number(product?.stock);
+  if (Number.isFinite(stock) && stock > 0) return 'available';
+  if (/(disponible|en stock|instock)/.test(raw)) return 'available';
+  if (/(agotado|sin stock|outofstock)/.test(raw) || stock === 0) return 'unavailable';
+  return 'unknown';
+}
+
+function getAvailabilityLabel(product) {
+  if (isServiceItem(product)) return 'Evaluación previa';
+  const availability = getExplicitAvailability(product);
+  if (availability === 'available') return 'Disponible';
+  if (availability === 'unavailable') return 'No disponible';
+  return 'Consultar disponibilidad';
+}
+
+function sortCatalogProducts(products) {
+  const list = products.slice();
+  if (state.sort === 'name-asc') {
+    list.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), 'es'));
+  } else if (state.sort === 'name-desc') {
+    list.sort((a, b) => String(b.title || '').localeCompare(String(a.title || ''), 'es'));
+  } else if (state.sort === 'price-asc') {
+    list.sort((a, b) => {
+      const priceA = parsePrice(a.price) || Number.POSITIVE_INFINITY;
+      const priceB = parsePrice(b.price) || Number.POSITIVE_INFINITY;
+      return priceA - priceB;
+    });
+  } else if (state.sort === 'price-desc') {
+    list.sort((a, b) => (parsePrice(b.price) || 0) - (parsePrice(a.price) || 0));
+  }
+  return list;
+}
+
+function applyAvailabilityFilter(products) {
+  if (state.availability === 'all') return products;
+  return products.filter((product) => getExplicitAvailability(product) === state.availability);
+}
+
+function syncCatalogUrl() {
+  if (!window.location.pathname.toLowerCase().includes('catalogo.html')) return;
+  const params = new URLSearchParams();
+  if (state.searchQuery) params.set('q', state.searchQuery);
+  if (state.dept !== 'all') params.set('cat', state.dept);
+  if (state.category !== 'all') params.set('category', state.category);
+  if (state.brand !== 'all') params.set('brand', state.brand);
+  if (state.availability !== 'all') params.set('availability', state.availability);
+  if (state.sort !== 'relevance') params.set('sort', state.sort);
+  if (state.minPrice > 0) params.set('min', String(state.minPrice));
+  if (state.maxPrice < 9999999) params.set('max', String(state.maxPrice));
+  const query = params.toString();
+  window.history.replaceState({}, '', `catalogo.html${query ? `?${query}` : ''}`);
+}
+
+function populateBrandFilter() {
+  const selects = document.querySelectorAll('[data-catalog-brand-filter]');
+  if (!selects.length) return;
+  const brands = [...new Set(mockDatabase.map((product) => String(product.brand || '').trim()).filter(Boolean))]
+    .sort((a, b) => a.localeCompare(b, 'es'));
+  selects.forEach((select) => {
+    const current = select.value || state.brand;
+    select.innerHTML = '<option value="all">Todas las marcas</option>' + brands
+      .map((brand) => `<option value="${escapeHTML(brand)}">${escapeHTML(brand)}</option>`)
+      .join('');
+    select.value = brands.includes(current) ? current : 'all';
+  });
+}
 
 function renderInlineAddButtonHTML(productId, variant = 'default') {
   const qty = window.FutunetCart ? window.FutunetCart.getItemQty(productId) : 0;
@@ -846,6 +917,7 @@ function updateContextualBanner() {
 function renderUI() {
   const container = document.getElementById('catalog-grid-container');
   if (!container) return;
+  syncCatalogUrl();
   updateContextualBanner();
   container.innerHTML = '';
   const compactMobile = isCompactMobileViewport();
@@ -872,6 +944,9 @@ function renderUI() {
       const price = parsePrice(p.price);
       return price >= state.minPrice && price <= state.maxPrice;
     });
+
+    if (state.brand !== 'all') results = results.filter(p => p.brand === state.brand);
+    results = sortCatalogProducts(applyAvailabilityFilter(results));
 
     updateCatalogContextBar({
       title: 'Resultados de búsqueda',
@@ -902,6 +977,7 @@ function renderUI() {
   // 2. Filtrado Base por Departamento
   let db = mockDatabase;
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
+  if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
 
   // Apply Price Range Filter
   db = db.filter(p => {
@@ -909,6 +985,7 @@ function renderUI() {
     const price = parsePrice(p.price);
     return price >= state.minPrice && price <= state.maxPrice;
   });
+  db = sortCatalogProducts(applyAvailabilityFilter(db));
 
   // NIVEL 1: CUBÍCULOS DE SUBCATEGORÍAS
   if (state.category === 'all') {
@@ -1095,7 +1172,16 @@ function clearSearch() {
   state.dept = 'all';
   state.category = 'all';
   state.brand = 'all';
+  state.availability = 'all';
+  state.sort = 'relevance';
   closeMobileFilters();
+
+  const brandFilter = document.querySelector('[data-catalog-brand-filter]');
+  if (brandFilter) brandFilter.value = 'all';
+  const availabilityFilter = document.querySelector('[data-catalog-availability-filter]');
+  if (availabilityFilter) availabilityFilter.value = 'all';
+  const sortFilter = document.querySelector('[data-catalog-sort]');
+  if (sortFilter) sortFilter.value = 'relevance';
 
   const catalogSearch = document.getElementById('search-catalog-page');
   if (catalogSearch) catalogSearch.value = '';
@@ -1751,6 +1837,35 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   bindCatalogInterface();
   initPriceFilter();
+  populateBrandFilter();
+
+  const brandFilter = document.querySelector('[data-catalog-brand-filter]');
+  if (brandFilter) {
+    brandFilter.addEventListener('change', (e) => {
+      state.brand = e.target.value;
+      state.page = 0;
+      renderUI();
+    });
+  }
+
+  const availabilityFilter = document.querySelector('[data-catalog-availability-filter]');
+  if (availabilityFilter) {
+    availabilityFilter.addEventListener('change', (e) => {
+      state.availability = e.target.value;
+      state.page = 0;
+      renderUI();
+    });
+  }
+
+  const sortFilter = document.querySelector('[data-catalog-sort]');
+  if (sortFilter) {
+    sortFilter.addEventListener('change', (e) => {
+      state.sort = e.target.value;
+      state.page = 0;
+      renderUI();
+    });
+  }
+
   const mobileFilterTrigger = document.getElementById('catalog-mobile-filter-trigger');
   const mobileFilterBarTrigger = document.getElementById('catalog-mobile-filter-bar-trigger');
   const mobileFilterClosers = document.querySelectorAll('[data-close-mobile-filters]');
@@ -1777,6 +1892,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const q = params.get('q');
     const brand = params.get('brand');
+    const availability = params.get('availability');
+    const sort = params.get('sort');
+
+    if (availability) {
+      state.availability = availability;
+      const availabilityFilter = document.querySelector('[data-catalog-availability-filter]');
+      if (availabilityFilter) availabilityFilter.value = availability;
+    }
+    if (sort) {
+      state.sort = sort;
+      const sortFilter = document.querySelector('[data-catalog-sort]');
+      if (sortFilter) sortFilter.value = sort;
+    }
 
     if (q) {
       state.searchQuery = q;
@@ -1784,14 +1912,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       syncFilterButtons('all');
       const initialInput = document.getElementById('search-catalog-page');
       if (initialInput) initialInput.value = q;
+      if (brand) {
+        state.brand = brand;
+        const brandFilter = document.querySelector('[data-catalog-brand-filter]');
+        if (brandFilter) brandFilter.value = brand;
+      }
       renderUI();
     } else if (brand) {
-      // Filtrar por marca desde los logos del Index
-      state.searchQuery = brand;
-      logSearchQuery(brand);
+      state.brand = brand;
+      const brandFilter = document.querySelector('[data-catalog-brand-filter]');
+      if (brandFilter) brandFilter.value = brand;
       syncFilterButtons('all');
-      const initialInput = document.getElementById('search-catalog-page');
-      if (initialInput) initialInput.value = brand;
       renderUI();
     } else {
       const cat = params.get('cat') || 'all';

@@ -80,7 +80,7 @@ function sendForm(event) {
 
   // Abrir WhatsApp con el mensaje construido
   window.open(
-    `https://wa.me/18297411041?text=${encodeURIComponent(text)}`,
+    `https://wa.me/${(window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041'}?text=${encodeURIComponent(text)}`,
     '_blank'
   );
 }

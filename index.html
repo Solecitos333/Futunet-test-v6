@@ -679,8 +679,17 @@
         </div>
       </div>
 
-      <!-- Sección de Planes Interactivos -->
-      <div class="portal-tabs-section reveal">
+      <!-- Panel desplegable de Planes Internet -->
+      <details class="home-plans-disclosure reveal" id="home-plans-disclosure">
+        <summary class="home-plans-disclosure__summary">
+          <span class="home-plans-disclosure__icon"><i data-lucide="wifi"></i></span>
+          <span class="home-plans-disclosure__copy">
+            <strong>Ver planes de Internet</strong>
+            <small>Despliega para comparar velocidades, beneficios y precios.</small>
+          </span>
+          <i class="home-plans-disclosure__chevron" data-lucide="chevron-down" aria-hidden="true"></i>
+        </summary>
+        <div class="portal-tabs-section home-plans-disclosure__content">
         <!-- Navegación de Pestañas -->
         <div class="portal-tabs-nav" role="tablist" aria-label="Planes por tipo">
           <button type="button" class="portal-tab-btn active" role="tab" aria-selected="true" aria-controls="panel-hogar" id="tab-hogar" onclick="switchPortalTab('hogar')">
@@ -864,6 +873,7 @@
           <div class="plans-dots" id="home-plans-empresas-dots" aria-label="Navegación de planes Empresas"></div>
         </div>
       </div>
+      </details>
     </div>
 </section>
 
@@ -1632,6 +1642,17 @@
 
       setupPlansCarousel('home-plans-hogar-grid', 'home-plans-hogar-dots', 'refreshHogarCarousel');
       setupPlansCarousel('home-plans-empresas-grid', 'home-plans-empresas-dots', 'refreshEmpresasCarousel');
+
+      const plansDisclosure = document.getElementById('home-plans-disclosure');
+      if (plansDisclosure) {
+        plansDisclosure.addEventListener('toggle', () => {
+          if (!plansDisclosure.open) return;
+          requestAnimationFrame(() => {
+            if (typeof window.refreshHogarCarousel === 'function') window.refreshHogarCarousel();
+            if (typeof window.refreshEmpresasCarousel === 'function') window.refreshEmpresasCarousel();
+          });
+        });
+      }
 
       // Lazy-load Google Maps iframe (solo se carga si está cerca del viewport)
       const mapFrame = document.querySelector('.contact-map-frame');

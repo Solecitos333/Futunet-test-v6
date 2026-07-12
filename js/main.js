@@ -780,6 +780,7 @@ function initTopMenuHighlight() {
 // =============================================================
 document.addEventListener('DOMContentLoaded', () => {
   // Inicialización de logo, navbar y vistas adaptables
+  normalizeSiteNavigation();
   initLogoFlip();
   syncViewportUIVars();
   syncHomeTrustBarPlacement();
@@ -853,5 +854,208 @@ function selectHomePlan(planName, planId, price) {
   }, 1000);
 }
 window.selectHomePlan = selectHomePlan;
+
+/* -------------------------------------------------------------
+   NAVEGACION GLOBAL — una sola arquitectura para todo el sitio
+   ------------------------------------------------------------- */
+function normalizeSiteNavigation() {
+  const header = document.querySelector('.site-header');
+  const navbar = document.getElementById('navbar');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (!header || !navbar || !mobileMenu) return;
+
+  const waNum = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
+  const waNumFormatted = waNum === '18297411041' ? '829-741-1041' : waNum;
+
+  const topBar = header.querySelector('.claro-top-bar');
+  if (topBar) {
+    topBar.innerHTML = `
+      <div class="container site-utility-inner">
+        <nav class="site-utility-links" aria-label="Navegación de utilidad">
+          <a href="index.html">Hogar</a>
+          <a href="corporativo.html">Empresas</a>
+          <a href="login.html">Área de clientes</a>
+          <a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer">Ubicación</a>
+          <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </nav>
+        <span class="site-utility-location"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Santiago, RD</span>
+      </div>`;
+  }
+
+  const navInner = navbar.querySelector('.nav-inner');
+  if (navInner) {
+    navInner.innerHTML = `
+      <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+        <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
+      </a>
+      <ul class="nav-menu" aria-label="Navegación principal">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="has-mega">
+          <a href="internet.html" class="mega-trigger" aria-haspopup="true">Internet <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <div class="mega-menu-container mega-menu-container--compact">
+            <div class="mega-menu-grid mega-menu-grid--single">
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Internet Futunet</div>
+                <ul>
+                  <li><a href="internet.html#planes">Planes para el hogar</a></li>
+                  <li><a href="internet.html#planes">Internet para empresas</a></li>
+                  <li><a href="internet.html#cobertura">Prevalidar cobertura</a></li>
+                  <li><a href="internet.html#planes">Comparar planes</a></li>
+                  <li><a href="internet.html#faqs">Preguntas frecuentes</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-mega">
+          <a href="index.html#soluciones" class="mega-trigger" aria-haspopup="true">Soluciones <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <div class="mega-menu-container">
+            <div class="mega-menu-grid mega-menu-grid--two">
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Tecnología e infraestructura</div>
+                <ul>
+                  <li><a href="seguridad-electronica.html">Seguridad electrónica</a></li>
+                  <li><a href="redes-datos.html">Redes y conectividad</a></li>
+                  <li><a href="energia-climatizacion.html">Energía y climatización</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Espacios de trabajo</div>
+                <ul>
+                  <li><a href="equipos-oficina.html">Equipos de oficina</a></li>
+                  <li><a href="mobiliario-suministros.html">Mobiliario y suministros</a></li>
+                  <li><a href="infraestructura-remozamiento.html">Infraestructura y remozamiento</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-mega">
+          <a href="catalogo.html" class="mega-trigger" aria-haspopup="true">Tienda <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <div class="mega-menu-container">
+            <div class="mega-menu-grid mega-menu-grid--two">
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Productos</div>
+                <ul>
+                  <li><a href="catalogo.html?cat=equipos">Computadoras y laptops</a></li>
+                  <li><a href="catalogo.html?cat=redes">Redes y WiFi</a></li>
+                  <li><a href="catalogo.html?cat=seguridad">Cámaras y seguridad</a></li>
+                </ul>
+              </div>
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Más categorías</div>
+                <ul>
+                  <li><a href="catalogo.html?cat=energia">Energía y climatización</a></li>
+                  <li><a href="catalogo.html?cat=oficina">Impresoras, oficina y mobiliario</a></li>
+                  <li><a href="catalogo.html">Ver catálogo completo</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="has-mega">
+          <a href="index.html#contacto" class="mega-trigger" aria-haspopup="true">Soporte <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <div class="mega-menu-container mega-menu-container--compact">
+            <div class="mega-menu-grid mega-menu-grid--single">
+              <div class="mega-menu-col">
+                <div class="mega-menu-title">Ayuda y autogestión</div>
+                <ul>
+                  <li><a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer">WhatsApp de soporte</a></li>
+                  <li><a href="internet.html#faqs">Preguntas frecuentes</a></li>
+                  <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer">Medir velocidad</a></li>
+                  <li><a href="login.html">Área de clientes</a></li>
+                  <li><a href="login.html?redirect=internet.html">Reportar avería</a></li>
+                  <li><a href="login.html?redirect=facturacion.html">Ver factura y reportar pago</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="index.html#contacto" class="nav-quote-link">Cotizar proyecto</a></li>
+      </ul>
+      <div class="nav-actions">
+        <div class="navbar-auth-container"></div>
+        <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" class="nav-wa-btn" aria-label="Hablar con Futunet por WhatsApp">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i><span>${waNumFormatted}</span>
+        </a>
+      </div>
+      <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+        <span></span><span></span><span></span>
+      </button>`;
+  }
+
+  mobileMenu.innerHTML = `
+    <div class="mobile-menu__head">
+      <strong>Menú</strong>
+      <button type="button" class="mobile-menu__close" data-close-mobile-menu aria-label="Cerrar menú"><i class="fas fa-times" aria-hidden="true"></i></button>
+    </div>
+    <a href="index.html" data-close-mobile-menu>Inicio</a>
+    <details class="mobile-details">
+      <summary class="mobile-summary">Internet <i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
+      <div class="mobile-details-content">
+        <a href="internet.html#planes" data-close-mobile-menu>Planes para el hogar</a>
+        <a href="internet.html#planes" data-close-mobile-menu>Internet para empresas</a>
+        <a href="internet.html#cobertura" data-close-mobile-menu>Prevalidar cobertura</a>
+        <a href="internet.html#planes" data-close-mobile-menu>Comparar planes</a>
+        <a href="internet.html#faqs" data-close-mobile-menu>Preguntas frecuentes</a>
+      </div>
+    </details>
+    <details class="mobile-details">
+      <summary class="mobile-summary">Soluciones <i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
+      <div class="mobile-details-content">
+        <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad electrónica</a>
+        <a href="redes-datos.html" data-close-mobile-menu>Redes y conectividad</a>
+        <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y climatización</a>
+        <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de oficina</a>
+        <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y suministros</a>
+        <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Infraestructura y remozamiento</a>
+      </div>
+    </details>
+    <details class="mobile-details">
+      <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
+      <div class="mobile-details-content">
+        <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y laptops</a>
+        <a href="catalogo.html?cat=redes" data-close-mobile-menu>Redes y WiFi</a>
+        <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras y seguridad</a>
+        <a href="catalogo.html?cat=energia" data-close-mobile-menu>Energía y climatización</a>
+        <a href="catalogo.html?cat=oficina" data-close-mobile-menu>Impresoras, oficina y mobiliario</a>
+        <a href="catalogo.html" data-close-mobile-menu>Ver catálogo completo</a>
+      </div>
+    </details>
+    <details class="mobile-details">
+      <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
+      <div class="mobile-details-content">
+        <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>WhatsApp de soporte</a>
+        <a href="internet.html#faqs" data-close-mobile-menu>Preguntas frecuentes</a>
+        <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Medir velocidad</a>
+        <a href="login.html" data-close-mobile-menu>Área de clientes</a>
+        <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+        <a href="login.html?redirect=facturacion.html" data-close-mobile-menu>Ver factura y reportar pago</a>
+      </div>
+    </details>
+    <a href="index.html#contacto" class="mobile-menu__quote" data-close-mobile-menu>Cotizar proyecto</a>
+    <div class="mobile-menu__utility">
+      <a href="corporativo.html" data-close-mobile-menu>Empresas</a>
+      <a href="login.html" data-close-mobile-menu>Área de clientes</a>
+      <a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Ubicación</a>
+    </div>
+    <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link" data-close-mobile-menu>
+      <i class="fab fa-whatsapp" aria-hidden="true"></i> ${waNumFormatted}
+    </a>
+    <div class="navbar-auth-container mobile-auth-container"></div>`;
+
+  const filename = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const activeGroup = filename === 'internet.html' ? 'internet.html'
+    : filename === 'catalogo.html' || filename === 'producto.html' || filename.startsWith('marca-') ? 'catalogo.html'
+    : ['seguridad-electronica.html', 'redes-datos.html', 'energia-climatizacion.html', 'equipos-oficina.html', 'mobiliario-suministros.html', 'infraestructura-remozamiento.html', 'corporativo.html'].includes(filename) ? 'index.html#soluciones'
+    : filename === 'index.html' ? 'index.html' : '';
+
+  if (activeGroup) {
+    document.querySelectorAll(`.nav-menu > li > a[href="${activeGroup}"], .mobile-menu > a[href="${activeGroup}"]`).forEach((link) => {
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    });
+  }
+}
 
 

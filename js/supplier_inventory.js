@@ -7,6 +7,7 @@
       defaultCategory: 'Equipos de Oficina'
     },
     selektronic: { label: 'Equipos Usados Selektronic', allowedConcepts: ['computadoras', 'generico'], defaultDepartment: 'equipos', defaultCategory: 'Computadoras' },
+    tgm: { label: 'TGM Air Conditioning', allowedConcepts: ['aire', 'climatizacion'], defaultDepartment: 'energia', defaultCategory: 'Aires Acondicionados' },
     improoficinas: {
       label: 'Mayorista de oficina',
       allowedConcepts: ['mobiliario', 'papeleria', 'suministros', 'impresora', 'archivo', 'silla', 'escritorio'],
@@ -738,9 +739,54 @@
       specs: ['Procesador: Intel Core i5 de 7.ª generación', 'Memoria RAM: 8 GB', 'Almacenamiento: SSD de 128 GB', 'Pantalla: 14 pulgadas', 'Condición: Reacondicionada', 'Sujeto a disponibilidad'],
       sourceUrl: 'https://www.dell.com/support/product-details/en-us/product/latitude-14-5490-laptop/overview'
     },
-],
+  ],
 
-    improoficinas: [
+  tgm: [
+    {
+      id: 'tgm_mwfot_12000_btu',
+      title: 'Aire acondicionado TGM Mini-Split 12,000 BTU',
+      brand: 'TGM', category: 'Aires Acondicionados', price: 'Consultar precio',
+      img: 'img/productos/tgm/tgm-fixed-speed-12000-btu.webp', gallery: ['img/productos/tgm/tgm-fixed-speed-12000-btu.webp', 'img/productos/tgm/tgm-mwfot-official-specs.webp', 'img/productos/tgm/tgm-mwfot-official-features.webp'],
+      imageSources: [
+        { src: 'img/productos/tgm/tgm-fixed-speed-12000-btu.webp', alt: 'Unidad interior TGM MWFOT12S de 12,000 BTU', type: 'front', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-specs.webp', alt: 'Ficha técnica oficial de la serie TGM MWFOT', type: 'specification', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-features.webp', alt: 'Funciones registradas en la ficha oficial TGM MWFOT', type: 'detail', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' }
+      ],
+      desc: 'Mini-Split TGM de velocidad fija para climatización residencial y comercial ligera.',
+      specs: ['Marca: TGM', 'Modelo: MWFOT12S / MRFOT12AS', 'Capacidad: 12,000 BTU/h', 'Tipo: Mini-Split de velocidad fija (convencional)', 'Eficiencia energética: EER 2.8 W/W; SEER no indicado en la ficha', 'Voltaje y frecuencia: 220-230 V, 60 Hz, 1 fase', 'Corriente nominal / máxima: 5.7 A / 9.0 A', 'Refrigerante: R410A, carga indicada de 0.46 kg', 'Área de aplicación estimada por el fabricante: 16-23 m²', 'Nivel de ruido interior (alto/medio/bajo): 39 / 31.5 / 26.5 dB(A)', 'Nivel de ruido exterior: 53 dB(A)', 'Funciones documentadas: modo silencioso, memoria de posición de aleta, encendido manual y detección de fuga de refrigerante', 'Filtro: alta densidad', 'WiFi y funciones inteligentes: no documentadas en la ficha oficial', 'Dimensiones unidad interior (ancho × fondo × alto): 805 × 194 × 285 mm', 'Dimensiones unidad exterior (ancho × fondo × alto): 681 × 285 × 434 mm', 'Peso neto interior / exterior: 8.0 / 23.7 kg', 'Tubería líquido / gas: 6.35 / 9.52 mm (1/4 / 3/8 pulgadas)', 'Longitud máxima de tubería / desnivel: 20 m / 8 m', 'Accesorios: kit de tubería indicado como incluido por el fabricante', 'Instalación: requiere alimentación compatible y validación del recorrido, drenaje y soportes', 'Garantía: confirmar al cotizar', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf'
+    },
+    {
+      id: 'tgm_mwfot_18000_btu',
+      title: 'Aire acondicionado TGM Mini-Split 18,000 BTU',
+      brand: 'TGM', category: 'Aires Acondicionados', price: 'Consultar precio',
+      img: 'img/productos/tgm/tgm-fixed-speed-18000-btu.webp', gallery: ['img/productos/tgm/tgm-fixed-speed-18000-btu.webp', 'img/productos/tgm/tgm-mwfot-official-specs.webp', 'img/productos/tgm/tgm-mwfot-official-features.webp'],
+      imageSources: [
+        { src: 'img/productos/tgm/tgm-fixed-speed-18000-btu.webp', alt: 'Unidad interior TGM MWFOT18S de 18,000 BTU', type: 'front', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-specs.webp', alt: 'Ficha técnica oficial de la serie TGM MWFOT', type: 'specification', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-features.webp', alt: 'Funciones registradas en la ficha oficial TGM MWFOT', type: 'detail', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' }
+      ],
+      desc: 'Mini-Split TGM de velocidad fija con mayor capacidad para espacios medianos.',
+      specs: ['Marca: TGM', 'Modelo: MWFOT18S / MRFOT18AS', 'Capacidad: 18,000 BTU/h', 'Tipo: Mini-Split de velocidad fija (convencional)', 'Eficiencia energética: EER 2.8 W/W; SEER no indicado en la ficha', 'Voltaje y frecuencia: 220-230 V, 60 Hz, 1 fase', 'Corriente nominal / máxima: 8.4 A / 11.9 A', 'Refrigerante: R410A, carga indicada de 560 g', 'Área de aplicación estimada por el fabricante: 24-35 m²', 'Nivel de ruido interior (alto/medio/bajo): 42.9 / 38.2 / 34.6 dB(A)', 'Nivel de ruido exterior: 58.4 dB(A)', 'Funciones documentadas: modo silencioso, memoria de posición de aleta, encendido manual y detección de fuga de refrigerante', 'Filtro: alta densidad', 'WiFi y funciones inteligentes: no documentadas en la ficha oficial', 'Dimensiones unidad interior (ancho × fondo × alto): 957 × 213 × 302 mm', 'Dimensiones unidad exterior (ancho × fondo × alto): 770 × 300 × 555 mm', 'Peso neto interior / exterior: 10 / 31.9 kg', 'Tubería líquido / gas: 6.35 / 12.7 mm (1/4 / 1/2 pulgadas)', 'Longitud máxima de tubería / desnivel: 25 m / 10 m', 'Accesorios: kit de tubería indicado como incluido por el fabricante', 'Instalación: requiere alimentación compatible y validación del recorrido, drenaje y soportes', 'Garantía: confirmar al cotizar', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf'
+    },
+    {
+      id: 'tgm_mwfot_24000_btu',
+      title: 'Aire acondicionado TGM Mini-Split 24,000 BTU',
+      brand: 'TGM', category: 'Aires Acondicionados', price: 'Consultar precio',
+      img: 'img/productos/tgm/tgm-fixed-speed-24000-btu.webp', gallery: ['img/productos/tgm/tgm-fixed-speed-24000-btu.webp', 'img/productos/tgm/tgm-mwfot-official-specs.webp', 'img/productos/tgm/tgm-mwfot-official-features.webp'],
+      imageSources: [
+        { src: 'img/productos/tgm/tgm-fixed-speed-24000-btu.webp', alt: 'Unidad interior TGM MWFOT24S de 24,000 BTU', type: 'front', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-specs.webp', alt: 'Ficha técnica oficial de la serie TGM MWFOT', type: 'specification', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' },
+        { src: 'img/productos/tgm/tgm-mwfot-official-features.webp', alt: 'Funciones registradas en la ficha oficial TGM MWFOT', type: 'detail', source: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf' }
+      ],
+      desc: 'Mini-Split TGM de velocidad fija para áreas amplias y necesidades de climatización exigentes.',
+      specs: ['Marca: TGM', 'Modelo: MWFOT24S / MRFOT24AS', 'Capacidad: 24,000 BTU/h', 'Tipo: Mini-Split de velocidad fija (convencional)', 'Eficiencia energética: EER 2.8 W/W; SEER no indicado en la ficha', 'Voltaje y frecuencia: 220-230 V, 60 Hz, 1 fase', 'Corriente nominal / máxima: 11.4 A / 17 A', 'Refrigerante: R410A, carga indicada de 910 g', 'Área de aplicación estimada por el fabricante: 32-47 m²', 'Nivel de ruido interior (alto/medio/bajo): 47.7 / 41.3 / 38.1 dB(A)', 'Nivel de ruido exterior: 57.6 dB(A)', 'Funciones documentadas: modo silencioso, memoria de posición de aleta, encendido manual y detección de fuga de refrigerante', 'Filtro: alta densidad', 'WiFi y funciones inteligentes: no documentadas en la ficha oficial', 'Dimensiones unidad interior (ancho × fondo × alto): 1040 × 220 × 327 mm', 'Dimensiones unidad exterior (ancho × fondo × alto): 845 × 363 × 702 mm', 'Peso neto interior / exterior: 13 / 40.8 kg', 'Tubería líquido / gas: 9.52 / 15.9 mm (3/8 / 5/8 pulgadas)', 'Longitud máxima de tubería / desnivel: 25 m / 10 m', 'Accesorios: kit de tubería indicado como incluido por el fabricante', 'Instalación: requiere alimentación compatible y validación del recorrido, drenaje y soportes', 'Garantía: confirmar al cotizar', 'Sujeto a disponibilidad'],
+      sourceUrl: 'https://tgmairconditioning.com/wp-content/uploads/2018/07/MWFOTSpecs.pdf'
+    }
+  ],
+
+  improoficinas: [
       {
         id: 'mob_oficina_1',
         department: 'oficina',

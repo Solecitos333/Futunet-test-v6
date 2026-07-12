@@ -162,6 +162,47 @@
   background: var(--brand-pale);
 }
 
+.catalog-reset-trigger[hidden] { display: none !important; }
+
+.catalog-control-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.catalog-control {
+  display: grid;
+  gap: 6px;
+}
+
+.catalog-control span {
+  color: var(--text-muted);
+  font-size: .76rem;
+  font-weight: 700;
+}
+
+.catalog-control select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 36px 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: .84rem;
+}
+
+.catalog-control select:focus-visible {
+  outline: 3px solid rgba(10, 112, 162, .2);
+  border-color: var(--brand);
+}
+
+@media (max-width: 767px) {
+  .catalog-control-bar { grid-template-columns: 1fr; }
+}
+
 /* ── Grid de productos (Mobile: 2 col) ── */
 .products-grid {
   display: grid; grid-template-columns: 1fr; gap: 14px;

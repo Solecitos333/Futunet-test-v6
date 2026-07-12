@@ -332,6 +332,33 @@
                 Limpiar vista
               </button>
             </div>
+            <div class="catalog-control-bar" aria-label="Filtros y orden del catálogo">
+              <label class="catalog-control">
+                <span>Marca</span>
+                <select data-catalog-brand-filter aria-label="Filtrar por marca">
+                  <option value="all">Todas las marcas</option>
+                </select>
+              </label>
+              <label class="catalog-control">
+                <span>Disponibilidad</span>
+                <select data-catalog-availability-filter aria-label="Filtrar por disponibilidad">
+                  <option value="all">Toda disponibilidad</option>
+                  <option value="available">Registrado como disponible</option>
+                  <option value="unknown">Consultar disponibilidad</option>
+                  <option value="unavailable">No disponible</option>
+                </select>
+              </label>
+              <label class="catalog-control">
+                <span>Ordenar</span>
+                <select data-catalog-sort aria-label="Ordenar resultados">
+                  <option value="relevance">Relevancia</option>
+                  <option value="price-asc">Precio: menor a mayor</option>
+                  <option value="price-desc">Precio: mayor a menor</option>
+                  <option value="name-asc">Nombre: A a Z</option>
+                  <option value="name-desc">Nombre: Z a A</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <button class="catalog-mobile-filter-trigger" id="catalog-mobile-filter-trigger" type="button">
