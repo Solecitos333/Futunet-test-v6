@@ -888,6 +888,11 @@ function normalizeSiteNavigation() {
       <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
         <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
       </a>
+      <form class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido" action="catalogo.html" method="GET">
+        <i class="fas fa-search nav-search-compact__icon" aria-hidden="true"></i>
+        <input type="search" id="search-navbar" name="q" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+        <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+      </form>
       <ul class="nav-menu" aria-label="Navegación principal">
         <li><a href="index.html">Inicio</a></li>
         <li class="has-mega">
