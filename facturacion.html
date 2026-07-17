@@ -44,7 +44,6 @@
         <select id="superadmin-company-select" class="form-input" style="height: 34px; padding: 0 8px; font-size: 0.8rem; font-weight: 600; border-radius: 8px; cursor: pointer; width: 100%; border: 1.5px solid var(--border-color); background: var(--card-bg); color: var(--text-color);">
           <option value="CREATICOS">Creaticos Group</option>
           <option value="FUTUNETSRL">Futunet Suministros</option>
-          <option value="PANITAS">Los Panitas</option>
         </select>
       </div>
 
@@ -1753,10 +1752,11 @@
 
             // Set current active value
             const activeCode = (localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
-            if (activeCode === 'CREATICOS' || activeCode === 'FUTUNETSRL' || activeCode === 'PANITAS') {
+            if (activeCode === 'CREATICOS' || activeCode === 'FUTUNETSRL') {
               select.value = activeCode;
             } else {
               select.value = 'CREATICOS';
+              localStorage.setItem('active_company_code', 'CREATICOS');
             }
 
             select.addEventListener('change', function() {

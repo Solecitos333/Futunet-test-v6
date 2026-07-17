@@ -7,10 +7,10 @@ service firebase.storage {
     }
 
     function isEditorOrAbove() {
-      let userData = firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
       return isSignedIn() && (
-        userData.role in ['superadmin', 'admin', 'editor'] ||
-        (userData.roles is list && userData.roles.hasAny(['superadmin', 'admin', 'editor']))
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'admin', 'editor'] ||
+        (firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.roles is list &&
+         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.roles.hasAny(['superadmin', 'admin', 'editor']))
       );
     }
 

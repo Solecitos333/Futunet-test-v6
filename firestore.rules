@@ -266,10 +266,16 @@ service cloud.firestore {
 
       // Users can update their own profile (only basic non-sensitive fields and if email verified)
       allow update: if isEmailVerified() && isOwner(userId) && (
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny([
           'role', 'roles', 'status', 'companyCode', 'isInternetClient', 'clientCode', 'internetPlan',
           'internetStatus', 'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
-        ])
+        ])) ||
+        (resource.data.status == 'pending_verification' &&
+         request.resource.data.status == 'active' &&
+         !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+           'role', 'roles', 'companyCode', 'isInternetClient', 'clientCode', 'internetPlan',
+           'internetStatus', 'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
+         ]))
       );
 
       // Admins can update any user (change roles, status, etc.)
@@ -365,7 +371,8 @@ service cloud.firestore {
     // ─── SEARCH QUERIES Collection ───
     match /search_queries/{queryId} {
       // Validate queries limits to protect database from bloat/DoS
-      allow create: if request.resource.data.keys().hasOnly(['query', 'timestamp']) &&
+      allow create: if isSignedIn() &&
+                    request.resource.data.keys().hasOnly(['query', 'timestamp']) &&
                     request.resource.data.query is string &&
                     request.resource.data.query.size() <= 100 &&
                     request.resource.data.timestamp == request.time;

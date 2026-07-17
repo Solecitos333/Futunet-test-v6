@@ -1742,7 +1742,7 @@ function initSmartSearch(inputId, dropdownId) {
 const debouncedLogSearch = debounce(async (clean) => {
   try {
     const db = window.FutunetFirebase?.db;
-    if (db) {
+    if (db && window.FutunetAuth?.isLoggedIn()) {
       await db.collection('search_queries').add({
         query: clean,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
