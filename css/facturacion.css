@@ -829,10 +829,22 @@ body {
    PRINT STYLES (OPtimized for physical printers and PDF exports)
    ═══════════════════════════════════════════ */
 @media print {
+  @page {
+    margin: 0 !important;
+  }
   body {
     background: #fff !important;
     color: #000 !important;
     font-size: 12pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket) {
+    padding: 1.6cm !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .admin-sidebar,
@@ -872,8 +884,6 @@ body {
   .printable-invoice-wrapper {
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
   }

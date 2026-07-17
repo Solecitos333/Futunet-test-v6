@@ -227,11 +227,11 @@ window.ERPBilling = (function () {
     const pageTitle = document.getElementById('page-title');
     if (pageTitle) {
       if (isCreaticos) {
-        pageTitle.textContent = 'Sistema de Facturación — Creaticos Group';
+        pageTitle.textContent = 'Creaticos Group';
       } else if (isPanitas) {
-        pageTitle.textContent = 'Sistema de Facturación — Los Panitas By Nechy';
+        pageTitle.textContent = 'Los Panitas By Nechy';
       } else {
-        pageTitle.textContent = 'Sistema de Facturación — Futunet Suministros';
+        pageTitle.textContent = 'Futunet Suministros';
       }
     }
 
