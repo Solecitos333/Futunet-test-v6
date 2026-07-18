@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
-const publicDirectories = ['css', 'images', 'img', 'js'];
+const publicDirectories = ['css', 'images', 'img', 'js', 'cotizaciones_de_soporte'];
 const publicRootFiles = new Set([
   'CNAME', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js',
   'favicon.ico', 'favicon.png'

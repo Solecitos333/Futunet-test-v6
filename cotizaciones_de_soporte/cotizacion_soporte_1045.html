@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización COT-1045 - Creaticos Group</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 40px;
+            color: #1e293b;
+            background-color: #f8fafc;
+        }
+        .quote-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo-area h1 {
+            color: #4f46e5;
+            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .logo-area span {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .company-details {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+        .company-details strong {
+            color: #0f172a;
+        }
+        .title-block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .title-block h2 {
+            font-size: 1.8rem;
+            color: #1e1b4b;
+            margin: 0;
+            font-weight: 600;
+        }
+        .meta-info {
+            text-align: right;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .meta-info strong {
+            color: #0f172a;
+        }
+        .client-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .client-card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #4f46e5;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .client-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 4px 12px;
+        }
+        .client-label {
+            font-weight: 600;
+            color: #64748b;
+        }
+        .client-val {
+            color: #334155;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        td {
+            padding: 14px 16px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }
+        tr:last-child td {
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .num-col {
+            text-align: right;
+        }
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 40px;
+        }
+        .totals-table {
+            width: 320px;
+            margin-bottom: 0;
+        }
+        .totals-table td {
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            border: none;
+        }
+        .totals-table tr.grand-total td {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4f46e5;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 14px;
+        }
+        .terms {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.6;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 20px;
+        }
+        .terms h4 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #475569;
+            font-size: 0.85rem;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            font-family: 'Outfit', sans-serif;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+        }
+        .btn-primary {
+            background: #4f46e5;
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #4338ca;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .quote-container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quote-container">
+        <div class="header">
+            <div class="logo-area">
+                <h1>Creaticos Group</h1>
+                <span>Soluciones Tecnológicas e Integrales</span>
+            </div>
+            <div class="company-details">
+                <strong>Creaticos Group, SRL</strong><br>
+                RNC: 133-73669-1<br>
+                Teléfono: 849-342-8525<br>
+                Email: info@creaticos.com.do<br>
+                Dirección: Calle 7 Las Colinas, Santiago
+            </div>
+        </div>
+
+        <div class="title-block">
+            <h2>Cotización de Soporte</h2>
+            <div class="meta-info">
+                <strong>Fecha:</strong> 02/07/2026<br>
+                <strong>Cotización N°:</strong> COT-1045<br>
+                <strong>Vendedor:</strong> Vendedor Principal<br>
+                <strong>Condición:</strong> Contado<br>
+                <strong>Moneda:</strong> Peso Dominicano
+            </div>
+        </div>
+
+        <div class="client-card">
+            <h3>Datos del Cliente</h3>
+            <div class="client-grid">
+                <div class="client-label">RNC/Cédula:</div>
+                <div class="client-val">430152552</div>
+                
+                <div class="client-label">Nombre:</div>
+                <div class="client-val"><strong>DISTRITO 08 04 (ESCUELA REVERENDO DIOGENES)</strong></div>
+                
+                <div class="client-label">Dirección:</div>
+                <div class="client-val">Santiago</div>
+                
+                <div class="client-label">Teléfono:</div>
+                <div class="client-val">(809) 204-2674</div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Descripción</th>
+                    <th class="num-col" style="width: 10%;">Cant.</th>
+                    <th class="num-col" style="width: 12%;">Precio</th>
+                    <th class="num-col" style="width: 10%;">ITBIS (18%)</th>
+                    <th class="num-col" style="width: 18%;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Esmalte Industrial Blanco Paz (Galón) - Eagle Paint</td>
+                    <td class="num-col">6.00</td>
+                    <td class="num-col">RD$3,250.00</td>
+                    <td class="num-col">RD$585.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$23,010.00</td>
+                </tr>
+                <tr>
+                    <td>Solvente / Disolvente Industrial Premium - Eagle Paint</td>
+                    <td class="num-col">4.00</td>
+                    <td class="num-col">RD$1,650.00</td>
+                    <td class="num-col">RD$297.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$7,788.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Satinada Plus Ultra Rojo Positivo (Galón)</td>
+                    <td class="num-col">1.00</td>
+                    <td class="num-col">RD$690.00</td>
+                    <td class="num-col">RD$124.20</td>
+                    <td class="num-col" style="font-weight: 600;">RD$814.20</td>
+                </tr>
+                <tr>
+                    <td>Pintura Satinada Plus Ultra Positivo Azul (Galón)</td>
+                    <td class="num-col">1.00</td>
+                    <td class="num-col">RD$410.00</td>
+                    <td class="num-col">RD$73.80</td>
+                    <td class="num-col" style="font-weight: 600;">RD$483.80</td>
+                </tr>
+                <tr>
+                    <td>Pintura Semigloss Crema 51 Genérica (Cubeta/Tarro)</td>
+                    <td class="num-col">8.00</td>
+                    <td class="num-col">RD$10,950.00</td>
+                    <td class="num-col">RD$1,971.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$103,368.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Semigloss Plus Ultra Verde Fresco 983 (Cubeta)</td>
+                    <td class="num-col">5.00</td>
+                    <td class="num-col">RD$10,950.00</td>
+                    <td class="num-col">RD$1,971.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$64,605.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Matizada Plus Ultra Ladrillo (Cubeta/Tarro)</td>
+                    <td class="num-col">1.00</td>
+                    <td class="num-col">RD$8,625.00</td>
+                    <td class="num-col">RD$1,552.50</td>
+                    <td class="num-col" style="font-weight: 600;">RD$10,177.50</td>
+                </tr>
+                <tr>
+                    <td>Sellador Sealer Plus Ultra Gris Claro - Eagle Paint (Cubeta)</td>
+                    <td class="num-col">3.00</td>
+                    <td class="num-col">RD$8,650.00</td>
+                    <td class="num-col">RD$1,557.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$30,621.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Semigloss Blanco Hueso Sarai - Eagle (Cubeta)</td>
+                    <td class="num-col">1.00</td>
+                    <td class="num-col">RD$10,950.00</td>
+                    <td class="num-col">RD$1,971.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$12,921.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Matizada Plus Ultra Ladrillo (Galón)</td>
+                    <td class="num-col">2.00</td>
+                    <td class="num-col">RD$1,825.00</td>
+                    <td class="num-col">RD$328.50</td>
+                    <td class="num-col" style="font-weight: 600;">RD$4,307.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura Acrílica Blanco Paz - Eagle Paint (Galón)</td>
+                    <td class="num-col">2.00</td>
+                    <td class="num-col">RD$1,120.00</td>
+                    <td class="num-col">RD$201.60</td>
+                    <td class="num-col" style="font-weight: 600;">RD$2,643.20</td>
+                </tr>
+                <tr>
+                    <td>Pintura para Cancha Deportiva Azul (Galón)</td>
+                    <td class="num-col">10.00</td>
+                    <td class="num-col">RD$2,100.00</td>
+                    <td class="num-col">RD$378.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$24,780.00</td>
+                </tr>
+                <tr>
+                    <td>Pintura para Cancha Deportiva Rojo (Galón)</td>
+                    <td class="num-col">15.00</td>
+                    <td class="num-col">RD$2,100.00</td>
+                    <td class="num-col">RD$378.00</td>
+                    <td class="num-col" style="font-weight: 600;">RD$37,170.00</td>
+                </tr>
+                <tr>
+                    <td>Felpa / Mota para Rodillo Antigoteo 9" - Eurosol</td>
+                    <td class="num-col">6.00</td>
+                    <td class="num-col">RD$195.00</td>
+                    <td class="num-col">RD$35.10</td>
+                    <td class="num-col" style="font-weight: 600;">RD$1,380.60</td>
+                </tr>
+                <tr>
+                    <td>Portarrodillo Naranja 9x5 Reforzado (U.S.A. Design)</td>
+                    <td class="num-col">4.00</td>
+                    <td class="num-col">RD$375.00</td>
+                    <td class="num-col">RD$67.50</td>
+                    <td class="num-col" style="font-weight: 600;">RD$1,770.00</td>
+                </tr>
+                <tr>
+                    <td>Brocha Profesional Eurosol R-500 3" Reforzada</td>
+                    <td class="num-col">10.00</td>
+                    <td class="num-col">RD$220.00</td>
+                    <td class="num-col">RD$39.60</td>
+                    <td class="num-col" style="font-weight: 600;">RD$2,596.00</td>
+                </tr>
+                <tr>
+                    <td>Cinta de Enmascarar Masking Tape 3/4 Norton (Naranja)</td>
+                    <td class="num-col">50.00</td>
+                    <td class="num-col">RD$410.00</td>
+                    <td class="num-col">RD$73.80</td>
+                    <td class="num-col" style="font-weight: 600;">RD$24,190.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="totals-section">
+            <table class="totals-table">
+                <tr>
+                    <td style="font-weight: 600; color: #475569;">SubTotal:</td>
+                    <td class="num-col" style="font-weight: 600;">RD$298,835.00</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600; color: #475569;">Descuento:</td>
+                    <td class="num-col">RD$0.00</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: 600; color: #475569;">Impuestos (18%):</td>
+                    <td class="num-col" style="font-weight: 600;">RD$53,790.30</td>
+                </tr>
+                <tr class="grand-total">
+                    <td>Total General:</td>
+                    <td class="num-col">RD$352,625.30</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="terms">
+            <h4>Términos y Condiciones:</h4>
+            1. Esta cotización tiene una validez de 15 días a partir de su fecha de emisión.<br>
+            2. Los precios cotizados corresponden a servicios de soporte técnico especializado, entrega y garantía según las políticas de Creaticos Group.<br>
+            3. Para aceptar este presupuesto, favor firmar y enviar copia digitalizada vía correo o WhatsApp.<br>
+            4. Forma de pago: 50% de anticipo para iniciar trabajos, 50% contra entrega.
+        </div>
+    </div>
+    
+    <div class="actions">
+        <button class="btn btn-primary" onclick="window.print()">Imprimir / Guardar PDF</button>
+    </div>
+</body>
+</html>
