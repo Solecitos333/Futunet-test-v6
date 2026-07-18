@@ -1483,13 +1483,13 @@
         '<td data-label="Estado"><span class="admin-role-badge role-' + (o.status === 'delivered' ? 'editor' : o.status === 'processing' ? 'admin' : 'user') + '">' + statusLabel + '</span></td>' +
         '<td data-label="Fecha" class="col-hide-mobile">' + date + '</td>' +
         '<td data-label="Acciones">' +
-        '  <select onchange="AdminPanel.updateOrderStatus(\'' + o.id + '\', this.value)" style="padding:4px 8px;border:1px solid #e5eef8;border-radius:8px;font-size:0.78rem;font-family:Outfit;">' +
+        '  <select onchange="AdminPanel.updateOrderStatus(\'' + escapeJs(o.id) + '\', this.value)" style="padding:4px 8px;border:1px solid #e5eef8;border-radius:8px;font-size:0.78rem;font-family:Outfit;">' +
         '    <option value="pending"' + (o.status === 'pending' ? ' selected' : '') + '>Pendiente</option>' +
         '    <option value="processing"' + (o.status === 'processing' ? ' selected' : '') + '>Procesando</option>' +
         '    <option value="shipped"' + (o.status === 'shipped' ? ' selected' : '') + '>Enviado</option>' +
         '    <option value="delivered"' + (o.status === 'delivered' ? ' selected' : '') + '>Entregado</option>' +
         '  </select>' +
-        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showOrderDetail(\'' + o.id + '\')" title="Ver detalles" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
+        '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showOrderDetail(\'' + escapeJs(o.id) + '\')" title="Ver detalles" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>' +
         '</td>' +
         '</tr>';
     });
@@ -1788,17 +1788,17 @@
       var html = `
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-weight: 700; color: #0a101d; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;">${sec.name}</span>
+            <span style="font-weight: 700; color: #0a101d; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;">${escapeHtml(sec.name)}</span>
           </div>
           <div style="display: flex; align-items: center; gap: 6px;">
-            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionUp('${sec.id}')" style="padding: 4px 8px;" title="Subir" ${isFirst ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
+            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionUp('${escapeJs(sec.id)}')" style="padding: 4px 8px;" title="Subir" ${isFirst ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
             </button>
-            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionDown('${sec.id}')" style="padding: 4px 8px;" title="Bajar" ${isLast ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
+            <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.moveSectionDown('${escapeJs(sec.id)}')" style="padding: 4px 8px;" title="Bajar" ${isLast ? 'disabled style="opacity:0.4; pointer-events:none;"' : ''}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <label class="admin-switch">
-              <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="AdminPanel.toggleSectionVisibility('${sec.id}', this.checked)" aria-label="Visibilidad de la sección ${escapeAttr(sec.name)}">
+              <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="AdminPanel.toggleSectionVisibility('${escapeJs(sec.id)}', this.checked)" aria-label="Visibilidad de la sección ${escapeAttr(sec.name)}">
               <span class="admin-slider"></span>
             </label>
           </div>
@@ -1807,12 +1807,12 @@
         <div style="display: flex; flex-direction: column; gap: 8px; ${sec.visible ? '' : 'display: none;'}">
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Título</label>
-            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;" aria-label="Título de la sección ${escapeAttr(sec.name)}">
+            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;" aria-label="Título de la sección ${escapeAttr(sec.name)}">
           </div>
           ${sec.id !== 'inicio' && sec.id !== 'nosotros' ? `
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Subtítulo</label>
-            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${sec.id}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;" aria-label="Subtítulo de la sección ${escapeAttr(sec.name)}">${sec.subtitle || ''}</textarea>
+            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;" aria-label="Subtítulo de la sección ${escapeAttr(sec.name)}">${escapeHtml(sec.subtitle || '')}</textarea>
           </div>
           ` : ''}
         </div>
@@ -1973,8 +1973,8 @@
           '<td data-label="Enlace">' + escapeHtml(b.link || '—') + '</td>' +
           '<td data-label="Orden">' + (b.order || 1) + '</td>' +
           '<td data-label="Acciones">' +
-          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBanner(\'' + doc.id + '\')">Editar</button>' +
-          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBanner(\'' + doc.id + '\')">Eliminar</button>' +
+          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBanner(\'' + escapeJs(doc.id) + '\')">Editar</button>' +
+          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBanner(\'' + escapeJs(doc.id) + '\')">Eliminar</button>' +
           '</td>' +
           '</tr>';
       });
@@ -2159,8 +2159,8 @@
           '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(c.name) + '</strong></td>' +
           '<td data-label="Icono / Lucide">' + escapeHtml(c.icon || '—') + '</td>' +
           '<td data-label="Acciones">' +
-          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCategory(\'' + doc.id + '\')">Editar</button>' +
-          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCategory(\'' + doc.id + '\')">Eliminar</button>' +
+          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCategory(\'' + escapeJs(doc.id) + '\')">Editar</button>' +
+          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCategory(\'' + escapeJs(doc.id) + '\')">Eliminar</button>' +
           '</td>' +
           '</tr>';
       });
@@ -2277,8 +2277,8 @@
           '<td data-label="Logo"><img src="' + escapeAttr(logo) + '" style="width:48px;height:48px;object-fit:contain;background:#f8f9fa;padding:4px;border-radius:8px;"></td>' +
           '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(b.name) + '</strong></td>' +
           '<td data-label="Acciones">' +
-          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBrand(\'' + doc.id + '\')">Editar</button>' +
-          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBrand(\'' + doc.id + '\')">Eliminar</button>' +
+          '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editBrand(\'' + escapeJs(doc.id) + '\')">Editar</button>' +
+          '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteBrand(\'' + escapeJs(doc.id) + '\')">Eliminar</button>' +
           '</td>' +
           '</tr>';
       });
@@ -2499,7 +2499,7 @@
       var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
       var revertBtn = '';
       if (currentUserData.role === 'superadmin' && log.metadata && log.metadata.collection && log.metadata.type) {
-        revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + log.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
+        revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + escapeJs(log.id) + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
       } else {
         revertBtn = '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>';
       }
@@ -2556,7 +2556,7 @@
           var time = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('es-DO') : '—';
           var revertBtn = '';
           if (currentUserData.role === 'superadmin' && log.metadata && log.metadata.collection && log.metadata.type) {
-            revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + log.id + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
+            revertBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" style="color:#e74c3c;border-color:rgba(231,76,60,0.15);padding:4px 8px;font-size:0.75rem;border-radius:6px;" onclick="AdminPanel.revertAction(\'' + escapeJs(log.id) + '\')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;vertical-align:middle;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Revertir</button>';
           } else {
             revertBtn = '<span style="font-size:0.75rem;color:#a0b0c4;">—</span>';
           }
@@ -3264,7 +3264,7 @@
           '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
           '  <td data-label="Fecha">' + date + '</td>' +
           '  <td data-label="Acciones" style="text-align:right;">' +
-          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openRequestModal(\'' + req.id + '\')">Ver detalle</button>' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openRequestModal(\'' + escapeJs(req.id) + '\')">Ver detalle</button>' +
           '  </td>' +
           '</tr>';
       });
@@ -3410,7 +3410,7 @@
           '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
           '  <td data-label="Teléfono">' + escapeHtml(client.phone || '—') + '</td>' +
           '  <td data-label="Acciones" style="text-align:right;">' +
-          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openInternetEdit(\'' + id + '\')">Editar plan</button>' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openInternetEdit(\'' + escapeJs(id) + '\')">Editar plan</button>' +
           '  </td>' +
           '</tr>';
       });
@@ -3541,7 +3541,7 @@
           '  <td data-label="Estado"><span class="product-card-badge ' + statusClass + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + statusLabel + '</span></td>' +
           '  <td data-label="Fecha">' + date + '</td>' +
           '  <td data-label="Acciones" style="text-align:right;">' +
-          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openVoucherModal(\'' + pay.id + '\')">Ver comprobante</button>' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openVoucherModal(\'' + escapeJs(pay.id) + '\')">Ver comprobante</button>' +
           '  </td>' +
           '</tr>';
       });
@@ -4286,9 +4286,11 @@
       var strengthsList = (c.strengths || '').split('\n').filter(Boolean).map(function(s){ return '<li>' + s + '</li>'; }).join('');
       var weaknessesList = (c.weaknesses || '').split('\n').filter(Boolean).map(function(w){ return '<li>' + w + '</li>'; }).join('');
 
+      var escapedLogo = escapeAttr(c.logo || '');
+      var escapedName = escapeHtml(c.name || '');
       var logoHtml = c.logo 
-        ? '<img src="' + c.logo + '" alt="' + c.name + '" style="max-height: 40px; max-width: 120px; object-fit: contain;">'
-        : '<div style="width:40px; height:40px; border-radius:8px; background:#f3f7fc; border:1px solid #e5eef8; display:flex; align-items:center; justify-content:center; font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700; color:#0A70A2;">' + c.name.charAt(0).toUpperCase() + '</div>';
+        ? '<img src="' + escapedLogo + '" alt="' + escapeAttr(c.name) + '" style="max-height: 40px; max-width: 120px; object-fit: contain;">'
+        : '<div style="width:40px; height:40px; border-radius:8px; background:#f3f7fc; border:1px solid #e5eef8; display:flex; align-items:center; justify-content:center; font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700; color:#0A70A2;">' + escapedName.charAt(0).toUpperCase() + '</div>';
 
       html += '<div class="admin-table-card" style="padding: 24px; margin-bottom: 20px; border-left: 5px solid ' + 
               (c.relevance === "Crítica" ? "#e74c3c" : c.relevance === "Alta" ? "#e67e22" : c.relevance === "Media" ? "#f1c40f" : "#2ecc71") + ';">';
@@ -4298,16 +4300,16 @@
                 '<div style="display:flex; align-items:center; gap:16px;">' +
                   logoHtml +
                   '<div>' +
-                    '<h3 style="font-family:\'Space Grotesk\',sans-serif; font-size:1.15rem; font-weight:700; margin:0; color:#0a101d;">' + c.name + '</h3>' +
+                    '<h3 style="font-family:\'Space Grotesk\',sans-serif; font-size:1.15rem; font-weight:700; margin:0; color:#0a101d;">' + escapedName + '</h3>' +
                     '<div style="display:flex; gap:8px; align-items:center; margin-top:4px;">' +
-                      '<span class="admin-role-badge ' + badgeClass + '" style="font-size:0.65rem; padding: 2px 8px;">Amenaza: ' + c.relevance + '</span>' +
-                      '<span style="font-size:0.75rem; color:#76889e; font-weight:600;">Rango: #' + c.rank + '</span>' +
+                      '<span class="admin-role-badge ' + badgeClass + '" style="font-size:0.65rem; padding: 2px 8px;">Amenaza: ' + escapeHtml(c.relevance) + '</span>' +
+                      '<span style="font-size:0.75rem; color:#76889e; font-weight:600;">Rango: #' + escapeHtml(c.rank) + '</span>' +
                     '</div>' +
                   '</div>' +
                 '</div>' +
                 '<div style="display:flex; gap:8px;">' +
-                  '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCompetitor(\'' + c.id + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Editar</button>' +
-                  '<button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCompetitor(\'' + c.id + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Eliminar</button>' +
+                  '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editCompetitor(\'' + escapeJs(c.id) + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Editar</button>' +
+                  '<button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteCompetitor(\'' + escapeJs(c.id) + '\')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg> Eliminar</button>' +
                 '</div>' +
               '</div>';
 

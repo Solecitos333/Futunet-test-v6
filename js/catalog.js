@@ -1528,13 +1528,22 @@ function openProductModal(id) {
   if (product.specs && product.specs.length > 0) {
     product.specs.forEach(spec => {
       const li = document.createElement('li');
-      li.innerHTML = `<i data-lucide="check-circle-2"></i> <span>${escapeHTML(spec)}</span>`;
+      const icon = document.createElement('i');
+      icon.setAttribute('data-lucide', 'check-circle-2');
+      const span = document.createElement('span');
+      span.textContent = spec;
+      li.appendChild(icon);
+      li.appendChild(span);
       specsList.appendChild(li);
     });
   }
 
   const btnQuote = document.getElementById('modal-quote-btn');
-  btnQuote.innerHTML = `<i data-lucide="message-circle"></i> ${serviceItem ? 'Solicitar este servicio' : quoteOnlyItem ? 'Consultar precio' : 'Cotizar Modelo Exacto'}`;
+  btnQuote.textContent = '';
+  const quoteIcon = document.createElement('i');
+  quoteIcon.setAttribute('data-lucide', 'message-circle');
+  btnQuote.appendChild(quoteIcon);
+  btnQuote.appendChild(document.createTextNode(' ' + (serviceItem ? 'Solicitar este servicio' : quoteOnlyItem ? 'Consultar precio' : 'Cotizar Modelo Exacto')));
   btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem, quoteOnlyItem); };
   const btnAddCart = document.getElementById('modal-add-cart-btn');
   if (btnAddCart) {

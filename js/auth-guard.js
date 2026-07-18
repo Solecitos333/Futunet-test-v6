@@ -27,7 +27,7 @@
 
         // Tenant-restricted users are strictly locked to their assigned companyCode
         if (userData && userData.companyCode) {
-          localStorage.setItem('active_company_code', userData.companyCode.toUpperCase());
+          sessionStorage.setItem('active_company_code', userData.companyCode.toUpperCase());
         }
 
         callback(FutunetAuth.getCurrentUser(), userData);
@@ -79,14 +79,14 @@
         const assignedCompany = userData && userData.companyCode
           ? String(userData.companyCode).toLowerCase().replace(/^futunet$/, 'futunetsrl')
           : '';
-        const activeCompany = assignedCompany || (localStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
+        const activeCompany = assignedCompany || (sessionStorage.getItem('active_company_code') || 'CREATICOS').toLowerCase();
         const supportedCompanies = ['creaticos', 'futunetsrl', 'panitas'];
 
         if (!supportedCompanies.includes(activeCompany)) {
           window.location.href = 'mi-cuenta.html';
           return;
         }
-        if (assignedCompany) localStorage.setItem('active_company_code', activeCompany.toUpperCase());
+        if (assignedCompany) sessionStorage.setItem('active_company_code', activeCompany.toUpperCase());
 
         // Platform superadmins can access any ERP
         if (roles.includes('superadmin') && userData && !userData.companyCode) {

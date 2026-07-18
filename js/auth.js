@@ -130,7 +130,7 @@
         err.code = 'auth/invalid-company-code';
         throw err;
       } else if (isPlatformSuperAdmin) {
-        localStorage.setItem('active_company_code', codeUpper);
+        sessionStorage.setItem('active_company_code', codeUpper);
       }
     }
 
