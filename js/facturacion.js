@@ -11,6 +11,7 @@ window.ERPBilling = (function () {
 
   // Tenant Config
   const SUPPORTED_COMPANIES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+  const BILLING_API_BASE_URL = 'https://futunet-backend.onrender.com';
   const DEFAULT_RESTAURANT_TABLES = Array.from({ length: 12 }, (_, index) => `Mesa ${index + 1}`);
   let activeCompanyCode = 'CREATICOS';
   let isCreaticos = true;
@@ -21,18 +22,18 @@ window.ERPBilling = (function () {
   let collectionSettings = '';
   let collectionSecrets = '';
   let collectionCashSessions = '';
+  let collectionInventoryMovements = '';
   let collectionProducts = '';
 
   function configureTenant(userData) {
-    const rawAssignedCode = userData && userData.companyCode ? String(userData.companyCode).toUpperCase() : '';
-    const assignedCode = rawAssignedCode === 'FUTUNET' ? 'FUTUNETSRL' : rawAssignedCode;
-    const requestedCode = assignedCode || String(localStorage.getItem('active_company_code') || 'CREATICOS').toUpperCase();
-    if (!SUPPORTED_COMPANIES.includes(requestedCode)) {
-      throw new Error('La empresa seleccionada no está habilitada en este sistema.');
-    }
+    const requestedCode = BillingCore.resolveCompanyCode(
+      userData,
+      localStorage.getItem('active_company_code') || 'CREATICOS'
+    );
 
     activeCompanyCode = requestedCode;
     localStorage.setItem('active_company_code', activeCompanyCode);
+    sessionStorage.setItem('active_company_code', activeCompanyCode);
     isCreaticos = activeCompanyCode === 'CREATICOS';
     isPanitas = activeCompanyCode === 'PANITAS';
 
@@ -43,11 +44,57 @@ window.ERPBilling = (function () {
     collectionSettings = `${prefix}_settings`;
     collectionSecrets = `${prefix}_secrets`;
     collectionCashSessions = `${prefix}_cash_sessions`;
+    collectionInventoryMovements = `${prefix}_inventory_movements`;
     collectionProducts = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
   }
 
   // Firestore DB reference
   function getDB() { return window.FutunetFirebase.db; }
+
+  function inventoryProductTarget(db, compositeId) {
+    const match = /^(creaticos|futunet|panitas)_(.+)$/.exec(String(compositeId || ''));
+    if (!match) return null;
+    const sourceCollection = match[1] === 'creaticos'
+      ? 'creaticos_products'
+      : (match[1] === 'panitas' ? 'panitas_products' : 'products');
+    return {
+      productId: compositeId,
+      documentId: match[2],
+      collection: sourceCollection,
+      ref: db.collection(sourceCollection).doc(match[2])
+    };
+  }
+
+  function aggregateInventoryItems(items) {
+    const aggregated = new Map();
+    (items || []).forEach(item => {
+      const productId = String(item.productId || '');
+      if (!/^(creaticos|futunet|panitas)_/.test(productId)) return;
+      const current = aggregated.get(productId) || { ...item, qty: 0 };
+      current.qty += Number(item.qty || 0);
+      aggregated.set(productId, current);
+    });
+    return Array.from(aggregated.values());
+  }
+
+  async function lookupRncSecure(cleanRnc) {
+    const authUser = window.firebase && firebase.auth ? firebase.auth().currentUser : null;
+    if (!authUser) throw new Error('La sesión expiró. Inicia sesión nuevamente.');
+    const idToken = await authUser.getIdToken();
+    const response = await fetch(`${BILLING_API_BASE_URL}/api/rnc/consulta?rnc=${encodeURIComponent(cleanRnc)}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        'X-Company-Code': activeCompanyCode
+      }
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.detail || data.mensaje || `Error HTTP ${response.status}`);
+    }
+    if (data && data.error) throw new Error(data.mensaje || data.error);
+    return data;
+  }
 
   // HTML escaping helper for XSS prevention
   function escapeHTML(str) {
@@ -473,22 +520,12 @@ window.ERPBilling = (function () {
 
     const legacyRncApiKey = String(settings.rncApiKey || '').trim();
     settings.rncApiKey = '';
-    if (isUserAdmin) {
+    if (isUserAdmin && legacyRncApiKey) {
       try {
-        const secretRef = getDB().collection(collectionSecrets).doc('general');
-        const secretDoc = await secretRef.get();
-        const storedSecret = secretDoc.exists ? String(secretDoc.data().rncApiKey || '').trim() : '';
-        settings.rncApiKey = storedSecret || legacyRncApiKey;
-
-        if (legacyRncApiKey) {
-          if (!storedSecret) {
-            await secretRef.set({ rncApiKey: legacyRncApiKey }, { merge: true });
-          }
-          await docRef.update({ rncApiKey: firebase.firestore.FieldValue.delete() });
-        }
+        await getDB().collection(collectionSecrets).doc('general').set({ rncApiKey: legacyRncApiKey }, { merge: true });
+        await docRef.update({ rncApiKey: firebase.firestore.FieldValue.delete() });
       } catch (secretError) {
-        console.warn('No se pudo cargar o migrar el token privado de consulta RNC.', secretError);
-        settings.rncApiKey = legacyRncApiKey;
+        console.warn('No se pudo retirar el token heredado de la configuración pública.', secretError);
       }
     }
 
@@ -775,8 +812,6 @@ window.ERPBilling = (function () {
   // Set up listeners for automatic RNC lookup
   function setupRncAutoLookup() {
     if (!isUserAdmin) return;
-    const apiKey = settings && settings.rncApiKey ? String(settings.rncApiKey).trim() : '';
-    if (!apiKey) return;
     const inputs = [
       { rncId: 'form-invoice-client-rnc', nameId: 'form-invoice-client-name', idId: 'form-invoice-client-id', context: 'invoice-form' },
       { rncId: 'form-client-rnc', nameId: 'form-client-name', idId: 'form-client-id', context: 'client-form' }
@@ -839,10 +874,7 @@ window.ERPBilling = (function () {
         if (lookupTimeout) clearTimeout(lookupTimeout);
         lookupTimeout = setTimeout(async function() {
           try {
-            const url = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + '&token=' + encodeURIComponent(apiKey);
-            const res = await fetch(url);
-            if (!res.ok) throw new Error('Error API');
-            const data = await res.json();
+            const data = await lookupRncSecure(cleanRnc);
             if (data && !data.error && data.nombre_razon_social) {
               const nombre = data.nombre_razon_social;
               const nombreComercial = data.nombre_comercial ? ` (${data.nombre_comercial})` : '';
@@ -1135,24 +1167,24 @@ window.ERPBilling = (function () {
     const validInvoiceIds = new Set(invoices.filter(isRevenueInvoice).map(invoice => invoice.id));
     payments.forEach(pay => {
       if (!validInvoiceIds.has(pay.invoiceId)) return;
-      const method = String(pay.method || 'Efectivo').toLowerCase();
+      const method = BillingCore.paymentMethodGroup(pay.method || 'Efectivo');
       const amount = Number(pay.amount || 0);
 
-      if (method.includes('efectivo')) {
+      if (method === 'cash') {
         cashSales += amount;
-      } else if (method.includes('tarjeta')) {
+      } else if (method === 'card') {
         cardSales += amount;
-      } else if (method.includes('transferencia')) {
+      } else if (method === 'transfer') {
         transferSales += amount;
       } else {
-        cashSales += amount;
+        transferSales += amount;
       }
     });
 
     invoices.forEach(inv => {
       if (!isRevenueInvoice(inv)) return;
       const paymentTerms = inv.paymentTerms || inv.paymentTerm || '';
-      if (paymentTerms === 'Crédito') {
+      if (BillingCore.isCreditTerms(paymentTerms)) {
         const total = Number(inv.total || 0);
         const paid = Number(inv.paidAmount || 0);
         const balance = total - paid;
@@ -1550,6 +1582,7 @@ window.ERPBilling = (function () {
 
     const seen = new Set();
     const uniqueProds = allProds.filter(p => {
+      if (p.isActive === false) return false;
       const compositeId = p._src + '_' + p.id;
       if (seen.has(compositeId)) return false;
       seen.add(compositeId);
@@ -1921,8 +1954,8 @@ window.ERPBilling = (function () {
           showToast('El tipo de un documento existente no puede cambiarse. Usa la opción Convertir.', 'danger');
           return;
         }
-        if (originalDoc.docType === 'invoice' && (originalDoc.ncf || Number(originalDoc.paidAmount || 0) > 0)) {
-          showToast('Una factura fiscal o con cobros no puede editarse. Debe anularse mediante el proceso correspondiente.', 'danger');
+        if (originalDoc.docType === 'invoice' && (originalDoc.inventoryPostedAt || originalDoc.ncf || Number(originalDoc.paidAmount || 0) > 0)) {
+          showToast('Una factura contabilizada en inventario, fiscal o con cobros no puede editarse. Debe anularse mediante el proceso correspondiente.', 'danger');
           return;
         }
         paidAmount = originalDoc.paidAmount || 0;
@@ -1961,6 +1994,7 @@ window.ERPBilling = (function () {
 
     const invoiceData = {
       docType: docType,
+      companyCode: activeCompanyCode,
       invoiceNumber: invoiceNum,
       clientId: clientId,
       clientName: clientName,
@@ -1980,6 +2014,7 @@ window.ERPBilling = (function () {
       status: status,
       paymentTerms: paymentTerms,
       notes: invoiceNotes,
+      updatedBy: currentUser.uid,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
     if (conversionSourceId) invoiceData.sourceDocumentId = conversionSourceId;
@@ -2011,6 +2046,15 @@ window.ERPBilling = (function () {
           throw new Error('La cotización o proforma ya fue convertida por otro proceso.');
         }
 
+        const stockDocuments = [];
+        for (const item of (docType === 'invoice' ? aggregateInventoryItems(items) : [])) {
+          const target = inventoryProductTarget(dbRef, item.productId);
+          if (!target) continue;
+          const productDoc = await transaction.get(target.ref);
+          if (!productDoc.exists) throw new Error(`El producto "${item.description}" ya no existe.`);
+          stockDocuments.push({ item, target, data: productDoc.data() });
+        }
+
         const freshSettings = settingsDoc.data();
         let freshInvoiceNum = '';
         let freshNcf = '';
@@ -2037,17 +2081,55 @@ window.ERPBilling = (function () {
 
         invoiceData.invoiceNumber = freshInvoiceNum;
         invoiceData.ncf = (docType === 'quote' || docType === 'proforma') ? '' : freshNcf;
+        invoiceData.createdBy = currentUser.uid;
         invoiceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+
+        const inventoryEffects = [];
+        stockDocuments.forEach(({ item, target, data }) => {
+          if (data.stock === undefined || data.stock === null) return;
+          const currentStock = Number(data.stock) || 0;
+          if (currentStock < item.qty) {
+            throw new Error(`Stock insuficiente para "${data.name || data.title || item.description}". Disponible: ${currentStock}, solicitado: ${item.qty}`);
+          }
+          transaction.update(target.ref, {
+            stock: currentStock - item.qty,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          inventoryEffects.push({
+            productId: target.productId,
+            documentId: target.documentId,
+            collection: target.collection,
+            quantity: item.qty
+          });
+        });
+        if (docType === 'invoice') {
+          invoiceData.inventoryEffects = inventoryEffects;
+          invoiceData.inventoryPostedAt = firebase.firestore.FieldValue.serverTimestamp();
+        }
 
         // Perform writes in the transaction
         const newInvoiceDocRef = invoicesCollRef.doc();
         transaction.set(newInvoiceDocRef, invoiceData);
+        inventoryEffects.forEach(effect => {
+          transaction.set(dbRef.collection(collectionInventoryMovements).doc(), {
+            type: 'sale',
+            invoiceId: newInvoiceDocRef.id,
+            invoiceNumber: freshInvoiceNum,
+            productId: effect.productId,
+            productCollection: effect.collection,
+            quantity: -effect.quantity,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
         transaction.update(settingsDocRef, settingsUpdates);
         if (conversionSourceRef) {
           transaction.update(conversionSourceRef, {
             status: 'converted',
             convertedTo: newInvoiceDocRef.id,
-            convertedAt: firebase.firestore.FieldValue.serverTimestamp()
+            convertedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedBy: currentUser.uid,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
         }
       });
@@ -2094,28 +2176,67 @@ window.ERPBilling = (function () {
 
     try {
       const db = getDB();
-      const batch = db.batch();
-      batch.update(db.collection(collectionInvoices).doc(id), {
-        status: 'cancelled',
-        cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
-        cancelledBy: firebase.auth().currentUser.uid
-      });
-
+      const invoiceRef = db.collection(collectionInvoices).doc(id);
       const auditRef = db.collection('audit_logs').doc();
-      batch.set(auditRef, {
-        action: `Anulación Factura ${activeCompanyCode}`,
-        details: `Factura ${actualNumber} anulada en el panel de ${activeCompanyCode}`,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        userId: firebase.auth().currentUser.uid,
-        userEmail: firebase.auth().currentUser.email
+      await db.runTransaction(async transaction => {
+        const freshInvoiceDoc = await transaction.get(invoiceRef);
+        if (!freshInvoiceDoc.exists) throw new Error('La factura ya no existe.');
+        const freshInvoice = freshInvoiceDoc.data();
+        if (freshInvoice.status === 'cancelled') throw new Error('La factura ya fue anulada.');
+        if (Number(freshInvoice.paidAmount || 0) > 0) {
+          throw new Error('La factura tiene cobros registrados y no puede anularse directamente.');
+        }
+        if (freshInvoice.inventoryReversedAt) throw new Error('El inventario de esta factura ya fue reversado.');
+
+        const stockDocuments = [];
+        for (const effect of (Array.isArray(freshInvoice.inventoryEffects) ? freshInvoice.inventoryEffects : [])) {
+          const target = inventoryProductTarget(db, effect.productId);
+          if (!target) throw new Error('La factura contiene una referencia de inventario no válida.');
+          const productDoc = await transaction.get(target.ref);
+          if (!productDoc.exists) throw new Error(`No se encontró el producto ${effect.productId} para reversar el inventario.`);
+          stockDocuments.push({ effect, target, data: productDoc.data() });
+        }
+
+        stockDocuments.forEach(({ effect, target, data }) => {
+          const quantity = Number(effect.quantity || 0);
+          transaction.update(target.ref, {
+            stock: (Number(data.stock) || 0) + quantity,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          transaction.set(db.collection(collectionInventoryMovements).doc(), {
+            type: 'sale_reversal',
+            invoiceId: id,
+            invoiceNumber: freshInvoice.invoiceNumber || actualNumber,
+            productId: target.productId,
+            productCollection: target.collection,
+            quantity: quantity,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
+
+        transaction.update(invoiceRef, {
+          status: 'cancelled',
+          cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+          cancelledBy: currentUser.uid,
+          inventoryReversedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedBy: currentUser.uid
+        });
+        transaction.set(auditRef, {
+          action: `Anulación Factura ${activeCompanyCode}`,
+          details: `Factura ${actualNumber} anulada en el panel de ${activeCompanyCode}`,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          userId: currentUser.uid,
+          userEmail: currentUser.email
+        });
       });
-      await batch.commit();
 
       await fetchAllData();
       renderInvoicesTable();
     } catch (err) {
       console.error(err);
-      alert('Error al anular la factura.');
+      alert('Error al anular la factura: ' + err.message);
     }
   }
 
@@ -2347,6 +2468,9 @@ window.ERPBilling = (function () {
         amount: amount,
         method: method,
         notes: notes,
+        createdBy: currentUser.uid,
+        companyCode: activeCompanyCode,
+        cashSessionId: activeCashSession ? activeCashSession.id : '',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       };
 
@@ -2369,11 +2493,13 @@ window.ERPBilling = (function () {
         transaction.update(invRef, {
           paidAmount: newPaidAmount,
           status: BillingCore.paymentStatus(total, newPaidAmount),
+          lastPaymentId: paymentRef.id,
+          updatedBy: currentUser.uid,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         if (sessionRef) {
-          const updates = {};
+          const updates = { transactionsCount: firebase.firestore.FieldValue.increment(1) };
           if (method === 'Efectivo') {
             updates.salesCash = firebase.firestore.FieldValue.increment(amount);
           } else if (method === 'Tarjeta') {
@@ -2747,6 +2873,7 @@ window.ERPBilling = (function () {
     const searchVal = document.getElementById('products-search').value.toLowerCase();
     
     const filtered = products.filter(p => {
+      if (p.isActive === false) return false;
       const name = p.name || p.title || '';
       const desc = p.description || p.desc || '';
       const sku = p.sku || '';
@@ -2787,7 +2914,7 @@ window.ERPBilling = (function () {
             <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditProductForm('${escapeAttr(p.id)}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteProduct('${escapeAttr(p.id)}', '', ${isCreaticosVal})">
+            <button class="table-btn table-btn-danger" title="Archivar" onclick="ERPBilling.deleteProduct('${escapeAttr(p.id)}', '', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>` : '<span class="admin-readonly-label">Solo lectura</span>';
 
@@ -3031,7 +3158,7 @@ window.ERPBilling = (function () {
 
   async function deleteProduct(id, name, isCreaticos) {
     if (!isUserAdmin) {
-      alert('No tienes permisos (Admin) para eliminar ítems.');
+      alert('No tienes permisos (Admin) para archivar ítems.');
       return;
     }
     let actualName = name;
@@ -3040,18 +3167,23 @@ window.ERPBilling = (function () {
       const prod = list.find(p => p.id === id);
       actualName = prod ? (prod.name || prod.title) : 'desconocido';
     }
-    if (!confirm(`¿Está seguro de que desea eliminar el ítem "${actualName}"?`)) {
+    if (!confirm(`¿Está seguro de que desea archivar el ítem "${actualName}"? Dejará de aparecer en ventas, pero se conservará su historial.`)) {
       return;
     }
 
     try {
       const coll = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
-      await getDB().collection(coll).doc(id).delete();
+      await getDB().collection(coll).doc(id).update({
+        isActive: false,
+        archivedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        archivedBy: currentUser.uid,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       await fetchAllData();
       renderProductsTable();
     } catch (e) {
       console.error(e);
-      alert('Error al eliminar ítem de la base de datos.');
+      alert('Error al archivar el ítem: ' + e.message);
     }
   }
 
@@ -3100,7 +3232,7 @@ window.ERPBilling = (function () {
     document.getElementById('set-ticket-footer').value = settings.ticketFooter || '';
 
     // RNC API Key
-    document.getElementById('set-rnc-api-key').value = settings.rncApiKey || '';
+    document.getElementById('set-rnc-api-key').value = '';
   }
 
   async function saveSettings(e) {
@@ -3176,7 +3308,9 @@ window.ERPBilling = (function () {
         ...updated,
         rncApiKey: firebase.firestore.FieldValue.delete()
       }, { merge: true });
-      batch.set(db.collection(collectionSecrets).doc('general'), { rncApiKey: rncApiKey }, { merge: true });
+      if (rncApiKey) {
+        batch.set(db.collection(collectionSecrets).doc('general'), { rncApiKey: rncApiKey }, { merge: true });
+      }
       await batch.commit();
       
       // Reload settings in cache
@@ -3391,6 +3525,8 @@ window.ERPBilling = (function () {
         list = list.concat(futunetProducts);
       }
     }
+
+    list = list.filter(p => p.isActive !== false);
 
     if (searchVal) {
       list = list.filter(p => {
@@ -4205,8 +4341,20 @@ window.ERPBilling = (function () {
         return;
       }
 
+      let previewRemaining = amountVal;
+      let affectedInvoiceCount = 0;
+      for (const invoice of clientInvoices) {
+        if (previewRemaining <= 0.009) break;
+        previewRemaining = BillingCore.roundMoney(previewRemaining - Math.min(previewRemaining, invoice.pending));
+        affectedInvoiceCount += 1;
+      }
+      if (affectedInvoiceCount > 8) {
+        showToast('Este abono alcanzaría más de 8 facturas. Divídelo en dos operaciones para conservar una validación atómica segura.', 'warning');
+        return;
+      }
+
       const db = getDB();
-      const invoiceRefs = clientInvoices.map(invoice => db.collection(collectionInvoices).doc(invoice.id));
+      const invoiceRefs = clientInvoices.slice(0, affectedInvoiceCount).map(invoice => db.collection(collectionInvoices).doc(invoice.id));
       const sessionRef = activeCashSession ? db.collection(collectionCashSessions).doc(activeCashSession.id) : null;
 
       await db.runTransaction(async transaction => {
@@ -4231,23 +4379,29 @@ window.ERPBilling = (function () {
           if (remainingAbono <= 0.009) break;
           const paymentAmount = BillingCore.roundMoney(Math.min(remainingAbono, invoice.pending));
           const newPaidAmount = BillingCore.roundMoney(Number(invoice.paidAmount || 0) + paymentAmount);
+          const paymentRef = db.collection(collectionPayments).doc();
           transaction.update(invoice.ref, {
             paidAmount: newPaidAmount,
             status: BillingCore.paymentStatus(invoice.total, newPaidAmount),
+            lastPaymentId: paymentRef.id,
+            updatedBy: currentUser.uid,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
-          transaction.set(db.collection(collectionPayments).doc(), {
+          transaction.set(paymentRef, {
             invoiceId: invoice.id,
             amount: paymentAmount,
             method: method,
             notes: (notes ? notes + ' - ' : '') + 'Abono general prorrateado',
+            createdBy: currentUser.uid,
+            companyCode: activeCompanyCode,
+            cashSessionId: activeCashSession ? activeCashSession.id : '',
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
           remainingAbono = BillingCore.roundMoney(remainingAbono - paymentAmount);
         }
 
         if (sessionRef) {
-          const sessionUpdates = {};
+          const sessionUpdates = { transactionsCount: firebase.firestore.FieldValue.increment(1) };
           if (method === 'Efectivo') sessionUpdates.salesCash = firebase.firestore.FieldValue.increment(amountVal);
           else if (method === 'Tarjeta') sessionUpdates.salesCard = firebase.firestore.FieldValue.increment(amountVal);
           else sessionUpdates.salesTransfer = firebase.firestore.FieldValue.increment(amountVal);
@@ -4384,15 +4538,25 @@ window.ERPBilling = (function () {
   }
 
   // ─── CASH REGISTER TURN MANAGEMENT ───
+  async function findOpenCashSessionForCurrentUser() {
+    const collection = getDB().collection(collectionCashSessions);
+    const byUid = await collection.where('openedByUid', '==', currentUser.uid).get();
+    let openDoc = byUid.docs.find(doc => doc.data().status === 'open');
+    if (openDoc || !currentUser.email) return openDoc || null;
+
+    const legacy = await collection.where('openedBy', '==', currentUser.email).get();
+    openDoc = legacy.docs.find(doc => doc.data().status === 'open');
+    if (openDoc && !openDoc.data().openedByUid) {
+      await openDoc.ref.update({ openedByUid: currentUser.uid });
+      openDoc = await openDoc.ref.get();
+    }
+    return openDoc || null;
+  }
+
   async function checkActiveCashSession() {
     if (!currentUser) return;
     try {
-      const email = currentUser.email || '';
-      const snap = await getDB().collection(collectionCashSessions)
-        .where('openedBy', '==', email)
-        .get();
-
-      const openDoc = snap.docs.find(doc => doc.data().status === 'open');
+      const openDoc = await findOpenCashSessionForCurrentUser();
       if (openDoc) {
         const doc = openDoc;
         activeCashSession = { id: doc.id, ...doc.data() };
@@ -4464,10 +4628,7 @@ window.ERPBilling = (function () {
 
     try {
       const email = currentUser.email || '';
-      const existing = await getDB().collection(collectionCashSessions)
-        .where('openedBy', '==', email)
-        .get();
-      const existingOpenDoc = existing.docs.find(doc => doc.data().status === 'open');
+      const existingOpenDoc = await findOpenCashSessionForCurrentUser();
       if (existingOpenDoc) {
         const doc = existingOpenDoc;
         activeCashSession = { id: doc.id, ...doc.data() };
@@ -4478,6 +4639,7 @@ window.ERPBilling = (function () {
       }
       const docData = {
         openedBy: email,
+        openedByUid: currentUser.uid,
         openedAt: firebase.firestore.FieldValue.serverTimestamp(),
         initialCash: initialCash,
         status: 'open',
@@ -4485,6 +4647,7 @@ window.ERPBilling = (function () {
         salesCard: 0,
         salesNfc: 0,
         salesTransfer: 0,
+        salesCredit: 0,
         transactionsCount: 0
       };
 
@@ -4547,7 +4710,8 @@ window.ERPBilling = (function () {
         realCash: realVal,
         difference: diff,
         notes: notes,
-        status: 'closed'
+        status: 'closed',
+        closedBy: currentUser.uid
       });
 
       activeCashSession = null;
@@ -4832,6 +4996,7 @@ window.ERPBilling = (function () {
 
     const invoiceData = {
       docType: docType,
+      companyCode: activeCompanyCode,
       clientId: posClient.id || 'anonymous',
       clientName: posClient.name,
       clientRnc: posClient.rnc,
@@ -4849,6 +5014,8 @@ window.ERPBilling = (function () {
       items: items,
       paymentTerms: method === 'credit' ? 'Crédito' : 'Contado',
       paymentMethod: method,
+      createdBy: currentUser.uid,
+      updatedBy: currentUser.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -4876,6 +5043,7 @@ window.ERPBilling = (function () {
       const paymentRef = docType === 'invoice' && paidAmount > 0
         ? dbRef.collection(collectionPayments).doc()
         : null;
+      if (paymentRef) invoiceData.lastPaymentId = paymentRef.id;
       const sessionRef = activeCashSession && docType === 'invoice'
         ? dbRef.collection(collectionCashSessions).doc(activeCashSession.id)
         : null;
@@ -4889,16 +5057,12 @@ window.ERPBilling = (function () {
       await dbRef.runTransaction(async (transaction) => {
         // Firestore exige completar todas las lecturas antes de cualquier escritura.
         const stockDocuments = [];
-        for (let item of (docType === 'invoice' ? posCart : [])) {
-          const match = /^(creaticos|futunet|panitas)_(.+)$/.exec(item.productId);
-          if (!match) throw new Error(`El producto "${item.name}" no tiene un origen válido.`);
-          const sourceCollection = match[1] === 'creaticos'
-            ? 'creaticos_products'
-            : (match[1] === 'panitas' ? 'panitas_products' : 'products');
-          const productDocRef = dbRef.collection(sourceCollection).doc(match[2]);
-          const productDoc = await transaction.get(productDocRef);
+        for (const item of (docType === 'invoice' ? aggregateInventoryItems(posCart) : [])) {
+          const target = inventoryProductTarget(dbRef, item.productId);
+          if (!target) throw new Error(`El producto "${item.name}" no tiene un origen válido.`);
+          const productDoc = await transaction.get(target.ref);
           if (!productDoc.exists) throw new Error(`El producto "${item.name}" ya no existe.`);
-          stockDocuments.push({ item, ref: productDocRef, data: productDoc.data() });
+          stockDocuments.push({ item, target, data: productDoc.data() });
         }
 
         const settingsDoc = await transaction.get(settingsDocRef);
@@ -4931,20 +5095,44 @@ window.ERPBilling = (function () {
         invoiceData.invoiceNumber = freshInvoiceNum;
         invoiceData.ncf = (docType === 'quote' || docType === 'proforma') ? '' : freshNcf;
 
-        stockDocuments.forEach(({ item, ref, data }) => {
+        const inventoryEffects = [];
+        stockDocuments.forEach(({ item, target, data }) => {
           if (data.stock !== undefined && data.stock !== null) {
             const currentStock = Number(data.stock) || 0;
             if (currentStock < item.qty) {
               throw new Error(`Stock insuficiente para "${data.name || data.title}". Disponible: ${currentStock}, Solicitado: ${item.qty}`);
             }
-            transaction.update(ref, {
+            transaction.update(target.ref, {
               stock: currentStock - item.qty,
               updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            inventoryEffects.push({
+              productId: target.productId,
+              documentId: target.documentId,
+              collection: target.collection,
+              quantity: item.qty
             });
           }
         });
 
+        if (docType === 'invoice') {
+          invoiceData.inventoryEffects = inventoryEffects;
+          invoiceData.inventoryPostedAt = firebase.firestore.FieldValue.serverTimestamp();
+        }
+
         transaction.set(newInvoiceDocRef, invoiceData);
+        inventoryEffects.forEach(effect => {
+          transaction.set(dbRef.collection(collectionInventoryMovements).doc(), {
+            type: 'sale',
+            invoiceId: createdDocId,
+            invoiceNumber: freshInvoiceNum,
+            productId: effect.productId,
+            productCollection: effect.collection,
+            quantity: -effect.quantity,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
         transaction.update(settingsDocRef, settingsUpdates);
 
         if (paymentRef) {
@@ -4953,6 +5141,9 @@ window.ERPBilling = (function () {
           amount: paidAmount,
           method: method === 'cash' ? 'Efectivo' : 'Tarjeta',
           notes: 'Pago POS ' + (method === 'nfc' ? 'Contactless NFC' : ''),
+          createdBy: currentUser.uid,
+          companyCode: activeCompanyCode,
+          cashSessionId: activeCashSession ? activeCashSession.id : '',
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
         }
@@ -5453,45 +5644,8 @@ window.ERPBilling = (function () {
       btn.disabled = true;
     }
 
-    const apiKey = (settings && settings.rncApiKey) ? settings.rncApiKey.trim() : '';
-    const targetUrl = 'https://rnc.megaplus.com.do/api/consulta?rnc=' + encodeURIComponent(cleanRnc) + (apiKey ? '&token=' + encodeURIComponent(apiKey) : '');
-    
-    // We try to access through various public CORS proxies for redundancy, falling back to a direct call
-    const proxies = [
-      url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-      url => 'https://corsproxy.io/?' + encodeURIComponent(url),
-      url => 'https://api.codetabs.com/v1/proxy?url=' + encodeURIComponent(url),
-      url => url // direct fallback
-    ];
-
-    let data = null;
-    let lastError = null;
-
-    for (let i = 0; i < proxies.length; i++) {
-      try {
-        const proxyUrl = proxies[i](targetUrl);
-        const res = await fetch(proxyUrl);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        data = await res.json();
-        if (data && data.error && data.mensaje && data.mensaje.includes('Token')) {
-          // If a configured token failed specifically, abort proxy rotation to prevent masking key errors
-          throw new Error(data.mensaje);
-        }
-        break; // Success!
-      } catch (err) {
-        console.warn(`Proxy RNC #${i} falló:`, err);
-        lastError = err;
-      }
-    }
-
     try {
-      if (!data) {
-        throw lastError || new Error('No se pudo establecer conexión con los servidores de consulta de la DGII.');
-      }
-
-      if (data.error) {
-        throw new Error(data.mensaje || data.error);
-      }
+      const data = await lookupRncSecure(cleanRnc);
 
       if (data.nombre_razon_social) {
         const nombre = data.nombre_razon_social;

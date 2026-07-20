@@ -26,7 +26,6 @@ const csp = config.hosting?.headers
 for (const requiredOrigin of [
   'https://unpkg.com',
   'https://cdnjs.cloudflare.com',
-  'https://rnc.megaplus.com.do',
   'https://*.tile.openstreetmap.org'
 ]) {
   if (!csp.includes(requiredOrigin)) errors.push(`CSP: falta ${requiredOrigin}`);

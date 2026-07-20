@@ -41,7 +41,8 @@ test('Hosting publica un artefacto aislado', () => {
   assert.ok(hosting.hosting.predeploy.some(command => command.includes('prepare-hosting.mjs')));
   const csp = hosting.hosting.headers.flatMap(rule => rule.headers || [])
     .find(header => header.key === 'Content-Security-Policy').value;
-  assert.match(csp, /https:\/\/rnc\.megaplus\.com\.do/);
+  assert.doesNotMatch(csp, /rnc\.megaplus\.com\.do|api\.allorigins\.win|corsproxy\.io|api\.codetabs\.com/);
+  assert.match(csp, /https:\/\/futunet-backend\.onrender\.com/);
   assert.match(csp, /https:\/\/cdnjs\.cloudflare\.com/);
   assert.match(csp, /tile\.openstreetmap\.org/);
   assert.doesNotMatch(csp, /localhost|127\.0\.0\.1/);
@@ -49,4 +50,47 @@ test('Hosting publica un artefacto aislado', () => {
     .find(rule => rule.source.includes('css|js'))?.headers
     .find(header => header.key === 'Cache-Control')?.value || '';
   assert.doesNotMatch(assetCache, /immutable/);
+});
+
+test('la consulta RNC usa únicamente el backend autenticado', () => {
+  assert.doesNotMatch(billing, /api\.allorigins\.win|corsproxy\.io|api\.codetabs\.com/);
+  assert.doesNotMatch(billing, /rnc\.megaplus\.com\.do\/api\/consulta/);
+  assert.match(billing, /\/api\/rnc\/consulta\?rnc=/);
+  assert.match(billing, /Authorization:\s*`Bearer \$\{idToken\}`/);
+  assert.match(billing, /'X-Company-Code': activeCompanyCode/);
+});
+
+test('las sesiones de caja conservan propietario y no permiten editar cajas cerradas', () => {
+  assert.match(rules, /function isCashSessionOwner\(\)/);
+  assert.match(rules, /resource\.data\.status == 'open'/);
+  assert.match(billing, /openedByUid: currentUser\.uid/);
+});
+
+test('facturación e inventario se contabilizan y reversan de forma transaccional', () => {
+  assert.match(billing, /aggregateInventoryItems\(items\)/);
+  assert.match(billing, /inventoryEffects/);
+  assert.match(billing, /type: 'sale_reversal'/);
+  assert.match(billing, /collectionInventoryMovements/);
+  assert.match(rules, /match \/creaticos_inventory_movements\/\{movementId\}/);
+  assert.match(rules, /allow update, delete: if false/);
+});
+
+test('los cobros son inmutables y quedan vinculados al usuario', () => {
+  assert.match(billing, /createdBy: currentUser\.uid/);
+  assert.match(billing, /lastPaymentId: paymentRef\.id/);
+  assert.match(rules, /function isPaymentOnlyInvoiceUpdate\(\)/);
+  assert.match(rules, /match \/futunet_payments\/\{paymentId\}[\s\S]*?allow update, delete: if false/);
+});
+
+test('la auditoría puede escribirse pero no alterarse ni borrarse', () => {
+  assert.match(rules, /match \/audit_logs\/\{logId\}/);
+  assert.match(rules, /request\.resource\.data\.userId == request\.auth\.uid/);
+  assert.match(rules, /allow update, delete: if false/);
+});
+
+test('los productos vendidos se archivan sin romper reversos de inventario', () => {
+  assert.match(billing, /isActive: false/);
+  assert.match(billing, /archivedBy: currentUser\.uid/);
+  assert.doesNotMatch(billing, /collection\(coll\)\.doc\(id\)\.delete\(\)/);
+  assert.match(rules, /match \/creaticos_products\/\{productId\}[\s\S]*?allow delete: if false/);
 });

@@ -131,6 +131,7 @@
         throw err;
       } else if (isPlatformSuperAdmin) {
         sessionStorage.setItem('active_company_code', codeUpper);
+        localStorage.setItem('active_company_code', codeUpper);
       }
     }
 

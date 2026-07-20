@@ -95,3 +95,21 @@ test('clasifica estados activos y medios de pago con cheque', () => {
   assert.equal(buckets.transfer, 1000);
   assert.equal(buckets.credit, 0);
 });
+
+test('resuelve la empresa asignada sin depender de una selección local obsoleta', () => {
+  assert.equal(core.resolveCompanyCode({ companyCode: 'FUTUNET' }, 'CREATICOS'), 'FUTUNETSRL');
+  assert.equal(core.resolveCompanyCode({ companyCode: 'PANITAS' }, 'CREATICOS'), 'PANITAS');
+  assert.equal(core.resolveCompanyCode({}, 'CREATICOS'), 'CREATICOS');
+  assert.throws(() => core.resolveCompanyCode({}, 'EMPRESA_INVALIDA'));
+});
+
+test('clasifica cheques y condiciones de crédito de forma consistente', () => {
+  assert.equal(core.paymentMethodGroup('Cheque'), 'transfer');
+  assert.equal(core.paymentMethodGroup('Transferencia Bancaria'), 'transfer');
+  assert.equal(core.paymentMethodGroup('Efectivo'), 'cash');
+  assert.equal(core.paymentMethodGroup('NFC'), 'card');
+  assert.equal(core.isCreditTerms('Crédito'), true);
+  assert.equal(core.isCreditTerms('15 días'), true);
+  assert.equal(core.isCreditTerms('30 días'), true);
+  assert.equal(core.isCreditTerms('Contado'), false);
+});

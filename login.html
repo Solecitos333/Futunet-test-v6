@@ -378,8 +378,14 @@
             return;
           }
           // Conservar el contexto corporativo solo cuando el usuario lo indicó.
-          if (companyCode) localStorage.setItem('active_company_code', companyCode);
-          else localStorage.removeItem('active_company_code');
+          if (companyCode) {
+            var normalizedCompanyCode = companyCode === 'FUTUNET' ? 'FUTUNETSRL' : companyCode;
+            localStorage.setItem('active_company_code', normalizedCompanyCode);
+            sessionStorage.setItem('active_company_code', normalizedCompanyCode);
+          } else {
+            localStorage.removeItem('active_company_code');
+            sessionStorage.removeItem('active_company_code');
+          }
           showMessage('login-message', '¡Bienvenido! Redirigiendo...', 'success');
           setTimeout(function () { redirectByRole(userData); }, 800);
         } catch (err) {

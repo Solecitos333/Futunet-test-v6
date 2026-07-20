@@ -19,6 +19,36 @@
     cancelled: ['pending']
   };
 
+  const SUPPORTED_COMPANY_CODES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+
+  function normalizeCompanyCode(value) {
+    const normalized = String(value || '').trim().toUpperCase();
+    return normalized === 'FUTUNET' ? 'FUTUNETSRL' : normalized;
+  }
+
+  function resolveCompanyCode(userData, storedCompanyCode = 'CREATICOS') {
+    const assigned = normalizeCompanyCode(userData && userData.companyCode);
+    const requested = assigned || normalizeCompanyCode(storedCompanyCode) || 'CREATICOS';
+    if (!SUPPORTED_COMPANY_CODES.includes(requested)) {
+      throw new Error('La empresa seleccionada no está habilitada en este sistema.');
+    }
+    return requested;
+  }
+
+  function paymentMethodGroup(value) {
+    const method = String(value || '').trim().toLowerCase();
+    if (method.includes('efectivo') || method === 'cash') return 'cash';
+    if (method.includes('tarjeta') || method === 'card' || method === 'nfc') return 'card';
+    if (method.includes('transferencia') || method.includes('cheque') || method === 'transfer') return 'transfer';
+    if (method.includes('crédito') || method.includes('credito') || method === 'credit') return 'credit';
+    return 'other';
+  }
+
+  function isCreditTerms(value) {
+    const terms = String(value || '').trim().toLowerCase();
+    return terms.includes('crédito') || terms.includes('credito') || /^\d+\s*d[ií]as?$/.test(terms);
+  }
+
   function toNumber(value, fallback = 0) {
     const number = Number(value);
     return Number.isFinite(number) ? number : fallback;
@@ -296,8 +326,13 @@
 
   return {
     NCF_TYPES,
+    SUPPORTED_COMPANY_CODES,
     RESTAURANT_ORDER_STATUSES,
     RESTAURANT_ACTIVE_STATUSES,
+    normalizeCompanyCode,
+    resolveCompanyCode,
+    paymentMethodGroup,
+    isCreditTerms,
     roundMoney,
     toLocalDateInput,
     parseDateOnly,
