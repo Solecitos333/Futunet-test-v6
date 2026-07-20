@@ -242,6 +242,50 @@ service cloud.firestore {
              data.createdBy == request.auth.uid && data.timestamp == request.time;
     }
 
+    function isValidPurchaseCreate() {
+      let data = request.resource.data;
+      return data.supplierRnc is string && data.supplierRnc.matches('^([0-9]{9}|[0-9]{11})$') &&
+             data.supplierName is string && data.supplierName.size() > 0 && data.supplierName.size() <= 150 &&
+             data.ncf is string && (data.ncf.matches('^B[0-9]{10}$') || data.ncf.matches('^E[0-9]{12}$')) &&
+             data.date is string && data.date.size() == 10 && data.dueDate is string && data.dueDate.size() == 10 &&
+             data.expenseType in ['02', '05', '09', '10', '11'] &&
+             data.subtotal is number && data.subtotal >= 0 && data.itbis is number && data.itbis >= 0 &&
+             data.total is number && data.total > 0 &&
+             data.total >= data.subtotal + data.itbis - 0.01 && data.total <= data.subtotal + data.itbis + 0.01 &&
+             data.paymentMethod in ['01', '02', '03', '04', '07'] &&
+             data.concept is string && data.concept.size() > 0 && data.concept.size() <= 300 &&
+             data.status in ['pending', 'paid'] &&
+             data.createdBy == request.auth.uid && data.updatedBy == request.auth.uid &&
+             data.createdAt == request.time && data.updatedAt == request.time &&
+             (data.paidAt == null || data.paidAt == request.time);
+    }
+
+    function isValidPurchasePaymentUpdate() {
+      return resource.data.status == 'pending' && request.resource.data.status == 'paid' &&
+             request.resource.data.paidAt == request.time && request.resource.data.updatedAt == request.time &&
+             request.resource.data.updatedBy == request.auth.uid &&
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'paidAt', 'updatedAt', 'updatedBy']);
+    }
+
+    function isValidBankMovementCreate() {
+      let data = request.resource.data;
+      return data.date is string && data.date.size() == 10 &&
+             data.account is string && data.account.size() > 0 && data.account.size() <= 100 &&
+             data.type in ['deposit', 'transfer_in', 'withdrawal', 'transfer_out', 'check'] &&
+             data.reference is string && data.reference.size() > 0 && data.reference.size() <= 100 &&
+             data.amount is number && data.amount > 0 &&
+             data.description is string && data.description.size() > 0 && data.description.size() <= 300 &&
+             data.status == 'pending' && data.createdBy == request.auth.uid &&
+             data.createdAt == request.time && data.updatedAt == request.time;
+    }
+
+    function isValidBankReconciliation() {
+      return resource.data.status == 'pending' && request.resource.data.status == 'reconciled' &&
+             request.resource.data.reconciledAt == request.time && request.resource.data.reconciledBy == request.auth.uid &&
+             request.resource.data.updatedAt == request.time &&
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reconciledAt', 'reconciledBy', 'updatedAt']);
+    }
+
     function isValidBillingClient() {
       let data = request.resource.data;
       return data.name is string && data.name.size() > 0 && data.name.size() <= 150 &&
@@ -534,6 +578,18 @@ service cloud.firestore {
       allow create: if isCreaticosOperator() && isValidInventoryMovement();
       allow update, delete: if false;
     }
+    match /creaticos_purchases/{purchaseId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && request.resource.data.companyCode == 'CREATICOS' && isValidPurchaseCreate();
+      allow update: if isCreaticosOperator() && isValidPurchasePaymentUpdate();
+      allow delete: if false;
+    }
+    match /creaticos_bank_movements/{movementId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && request.resource.data.companyCode == 'CREATICOS' && isValidBankMovementCreate();
+      allow update: if isCreaticosOperator() && isValidBankReconciliation();
+      allow delete: if false;
+    }
     match /creaticos_products/{productId} {
       allow read: if isCreaticosOperator();
       allow create: if isCreaticosAdmin();
@@ -600,6 +656,18 @@ service cloud.firestore {
       allow read: if isFutunetOperator();
       allow create: if isFutunetOperator() && isValidInventoryMovement();
       allow update, delete: if false;
+    }
+    match /futunet_purchases/{purchaseId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && request.resource.data.companyCode == 'FUTUNETSRL' && isValidPurchaseCreate();
+      allow update: if isFutunetOperator() && isValidPurchasePaymentUpdate();
+      allow delete: if false;
+    }
+    match /futunet_bank_movements/{movementId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && request.resource.data.companyCode == 'FUTUNETSRL' && isValidBankMovementCreate();
+      allow update: if isFutunetOperator() && isValidBankReconciliation();
+      allow delete: if false;
     }
     match /futunet_settings/{settingId} {
       allow read: if isFutunetOperator();

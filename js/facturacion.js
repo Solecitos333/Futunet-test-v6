@@ -10,7 +10,7 @@ window.ERPBilling = (function () {
   if (!BillingCore) throw new Error('No se pudo cargar el núcleo de cálculos de facturación.');
 
   // Tenant Config
-  const SUPPORTED_COMPANIES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+  const SUPPORTED_COMPANIES = ['CREATICOS', 'FUTUNETSRL'];
   const BILLING_API_BASE_URL = 'https://futunet-backend.onrender.com';
   const DEFAULT_RESTAURANT_TABLES = Array.from({ length: 12 }, (_, index) => `Mesa ${index + 1}`);
   let activeCompanyCode = 'CREATICOS';

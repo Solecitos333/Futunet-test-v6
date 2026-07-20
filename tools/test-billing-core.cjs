@@ -98,9 +98,10 @@ test('clasifica estados activos y medios de pago con cheque', () => {
 
 test('resuelve la empresa asignada sin depender de una selección local obsoleta', () => {
   assert.equal(core.resolveCompanyCode({ companyCode: 'FUTUNET' }, 'CREATICOS'), 'FUTUNETSRL');
-  assert.equal(core.resolveCompanyCode({ companyCode: 'PANITAS' }, 'CREATICOS'), 'PANITAS');
+  assert.throws(() => core.resolveCompanyCode({ companyCode: 'PANITAS' }, 'CREATICOS'), /no está habilitada/);
   assert.equal(core.resolveCompanyCode({}, 'CREATICOS'), 'CREATICOS');
-  assert.throws(() => core.resolveCompanyCode({}, 'EMPRESA_INVALIDA'));
+  assert.equal(core.resolveCompanyCode({}, 'PANITAS'), 'CREATICOS');
+  assert.equal(core.resolveCompanyCode({}, 'EMPRESA_INVALIDA'), 'CREATICOS');
 });
 
 test('clasifica cheques y condiciones de crédito de forma consistente', () => {

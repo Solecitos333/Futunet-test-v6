@@ -6,6 +6,8 @@ const test = require('node:test');
 const root = path.resolve(__dirname, '..');
 const rules = fs.readFileSync(path.join(root, 'firestore.rules'), 'utf8');
 const billing = fs.readFileSync(path.join(root, 'js', 'facturacion.js'), 'utf8');
+const extensions = fs.readFileSync(path.join(root, 'js', 'erp-extensions.js'), 'utf8');
+const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
 
 test('las reglas de comandas no conceden escritura total a operadores', () => {
@@ -93,4 +95,25 @@ test('los productos vendidos se archivan sin romper reversos de inventario', () 
   assert.match(billing, /archivedBy: currentUser\.uid/);
   assert.doesNotMatch(billing, /collection\(coll\)\.doc\(id\)\.delete\(\)/);
   assert.match(rules, /match \/creaticos_products\/\{productId\}[\s\S]*?allow delete: if false/);
+});
+
+test('facturación solo permite Creaticos y Futunet', () => {
+  const switcher = billingHtml.match(/<select id="superadmin-company-select"[\s\S]*?<\/select>/)?.[0] || '';
+  assert.match(switcher, /value="CREATICOS"/);
+  assert.match(switcher, /value="FUTUNETSRL"/);
+  assert.doesNotMatch(switcher, /PANITAS|Los Panitas/);
+  assert.doesNotMatch(extensions, /companyCode === 'PANITAS'/);
+});
+
+test('los módulos ERP visibles registran compras, banco, alertas y auditoría', () => {
+  for (const panel of ['alerts', 'receivables', 'purchases', 'banking', 'inventory-audit']) {
+    assert.match(billingHtml, new RegExp(`id="panel-${panel}"`));
+    assert.match(billingHtml, new RegExp(`data-nav="${panel}"`));
+  }
+  assert.match(extensions, /collection\(`\$\{prefix\}_purchases`\)/);
+  assert.match(extensions, /collection\(`\$\{prefix\}_bank_movements`\)/);
+  assert.match(extensions, /function export606\(\)/);
+  assert.match(extensions, /function loadReceivables\(\)/);
+  assert.match(rules, /match \/creaticos_purchases\/\{purchaseId\}/);
+  assert.match(rules, /match \/futunet_bank_movements\/\{movementId\}/);
 });

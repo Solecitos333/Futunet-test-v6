@@ -19,7 +19,7 @@
     cancelled: ['pending']
   };
 
-  const SUPPORTED_COMPANY_CODES = ['CREATICOS', 'FUTUNETSRL', 'PANITAS'];
+  const SUPPORTED_COMPANY_CODES = ['CREATICOS', 'FUTUNETSRL'];
 
   function normalizeCompanyCode(value) {
     const normalized = String(value || '').trim().toUpperCase();
@@ -28,11 +28,12 @@
 
   function resolveCompanyCode(userData, storedCompanyCode = 'CREATICOS') {
     const assigned = normalizeCompanyCode(userData && userData.companyCode);
-    const requested = assigned || normalizeCompanyCode(storedCompanyCode) || 'CREATICOS';
-    if (!SUPPORTED_COMPANY_CODES.includes(requested)) {
+    if (assigned && !SUPPORTED_COMPANY_CODES.includes(assigned)) {
       throw new Error('La empresa seleccionada no está habilitada en este sistema.');
     }
-    return requested;
+    if (assigned) return assigned;
+    const stored = normalizeCompanyCode(storedCompanyCode);
+    return SUPPORTED_COMPANY_CODES.includes(stored) ? stored : 'CREATICOS';
   }
 
   function paymentMethodGroup(value) {
