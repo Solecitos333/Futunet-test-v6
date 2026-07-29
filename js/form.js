@@ -19,9 +19,12 @@
 function sendForm(event) {
   if (event) event.preventDefault();
 
+  const nombreField = document.getElementById('f-nombre');
+  const telField = document.getElementById('f-tel');
+
   // Obtener valores del formulario
-  const nombre   = document.getElementById('f-nombre').value.trim();
-  const tel      = document.getElementById('f-tel').value.trim();
+  const nombre   = nombreField.value.trim();
+  const tel      = telField.value.trim();
   const servicio = document.getElementById('f-servicio').value;
   const msg      = document.getElementById('f-msg').value.trim();
 
@@ -34,19 +37,25 @@ function sendForm(event) {
     }
   };
 
+  const markInvalid = (field, message) => {
+    field.setAttribute('aria-invalid', 'true');
+    field.focus();
+    notify(message, 'error');
+  };
+
   // Validación — Nombre y teléfono son obligatorios
   if (!nombre) {
-    notify('Por favor completa tu nombre.', 'error');
+    markInvalid(nombreField, 'Por favor completa tu nombre.');
     return;
   }
   if (!tel) {
-    notify('Por favor completa tu teléfono.', 'error');
+    markInvalid(telField, 'Por favor completa tu teléfono.');
     return;
   }
 
   // Validaciones de longitud para evitar abusos/spam
   if (nombre.length > 100) {
-    notify('El nombre no debe superar los 100 caracteres.', 'error');
+    markInvalid(nombreField, 'El nombre no debe superar los 100 caracteres.');
     return;
   }
   if (msg.length > 1500) {
@@ -57,7 +66,7 @@ function sendForm(event) {
   // Validación de formato del teléfono
   const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
   if (!phoneRegex.test(tel)) {
-    notify('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+    markInvalid(telField, 'Por favor introduce un número de teléfono válido (mín. 7 dígitos).');
     return;
   }
 
@@ -79,15 +88,21 @@ function sendForm(event) {
   text += `\n\n¿Me pueden dar más información?`;
 
   // Abrir WhatsApp con el mensaje construido
-  window.open(
+  const whatsappWindow = window.open(
     `https://wa.me/${(window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041'}?text=${encodeURIComponent(text)}`,
-    '_blank'
+    '_blank',
+    'noopener,noreferrer'
   );
+  if (whatsappWindow) whatsappWindow.opener = null;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', sendForm);
+    contactForm.querySelectorAll('input, select, textarea').forEach((field) => {
+      field.addEventListener('input', () => field.removeAttribute('aria-invalid'));
+      field.addEventListener('change', () => field.removeAttribute('aria-invalid'));
+    });
   }
 });

@@ -267,15 +267,23 @@
 }
 
 /* ── Hero Carousel Dots ── */
-.hero-carousel-dots {
+.hero-carousel-controls {
   position: absolute;
-  bottom: 24px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: calc(100vw - 24px);
+  z-index: 26;
+}
+.hero-carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
-  z-index: 20;
 }
 .hero-carousel-dot {
   position: relative;
@@ -320,13 +328,71 @@
   border-color: #fff;
 }
 
+.hero-carousel-toggle {
+  position: relative;
+  flex: 0 0 auto;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(11, 126, 181, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--brand);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-carousel-toggle:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand);
+  background: #fff;
+}
+
+.hero-carousel-toggle__icon {
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.16em;
+  transform: translateX(-0.08em);
+}
+
+.hero-carousel-toggle[aria-pressed="true"] .hero-carousel-toggle__icon {
+  letter-spacing: 0;
+  transform: none;
+}
+
+.hero-carousel:has(.hero-carousel-slide--banner.active) .hero-carousel-toggle {
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(15, 23, 42, 0.62);
+  color: #fff;
+}
+
 /* ── Responsive: Mobile ── */
 @media (max-width: 767px) {
   .hero-carousel-arrow {
     display: none;
   }
-  .hero-carousel-dots { bottom: 4px; gap: 0; }
-  .hero-carousel-dot { width: 44px; height: 44px; }
+  .hero-carousel-controls {
+    bottom: 4px;
+    width: calc(100% - 16px);
+    max-width: calc(100% - 16px);
+  }
+  .hero-carousel-dots {
+    min-width: 0;
+    max-width: calc(100% - 48px);
+    flex: 0 1 auto;
+    justify-content: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+  .hero-carousel-dots::-webkit-scrollbar { display: none; }
+  .hero-carousel-dot { width: 36px; height: 44px; flex: 0 0 36px; }
   .hero-carousel-dot::before { width: 9px; height: 9px; }
 
   .hero-carousel-slide--banner {

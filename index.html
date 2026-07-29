@@ -12,17 +12,18 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Futunet – La Tecnología del Futuro" />
   <meta property="og:description" content="Internet, tecnología e infraestructura para hogares y empresas en Santiago, República Dominicana." />
-  <meta property="og:image" content="https://futunet.com.do/img/logo.webp" />
-  <meta property="og:image:width" content="1024" />
-  <meta property="og:image:height" content="1024" />
+  <meta property="og:image" content="https://futunet.com.do/img/og-futunet-2026.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:url" content="https://futunet.com.do" />
   <meta property="og:locale" content="es_DO" />
   <meta property="og:site_name" content="Futunet" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Futunet – La Tecnología del Futuro" />
   <meta name="twitter:description" content="Internet, tecnología e infraestructura para hogares y empresas en Santiago, República Dominicana." />
-  <meta name="twitter:image" content="https://futunet.com.do/img/logo.webp" />
-  <meta property="og:image:alt" content="Logo de Futunet – La Tecnología del Futuro" />
+  <meta name="twitter:image" content="https://futunet.com.do/img/og-futunet-2026.jpg" />
+  <meta name="twitter:image:alt" content="Futunet: internet y tecnología para hogares y empresas en Santiago" />
+  <meta property="og:image:alt" content="Futunet: internet y tecnología para hogares y empresas en Santiago" />
   <link rel="canonical" href="https://futunet.com.do/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -143,12 +144,7 @@
   }
   </script>
 </head>
-<body class="is-loading">
-  <div id="page-preloader" class="page-preloader" aria-hidden="true">
-    <img src="img/logo-navbar.webp" alt="Futunet" class="preloader-logo" width="972" height="303" />
-    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
-  </div>
-
+<body>
   <a href="#main-content" class="skip-link">Saltar al contenido</a>
 
 
@@ -378,9 +374,9 @@
   </header>
 
   <main id="main-content" tabindex="-1">
-  <section id="inicio" class="hero-carousel-section">
+  <section id="inicio" class="hero-carousel-section" aria-label="Contenido destacado">
     <!-- Hero Carousel Viewport -->
-    <div class="hero-carousel" id="hero-carousel">
+    <div class="hero-carousel" id="hero-carousel" role="region" aria-roledescription="carrusel" aria-label="Promociones y accesos destacados">
       <div class="hero-carousel-track">
         <!-- SLIDE 0: Hero Original -->
         <div class="hero-carousel-slide hero-carousel-slide--hero active" data-slide="hero">
@@ -421,21 +417,6 @@
             </div>
           </div>
         </div>
-        <!-- SLIDE: Papá Smart & Gaming (Campaña de Julio) -->
-        <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
-          <div class="hb-bg" style="background-image:url('img/banners/papa_smart_gaming.webp')"></div>
-          <div class="hb-overlay"></div>
-          <div class="hb-body">
-            <span class="hb-label"><i data-lucide="gamepad-2"></i> Papá Smart & Gaming</span>
-            <h2 class="hb-title">Mes del Padre <br>con <span>Rendimiento y Potencia</span></h2>
-            <p class="hb-desc">Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código <strong>PAPASMART2026</strong>.</p>
-            <div class="hb-actions">
-              <a href="catalogo.html?cat=equipos" class="btn btn-primary">Ver laptops</a>
-              <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quiero%20cotizar%20laptops%20y%20routers%20WiFi%206%20para%20regalar%20en%20el%20d%C3%ADa%20de%20los%20padres%20con%20el%20c%C3%B3digo%20PAPASMART2026." target="_blank" rel="noopener noreferrer" class="btn btn-wa"><svg width="16" height="16"><use href="#wa-icon"/></svg> Cotizar con 10% Off</a>
-            </div>
-          </div>
-        </div>
-
         <!-- SLIDE: Internet Fibra Óptica Residencial -->
         <div class="hero-carousel-slide hero-carousel-slide--banner" data-slide="banner">
           <div class="hb-bg" style="background-image:url('img/banners/internet.webp')"></div>
@@ -525,14 +506,20 @@
         </div>
       </div>
       <!-- Flechas flotantes -->
-      <button class="hero-carousel-arrow hero-carousel-arrow--prev" aria-label="Anterior">
+      <button class="hero-carousel-arrow hero-carousel-arrow--prev" type="button" aria-label="Mostrar diapositiva anterior">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
       </button>
-      <button class="hero-carousel-arrow hero-carousel-arrow--next" aria-label="Siguiente">
+      <button class="hero-carousel-arrow hero-carousel-arrow--next" type="button" aria-label="Mostrar diapositiva siguiente">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
       </button>
       <!-- Indicadores -->
-      <div class="hero-carousel-dots" aria-label="Indicadores"></div>
+      <div class="hero-carousel-controls">
+        <div class="hero-carousel-dots" aria-label="Elegir diapositiva"></div>
+        <button class="hero-carousel-toggle" id="hero-carousel-toggle" type="button" aria-pressed="false" aria-label="Pausar rotación automática">
+          <span class="hero-carousel-toggle__icon" aria-hidden="true">Ⅱ</span>
+          <span class="sr-only">Pausar rotación automática</span>
+        </button>
+      </div>
       <!-- Barra de Progreso Autoplay -->
       <div class="hero-progress-bar" id="hero-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Progreso de rotación de diapositivas"></div>
     </div>
@@ -1108,11 +1095,11 @@
       </div>
       <div class="category-tabs reveal" aria-label="Filtrar por categoría"></div>
       <div class="catshowcase-wrapper reveal">
-        <button class="catshowcase-arrow catshowcase-arrow--prev" aria-label="Anterior">
+        <button class="catshowcase-arrow catshowcase-arrow--prev" type="button" aria-label="Anterior">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
         <div class="catshowcase-grid" id="catshowcase-grid"></div>
-        <button class="catshowcase-arrow catshowcase-arrow--next" aria-label="Siguiente">
+        <button class="catshowcase-arrow catshowcase-arrow--next" type="button" aria-label="Siguiente">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
         </button>
       </div>
@@ -1319,7 +1306,7 @@
       </div>
 
       <!-- Botón interactivo para desplegar marcas -->
-      <button id="btn-toggle-brands" class="brands-more-btn" aria-expanded="false" aria-controls="extended-brands-grid">
+      <button id="btn-toggle-brands" class="brands-more-btn" type="button" aria-expanded="false" aria-controls="extended-brands-grid">
         <span>¡Y muchas más marcas!</span> <i class="fa-solid fa-chevron-down toggle-icon" style="transition: transform 0.3s ease;"></i>
       </button>
       <div class="state-provider">

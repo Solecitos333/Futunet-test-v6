@@ -5,7 +5,6 @@
    - Toggle del menú mobile (hamburguesa)
    - Animación de revelado en scroll (IntersectionObserver)
    - Botón "Volver Arriba"
-   - Preloader suave
    ============================================================= */
 
 
@@ -630,19 +629,6 @@ function initTypingAnimation() {
     }
   }, { passive: true });
 })();
-
-let preloaderTimeout = null;
-
-function hidePagePreloader() {
-  if (preloaderTimeout) clearTimeout(preloaderTimeout);
-  const preloader = document.getElementById('page-preloader');
-  if (preloader) preloader.classList.add('hidden');
-  document.body.classList.remove('is-loading');
-}
-
-window.addEventListener('load', hidePagePreloader);
-// Fallback timeout in case resources (images, large scripts) hang the load event on mobile
-preloaderTimeout = setTimeout(hidePagePreloader, 1500);
 
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
