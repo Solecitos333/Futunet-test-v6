@@ -6,6 +6,7 @@
   'use strict';
 
   var db, storage, currentUserData, ordersChart, searchesChart;
+  var lastAdminModalFocus = null;
 
   function compressToWebP(file, quality) {
     return new Promise(function(resolve, reject) {
@@ -78,6 +79,7 @@
 
   var allAuditLogs = [];
   var currentAuditSearchQuery = '';
+  var loadedPanels = {};
 
   function checkPermission(allowedRoles, errorMessage) {
     if (!currentUserData) return false;
@@ -91,35 +93,24 @@
     return true;
   }
 
+  function currentUserHasRole(role) {
+    if (!currentUserData) return false;
+    var roles = Array.isArray(currentUserData.roles) ? currentUserData.roles : [];
+    return currentUserData.role === role || roles.includes(role);
+  }
+
   function init() {
     db = window.FutunetFirebase.db;
     storage = window.FutunetFirebase.storage;
     currentUserData = FutunetAuth.getUserData();
 
-    // Auto-setup/seed default categories and brands if empty
-    seedDefaultCategoriesAndBrands();
+    // Seed only from a catalog role. Other scoped roles must never attempt writes.
+    if (currentUserHasRole('superadmin') || currentUserHasRole('admin') || currentUserHasRole('editor')) {
+      seedDefaultCategoriesAndBrands();
+    }
 
-    loadDashboardStats();
-    loadInventory();
-    loadUsers();
-    loadDiscounts();
-    loadOrders();
-    loadConfig();
-    
-    // New Loaders
-    loadBanners();
-    loadCategories();
-    loadBrands();
-    loadSearchQueries();
-    loadAuditLogs();
-    loadLayout();
-    updateCopywritingAssistant();
-    
-    // Portal & Requests Loaders
-    loadServiceRequests();
-    loadInternetClients();
-    loadInternetPayments();
-    loadCompetitors();
+    // Load only the visible section. Remaining panels are fetched on first use.
+    loadPanel('dashboard');
 
     // Setup logout button listener
     var logoutBtn = document.getElementById('btn-logout');
@@ -154,6 +145,36 @@
         console.warn('Error checking products collection for auto-migrate:', err);
       });
     }
+  }
+
+  function loadPanel(panelName, forceReload) {
+    if (!db || (!forceReload && loadedPanels[panelName])) return Promise.resolve();
+    loadedPanels[panelName] = true;
+
+    var loaders = {
+      dashboard: function () { return loadDashboardStats(); },
+      inventory: function () { return loadInventory(); },
+      users: function () { return loadUsers(); },
+      discounts: function () { return loadDiscounts(); },
+      orders: function () { return loadOrders(); },
+      banners: function () { return loadBanners(); },
+      'marketing-calendar': function () { updateCopywritingAssistant(); },
+      'categories-brands': function () { return Promise.all([loadCategories(), loadBrands()]); },
+      searches: function () { return loadSearchQueries(); },
+      audit: function () { return loadAuditLogs(); },
+      'service-requests': function () { return loadServiceRequests(); },
+      'internet-management': function () { return Promise.all([loadInternetClients(), loadInternetPayments()]); },
+      'clients-map': function () { return initClientsMap(); },
+      'visual-editor': function () { return loadLayout(); },
+      config: function () { return loadConfig(); },
+      competitors: function () { return loadCompetitors(); }
+    };
+
+    if (!loaders[panelName]) return Promise.resolve();
+    return Promise.resolve(loaders[panelName]()).catch(function (error) {
+      loadedPanels[panelName] = false;
+      console.warn('Error loading admin panel "' + panelName + '":', error);
+    });
   }
 
   // ═══════════════════════════════════
@@ -238,7 +259,7 @@
   // ═══════════════════════════════════
   // DASHBOARD STATS & ALERTS
   // ═══════════════════════════════════
-  async function loadDashboardStats() {
+  async function loadDashboardStatsLegacy() {
     try {
       var products = await db.collection('products').get();
       var users = await db.collection('users').get();
@@ -432,6 +453,176 @@
   // ═══════════════════════════════════
   // INVENTORY
   // ═══════════════════════════════════
+  async function loadDashboardStats() {
+    var canReadUsers = ['superadmin', 'admin', 'support_agent'].some(currentUserHasRole);
+    var canReadOrders = ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'].some(currentUserHasRole);
+    var canReadDiscounts = ['superadmin', 'admin', 'marketing_manager'].some(currentUserHasRole);
+    var canReadSearches = ['superadmin', 'admin', 'marketing_manager'].some(currentUserHasRole);
+    var canReadAudit = ['superadmin', 'admin', 'editor'].some(currentUserHasRole);
+
+    function countDocuments(query) {
+      if (typeof query.count === 'function') {
+        return query.count().get().then(function (snapshot) { return snapshot.data().count; });
+      }
+      return query.limit(1000).get().then(function (snapshot) { return snapshot.size; });
+    }
+
+    var taskMap = {
+      products: db.collection('products').limit(500).get(),
+      productCount: countDocuments(db.collection('products')),
+      users: canReadUsers ? countDocuments(db.collection('users')) : Promise.resolve(null),
+      orders: canReadOrders ? db.collection('orders').orderBy('createdAt', 'desc').limit(500).get() : Promise.resolve(null),
+      orderCount: canReadOrders ? countDocuments(db.collection('orders')) : Promise.resolve(null),
+      discounts: canReadDiscounts ? countDocuments(db.collection('discounts').where('isActive', '==', true)) : Promise.resolve(null),
+      searches: canReadSearches ? db.collection('search_queries').limit(1000).get() : Promise.resolve(null),
+      audit: canReadAudit ? db.collection('audit_logs').orderBy('timestamp', 'desc').limit(5).get() : Promise.resolve(null)
+    };
+    var taskKeys = Object.keys(taskMap);
+    var settled = await Promise.allSettled(taskKeys.map(function (key) { return taskMap[key]; }));
+    var result = {};
+    settled.forEach(function (entry, index) {
+      result[taskKeys[index]] = entry.status === 'fulfilled' ? entry.value : null;
+      if (entry.status === 'rejected') {
+        console.warn('Dashboard query failed (' + taskKeys[index] + '):', entry.reason);
+      }
+    });
+
+    setText('stat-products', result.productCount == null ? '—' : result.productCount);
+    setText('stat-users', result.users == null ? '—' : result.users);
+    setText('stat-orders', result.orderCount == null ? '—' : result.orderCount);
+    setText('stat-discounts', result.discounts == null ? '—' : result.discounts);
+
+    var alertsContainer = document.getElementById('dashboard-stock-alerts');
+    if (alertsContainer) {
+      var alerts = [];
+      if (result.products) {
+        result.products.forEach(function (doc) {
+          var product = doc.data();
+          if (product.isActive === false || product.stock == null) return;
+          var stock = Number(product.stock);
+          var threshold = Number(product.lowStockThreshold == null ? 5 : product.lowStockThreshold);
+          if (stock <= threshold) alerts.push({ product: product, stock: stock });
+        });
+      }
+      alerts.sort(function (a, b) { return a.stock - b.stock; });
+      alertsContainer.innerHTML = alerts.slice(0, 30).map(function (entry) {
+        var exhausted = entry.stock <= 0;
+        return '<div style="display:flex;justify-content:space-between;align-items:center;background:' +
+          (exhausted ? '#fee2e2' : '#fef3c7') + ';border-left:4px solid ' +
+          (exhausted ? '#ef4444' : '#f59e0b') + ';padding:10px 14px;border-radius:8px;font-size:0.85rem;">' +
+          '<span style="color:' + (exhausted ? '#991b1b' : '#92400e') + ';font-weight:600;">' +
+          escapeHtml(entry.product.title || entry.product.name || 'Producto sin nombre') + '</span>' +
+          '<span style="background:' + (exhausted ? '#ef4444' : '#f59e0b') +
+          ';color:white;padding:2px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;">' +
+          (exhausted ? 'AGOTADO' : 'BAJO STOCK (' + entry.stock + ')') + '</span></div>';
+      }).join('') || '<div style="color:#10b981;text-align:center;padding:16px;font-weight:500;">✓ Todo el inventario en buen estado</div>';
+    }
+
+    var activityContainer = document.getElementById('dashboard-audit-activity');
+    if (activityContainer) {
+      if (!canReadAudit) {
+        activityContainer.innerHTML = '<div style="color:#76889e;text-align:center;padding:16px;">Actividad visible solo para roles autorizados</div>';
+      } else {
+        var activityHtml = '';
+        if (result.audit) {
+          result.audit.forEach(function (doc) {
+            var log = doc.data();
+            var logDate = log.timestamp && typeof log.timestamp.toDate === 'function' ? log.timestamp.toDate() : null;
+            activityHtml += '<div style="background:#f3f7fc;padding:10px 14px;border-radius:8px;font-size:0.82rem;border:1px solid #e5eef8;margin-bottom:8px;">' +
+              '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-weight:600;color:#394c60;">' +
+              '<span>' + escapeHtml(log.userEmail || 'Sistema') + '</span><span style="font-size:0.75rem;color:#76889e;">' +
+              (logDate ? logDate.toLocaleString('es-DO', { dateStyle: 'short', timeStyle: 'short' }) : '') + '</span></div>' +
+              '<div style="color:#0a101d;">' + escapeHtml(log.action || '') + ': <span style="color:#76889e;">' +
+              escapeHtml(log.details || '') + '</span></div></div>';
+          });
+        }
+        activityContainer.innerHTML = activityHtml || '<div style="color:#76889e;text-align:center;padding:16px;">Sin actividad registrada</div>';
+      }
+    }
+
+    var monthKeys = [];
+    var monthlyCounts = {};
+    var now = new Date();
+    for (var monthOffset = 5; monthOffset >= 0; monthOffset--) {
+      var monthDate = new Date(now.getFullYear(), now.getMonth() - monthOffset, 1);
+      monthKeys.push(monthDate.getFullYear() + '-' + String(monthDate.getMonth() + 1).padStart(2, '0'));
+    }
+    if (result.orders) {
+      result.orders.forEach(function (doc) {
+        var order = doc.data();
+        var date = order.createdAt && typeof order.createdAt.toDate === 'function' ? order.createdAt.toDate() : null;
+        if (!date) return;
+        var key = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+        if (monthKeys.includes(key)) monthlyCounts[key] = (monthlyCounts[key] || 0) + 1;
+      });
+    }
+    var monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    var ctxOrders = document.getElementById('chart-orders');
+    if (ctxOrders && typeof Chart !== 'undefined') {
+      if (ordersChart) ordersChart.destroy();
+      ordersChart = new Chart(ctxOrders, {
+        type: 'line',
+        data: {
+          labels: monthKeys.map(function (key) {
+            var parts = key.split('-');
+            return monthNames[Number(parts[1]) - 1] + ' ' + parts[0];
+          }),
+          datasets: [{
+            label: 'Pedidos',
+            data: monthKeys.map(function (key) { return monthlyCounts[key] || 0; }),
+            borderColor: '#2ecc71',
+            backgroundColor: 'rgba(46,204,113,0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#2ecc71',
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } }
+        }
+      });
+    }
+
+    var searchFrequency = {};
+    if (result.searches) {
+      result.searches.forEach(function (doc) {
+        var query = String(doc.data().query || '').trim().toLowerCase();
+        if (query) searchFrequency[query] = (searchFrequency[query] || 0) + 1;
+      });
+    }
+    var topSearches = Object.entries(searchFrequency)
+      .sort(function (a, b) { return b[1] - a[1]; })
+      .slice(0, 5);
+    var ctxSearches = document.getElementById('chart-searches');
+    if (ctxSearches && typeof Chart !== 'undefined') {
+      if (searchesChart) searchesChart.destroy();
+      searchesChart = new Chart(ctxSearches, {
+        type: 'bar',
+        data: {
+          labels: topSearches.length ? topSearches.map(function (entry) { return entry[0]; }) : ['Sin datos disponibles'],
+          datasets: [{
+            label: 'Frecuencia',
+            data: topSearches.length ? topSearches.map(function (entry) { return entry[1]; }) : [0],
+            backgroundColor: '#f1c40f',
+            borderRadius: 4,
+            barThickness: 24
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 } } }
+        }
+      });
+    }
+  }
+
   var allProducts = [];
   var currentCategoryFilter = 'all';
   var currentSearchQuery = '';
@@ -475,8 +666,8 @@
             price: data.price || 0,
             tax: data.tax || 18,
             category: 'Creaticos',
-            stock: null,
-            isActive: true,
+            stock: data.stock == null ? null : data.stock,
+            isActive: data.isActive !== false,
             _isCreaticos: true,
             sku: data.sku || '',
             reference: data.reference || '',
@@ -518,7 +709,7 @@
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' : 
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>';
 
-      var eyeBtn = p._isCreaticos ? '' : '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>';
+      var eyeBtn = '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.toggleProductActive(\'' + p.id + '\', ' + (p.isActive !== false) + ')" title="Ocultar/Mostrar">' + eyeIcon + '</button>';
 
       var codeInfo = '';
       if (p.sku || p.reference) {
@@ -537,7 +728,7 @@
         '<td data-label="Acciones">' +
         eyeBtn +
         '  <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.editProduct(\'' + p.id + '\')" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>' +
-        '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteProduct(\'' + p.id + '\')" title="Eliminar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>' +
+        '  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="AdminPanel.deleteProduct(\'' + p.id + '\')" title="Archivar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>' +
         '</td>' +
         '</tr>';
     });
@@ -796,7 +987,7 @@
     }
   }
 
-  async function deleteProduct(id) {
+  async function deleteProductLegacy(id) {
     if (!checkPermission(['superadmin', 'admin', 'editor'], 'No tienes permisos para modificar el catálogo.')) return;
     var product = allProducts.find(function (p) { return p.id === id; });
     var isCreaticos = product && product._isCreaticos;
@@ -807,7 +998,12 @@
     try {
       var prevSnap = await db.collection(coll).doc(id).get();
       var prevData = prevSnap.exists ? prevSnap.data() : null;
-      await db.collection(coll).doc(id).delete();
+      await db.collection(coll).doc(id).update({
+        isActive: false,
+        archivedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        archivedBy: currentUserData.uid,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       writeAuditLog('Eliminar Producto (' + (isCreaticos ? 'Creaticos' : 'Futunet') + ')', prevData ? (prevData[titleField] || prevData.title) : id, {
         collection: coll,
         docId: id,
@@ -822,7 +1018,7 @@
     }
   }
 
-  async function toggleProductActive(id, currentStatus) {
+  async function toggleProductActiveLegacy(id, currentStatus) {
     try {
       var prevSnap = await db.collection('products').doc(id).get();
       var prevData = prevSnap.exists ? prevSnap.data() : null;
@@ -845,6 +1041,76 @@
       loadDashboardStats();
     } catch (e) {
       showToast('Error al actualizar estado: ' + e.message, 'error');
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!checkPermission(['superadmin', 'admin', 'editor'], 'No tienes permisos para modificar el catálogo.')) return;
+    var product = allProducts.find(function (item) { return item.id === id; });
+    var isCreaticos = product && product._isCreaticos;
+    var collectionName = isCreaticos ? 'creaticos_products' : 'products';
+    var titleField = isCreaticos ? 'name' : 'title';
+    var confirmed = await showConfirmModal(
+      'Archivar producto',
+      '¿Archivar este producto? Dejará de aparecer en ventas, pero conservará su historial y podrá reactivarse.'
+    );
+    if (!confirmed) return;
+
+    try {
+      var productRef = db.collection(collectionName).doc(id);
+      var previousSnapshot = await productRef.get();
+      var previousData = previousSnapshot.exists ? previousSnapshot.data() : null;
+      var archivedFields = {
+        isActive: false,
+        archivedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        archivedBy: currentUserData.uid,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      await productRef.update(archivedFields);
+      writeAuditLog('Archivar Producto (' + (isCreaticos ? 'Creaticos' : 'Futunet') + ')', previousData ? (previousData[titleField] || previousData.title) : id, {
+        collection: collectionName,
+        docId: id,
+        type: 'update',
+        previousData: previousData,
+        newData: { ...(previousData || {}), isActive: false }
+      });
+      showToast('Producto archivado sin borrar su historial', 'success');
+      loadInventory();
+      loadDashboardStats();
+    } catch (error) {
+      showToast('Error al archivar: ' + error.message, 'error');
+    }
+  }
+
+  async function toggleProductActive(id, currentStatus) {
+    if (!checkPermission(['superadmin', 'admin', 'editor'], 'No tienes permisos para modificar el catálogo.')) return;
+    try {
+      var product = allProducts.find(function (item) { return item.id === id; });
+      var collectionName = product && product._isCreaticos ? 'creaticos_products' : 'products';
+      var productRef = db.collection(collectionName).doc(id);
+      var previousSnapshot = await productRef.get();
+      var previousData = previousSnapshot.exists ? previousSnapshot.data() : {};
+      var updatedFields = {
+        isActive: !currentStatus,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      if (!currentStatus) {
+        updatedFields.archivedAt = firebase.firestore.FieldValue.delete();
+        updatedFields.archivedBy = firebase.firestore.FieldValue.delete();
+      }
+      await productRef.update(updatedFields);
+      writeAuditLog(!currentStatus ? 'Mostrar Producto' : 'Ocultar Producto', previousData.title || previousData.name || id, {
+        collection: collectionName,
+        docId: id,
+        type: 'update',
+        previousData: previousData,
+        newData: { ...previousData, isActive: !currentStatus }
+      });
+      showToast(!currentStatus ? 'Producto visible en ventas' : 'Producto archivado', 'success');
+      loadInventory();
+      loadDashboardStats();
+    } catch (error) {
+      showToast('Error al actualizar estado: ' + error.message, 'error');
     }
   }
 
@@ -1111,6 +1377,7 @@
       var btn = document.createElement('button');
       btn.type = 'button';
       var isActive = activeRoles.includes(r.id);
+      var isProtectedRole = r.id === 'superadmin' && !currentUserHasRole('superadmin');
       btn.className = 'admin-btn admin-btn-sm';
       btn.style.fontSize = '0.7rem';
       btn.style.padding = '4px 8px';
@@ -1119,10 +1386,17 @@
       btn.style.background = isActive ? 'rgba(10, 112, 162, 0.1)' : '#f8fafc';
       btn.style.color = isActive ? 'var(--primary)' : '#475569';
       btn.style.fontWeight = isActive ? '700' : '500';
-      btn.style.cursor = 'pointer';
+      btn.style.cursor = isProtectedRole ? 'not-allowed' : 'pointer';
+      btn.style.opacity = isProtectedRole ? '0.5' : '1';
       btn.textContent = r.label;
+      btn.disabled = isProtectedRole;
+      btn.setAttribute('aria-disabled', String(isProtectedRole));
+      if (isProtectedRole) {
+        btn.title = 'Solo un superadministrador puede asignar este rol';
+      }
 
       btn.onclick = function() {
+        if (isProtectedRole) return;
         var input = document.getElementById('user-roles-list-input');
         if (!input) return;
         var currentRoles = input.value.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
@@ -1149,6 +1423,10 @@
 
     var rolesInput = getVal('user-roles-list-input');
     var roles = rolesInput.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+    if (!currentUserHasRole('superadmin') && (role === 'superadmin' || roles.includes('superadmin'))) {
+      showToast('Solo un superadministrador puede asignar el rol superadmin.', 'error');
+      return;
+    }
 
     // Keep primary role in sync with select if changed, or set from first element of roles
     if (roles.length > 0 && !roles.includes(role)) {
@@ -2796,8 +3074,36 @@
     document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var modal = this.closest('.admin-modal-overlay');
-        if (modal) modal.classList.remove('is-open');
+        if (modal) closeModal(modal.id);
       });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      var modal = document.querySelector('.admin-modal-overlay.is-open');
+      if (!modal) return;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal(modal.id);
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      var focusable = Array.from(modal.querySelectorAll(
+        'button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])'
+      )).filter(function (element) { return element.offsetParent !== null; });
+      if (!focusable.length) {
+        event.preventDefault();
+        modal.focus();
+        return;
+      }
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
 
     // Inventory search
@@ -2962,11 +3268,27 @@
 
   function openModal(id) {
     var modal = document.getElementById(id);
-    if (modal) modal.classList.add('is-open');
+    if (!modal) return;
+    lastAdminModalFocus = document.activeElement;
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-hidden', 'false');
+    modal.setAttribute('tabindex', '-1');
+    modal.classList.add('is-open');
+    setTimeout(function () {
+      var first = modal.querySelector('input:not([type="hidden"]),select,textarea,button:not([disabled]),a[href]');
+      (first || modal).focus();
+    }, 0);
   }
   function closeModal(id) {
     var modal = document.getElementById(id);
-    if (modal) modal.classList.remove('is-open');
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (lastAdminModalFocus && typeof lastAdminModalFocus.focus === 'function') {
+      lastAdminModalFocus.focus();
+    }
+    lastAdminModalFocus = null;
   }
 
   // ═══════════════════════════════════
@@ -3019,10 +3341,10 @@
 
       titleEl.textContent = title;
       msgEl.textContent = message;
-      modal.classList.add('is-open');
+      openModal('confirm-modal');
 
       function cleanup(result) {
-        modal.classList.remove('is-open');
+        closeModal('confirm-modal');
         btnAccept.removeEventListener('click', onAccept);
         btnCancel.removeEventListener('click', onCancel);
         if (btnClose) btnClose.removeEventListener('click', onCancel);
@@ -3120,8 +3442,14 @@
     var csvRows = [];
     
     // Add header row
+    function safeCsvCell(value) {
+      var text = String(value == null ? '' : value);
+      if (/^\s*[=+\-@]/.test(text)) text = "'" + text;
+      return '"' + text.replace(/"/g, '""') + '"';
+    }
+
     csvRows.push(headers.map(function (h) {
-      return '"' + String(h).replace(/"/g, '""') + '"';
+      return safeCsvCell(h);
     }).join(','));
 
     // Add data rows
@@ -3133,8 +3461,7 @@
         } else {
           val = item[key];
         }
-        if (val == null) val = '';
-        return '"' + String(val).replace(/"/g, '""') + '"';
+        return safeCsvCell(val);
       });
       csvRows.push(row.join(','));
     });
@@ -3154,6 +3481,7 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 0);
       }
     }
     showToast('Exportación completada', 'success');
@@ -3340,7 +3668,9 @@
     if (!currentSelectedRequestId) return;
     try {
       await db.collection('service_requests').doc(currentSelectedRequestId).update({
-        status: 'completed'
+        status: 'completed',
+        completedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        completedBy: currentUserData.uid
       });
       showToast('Solicitud marcada como completada', 'success');
       closeModal('service-request-detail-modal');
@@ -3613,7 +3943,7 @@
   }
 
   // Aprobar Pago
-  async function approveVoucherPayment() {
+  async function approveVoucherPaymentLegacy() {
     if (!currentSelectedPaymentId) return;
     try {
       // 1. Actualizar estado del pago a Aprobado
@@ -3651,8 +3981,48 @@
     }
   }
 
+  async function approveVoucherPayment() {
+    if (!currentSelectedPaymentId) return;
+    try {
+      var paymentRef = db.collection('internet_payments').doc(currentSelectedPaymentId);
+      var auditRef = db.collection('audit_logs').doc();
+
+      await db.runTransaction(async function (transaction) {
+        var paymentSnapshot = await transaction.get(paymentRef);
+        if (!paymentSnapshot.exists) throw new Error('El pago ya no existe.');
+        var paymentData = paymentSnapshot.data();
+        if (paymentData.status !== 'pending') throw new Error('Este pago ya fue procesado.');
+
+        var clientRef = paymentData.userId ? db.collection('users').doc(paymentData.userId) : null;
+        var clientSnapshot = clientRef ? await transaction.get(clientRef) : null;
+
+        transaction.update(paymentRef, {
+          status: 'approved',
+          approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          approvedBy: currentUserData.uid
+        });
+        if (clientRef && clientSnapshot && clientSnapshot.exists && clientSnapshot.data().internetStatus === 'suspended') {
+          transaction.update(clientRef, { internetStatus: 'active' });
+        }
+        transaction.set(auditRef, {
+          action: 'Aprobación de pago',
+          details: 'Aprobado pago de RD$ ' + Number(paymentData.amount || 0).toFixed(2) + ' para ' + (paymentData.userEmail || ''),
+          userId: currentUserData.uid,
+          userEmail: currentUserData.email,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+
+      showToast('Pago verificado y aprobado con éxito', 'success');
+      closeModal('internet-voucher-detail-modal');
+      loadInternetPayments();
+    } catch (error) {
+      showToast('Error al aprobar pago: ' + error.message, 'error');
+    }
+  }
+
   // Rechazar Pago
-  async function rejectVoucherPayment() {
+  async function rejectVoucherPaymentLegacy() {
     if (!currentSelectedPaymentId) return;
     try {
       await db.collection('internet_payments').doc(currentSelectedPaymentId).update({
@@ -3678,6 +4048,39 @@
   }
 
   // ─── LEAFLET MAP & REALTIME BADGES CODE ───
+  async function rejectVoucherPayment() {
+    if (!currentSelectedPaymentId) return;
+    try {
+      var paymentRef = db.collection('internet_payments').doc(currentSelectedPaymentId);
+      var auditRef = db.collection('audit_logs').doc();
+      await db.runTransaction(async function (transaction) {
+        var paymentSnapshot = await transaction.get(paymentRef);
+        if (!paymentSnapshot.exists) throw new Error('El pago ya no existe.');
+        var paymentData = paymentSnapshot.data();
+        if (paymentData.status !== 'pending') throw new Error('Este pago ya fue procesado.');
+
+        transaction.update(paymentRef, {
+          status: 'rejected',
+          rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          rejectedBy: currentUserData.uid
+        });
+        transaction.set(auditRef, {
+          action: 'Rechazo de pago',
+          details: 'Rechazado pago de RD$ ' + Number(paymentData.amount || 0).toFixed(2) + ' para ' + (paymentData.userEmail || ''),
+          userId: currentUserData.uid,
+          userEmail: currentUserData.email,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+
+      showToast('Pago rechazado correctamente', 'info');
+      closeModal('internet-voucher-detail-modal');
+      loadInternetPayments();
+    } catch (error) {
+      showToast('Error al rechazar pago: ' + error.message, 'error');
+    }
+  }
+
   var techMap = null;
   var mapMarkersGroup = null;
   var tempMarker = null;
@@ -3699,25 +4102,12 @@
   }
 
   function initRealTimeBadges() {
-    // 1. Orders Real-time badge & stats
-    db.collection('orders').onSnapshot(function (snapshot) {
-      var pending = 0;
-      var processing = 0;
-      var delivered = 0;
-      snapshot.forEach(function (doc) {
-        var data = doc.data();
-        if (data.status === 'pending') pending++;
-        else if (data.status === 'processing') processing++;
-        else if (data.status === 'delivered') delivered++;
-      });
-
+    // Keep listeners narrowly filtered: the previous implementation downloaded
+    // every historical document in four collections on every admin login.
+    db.collection('orders').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+      var pending = snapshot.size;
       var elPending = document.getElementById('orders-count-pending');
       if (elPending) elPending.textContent = pending;
-      var elProcessing = document.getElementById('orders-count-processing');
-      if (elProcessing) elProcessing.textContent = processing;
-      var elDelivered = document.getElementById('orders-count-delivered');
-      if (elDelivered) elDelivered.textContent = delivered;
-
       var sidebarBadge = document.getElementById('badge-orders');
       if (sidebarBadge) {
         if (pending > 0) {
@@ -3731,21 +4121,10 @@
       console.warn('Real-time orders badge error:', err);
     });
 
-    // 2. Service Requests Real-time badge & stats
-    db.collection('service_requests').onSnapshot(function (snapshot) {
-      var pending = 0;
-      var completed = 0;
-      snapshot.forEach(function (doc) {
-        var data = doc.data();
-        if (data.status === 'pending' || !data.status) pending++;
-        else if (data.status === 'completed') completed++;
-      });
-
+    db.collection('service_requests').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+      var pending = snapshot.size;
       var elPending = document.getElementById('solicitudes-count-pending');
       if (elPending) elPending.textContent = pending;
-      var elCompleted = document.getElementById('solicitudes-count-completed');
-      if (elCompleted) elCompleted.textContent = completed;
-
       var sidebarBadge = document.getElementById('badge-requests');
       if (sidebarBadge) {
         if (pending > 0) {
@@ -3759,31 +4138,19 @@
       console.warn('Real-time requests badge error:', err);
     });
 
-    // 3. Internet Payments Real-time stats & badge
-    db.collection('internet_payments').onSnapshot(function (snapshot) {
-      var pending = 0;
-      snapshot.forEach(function (doc) {
-        var data = doc.data();
-        if (data.status === 'pending') pending++;
-      });
-      pendingPaymentsCount = pending;
+    db.collection('internet_payments').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+      pendingPaymentsCount = snapshot.size;
       var elPending = document.getElementById('internet-payments-count-pending');
-      if (elPending) elPending.textContent = pending;
+      if (elPending) elPending.textContent = pendingPaymentsCount;
       updateInternetBadge();
     }, function (err) {
       console.warn('Real-time internet payments badge error:', err);
     });
 
-    // 4. Internet Tickets Real-time stats & badge
-    db.collection('internet_tickets').onSnapshot(function (snapshot) {
-      var pending = 0;
-      snapshot.forEach(function (doc) {
-        var data = doc.data();
-        if (data.status === 'pending' || !data.status) pending++;
-      });
-      pendingTicketsCount = pending;
+    db.collection('internet_tickets').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+      pendingTicketsCount = snapshot.size;
       var elPending = document.getElementById('internet-tickets-count-pending');
-      if (elPending) elPending.textContent = pending;
+      if (elPending) elPending.textContent = pendingTicketsCount;
       updateInternetBadge();
     }, function (err) {
       console.warn('Real-time internet tickets badge error:', err);
@@ -4992,6 +5359,7 @@
   // ─── Public API ───
   window.AdminPanel = {
     init: init,
+    loadPanel: loadPanel,
     updateCopywritingAssistant: updateCopywritingAssistant,
     copyToClipboard: copyToClipboard,
     openNewBannerWithPreset: openNewBannerWithPreset,

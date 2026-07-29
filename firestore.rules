@@ -50,8 +50,67 @@ service cloud.firestore {
       return isEmailVerified() && userHasAnyRole(['superadmin', 'admin', 'editor']);
     }
 
+    function isPlatformStaff(allowedRoles) {
+      let userData = get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+      return isEmailVerified() &&
+             (!('companyCode' in userData) || userData.companyCode == null || userData.companyCode == '') &&
+             (userData.role in allowedRoles ||
+              (userData.roles is list && userData.roles.hasAny(allowedRoles)));
+    }
+
+    function isPlatformSupport() {
+      return isPlatformStaff(['superadmin', 'admin', 'support_agent']);
+    }
+
+    function isPlatformBilling() {
+      return isPlatformStaff(['superadmin', 'admin', 'billing_clerk']);
+    }
+
+    function isPlatformMarketing() {
+      return isPlatformStaff(['superadmin', 'admin', 'marketing_manager']);
+    }
+
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isScopedInternetClientUpdate() {
+      let data = request.resource.data;
+      return data.diff(resource.data).affectedKeys().hasOnly([
+               'isInternetClient', 'clientCode', 'internetPlan', 'internetStatus',
+               'latitude', 'longitude', 'locationNotes', 'locationAccuracy'
+             ]) &&
+             data.isInternetClient == true &&
+             (!('clientCode' in data) || (data.clientCode is string && data.clientCode.size() <= 50)) &&
+             (!('internetPlan' in data) || (data.internetPlan is string && data.internetPlan.size() <= 50)) &&
+             data.internetStatus in ['active', 'suspended', 'inactive'] &&
+             (!('latitude' in data) || data.latitude is number) &&
+             (!('longitude' in data) || data.longitude is number) &&
+             (!('locationNotes' in data) || (data.locationNotes is string && data.locationNotes.size() <= 500)) &&
+             (!('locationAccuracy' in data) || (data.locationAccuracy is string && data.locationAccuracy.size() <= 100));
+    }
+
+    function isValidInternetPaymentReview() {
+      let data = request.resource.data;
+      return resource.data.status == 'pending' && (
+        (data.status == 'approved' &&
+         data.approvedAt == request.time &&
+         data.approvedBy == request.auth.uid &&
+         data.diff(resource.data).affectedKeys().hasOnly(['status', 'approvedAt', 'approvedBy'])) ||
+        (data.status == 'rejected' &&
+         data.rejectedAt == request.time &&
+         data.rejectedBy == request.auth.uid &&
+         data.diff(resource.data).affectedKeys().hasOnly(['status', 'rejectedAt', 'rejectedBy']))
+      );
+    }
+
+    function isValidServiceRequestCompletion() {
+      let data = request.resource.data;
+      return resource.data.status == 'pending' &&
+             data.status == 'completed' &&
+             data.completedAt == request.time &&
+             data.completedBy == request.auth.uid &&
+             data.diff(resource.data).affectedKeys().hasOnly(['status', 'completedAt', 'completedBy']);
     }
 
     function canAdminTenant(companyCodes, tenantAdminRole) {
@@ -153,7 +212,7 @@ service cloud.firestore {
 
     function isValidBillingInvoice() {
       let data = request.resource.data;
-      return data.docType in ['invoice', 'quote', 'proforma'] &&
+      return data.docType in ['invoice', 'quote', 'proforma', 'credit_note', 'debit_note'] &&
              data.invoiceNumber is string && data.invoiceNumber.size() > 0 && data.invoiceNumber.size() <= 50 &&
              data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 150 &&
              data.clientRnc is string && data.clientRnc.size() <= 30 &&
@@ -164,9 +223,21 @@ service cloud.firestore {
              data.itbis is number && data.itbis >= 0 &&
              data.total is number && data.total > 0 &&
              data.paidAmount is number && data.paidAmount >= 0 && data.paidAmount <= data.total + 0.01 &&
-             data.status in ['pending', 'partial', 'unpaid', 'paid', 'cancelled', 'quote', 'proforma', 'converted'] &&
+             data.status in ['pending', 'partial', 'unpaid', 'paid', 'cancelled', 'quote', 'proforma', 'converted', 'issued', 'credited'] &&
              (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000)) &&
-             data.ncf is string && data.ncf.size() <= 19;
+             data.ncf is string && data.ncf.size() <= 19 &&
+             (
+               !('fiscalSchemaVersion' in data) || data.fiscalSchemaVersion < 2 || (
+                 data.discountAmount is number && data.discountAmount >= 0 && data.discountAmount <= data.subtotal &&
+                 data.taxableAmount is number && data.taxableAmount >= 0 &&
+                 data.taxableAmount >= data.subtotal - data.discountAmount - 0.02 &&
+                 data.taxableAmount <= data.subtotal - data.discountAmount + 0.02 &&
+                 data.total >= data.taxableAmount + data.itbis - 0.02 &&
+                 data.total <= data.taxableAmount + data.itbis + 0.02 &&
+                 data.issuerSnapshot is map &&
+                 data.customerSnapshot is map
+               )
+             );
     }
 
     function hasValidBillingCreateAudit() {
@@ -179,8 +250,12 @@ service cloud.firestore {
                (data.docType == 'invoice' && data.status in ['pending', 'partial', 'unpaid', 'paid'] &&
                  data.inventoryEffects is list && data.inventoryPostedAt == request.time) ||
                (data.docType == 'quote' && data.status == 'quote') ||
-               (data.docType == 'proforma' && data.status == 'proforma')
-             );
+                (data.docType == 'proforma' && data.status == 'proforma') ||
+                (data.docType in ['credit_note', 'debit_note'] && data.status == 'issued' &&
+                  data.originalInvoiceId is string && data.originalInvoiceId.size() > 0 &&
+                  data.modifiedNcf is string && data.modifiedNcf.matches('^B[0-9]{10}$') &&
+                  data.inventoryEffects is list)
+              );
     }
 
     function hasValidBillingUpdateAudit() {
@@ -201,15 +276,80 @@ service cloud.firestore {
              resource.data.paidAmount == 0 && request.resource.data.status == 'cancelled' &&
              request.resource.data.cancelledBy == request.auth.uid &&
              request.resource.data.cancelledAt == request.time &&
+             request.resource.data.cancellationDate is string && request.resource.data.cancellationDate.size() == 10 &&
+             request.resource.data.cancellationType is string &&
+             request.resource.data.cancellationType.matches('^(0[1-9]|10)$') &&
              request.resource.data.inventoryReversedAt == request.time &&
              request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-               'status', 'cancelledAt', 'cancelledBy', 'inventoryReversedAt', 'updatedBy', 'updatedAt'
+               'status', 'cancelledAt', 'cancellationDate', 'cancellationType', 'cancelledBy',
+               'inventoryReversedAt', 'updatedBy', 'updatedAt'
              ]);
+    }
+
+    function isFiscalAdjustmentOnlyInvoiceUpdate() {
+      let data = request.resource.data;
+      return resource.data.docType == 'invoice' &&
+             data.creditedAmount is number && data.creditedAmount >= 0 &&
+             data.debitedAmount is number && data.debitedAmount >= 0 &&
+             data.refundedAmount is number && data.refundedAmount >= 0 &&
+             data.lastAdjustmentId is string && data.lastAdjustmentId.size() > 0 &&
+             data.status in ['pending', 'partial', 'unpaid', 'paid', 'credited'] &&
+             data.diff(resource.data).affectedKeys().hasOnly([
+               'creditedAmount', 'debitedAmount', 'refundedAmount', 'lastAdjustmentId',
+               'status', 'creditRestockedAt', 'updatedBy', 'updatedAt'
+             ]);
+    }
+
+    function matchesFiscalAdjustment(adjustment, invoiceId) {
+      return adjustment.originalInvoiceId == invoiceId && (
+        (adjustment.docType == 'credit_note' &&
+          request.resource.data.creditedAmount - (('creditedAmount' in resource.data) ? resource.data.creditedAmount : 0) >= adjustment.total - 0.01 &&
+          request.resource.data.creditedAmount - (('creditedAmount' in resource.data) ? resource.data.creditedAmount : 0) <= adjustment.total + 0.01 &&
+          request.resource.data.debitedAmount == (('debitedAmount' in resource.data) ? resource.data.debitedAmount : 0) &&
+          request.resource.data.refundedAmount - (('refundedAmount' in resource.data) ? resource.data.refundedAmount : 0) >= adjustment.refundAmount - 0.01 &&
+          request.resource.data.refundedAmount - (('refundedAmount' in resource.data) ? resource.data.refundedAmount : 0) <= adjustment.refundAmount + 0.01) ||
+        (adjustment.docType == 'debit_note' &&
+          request.resource.data.debitedAmount - (('debitedAmount' in resource.data) ? resource.data.debitedAmount : 0) >= adjustment.total - 0.01 &&
+          request.resource.data.debitedAmount - (('debitedAmount' in resource.data) ? resource.data.debitedAmount : 0) <= adjustment.total + 0.01 &&
+          request.resource.data.creditedAmount == (('creditedAmount' in resource.data) ? resource.data.creditedAmount : 0) &&
+          request.resource.data.refundedAmount == (('refundedAmount' in resource.data) ? resource.data.refundedAmount : 0))
+      );
     }
 
     function hasValidNewBillingNcf() {
       let ncf = request.resource.data.ncf;
-      return ncf == '' || ncf.matches('^B[0-9]{10}$') || ncf.matches('^E[0-9]{12}$');
+      return ncf == '' || ncf.matches('^B[0-9]{10}$');
+    }
+
+    function isValidNcfRegistryCreate(companyCode) {
+      let data = request.resource.data;
+      return data.keys().hasAll(['ncf', 'invoiceId', 'companyCode', 'createdBy', 'timestamp']) &&
+             data.keys().hasOnly(['ncf', 'invoiceId', 'companyCode', 'createdBy', 'timestamp']) &&
+             data.ncf is string && data.ncf.matches('^B[0-9]{10}$') &&
+             data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 150 &&
+             data.companyCode == companyCode &&
+             data.createdBy == request.auth.uid &&
+             data.timestamp == request.time;
+    }
+
+    function isValidRefundCreate(companyCode) {
+      let data = request.resource.data;
+      return data.keys().hasAll([
+               'invoiceId', 'adjustmentId', 'amount', 'method', 'reason',
+               'companyCode', 'createdBy', 'timestamp'
+             ]) &&
+             data.keys().hasOnly([
+               'invoiceId', 'adjustmentId', 'amount', 'method', 'reason',
+               'companyCode', 'createdBy', 'timestamp'
+             ]) &&
+             data.invoiceId is string && data.invoiceId.size() > 0 &&
+             data.adjustmentId is string && data.adjustmentId.size() > 0 &&
+             data.amount is number && data.amount > 0 &&
+             data.method in ['Efectivo', 'Tarjeta', 'Transferencia', 'Cheque'] &&
+             data.reason is string && data.reason.size() > 0 && data.reason.size() <= 500 &&
+             data.companyCode == companyCode &&
+             data.createdBy == request.auth.uid &&
+             data.timestamp == request.time;
     }
 
     function preservesBillingIdentity() {
@@ -233,13 +373,72 @@ service cloud.firestore {
 
     function isValidInventoryMovement() {
       let data = request.resource.data;
-      return data.type in ['sale', 'sale_reversal'] &&
+      return data.type in ['sale', 'sale_reversal', 'credit_note_return'] &&
              data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 150 &&
              data.invoiceNumber is string && data.invoiceNumber.size() > 0 && data.invoiceNumber.size() <= 50 &&
              data.productId is string && data.productId.size() > 0 && data.productId.size() <= 250 &&
+             data.productDocumentId is string && data.productDocumentId.size() > 0 && data.productDocumentId.size() <= 150 &&
              data.productCollection in ['products', 'creaticos_products', 'panitas_products'] &&
              data.quantity is number && data.quantity != 0 &&
              data.createdBy == request.auth.uid && data.timestamp == request.time;
+    }
+
+    function inventoryMovementMatchesStockUpdate(movement, productId, productCollection) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+               'stock', 'updatedAt', 'lastInventoryMovementId'
+             ]) &&
+             request.resource.data.stock is number &&
+             request.resource.data.stock >= 0 &&
+             request.resource.data.updatedAt == request.time &&
+             request.resource.data.lastInventoryMovementId is string &&
+             movement.productDocumentId == productId &&
+             movement.productCollection == productCollection &&
+             movement.quantity == request.resource.data.stock - resource.data.stock &&
+             movement.createdBy == request.auth.uid &&
+             movement.timestamp == request.time;
+    }
+
+    function inventoryMovementMatchesInvoice(invoice) {
+      let movement = request.resource.data;
+      return invoice.invoiceNumber == movement.invoiceNumber && (
+        (movement.type == 'sale' &&
+         invoice.docType == 'invoice' &&
+         invoice.inventoryPostedAt == request.time) ||
+        (movement.type == 'sale_reversal' &&
+         invoice.docType == 'invoice' &&
+         invoice.status == 'cancelled' &&
+         invoice.inventoryReversedAt == request.time) ||
+        (movement.type == 'credit_note_return' &&
+         invoice.docType == 'credit_note' &&
+         invoice.inventoryPostedAt == request.time)
+      );
+    }
+
+    function hasCreaticosInventoryMovement(productId, productCollection) {
+      return existsAfter(/databases/$(database)/documents/creaticos_inventory_movements/$(request.resource.data.lastInventoryMovementId)) &&
+             inventoryMovementMatchesStockUpdate(
+               getAfter(/databases/$(database)/documents/creaticos_inventory_movements/$(request.resource.data.lastInventoryMovementId)).data,
+               productId,
+               productCollection
+             );
+    }
+
+    function hasFutunetInventoryMovement(productId, productCollection) {
+      return existsAfter(/databases/$(database)/documents/futunet_inventory_movements/$(request.resource.data.lastInventoryMovementId)) &&
+             inventoryMovementMatchesStockUpdate(
+               getAfter(/databases/$(database)/documents/futunet_inventory_movements/$(request.resource.data.lastInventoryMovementId)).data,
+               productId,
+               productCollection
+             );
+    }
+
+    function hasPanitasInventoryMovement(productId, productCollection) {
+      return existsAfter(/databases/$(database)/documents/panitas_inventory_movements/$(request.resource.data.lastInventoryMovementId)) &&
+             inventoryMovementMatchesStockUpdate(
+               getAfter(/databases/$(database)/documents/panitas_inventory_movements/$(request.resource.data.lastInventoryMovementId)).data,
+               productId,
+               productCollection
+             );
     }
 
     function isValidPurchaseCreate() {
@@ -248,23 +447,61 @@ service cloud.firestore {
              data.supplierName is string && data.supplierName.size() > 0 && data.supplierName.size() <= 150 &&
              data.ncf is string && (data.ncf.matches('^B[0-9]{10}$') || data.ncf.matches('^E[0-9]{12}$')) &&
              data.date is string && data.date.size() == 10 && data.dueDate is string && data.dueDate.size() == 10 &&
-             data.expenseType in ['02', '05', '09', '10', '11'] &&
-             data.subtotal is number && data.subtotal >= 0 && data.itbis is number && data.itbis >= 0 &&
+             data.paymentDate is string && (data.paymentDate == '' || data.paymentDate.size() == 10) &&
+             data.retentionDate is string && (data.retentionDate == '' || data.retentionDate.size() == 10) &&
+             data.expenseType.matches('^(0[1-9]|1[01])$') &&
+             data.goodsAmount is number && data.goodsAmount >= 0 &&
+             data.servicesAmount is number && data.servicesAmount >= 0 &&
+             data.subtotal is number && data.subtotal >= 0 &&
+             data.subtotal >= data.goodsAmount + data.servicesAmount - 0.01 &&
+             data.subtotal <= data.goodsAmount + data.servicesAmount + 0.01 &&
+             data.itbis is number && data.itbis >= 0 &&
+             data.itbisWithheld is number && data.itbisWithheld >= 0 &&
+             data.itbisProportional is number && data.itbisProportional >= 0 &&
+             data.itbisCost is number && data.itbisCost >= 0 && data.itbisCost <= data.itbis &&
+             data.itbisAdvance is number && data.itbisAdvance >= 0 &&
+             data.itbisAdvance >= data.itbis - data.itbisCost - 0.01 &&
+             data.itbisAdvance <= data.itbis - data.itbisCost + 0.01 &&
+             data.itbisPerceived is number && data.itbisPerceived >= 0 &&
+             data.incomeTaxWithheld is number && data.incomeTaxWithheld >= 0 &&
+             data.incomeTaxPerceived is number && data.incomeTaxPerceived >= 0 &&
+             data.selectiveTax is number && data.selectiveTax >= 0 &&
+             data.otherTaxes is number && data.otherTaxes >= 0 &&
+             data.legalTip is number && data.legalTip >= 0 &&
+             data.modifiedNcf is string && (data.modifiedNcf == '' || data.modifiedNcf.matches('^(B[0-9]{10}|E[0-9]{12})$')) &&
+             data.incomeWithholdingType is string &&
+             (data.incomeWithholdingType == '' || data.incomeWithholdingType.matches('^0[1-9]$')) &&
              data.total is number && data.total > 0 &&
-             data.total >= data.subtotal + data.itbis - 0.01 && data.total <= data.subtotal + data.itbis + 0.01 &&
-             data.paymentMethod in ['01', '02', '03', '04', '07'] &&
+             data.total >= data.subtotal + data.itbis + data.selectiveTax + data.otherTaxes + data.legalTip - 0.01 &&
+             data.total <= data.subtotal + data.itbis + data.selectiveTax + data.otherTaxes + data.legalTip + 0.01 &&
+             data.paymentMethod in ['01', '02', '03', '04', '05', '06', '07'] &&
              data.concept is string && data.concept.size() > 0 && data.concept.size() <= 300 &&
              data.status in ['pending', 'paid'] &&
              data.createdBy == request.auth.uid && data.updatedBy == request.auth.uid &&
              data.createdAt == request.time && data.updatedAt == request.time &&
-             (data.paidAt == null || data.paidAt == request.time);
+             (data.paidAt == null || data.paidAt == request.time) &&
+             ((data.itbisWithheld == 0 && data.incomeTaxWithheld == 0) || data.paymentDate.size() == 10) &&
+             (data.status == 'pending' || data.paymentDate.size() == 10);
     }
 
     function isValidPurchasePaymentUpdate() {
       return resource.data.status == 'pending' && request.resource.data.status == 'paid' &&
+             request.resource.data.paymentDate is string && request.resource.data.paymentDate.size() == 10 &&
              request.resource.data.paidAt == request.time && request.resource.data.updatedAt == request.time &&
              request.resource.data.updatedBy == request.auth.uid &&
-             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'paidAt', 'updatedAt', 'updatedBy']);
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'paymentDate', 'paidAt', 'updatedAt', 'updatedBy']);
+    }
+
+    function isValidPurchaseRegistryCreate(companyCode) {
+      let data = request.resource.data;
+      return data.keys().hasAll(['supplierRnc', 'ncf', 'purchaseId', 'companyCode', 'createdBy', 'timestamp']) &&
+             data.keys().hasOnly(['supplierRnc', 'ncf', 'purchaseId', 'companyCode', 'createdBy', 'timestamp']) &&
+             data.supplierRnc is string && data.supplierRnc.matches('^([0-9]{9}|[0-9]{11})$') &&
+             data.ncf is string && (data.ncf.matches('^B[0-9]{10}$') || data.ncf.matches('^E[0-9]{12}$')) &&
+             data.purchaseId is string && data.purchaseId.size() > 0 &&
+             data.companyCode == companyCode &&
+             data.createdBy == request.auth.uid &&
+             data.timestamp == request.time;
     }
 
     function isValidBankMovementCreate() {
@@ -381,10 +618,12 @@ service cloud.firestore {
     // ─── USERS Collection ───
     match /users/{userId} {
       // Logged-in users can read their own data, admins/editors can read all (if email verified)
-      allow read: if isEmailVerified() && (isOwner(userId) || isEditorOrAbove());
+      allow read: if isEmailVerified() && (
+        isOwner(userId) || isEditorOrAbove() || isPlatformSupport() || isPlatformBilling()
+      );
 
       // Allow list access only to admins and above (mitigates global users disclosure)
-      allow list: if isAdminOrAbove();
+      allow list: if isAdminOrAbove() || isPlatformSupport() || isPlatformBilling();
 
       // El registro público solo puede crear usuarios sin privilegios.
       // El primer administrador debe aprovisionarse mediante Firebase Admin o consola segura.
@@ -407,11 +646,16 @@ service cloud.firestore {
          ]))
       );
 
-      // Admins can update any user (change roles, status, etc.)
-      // But only superadmin can modify another superadmin
+      // Admins can update users, but only a superadmin may grant, remove
+      // or modify the superadmin role.
       allow update: if isAdminOrAbove() && (
-        !documentHasRole(resource.data, 'superadmin') || isSuperAdmin()
+        isSuperAdmin() || (
+          !documentHasRole(resource.data, 'superadmin') &&
+          !documentHasRole(request.resource.data, 'superadmin')
+        )
       );
+      allow update: if (isPlatformSupport() || isPlatformBilling()) &&
+                       isScopedInternetClientUpdate();
 
       // Only superadmin can delete users
       allow delete: if isSuperAdmin();
@@ -426,7 +670,10 @@ service cloud.firestore {
       allow create: if isEditorOrAbove() || isFutunetAdmin() || isCreaticosAdmin();
       allow update: if isEditorOrAbove() || isFutunetAdmin() || isCreaticosAdmin() || (
         (isFutunetOperator() || isCreaticosOperator()) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+        (
+          (isFutunetOperator() && hasFutunetInventoryMovement(productId, 'products')) ||
+          (isCreaticosOperator() && hasCreaticosInventoryMovement(productId, 'products'))
+        )
       );
 
       // Only admins can delete products
@@ -448,14 +695,15 @@ service cloud.firestore {
     match /orders/{orderId} {
       // Users can read their own orders, admins/editors can read all (if email verified)
       allow read: if isEmailVerified() && (
-        resource.data.userId == request.auth.uid || isEditorOrAbove()
+        resource.data.userId == request.auth.uid || isEditorOrAbove() ||
+        isPlatformSupport() || isPlatformBilling()
       );
 
       // Client-side document creation is blocked (orders are created securely via backend API)
       allow create: if false;
 
       // Only admins/editors can update order status
-      allow update: if isEditorOrAbove();
+      allow update: if isEditorOrAbove() || isPlatformSupport() || isPlatformBilling();
 
       // Only superadmin can delete orders
       allow delete: if isSuperAdmin();
@@ -467,7 +715,7 @@ service cloud.firestore {
       allow read: if isEmailVerified();
 
       // Only admins can manage discounts
-      allow create, update, delete: if isAdminOrAbove();
+      allow create, update, delete: if isAdminOrAbove() || isPlatformMarketing();
     }
 
     // ─── CONFIG Collection ───
@@ -482,7 +730,7 @@ service cloud.firestore {
     // ─── BANNERS Collection ───
     match /banners/{bannerId} {
       allow read: if true;
-      allow write: if isEditorOrAbove();
+      allow write: if isEditorOrAbove() || isPlatformMarketing();
     }
 
     // ─── CATEGORIES Collection ───
@@ -505,30 +753,8 @@ service cloud.firestore {
                     request.resource.data.query is string &&
                     request.resource.data.query.size() <= 100 &&
                     request.resource.data.timestamp == request.time;
-      allow read, delete: if isAdminOrAbove();
-    }
-
-    // ─── AUDIT LOGS Collection ───
-    match /audit_logs/{logId} {
-      // Admins/editors can read and write all logs
-      allow read: if isEditorOrAbove();
-
-      // Signed-in users with email verified can create audit logs representing their own actions
-      allow create: if isEmailVerified() && (
-        isEditorOrAbove() ||
-        (isAnyTenantAdmin() &&
-          request.resource.data.userId == request.auth.uid &&
-          request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
-          request.resource.data.action is string && request.resource.data.action.size() <= 100 &&
-          request.resource.data.details is string && request.resource.data.details.size() <= 500 &&
-          request.resource.data.timestamp == request.time
-        ) || (
-          request.resource.data.userId == request.auth.uid &&
-          request.resource.data.keys().hasOnly(['action', 'details', 'userId', 'userEmail', 'timestamp']) &&
-          request.resource.data.action in ['Inicio de sesión', 'Reporte de pago', 'Pedido por Transferencia'] &&
-          request.resource.data.timestamp == request.time
-        )
-      );
+      allow read: if isAdminOrAbove() || isPlatformMarketing();
+      allow delete: if isAdminOrAbove();
     }
 
     // ─── SERVICES CONFIG Collection ───
@@ -539,15 +765,26 @@ service cloud.firestore {
 
     // ─── COMPETITORS Collection ───
     match /competitors/{competitorId} {
-      allow read, write: if isEditorOrAbove();
+      allow read, write: if isEditorOrAbove() || isPlatformMarketing();
     }
 
     // ─── CREATICOS BILLING Collections ───
     match /creaticos_invoices/{invoiceId} {
       allow read: if isCreaticosOperator();
-      allow create: if isCreaticosOperator() && isValidBillingInvoice() && hasValidNewBillingNcf() && hasValidBillingCreateAudit() && request.resource.data.companyCode == 'CREATICOS';
+      allow create: if isCreaticosOperator() && isValidBillingInvoice() && hasValidNewBillingNcf() && hasValidBillingCreateAudit() &&
+                       request.resource.data.companyCode == 'CREATICOS' &&
+                       (request.resource.data.ncf == '' || (
+                         existsAfter(/databases/$(database)/documents/creaticos_ncf_registry/$(request.resource.data.ncf)) &&
+                         getAfter(/databases/$(database)/documents/creaticos_ncf_registry/$(request.resource.data.ncf)).data.invoiceId == invoiceId
+                       ));
       allow update: if isValidBillingInvoice() && preservesBillingIdentity() && hasValidBillingUpdateAudit() && (
         (isCreaticosAdmin() && isCancellationOnlyInvoiceUpdate()) ||
+        (isCreaticosAdmin() && isFiscalAdjustmentOnlyInvoiceUpdate() &&
+          existsAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.lastAdjustmentId)) &&
+          matchesFiscalAdjustment(
+            getAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.lastAdjustmentId)).data,
+            invoiceId
+          )) ||
         (isCreaticosOperator() && resource.data.docType in ['quote', 'proforma']) ||
         (isCreaticosOperator() && isPaymentOnlyInvoiceUpdate() &&
           existsAfter(/databases/$(database)/documents/creaticos_payments/$(request.resource.data.lastPaymentId)) &&
@@ -575,14 +812,45 @@ service cloud.firestore {
     }
     match /creaticos_inventory_movements/{movementId} {
       allow read: if isCreaticosOperator();
-      allow create: if isCreaticosOperator() && isValidInventoryMovement();
+      allow create: if isCreaticosOperator() && isValidInventoryMovement() &&
+                       existsAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.invoiceId)) &&
+                       inventoryMovementMatchesInvoice(
+                         getAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.invoiceId)).data
+                       );
+      allow update, delete: if false;
+    }
+    match /creaticos_ncf_registry/{ncf} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && ncf == request.resource.data.ncf &&
+                       isValidNcfRegistryCreate('CREATICOS') &&
+                       existsAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.invoiceId)) &&
+                       getAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.invoiceId)).data.ncf == ncf;
+      allow update, delete: if false;
+    }
+    match /creaticos_refunds/{refundId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosAdmin() && isValidRefundCreate('CREATICOS') &&
+                       existsAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.adjustmentId)) &&
+                       getAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.adjustmentId)).data.originalInvoiceId == request.resource.data.invoiceId &&
+                       getAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.adjustmentId)).data.refundAmount == request.resource.data.amount;
       allow update, delete: if false;
     }
     match /creaticos_purchases/{purchaseId} {
       allow read: if isCreaticosOperator();
-      allow create: if isCreaticosOperator() && request.resource.data.companyCode == 'CREATICOS' && isValidPurchaseCreate();
+      allow create: if isCreaticosOperator() && request.resource.data.companyCode == 'CREATICOS' && isValidPurchaseCreate() &&
+                       existsAfter(/databases/$(database)/documents/creaticos_purchase_ncf_registry/$(request.resource.data.supplierRnc + '_' + request.resource.data.ncf)) &&
+                       getAfter(/databases/$(database)/documents/creaticos_purchase_ncf_registry/$(request.resource.data.supplierRnc + '_' + request.resource.data.ncf)).data.purchaseId == purchaseId;
       allow update: if isCreaticosOperator() && isValidPurchasePaymentUpdate();
       allow delete: if false;
+    }
+    match /creaticos_purchase_ncf_registry/{registryId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() &&
+                       registryId == request.resource.data.supplierRnc + '_' + request.resource.data.ncf &&
+                       isValidPurchaseRegistryCreate('CREATICOS') &&
+                       existsAfter(/databases/$(database)/documents/creaticos_purchases/$(request.resource.data.purchaseId)) &&
+                       getAfter(/databases/$(database)/documents/creaticos_purchases/$(request.resource.data.purchaseId)).data.ncf == request.resource.data.ncf;
+      allow update, delete: if false;
     }
     match /creaticos_bank_movements/{movementId} {
       allow read: if isCreaticosOperator();
@@ -596,7 +864,7 @@ service cloud.firestore {
       allow delete: if false;
       allow update: if isCreaticosAdmin() || (
         isCreaticosOperator() &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+        hasCreaticosInventoryMovement(productId, 'creaticos_products')
       );
     }
     match /creaticos_settings/{settingId} {
@@ -606,7 +874,8 @@ service cloud.firestore {
         isCreaticosOperator() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum',
-          'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
+          'ncfB01Seq', 'ncfB02Seq', 'ncfB03Seq', 'ncfB04Seq',
+          'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
         ])
       );
     }
@@ -624,9 +893,20 @@ service cloud.firestore {
     // ─── FUTUNET BILLING Collections ───
     match /futunet_invoices/{invoiceId} {
       allow read: if isFutunetOperator();
-      allow create: if isFutunetOperator() && isValidBillingInvoice() && hasValidNewBillingNcf() && hasValidBillingCreateAudit() && request.resource.data.companyCode == 'FUTUNETSRL';
+      allow create: if isFutunetOperator() && isValidBillingInvoice() && hasValidNewBillingNcf() && hasValidBillingCreateAudit() &&
+                       request.resource.data.companyCode == 'FUTUNETSRL' &&
+                       (request.resource.data.ncf == '' || (
+                         existsAfter(/databases/$(database)/documents/futunet_ncf_registry/$(request.resource.data.ncf)) &&
+                         getAfter(/databases/$(database)/documents/futunet_ncf_registry/$(request.resource.data.ncf)).data.invoiceId == invoiceId
+                       ));
       allow update: if isValidBillingInvoice() && preservesBillingIdentity() && hasValidBillingUpdateAudit() && (
         (isFutunetAdmin() && isCancellationOnlyInvoiceUpdate()) ||
+        (isFutunetAdmin() && isFiscalAdjustmentOnlyInvoiceUpdate() &&
+          existsAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.lastAdjustmentId)) &&
+          matchesFiscalAdjustment(
+            getAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.lastAdjustmentId)).data,
+            invoiceId
+          )) ||
         (isFutunetOperator() && resource.data.docType in ['quote', 'proforma']) ||
         (isFutunetOperator() && isPaymentOnlyInvoiceUpdate() &&
           existsAfter(/databases/$(database)/documents/futunet_payments/$(request.resource.data.lastPaymentId)) &&
@@ -654,14 +934,45 @@ service cloud.firestore {
     }
     match /futunet_inventory_movements/{movementId} {
       allow read: if isFutunetOperator();
-      allow create: if isFutunetOperator() && isValidInventoryMovement();
+      allow create: if isFutunetOperator() && isValidInventoryMovement() &&
+                       existsAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.invoiceId)) &&
+                       inventoryMovementMatchesInvoice(
+                         getAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.invoiceId)).data
+                       );
+      allow update, delete: if false;
+    }
+    match /futunet_ncf_registry/{ncf} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && ncf == request.resource.data.ncf &&
+                       isValidNcfRegistryCreate('FUTUNETSRL') &&
+                       existsAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.invoiceId)) &&
+                       getAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.invoiceId)).data.ncf == ncf;
+      allow update, delete: if false;
+    }
+    match /futunet_refunds/{refundId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetAdmin() && isValidRefundCreate('FUTUNETSRL') &&
+                       existsAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.adjustmentId)) &&
+                       getAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.adjustmentId)).data.originalInvoiceId == request.resource.data.invoiceId &&
+                       getAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.adjustmentId)).data.refundAmount == request.resource.data.amount;
       allow update, delete: if false;
     }
     match /futunet_purchases/{purchaseId} {
       allow read: if isFutunetOperator();
-      allow create: if isFutunetOperator() && request.resource.data.companyCode == 'FUTUNETSRL' && isValidPurchaseCreate();
+      allow create: if isFutunetOperator() && request.resource.data.companyCode == 'FUTUNETSRL' && isValidPurchaseCreate() &&
+                       existsAfter(/databases/$(database)/documents/futunet_purchase_ncf_registry/$(request.resource.data.supplierRnc + '_' + request.resource.data.ncf)) &&
+                       getAfter(/databases/$(database)/documents/futunet_purchase_ncf_registry/$(request.resource.data.supplierRnc + '_' + request.resource.data.ncf)).data.purchaseId == purchaseId;
       allow update: if isFutunetOperator() && isValidPurchasePaymentUpdate();
       allow delete: if false;
+    }
+    match /futunet_purchase_ncf_registry/{registryId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() &&
+                       registryId == request.resource.data.supplierRnc + '_' + request.resource.data.ncf &&
+                       isValidPurchaseRegistryCreate('FUTUNETSRL') &&
+                       existsAfter(/databases/$(database)/documents/futunet_purchases/$(request.resource.data.purchaseId)) &&
+                       getAfter(/databases/$(database)/documents/futunet_purchases/$(request.resource.data.purchaseId)).data.ncf == request.resource.data.ncf;
+      allow update, delete: if false;
     }
     match /futunet_bank_movements/{movementId} {
       allow read: if isFutunetOperator();
@@ -676,7 +987,8 @@ service cloud.firestore {
         isFutunetOperator() &&
         request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum',
-          'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
+          'ncfB01Seq', 'ncfB02Seq', 'ncfB03Seq', 'ncfB04Seq',
+          'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq'
         ])
       );
     }
@@ -724,7 +1036,11 @@ service cloud.firestore {
     }
     match /panitas_inventory_movements/{movementId} {
       allow read: if isPanitasOperator();
-      allow create: if isPanitasOperator() && isValidInventoryMovement();
+      allow create: if isPanitasOperator() && isValidInventoryMovement() &&
+                       existsAfter(/databases/$(database)/documents/panitas_invoices/$(request.resource.data.invoiceId)) &&
+                       inventoryMovementMatchesInvoice(
+                         getAfter(/databases/$(database)/documents/panitas_invoices/$(request.resource.data.invoiceId)).data
+                       );
       allow update, delete: if false;
     }
     match /panitas_products/{productId} {
@@ -733,7 +1049,7 @@ service cloud.firestore {
       allow delete: if false;
       allow update: if isPanitasAdmin() || (
         isPanitasOperator() &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'updatedAt'])
+        hasPanitasInventoryMovement(productId, 'panitas_products')
       );
     }
     match /panitas_settings/{settingId} {
@@ -803,7 +1119,7 @@ service cloud.firestore {
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.userEmail == request.auth.token.email &&
                     request.resource.data.timestamp == request.time;
-      allow read: if isAdminOrAbove() || isAnyTenantAdmin();
+      allow read: if isEditorOrAbove() || isAnyTenantAdmin();
       allow update, delete: if false;
     }
 
@@ -824,7 +1140,9 @@ service cloud.firestore {
                     (!('company' in request.resource.data.keys()) || (request.resource.data.company is string && request.resource.data.company.size() <= 100)) &&
                     (!('planRequested' in request.resource.data.keys()) || (request.resource.data.planRequested is string && request.resource.data.planRequested.size() <= 100)) &&
                     (!('profile' in request.resource.data.keys()) || (request.resource.data.profile is string && request.resource.data.profile.size() <= 50));
-      allow read, update: if isEditorOrAbove();
+      allow read: if isEditorOrAbove() || isPlatformSupport();
+      allow update: if (isEditorOrAbove() || isPlatformSupport()) &&
+                       isValidServiceRequestCompletion();
       allow delete: if isSuperAdmin();
     }
 
@@ -844,8 +1162,12 @@ service cloud.firestore {
                     request.resource.data.voucherUrl is string && request.resource.data.voucherUrl.size() <= 500 &&
                     request.resource.data.storagePath is string && request.resource.data.storagePath.size() <= 500 &&
                     request.resource.data.plan is string && request.resource.data.plan.size() <= 50;
-      allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
-      allow update: if isEditorOrAbove();
+      allow read: if isEmailVerified() && (
+        resource.data.userId == request.auth.uid || isEditorOrAbove() ||
+        isPlatformSupport() || isPlatformBilling()
+      );
+      allow update: if (isEditorOrAbove() || isPlatformSupport() || isPlatformBilling()) &&
+                       isValidInternetPaymentReview();
       allow delete: if isSuperAdmin();
     }
 
@@ -862,8 +1184,11 @@ service cloud.firestore {
                     request.resource.data.type is string && request.resource.data.type.size() <= 50 &&
                     request.resource.data.details is string && request.resource.data.details.size() <= 1500 &&
                     (!('requestedPlan' in request.resource.data.keys()) || (request.resource.data.requestedPlan is string && request.resource.data.requestedPlan.size() <= 50));
-      allow read: if isEmailVerified() && (resource.data.userId == request.auth.uid || isEditorOrAbove());
-      allow update: if isEditorOrAbove();
+      allow read: if isEmailVerified() && (
+        resource.data.userId == request.auth.uid || isEditorOrAbove() ||
+        isPlatformSupport() || isPlatformBilling()
+      );
+      allow update: if isEditorOrAbove() || isPlatformSupport() || isPlatformBilling();
       allow delete: if isSuperAdmin();
     }
 

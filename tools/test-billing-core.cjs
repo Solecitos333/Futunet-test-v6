@@ -114,3 +114,63 @@ test('clasifica cheques y condiciones de crédito de forma consistente', () => {
   assert.equal(core.isCreditTerms('30 días'), true);
   assert.equal(core.isCreditTerms('Contado'), false);
 });
+
+test('calcula descuentos globales reduciendo base e ITBIS en centavos', () => {
+  const result = core.calculateInvoiceTotals([
+    { price: 1000, qty: 1, discount: 10, tax: 162, taxMode: 'amount', taxRate: 18 }
+  ], 10);
+  assert.equal(result.subtotal, 1000);
+  assert.equal(result.discountAmount, 190);
+  assert.equal(result.taxableAmount, 810);
+  assert.equal(result.itbis, 145.8);
+  assert.equal(result.total, 955.8);
+  assert.equal(result.items[0].total, 955.8);
+});
+
+test('controla inicio, fin, vencimiento y alerta de rangos NCF', () => {
+  const settings = {
+    ncfB01Seq: 98,
+    ncfB01Start: 1,
+    ncfB01End: 100,
+    ncfB01Expiry: '2026-12-31',
+    ncfLowStockWarning: 5
+  };
+  const status = core.ncfRangeStatus(settings, 'B01', '2026-07-29');
+  assert.equal(status.remaining, 3);
+  assert.equal(status.low, true);
+  assert.equal(status.valid, true);
+  assert.throws(() => core.assertNcfRangeAvailable(settings, 'B01', '2027-01-01'), /venció/);
+});
+
+test('genera registros DGII 606 y 608 con sus estructuras completas', () => {
+  const record606 = core.build606Record({
+    supplierRnc: '132702077',
+    expenseType: '09',
+    ncf: 'B0100000001',
+    date: '2026-07-10',
+    paymentDate: '2026-07-20',
+    goodsAmount: 1000,
+    servicesAmount: 500,
+    total: 1770,
+    itbis: 270,
+    paymentMethod: '04'
+  });
+  assert.equal(record606.length, 23);
+  assert.equal(record606[7], 500);
+  assert.equal(record606[8], 1000);
+  assert.equal(record606[9], 1500);
+  assert.deepEqual(core.build608Record({
+    docType: 'invoice',
+    status: 'cancelled',
+    ncf: 'B0100000001',
+    date: '2026-07-10',
+    cancellationDate: '2026-07-29',
+    cancellationType: '04'
+  }), ['B0100000001', '20260710', '04']);
+});
+
+test('filtra registros por período fiscal válido', () => {
+  assert.equal(core.recordBelongsToPeriod({ date: '2026-07-31' }, '2026-07'), true);
+  assert.equal(core.recordBelongsToPeriod({ date: '2026-06-30' }, '2026-07'), false);
+  assert.throws(() => core.normalizeFiscalPeriod('07-2026'));
+});

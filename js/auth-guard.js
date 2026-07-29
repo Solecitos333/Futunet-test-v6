@@ -59,7 +59,15 @@
           window.location.href = 'mi-cuenta.html';
           return;
         }
-        if (userData && userData.role !== 'superadmin' && userData.role !== 'admin' && userData.role !== 'editor') {
+        var roles = Array.from(new Set([
+          userData ? (userData.role || 'user') : 'user',
+          ...((userData && Array.isArray(userData.roles)) ? userData.roles : [])
+        ]));
+        var platformRoles = [
+          'superadmin', 'admin', 'editor',
+          'support_agent', 'billing_clerk', 'marketing_manager'
+        ];
+        if (!roles.some(function (role) { return platformRoles.includes(role); })) {
           window.location.href = 'mi-cuenta.html';
           return;
         }

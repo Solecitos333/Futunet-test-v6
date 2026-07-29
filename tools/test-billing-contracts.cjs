@@ -7,6 +7,8 @@ const root = path.resolve(__dirname, '..');
 const rules = fs.readFileSync(path.join(root, 'firestore.rules'), 'utf8');
 const billing = fs.readFileSync(path.join(root, 'js', 'facturacion.js'), 'utf8');
 const extensions = fs.readFileSync(path.join(root, 'js', 'erp-extensions.js'), 'utf8');
+const admin = fs.readFileSync(path.join(root, 'js', 'admin-panel.js'), 'utf8');
+const authGuard = fs.readFileSync(path.join(root, 'js', 'auth-guard.js'), 'utf8');
 const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
 
@@ -73,6 +75,10 @@ test('facturación e inventario se contabilizan y reversan de forma transacciona
   assert.match(billing, /inventoryEffects/);
   assert.match(billing, /type: 'sale_reversal'/);
   assert.match(billing, /collectionInventoryMovements/);
+  assert.match(billing, /lastInventoryMovementId: movementRef\.id/);
+  assert.match(billing, /productDocumentId: effect\.documentId/);
+  assert.match(rules, /function inventoryMovementMatchesStockUpdate\(/);
+  assert.match(rules, /request\.resource\.data\.lastInventoryMovementId/);
   assert.match(rules, /match \/creaticos_inventory_movements\/\{movementId\}/);
   assert.match(rules, /allow update, delete: if false/);
 });
@@ -85,9 +91,39 @@ test('los cobros son inmutables y quedan vinculados al usuario', () => {
 });
 
 test('la auditoría puede escribirse pero no alterarse ni borrarse', () => {
-  assert.match(rules, /match \/audit_logs\/\{logId\}/);
+  assert.equal((rules.match(/match \/audit_logs\/\{logId\}/g) || []).length, 1);
   assert.match(rules, /request\.resource\.data\.userId == request\.auth\.uid/);
   assert.match(rules, /allow update, delete: if false/);
+});
+
+test('un administrador no puede conceder el rol superadmin', () => {
+  assert.match(rules, /!documentHasRole\(request\.resource\.data, 'superadmin'\)/);
+  assert.match(admin, /Solo un superadministrador puede asignar el rol superadmin/);
+  assert.match(admin, /isProtectedRole/);
+});
+
+test('los roles operativos tienen acceso limitado por especialidad', () => {
+  for (const role of ['support_agent', 'billing_clerk', 'marketing_manager']) {
+    assert.match(rules, new RegExp(role));
+    assert.match(authGuard, new RegExp(role));
+  }
+  assert.match(rules, /function isPlatformSupport\(\)/);
+  assert.match(rules, /function isPlatformBilling\(\)/);
+  assert.match(rules, /function isPlatformMarketing\(\)/);
+});
+
+test('el pago NFC es un registro manual verificable y no simula aprobacion bancaria', () => {
+  assert.match(billingHtml, /id="nfc-manual-reference"/);
+  assert.match(billingHtml, /Registrar pago verificado/);
+  assert.match(billing, /document\.getElementById\('nfc-manual-reference'\)/);
+  assert.doesNotMatch(billing, /PROCESANDO PAGO CON EL BANCO|PAGO APROBADO/);
+});
+
+test('el panel administrativo carga secciones bajo demanda y limita los contadores en vivo', () => {
+  assert.match(admin, /loadPanel\('dashboard'\)/);
+  assert.match(admin, /function loadPanel\(panelName, forceReload\)/);
+  assert.match(admin, /collection\('orders'\)\.where\('status', '==', 'pending'\)/);
+  assert.match(admin, /collection\('internet_payments'\)\.where\('status', '==', 'pending'\)/);
 });
 
 test('los productos vendidos se archivan sin romper reversos de inventario', () => {

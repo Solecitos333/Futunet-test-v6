@@ -21,7 +21,7 @@
   <link rel="shortcut icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
   <meta name="theme-color" content="#0f1923" />
   <link rel="manifest" href="manifest.json" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
@@ -2057,7 +2057,7 @@
           'clients-map': ['superadmin', 'admin', 'support_agent'],
           'competitors': ['superadmin', 'admin', 'editor', 'marketing_manager'],
           'users': ['superadmin', 'admin', 'support_agent'],
-          'discounts': ['superadmin', 'admin', 'editor', 'marketing_manager'],
+          'discounts': ['superadmin', 'admin', 'marketing_manager'],
           'banners': ['superadmin', 'admin', 'editor', 'marketing_manager'],
           'marketing-calendar': ['superadmin', 'admin', 'editor', 'marketing_manager'],
           'categories-brands': ['superadmin', 'admin', 'editor'],
@@ -2103,10 +2103,8 @@
           var panel = document.querySelector('[data-admin-panel="' + target + '"]');
           if (panel) panel.classList.add('is-active');
 
-          if (target === 'clients-map') {
-            if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.initClientsMap === 'function') {
-              AdminPanel.initClientsMap();
-            }
+          if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.loadPanel === 'function') {
+            AdminPanel.loadPanel(target);
           }
 
           // Close mobile sidebar

@@ -5,7 +5,7 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
 
-  const NCF_TYPES = ['B01', 'B02', 'B12', 'B14', 'B15'];
+  const NCF_TYPES = ['B01', 'B02', 'B03', 'B04', 'B12', 'B14', 'B15'];
   const RESTAURANT_ORDER_STATUSES = ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'closed', 'cancelled'];
   const RESTAURANT_ACTIVE_STATUSES = ['pending', 'preparing', 'ready', 'served', 'pending_payment', 'delivered'];
   const RESTAURANT_STATUS_TRANSITIONS = {
@@ -57,6 +57,14 @@
 
   function roundMoney(value) {
     return Math.round((toNumber(value) + Number.EPSILON) * 100) / 100;
+  }
+
+  function toCents(value) {
+    return Math.round((toNumber(value) + Number.EPSILON) * 100);
+  }
+
+  function fromCents(value) {
+    return Math.round(toNumber(value)) / 100;
   }
 
   function toLocalDateInput(value = new Date()) {
@@ -117,6 +125,109 @@
     const ncf = String(value || '').trim().toUpperCase();
     if (/^B\d{10}$/.test(ncf)) return true;
     return options.allowElectronic !== false && /^E\d{12}$/.test(ncf);
+  }
+
+  function calculateInvoiceTotals(items = [], globalDiscountPct = 0) {
+    const globalRate = Math.min(100, Math.max(0, toNumber(globalDiscountPct)));
+    const lines = [];
+    let subtotalCents = 0;
+    let rowDiscountCents = 0;
+    let globalDiscountCents = 0;
+    let taxableCents = 0;
+    let itbisCents = 0;
+
+    (Array.isArray(items) ? items : []).forEach(item => {
+      const price = Math.max(0, toNumber(item.price));
+      const qty = Math.max(0, toNumber(item.qty, 1));
+      const discountPct = Math.min(100, Math.max(0, toNumber(item.discount)));
+      const grossCents = toCents(price * qty);
+      const lineDiscountCents = Math.round(grossCents * discountPct / 100);
+      const netBeforeGlobalCents = Math.max(0, grossCents - lineDiscountCents);
+      const lineGlobalDiscountCents = Math.round(netBeforeGlobalCents * globalRate / 100);
+      const netCents = Math.max(0, netBeforeGlobalCents - lineGlobalDiscountCents);
+      const resolvedTax = resolveLineTax({ ...item, price, qty, discount: discountPct });
+      const taxBeforeGlobalCents = toCents(resolvedTax.amount);
+      const taxCents = Math.max(0, Math.round(taxBeforeGlobalCents * (100 - globalRate) / 100));
+
+      subtotalCents += grossCents;
+      rowDiscountCents += lineDiscountCents;
+      globalDiscountCents += lineGlobalDiscountCents;
+      taxableCents += netCents;
+      itbisCents += taxCents;
+      lines.push({
+        ...item,
+        price: roundMoney(price),
+        qty,
+        discount: discountPct,
+        grossAmount: fromCents(grossCents),
+        rowDiscountAmount: fromCents(lineDiscountCents),
+        globalDiscountAmount: fromCents(lineGlobalDiscountCents),
+        netAmount: fromCents(netCents),
+        tax: fromCents(taxBeforeGlobalCents),
+        taxAfterGlobalDiscount: fromCents(taxCents),
+        taxMode: resolvedTax.mode,
+        taxRate: roundMoney(resolvedTax.rate),
+        total: fromCents(netCents + taxCents)
+      });
+    });
+
+    return {
+      items: lines,
+      subtotal: fromCents(subtotalCents),
+      rowDiscountAmount: fromCents(rowDiscountCents),
+      globalDiscountAmount: fromCents(globalDiscountCents),
+      discountAmount: fromCents(rowDiscountCents + globalDiscountCents),
+      taxableAmount: fromCents(taxableCents),
+      itbis: fromCents(itbisCents),
+      total: fromCents(taxableCents + itbisCents),
+      discountPct: globalRate
+    };
+  }
+
+  function normalizeFiscalPeriod(value) {
+    const raw = String(value || '').trim();
+    const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(raw);
+    if (!match) throw new Error('El período fiscal debe tener el formato AAAA-MM.');
+    return raw;
+  }
+
+  function recordBelongsToPeriod(record, period, dateField = 'date') {
+    const normalizedPeriod = normalizeFiscalPeriod(period);
+    return String(record && record[dateField] || '').slice(0, 7) === normalizedPeriod;
+  }
+
+  function ncfRangeStatus(settings = {}, type, issueDate = new Date()) {
+    const normalizedType = String(type || '').toUpperCase();
+    if (!NCF_TYPES.includes(normalizedType)) throw new Error('Tipo de NCF no soportado.');
+    const key = `ncf${normalizedType}`;
+    const next = Math.max(1, Math.trunc(toNumber(settings[`${key}Seq`], 1)));
+    const start = Math.max(1, Math.trunc(toNumber(settings[`${key}Start`], 1)));
+    const end = Math.min(99999999, Math.max(start, Math.trunc(toNumber(settings[`${key}End`], 99999999))));
+    const expiry = String(settings[`${key}Expiry`] || '').slice(0, 10);
+    const issue = toLocalDateInput(parseDateOnly(issueDate) || issueDate);
+    const expired = Boolean(expiry && issue > expiry);
+    const exhausted = next < start || next > end;
+    const remaining = exhausted ? 0 : Math.max(0, end - next + 1);
+    const warningThreshold = Math.max(1, Math.trunc(toNumber(settings.ncfLowStockWarning, 25)));
+    return {
+      type: normalizedType,
+      next,
+      start,
+      end,
+      expiry,
+      expired,
+      exhausted,
+      remaining,
+      low: !expired && !exhausted && remaining <= warningThreshold,
+      valid: !expired && !exhausted
+    };
+  }
+
+  function assertNcfRangeAvailable(settings, type, issueDate) {
+    const status = ncfRangeStatus(settings, type, issueDate);
+    if (status.expired) throw new Error(`El rango ${status.type} venció el ${status.expiry}.`);
+    if (status.exhausted) throw new Error(`El rango ${status.type} está agotado o fuera de secuencia.`);
+    return status;
   }
 
   function resolveLineTax(line = {}) {
@@ -282,7 +393,7 @@
   }
 
   function classify607Invoice(invoice) {
-    if (!invoice || invoice.docType !== 'invoice' || invoice.status === 'cancelled') return 'excluded';
+    if (!invoice || !['invoice', 'credit_note', 'debit_note'].includes(invoice.docType) || invoice.status === 'cancelled') return 'excluded';
     const ncf = String(invoice.ncf || '').trim().toUpperCase();
     if (/^E\d{12}$/.test(ncf)) return 'electronic';
     if (!/^B\d{10}$/.test(ncf)) return 'invalid';
@@ -306,7 +417,9 @@
       Number(invoice.incomeType) || 1,
       String(invoice.date || '').replace(/\D/g, '').slice(0, 8),
       String(invoice.retentionDate || '').replace(/\D/g, '').slice(0, 8),
-      roundMoney(invoice.subtotal),
+      roundMoney(invoice.taxableAmount !== undefined
+        ? invoice.taxableAmount
+        : Math.max(0, toNumber(invoice.subtotal) - toNumber(invoice.discountAmount))),
       roundMoney(invoice.itbis),
       roundMoney(invoice.itbisWithheld),
       roundMoney(invoice.itbisPerceived),
@@ -325,6 +438,53 @@
     ];
   }
 
+  function build606Record(purchase) {
+    const rnc = String(purchase && purchase.supplierRnc || '').replace(/\D/g, '');
+    const typeId = rnc.length === 9 ? 1 : (rnc.length === 11 ? 2 : 3);
+    const services = roundMoney(purchase && purchase.servicesAmount);
+    const goods = roundMoney(purchase && (
+      purchase.goodsAmount !== undefined ? purchase.goodsAmount : purchase.subtotal
+    ));
+    const totalBeforeTax = roundMoney(services + goods);
+    return [
+      rnc,
+      typeId,
+      String(purchase && purchase.expenseType || '09'),
+      String(purchase && purchase.ncf || '').trim().toUpperCase(),
+      String(purchase && purchase.modifiedNcf || '').trim().toUpperCase(),
+      String(purchase && purchase.date || '').replace(/\D/g, '').slice(0, 8),
+      String(purchase && purchase.paymentDate || '').replace(/\D/g, '').slice(0, 8),
+      services,
+      goods,
+      totalBeforeTax,
+      roundMoney(purchase && purchase.itbis),
+      roundMoney(purchase && purchase.itbisWithheld),
+      roundMoney(purchase && purchase.itbisProportional),
+      roundMoney(purchase && purchase.itbisCost),
+      roundMoney(purchase && purchase.itbisAdvance),
+      roundMoney(purchase && purchase.itbisPerceived),
+      String(purchase && purchase.incomeWithholdingType || ''),
+      roundMoney(purchase && purchase.incomeTaxWithheld),
+      roundMoney(purchase && purchase.incomeTaxPerceived),
+      roundMoney(purchase && purchase.selectiveTax),
+      roundMoney(purchase && purchase.otherTaxes),
+      roundMoney(purchase && purchase.legalTip),
+      String(purchase && purchase.paymentMethod || '04')
+    ];
+  }
+
+  function build608Record(invoice) {
+    if (!invoice || invoice.docType !== 'invoice' || invoice.status !== 'cancelled') return null;
+    const ncf = String(invoice.ncf || '').trim().toUpperCase();
+    if (!/^B\d{10}$/.test(ncf)) return null;
+    const invoiceDate = String(invoice.date || '')
+      .replace(/\D/g, '')
+      .slice(0, 8);
+    const cancellationType = String(invoice.cancellationType || '04').replace(/\D/g, '').padStart(2, '0');
+    if (invoiceDate.length !== 8 || !/^(0[1-9]|10)$/.test(cancellationType)) return null;
+    return [ncf, invoiceDate, cancellationType];
+  }
+
   return {
     NCF_TYPES,
     SUPPORTED_COMPANY_CODES,
@@ -335,6 +495,8 @@
     paymentMethodGroup,
     isCreditTerms,
     roundMoney,
+    toCents,
+    fromCents,
     toLocalDateInput,
     parseDateOnly,
     formatDate,
@@ -342,6 +504,11 @@
     normalizeNcfPrefix,
     buildNcf,
     isValidNcf,
+    calculateInvoiceTotals,
+    normalizeFiscalPeriod,
+    recordBelongsToPeriod,
+    ncfRangeStatus,
+    assertNcfRangeAvailable,
     resolveLineTax,
     paymentStatus,
     normalizeTableName,
@@ -355,6 +522,8 @@
     csvCell,
     paymentBucketsFor607,
     classify607Invoice,
-    build607Record
+    build607Record,
+    build606Record,
+    build608Record
   };
 });

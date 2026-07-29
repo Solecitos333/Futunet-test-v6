@@ -23,6 +23,8 @@ window.ERPBilling = (function () {
   let collectionSecrets = '';
   let collectionCashSessions = '';
   let collectionInventoryMovements = '';
+  let collectionNcfRegistry = '';
+  let collectionRefunds = '';
   let collectionProducts = '';
 
   function configureTenant(userData) {
@@ -45,6 +47,8 @@ window.ERPBilling = (function () {
     collectionSecrets = `${prefix}_secrets`;
     collectionCashSessions = `${prefix}_cash_sessions`;
     collectionInventoryMovements = `${prefix}_inventory_movements`;
+    collectionNcfRegistry = `${prefix}_ncf_registry`;
+    collectionRefunds = `${prefix}_refunds`;
     collectionProducts = isCreaticos ? 'creaticos_products' : (isPanitas ? 'panitas_products' : 'products');
   }
 
@@ -75,6 +79,16 @@ window.ERPBilling = (function () {
       aggregated.set(productId, current);
     });
     return Array.from(aggregated.values());
+  }
+
+  function productCategorySnapshot(compositeId) {
+    const match = /^(creaticos|futunet|panitas)_(.+)$/.exec(String(compositeId || ''));
+    if (!match) return 'Otros';
+    const source = match[1] === 'creaticos'
+      ? creaticosProducts
+      : (match[1] === 'futunet' ? futunetProducts : products);
+    const product = source.find(item => item.id === match[2]);
+    return String(product && product.category || (match[1] === 'creaticos' ? 'Servicios Creaticos' : 'Otros'));
   }
 
   async function lookupRncSecure(cleanRnc) {
@@ -160,6 +174,7 @@ window.ERPBilling = (function () {
   let creaticosProducts = [];
   let futunetProducts = [];
   let payments = [];
+  let refunds = [];
   
   let currentInvoiceItems = [];
   let dashboardChart = null;
@@ -173,6 +188,7 @@ window.ERPBilling = (function () {
   let posActiveCategory = 'all';
   let currentProfileClientId = '';
   let isProcessingPosSale = false;
+  let pendingPosManualReference = '';
   let lastFocusedBeforeModal = null;
   let restaurantOrders = [];
   let restaurantOrdersLoaded = false;
@@ -233,6 +249,10 @@ window.ERPBilling = (function () {
       }
       await fetchAllData();
       await checkActiveCashSession();
+      const fiscalPeriodInput = document.getElementById('fiscal-report-period');
+      if (fiscalPeriodInput && !fiscalPeriodInput.value) {
+        fiscalPeriodInput.value = BillingCore.toLocalDateInput().slice(0, 7);
+      }
       initDashboard();
       setupEventListeners();
       if (isPanitas) {
@@ -365,11 +385,13 @@ window.ERPBilling = (function () {
   }
 
   const NCF_FIELDS = {
-    B01: { prefix: 'ncfB01Prefix', sequence: 'ncfB01Seq' },
-    B02: { prefix: 'ncfB02Prefix', sequence: 'ncfB02Seq' },
-    B12: { prefix: 'ncfB12Prefix', sequence: 'ncfB12Seq' },
-    B14: { prefix: 'ncfB14Prefix', sequence: 'ncfB14Seq' },
-    B15: { prefix: 'ncfB15Prefix', sequence: 'ncfB15Seq' }
+    B01: { prefix: 'ncfB01Prefix', sequence: 'ncfB01Seq', start: 'ncfB01Start', end: 'ncfB01End', expiry: 'ncfB01Expiry' },
+    B02: { prefix: 'ncfB02Prefix', sequence: 'ncfB02Seq', start: 'ncfB02Start', end: 'ncfB02End', expiry: 'ncfB02Expiry' },
+    B03: { prefix: 'ncfB03Prefix', sequence: 'ncfB03Seq', start: 'ncfB03Start', end: 'ncfB03End', expiry: 'ncfB03Expiry' },
+    B04: { prefix: 'ncfB04Prefix', sequence: 'ncfB04Seq', start: 'ncfB04Start', end: 'ncfB04End', expiry: 'ncfB04Expiry' },
+    B12: { prefix: 'ncfB12Prefix', sequence: 'ncfB12Seq', start: 'ncfB12Start', end: 'ncfB12End', expiry: 'ncfB12Expiry' },
+    B14: { prefix: 'ncfB14Prefix', sequence: 'ncfB14Seq', start: 'ncfB14Start', end: 'ncfB14End', expiry: 'ncfB14Expiry' },
+    B15: { prefix: 'ncfB15Prefix', sequence: 'ncfB15Seq', start: 'ncfB15Start', end: 'ncfB15End', expiry: 'ncfB15Expiry' }
   };
 
   function normalizeNcfSettings(target) {
@@ -377,7 +399,13 @@ window.ERPBilling = (function () {
       target[fields.prefix] = BillingCore.normalizeNcfPrefix(target[fields.prefix], type);
       const sequence = Number(target[fields.sequence]);
       target[fields.sequence] = Number.isInteger(sequence) && sequence > 0 ? sequence : 1;
+      const start = Number(target[fields.start]);
+      const end = Number(target[fields.end]);
+      target[fields.start] = Number.isInteger(start) && start > 0 ? start : 1;
+      target[fields.end] = Number.isInteger(end) && end >= target[fields.start] ? end : 99999999;
+      target[fields.expiry] = String(target[fields.expiry] || '').slice(0, 10);
     });
+    target.ncfLowStockWarning = Math.max(1, Number(target.ncfLowStockWarning) || 25);
     return target;
   }
 
@@ -385,6 +413,37 @@ window.ERPBilling = (function () {
     const fields = NCF_FIELDS[type];
     if (!fields) return '';
     return BillingCore.buildNcf(type, sourceSettings[fields.prefix], sourceSettings[fields.sequence]);
+  }
+
+  function invoiceIssuerSnapshot(division, sourceSettings = settings) {
+    const base = sourceSettings || {};
+    let displayName = base.name || (isCreaticos ? 'Creaticos Group' : 'Futunet Suministros');
+    if (isCreaticos && division === 'papeleria') displayName = 'Creaticos Papelería y Suministros';
+    if (isCreaticos && division === 'sublimacion') displayName = 'Creaticos Sublimación';
+    return {
+      companyCode: activeCompanyCode,
+      legalName: base.name || displayName,
+      displayName,
+      rnc: base.rnc || '',
+      phone: base.phone || '',
+      email: base.email || '',
+      address: base.address || '',
+      slogan: base.ticketSlogan || '',
+      instagram: base.ticketInstagram || '',
+      logo: isCreaticos ? 'img/logo-creaticos-full.webp' : 'img/futunet-logo-clean.png'
+    };
+  }
+
+  function invoiceCustomerSnapshot(clientId, fallback) {
+    const client = clients.find(item => item.id === clientId) || {};
+    return {
+      id: clientId || 'custom',
+      name: client.name || fallback.name || '',
+      rnc: client.rnc || fallback.rnc || '',
+      phone: client.phone || '',
+      email: client.email || '',
+      address: client.address || ''
+    };
   }
 
   // Load Settings (Ensure default document in Firestore if not existing)
@@ -627,7 +686,7 @@ window.ERPBilling = (function () {
   }
 
   // Fetch all collections in background
-  async function fetchAllData() {
+  async function fetchAllDataLegacy() {
     showTableSkeletons();
     try {
       const clientsSnap = await getDB().collection(collectionClients).get();
@@ -680,6 +739,12 @@ window.ERPBilling = (function () {
       paymentsSnap.forEach(doc => {
         payments.push({ id: doc.id, ...doc.data() });
       });
+
+      const refundsSnap = await getDB().collection(collectionRefunds).orderBy('timestamp', 'desc').limit(2000).get();
+      refunds = [];
+      refundsSnap.forEach(doc => {
+        refunds.push({ id: doc.id, ...doc.data() });
+      });
     } finally {
       // Clear skeletons to stop infinite CPU-intensive background animations
       const invoicesBody = document.getElementById('invoices-table-body');
@@ -688,6 +753,52 @@ window.ERPBilling = (function () {
       if (invoicesBody) invoicesBody.innerHTML = '';
       if (clientsBody) clientsBody.innerHTML = '';
       if (productsBody) productsBody.innerHTML = '';
+    }
+  }
+
+  async function fetchAllData() {
+    showTableSkeletons();
+    try {
+      const database = getDB();
+      const productCollections = isPanitas
+        ? [collectionProducts]
+        : (isCreaticos ? ['creaticos_products', 'products'] : ['products']);
+      const [clientsSnap, productSnapshots, invoicesSnap, paymentsSnap, refundsSnap] = await Promise.all([
+        database.collection(collectionClients).get(),
+        Promise.all(productCollections.map(name => database.collection(name).get())),
+        database.collection(collectionInvoices).orderBy('createdAt', 'desc').get(),
+        database.collection(collectionPayments).orderBy('timestamp', 'desc').get(),
+        database.collection(collectionRefunds).orderBy('timestamp', 'desc').limit(2000).get()
+      ]);
+
+      clients = clientsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      invoices = invoicesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      payments = paymentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      refunds = refundsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      if (isPanitas) {
+        products = productSnapshots[0].docs.map(doc => ({ id: doc.id, ...doc.data(), _isCreaticos: false }));
+        creaticosProducts = [];
+        futunetProducts = [];
+      } else if (isCreaticos) {
+        creaticosProducts = productSnapshots[0].docs.map(doc => ({ id: doc.id, ...doc.data(), _isCreaticos: true }));
+        futunetProducts = productSnapshots[1].docs.map(doc => ({ id: doc.id, ...doc.data(), _isCreaticos: false }));
+        const sourceElement = document.getElementById('products-source-filter');
+        products = sourceElement && sourceElement.value === 'futunet' ? futunetProducts : creaticosProducts;
+      } else {
+        creaticosProducts = [];
+        futunetProducts = productSnapshots[0].docs.map(doc => ({ id: doc.id, ...doc.data(), _isCreaticos: false }));
+        products = futunetProducts;
+      }
+    } catch (error) {
+      console.error('No se pudieron cargar los datos de facturación:', error);
+      showToast('No se pudieron cargar todos los datos. Revisa tu conexión y permisos.', 'danger');
+      throw error;
+    } finally {
+      ['invoices-table-body', 'clients-table-body', 'products-table-body'].forEach(id => {
+        const body = document.getElementById(id);
+        if (body) body.innerHTML = '';
+      });
     }
   }
 
@@ -939,40 +1050,104 @@ window.ERPBilling = (function () {
     return invoice && invoice.docType === 'invoice' && invoice.status !== 'cancelled';
   }
 
+  function isFiscalAdjustment(invoice) {
+    return invoice && ['credit_note', 'debit_note'].includes(invoice.docType);
+  }
+
+  function invoiceNetTotal(invoice) {
+    return BillingCore.roundMoney(
+      Number(invoice.total || 0) +
+      Number(invoice.debitedAmount || 0) -
+      Number(invoice.creditedAmount || 0)
+    );
+  }
+
   function invoiceBalance(invoice) {
-    return Math.max(0, BillingCore.roundMoney(Number(invoice.total || 0) - Number(invoice.paidAmount || 0)));
+    if (isFiscalAdjustment(invoice)) return 0;
+    const effectivePaid = Number(invoice.paidAmount || 0) - Number(invoice.refundedAmount || 0);
+    return Math.max(0, BillingCore.roundMoney(invoiceNetTotal(invoice) - effectivePaid));
   }
 
   // ═══════════════════════════════════════════
   // 1. DASHBOARD & STATS LÓGICA
   // ═══════════════════════════════════════════
+  function timestampToDate(value) {
+    if (value && typeof value.toDate === 'function') return value.toDate();
+    if (value && Number.isFinite(value.seconds)) return new Date(value.seconds * 1000);
+    return BillingCore.parseDateOnly(value);
+  }
+
+  function dashboardDateWindow() {
+    const filter = document.getElementById('dashboard-period-filter');
+    const mode = filter ? filter.value : 'month';
+    const now = new Date();
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    let start = null;
+    if (mode === 'month') start = new Date(now.getFullYear(), now.getMonth(), 1);
+    if (mode === '30days') start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 29);
+    if (mode === 'quarter') start = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
+    if (mode === 'year') start = new Date(now.getFullYear(), 0, 1);
+    return { start, end, mode };
+  }
+
+  function dateInDashboardWindow(value, windowRange) {
+    const date = timestampToDate(value);
+    if (!date) return false;
+    if (windowRange.start && date < windowRange.start) return false;
+    return date <= windowRange.end;
+  }
+
+  function adjustmentSignedAmount(document, field = 'total') {
+    const amount = Number(document && document[field] || 0);
+    if (document && document.docType === 'credit_note') return -amount;
+    if (document && document.docType === 'debit_note') return amount;
+    return amount;
+  }
+
   function initDashboard() {
     switchPanel('dashboard');
 
-    let totalBilled = 0;
-    let totalPaid = 0;
-
-    // Filter cancelled invoices from total calculations
-    invoices.forEach(inv => {
-      if (isRevenueInvoice(inv)) {
-        totalBilled += Number(inv.total || 0);
-        totalPaid += Number(inv.paidAmount || 0);
-      }
-    });
-
-    const totalPending = Math.max(0, BillingCore.roundMoney(totalBilled - totalPaid));
+    const windowRange = dashboardDateWindow();
+    const periodDocuments = invoices.filter(document =>
+      document.status !== 'cancelled' &&
+      ['invoice', 'credit_note', 'debit_note'].includes(document.docType) &&
+      dateInDashboardWindow(document.date, windowRange)
+    );
+    const periodInvoices = periodDocuments.filter(document => document.docType === 'invoice');
+    const totalBilled = BillingCore.roundMoney(periodDocuments.reduce((sum, document) =>
+      sum + adjustmentSignedAmount(document), 0));
+    const totalPaid = BillingCore.roundMoney(
+      payments.filter(payment => dateInDashboardWindow(payment.timestamp, windowRange))
+        .reduce((sum, payment) => sum + Number(payment.amount || 0), 0) -
+      refunds.filter(refund => dateInDashboardWindow(refund.timestamp, windowRange))
+        .reduce((sum, refund) => sum + Number(refund.amount || 0), 0)
+    );
+    const totalPending = BillingCore.roundMoney(periodInvoices.reduce((sum, invoice) => sum + invoiceBalance(invoice), 0));
+    const totalItbis = BillingCore.roundMoney(periodDocuments.reduce((sum, document) =>
+      sum + adjustmentSignedAmount(document, 'itbis'), 0));
+    const invoiceCount = periodInvoices.length;
+    const averageTicket = invoiceCount ? BillingCore.roundMoney(totalBilled / invoiceCount) : 0;
+    const overdueTotal = BillingCore.roundMoney(periodInvoices.reduce((sum, invoice) =>
+      sum + (BillingCore.isOverdue(invoice.dueDate, invoiceBalance(invoice)) ? invoiceBalance(invoice) : 0), 0));
+    const activeClients = new Set(periodInvoices.map(invoice => invoice.clientId || invoice.clientRnc || invoice.clientName).filter(Boolean));
 
     // Set stats text
     document.getElementById('stat-total-billed').textContent = formatMoney(totalBilled);
     document.getElementById('stat-total-paid').textContent = formatMoney(totalPaid);
     document.getElementById('stat-total-pending').textContent = formatMoney(totalPending);
-    document.getElementById('stat-total-clients').textContent = clients.length.toString();
+    document.getElementById('stat-total-clients').textContent = activeClients.size.toString();
+    document.getElementById('stat-total-itbis').textContent = formatMoney(totalItbis);
+    document.getElementById('stat-average-ticket').textContent = formatMoney(averageTicket);
+    document.getElementById('stat-overdue-total').textContent = formatMoney(overdueTotal);
+    document.getElementById('stat-invoice-count').textContent = String(invoiceCount);
+    const updated = document.getElementById('dashboard-last-updated');
+    if (updated) updated.textContent = `Actualizado ${new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}`;
 
     // Populate recent invoices table
     const recentBody = document.getElementById('db-recent-invoices-body');
     recentBody.innerHTML = '';
     
-    const recent = invoices.filter(isRevenueInvoice).slice(0, 5);
+    const recent = periodInvoices.slice(0, 5);
     if (recent.length === 0) {
       recentBody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:20px;">No hay facturas registradas</td></tr>`;
     } else {
@@ -991,8 +1166,8 @@ window.ERPBilling = (function () {
 
     // Build statistics charts
     renderMonthlyChart();
-    renderCategoryChart();
-    renderPaymentBreakdown();
+    renderCategoryChart(periodInvoices);
+    renderPaymentBreakdown(periodInvoices, windowRange);
   }
 
   function renderMonthlyChart() {
@@ -1018,17 +1193,12 @@ window.ERPBilling = (function () {
     }
 
     invoices.forEach(inv => {
-      if (!isRevenueInvoice(inv)) return;
-      let date = null;
-      if (inv.createdAt && inv.createdAt.seconds) {
-        date = new Date(inv.createdAt.seconds * 1000);
-      } else if (inv.date) {
-        date = BillingCore.parseDateOnly(inv.date);
-      }
+      if (inv.status === 'cancelled' || !['invoice', 'credit_note', 'debit_note'].includes(inv.docType)) return;
+      const date = BillingCore.parseDateOnly(inv.date);
       if (date) {
         const key = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
         if (monthlySales[key] !== undefined) {
-          monthlySales[key] += Number(inv.total || 0);
+          monthlySales[key] += adjustmentSignedAmount(inv);
         }
       }
     });
@@ -1066,7 +1236,7 @@ window.ERPBilling = (function () {
     });
   }
 
-  function renderCategoryChart() {
+  function renderCategoryChart(sourceInvoices = invoices.filter(isRevenueInvoice)) {
     const ctx = document.getElementById('chart-category-distribution');
     if (!ctx) return;
 
@@ -1076,7 +1246,7 @@ window.ERPBilling = (function () {
 
     const categorySales = {};
 
-    invoices.forEach(inv => {
+    sourceInvoices.forEach(inv => {
       if (!isRevenueInvoice(inv)) return;
       if (Array.isArray(inv.items)) {
         inv.items.forEach(item => {
@@ -1088,7 +1258,9 @@ window.ERPBilling = (function () {
                        futunetProducts.find(p => p.id === rawProductId);
           
           let category = 'Otros';
-          if (prod && prod.category) {
+          if (item.categorySnapshot) {
+            category = item.categorySnapshot;
+          } else if (prod && prod.category) {
             category = prod.category;
           } else if (isPanitas) {
             category = 'Comida';
@@ -1158,15 +1330,16 @@ window.ERPBilling = (function () {
     });
   }
 
-  function renderPaymentBreakdown() {
+  function renderPaymentBreakdown(sourceInvoices = invoices.filter(isRevenueInvoice), windowRange = dashboardDateWindow()) {
     let cashSales = 0;
     let cardSales = 0;
     let transferSales = 0;
     let creditSales = 0;
+    let otherSales = 0;
 
-    const validInvoiceIds = new Set(invoices.filter(isRevenueInvoice).map(invoice => invoice.id));
+    const validInvoiceIds = new Set(sourceInvoices.map(invoice => invoice.id));
     payments.forEach(pay => {
-      if (!validInvoiceIds.has(pay.invoiceId)) return;
+      if (!validInvoiceIds.has(pay.invoiceId) || !dateInDashboardWindow(pay.timestamp, windowRange)) return;
       const method = BillingCore.paymentMethodGroup(pay.method || 'Efectivo');
       const amount = Number(pay.amount || 0);
 
@@ -1177,32 +1350,26 @@ window.ERPBilling = (function () {
       } else if (method === 'transfer') {
         transferSales += amount;
       } else {
-        transferSales += amount;
+        otherSales += amount;
       }
     });
 
-    invoices.forEach(inv => {
-      if (!isRevenueInvoice(inv)) return;
-      const paymentTerms = inv.paymentTerms || inv.paymentTerm || '';
-      if (BillingCore.isCreditTerms(paymentTerms)) {
-        const total = Number(inv.total || 0);
-        const paid = Number(inv.paidAmount || 0);
-        const balance = total - paid;
-        if (balance > 0) {
-          creditSales += balance;
-        }
-      }
+    sourceInvoices.forEach(inv => {
+      const balance = invoiceBalance(inv);
+      if (balance > 0) creditSales += balance;
     });
 
     const cashEl = document.getElementById('db-ops-cash');
     const cardEl = document.getElementById('db-ops-card');
     const transferEl = document.getElementById('db-ops-transfer');
     const creditEl = document.getElementById('db-ops-credit');
+    const otherEl = document.getElementById('db-ops-other');
 
     if (cashEl) cashEl.textContent = formatMoney(cashSales);
     if (cardEl) cardEl.textContent = formatMoney(cardSales);
     if (transferEl) transferEl.textContent = formatMoney(transferSales);
     if (creditEl) creditEl.textContent = formatMoney(creditSales);
+    if (otherEl) otherEl.textContent = formatMoney(otherSales);
   }
 
   // ═══════════════════════════════════════════
@@ -1300,6 +1467,10 @@ window.ERPBilling = (function () {
         statusBadge = '<span class="admin-badge" style="background:#e0f2fe; color:#0369a1; border: 1px solid #bae6fd;">Cotización</span>';
       } else if (inv.docType === 'proforma') {
         statusBadge = '<span class="admin-badge" style="background:#fef3c7; color:#d97706; border: 1px solid #fde68a;">Proforma</span>';
+      } else if (inv.docType === 'credit_note') {
+        statusBadge = '<span class="admin-badge badge-credit">Nota de crédito</span>';
+      } else if (inv.docType === 'debit_note') {
+        statusBadge = '<span class="admin-badge badge-partial">Nota de débito</span>';
       } else if (inv.status === 'paid') {
         statusBadge = '<span class="admin-badge badge-paid">Pagada</span>';
       } else if (inv.status === 'pending' || inv.status === 'unpaid' || inv.status === 'partial') {
@@ -1330,7 +1501,7 @@ window.ERPBilling = (function () {
           </button>
       `;
 
-      if (inv.status !== 'cancelled' && inv.status !== 'converted') {
+      if (inv.status !== 'cancelled' && inv.status !== 'converted' && !isFiscalAdjustment(inv)) {
         const canEdit = inv.docType === 'quote' || inv.docType === 'proforma' ||
           (inv.docType === 'invoice' && !inv.ncf && Number(inv.paidAmount || 0) === 0);
         if (canEdit) actionsHtml += `
@@ -1354,6 +1525,9 @@ window.ERPBilling = (function () {
         }
 
         if (isUserAdmin && inv.docType === 'invoice') actionsHtml += `
+          <button class="table-btn table-btn-secondary" title="Crear nota de crédito o débito" onclick="ERPBilling.openFiscalAdjustment('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
+          </button>
           <button class="table-btn table-btn-danger" title="Anular Factura" onclick="ERPBilling.cancelInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
@@ -1368,7 +1542,7 @@ window.ERPBilling = (function () {
         <td>${escapeHTML(formatDate(inv.date))}</td>
         <td>${escapeHTML(formatDate(inv.dueDate))}</td>
         <td>${inv.ncf ? escapeHTML(inv.ncf) : '<span style="color:#cbd5e1;font-size:0.8rem;">Ninguno</span>'}</td>
-        <td>${escapeHTML(formatMoney(inv.total))}</td>
+        <td title="${Number(inv.creditedAmount || 0) || Number(inv.debitedAmount || 0) ? 'Total neto después de ajustes fiscales' : 'Total del documento'}">${escapeHTML(formatMoney(isFiscalAdjustment(inv) ? inv.total : invoiceNetTotal(inv)))}</td>
         <td>${statusBadge}</td>
         <td>${actionsHtml}</td>
       `;
@@ -1689,48 +1863,41 @@ window.ERPBilling = (function () {
     if (!tbody) return;
     const rows = tbody.querySelectorAll('tr');
 
-    let subtotal = 0;
-    let totalDiscount = 0;
-    let totalItbis = 0;
-
+    const rawItems = [];
     rows.forEach(tr => {
       const price = Number(tr.querySelector('.row-price').value) || 0;
       const qty = Number(tr.querySelector('.row-qty').value) || 1;
       const lineItbis = Number(tr.querySelector('.row-tax').value) || 0;
+      const taxInput = tr.querySelector('.row-tax');
       const discountInput = tr.querySelector('.row-discount');
       const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
-
-      const lineSubtotal = price * qty;
-      const lineDiscount = lineSubtotal * (discountPct / 100);
-      const lineNet = lineSubtotal - lineDiscount;
-      const lineTotal = lineNet + lineItbis;
-
-      subtotal += lineSubtotal;
-      totalDiscount += lineDiscount;
-      totalItbis += lineItbis;
-
-      // Update text in row total column
-      const totalCol = tr.querySelector('.row-total');
-      if (totalCol) totalCol.textContent = formatMoney(lineTotal);
+      rawItems.push({
+        price,
+        qty,
+        discount: discountPct,
+        tax: lineItbis,
+        taxMode: taxInput && taxInput.dataset.override === 'true' ? 'amount' : 'rate',
+        taxRate: taxInput ? Number(taxInput.dataset.percent) || 0 : 0
+      });
     });
 
-    // Apply global discount if set
     const globalDiscountPctInput = document.getElementById('form-invoice-discount-pct');
     const globalDiscountPct = globalDiscountPctInput ? (Number(globalDiscountPctInput.value) || 0) : 0;
-    const globalDiscountAmount = (subtotal - totalDiscount) * (globalDiscountPct / 100);
-    totalDiscount += globalDiscountAmount;
-
-    const grandTotal = subtotal - totalDiscount + totalItbis;
+    const calculated = BillingCore.calculateInvoiceTotals(rawItems, globalDiscountPct);
+    rows.forEach((tr, index) => {
+      const totalCol = tr.querySelector('.row-total');
+      if (totalCol && calculated.items[index]) totalCol.textContent = formatMoney(calculated.items[index].total);
+    });
 
     const subtotalEl = document.getElementById('form-summary-subtotal');
     const discountEl = document.getElementById('form-summary-discount');
     const itbisEl = document.getElementById('form-summary-itbis');
     const totalEl = document.getElementById('form-summary-total');
 
-    if (subtotalEl) subtotalEl.textContent = formatMoney(subtotal);
-    if (discountEl) discountEl.textContent = formatMoney(totalDiscount);
-    if (itbisEl) itbisEl.textContent = formatMoney(totalItbis);
-    if (totalEl) totalEl.textContent = formatMoney(grandTotal);
+    if (subtotalEl) subtotalEl.textContent = formatMoney(calculated.subtotal);
+    if (discountEl) discountEl.textContent = formatMoney(calculated.discountAmount);
+    if (itbisEl) itbisEl.textContent = formatMoney(calculated.itbis);
+    if (totalEl) totalEl.textContent = formatMoney(calculated.total);
   }
 
   // Client Auto-Complete Dropdown Search
@@ -1805,7 +1972,11 @@ window.ERPBilling = (function () {
     } else if (NCF_FIELDS[type]) {
       ncfInput.setAttribute('readonly', 'true');
       try {
+        const range = BillingCore.assertNcfRangeAvailable(settings, type, BillingCore.toLocalDateInput());
         ncfInput.value = buildNcfFromSettings(settings, type);
+        if (range.low) {
+          showToast(`Quedan ${range.remaining} comprobantes disponibles en el rango ${type}.`, 'warning');
+        }
       } catch (error) {
         ncfInput.value = '';
         showToast(error.message, 'danger');
@@ -1852,8 +2023,8 @@ window.ERPBilling = (function () {
       showToast('La fecha de vencimiento no puede ser anterior a la fecha de emisión.', 'danger');
       return;
     }
-    if (docType === 'invoice' && ncfType === 'manual' && !BillingCore.isValidNcf(ncf)) {
-      showToast('El NCF manual debe tener 11 posiciones, o 13 si es electrónico.', 'danger');
+    if (docType === 'invoice' && ncfType === 'manual' && !BillingCore.isValidNcf(ncf, { allowElectronic: false })) {
+      showToast('El NCF manual debe ser un comprobante físico válido de 11 posiciones. Los e-CF se emiten únicamente mediante la integración certificada.', 'danger');
       return;
     }
     if (docType === 'invoice' && ncfType === 'manual' && invoices.some(invoice => invoice.id !== editingInvoiceId && invoice.ncf === ncf)) {
@@ -1905,6 +2076,7 @@ window.ERPBilling = (function () {
       items.push({
         productId: productIdInput ? productIdInput.value : 'custom',
         description: description,
+        categorySnapshot: productCategorySnapshot(productIdInput ? productIdInput.value : 'custom'),
         price: price,
         qty: qty,
         tax: lineTax,
@@ -1921,10 +2093,13 @@ window.ERPBilling = (function () {
 
     const globalDiscountPctEl = document.getElementById('form-invoice-discount-pct');
     const globalDiscountPct = globalDiscountPctEl ? (Number(globalDiscountPctEl.value) || 0) : 0;
-    const globalDiscountAmount = (subtotal - totalRowDiscount) * (globalDiscountPct / 100);
-    const totalDiscountAmount = totalRowDiscount + globalDiscountAmount;
-    
-    const grandTotal = subtotal - totalDiscountAmount + totalItbis;
+    const calculatedTotals = BillingCore.calculateInvoiceTotals(items, globalDiscountPct);
+    items.splice(0, items.length, ...calculatedTotals.items);
+    subtotal = calculatedTotals.subtotal;
+    totalItbis = calculatedTotals.itbis;
+    totalRowDiscount = calculatedTotals.rowDiscountAmount;
+    const totalDiscountAmount = calculatedTotals.discountAmount;
+    const grandTotal = calculatedTotals.total;
     if (!Number.isFinite(grandTotal) || grandTotal <= 0) {
       showToast('El total del documento debe ser mayor que cero.', 'danger');
       return;
@@ -2003,6 +2178,9 @@ window.ERPBilling = (function () {
       clientId: clientId || 'custom',
       clientName: clientName || '',
       clientRnc: clientRnc || '',
+      customerSnapshot: invoiceCustomerSnapshot(clientId, { name: clientName, rnc: clientRnc }),
+      issuerSnapshot: invoiceIssuerSnapshot(division),
+      fiscalSchemaVersion: 2,
       date: date || '',
       dueDate: dueDate || '',
       division: division || 'general',
@@ -2012,6 +2190,7 @@ window.ERPBilling = (function () {
       subtotal: subtotal || 0,
       discountPct: globalDiscountPct || 0,
       discountAmount: totalDiscountAmount || 0,
+      taxableAmount: calculatedTotals.taxableAmount || 0,
       itbis: totalItbis || 0,
       total: grandTotal || 0,
       paidAmount: paidAmount || 0,
@@ -2079,10 +2258,20 @@ window.ERPBilling = (function () {
 
           if (NCF_FIELDS[ncfType]) {
             const fields = NCF_FIELDS[ncfType];
-            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix], freshSettings[fields.sequence]);
+            BillingCore.assertNcfRangeAvailable(freshSettings, ncfType, date);
+            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix] || ncfType, freshSettings[fields.sequence] || 1);
             settingsUpdates[fields.sequence] = Number(freshSettings[fields.sequence] || 1) + 1;
           } else if (ncfType === 'manual') {
             freshNcf = ncf; // Keep the manually entered NCF
+          }
+        }
+
+        let ncfRegistryRef = null;
+        if (freshNcf) {
+          ncfRegistryRef = dbRef.collection(collectionNcfRegistry).doc(freshNcf);
+          const ncfRegistryDoc = await transaction.get(ncfRegistryRef);
+          if (ncfRegistryDoc.exists) {
+            throw new Error(`El NCF ${freshNcf} ya fue utilizado por otro documento.`);
           }
         }
 
@@ -2098,31 +2287,44 @@ window.ERPBilling = (function () {
           if (currentStock < item.qty) {
             throw new Error(`Stock insuficiente para "${data.name || data.title || item.description}". Disponible: ${currentStock}, solicitado: ${item.qty}`);
           }
+          const movementRef = dbRef.collection(collectionInventoryMovements).doc();
           transaction.update(target.ref, {
             stock: currentStock - item.qty,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastInventoryMovementId: movementRef.id
           });
           inventoryEffects.push({
             productId: target.productId,
             documentId: target.documentId,
             collection: target.collection,
-            quantity: item.qty
+            quantity: item.qty,
+            movementRef
           });
         });
         if (docType === 'invoice') {
-          invoiceData.inventoryEffects = inventoryEffects;
+          invoiceData.inventoryEffects = inventoryEffects.map(({ movementRef, ...effect }) => effect);
           invoiceData.inventoryPostedAt = firebase.firestore.FieldValue.serverTimestamp();
         }
 
         // Perform writes in the transaction
         const newInvoiceDocRef = invoicesCollRef.doc();
         transaction.set(newInvoiceDocRef, invoiceData);
+        if (ncfRegistryRef) {
+          transaction.set(ncfRegistryRef, {
+            ncf: freshNcf,
+            invoiceId: newInvoiceDocRef.id,
+            companyCode: activeCompanyCode,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
         inventoryEffects.forEach(effect => {
-          transaction.set(dbRef.collection(collectionInventoryMovements).doc(), {
+          transaction.set(effect.movementRef, {
             type: 'sale',
             invoiceId: newInvoiceDocRef.id,
             invoiceNumber: freshInvoiceNum,
             productId: effect.productId,
+            productDocumentId: effect.documentId,
             productCollection: effect.collection,
             quantity: -effect.quantity,
             createdBy: currentUser.uid,
@@ -2180,6 +2382,16 @@ window.ERPBilling = (function () {
     if (!confirm(`¿Está seguro de que desea ANULAR la factura ${actualNumber}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
       return;
     }
+    const cancellationTypeInput = window.prompt(
+      'Tipo de anulación 608:\n01 Deterioro\n02 Error de impresión\n03 Impresión defectuosa\n04 Corrección de información\n05 Cambio de productos\n06 Devolución\n07 Omisión de productos\n08 Error secuencia NCF\n09 Cese de operaciones\n10 Pérdida/hurto de talonarios',
+      '04'
+    );
+    if (cancellationTypeInput === null) return;
+    const cancellationType = String(cancellationTypeInput).replace(/\D/g, '').padStart(2, '0');
+    if (!/^(0[1-9]|10)$/.test(cancellationType)) {
+      showToast('Selecciona un tipo de anulación válido del 01 al 10.', 'danger');
+      return;
+    }
 
     try {
       const db = getDB();
@@ -2206,15 +2418,18 @@ window.ERPBilling = (function () {
 
         stockDocuments.forEach(({ effect, target, data }) => {
           const quantity = Number(effect.quantity || 0);
+          const movementRef = db.collection(collectionInventoryMovements).doc();
           transaction.update(target.ref, {
             stock: (Number(data.stock) || 0) + quantity,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastInventoryMovementId: movementRef.id
           });
-          transaction.set(db.collection(collectionInventoryMovements).doc(), {
+          transaction.set(movementRef, {
             type: 'sale_reversal',
             invoiceId: id,
             invoiceNumber: freshInvoice.invoiceNumber || actualNumber,
             productId: target.productId,
+            productDocumentId: target.documentId,
             productCollection: target.collection,
             quantity: quantity,
             createdBy: currentUser.uid,
@@ -2225,6 +2440,8 @@ window.ERPBilling = (function () {
         transaction.update(invoiceRef, {
           status: 'cancelled',
           cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+          cancellationDate: BillingCore.toLocalDateInput(),
+          cancellationType,
           cancelledBy: currentUser.uid,
           inventoryReversedAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -2244,6 +2461,293 @@ window.ERPBilling = (function () {
     } catch (err) {
       console.error(err);
       alert('Error al anular la factura: ' + err.message);
+    }
+  }
+
+  function openFiscalAdjustment(invoiceId) {
+    if (!isUserAdmin) {
+      showToast('Solo un administrador puede emitir notas fiscales.', 'danger');
+      return;
+    }
+    const invoice = invoices.find(item => item.id === invoiceId);
+    if (!invoice || invoice.docType !== 'invoice' || invoice.status === 'cancelled') {
+      showToast('Selecciona una factura fiscal activa.', 'warning');
+      return;
+    }
+    if (!/^B\d{10}$/.test(String(invoice.ncf || '').toUpperCase())) {
+      showToast('La factura debe tener un NCF físico válido para emitir una nota relacionada.', 'warning');
+      return;
+    }
+    const remainingCredit = Math.max(0, BillingCore.roundMoney(Number(invoice.total || 0) - Number(invoice.creditedAmount || 0)));
+    document.getElementById('fiscal-adjustment-invoice-id').value = invoiceId;
+    document.getElementById('fiscal-adjustment-type').value = 'credit_note';
+    document.getElementById('fiscal-adjustment-date').value = BillingCore.toLocalDateInput();
+    document.getElementById('fiscal-adjustment-amount').value = remainingCredit.toFixed(2);
+    document.getElementById('fiscal-adjustment-reason').value = '';
+    document.getElementById('fiscal-adjustment-resolution').value = 'credit_balance';
+    document.getElementById('fiscal-adjustment-restock').checked = false;
+    document.getElementById('fiscal-adjustment-summary').innerHTML = `
+      <strong>${escapeHTML(invoice.invoiceNumber)}</strong><br>
+      <span style="color:var(--text-muted);font-size:0.84rem;">NCF ${escapeHTML(invoice.ncf)} · ${escapeHTML(invoice.clientName)} · Total ${escapeHTML(formatMoney(invoice.total))}</span>
+    `;
+    handleFiscalAdjustmentTypeChange();
+    handleFiscalAdjustmentResolutionChange();
+    openModal('modal-fiscal-adjustment');
+  }
+
+  function handleFiscalAdjustmentTypeChange() {
+    const invoiceId = document.getElementById('fiscal-adjustment-invoice-id').value;
+    const invoice = invoices.find(item => item.id === invoiceId);
+    if (!invoice) return;
+    const type = document.getElementById('fiscal-adjustment-type').value;
+    const amountInput = document.getElementById('fiscal-adjustment-amount');
+    const options = document.getElementById('credit-note-options');
+    const limit = document.getElementById('fiscal-adjustment-limit');
+    const remainingCredit = Math.max(0, BillingCore.roundMoney(Number(invoice.total || 0) - Number(invoice.creditedAmount || 0)));
+    if (type === 'credit_note') {
+      options.style.display = 'block';
+      amountInput.max = remainingCredit.toFixed(2);
+      if (Number(amountInput.value) > remainingCredit || Number(amountInput.value) <= 0) amountInput.value = remainingCredit.toFixed(2);
+      limit.textContent = `Máximo disponible para acreditar: ${formatMoney(remainingCredit)}.`;
+    } else {
+      options.style.display = 'none';
+      amountInput.removeAttribute('max');
+      if (Number(amountInput.value) <= 0) amountInput.value = '0.00';
+      limit.textContent = 'El monto incrementará el balance de la factura original.';
+    }
+  }
+
+  function handleFiscalAdjustmentResolutionChange() {
+    const resolution = document.getElementById('fiscal-adjustment-resolution').value;
+    const methodGroup = document.getElementById('fiscal-refund-method-group');
+    if (methodGroup) methodGroup.style.display = resolution === 'refund' ? 'block' : 'none';
+  }
+
+  async function saveFiscalAdjustment(event) {
+    event.preventDefault();
+    if (!isUserAdmin) return;
+    const submit = event.submitter;
+    if (submit && submit.disabled) return;
+    const invoiceId = document.getElementById('fiscal-adjustment-invoice-id').value;
+    const type = document.getElementById('fiscal-adjustment-type').value;
+    const date = document.getElementById('fiscal-adjustment-date').value;
+    const amount = BillingCore.roundMoney(document.getElementById('fiscal-adjustment-amount').value);
+    const reason = document.getElementById('fiscal-adjustment-reason').value.trim();
+    const resolution = type === 'credit_note'
+      ? document.getElementById('fiscal-adjustment-resolution').value
+      : 'additional_charge';
+    const refundMethod = document.getElementById('fiscal-refund-method').value;
+    const requestedRestock = type === 'credit_note' && document.getElementById('fiscal-adjustment-restock').checked;
+    if (!['credit_note', 'debit_note'].includes(type) || !date || !reason || amount <= 0) {
+      showToast('Completa correctamente el tipo, fecha, monto y motivo.', 'danger');
+      return;
+    }
+    if (submit) {
+      submit.disabled = true;
+      submit.textContent = 'Emitiendo…';
+    }
+
+    try {
+      const db = getDB();
+      const settingsRef = db.collection(collectionSettings).doc('general');
+      const originalRef = db.collection(collectionInvoices).doc(invoiceId);
+      const adjustmentRef = db.collection(collectionInvoices).doc();
+      const ncfType = type === 'credit_note' ? 'B04' : 'B03';
+      const fields = NCF_FIELDS[ncfType];
+
+      await db.runTransaction(async transaction => {
+        const settingsDoc = await transaction.get(settingsRef);
+        const originalDoc = await transaction.get(originalRef);
+        if (!settingsDoc.exists || !originalDoc.exists) throw new Error('No se encontró la configuración o factura original.');
+        const original = originalDoc.data();
+        if (original.docType !== 'invoice' || original.status === 'cancelled') throw new Error('La factura original ya no admite ajustes.');
+
+        const credited = Number(original.creditedAmount || 0);
+        const debited = Number(original.debitedAmount || 0);
+        const refunded = Number(original.refundedAmount || 0);
+        const remainingCredit = BillingCore.roundMoney(Number(original.total || 0) - credited);
+        if (type === 'credit_note' && amount > remainingCredit + 0.01) {
+          throw new Error(`El monto supera el crédito disponible de ${formatMoney(remainingCredit)}.`);
+        }
+        const effectivePaid = Math.max(0, Number(original.paidAmount || 0) - refunded);
+        if (resolution === 'refund' && amount > effectivePaid + 0.01) {
+          throw new Error(`Solo se pueden devolver ${formatMoney(effectivePaid)} ya cobrados.`);
+        }
+
+        const freshSettings = settingsDoc.data();
+        BillingCore.assertNcfRangeAvailable(freshSettings, ncfType, date);
+        const freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix] || ncfType, freshSettings[fields.sequence] || 1);
+        const registryRef = db.collection(collectionNcfRegistry).doc(freshNcf);
+        const registryDoc = await transaction.get(registryRef);
+        if (registryDoc.exists) throw new Error(`El NCF ${freshNcf} ya fue utilizado.`);
+
+        const completesCredit = type === 'credit_note' && credited + amount >= Number(original.total || 0) - 0.01;
+        const shouldRestock = requestedRestock && completesCredit && !original.creditRestockedAt;
+        const restockDocuments = [];
+        if (shouldRestock) {
+          for (const effect of (original.inventoryEffects || [])) {
+            const fallbackTarget = inventoryProductTarget(db, effect.productId);
+            const effectCollection = effect.collection || (fallbackTarget && fallbackTarget.collection);
+            const effectDocumentId = effect.documentId || (fallbackTarget && fallbackTarget.documentId);
+            if (!effectCollection || !effectDocumentId) continue;
+            const productRef = db.collection(effectCollection).doc(effectDocumentId);
+            const productDoc = await transaction.get(productRef);
+            if (productDoc.exists) {
+              restockDocuments.push({
+                effect: { ...effect, collection: effectCollection, documentId: effectDocumentId },
+                ref: productRef,
+                data: productDoc.data()
+              });
+            }
+          }
+        }
+
+        const originalTotal = Math.max(0.01, Number(original.total || 0));
+        const ratio = amount / originalTotal;
+        const adjustmentItbis = BillingCore.roundMoney(Number(original.itbis || 0) * ratio);
+        const adjustmentDiscount = BillingCore.roundMoney(Number(original.discountAmount || 0) * ratio);
+        const adjustmentTaxable = BillingCore.roundMoney(Math.max(0, amount - adjustmentItbis));
+        const adjustmentSubtotal = BillingCore.roundMoney(adjustmentTaxable + adjustmentDiscount);
+        const adjustmentNumber = `${type === 'credit_note' ? 'NC' : 'ND'}-${freshNcf}`;
+        const adjustmentData = {
+          docType: type,
+          type,
+          companyCode: activeCompanyCode,
+          invoiceNumber: adjustmentNumber,
+          number: adjustmentNumber,
+          originalInvoiceId: invoiceId,
+          originalInvoiceNumber: original.invoiceNumber,
+          modifiedNcf: original.ncf,
+          clientId: original.clientId || 'custom',
+          clientName: original.clientName || '',
+          clientRnc: original.clientRnc || '',
+          customerSnapshot: original.customerSnapshot || invoiceCustomerSnapshot(original.clientId, { name: original.clientName, rnc: original.clientRnc }),
+          issuerSnapshot: original.issuerSnapshot || invoiceIssuerSnapshot(original.division),
+          fiscalSchemaVersion: 2,
+          date,
+          dueDate: date,
+          division: original.division || 'general',
+          ncfType,
+          ncf: freshNcf,
+          items: [{
+            productId: 'fiscal_adjustment',
+            description: `${type === 'credit_note' ? 'Nota de crédito' : 'Nota de débito'}: ${reason}`,
+            price: adjustmentTaxable,
+            qty: 1,
+            discount: 0,
+            tax: adjustmentItbis,
+            taxAfterGlobalDiscount: adjustmentItbis,
+            taxMode: 'amount',
+            taxRate: original.taxableAmount > 0 ? BillingCore.roundMoney(Number(original.itbis || 0) / Number(original.taxableAmount) * 100) : 0,
+            total: amount
+          }],
+          subtotal: adjustmentSubtotal,
+          discountPct: 0,
+          discountAmount: adjustmentDiscount,
+          taxableAmount: adjustmentTaxable,
+          itbis: adjustmentItbis,
+          total: amount,
+          paidAmount: 0,
+          status: 'issued',
+          paymentTerms: original.paymentTerms || 'Contado',
+          notes: reason,
+          adjustmentReason: reason,
+          resolution,
+          refundAmount: resolution === 'refund' ? amount : 0,
+          refundMethod: resolution === 'refund' ? refundMethod : '',
+          restocked: shouldRestock,
+          inventoryEffects: shouldRestock ? (original.inventoryEffects || []) : [],
+          createdBy: currentUser.uid,
+          updatedBy: currentUser.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (shouldRestock) adjustmentData.inventoryPostedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+        const nextCredited = type === 'credit_note' ? BillingCore.roundMoney(credited + amount) : credited;
+        const nextDebited = type === 'debit_note' ? BillingCore.roundMoney(debited + amount) : debited;
+        const nextRefunded = resolution === 'refund' ? BillingCore.roundMoney(refunded + amount) : refunded;
+        const nextNetTotal = BillingCore.roundMoney(Number(original.total || 0) + nextDebited - nextCredited);
+        const nextEffectivePaid = Math.max(0, BillingCore.roundMoney(Number(original.paidAmount || 0) - nextRefunded));
+        let nextStatus = nextNetTotal <= 0.01 ? 'credited' : BillingCore.paymentStatus(nextNetTotal, nextEffectivePaid);
+        if (nextStatus === 'pending' && original.status === 'unpaid') nextStatus = 'unpaid';
+
+        const originalUpdates = {
+          creditedAmount: nextCredited,
+          debitedAmount: nextDebited,
+          refundedAmount: nextRefunded,
+          lastAdjustmentId: adjustmentRef.id,
+          status: nextStatus,
+          updatedBy: currentUser.uid,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        if (shouldRestock) originalUpdates.creditRestockedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+        restockDocuments.forEach(({ effect, ref, data }) => {
+          const currentStock = Number(data.stock || 0);
+          const movementRef = db.collection(collectionInventoryMovements).doc();
+          transaction.update(ref, {
+            stock: currentStock + Number(effect.quantity || 0),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastInventoryMovementId: movementRef.id
+          });
+          transaction.set(movementRef, {
+            type: 'credit_note_return',
+            invoiceId: adjustmentRef.id,
+            invoiceNumber: adjustmentNumber,
+            productId: effect.productId,
+            productDocumentId: effect.documentId,
+            productCollection: effect.collection,
+            quantity: Number(effect.quantity || 0),
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        });
+
+        transaction.set(adjustmentRef, adjustmentData);
+        transaction.set(registryRef, {
+          ncf: freshNcf,
+          invoiceId: adjustmentRef.id,
+          companyCode: activeCompanyCode,
+          createdBy: currentUser.uid,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        transaction.update(originalRef, originalUpdates);
+        transaction.update(settingsRef, { [fields.sequence]: Number(freshSettings[fields.sequence] || 1) + 1 });
+        if (resolution === 'refund') {
+          transaction.set(db.collection(collectionRefunds).doc(), {
+            invoiceId,
+            adjustmentId: adjustmentRef.id,
+            amount,
+            method: refundMethod,
+            reason,
+            companyCode: activeCompanyCode,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+        transaction.set(db.collection('audit_logs').doc(), {
+          action: type === 'credit_note' ? 'Emitir nota de crédito' : 'Emitir nota de débito',
+          details: `${adjustmentNumber} vinculada a ${original.invoiceNumber} por ${formatMoney(amount)}`,
+          userEmail: currentUser.email,
+          userId: currentUser.uid,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+
+      closeModal('modal-fiscal-adjustment');
+      await loadSettings();
+      await fetchAllData();
+      renderInvoicesTable();
+      showToast('Ajuste fiscal emitido y vinculado correctamente.', 'success');
+    } catch (error) {
+      console.error('Fiscal adjustment error:', error);
+      showToast(error.message || 'No se pudo emitir el ajuste fiscal.', 'danger');
+    } finally {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = 'Emitir ajuste fiscal';
+      }
     }
   }
 
@@ -2275,23 +2779,30 @@ window.ERPBilling = (function () {
       }
     }
 
-    // Fetch client contact details if available
-    let client = clients.find(c => c.id === inv.clientId);
-    if (!client) {
-      client = { address: 'Dirección no registrada', phone: 'N/D', email: 'N/D' };
-    }
+    // Historical documents use immutable snapshots. Legacy invoices fall back
+    // to the current records without mutating the stored document.
+    const currentClient = clients.find(c => c.id === inv.clientId) || {};
+    const client = inv.customerSnapshot || {
+      name: inv.clientName,
+      rnc: inv.clientRnc,
+      address: currentClient.address || 'Dirección no registrada',
+      phone: currentClient.phone || 'N/D',
+      email: currentClient.email || 'N/D'
+    };
+    const issuer = inv.issuerSnapshot || invoiceIssuerSnapshot(inv.division);
 
-    // Set company name based on division in invoice
     const nameEl = document.getElementById('view-company-name');
-    if (nameEl) {
-      if (inv.division === 'papeleria') {
-        nameEl.textContent = 'Creaticos Papelería y Suministros';
-      } else if (inv.division === 'sublimacion') {
-        nameEl.textContent = 'Creaticos Sublimación';
-      } else {
-        nameEl.textContent = 'Creaticos Group';
-      }
-    }
+    if (nameEl) nameEl.textContent = issuer.displayName || issuer.legalName || '';
+    const issuerRncEl = document.getElementById('view-company-rnc');
+    const issuerPhoneEl = document.getElementById('view-company-phone');
+    const issuerEmailEl = document.getElementById('view-company-email');
+    const issuerAddressEl = document.getElementById('view-company-address');
+    const issuerLogoEl = document.getElementById('view-company-logo');
+    if (issuerRncEl) issuerRncEl.textContent = issuer.rnc || '';
+    if (issuerPhoneEl) issuerPhoneEl.textContent = issuer.phone || '';
+    if (issuerEmailEl) issuerEmailEl.textContent = issuer.email || '';
+    if (issuerAddressEl) issuerAddressEl.textContent = issuer.address || '';
+    if (issuerLogoEl && issuer.logo) issuerLogoEl.src = issuer.logo;
 
     // Target the printable title (Factura vs Cotización vs Proforma)
     const headerTitle = document.querySelector('.billing-meta-box h3');
@@ -2300,6 +2811,10 @@ window.ERPBilling = (function () {
         headerTitle.textContent = 'COTIZACIÓN';
       } else if (inv.docType === 'proforma') {
         headerTitle.textContent = 'FACTURA PROFORMA';
+      } else if (inv.docType === 'credit_note') {
+        headerTitle.textContent = 'NOTA DE CRÉDITO';
+      } else if (inv.docType === 'debit_note') {
+        headerTitle.textContent = 'NOTA DE DÉBITO';
       } else {
         headerTitle.textContent = 'FACTURA';
       }
@@ -2316,7 +2831,13 @@ window.ERPBilling = (function () {
     statusEl.className = 'admin-badge';
     statusEl.removeAttribute('style');
 
-    if (inv.status === 'converted') {
+    if (inv.docType === 'credit_note') {
+      statusEl.classList.add('badge-credit');
+      statusEl.textContent = 'Nota de crédito';
+    } else if (inv.docType === 'debit_note') {
+      statusEl.classList.add('badge-partial');
+      statusEl.textContent = 'Nota de débito';
+    } else if (inv.status === 'converted') {
       statusEl.classList.add('badge-converted');
       statusEl.textContent = 'Convertida';
     } else if (inv.docType === 'quote') {
@@ -2342,8 +2863,8 @@ window.ERPBilling = (function () {
     }
 
     // Client details
-    document.getElementById('view-client-name').textContent = inv.clientName;
-    document.getElementById('view-client-rnc').textContent = inv.clientRnc || 'N/D';
+    document.getElementById('view-client-name').textContent = client.name || inv.clientName;
+    document.getElementById('view-client-rnc').textContent = client.rnc || inv.clientRnc || 'N/D';
     document.getElementById('view-client-phone').textContent = client.phone || 'N/D';
     document.getElementById('view-client-email').textContent = client.email || 'N/D';
     document.getElementById('view-client-address').textContent = client.address || 'N/D';
@@ -2355,7 +2876,9 @@ window.ERPBilling = (function () {
     inv.items.forEach(line => {
       const price = Number(line.price) || 0;
       const qty = Number(line.qty) || 1;
-      const lineTaxAmount = BillingCore.resolveLineTax(line).amount;
+      const lineTaxAmount = line.taxAfterGlobalDiscount !== undefined
+        ? Number(line.taxAfterGlobalDiscount)
+        : BillingCore.resolveLineTax(line).amount;
 
       const lineDiscountPct = line.discount || 0;
       const lineDiscountStr = lineDiscountPct > 0 ? `${lineDiscountPct}%` : '—';
@@ -2620,6 +3143,7 @@ window.ERPBilling = (function () {
 
     let totalPurchases = 0;
     let totalPaid = 0;
+    let totalBalance = 0;
 
     const tbody = document.getElementById('profile-invoices-body');
     tbody.innerHTML = '';
@@ -2632,9 +3156,10 @@ window.ERPBilling = (function () {
         const isQuote = inv.docType === 'quote';
         const isProforma = inv.docType === 'proforma';
 
-        if (!isCancelled && !isQuote && !isProforma) {
-          totalPurchases += Number(inv.total) || 0;
-          totalPaid += Number(inv.paidAmount || 0);
+        if (!isCancelled && inv.docType === 'invoice') {
+          totalPurchases += invoiceNetTotal(inv);
+          totalPaid += Math.max(0, Number(inv.paidAmount || 0) - Number(inv.refundedAmount || 0));
+          totalBalance += invoiceBalance(inv);
         }
 
         const balance = invoiceBalance(inv);
@@ -2685,8 +3210,6 @@ window.ERPBilling = (function () {
       });
     }
 
-    const totalBalance = Math.max(0, totalPurchases - totalPaid);
-
     document.getElementById('profile-stats-purchases').textContent = formatMoney(totalPurchases);
     document.getElementById('profile-stats-paid').textContent = formatMoney(totalPaid);
     document.getElementById('profile-stats-balance').textContent = formatMoney(totalBalance);
@@ -2700,8 +3223,8 @@ window.ERPBilling = (function () {
         const isCancelled = inv.status === 'cancelled';
         const isQuote = inv.docType === 'quote';
         const isProforma = inv.docType === 'proforma';
-        const isUnpaid = inv.status === 'unpaid' || (Number(inv.total || 0) > Number(inv.paidAmount || 0));
-        return !isCancelled && !isQuote && !isProforma && isUnpaid;
+        const isUnpaid = invoiceBalance(inv) > 0;
+        return inv.docType === 'invoice' && !isCancelled && !isQuote && !isProforma && isUnpaid;
       });
 
       if (unpaidInvoices.length === 0) {
@@ -3208,17 +3731,21 @@ window.ERPBilling = (function () {
     document.getElementById('set-company-email').value = settings.email;
     document.getElementById('set-company-address').value = settings.address;
     
-    document.getElementById('set-ncf-b01-prefix').value = settings.ncfB01Prefix;
-    document.getElementById('set-ncf-b01-seq').value = settings.ncfB01Seq;
-    document.getElementById('set-ncf-b02-prefix').value = settings.ncfB02Prefix;
-    document.getElementById('set-ncf-b02-seq').value = settings.ncfB02Seq;
-    
-    document.getElementById('set-ncf-b14-prefix').value = settings.ncfB14Prefix || 'B14';
-    document.getElementById('set-ncf-b14-seq').value = settings.ncfB14Seq || 1;
-    document.getElementById('set-ncf-b15-prefix').value = settings.ncfB15Prefix || 'B15';
-    document.getElementById('set-ncf-b15-seq').value = settings.ncfB15Seq || 1;
-    document.getElementById('set-ncf-b12-prefix').value = settings.ncfB12Prefix || 'B12';
-    document.getElementById('set-ncf-b12-seq').value = settings.ncfB12Seq || 1;
+    Object.entries(NCF_FIELDS).forEach(([type, fields]) => {
+      const slug = type.toLowerCase();
+      const prefixInput = document.getElementById(`set-ncf-${slug}-prefix`);
+      const sequenceInput = document.getElementById(`set-ncf-${slug}-seq`);
+      const startInput = document.getElementById(`set-ncf-${slug}-start`);
+      const endInput = document.getElementById(`set-ncf-${slug}-end`);
+      const expiryInput = document.getElementById(`set-ncf-${slug}-expiry`);
+      if (prefixInput) prefixInput.value = settings[fields.prefix] || type;
+      if (sequenceInput) sequenceInput.value = settings[fields.sequence] || 1;
+      if (startInput) startInput.value = settings[fields.start] || 1;
+      if (endInput) endInput.value = settings[fields.end] || 99999999;
+      if (expiryInput) expiryInput.value = settings[fields.expiry] || '';
+    });
+    const lowWarningInput = document.getElementById('set-ncf-low-warning');
+    if (lowWarningInput) lowWarningInput.value = settings.ncfLowStockWarning || 25;
 
     document.getElementById('set-invoice-prefix').value = settings.invoicePrefix;
     document.getElementById('set-invoice-seq').value = settings.nextInvoiceNum;
@@ -3274,6 +3801,10 @@ window.ERPBilling = (function () {
       ncfB01Seq: Number(document.getElementById('set-ncf-b01-seq').value) || 1,
       ncfB02Prefix: document.getElementById('set-ncf-b02-prefix').value.trim(),
       ncfB02Seq: Number(document.getElementById('set-ncf-b02-seq').value) || 1,
+      ncfB03Prefix: document.getElementById('set-ncf-b03-prefix').value.trim(),
+      ncfB03Seq: Number(document.getElementById('set-ncf-b03-seq').value) || 1,
+      ncfB04Prefix: document.getElementById('set-ncf-b04-prefix').value.trim(),
+      ncfB04Seq: Number(document.getElementById('set-ncf-b04-seq').value) || 1,
       
       ncfB14Prefix: document.getElementById('set-ncf-b14-prefix').value.trim(),
       ncfB14Seq: Number(document.getElementById('set-ncf-b14-seq').value) || 1,
@@ -3295,17 +3826,34 @@ window.ERPBilling = (function () {
       ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
       ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
       ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
+      ncfLowStockWarning: Number(document.getElementById('set-ncf-low-warning').value) || 25,
       ...(isPanitas ? { restaurantTables } : {})
     };
 
+    Object.entries(NCF_FIELDS).forEach(([type, fields]) => {
+      const slug = type.toLowerCase();
+      updated[fields.start] = Number(document.getElementById(`set-ncf-${slug}-start`).value) || 1;
+      updated[fields.end] = Number(document.getElementById(`set-ncf-${slug}-end`).value) || 99999999;
+      updated[fields.expiry] = document.getElementById(`set-ncf-${slug}-expiry`).value || '';
+    });
+
     const sequenceFields = [
-      'ncfB01Seq', 'ncfB02Seq', 'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq',
+      'ncfB01Seq', 'ncfB02Seq', 'ncfB03Seq', 'ncfB04Seq',
+      'ncfB12Seq', 'ncfB14Seq', 'ncfB15Seq',
       'nextInvoiceNum', 'nextQuoteNum', 'nextProformaNum'
     ];
     const prefixesAreValid = Object.entries(NCF_FIELDS).every(([type, fields]) => updated[fields.prefix].toUpperCase() === type);
     const sequencesAreValid = sequenceFields.every(field => Number.isInteger(updated[field]) && updated[field] > 0 && updated[field] <= 99999999);
-    if (!prefixesAreValid || !sequencesAreValid || ![0, 16, 18].includes(rawDefaultTax)) {
-      showToast('Revisa los prefijos NCF, las secuencias y el ITBIS predeterminado.', 'danger');
+    const rangesAreValid = Object.values(NCF_FIELDS).every(fields =>
+      Number.isInteger(updated[fields.start]) &&
+      Number.isInteger(updated[fields.end]) &&
+      updated[fields.start] > 0 &&
+      updated[fields.end] >= updated[fields.start] &&
+      updated[fields.sequence] >= updated[fields.start] &&
+      updated[fields.sequence] <= updated[fields.end]
+    );
+    if (!prefixesAreValid || !sequencesAreValid || !rangesAreValid || ![0, 16, 18].includes(rawDefaultTax)) {
+      showToast('Revisa los prefijos, secuencias, rangos autorizados y el ITBIS predeterminado.', 'danger');
       return;
     }
     normalizeNcfSettings(updated);
@@ -4749,6 +5297,32 @@ window.ERPBilling = (function () {
     }
   }
 
+  function downloadText(filename, textContent) {
+    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = filename;
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function selectedFiscalPeriod(inputId = 'fiscal-report-period') {
+    const input = document.getElementById(inputId);
+    const fallback = BillingCore.toLocalDateInput().slice(0, 7);
+    const value = input && input.value ? input.value : fallback;
+    if (input && !input.value) input.value = fallback;
+    return BillingCore.normalizeFiscalPeriod(value);
+  }
+
+  function dgiiTextValue(value, numeric = false) {
+    if (numeric) return Number(value || 0).toFixed(2);
+    return String(value === undefined || value === null ? '' : value).replace(/[|\r\n\t]/g, ' ').trim();
+  }
+
   function exportInvoicesToCSV() {
     if (invoices.length === 0) {
       alert('No hay facturas registradas para exportar.');
@@ -4777,43 +5351,80 @@ window.ERPBilling = (function () {
   }
 
   function exportDGII607ToCSV() {
-    const eligibleInvoices = invoices.filter(isRevenueInvoice);
+    let period;
+    try {
+      period = selectedFiscalPeriod();
+    } catch (error) {
+      showToast(error.message, 'danger');
+      return;
+    }
+    const eligibleInvoices = invoices.filter(invoice =>
+      ['invoice', 'credit_note', 'debit_note'].includes(invoice.docType) &&
+      BillingCore.recordBelongsToPeriod(invoice, period)
+    );
     const groups = eligibleInvoices.reduce((result, invoice) => {
       const classification = BillingCore.classify607Invoice(invoice);
       result[classification] = (result[classification] || 0) + 1;
       return result;
     }, {});
     const detailInvoices = eligibleInvoices.filter(invoice => BillingCore.classify607Invoice(invoice) === 'detail');
-
-    if (detailInvoices.length === 0) {
-      showToast('No hay comprobantes físicos válidos para el detalle 607. Revisa NCF y facturas de consumo.', 'warning');
+    if (Number(groups.invalid || 0) > 0) {
+      showToast(`Hay ${groups.invalid} comprobante(s) con NCF o identificación inválida en ${period}. Corrígelos antes de generar el 607.`, 'danger');
       return;
     }
-
-    let officialCsv = 'RNC o Cedula,Tipo Identificacion,NCF,NCF Modificado,Tipo Ingreso,Fecha Comprobante,Fecha Retencion,Monto Facturado,ITBIS Facturado,ITBIS Retenido por Terceros,ITBIS Percibido,Retencion Renta por Terceros,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Monto Efectivo,Monto Cheque Transferencia Deposito,Monto Tarjeta Debito Credito,Monto Venta a Credito,Bonos o Certificados de Regalo,Permuta,Otras Formas de Venta\n';
-    detailInvoices.forEach(invoice => {
+    const companyRnc = String(settings && settings.rnc || '').replace(/\D/g, '');
+    if (companyRnc.length !== 9) {
+      showToast('Configura un RNC empresarial válido antes de generar reportes DGII.', 'danger');
+      return;
+    }
+    const records = detailInvoices.map(invoice => {
       const record = BillingCore.build607Record(invoice, payments);
-      officialCsv += record.map((value, index) => {
-        if ([0, 2, 3, 5, 6].includes(index)) return BillingCore.csvCell(value);
-        if (index >= 7) return Number(value || 0).toFixed(2);
-        return String(value);
-      }).join(',') + '\n';
+      return record.map((value, index) => dgiiTextValue(value, index >= 7)).join('|');
     });
+    const header = ['607', companyRnc, period.replace('-', ''), records.length].join('|');
+    downloadText(`DGII_F_607_${companyRnc}_${period.replace('-', '')}.TXT`, [header, ...records].join('\r\n'));
 
-    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`DGII_607_${companyName}_${BillingCore.toLocalDateInput()}.csv`, officialCsv);
-    const excluded = Number(groups['consumer-summary'] || 0) + Number(groups.electronic || 0) + Number(groups.invalid || 0);
-    const note = excluded > 0
-      ? ` Se excluyeron ${excluded} registros: consumo bajo RD$250,000, e-NCF o NCF inválidos.`
+    const consumerInvoices = eligibleInvoices.filter(invoice => BillingCore.classify607Invoice(invoice) === 'consumer-summary');
+    const consumerAmount = consumerInvoices.reduce((sum, invoice) =>
+      sum + Number(invoice.taxableAmount !== undefined ? invoice.taxableAmount : Number(invoice.subtotal || 0) - Number(invoice.discountAmount || 0)), 0);
+    const consumerItbis = consumerInvoices.reduce((sum, invoice) => sum + Number(invoice.itbis || 0), 0);
+    const electronic = Number(groups.electronic || 0);
+    const summary = consumerInvoices.length
+      ? ` Resumen consumidor final: ${consumerInvoices.length} comprobante(s), base ${formatMoney(consumerAmount)}, ITBIS ${formatMoney(consumerItbis)}.`
       : '';
-    showToast(`Borrador 607 generado. Debe prevalidarse con la herramienta oficial DGII.${note}`, excluded ? 'warning' : 'success');
+    const electronicNote = electronic ? ` Se excluyeron ${electronic} e-NCF históricos; deben seguir el canal electrónico.` : '';
+    showToast(`607 de ${period} generado con ${records.length} registro(s). Prevalídalo antes de remitir.${summary}${electronicNote}`, consumerInvoices.length || electronic ? 'warning' : 'success');
+  }
+
+  function exportDGII608() {
+    let period;
+    try {
+      period = selectedFiscalPeriod();
+    } catch (error) {
+      showToast(error.message, 'danger');
+      return;
+    }
+    const companyRnc = String(settings && settings.rnc || '').replace(/\D/g, '');
+    if (companyRnc.length !== 9) {
+      showToast('Configura un RNC empresarial válido antes de generar reportes DGII.', 'danger');
+      return;
+    }
+    const records = invoices
+      .filter(invoice => invoice.status === 'cancelled' &&
+        String(invoice.cancellationDate || invoice.date || '').slice(0, 7) === period)
+      .map(BillingCore.build608Record)
+      .filter(Boolean)
+      .map(record => record.map(value => dgiiTextValue(value)).join('|'));
+    const header = ['608', companyRnc, period.replace('-', ''), records.length].join('|');
+    downloadText(`DGII_F_608_${companyRnc}_${period.replace('-', '')}.TXT`, [header, ...records].join('\r\n'));
+    showToast(`608 de ${period} generado con ${records.length} NCF anulado(s). Prevalídalo antes de remitir.`, 'success');
   }
 
   function exportDGII606ToCSV() {
-    const blankCsv = 'RNC o Cedula,Tipo Identificacion,Tipo Gasto,NCF,NCF Modificado,Fecha Comprobante,Fecha Pago,Monto Facturado,ITBIS Facturado,ITBIS Retenido,ITBIS Sujeto a Proporcionalidad,ITBIS Total Gasto,ITBIS por Adelantar,Retencion Renta,ISR Percibido,Impuesto Selectivo al Consumo,Otros Impuestos Tasas,Propina Legal,Forma Pago\n';
-    const blankCompanyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
-    downloadCSV(`DGII_606_Plantilla_${blankCompanyName}_${BillingCore.toLocalDateInput()}.csv`, blankCsv);
-    showToast('Se descargó una plantilla 606 vacía. Este sistema aún no registra compras; no la remitas sin completarla y prevalidarla.', 'warning');
+    if (window.ERPExtensions && typeof window.ERPExtensions.export606 === 'function') {
+      return window.ERPExtensions.export606();
+    }
+    showToast('El módulo de compras todavía no está disponible. Recarga la página e inténtalo de nuevo.', 'danger');
   }
 
   function exportClientsToCSV() {
@@ -4892,13 +5503,17 @@ window.ERPBilling = (function () {
 
     if (method === 'nfc') {
       document.getElementById('nfc-payment-amount').textContent = formatMoney(total);
-      document.getElementById('nfc-payment-status').textContent = 'ESPERANDO DISPOSITIVO O TARJETA...';
+      document.getElementById('nfc-payment-status').textContent = 'PENDIENTE DE REFERENCIA DEL VOUCHER';
+      document.getElementById('nfc-manual-reference').value = '';
+      pendingPosManualReference = '';
       const tapBtn = document.getElementById('btn-nfc-tap-action');
       if (tapBtn) {
         tapBtn.style.display = 'block';
-        tapBtn.textContent = 'Simular Contacto (Tap)';
+        tapBtn.disabled = false;
+        tapBtn.textContent = 'Registrar pago verificado';
       }
       openModal('modal-nfc-payment');
+      setTimeout(() => document.getElementById('nfc-manual-reference')?.focus(), 200);
       return;
     }
 
@@ -4960,6 +5575,10 @@ window.ERPBilling = (function () {
       showToast('Método de pago no válido.', 'danger');
       return;
     }
+    if (method === 'nfc' && pendingPosManualReference.length < 4) {
+      showToast('Indica la referencia del voucher del terminal físico.', 'danger');
+      return;
+    }
     isProcessingPosSale = true;
     let docType = posDocType;
     let ncfType = posNcfType;
@@ -4977,6 +5596,7 @@ window.ERPBilling = (function () {
         productId: item.productId,
         productSource: item.source,
         description: item.name,
+        categorySnapshot: productCategorySnapshot(item.productId),
         price: item.price,
         qty: item.qty,
         tax: lineTax,
@@ -4987,7 +5607,11 @@ window.ERPBilling = (function () {
       };
     });
 
-    const total = BillingCore.roundMoney(subtotal + itbis);
+    const posTotals = BillingCore.calculateInvoiceTotals(items, 0);
+    items.splice(0, items.length, ...posTotals.items);
+    subtotal = posTotals.subtotal;
+    itbis = posTotals.itbis;
+    const total = posTotals.total;
     const paidAmount = (docType === 'invoice') ? (method === 'credit' ? 0 : total) : 0;
     const cleanClientRnc = String(posClient.rnc || '').replace(/\D/g, '');
     if (docType === 'invoice' && ['B01', 'B12', 'B14', 'B15'].includes(ncfType) && ![9, 11].includes(cleanClientRnc.length)) {
@@ -5006,14 +5630,19 @@ window.ERPBilling = (function () {
     const invoiceData = {
       docType: docType,
       companyCode: activeCompanyCode,
+      type: docType,
       clientId: posClient.id || 'anonymous',
       clientName: posClient.name,
       clientRnc: posClient.rnc,
+      customerSnapshot: invoiceCustomerSnapshot(posClient.id, { name: posClient.name, rnc: posClient.rnc }),
+      issuerSnapshot: invoiceIssuerSnapshot('general'),
+      fiscalSchemaVersion: 2,
       date: localDate,
       dueDate: localDate,
       subtotal: subtotal,
       discountPct: 0,
       discountAmount: 0,
+      taxableAmount: posTotals.taxableAmount,
       itbis: itbis,
       total: total,
       paidAmount: paidAmount,
@@ -5096,9 +5725,17 @@ window.ERPBilling = (function () {
 
           if (NCF_FIELDS[ncfType]) {
             const fields = NCF_FIELDS[ncfType];
-            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix], freshSettings[fields.sequence]);
+            BillingCore.assertNcfRangeAvailable(freshSettings, ncfType, localDate);
+            freshNcf = BillingCore.buildNcf(ncfType, freshSettings[fields.prefix] || ncfType, freshSettings[fields.sequence] || 1);
             settingsUpdates[fields.sequence] = Number(freshSettings[fields.sequence] || 1) + 1;
           }
+        }
+
+        let ncfRegistryRef = null;
+        if (freshNcf) {
+          ncfRegistryRef = dbRef.collection(collectionNcfRegistry).doc(freshNcf);
+          const registryDoc = await transaction.get(ncfRegistryRef);
+          if (registryDoc.exists) throw new Error(`El NCF ${freshNcf} ya fue utilizado.`);
         }
 
         invoiceData.invoiceNumber = freshInvoiceNum;
@@ -5111,31 +5748,44 @@ window.ERPBilling = (function () {
             if (currentStock < item.qty) {
               throw new Error(`Stock insuficiente para "${data.name || data.title}". Disponible: ${currentStock}, Solicitado: ${item.qty}`);
             }
+            const movementRef = dbRef.collection(collectionInventoryMovements).doc();
             transaction.update(target.ref, {
               stock: currentStock - item.qty,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              lastInventoryMovementId: movementRef.id
             });
             inventoryEffects.push({
               productId: target.productId,
               documentId: target.documentId,
               collection: target.collection,
-              quantity: item.qty
+              quantity: item.qty,
+              movementRef
             });
           }
         });
 
         if (docType === 'invoice') {
-          invoiceData.inventoryEffects = inventoryEffects;
+          invoiceData.inventoryEffects = inventoryEffects.map(({ movementRef, ...effect }) => effect);
           invoiceData.inventoryPostedAt = firebase.firestore.FieldValue.serverTimestamp();
         }
 
         transaction.set(newInvoiceDocRef, invoiceData);
+        if (ncfRegistryRef) {
+          transaction.set(ncfRegistryRef, {
+            ncf: freshNcf,
+            invoiceId: createdDocId,
+            companyCode: activeCompanyCode,
+            createdBy: currentUser.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
         inventoryEffects.forEach(effect => {
-          transaction.set(dbRef.collection(collectionInventoryMovements).doc(), {
+          transaction.set(effect.movementRef, {
             type: 'sale',
             invoiceId: createdDocId,
             invoiceNumber: freshInvoiceNum,
             productId: effect.productId,
+            productDocumentId: effect.documentId,
             productCollection: effect.collection,
             quantity: -effect.quantity,
             createdBy: currentUser.uid,
@@ -5149,7 +5799,9 @@ window.ERPBilling = (function () {
           invoiceId: createdDocId,
           amount: paidAmount,
           method: method === 'cash' ? 'Efectivo' : 'Tarjeta',
-          notes: 'Pago POS ' + (method === 'nfc' ? 'Contactless NFC' : ''),
+          notes: method === 'nfc'
+            ? 'Pago contactless verificado manualmente. Ref: ' + pendingPosManualReference
+            : 'Pago POS',
           createdBy: currentUser.uid,
           companyCode: activeCompanyCode,
           cashSessionId: activeCashSession ? activeCashSession.id : '',
@@ -5266,24 +5918,23 @@ window.ERPBilling = (function () {
     }
   }
 
-  function simulateNfcCardTap() {
+  async function simulateNfcCardTap() {
     const statusEl = document.getElementById('nfc-payment-status');
     const tapBtn = document.getElementById('btn-nfc-tap-action');
-    if (!statusEl) return;
+    const referenceInput = document.getElementById('nfc-manual-reference');
+    const reference = String(referenceInput?.value || '').trim();
+    if (!statusEl || reference.length < 4) {
+      showToast('Escribe una referencia válida del voucher físico.', 'warning');
+      referenceInput?.focus();
+      return;
+    }
 
-    statusEl.textContent = 'PROCESANDO PAGO CON EL BANCO...';
-    if (tapBtn) tapBtn.style.display = 'none';
-
+    pendingPosManualReference = reference.slice(0, 100);
+    statusEl.innerHTML = '<span style="color:#10b981;font-weight:bold;">✓ REGISTRO MANUAL CONFIRMADO</span>';
+    if (tapBtn) tapBtn.disabled = true;
     playBeepTone(1200, 0.15);
-
-    setTimeout(() => {
-      statusEl.innerHTML = '<span style="color:#10b981; font-weight:bold;">✔ PAGO APROBADO</span>';
-      
-      setTimeout(async () => {
-        closeModal('modal-nfc-payment');
-        await processPosSale('nfc');
-      }, 1200);
-    }, 1800);
+    closeModal('modal-nfc-payment');
+    await processPosSale('nfc');
   }
 
   function playBeepTone(freq, duration) {
@@ -5710,6 +6361,10 @@ window.ERPBilling = (function () {
     saveInvoice: saveInvoice,
     viewInvoice: viewInvoice,
     cancelInvoice: cancelInvoice,
+    openFiscalAdjustment: openFiscalAdjustment,
+    handleFiscalAdjustmentTypeChange: handleFiscalAdjustmentTypeChange,
+    handleFiscalAdjustmentResolutionChange: handleFiscalAdjustmentResolutionChange,
+    saveFiscalAdjustment: saveFiscalAdjustment,
     convertQuoteToInvoice: convertQuoteToInvoice,
     printInvoiceDirectly: printInvoiceDirectly,
     downloadInvoicePDF: downloadInvoicePDF,
@@ -5747,6 +6402,7 @@ window.ERPBilling = (function () {
     exportInvoicesToCSV: exportInvoicesToCSV,
     exportDGII606ToCSV: exportDGII606ToCSV,
     exportDGII607ToCSV: exportDGII607ToCSV,
+    exportDGII608: exportDGII608,
     exportClientsToCSV: exportClientsToCSV,
     exportProductsToCSV: exportProductsToCSV,
     printKitchenTicket: printKitchenTicket,

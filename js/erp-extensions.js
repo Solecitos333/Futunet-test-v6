@@ -54,6 +54,20 @@ window.ERPExtensions = (function () {
       const input = document.getElementById(id);
       if (input && !input.value) input.value = today;
     });
+    const fiscalPeriod = document.getElementById('purchase-fiscal-period');
+    if (fiscalPeriod && !fiscalPeriod.value) fiscalPeriod.value = today.slice(0, 7);
+  }
+
+  function numericInput(id) {
+    const input = document.getElementById(id);
+    const value = Number(input && input.value || 0);
+    return Number.isFinite(value) ? Math.round(value * 100) / 100 : 0;
+  }
+
+  function updatePurchaseItbisAdvance() {
+    const input = document.getElementById('purchase-itbis-advance');
+    if (!input) return;
+    input.value = Math.max(0, Math.round((numericInput('purchase-itbis') - numericInput('purchase-itbis-cost')) * 100) / 100).toFixed(2);
   }
 
   function init(userData) {
@@ -61,6 +75,11 @@ window.ERPExtensions = (function () {
     companyCode = window.ERPBillingCore.resolveCompanyCode(userData, localStorage.getItem('active_company_code') || 'CREATICOS');
     prefix = companyCode === 'CREATICOS' ? 'creaticos' : 'futunet';
     setDefaultDates();
+    ['purchase-itbis', 'purchase-itbis-cost'].forEach(id => {
+      const input = document.getElementById(id);
+      if (input) input.addEventListener('input', updatePurchaseItbisAdvance);
+    });
+    updatePurchaseItbisAdvance();
   }
 
   async function load(target) {
@@ -164,25 +183,57 @@ window.ERPExtensions = (function () {
       const ncf = document.getElementById('purchase-ncf').value.trim().toUpperCase();
       const date = document.getElementById('purchase-date').value;
       const dueDate = document.getElementById('purchase-due-date').value;
-      const subtotal = Number(document.getElementById('purchase-subtotal').value);
-      const itbis = Number(document.getElementById('purchase-itbis').value || 0);
+      const goodsAmount = numericInput('purchase-goods-amount');
+      const servicesAmount = numericInput('purchase-services-amount');
+      const subtotal = Math.round((goodsAmount + servicesAmount) * 100) / 100;
+      const itbis = numericInput('purchase-itbis');
+      const selectiveTax = numericInput('purchase-selective-tax');
+      const otherTaxes = numericInput('purchase-other-taxes');
+      const legalTip = numericInput('purchase-legal-tip');
+      const itbisWithheld = numericInput('purchase-itbis-withheld');
+      const itbisCost = numericInput('purchase-itbis-cost');
+      const itbisAdvance = Math.max(0, Math.round((itbis - itbisCost) * 100) / 100);
+      const incomeTaxWithheld = numericInput('purchase-income-tax-withheld');
       const paymentMethod = document.getElementById('purchase-payment-method').value;
       if (![9, 11].includes(supplierRnc.length)) throw new Error('El RNC o cédula debe tener 9 u 11 dígitos.');
       if (!/^(B\d{10}|E\d{12})$/.test(ncf)) throw new Error('El NCF debe tener un formato fiscal válido.');
       if (!date || !dueDate || dueDate < date) throw new Error('Revisa las fechas de compra y vencimiento.');
-      if (!Number.isFinite(subtotal) || subtotal < 0 || !Number.isFinite(itbis) || itbis < 0 || subtotal + itbis <= 0) throw new Error('Los montos de la compra no son válidos.');
+      if (goodsAmount < 0 || servicesAmount < 0 || itbis < 0 || subtotal + itbis <= 0) throw new Error('Los montos de la compra no son válidos.');
       const isPaid = paymentMethod !== '04';
-      await db().collection(`${prefix}_purchases`).add({
+      const paymentDateInput = document.getElementById('purchase-payment-date').value;
+      const paymentDate = isPaid ? (paymentDateInput || date) : '';
+      if ((itbisWithheld > 0 || incomeTaxWithheld > 0) && !paymentDate) {
+        throw new Error('Las retenciones requieren indicar la fecha de pago.');
+      }
+      const modifiedNcf = document.getElementById('purchase-modified-ncf').value.trim().toUpperCase();
+      if (modifiedNcf && !/^(B\d{10}|E\d{12})$/.test(modifiedNcf)) throw new Error('El NCF modificado no tiene un formato válido.');
+      const purchaseData = {
         companyCode,
         supplierRnc,
         supplierName: document.getElementById('purchase-supplier-name').value.trim(),
         ncf,
+        modifiedNcf,
         date,
         dueDate,
+        paymentDate,
+        retentionDate: document.getElementById('purchase-retention-date').value || '',
         expenseType: document.getElementById('purchase-expense-type').value,
+        goodsAmount,
+        servicesAmount,
         subtotal,
         itbis,
-        total: Math.round((subtotal + itbis) * 100) / 100,
+        itbisWithheld,
+        itbisProportional: numericInput('purchase-itbis-proportional'),
+        itbisCost,
+        itbisAdvance,
+        itbisPerceived: numericInput('purchase-itbis-perceived'),
+        incomeWithholdingType: document.getElementById('purchase-income-withholding-type').value.trim(),
+        incomeTaxWithheld,
+        incomeTaxPerceived: numericInput('purchase-income-tax-perceived'),
+        selectiveTax,
+        otherTaxes,
+        legalTip,
+        total: Math.round((subtotal + itbis + selectiveTax + otherTaxes + legalTip) * 100) / 100,
         paymentMethod,
         concept: document.getElementById('purchase-concept').value.trim(),
         status: isPaid ? 'paid' : 'pending',
@@ -191,9 +242,27 @@ window.ERPExtensions = (function () {
         updatedBy: user.uid,
         createdAt: serverTime(),
         updatedAt: serverTime()
+      };
+      const database = db();
+      const purchaseRef = database.collection(`${prefix}_purchases`).doc();
+      const registryId = `${supplierRnc}_${ncf}`;
+      const registryRef = database.collection(`${prefix}_purchase_ncf_registry`).doc(registryId);
+      await database.runTransaction(async transaction => {
+        const registry = await transaction.get(registryRef);
+        if (registry.exists) throw new Error('Este NCF ya fue registrado para el mismo proveedor.');
+        transaction.set(purchaseRef, purchaseData);
+        transaction.set(registryRef, {
+          supplierRnc,
+          ncf,
+          purchaseId: purchaseRef.id,
+          companyCode,
+          createdBy: user.uid,
+          timestamp: serverTime()
+        });
       });
       form.reset();
       setDefaultDates();
+      updatePurchaseItbisAdvance();
       notify('Compra registrada y agregada al control 606.', 'success');
       await loadPurchases();
     } catch (error) {
@@ -207,7 +276,7 @@ window.ERPExtensions = (function () {
     if (!confirm('¿Confirmas que esta cuenta por pagar fue saldada?')) return;
     try {
       await db().collection(`${prefix}_purchases`).doc(id).update({
-        status: 'paid', paidAt: serverTime(), updatedAt: serverTime(), updatedBy: user.uid
+        status: 'paid', paymentDate: localDate(), paidAt: serverTime(), updatedAt: serverTime(), updatedBy: user.uid
       });
       notify('Cuenta por pagar marcada como pagada.', 'success');
       await loadPurchases();
@@ -215,25 +284,44 @@ window.ERPExtensions = (function () {
   }
 
   function clean606(value) {
-    return String(value == null ? '' : value).replace(/[\t\r\n]/g, ' ').trim();
+    return String(value == null ? '' : value).replace(/[|\t\r\n]/g, ' ').trim();
   }
-  function dgiiDate(value) { return String(value || '').replace(/-/g, ''); }
   async function export606() {
-    if (!purchases.length) await loadPurchases();
-    if (!purchases.length) { notify('No hay compras que exportar.', 'warning'); return; }
-    const rows = purchases.map(item => [
-      item.supplierRnc, item.supplierRnc.length === 9 ? '1' : '2', item.expenseType || '09', item.ncf, '',
-      dgiiDate(item.date), item.status === 'paid' ? dgiiDate(item.date) : '', '0.00', Number(item.subtotal || 0).toFixed(2),
-      Number(item.total || 0).toFixed(2), Number(item.itbis || 0).toFixed(2), '0.00', '0.00', '0.00', Number(item.itbis || 0).toFixed(2),
-      '0.00', '', '0.00', '0.00', '0.00', '0.00', '0.00', item.paymentMethod || '04'
-    ].map(clean606).join('\t'));
-    const content = rows.join('\r\n');
-    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), content], { type: 'text/plain;charset=utf-8' });
+    const core = window.ERPBillingCore;
+    const periodInput = document.getElementById('purchase-fiscal-period');
+    let period;
+    try {
+      period = core.normalizeFiscalPeriod(periodInput && periodInput.value ? periodInput.value : localDate().slice(0, 7));
+    } catch (error) {
+      notify(error.message, 'error');
+      return;
+    }
+    const [snapshot, settingsDoc] = await Promise.all([
+      db().collection(`${prefix}_purchases`)
+        .where('date', '>=', `${period}-01`)
+        .where('date', '<=', `${period}-31`)
+        .orderBy('date', 'asc')
+        .get(),
+      db().collection(`${prefix}_settings`).doc('general').get()
+    ]);
+    const periodPurchases = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const companyRnc = String(settingsDoc.exists ? settingsDoc.data().rnc || '' : '').replace(/\D/g, '');
+    if (companyRnc.length !== 9) { notify('Configura un RNC empresarial válido antes de generar el 606.', 'error'); return; }
+    const rows = periodPurchases.map(item => core.build606Record(item).map((value, index) =>
+      clean606(index >= 7 && index <= 21 && index !== 16 ? Number(value || 0).toFixed(2) : value)
+    ).join('|'));
+    const header = ['606', companyRnc, period.replace('-', ''), rows.length].join('|');
+    const content = [header, ...rows].join('\r\n');
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `DGII_606_${companyCode}_${localDate()}.txt`;
-    document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(link.href);
-    notify('Reporte 606 generado. Prevalídalo antes de remitirlo a DGII.', 'success');
+    const downloadUrl = URL.createObjectURL(blob);
+    link.href = downloadUrl;
+    link.download = `DGII_F_606_${companyRnc}_${period.replace('-', '')}.TXT`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+    notify(`Reporte 606 de ${period} generado con ${rows.length} registro(s). Prevalídalo antes de remitirlo a DGII.`, 'success');
   }
 
   async function loadBanking() {
