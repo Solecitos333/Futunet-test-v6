@@ -62,17 +62,13 @@
     return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
-  function sanitizeUrl(url, fallback = '#') {
-    const rawUrl = String(url || '').trim();
-    if (!rawUrl) return fallback;
-
-    try {
-      const parsed = new URL(rawUrl, window.location.href);
-      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return fallback;
-      return rawUrl;
-    } catch (error) {
-      return fallback;
+  function sanitizeUrl(url) {
+    if (!url) return '#';
+    var clean = url.trim().toLowerCase();
+    if (clean.indexOf('javascript:') === 0 || clean.indexOf('data:') === 0 || clean.indexOf('vbscript:') === 0) {
+      return '#';
     }
+    return url;
   }
 
   function sanitizeHtml(htmlString) {
@@ -143,19 +139,16 @@
       slideDiv.className = 'hero-carousel-slide hero-carousel-slide--banner';
       slideDiv.setAttribute('data-slide', 'banner');
       
-      const title = String(banner.title || 'Promoción Futunet');
-      const linkUrl = sanitizeUrl(banner.link, 'catalogo.html');
-      const imageUrl = sanitizeUrl(banner.image, 'img/logo.webp');
-      const cleanWaMsg = `Hola Futunet, me interesa la promoción: ${title.replace(/<[^>]*>/g, '')}`;
-      const whatsappNumber = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
-      const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(cleanWaMsg)}`;
+      const linkUrl = sanitizeUrl(banner.link || '#');
+      const cleanWaMsg = `Hola Futunet, me interesa la promoción: ${banner.title.replace(/<[^>]*>/g, '')}`;
+      const waUrl = `https://wa.me/${FUTUNET_CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(cleanWaMsg)}`;
 
       slideDiv.innerHTML = `
-        <div class="hb-bg"></div>
+        <div class="hb-bg" style="background-image:url('${escapeAttr(banner.image || 'img/logo.webp')}')"></div>
         <div class="hb-overlay"></div>
         <div class="hb-body">
           <span class="hb-label"><i data-lucide="tag"></i> Promoción</span>
-          <h2 class="hb-title">${sanitizeHtml(title)}</h2>
+          <h2 class="hb-title">${sanitizeHtml(banner.title)}</h2>
           <p class="hb-desc">${sanitizeHtml(banner.subtitle || '')}</p>
           <div class="hb-actions">
             <a href="${escapeAttr(linkUrl)}" class="btn btn-primary">Ver detalles</a>
@@ -165,8 +158,6 @@
           </div>
         </div>
       `;
-      const background = slideDiv.querySelector('.hb-bg');
-      if (background) background.style.backgroundImage = `url(${JSON.stringify(imageUrl)})`;
       track.appendChild(slideDiv);
     });
   }
@@ -181,32 +172,21 @@
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let progressVal = 0;
   let isPaused = false;
-  let userPaused = reduceMotion;
   let startX = 0;
   let isDragging = false;
   let isSearching = false;
 
   // Build Dots dynamically based on the final slides count
   dotsContainer.innerHTML = '';
-  slides.forEach((slide, i) => {
-    const slideId = `hero-carousel-slide-${i + 1}`;
-    slide.id = slideId;
-    slide.setAttribute('role', 'group');
-    slide.setAttribute('aria-roledescription', 'diapositiva');
-    slide.setAttribute('aria-label', `${i + 1} de ${slides.length}`);
-
+  slides.forEach((_, i) => {
     const dot = document.createElement('button');
-    dot.type = 'button';
     dot.className = 'hero-carousel-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', i === 0 ? 'Mostrar inicio' : `Mostrar promoción ${i}`);
-    dot.setAttribute('aria-controls', slideId);
-    dot.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+    dot.setAttribute('aria-label', i === 0 ? 'Inicio' : `Promoción ${i}`);
     dot.addEventListener('click', () => goTo(i));
     dotsContainer.appendChild(dot);
   });
 
   const dots = Array.from(dotsContainer.querySelectorAll('.hero-carousel-dot'));
-  const toggleButton = carousel.querySelector('#hero-carousel-toggle');
 
   function updateNavbarState(slideIndex) {
     const slide = slides[slideIndex];
@@ -224,18 +204,11 @@
     current = index;
 
     slides.forEach((s, i) => {
-      const isActive = i === current;
-      s.classList.toggle('active', isActive);
-      s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      if (isActive) s.removeAttribute('inert');
-      else s.setAttribute('inert', '');
+      s.classList.toggle('active', i === current);
+      s.setAttribute('aria-hidden', i !== current ? 'true' : 'false');
     });
 
-    dots.forEach((d, i) => {
-      const isActive = i === current;
-      d.classList.toggle('active', isActive);
-      d.setAttribute('aria-current', isActive ? 'true' : 'false');
-    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
 
     updateNavbarState(current);
     resetAutoPlay();
@@ -267,24 +240,12 @@
   function updateProgressBar() {
     if (progressBar) {
       progressBar.style.width = progressVal + '%';
-      progressBar.setAttribute('aria-valuenow', String(Math.round(progressVal)));
     }
-  }
-
-  function updateToggleButton() {
-    if (!toggleButton) return;
-    const label = userPaused ? 'Reanudar rotación automática' : 'Pausar rotación automática';
-    toggleButton.setAttribute('aria-pressed', String(userPaused));
-    toggleButton.setAttribute('aria-label', label);
-    const icon = toggleButton.querySelector('.hero-carousel-toggle__icon');
-    if (icon) icon.textContent = userPaused ? '▶' : 'Ⅱ';
-    const accessibleLabel = toggleButton.querySelector('.sr-only');
-    if (accessibleLabel) accessibleLabel.textContent = label;
   }
 
   function startAutoPlay() {
     stopAutoPlay();
-    if (isSearching || userPaused || document.hidden) return;
+    if (isSearching || reduceMotion) return;
     isPaused = false;
 
     let startTime = Date.now() - (progressVal / 100) * AUTO_INTERVAL;
@@ -302,7 +263,7 @@
       } else {
         updateProgressBar();
       }
-    }, 100);
+    }, 30);
   }
 
   function stopAutoPlay() {
@@ -318,15 +279,6 @@
     progressVal = 0;
     updateProgressBar();
     startAutoPlay();
-  }
-
-  if (toggleButton) {
-    toggleButton.addEventListener('click', () => {
-      userPaused = !userPaused;
-      updateToggleButton();
-      if (userPaused) stopAutoPlay();
-      else startAutoPlay();
-    });
   }
 
   carousel.addEventListener('mouseenter', stopAutoPlay);
@@ -362,13 +314,7 @@
     startAutoPlay();
   });
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stopAutoPlay();
-    else startAutoPlay();
-  });
-
   goTo(0);
-  updateToggleButton();
   startAutoPlay();
 
   if ('IntersectionObserver' in window) {

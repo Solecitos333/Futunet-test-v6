@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v13';
+const CACHE_NAME = 'futunet-cache-v12';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -141,14 +141,14 @@ self.addEventListener('fetch', event => {
           return networkResponse;
         })
         .catch(async () => {
-          return (await caches.match(event.request, { ignoreSearch: true })) || caches.match('./offline.html');
+          return (await caches.match(event.request)) || caches.match('./offline.html');
         })
     );
     return;
   }
 
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then(cachedResponse => {
+    caches.match(event.request).then(cachedResponse => {
       if (cachedResponse) {
         // Return from cache, but fetch fresh in background for next time if it is a local asset
         if (event.request.url.startsWith(self.location.origin)) {

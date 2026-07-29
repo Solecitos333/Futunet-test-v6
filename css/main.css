@@ -113,6 +113,50 @@ button:focus-visible,
 .mobile-menu-wa-icon { width: 16px; height: 16px; vertical-align: -2px; }
 
 /* ── 2b. PRELOADER (Logo + Progress Bar) ── */
+body.is-loading {
+  overflow: hidden;
+}
+.page-preloader {
+  position: fixed; inset: 0; z-index: 99999;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f8fc 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 24px;
+  transition: opacity .25s ease, visibility .25s ease;
+}
+.page-preloader.hidden {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.preloader-logo {
+  width: clamp(150px, 28vw, 220px);
+  height: auto;
+  filter: drop-shadow(0 10px 24px rgba(11, 126, 181, 0.08));
+  animation: preloaderPulse .9s ease-in-out infinite;
+}
+@keyframes preloaderPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+.preloader-bar {
+  width: clamp(180px, 30vw, 280px);
+  height: 4px;
+  background: rgba(11, 126, 181, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.preloader-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light), var(--accent));
+  border-radius: 4px;
+  animation: preloaderFill 1.1s ease-in-out forwards;
+}
+@keyframes preloaderFill {
+  0% { width: 0%; }
+  40% { width: 65%; }
+  80% { width: 88%; }
+  100% { width: 100%; }
+}
+
 /* ── 2c. PROMO TOP BAR ── */
 .promo-top-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 950;
