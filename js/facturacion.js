@@ -1945,12 +1945,13 @@ window.ERPBilling = (function () {
     let status = 'pending';
     let paidAmount = 0;
     
-    if (editingInvoiceId && editingInvoiceNumber) {
-      invoiceNum = editingInvoiceNumber;
+    if (editingInvoiceId) {
+      invoiceNum = editingInvoiceNumber || editingInvoiceId;
       status = docType === 'quote' ? 'quote' : (docType === 'proforma' ? 'proforma' : 'pending');
       const originalDoc = invoices.find(i => i.id === editingInvoiceId);
       if (originalDoc) {
-        if (originalDoc.docType !== docType) {
+        const origDocType = originalDoc.docType || originalDoc.type || docType;
+        if (origDocType !== docType) {
           showToast('El tipo de un documento existente no puede cambiarse. Usa la opción Convertir.', 'danger');
           return;
         }
@@ -1992,31 +1993,37 @@ window.ERPBilling = (function () {
     const invoiceNotesEl = document.getElementById('form-invoice-notes');
     const invoiceNotes = invoiceNotesEl ? invoiceNotesEl.value.trim() : '';
 
+    const userUid = (currentUser && (currentUser.uid || currentUser.id)) ? (currentUser.uid || currentUser.id) : 'admin';
     const invoiceData = {
-      docType: docType,
-      companyCode: activeCompanyCode,
-      invoiceNumber: invoiceNum,
-      clientId: clientId,
-      clientName: clientName,
-      clientRnc: clientRnc,
-      date: date,
-      dueDate: dueDate,
-      division: division,
-      ncfType: (docType === 'quote' || docType === 'proforma') ? 'none' : ncfType,
-      ncf: (docType === 'quote' || docType === 'proforma') ? '' : ncf,
-      items: items,
-      subtotal: subtotal,
-      discountPct: globalDiscountPct,
-      discountAmount: totalDiscountAmount,
-      itbis: totalItbis,
-      total: grandTotal,
-      paidAmount: paidAmount,
-      status: status,
-      paymentTerms: paymentTerms,
-      notes: invoiceNotes,
-      updatedBy: currentUser.uid,
+      docType: docType || 'quote',
+      type: docType || 'quote',
+      companyCode: activeCompanyCode || 'CREATICOS',
+      invoiceNumber: invoiceNum || editingInvoiceNumber || editingInvoiceId || 'COT-1000',
+      number: invoiceNum || editingInvoiceNumber || editingInvoiceId || 'COT-1000',
+      clientId: clientId || 'custom',
+      clientName: clientName || '',
+      clientRnc: clientRnc || '',
+      date: date || '',
+      dueDate: dueDate || '',
+      division: division || 'general',
+      ncfType: (docType === 'quote' || docType === 'proforma') ? 'none' : (ncfType || 'none'),
+      ncf: (docType === 'quote' || docType === 'proforma') ? '' : (ncf || ''),
+      items: items || [],
+      subtotal: subtotal || 0,
+      discountPct: globalDiscountPct || 0,
+      discountAmount: totalDiscountAmount || 0,
+      itbis: totalItbis || 0,
+      total: grandTotal || 0,
+      paidAmount: paidAmount || 0,
+      status: status || 'quote',
+      paymentTerms: paymentTerms || 'Contado',
+      notes: invoiceNotes || '',
+      updatedBy: userUid,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
+    Object.keys(invoiceData).forEach(k => {
+      if (invoiceData[k] === undefined) delete invoiceData[k];
+    });
     if (conversionSourceId) invoiceData.sourceDocumentId = conversionSourceId;
 
     if (editingInvoiceId) {
@@ -2257,11 +2264,13 @@ window.ERPBilling = (function () {
     // Adjust compact print layout classes based on items count
     const printArea = document.getElementById('invoice-print-area');
     if (printArea) {
-      printArea.classList.remove('print-compact-medium', 'print-compact-high');
+      printArea.classList.remove('print-compact-medium', 'print-compact-high', 'print-compact-ultra');
       const itemsCount = inv.items ? inv.items.length : 0;
-      if (itemsCount > 12) {
+      if (itemsCount > 14) {
+        printArea.classList.add('print-compact-ultra');
+      } else if (itemsCount > 10) {
         printArea.classList.add('print-compact-high');
-      } else if (itemsCount > 7) {
+      } else if (itemsCount > 6) {
         printArea.classList.add('print-compact-medium');
       }
     }
@@ -5430,7 +5439,7 @@ window.ERPBilling = (function () {
     }
 
     editingInvoiceId = id;
-    editingInvoiceNumber = inv.invoiceNumber;
+    editingInvoiceNumber = inv.invoiceNumber || inv.number || id;
 
     switchPanel('invoices');
     switchSubTab('invoices', 'form');

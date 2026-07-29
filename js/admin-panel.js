@@ -4979,6 +4979,13 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-07-01');
       setVal('banner-end-date', '2026-07-31');
+    } else if (presetName === 'Regreso a Clases') {
+      setVal('banner-title', '🎒 <strong>Regreso a Clases y Universidad 2026</strong>');
+      setVal('banner-subtitle', 'Laptops estudiantiles, impresoras EcoTank con tinta de regalo e Internet Fibra Óptica Lite con el código BACKTOSCHOOL2026.');
+      setVal('banner-link', 'catalogo.html?cat=equipos');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-07-26');
+      setVal('banner-end-date', '2026-08-31');
     }
   }
 
