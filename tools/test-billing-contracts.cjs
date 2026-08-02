@@ -8,6 +8,11 @@ const rules = fs.readFileSync(path.join(root, 'firestore.rules'), 'utf8');
 const billing = fs.readFileSync(path.join(root, 'js', 'facturacion.js'), 'utf8');
 const extensions = fs.readFileSync(path.join(root, 'js', 'erp-extensions.js'), 'utf8');
 const admin = fs.readFileSync(path.join(root, 'js', 'admin-panel.js'), 'utf8');
+const financing = fs.readFileSync(path.join(root, 'js', 'financing.js'), 'utf8');
+const adminFinancing = fs.readFileSync(path.join(root, 'js', 'admin-financing.js'), 'utf8');
+const cart = fs.readFileSync(path.join(root, 'js', 'cart.js'), 'utf8');
+const auth = fs.readFileSync(path.join(root, 'js', 'auth.js'), 'utf8');
+const storageRules = fs.readFileSync(path.join(root, 'storage.rules'), 'utf8');
 const authGuard = fs.readFileSync(path.join(root, 'js', 'auth-guard.js'), 'utf8');
 const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
@@ -88,6 +93,19 @@ test('los cobros son inmutables y quedan vinculados al usuario', () => {
   assert.match(billing, /lastPaymentId: paymentRef\.id/);
   assert.match(rules, /function isPaymentOnlyInvoiceUpdate\(\)/);
   assert.match(rules, /match \/futunet_payments\/\{paymentId\}[\s\S]*?allow update, delete: if false/);
+});
+
+test('el financiamiento exige identidad aprobada y conserva un libro de pagos inmutable', () => {
+  assert.match(auth, /normalizeIdentityDocument/);
+  assert.match(auth, /termsAcceptedAt/);
+  assert.match(cart, /paymentMethod === 'financing'/);
+  assert.match(financing, /financing_profiles/);
+  assert.match(adminFinancing, /runTransaction/);
+  assert.match(rules, /match \/financing_profiles\/\{userId\}/);
+  assert.match(rules, /get\(\/databases\/\$\(database\)\/documents\/financing_profiles\/\$\(data\.userId\)\)\.data\.status == 'approved'/);
+  assert.match(rules, /match \/financing_payments\/\{paymentId\}[\s\S]*?allow update, delete: if false/);
+  assert.match(storageRules, /match \/financing-documents\/\{userId\}\/\{fileName\}/);
+  assert.match(storageRules, /request\.auth\.uid == userId \|\| isAdminOrAbove\(\)/);
 });
 
 test('la auditoría puede escribirse pero no alterarse ni borrarse', () => {

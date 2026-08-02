@@ -19,6 +19,10 @@
     renderFavorites();
     loadUserOrders();
     setupProfileForm();
+    if (window.FutunetFinancing) window.FutunetFinancing.init(user, data);
+    if (!data.documentType || !data.documentNumber || data.termsAccepted !== true) {
+      showToast('Completa tu documento de identidad y acepta las políticas para finalizar el registro.', 'info');
+    }
   }
 
   // ─── Profile Section ───
@@ -34,6 +38,18 @@
     setVal('profile-name', userData.displayName || '');
     setVal('profile-phone', userData.phone || '');
     setVal('profile-address', userData.address || '');
+    setVal('profile-document-type', userData.documentType || 'cedula');
+    setVal('profile-document-number', userData.documentNumber || '');
+    var documentTypeField = document.getElementById('profile-document-type');
+    var documentNumberField = document.getElementById('profile-document-number');
+    var identityLocked = userData.financingProfileStatus === 'approved';
+    if (documentTypeField) documentTypeField.disabled = identityLocked;
+    if (documentNumberField) documentNumberField.readOnly = identityLocked;
+    var terms = document.getElementById('profile-terms');
+    if (terms) {
+      terms.checked = userData.termsAccepted === true;
+      terms.disabled = userData.termsAccepted === true;
+    }
 
     // Avatar
     var avatar = document.getElementById('user-avatar');
@@ -59,17 +75,34 @@
       var name = document.getElementById('profile-name').value.trim();
       var phone = document.getElementById('profile-phone').value.trim();
       var address = document.getElementById('profile-address').value.trim();
+      var documentType = document.getElementById('profile-document-type').value;
+      var documentNumber = document.getElementById('profile-document-number').value.trim();
+      var acceptedTerms = document.getElementById('profile-terms').checked;
+
+      if (!acceptedTerms) {
+        showToast('Debes aceptar los términos y la política de privacidad.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
 
       try {
-        await db.collection('users').doc(currentUser.uid).update({
+        var identity = FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
+        var updateData = {
           displayName: name,
           phone: phone,
-          address: address
-        });
+          address: address,
+          documentType: identity.documentType,
+          documentNumber: identity.documentNumber,
+          identityProfileComplete: true,
+          termsAccepted: true
+        };
+        if (userData.termsAccepted !== true) {
+          updateData.termsAcceptedAt = firebase.firestore.FieldValue.serverTimestamp();
+          updateData.termsVersion = '2026-08-01';
+        }
+        await db.collection('users').doc(currentUser.uid).update(updateData);
         await currentUser.updateProfile({ displayName: name });
-        userData.displayName = name;
-        userData.phone = phone;
-        userData.address = address;
+        Object.assign(userData, updateData);
         renderProfile();
         showToast('Perfil actualizado correctamente', 'success');
       } catch (err) {
@@ -336,8 +369,20 @@
         this.classList.add('is-active');
         var panel = document.querySelector('[data-up-panel="' + target + '"]');
         if (panel) panel.classList.add('is-active');
+        try {
+          var url = new URL(window.location.href);
+          url.searchParams.set('tab', target);
+          url.searchParams.delete('completeProfile');
+          window.history.replaceState({}, '', url.toString());
+        } catch (e) { }
       });
     });
+
+    var requestedTab = new URLSearchParams(window.location.search).get('tab');
+    if (requestedTab) {
+      var requestedButton = document.querySelector('[data-up-tab="' + requestedTab + '"]');
+      if (requestedButton) requestedButton.click();
+    }
   }
 
   // ─── Helpers ───

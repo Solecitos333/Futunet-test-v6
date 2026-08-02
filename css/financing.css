@@ -1,0 +1,48 @@
+.fin-status-banner {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+  margin-bottom:20px; padding:16px 18px; border:1px solid #dbe8f5;
+  border-radius:16px; background:#f8fbff; color:#334155;
+}
+.fin-status-banner strong { display:block; color:#0f172a; margin-bottom:3px; }
+.fin-status-pill { flex:0 0 auto; padding:6px 10px; border-radius:999px; font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+.fin-status-not_started { background:#e2e8f0; color:#475569; }
+.fin-status-pending_review { background:#fef3c7; color:#92400e; }
+.fin-status-approved, .fin-status-active, .fin-status-paid { background:#dcfce7; color:#166534; }
+.fin-status-rejected, .fin-status-overdue { background:#fee2e2; color:#991b1b; }
+.fin-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.fin-grid .full { grid-column:1/-1; }
+.fin-help { display:block; color:#64748b; font-size:.76rem; line-height:1.4; margin-top:6px; }
+.fin-file-field { padding:14px; border:1px dashed #a9c6df; border-radius:12px; background:#f8fbff; }
+.fin-file-field input { display:block; width:100%; margin-top:8px; }
+.fin-signature-wrap { border:1px solid #cbd5e1; border-radius:14px; overflow:hidden; background:#fff; }
+.fin-signature-wrap canvas { display:block; width:100%; height:180px; touch-action:none; cursor:crosshair; }
+.fin-signature-tools { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-top:1px solid #e2e8f0; background:#f8fafc; font-size:.75rem; color:#64748b; }
+.fin-link-button { border:0; background:transparent; color:#0a70a2; font:inherit; font-weight:700; cursor:pointer; }
+.fin-consent { display:flex; align-items:flex-start; gap:10px; padding:14px; border-radius:12px; background:#f8fafc; color:#475569; font-size:.82rem; line-height:1.5; }
+.fin-consent input { width:18px; height:18px; flex:0 0 auto; margin-top:2px; }
+.fin-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:18px 0; }
+.fin-summary-card { padding:16px; border:1px solid #e2e8f0; border-radius:14px; background:#fff; }
+.fin-summary-card span { display:block; color:#64748b; font-size:.75rem; margin-bottom:5px; }
+.fin-summary-card strong { color:#0f172a; font-size:1.18rem; }
+.fin-account-card { border:1px solid #dce7f2; border-radius:16px; padding:18px; margin-top:14px; background:#fff; }
+.fin-account-head { display:flex; justify-content:space-between; gap:14px; align-items:flex-start; }
+.fin-account-head h4 { margin:0 0 4px; color:#0f172a; }
+.fin-account-meta { color:#64748b; font-size:.8rem; }
+.fin-progress { height:9px; border-radius:999px; background:#e2e8f0; overflow:hidden; margin:15px 0 8px; }
+.fin-progress > span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#0a70a2,#00c281); }
+.fin-account-numbers { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+.fin-account-number { padding:10px; border-radius:10px; background:#f8fafc; }
+.fin-account-number small { display:block; color:#64748b; margin-bottom:3px; }
+.fin-payments { margin-top:14px; border-top:1px solid #e2e8f0; padding-top:12px; }
+.fin-payment-row { display:grid; grid-template-columns:1.1fr .8fr .8fr 1fr; gap:8px; padding:8px 0; border-bottom:1px solid #f1f5f9; font-size:.78rem; color:#475569; }
+.fin-empty { padding:28px; text-align:center; color:#64748b; border:1px dashed #cbd5e1; border-radius:14px; }
+.fin-admin-actions { display:flex; flex-wrap:wrap; gap:6px; }
+.fin-doc-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.fin-doc-links a { color:#0a70a2; font-size:.78rem; font-weight:700; }
+@media (max-width:720px) {
+  .fin-grid, .fin-summary { grid-template-columns:1fr; }
+  .fin-grid .full { grid-column:auto; }
+  .fin-account-numbers { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .fin-status-banner, .fin-account-head { flex-direction:column; }
+  .fin-payment-row { grid-template-columns:1fr 1fr; }
+}

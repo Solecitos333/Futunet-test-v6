@@ -22,6 +22,24 @@
   function getAuth() { return window.FutunetFirebase.auth; }
   function getDB() { return window.FutunetFirebase.db; }
 
+  function normalizeIdentityDocument(type, value) {
+    var documentType = type === 'passport' ? 'passport' : 'cedula';
+    var documentNumber = String(value || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    if (documentType === 'cedula') {
+      documentNumber = documentNumber.replace(/\D/g, '');
+      if (documentNumber.length !== 11) {
+        var cedulaError = new Error('La cédula debe contener 11 dígitos.');
+        cedulaError.code = 'auth/invalid-document';
+        throw cedulaError;
+      }
+    } else if (!/^[A-Z0-9-]{6,20}$/.test(documentNumber)) {
+      var passportError = new Error('El pasaporte debe contener entre 6 y 20 letras, números o guiones.');
+      passportError.code = 'auth/invalid-document';
+      throw passportError;
+    }
+    return { documentType: documentType, documentNumber: documentNumber };
+  }
+
   // ─── Create/ensure user document in Firestore ───
   // El registro público siempre crea usuarios sin privilegios.
   // Los administradores se aprovisionan exclusivamente desde un entorno confiable.
@@ -35,6 +53,12 @@
         email: data.email || '',
         phone: data.phone || '',
         address: '',
+        documentType: data.documentType || '',
+        documentNumber: data.documentNumber || '',
+        identityProfileComplete: !!(data.documentType && data.documentNumber),
+        termsAccepted: data.termsAccepted === true,
+        termsAcceptedAt: data.termsAccepted === true ? firebase.firestore.FieldValue.serverTimestamp() : null,
+        termsVersion: data.termsAccepted === true ? '2026-08-01' : '',
         role: role,
         roles: [ROLES.USER],
         status: data.status || 'active',
@@ -52,7 +76,14 @@
   }
 
   // ─── Sign Up ───
-  async function signUp(email, password, displayName) {
+  async function signUp(email, password, displayName, identityData) {
+    identityData = identityData || {};
+    if (identityData.termsAccepted !== true) {
+      var termsError = new Error('Debes aceptar los términos y la política de privacidad para crear una cuenta.');
+      termsError.code = 'auth/terms-required';
+      throw termsError;
+    }
+    var identity = normalizeIdentityDocument(identityData.documentType, identityData.documentNumber);
     var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
     if (!passwordRegex.test(password)) {
       var err = new Error('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.');
@@ -63,15 +94,24 @@
     var cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: displayName });
 
-    // Send verification email
-    await cred.user.sendEmailVerification();
-
-    // Create user document (resilient - won't block if Firestore fails)
-    await ensureUserDoc(cred.user.uid, {
+    // Create the required identity record before considering registration complete.
+    var createdRole = await ensureUserDoc(cred.user.uid, {
       displayName: displayName,
       email: email,
+      documentType: identity.documentType,
+      documentNumber: identity.documentNumber,
+      termsAccepted: true,
       status: 'pending_verification'
     });
+    if (!createdRole) {
+      try { await cred.user.delete(); } catch (deleteError) { await auth.signOut(); }
+      var profileCreateError = new Error('No se pudo guardar el perfil de identidad. Intenta crear la cuenta nuevamente.');
+      profileCreateError.code = 'auth/profile-create-failed';
+      throw profileCreateError;
+    }
+
+    // Send verification email only after the account record is safely stored.
+    await cred.user.sendEmailVerification();
 
     // Sign out immediately so they must verify and log in
     await auth.signOut();
@@ -166,7 +206,7 @@
   }
 
   // ─── Sign In with Google ───
-  async function signInWithGoogle() {
+  async function signInWithGoogle(registrationData) {
     var provider = new firebase.auth.GoogleAuthProvider();
     var cred = await getAuth().signInWithPopup(provider);
 
@@ -178,12 +218,31 @@
     }
 
     if (!userDoc.exists) {
-      await ensureUserDoc(cred.user.uid, {
+      if (!registrationData || registrationData.termsAccepted !== true || !registrationData.documentNumber) {
+        try { await cred.user.delete(); } catch (deleteError) { await getAuth().signOut(); }
+        var incompleteGoogleError = new Error('Para crear una cuenta con Google, abre “Crear cuenta”, completa tu cédula o pasaporte y acepta las políticas.');
+        incompleteGoogleError.code = 'auth/identity-required';
+        throw incompleteGoogleError;
+      }
+      var googleIdentity = null;
+      if (registrationData && registrationData.documentNumber) {
+        googleIdentity = normalizeIdentityDocument(registrationData.documentType, registrationData.documentNumber);
+      }
+      var googleRole = await ensureUserDoc(cred.user.uid, {
         displayName: cred.user.displayName || '',
         email: cred.user.email || '',
         phone: cred.user.phoneNumber || '',
+        documentType: googleIdentity ? googleIdentity.documentType : '',
+        documentNumber: googleIdentity ? googleIdentity.documentNumber : '',
+        termsAccepted: !!(registrationData && registrationData.termsAccepted),
         status: 'active'
       });
+      if (!googleRole) {
+        try { await cred.user.delete(); } catch (deleteError) { await getAuth().signOut(); }
+        var googleProfileError = new Error('No se pudo guardar el perfil de identidad. Intenta registrarte nuevamente.');
+        googleProfileError.code = 'auth/profile-create-failed';
+        throw googleProfileError;
+      }
     } else {
       getDB().collection('users').doc(cred.user.uid).update({
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
@@ -244,11 +303,10 @@
     }
 
     if (!userDoc.exists) {
-      await ensureUserDoc(cred.user.uid, {
-        displayName: cred.user.displayName || '',
-        email: cred.user.email || email,
-        phone: cred.user.phoneNumber || ''
-      });
+      try { await cred.user.delete(); } catch (deleteError) { await auth.signOut(); }
+      var identityRequiredError = new Error('Este enlace no corresponde a una cuenta registrada. Crea tu cuenta e ingresa la cédula o pasaporte requerido.');
+      identityRequiredError.code = 'auth/identity-required';
+      throw identityRequiredError;
     } else {
       getDB().collection('users').doc(cred.user.uid).update({
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()
@@ -473,6 +531,7 @@
     isLoggedIn: isLoggedIn,
     renderNavbarAuth: renderNavbarAuth,
     authReady: authReady,
+    normalizeIdentityDocument: normalizeIdentityDocument,
     ROLES: ROLES
   };
 })();

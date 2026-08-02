@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/main.css?v=3.2" />
   <link rel="stylesheet" href="css/navbar.css?v=3.6" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="css/financing.css?v=20260801" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
   <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
@@ -538,6 +539,9 @@
         <button class="up-tab" data-up-tab="orders">
           <i data-lucide="package"></i> Mis Pedidos
         </button>
+        <button class="up-tab" data-up-tab="financing">
+          <i data-lucide="landmark"></i> Financiamiento
+        </button>
         <button class="up-tab" data-up-tab="carts">
           <i data-lucide="shopping-cart"></i> Carritos
         </button>
@@ -570,8 +574,93 @@
               <label class="up-form-label" for="profile-address">Dirección</label>
               <input class="up-form-input" type="text" id="profile-address" placeholder="Tu dirección" />
             </div>
+            <div class="fin-grid">
+              <div class="up-form-group">
+                <label class="up-form-label" for="profile-document-type">Tipo de documento</label>
+                <select class="up-form-input" id="profile-document-type" required>
+                  <option value="cedula">Cédula</option>
+                  <option value="passport">Pasaporte</option>
+                </select>
+              </div>
+              <div class="up-form-group">
+                <label class="up-form-label" for="profile-document-number">Cédula o pasaporte</label>
+                <input class="up-form-input" type="text" id="profile-document-number" required maxlength="20" />
+              </div>
+            </div>
+            <label class="fin-consent" id="profile-terms-wrap">
+              <input type="checkbox" id="profile-terms" />
+              <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a> de Futunet.</span>
+            </label>
             <button type="submit" class="up-btn-save" id="profile-save-btn">Guardar cambios</button>
           </form>
+        </div>
+      </div>
+
+      <!-- Panel: Financing -->
+      <div class="up-panel" data-up-panel="financing">
+        <div class="up-card">
+          <h3>Expediente de financiamiento</h3>
+          <div class="fin-status-banner" id="financing-profile-status">
+            <div><strong>Verificando expediente</strong><span>Estamos consultando el estado de tu solicitud.</span></div>
+            <span class="fin-status-pill fin-status-not_started">Cargando</span>
+          </div>
+
+          <form id="financing-profile-form" hidden>
+            <p style="color:#64748b;font-size:.86rem;line-height:1.55;margin:0 0 18px;">Para proteger tu identidad y solicitar artículos o servicios a cuotas, completa estos datos. Los documentos solo serán visibles para ti y el personal autorizado.</p>
+            <div class="fin-grid">
+              <div class="up-form-group">
+                <label class="up-form-label" for="fin-document-type">Tipo de documento</label>
+                <select class="up-form-input" id="fin-document-type" required>
+                  <option value="cedula">Cédula</option>
+                  <option value="passport">Pasaporte</option>
+                </select>
+              </div>
+              <div class="up-form-group">
+                <label class="up-form-label" for="fin-document-number">Número</label>
+                <input class="up-form-input" id="fin-document-number" required maxlength="20" />
+              </div>
+              <div class="up-form-group">
+                <label class="up-form-label" for="fin-phone">Teléfono</label>
+                <input class="up-form-input" type="tel" id="fin-phone" required placeholder="809-000-0000" />
+              </div>
+              <div class="up-form-group">
+                <label class="up-form-label" for="fin-address">Dirección residencial</label>
+                <input class="up-form-input" id="fin-address" required maxlength="300" />
+              </div>
+              <label class="fin-file-field">
+                <strong>Foto frontal del documento</strong>
+                <span class="fin-help">Imagen clara, completa y sin reflejos. JPG, PNG o WEBP; máximo 5 MB.</span>
+                <input type="file" id="fin-id-photo" accept="image/jpeg,image/png,image/webp" required />
+              </label>
+              <label class="fin-file-field">
+                <strong>Foto tuya sosteniendo el documento</strong>
+                <span class="fin-help">Tu rostro y el documento deben verse claramente. Máximo 5 MB.</span>
+                <input type="file" id="fin-selfie-photo" accept="image/jpeg,image/png,image/webp" required />
+              </label>
+              <div class="full">
+                <label class="up-form-label">Firma digital</label>
+                <div class="fin-signature-wrap">
+                  <canvas id="fin-signature-canvas" width="900" height="260" aria-label="Área para dibujar la firma"></canvas>
+                  <div class="fin-signature-tools"><span>Firma dentro del recuadro usando el dedo o el mouse.</span><button type="button" class="fin-link-button" id="fin-clear-signature">Limpiar</button></div>
+                </div>
+              </div>
+              <label class="fin-consent full">
+                <input type="checkbox" id="financing-terms" required />
+                <span>Declaro que la información es verdadera, autorizo su revisión para fines de crédito y acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de tratamiento de datos</a>.</span>
+              </label>
+              <div class="full"><button type="submit" class="up-btn-save" id="financing-submit-btn">Enviar expediente para revisión</button></div>
+            </div>
+          </form>
+        </div>
+
+        <div class="up-card" style="margin-top:20px;">
+          <h3>Mi cuenta de cuotas y abonos</h3>
+          <div class="fin-summary">
+            <div class="fin-summary-card"><span>Total financiado</span><strong id="fin-total-financed">RD$ 0.00</strong></div>
+            <div class="fin-summary-card"><span>Total abonado</span><strong id="fin-total-paid">RD$ 0.00</strong></div>
+            <div class="fin-summary-card"><span>Balance pendiente</span><strong id="fin-total-balance">RD$ 0.00</strong></div>
+          </div>
+          <div id="financing-accounts-list"><div class="fin-empty">Cargando cuentas...</div></div>
         </div>
       </div>
 
@@ -678,6 +767,7 @@
   <script defer src="js/chatbot.js?v=20260628"></script>
   <script defer src="js/main.js?v=20260712"></script>
   <script defer src="js/user-panel.js?v=20260712"></script>
+  <script defer src="js/financing.js?v=20260801"></script>
   <script>
     window.addEventListener('DOMContentLoaded', function () {
       if (window.lucide) lucide.createIcons();

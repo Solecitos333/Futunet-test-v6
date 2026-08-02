@@ -13,6 +13,7 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
   <link rel="stylesheet" href="css/admin.css?v=3.1" />
+  <link rel="stylesheet" href="css/financing.css?v=20260801" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
@@ -86,6 +87,10 @@
         <button class="admin-nav-item" data-admin-nav="users">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Usuarios
+        </button>
+        <button class="admin-nav-item" data-admin-nav="financing-management">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
+          Financiamientos <span class="admin-nav-badge" id="badge-financing" style="display:none;"></span>
         </button>
         <button class="admin-nav-item" data-admin-nav="discounts">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -317,17 +322,53 @@
                 <tr>
                   <th>Nombre</th>
                   <th>Email</th>
+                  <th>Documento</th>
                   <th>Rol</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="users-table-body">
-                <tr><td colspan="5" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
+                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando...</td></tr>
               </tbody>
             </table>
           </div>
           <div id="users-pagination"></div>
+        </div>
+      </div>
+
+      <!-- ═══ FINANCING MANAGEMENT PANEL ═══ -->
+      <div class="admin-panel" data-admin-panel="financing-management">
+        <div class="admin-topbar">
+          <h1>Financiamientos</h1>
+          <div class="admin-topbar-actions">
+            <button class="admin-btn admin-btn-primary" onclick="AdminPanel.openFinancingAccountModal()">
+              <i data-lucide="plus"></i> Asignar deuda a cuotas
+            </button>
+          </div>
+        </div>
+        <div class="fin-summary">
+          <div class="fin-summary-card"><span>Cartera financiada</span><strong id="admin-fin-total">RD$ 0.00</strong></div>
+          <div class="fin-summary-card"><span>Abonos recibidos</span><strong id="admin-fin-paid">RD$ 0.00</strong></div>
+          <div class="fin-summary-card"><span>Balance por cobrar</span><strong id="admin-fin-balance">RD$ 0.00</strong></div>
+        </div>
+        <div class="admin-table-card" style="margin-bottom:20px;">
+          <div class="admin-table-header"><h3>Expedientes por revisar</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead><tr><th>Cliente</th><th>Documento</th><th>Estado</th><th>Enviado</th><th>Documentos</th><th>Acciones</th></tr></thead>
+              <tbody id="financing-profiles-table-body"><tr><td colspan="6" style="text-align:center;padding:28px;color:#76889e;">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="admin-table-card">
+          <div class="admin-table-header"><h3>Cuentas a cuotas asignadas</h3></div>
+          <div style="overflow-x:auto;">
+            <table class="admin-table">
+              <thead><tr><th>Cuenta</th><th>Cliente</th><th>Artículo o servicio</th><th>Financiado</th><th>Abonado</th><th>Balance</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody id="financing-accounts-table-body"><tr><td colspan="8" style="text-align:center;padding:28px;color:#76889e;">Cargando...</td></tr></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -1651,6 +1692,19 @@
             <label class="auth-label" for="create-user-email">Correo electrónico</label>
             <input class="auth-input" type="email" id="create-user-email" placeholder="tu@email.com" required />
           </div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group">
+              <label class="auth-label" for="create-user-document-type">Documento</label>
+              <select class="auth-input" id="create-user-document-type" required>
+                <option value="cedula">Cédula</option>
+                <option value="passport">Pasaporte</option>
+              </select>
+            </div>
+            <div class="auth-form-group">
+              <label class="auth-label" for="create-user-document-number">Número</label>
+              <input class="auth-input" id="create-user-document-number" required maxlength="20" />
+            </div>
+          </div>
           <div class="auth-form-group">
             <label class="auth-label" for="create-user-password">Contraseña</label>
             <div class="auth-password-wrap">
@@ -1676,6 +1730,56 @@
             <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
             <button type="submit" class="admin-btn admin-btn-primary">Crear usuario</button>
           </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Financing Account Modal -->
+  <div class="admin-modal-overlay" id="financing-account-modal">
+    <div class="admin-modal" style="max-width:680px;">
+      <div class="admin-modal-header"><h3>Asignar deuda a cuotas</h3><button class="admin-modal-close" data-close-modal>&times;</button></div>
+      <div class="admin-modal-body">
+        <form id="financing-account-form">
+          <div class="auth-form-group"><label class="auth-label" for="fin-admin-user">Cliente con expediente aprobado</label><select class="auth-input" id="fin-admin-user" required><option value="">Selecciona un cliente</option></select></div>
+          <div class="auth-form-group"><label class="auth-label" for="fin-admin-item">Artículo o servicio</label><input class="auth-input" id="fin-admin-item" required maxlength="180" placeholder="Ej. Laptop Dell Latitude 5420" /></div>
+          <div class="auth-form-group"><label class="auth-label" for="fin-admin-description">Detalle</label><textarea class="auth-input" id="fin-admin-description" rows="3" maxlength="1000" placeholder="Modelo, serial, garantía u observaciones"></textarea></div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group"><label class="auth-label" for="fin-admin-total">Precio total (RD$)</label><input class="auth-input" type="number" id="fin-admin-total" min="1" step="0.01" required /></div>
+            <div class="auth-form-group"><label class="auth-label" for="fin-admin-down">Inicial (RD$)</label><input class="auth-input" type="number" id="fin-admin-down" min="0" step="0.01" value="0" required /></div>
+          </div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group"><label class="auth-label" for="fin-admin-count">Cantidad de cuotas</label><input class="auth-input" type="number" id="fin-admin-count" min="1" max="240" value="12" required /></div>
+            <div class="auth-form-group"><label class="auth-label" for="fin-admin-frequency">Frecuencia</label><select class="auth-input" id="fin-admin-frequency"><option value="weekly">Semanal</option><option value="biweekly">Quincenal</option><option value="monthly" selected>Mensual</option></select></div>
+          </div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group"><label class="auth-label" for="fin-admin-first-date">Primer vencimiento</label><input class="auth-input" type="date" id="fin-admin-first-date" required /></div>
+            <div class="auth-form-group"><label class="auth-label">Cuota calculada</label><div class="auth-input" id="fin-admin-installment-preview" style="background:#f8fafc;font-weight:800;">RD$ 0.00</div></div>
+          </div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid #e5eef8;"><button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button><button type="submit" class="admin-btn admin-btn-primary" id="fin-admin-save-account">Crear cuenta</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Financing Payment Modal -->
+  <div class="admin-modal-overlay" id="financing-payment-modal">
+    <div class="admin-modal" style="max-width:540px;">
+      <div class="admin-modal-header"><h3>Registrar abono</h3><button class="admin-modal-close" data-close-modal>&times;</button></div>
+      <div class="admin-modal-body">
+        <form id="financing-payment-form">
+          <input type="hidden" id="fin-payment-account-id" />
+          <div class="fin-status-banner" id="fin-payment-account-summary"></div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group"><label class="auth-label" for="fin-payment-amount">Monto (RD$)</label><input class="auth-input" type="number" id="fin-payment-amount" min="0.01" step="0.01" required /></div>
+            <div class="auth-form-group"><label class="auth-label" for="fin-payment-date">Fecha del pago</label><input class="auth-input" type="date" id="fin-payment-date" required /></div>
+          </div>
+          <div class="admin-grid-form-2col">
+            <div class="auth-form-group"><label class="auth-label" for="fin-payment-method">Método</label><select class="auth-input" id="fin-payment-method"><option value="cash">Efectivo</option><option value="transfer">Transferencia</option><option value="card">Tarjeta</option><option value="other">Otro</option></select></div>
+            <div class="auth-form-group"><label class="auth-label" for="fin-payment-reference">Referencia</label><input class="auth-input" id="fin-payment-reference" maxlength="120" /></div>
+          </div>
+          <div class="auth-form-group"><label class="auth-label" for="fin-payment-notes">Notas</label><textarea class="auth-input" id="fin-payment-notes" rows="2" maxlength="500"></textarea></div>
+          <div class="admin-modal-footer" style="padding:16px 0 0;border-top:1px solid #e5eef8;"><button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button><button type="submit" class="admin-btn admin-btn-primary" id="fin-payment-save">Registrar abono</button></div>
         </form>
       </div>
     </div>
@@ -2016,6 +2120,7 @@
   <script defer src="js/inventory_data.js?v=20260712"></script>
   <script defer src="js/supplier_inventory.js?v=20260712-gallery"></script>
   <script defer src="js/admin-panel.js"></script>
+  <script defer src="js/admin-financing.js?v=20260801"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -2057,6 +2162,7 @@
           'clients-map': ['superadmin', 'admin', 'support_agent'],
           'competitors': ['superadmin', 'admin', 'editor', 'marketing_manager'],
           'users': ['superadmin', 'admin', 'support_agent'],
+          'financing-management': ['superadmin', 'admin'],
           'discounts': ['superadmin', 'admin', 'marketing_manager'],
           'banners': ['superadmin', 'admin', 'editor', 'marketing_manager'],
           'marketing-calendar': ['superadmin', 'admin', 'editor', 'marketing_manager'],

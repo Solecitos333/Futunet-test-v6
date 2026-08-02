@@ -14,6 +14,14 @@ service firebase.storage {
       );
     }
 
+    function isAdminOrAbove() {
+      return isSignedIn() && (
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role in ['superadmin', 'admin'] ||
+        (firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.roles is list &&
+         firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.roles.hasAny(['superadmin', 'admin']))
+      );
+    }
+
     function isSafeUpload(maxBytes) {
       return request.resource.size <= maxBytes &&
              request.resource.contentType.matches('image/(jpeg|png|webp)|application/pdf');
@@ -22,6 +30,13 @@ service firebase.storage {
     match /vouchers/{userId}/{fileName} {
       allow write: if isSignedIn() && request.auth.uid == userId && isSafeUpload(5 * 1024 * 1024);
       allow read: if isSignedIn() && (request.auth.uid == userId || isEditorOrAbove());
+    }
+
+    match /financing-documents/{userId}/{fileName} {
+      allow write: if isSignedIn() && request.auth.uid == userId &&
+                   request.resource.size <= 5 * 1024 * 1024 &&
+                   request.resource.contentType.matches('image/(jpeg|png|webp)');
+      allow read: if isSignedIn() && (request.auth.uid == userId || isAdminOrAbove());
     }
 
     match /products/{fileName} {

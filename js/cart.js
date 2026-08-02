@@ -396,6 +396,7 @@
   }
 
   var selectedCheckoutFile = null;
+  var checkoutFinancingApproved = false;
 
   function showCartToast(msg, type = 'info') {
     const existing = document.querySelector('.cart-toast');
@@ -466,7 +467,7 @@
       
       const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked')?.value;
       const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
-      if (paymentMethod === 'bank_transfer' && !user) {
+      if ((paymentMethod === 'bank_transfer' && !user) || (paymentMethod === 'financing' && (!user || !checkoutFinancingApproved))) {
         btnNext.disabled = true;
       } else {
         btnNext.disabled = false;
@@ -489,7 +490,7 @@
     const address = document.getElementById('chk-address').value;
     const notes = document.getElementById('chk-notes').value;
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
-    const pmDisplay = paymentMethod === 'bank_transfer' ? 'Transferencia Bancaria' : 'WhatsApp (Pedido Rápido)';
+    const pmDisplay = paymentMethod === 'bank_transfer' ? 'Transferencia Bancaria' : (paymentMethod === 'financing' ? 'Solicitud de financiamiento' : 'WhatsApp (Pedido Rápido)');
 
     const items = getCartItems();
     let total = 0;
@@ -572,15 +573,23 @@
 
     const bankSection = document.getElementById('checkout-step3-bank-details');
     const whatsappSection = document.getElementById('checkout-step3-whatsapp-details');
+    const financingSection = document.getElementById('checkout-step3-financing-details');
     const submitBtn = document.getElementById('btn-submit-checkout');
 
     if (paymentMethod === 'bank_transfer') {
       bankSection.style.display = 'block';
       whatsappSection.style.display = 'none';
+      financingSection.style.display = 'none';
       if (submitBtn) submitBtn.disabled = !selectedCheckoutFile;
+    } else if (paymentMethod === 'financing') {
+      bankSection.style.display = 'none';
+      whatsappSection.style.display = 'none';
+      financingSection.style.display = 'block';
+      if (submitBtn) submitBtn.disabled = !checkoutFinancingApproved;
     } else {
       bankSection.style.display = 'none';
       whatsappSection.style.display = 'block';
+      financingSection.style.display = 'none';
       if (submitBtn) submitBtn.disabled = false;
     }
   }
@@ -682,6 +691,17 @@
                   </div>
                 </div>
               </label>
+
+              <label class="checkout-method-option" id="financing-option-label">
+                <input type="radio" name="chk-payment-method" value="financing">
+                <div class="method-card">
+                  <div class="method-icon"><i data-lucide="calendar-check"></i></div>
+                  <div class="method-text">
+                    <strong>Solicitar financiamiento</strong>
+                    <span>Envía el pedido para evaluación y asignación de cuotas.</span>
+                  </div>
+                </div>
+              </label>
             </div>
             
             <div id="checkout-guest-warning" class="checkout-warning-box" style="display:none; margin-top:12px;">
@@ -729,6 +749,11 @@
                   <span id="checkout-voucher-filename">archivo.jpg</span>
                   <button type="button" class="btn-remove-file" id="btn-remove-chk-file">&times; Eliminar</button>
                 </div>
+              </div>
+            </div>
+            <div id="checkout-step3-financing-details" class="checkout-subpanel" style="display:none; margin-top:16px;">
+              <div class="checkout-info-box">
+                <p><strong>Solicitud protegida:</strong> Tu expediente de identidad ya fue aprobado. Un administrador revisará el pedido y, si procede, te asignará la cuenta con el detalle de cuotas en “Mi cuenta”.</p>
               </div>
             </div>
           </div>
@@ -804,6 +829,12 @@
 
     btnPrev.addEventListener('click', () => {
       if (currentStep === 1) {
+        closeCheckoutModal();
+      } else if (paymentMethod === 'financing') {
+        showCartToast(resData.message || 'Solicitud de financiamiento registrada para evaluación.', 'success');
+        cartState.items = {};
+        saveCartState();
+        updateCartCount();
         closeCheckoutModal();
       } else {
         currentStep--;
@@ -882,7 +913,20 @@
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
     const btnNext = document.getElementById('btn-next-checkout');
 
-    if (method === 'bank_transfer') {
+    if (method === 'financing') {
+      if (!user) {
+        warningBox.innerHTML = '<p>Para solicitar financiamiento debes <a href="login.html?redirect=mi-cuenta.html%3Ftab%3Dfinancing" style="text-decoration:underline;font-weight:600;color:#0A70A2;">iniciar sesión o crear una cuenta</a>.</p>';
+        warningBox.style.display = 'block';
+        if (btnNext) btnNext.disabled = true;
+      } else if (!checkoutFinancingApproved) {
+        warningBox.innerHTML = '<p>Antes de financiar debes completar y obtener aprobación de tu expediente: foto del documento, selfie con el documento y firma. <a href="mi-cuenta.html?tab=financing" style="text-decoration:underline;font-weight:600;color:#0A70A2;">Completar expediente</a>.</p>';
+        warningBox.style.display = 'block';
+        if (btnNext) btnNext.disabled = true;
+      } else {
+        warningBox.style.display = 'none';
+        if (btnNext) btnNext.disabled = false;
+      }
+    } else if (method === 'bank_transfer') {
       if (user) {
         warningBox.style.display = 'none';
         if (btnNext) btnNext.disabled = false;
@@ -999,8 +1043,11 @@
     const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
     
     const transferOption = document.getElementById('transfer-option-label');
+    const financingOption = document.getElementById('financing-option-label');
+    checkoutFinancingApproved = false;
     if (!user) {
       if (transferOption) transferOption.style.opacity = '0.5';
+      if (financingOption) financingOption.style.opacity = '0.5';
     } else {
       if (transferOption) transferOption.style.opacity = '1';
       
@@ -1020,6 +1067,9 @@
               emailField.value = data.email;
             }
           }
+          const financingDoc = await db.collection('financing_profiles').doc(user.uid).get();
+          checkoutFinancingApproved = financingDoc.exists && financingDoc.data().status === 'approved';
+          if (financingOption) financingOption.style.opacity = checkoutFinancingApproved ? '1' : '0.65';
         } catch (e) {
           console.warn('Error autofilling checkout fields:', e);
         }
@@ -1117,6 +1167,11 @@
     let storagePath = null;
     
     try {
+      if (paymentMethod === 'financing' && (!user || !checkoutFinancingApproved)) {
+        showCartToast('Necesitas un expediente de financiamiento aprobado para continuar.', 'error');
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnText; }
+        return;
+      }
       if (paymentMethod === 'bank_transfer') {
         if (!user || !storage) {
           showCartToast('Error: Debes iniciar sesión para pagar mediante transferencia bancaria.', 'error');

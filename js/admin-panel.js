@@ -155,6 +155,7 @@
       dashboard: function () { return loadDashboardStats(); },
       inventory: function () { return loadInventory(); },
       users: function () { return loadUsers(); },
+      'financing-management': function () { return window.AdminFinancing ? window.AdminFinancing.load() : Promise.resolve(); },
       discounts: function () { return loadDiscounts(); },
       orders: function () { return loadOrders(); },
       banners: function () { return loadBanners(); },
@@ -1277,7 +1278,7 @@
 
     var tbody = document.getElementById('users-table-body');
     if (!tbody) return;
-    tbody.innerHTML = getTableSkeletonHtml(5, 5);
+    tbody.innerHTML = getTableSkeletonHtml(6, 5);
 
     try {
       var snapshot = await db.collection('users').orderBy('createdAt', 'desc').get();
@@ -1286,7 +1287,7 @@
       filterAndRenderUsers();
     } catch (e) {
       console.error('Users load error:', e);
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar usuarios</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar usuarios</td></tr>';
     }
   }
 
@@ -1295,7 +1296,7 @@
     if (!tbody) return;
 
     if (users.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;">No hay usuarios registrados.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;">No hay usuarios registrados.</td></tr>';
       return;
     }
 
@@ -1309,6 +1310,7 @@
       html += '<tr>' +
         '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(u.displayName || 'Sin nombre') + '</strong></td>' +
         '<td data-label="Email">' + escapeHtml(u.email || '') + '</td>' +
+        '<td data-label="Documento">' + escapeHtml(u.documentNumber || 'Pendiente') + '</td>' +
         '<td data-label="Rol"><span class="admin-role-badge role-' + (u.role || 'user') + '">' + (u.role || 'user') + '</span></td>' +
         '<td data-label="Estado"><span class="admin-status-badge status-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td>' +
         '<td data-label="Acciones">' +
@@ -1480,7 +1482,7 @@
     }
   }
 
-  async function createUser(email, password, displayName, role) {
+  async function createUser(email, password, displayName, role, identityData) {
     var firebaseConfig = window.FutunetFirebase.config;
     var secondaryAppName = 'SecondaryApp_' + Date.now();
     var secondaryApp = firebase.initializeApp(firebaseConfig, secondaryAppName);
@@ -1491,12 +1493,20 @@
 
       await cred.user.updateProfile({ displayName: displayName });
 
+      var identity = FutunetAuth.normalizeIdentityDocument(identityData.documentType, identityData.documentNumber);
+
       var userRef = db.collection('users').doc(uid);
       await userRef.set({
         displayName: displayName,
         email: email,
         phone: '',
         address: '',
+        documentType: identity.documentType,
+        documentNumber: identity.documentNumber,
+        identityProfileComplete: true,
+        termsAccepted: false,
+        termsAcceptedAt: null,
+        termsVersion: '',
         role: role,
         roles: [role],
         status: 'active',
@@ -3215,6 +3225,15 @@
         var email = document.getElementById('create-user-email').value.trim();
         var password = document.getElementById('create-user-password').value;
         var role = document.getElementById('create-user-role').value;
+        var documentType = document.getElementById('create-user-document-type').value;
+        var documentNumber = document.getElementById('create-user-document-number').value.trim();
+
+        try {
+          FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
+        } catch (identityError) {
+          showToast(identityError.message, 'error');
+          return;
+        }
 
         var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
         if (!passwordRegex.test(password)) {
@@ -3229,7 +3248,10 @@
         }
 
         try {
-          await createUser(email, password, name, role);
+          await createUser(email, password, name, role, {
+            documentType: documentType,
+            documentNumber: documentNumber
+          });
           showToast('Usuario creado con éxito', 'success');
           createUserForm.reset();
           closeModal('create-user-modal');
