@@ -17,6 +17,14 @@
           window.location.href = 'login.html?redirect=' + encodeURIComponent(currentPage);
           return;
         }
+        var authUser = FutunetAuth.getCurrentUser();
+        if (!authUser || authUser.emailVerified !== true) {
+          var verificationRedirect = window.location.pathname.split('/').pop() + window.location.search;
+          FutunetAuth.signOut().finally(function () {
+            window.location.href = 'login.html?reason=email-verification-required&redirect=' + encodeURIComponent(verificationRedirect);
+          });
+          return;
+        }
         var userData = FutunetAuth.getUserData();
         if (userData && userData.status === 'disabled') {
           FutunetAuth.signOut().then(function () {

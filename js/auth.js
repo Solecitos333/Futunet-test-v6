@@ -18,9 +18,38 @@
   let currentUserData = null;
   let authReadyResolve;
   const authReady = new Promise(function (resolve) { authReadyResolve = resolve; });
+  let authRefreshPromise = null;
+  let authRefreshUid = '';
 
   function getAuth() { return window.FutunetFirebase.auth; }
   function getDB() { return window.FutunetFirebase.db; }
+
+  function refreshAuthenticatedSession(user) {
+    if (!user) return Promise.resolve(null);
+    if (authRefreshPromise && authRefreshUid === user.uid) return authRefreshPromise;
+    authRefreshUid = user.uid;
+    authRefreshPromise = user.reload()
+      .then(function () {
+        var refreshedUser = getAuth().currentUser || user;
+        return refreshedUser.getIdToken(true).then(function () { return refreshedUser; });
+      })
+      .catch(function (error) {
+        console.warn('No se pudo actualizar la sesión autenticada.', error);
+        return getAuth().currentUser || user;
+      });
+    return authRefreshPromise;
+  }
+
+  function minimalUnverifiedProfile(user) {
+    return {
+      uid: user.uid,
+      displayName: user.displayName || '',
+      email: user.email || '',
+      role: ROLES.USER,
+      roles: [ROLES.USER],
+      status: 'pending_verification'
+    };
+  }
 
   function normalizeIdentityDocument(type, value) {
     var documentType = type === 'passport' ? 'passport' : 'cedula';
@@ -330,6 +359,8 @@
   // ─── Sign Out ───
   async function signOut() {
     currentUserData = null;
+    authRefreshPromise = null;
+    authRefreshUid = '';
     return getAuth().signOut();
   }
 
@@ -400,7 +431,10 @@
   function onAuthChanged(callback) {
     getAuth().onAuthStateChanged(async function (user) {
       if (user) {
-        currentUserData = await fetchUserData(user.uid);
+        user = await refreshAuthenticatedSession(user);
+        currentUserData = user.emailVerified
+          ? await fetchUserData(user.uid)
+          : minimalUnverifiedProfile(user);
         if (currentUserData && currentUserData.status === 'disabled') {
           await signOut();
           callback(null, null);
@@ -417,7 +451,10 @@
   // ─── Initialize auth state listener ───
   getAuth().onAuthStateChanged(async function (user) {
     if (user) {
-      currentUserData = await fetchUserData(user.uid);
+      user = await refreshAuthenticatedSession(user);
+      currentUserData = user.emailVerified
+        ? await fetchUserData(user.uid)
+        : minimalUnverifiedProfile(user);
     } else {
       currentUserData = null;
     }

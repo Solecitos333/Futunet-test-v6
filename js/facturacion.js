@@ -165,6 +165,20 @@ window.ERPBilling = (function () {
     }, 3000);
   }
 
+  function billingInitializationErrorMessage(error) {
+    const code = String(error && error.code || '').toLowerCase();
+    const message = String(error && error.message || 'Error desconocido.');
+    if (code.includes('permission-denied') || /missing or insufficient permissions/i.test(message)) {
+      const authUser = window.firebase && firebase.auth ? firebase.auth().currentUser : null;
+      if (!authUser || authUser.emailVerified !== true) {
+        return 'La sesión necesita renovar la verificación del correo. Cierra sesión e inicia nuevamente.';
+      }
+      const companyName = activeCompanyCode === 'FUTUNETSRL' ? 'Futunet' : 'Creaticos';
+      return `Tu usuario no tiene acceso a la facturación de ${companyName}. Cierra sesión e inicia nuevamente; si continúa, revisa la empresa y el rol asignados al usuario.`;
+    }
+    return 'No se pudo iniciar la facturación: ' + message;
+  }
+
   function actionDialog(options) {
     const config = options || {};
     return new Promise(resolve => {
@@ -345,7 +359,8 @@ window.ERPBilling = (function () {
       }
     } catch (err) {
       console.error('Error initializing ERP Billing:', err);
-      showToast('Error al inicializar la facturación: ' + err.message, 'danger');
+      showToast(billingInitializationErrorMessage(err), 'danger');
+      throw err;
     }
   }
 

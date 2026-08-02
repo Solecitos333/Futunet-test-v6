@@ -340,6 +340,10 @@
 
       // ─── Check email link or redirect if already logged in ───
       FutunetAuth.authReady.then(async function () {
+        var loginParams = new URLSearchParams(window.location.search);
+        if (loginParams.get('reason') === 'email-verification-required') {
+          showMessage('login-message', 'Tu sesión necesita confirmar el correo electrónico. Inicia sesión nuevamente y, si todavía no lo has hecho, usa el enlace de verificación enviado a tu correo.', 'error');
+        }
         if (FutunetAuth.isSignInWithEmailLink(window.location.href)) {
           isCompletingSignInLink = true;
           signInLink = window.location.href;

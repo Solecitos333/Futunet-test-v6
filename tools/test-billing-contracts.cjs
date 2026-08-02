@@ -242,6 +242,16 @@ test('facturación usa paginación de servidor y evita eventos HTML ejecutables'
   assert.doesNotMatch(extensions, /\s(?:onclick|onchange|oninput|onsubmit)=/);
 });
 
+test('la sesión de facturación renueva permisos y evita módulos privados obsoletos', () => {
+  assert.match(auth, /getIdToken\(true\)/);
+  assert.match(authGuard, /authUser\.emailVerified !== true/);
+  assert.match(billingHtml, /facturacion\.js\?v=20260802-permissions-fix/);
+  assert.match(billing, /billingInitializationErrorMessage/);
+  const serviceWorker = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
+  assert.match(serviceWorker, /privateScripts/);
+  assert.match(serviceWorker, /'\/js\/facturacion\.js'/);
+});
+
 test('la cobranza incluye estados de cuenta, recordatorios y recurrencia revisable', () => {
   assert.match(workflows, /downloadStatement/);
   assert.match(workflows, /collection_reminders/);

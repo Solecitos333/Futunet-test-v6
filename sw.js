@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v13';
+const CACHE_NAME = 'futunet-cache-v14';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -61,8 +61,7 @@ const CRITICAL_ASSETS = [
 
 // Assets opcionales (si fallan, no se rompe la instalación)
 const OPTIONAL_ASSETS = [
-  './producto.html',
-  './js/auth-guard.js'
+  './producto.html'
 ];
 
 // Install Event — cachear assets críticos
@@ -112,12 +111,23 @@ self.addEventListener('fetch', event => {
     '/facturacion', '/facturacion.html',
     '/login', '/login.html'
   ]);
+  const privateScripts = new Set([
+    '/js/auth.js',
+    '/js/auth-guard.js',
+    '/js/firebase-config.js',
+    '/js/billing-core.js',
+    '/js/facturacion.js',
+    '/js/erp-extensions.js',
+    '/js/billing-workflows.js',
+    '/js/billing-events.js'
+  ]);
 
   // Skip cross-origin requests, POST requests, and firebase/firestore API calls
   if (
     event.request.method !== 'GET' ||
     requestUrl.origin !== self.location.origin ||
     privatePaths.has(normalizedPath) ||
+    privateScripts.has(normalizedPath) ||
     event.request.url.includes('firestore.googleapis.com') ||
     event.request.url.includes('firebaseinstallations.googleapis.com') ||
     event.request.url.includes('identitytoolkit.googleapis.com') ||
