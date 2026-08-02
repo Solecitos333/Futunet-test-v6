@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/admin.css?v=3.1" />
+  <link rel="stylesheet" href="css/admin.css?v=3.2" />
   <link rel="stylesheet" href="css/financing.css?v=20260801" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
@@ -32,15 +32,17 @@
 </head>
 <body>
 
+  <a class="admin-skip-link" href="#admin-main-content">Saltar al contenido principal</a>
+
   <!-- Mobile Toggle -->
-  <button class="admin-mobile-toggle" id="admin-mobile-toggle" aria-label="Abrir menú">
+  <button class="admin-mobile-toggle" id="admin-mobile-toggle" aria-label="Abrir menú" aria-controls="admin-sidebar" aria-expanded="false">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
   </button>
   <div class="admin-overlay" id="admin-overlay"></div>
 
   <div class="admin-layout" id="admin-layout">
     <!-- ═══ SIDEBAR ═══ -->
-    <aside class="admin-sidebar" id="admin-sidebar">
+    <aside class="admin-sidebar" id="admin-sidebar" aria-label="Navegación administrativa">
       <button class="admin-sidebar-close" id="admin-sidebar-close" aria-label="Cerrar menú">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
@@ -49,6 +51,12 @@
         <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
         <span>Panel de administración</span>
       </div>
+
+      <div class="admin-nav-search-wrap">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="admin-nav-search" placeholder="Buscar módulo..." autocomplete="off" aria-label="Buscar un módulo del panel" />
+      </div>
+      <div class="admin-nav-empty" id="admin-nav-empty" hidden>No se encontró ese módulo.</div>
 
       <nav class="admin-nav">
         <div class="admin-nav-label">Principal</div>
@@ -156,84 +164,129 @@
     </aside>
 
     <!-- ═══ MAIN ═══ -->
-    <main class="admin-main">
+    <main class="admin-main" id="admin-main-content" tabindex="-1">
 
       <!-- ═══ DASHBOARD PANEL ═══ -->
-      <div class="admin-panel is-active" data-admin-panel="dashboard">
-        <div class="admin-topbar">
-          <h1>Dashboard</h1>
-        </div>
-        <div class="admin-stats">
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon stat-icon-blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
-            <div class="admin-stat-label">Productos</div>
-            <div class="admin-stat-value" id="stat-products">—</div>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon stat-icon-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-            <div class="admin-stat-label">Usuarios</div>
-            <div class="admin-stat-value" id="stat-users">—</div>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon stat-icon-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg></div>
-            <div class="admin-stat-label">Pedidos</div>
-            <div class="admin-stat-value" id="stat-orders">—</div>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-stat-icon stat-icon-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5"/></svg></div>
-            <div class="admin-stat-label">Descuentos activos</div>
-            <div class="admin-stat-value" id="stat-discounts">—</div>
-          </div>
-        </div>
-
-        <div class="admin-grid-2col" style="margin-top:24px;">
-          <!-- Gráfico de Pedidos Mensuales -->
-          <div class="admin-table-card" style="padding:20px;">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              Pedidos por Mes
-            </h3>
-            <div style="position:relative; height:250px; width:100%;">
-              <canvas id="chart-orders"></canvas>
+      <div class="admin-panel is-active" data-admin-panel="dashboard" aria-labelledby="dashboard-title">
+        <section class="admin-dashboard-hero">
+          <div>
+            <span class="admin-dashboard-eyebrow">Centro de operaciones</span>
+            <h1 id="dashboard-title">Hola, <span id="dashboard-greeting-name">equipo</span></h1>
+            <p>Revisa lo que requiere atención y entra directamente al módulo para resolverlo.</p>
+            <div class="admin-dashboard-update" id="dashboard-updated" role="status" aria-live="polite">
+              <span class="admin-live-dot" aria-hidden="true"></span> Preparando resumen operativo…
             </div>
           </div>
+          <button class="admin-btn admin-btn-dashboard-refresh" id="btn-refresh-dashboard" type="button" onclick="AdminPanel.refreshDashboard()">
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 11a8.1 8.1 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></svg>
+            Actualizar datos
+          </button>
+        </section>
 
-          <!-- Gráfico de Búsquedas Populares -->
-          <div class="admin-table-card" style="padding:20px;">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1c40f" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              Búsquedas Más Frecuentes
-            </h3>
-            <div style="position:relative; height:250px; width:100%;">
-              <canvas id="chart-searches"></canvas>
+        <section class="admin-dashboard-section" aria-labelledby="quick-actions-title">
+          <div class="admin-section-heading">
+            <div>
+              <span class="admin-section-kicker">Accesos rápidos</span>
+              <h2 id="quick-actions-title">¿Qué deseas hacer?</h2>
             </div>
           </div>
+          <div class="admin-quick-actions">
+            <button type="button" class="admin-quick-action" data-admin-jump="inventory" data-admin-action="new-product">
+              <span class="admin-quick-action-icon quick-action-blue"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+              <span><strong>Agregar producto</strong><small>Crear una ficha en inventario</small></span>
+              <svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="admin-quick-action" data-admin-jump="orders">
+              <span class="admin-quick-action-icon quick-action-purple"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg></span>
+              <span><strong>Gestionar pedidos</strong><small>Estados, pagos y entregas</small></span>
+              <svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <button type="button" class="admin-quick-action" data-admin-jump="financing-management">
+              <span class="admin-quick-action-icon quick-action-green"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span>
+              <span><strong>Revisar financiamientos</strong><small>Validaciones, cuentas y abonos</small></span>
+              <svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <a class="admin-quick-action" href="facturacion.html" target="_blank" rel="noopener">
+              <span class="admin-quick-action-icon quick-action-orange"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 13h6M9 17h6"/></svg></span>
+              <span><strong>Abrir facturación</strong><small>Facturas, cobros y reportes</small></span>
+              <svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </div>
+        </section>
+
+        <section class="admin-dashboard-section" aria-labelledby="summary-title">
+          <div class="admin-section-heading">
+            <div>
+              <span class="admin-section-kicker">Panorama general</span>
+              <h2 id="summary-title">Resumen de la plataforma</h2>
+            </div>
+          </div>
+          <div class="admin-stats admin-dashboard-stats">
+            <button type="button" class="admin-stat-card" data-admin-jump="inventory">
+              <div class="admin-stat-card-top"><div class="admin-stat-icon stat-icon-blue"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><svg class="admin-stat-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+              <div class="admin-stat-label">Productos</div>
+              <div class="admin-stat-value" id="stat-products">—</div>
+              <div class="admin-stat-caption"><span id="stat-low-stock">—</span> requieren revisar stock</div>
+            </button>
+            <button type="button" class="admin-stat-card" data-admin-jump="users">
+              <div class="admin-stat-card-top"><div class="admin-stat-icon stat-icon-green"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><svg class="admin-stat-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+              <div class="admin-stat-label">Usuarios</div>
+              <div class="admin-stat-value" id="stat-users">—</div>
+              <div class="admin-stat-caption">cuentas registradas</div>
+            </button>
+            <button type="button" class="admin-stat-card" data-admin-jump="orders">
+              <div class="admin-stat-card-top"><div class="admin-stat-icon stat-icon-purple"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg></div><svg class="admin-stat-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+              <div class="admin-stat-label">Pedidos</div>
+              <div class="admin-stat-value" id="stat-orders">—</div>
+              <div class="admin-stat-caption"><span id="stat-orders-pending">—</span> pendientes</div>
+            </button>
+            <button type="button" class="admin-stat-card" data-admin-jump="discounts">
+              <div class="admin-stat-card-top"><div class="admin-stat-icon stat-icon-orange"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5ZM2 17l10 5 10-5"/></svg></div><svg class="admin-stat-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+              <div class="admin-stat-label">Descuentos activos</div>
+              <div class="admin-stat-value" id="stat-discounts">—</div>
+              <div class="admin-stat-caption">promociones publicadas</div>
+            </button>
+          </div>
+        </section>
+
+        <section class="admin-dashboard-section" aria-labelledby="queue-title">
+          <div class="admin-section-heading admin-section-heading-inline">
+            <div>
+              <span class="admin-section-kicker">Bandeja operativa</span>
+              <h2 id="queue-title">Pendientes de atención</h2>
+            </div>
+            <span class="admin-operational-status" id="dashboard-operational-status" role="status" aria-live="polite">Consultando pendientes…</span>
+          </div>
+          <div class="admin-work-queue">
+            <button type="button" class="admin-queue-card queue-urgent" data-admin-jump="orders"><span class="admin-queue-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg></span><span><strong id="queue-orders">—</strong><small>Pedidos pendientes</small></span><svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button type="button" class="admin-queue-card" data-admin-jump="service-requests"><span class="admin-queue-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span><span><strong id="queue-requests">—</strong><small>Solicitudes nuevas</small></span><svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button type="button" class="admin-queue-card" data-admin-jump="internet-management"><span class="admin-queue-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.58 16.14a6 6 0 0 1 6.84 0"/><circle cx="12" cy="20" r="1"/></svg></span><span><strong id="queue-internet">—</strong><small>Pagos o tickets</small></span><svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button type="button" class="admin-queue-card" data-admin-jump="financing-management"><span class="admin-queue-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span><strong id="queue-financing">—</strong><small>Identidades por validar</small></span><svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button type="button" class="admin-queue-card" data-admin-jump="inventory"><span class="admin-queue-icon"><svg aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></span><span><strong id="queue-stock">—</strong><small>Productos con stock crítico</small></span><svg class="admin-action-arrow" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+        </section>
+
+        <div class="admin-grid-2col admin-dashboard-grid">
+          <section class="admin-table-card admin-dashboard-card" aria-labelledby="orders-chart-title">
+            <div class="admin-card-heading"><div><span class="admin-section-kicker">Últimos 6 meses</span><h2 id="orders-chart-title">Pedidos por mes</h2></div><button type="button" class="admin-card-link" data-admin-jump="orders">Ver pedidos</button></div>
+            <div class="admin-chart-wrap"><canvas id="chart-orders" aria-label="Gráfico de pedidos por mes" role="img"></canvas></div>
+          </section>
+          <section class="admin-table-card admin-dashboard-card" aria-labelledby="searches-chart-title" data-admin-jump-container="searches">
+            <div class="admin-card-heading"><div><span class="admin-section-kicker">Interés del catálogo</span><h2 id="searches-chart-title">Búsquedas frecuentes</h2></div><button type="button" class="admin-card-link" data-admin-jump="searches">Ver búsquedas</button></div>
+            <div class="admin-chart-wrap"><canvas id="chart-searches" aria-label="Gráfico de búsquedas más frecuentes" role="img"></canvas></div>
+          </section>
         </div>
 
-        <div class="admin-grid-2col" style="margin-top:24px;">
-          <!-- Alertas de Stock -->
-          <div class="admin-table-card" style="padding:20px;">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-              Alertas de Stock Crítico
-            </h3>
-            <div id="dashboard-stock-alerts" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
-              <div style="color:#76889e; text-align:center; padding:16px;">Cargando alertas...</div>
-            </div>
-          </div>
-
-          <!-- Actividad Reciente -->
-          <div class="admin-table-card" style="padding:20px;">
-            <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0a101d;margin:0 0 16px; display:flex; align-items:center; gap:8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2a75d3" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Actividad Reciente
-            </h3>
-            <div id="dashboard-audit-activity" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
-              <div style="color:#76889e; text-align:center; padding:16px;">Cargando actividad...</div>
-            </div>
-          </div>
+        <div class="admin-grid-2col admin-dashboard-grid">
+          <section class="admin-table-card admin-dashboard-card" aria-labelledby="stock-alerts-title" data-admin-jump-container="inventory">
+            <div class="admin-card-heading"><div><span class="admin-section-kicker">Inventario</span><h2 id="stock-alerts-title">Alertas de stock crítico</h2></div><button type="button" class="admin-card-link" data-admin-jump="inventory">Abrir inventario</button></div>
+            <div id="dashboard-stock-alerts" class="admin-dashboard-feed"><div class="admin-dashboard-empty">Cargando alertas…</div></div>
+          </section>
+          <section class="admin-table-card admin-dashboard-card" aria-labelledby="activity-title" data-admin-jump-container="audit">
+            <div class="admin-card-heading"><div><span class="admin-section-kicker">Trazabilidad</span><h2 id="activity-title">Actividad reciente</h2></div><button type="button" class="admin-card-link" data-admin-jump="audit">Ver auditoría</button></div>
+            <div id="dashboard-audit-activity" class="admin-dashboard-feed"><div class="admin-dashboard-empty">Cargando actividad…</div></div>
+          </section>
         </div>
-
       </div>
 
       <!-- ═══ INVENTORY PANEL ═══ -->
@@ -2119,7 +2172,7 @@
   <script defer src="js/backup_data.js"></script>
   <script defer src="js/inventory_data.js?v=20260712"></script>
   <script defer src="js/supplier_inventory.js?v=20260712-gallery"></script>
-  <script defer src="js/admin-panel.js"></script>
+  <script defer src="js/admin-panel.js?v=20260802-dashboard"></script>
   <script defer src="js/admin-financing.js?v=20260801"></script>
 
   <script>
@@ -2180,6 +2233,7 @@
           if (!allowedRoles) return;
 
           var hasAccess = isSuper || roles.some(function (r) { return allowedRoles.includes(r); });
+          btn.dataset.accessAllowed = hasAccess ? 'true' : 'false';
           btn.style.display = hasAccess ? 'flex' : 'none';
         });
 
@@ -2194,32 +2248,124 @@
 
         // Init admin panel
         AdminPanel.init();
+        setTimeout(function () {
+          syncDashboardAccess();
+          restoreAdminPanel();
+        }, 0);
       });
 
       // ─── Sidebar navigation ───
       var navItems = document.querySelectorAll('[data-admin-nav]');
       var panels = document.querySelectorAll('[data-admin-panel]');
 
+      function getAllowedNav(target) {
+        var item = document.querySelector('[data-admin-nav="' + target + '"]');
+        if (!item || item.dataset.accessAllowed === 'false') return null;
+        return item;
+      }
+
+      function activatePanel(target, options) {
+        var item = getAllowedNav(target);
+        var panel = document.querySelector('[data-admin-panel="' + target + '"]');
+        if (!item || !panel) return Promise.resolve(false);
+
+        navItems.forEach(function (navItem) {
+          navItem.classList.remove('is-active');
+          navItem.removeAttribute('aria-current');
+        });
+        panels.forEach(function (panelItem) { panelItem.classList.remove('is-active'); });
+        item.classList.add('is-active');
+        item.setAttribute('aria-current', 'page');
+        panel.classList.add('is-active');
+
+        var heading = panel.querySelector('h1');
+        var panelTitle = target === 'dashboard' ? 'Dashboard' : (heading ? heading.textContent.trim() : 'Administración');
+        document.title = panelTitle + ' — Futunet Admin';
+        try {
+          localStorage.setItem('futunet_admin_panel', target);
+          if (!options || options.updateHistory !== false) history.replaceState(null, '', '#' + target);
+        } catch (storageError) {
+          console.warn('No se pudo guardar la sección activa:', storageError);
+        }
+
+        var loadPromise = Promise.resolve();
+        if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.loadPanel === 'function') {
+          loadPromise = Promise.resolve(AdminPanel.loadPanel(target));
+        }
+
+        closeSidebar();
+        if (window.innerWidth <= 768) document.getElementById('admin-main-content').focus({ preventScroll: true });
+        window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        return loadPromise.then(function () { return true; });
+      }
+
+      function syncDashboardAccess() {
+        document.querySelectorAll('[data-admin-jump]').forEach(function (action) {
+          action.hidden = !getAllowedNav(action.getAttribute('data-admin-jump'));
+        });
+        document.querySelectorAll('[data-admin-jump-container]').forEach(function (container) {
+          container.hidden = !getAllowedNav(container.getAttribute('data-admin-jump-container'));
+        });
+        updateNavGroupLabels();
+      }
+
+      function restoreAdminPanel() {
+        var target = window.location.hash.replace(/^#/, '');
+        if (!target) {
+          try { target = localStorage.getItem('futunet_admin_panel') || 'dashboard'; } catch (storageError) { target = 'dashboard'; }
+        }
+        if (!getAllowedNav(target)) target = 'dashboard';
+        activatePanel(target, { updateHistory: false });
+      }
+
       navItems.forEach(function (item) {
         item.addEventListener('click', function () {
           var target = this.getAttribute('data-admin-nav');
-          navItems.forEach(function (i) { i.classList.remove('is-active'); });
-          panels.forEach(function (p) { p.classList.remove('is-active'); });
-          this.classList.add('is-active');
-          var panel = document.querySelector('[data-admin-panel="' + target + '"]');
-          if (panel) panel.classList.add('is-active');
-
-          if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.loadPanel === 'function') {
-            AdminPanel.loadPanel(target);
-          }
-
-          // Close mobile sidebar
-          var sidebar = document.getElementById('admin-sidebar');
-          var overlay = document.getElementById('admin-overlay');
-          if (sidebar) sidebar.classList.remove('is-open');
-          if (overlay) overlay.classList.remove('is-open');
+          activatePanel(target);
         });
       });
+
+      document.querySelectorAll('[data-admin-jump]').forEach(function (action) {
+        action.addEventListener('click', function () {
+          var target = this.getAttribute('data-admin-jump');
+          var followup = this.getAttribute('data-admin-action');
+          activatePanel(target).then(function (activated) {
+            if (activated && followup === 'new-product' && window.AdminPanel) AdminPanel.openNewProduct();
+          });
+        });
+      });
+
+      function updateNavGroupLabels() {
+        document.querySelectorAll('.admin-nav-label').forEach(function (label) {
+          var sibling = label.nextElementSibling;
+          var hasVisibleItem = false;
+          while (sibling && !sibling.classList.contains('admin-nav-label')) {
+            if (sibling.classList.contains('admin-nav-item') && sibling.style.display !== 'none' && !sibling.hidden) {
+              hasVisibleItem = true;
+              break;
+            }
+            sibling = sibling.nextElementSibling;
+          }
+          label.style.display = hasVisibleItem ? 'block' : 'none';
+        });
+      }
+
+      var navSearch = document.getElementById('admin-nav-search');
+      var navEmpty = document.getElementById('admin-nav-empty');
+      if (navSearch) {
+        navSearch.addEventListener('input', function () {
+          var query = this.value.trim().toLocaleLowerCase('es');
+          var visibleCount = 0;
+          document.querySelectorAll('.admin-nav-item').forEach(function (item) {
+            if (item.dataset.accessAllowed === 'false') return;
+            var matches = !query || item.textContent.trim().toLocaleLowerCase('es').includes(query);
+            item.style.display = matches ? 'flex' : 'none';
+            if (matches) visibleCount += 1;
+          });
+          if (navEmpty) navEmpty.hidden = visibleCount > 0;
+          updateNavGroupLabels();
+        });
+      }
 
       // ─── Mobile sidebar toggle ───
       var toggleBtn = document.getElementById('admin-mobile-toggle');
@@ -2230,15 +2376,26 @@
       function openSidebar() {
         if (sidebar) sidebar.classList.add('is-open');
         if (overlay) overlay.classList.add('is-open');
+        if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
+        setTimeout(function () { if (navSearch) navSearch.focus(); }, 80);
       }
       function closeSidebar() {
         if (sidebar) sidebar.classList.remove('is-open');
         if (overlay) overlay.classList.remove('is-open');
+        if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
       }
 
       if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
       if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
       if (overlay) overlay.addEventListener('click', closeSidebar);
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeSidebar();
+        if (event.key === '/' && navSearch && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) {
+          event.preventDefault();
+          if (window.innerWidth <= 768) openSidebar();
+          navSearch.focus();
+        }
+      });
     });
   </script>
 </body>

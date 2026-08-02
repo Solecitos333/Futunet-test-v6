@@ -15,6 +15,8 @@ const auth = fs.readFileSync(path.join(root, 'js', 'auth.js'), 'utf8');
 const storageRules = fs.readFileSync(path.join(root, 'storage.rules'), 'utf8');
 const authGuard = fs.readFileSync(path.join(root, 'js', 'auth-guard.js'), 'utf8');
 const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
+const adminHtml = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
+const adminCss = fs.readFileSync(path.join(root, 'css', 'admin.css'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
 
 test('las reglas de comandas no conceden escritura total a operadores', () => {
@@ -142,6 +144,21 @@ test('el panel administrativo carga secciones bajo demanda y limita los contador
   assert.match(admin, /function loadPanel\(panelName, forceReload\)/);
   assert.match(admin, /collection\('orders'\)\.where\('status', '==', 'pending'\)/);
   assert.match(admin, /collection\('internet_payments'\)\.where\('status', '==', 'pending'\)/);
+});
+
+test('el dashboard administrativo prioriza pendientes, accesos rápidos y navegación accesible', () => {
+  for (const id of ['queue-orders', 'queue-requests', 'queue-internet', 'queue-financing', 'queue-stock']) {
+    assert.match(adminHtml, new RegExp(`id="${id}"`));
+  }
+  assert.match(adminHtml, /id="btn-refresh-dashboard"/);
+  assert.match(adminHtml, /id="admin-nav-search"/);
+  assert.match(adminHtml, /class="admin-skip-link"/);
+  assert.match(adminHtml, /data-admin-jump="financing-management"/);
+  assert.match(admin, /function refreshDashboard\(\)/);
+  assert.match(admin, /financing_profiles'\)\.where\('status', '==', 'pending_review'\)/);
+  assert.match(admin, /\['superadmin', 'admin', 'support_agent'\]\.some\(currentUserHasRole\)/);
+  assert.match(adminCss, /\.admin-work-queue/);
+  assert.match(adminCss, /@media \(max-width: 1100px\) and \(min-width: 769px\)/);
 });
 
 test('los productos vendidos se archivan sin romper reversos de inventario', () => {

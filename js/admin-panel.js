@@ -80,6 +80,7 @@
   var allAuditLogs = [];
   var currentAuditSearchQuery = '';
   var loadedPanels = {};
+  var dashboardRefreshInProgress = false;
 
   function checkPermission(allowedRoles, errorMessage) {
     if (!currentUserData) return false;
@@ -103,6 +104,12 @@
     db = window.FutunetFirebase.db;
     storage = window.FutunetFirebase.storage;
     currentUserData = FutunetAuth.getUserData();
+
+    var greetingName = document.getElementById('dashboard-greeting-name');
+    if (greetingName) {
+      var preferredName = String(currentUserData.displayName || currentUserData.name || currentUserData.email || 'equipo').trim();
+      greetingName.textContent = preferredName.includes('@') ? preferredName.split('@')[0] : preferredName.split(/\s+/)[0];
+    }
 
     // Seed only from a catalog role. Other scoped roles must never attempt writes.
     if (currentUserHasRole('superadmin') || currentUserHasRole('admin') || currentUserHasRole('editor')) {
@@ -172,10 +179,75 @@
     };
 
     if (!loaders[panelName]) return Promise.resolve();
-    return Promise.resolve(loaders[panelName]()).catch(function (error) {
+    return Promise.resolve(loaders[panelName]()).then(function () { return true; }).catch(function (error) {
       loadedPanels[panelName] = false;
+      if (panelName === 'dashboard') setDashboardUpdated('No se pudieron cargar todos los datos. Intenta actualizar.');
       console.warn('Error loading admin panel "' + panelName + '":', error);
+      return false;
     });
+  }
+
+  function setDashboardUpdated(message) {
+    var updated = document.getElementById('dashboard-updated');
+    if (!updated) return;
+    if (message) {
+      updated.innerHTML = '<span class="admin-live-dot" aria-hidden="true"></span> ' + escapeHtml(message);
+      return;
+    }
+    var formatted = new Intl.DateTimeFormat('es-DO', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date());
+    updated.innerHTML = '<span class="admin-live-dot" aria-hidden="true"></span> Datos actualizados a las ' + formatted;
+  }
+
+  function updateDashboardOperationalStatus() {
+    var status = document.getElementById('dashboard-operational-status');
+    if (!status) return;
+    var visibleValues = Array.from(document.querySelectorAll('.admin-queue-card:not([hidden]) strong')).map(function (el) {
+      var value = Number(String(el.textContent || '').replace(/[^0-9.-]/g, ''));
+      return Number.isFinite(value) ? value : null;
+    });
+    if (!visibleValues.length || visibleValues.some(function (value) { return value == null; })) {
+      status.textContent = 'Consultando pendientes…';
+      status.className = 'admin-operational-status';
+      return;
+    }
+    var total = visibleValues.reduce(function (sum, value) { return sum + value; }, 0);
+    status.textContent = total ? total + (total === 1 ? ' pendiente por atender' : ' pendientes por atender') : 'Todo al día';
+    status.className = 'admin-operational-status ' + (total ? 'has-pending' : 'is-clear');
+  }
+
+  function setDashboardQueueCount(id, value) {
+    setText(id, value == null ? '—' : value);
+    updateDashboardOperationalStatus();
+  }
+
+  async function refreshDashboard() {
+    if (dashboardRefreshInProgress) return;
+    dashboardRefreshInProgress = true;
+    var button = document.getElementById('btn-refresh-dashboard');
+    var panel = document.querySelector('[data-admin-panel="dashboard"]');
+    if (button) {
+      button.disabled = true;
+      button.classList.add('is-loading');
+    }
+    if (panel) panel.setAttribute('aria-busy', 'true');
+    setDashboardUpdated('Actualizando información…');
+    try {
+      var refreshed = await loadPanel('dashboard', true);
+      showToast(refreshed === false ? 'No fue posible actualizar todos los datos.' : 'Dashboard actualizado.', refreshed === false ? 'error' : 'success');
+    } catch (error) {
+      showToast('No fue posible actualizar todos los datos.', 'error');
+    } finally {
+      dashboardRefreshInProgress = false;
+      if (button) {
+        button.disabled = false;
+        button.classList.remove('is-loading');
+      }
+      if (panel) panel.removeAttribute('aria-busy');
+    }
   }
 
   // ═══════════════════════════════════
@@ -455,11 +527,12 @@
   // INVENTORY
   // ═══════════════════════════════════
   async function loadDashboardStats() {
+    var canReadInventory = ['superadmin', 'admin', 'editor'].some(currentUserHasRole);
     var canReadUsers = ['superadmin', 'admin', 'support_agent'].some(currentUserHasRole);
     var canReadOrders = ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'].some(currentUserHasRole);
     var canReadDiscounts = ['superadmin', 'admin', 'marketing_manager'].some(currentUserHasRole);
     var canReadSearches = ['superadmin', 'admin', 'marketing_manager'].some(currentUserHasRole);
-    var canReadAudit = ['superadmin', 'admin', 'editor'].some(currentUserHasRole);
+    var canReadAudit = ['superadmin', 'admin'].some(currentUserHasRole);
 
     function countDocuments(query) {
       if (typeof query.count === 'function') {
@@ -469,11 +542,12 @@
     }
 
     var taskMap = {
-      products: db.collection('products').limit(500).get(),
-      productCount: countDocuments(db.collection('products')),
+      products: canReadInventory ? db.collection('products').limit(500).get() : Promise.resolve(null),
+      productCount: canReadInventory ? countDocuments(db.collection('products')) : Promise.resolve(null),
       users: canReadUsers ? countDocuments(db.collection('users')) : Promise.resolve(null),
       orders: canReadOrders ? db.collection('orders').orderBy('createdAt', 'desc').limit(500).get() : Promise.resolve(null),
       orderCount: canReadOrders ? countDocuments(db.collection('orders')) : Promise.resolve(null),
+      pendingOrders: canReadOrders ? countDocuments(db.collection('orders').where('status', '==', 'pending')) : Promise.resolve(null),
       discounts: canReadDiscounts ? countDocuments(db.collection('discounts').where('isActive', '==', true)) : Promise.resolve(null),
       searches: canReadSearches ? db.collection('search_queries').limit(1000).get() : Promise.resolve(null),
       audit: canReadAudit ? db.collection('audit_logs').orderBy('timestamp', 'desc').limit(5).get() : Promise.resolve(null)
@@ -491,6 +565,8 @@
     setText('stat-products', result.productCount == null ? '—' : result.productCount);
     setText('stat-users', result.users == null ? '—' : result.users);
     setText('stat-orders', result.orderCount == null ? '—' : result.orderCount);
+    setText('stat-orders-pending', result.pendingOrders == null ? '—' : result.pendingOrders);
+    setDashboardQueueCount('queue-orders', result.pendingOrders);
     setText('stat-discounts', result.discounts == null ? '—' : result.discounts);
 
     var alertsContainer = document.getElementById('dashboard-stock-alerts');
@@ -506,38 +582,41 @@
         });
       }
       alerts.sort(function (a, b) { return a.stock - b.stock; });
-      alertsContainer.innerHTML = alerts.slice(0, 30).map(function (entry) {
-        var exhausted = entry.stock <= 0;
-        return '<div style="display:flex;justify-content:space-between;align-items:center;background:' +
-          (exhausted ? '#fee2e2' : '#fef3c7') + ';border-left:4px solid ' +
-          (exhausted ? '#ef4444' : '#f59e0b') + ';padding:10px 14px;border-radius:8px;font-size:0.85rem;">' +
-          '<span style="color:' + (exhausted ? '#991b1b' : '#92400e') + ';font-weight:600;">' +
-          escapeHtml(entry.product.title || entry.product.name || 'Producto sin nombre') + '</span>' +
-          '<span style="background:' + (exhausted ? '#ef4444' : '#f59e0b') +
-          ';color:white;padding:2px 8px;border-radius:12px;font-size:0.75rem;font-weight:700;">' +
-          (exhausted ? 'AGOTADO' : 'BAJO STOCK (' + entry.stock + ')') + '</span></div>';
-      }).join('') || '<div style="color:#10b981;text-align:center;padding:16px;font-weight:500;">✓ Todo el inventario en buen estado</div>';
+      if (!result.products) {
+        setText('stat-low-stock', '—');
+        setDashboardQueueCount('queue-stock', null);
+        alertsContainer.innerHTML = '<div class="admin-dashboard-empty">No se pudo consultar el inventario en este momento.</div>';
+      } else {
+        setText('stat-low-stock', alerts.length);
+        setDashboardQueueCount('queue-stock', alerts.length);
+        alertsContainer.innerHTML = alerts.slice(0, 30).map(function (entry) {
+          var exhausted = entry.stock <= 0;
+          return '<div class="admin-dashboard-alert' + (exhausted ? ' is-exhausted' : '') + '">' +
+            '<strong>' + escapeHtml(entry.product.title || entry.product.name || 'Producto sin nombre') + '</strong>' +
+            '<span class="admin-dashboard-pill">' +
+            (exhausted ? 'AGOTADO' : 'QUEDAN ' + entry.stock) + '</span></div>';
+        }).join('') || '<div class="admin-dashboard-empty is-success">✓ Todo el inventario está en buen estado</div>';
+      }
     }
 
     var activityContainer = document.getElementById('dashboard-audit-activity');
     if (activityContainer) {
       if (!canReadAudit) {
-        activityContainer.innerHTML = '<div style="color:#76889e;text-align:center;padding:16px;">Actividad visible solo para roles autorizados</div>';
+        activityContainer.innerHTML = '<div class="admin-dashboard-empty">Actividad visible solo para roles autorizados</div>';
       } else {
         var activityHtml = '';
         if (result.audit) {
           result.audit.forEach(function (doc) {
             var log = doc.data();
             var logDate = log.timestamp && typeof log.timestamp.toDate === 'function' ? log.timestamp.toDate() : null;
-            activityHtml += '<div style="background:#f3f7fc;padding:10px 14px;border-radius:8px;font-size:0.82rem;border:1px solid #e5eef8;margin-bottom:8px;">' +
-              '<div style="display:flex;justify-content:space-between;margin-bottom:4px;font-weight:600;color:#394c60;">' +
-              '<span>' + escapeHtml(log.userEmail || 'Sistema') + '</span><span style="font-size:0.75rem;color:#76889e;">' +
-              (logDate ? logDate.toLocaleString('es-DO', { dateStyle: 'short', timeStyle: 'short' }) : '') + '</span></div>' +
-              '<div style="color:#0a101d;">' + escapeHtml(log.action || '') + ': <span style="color:#76889e;">' +
-              escapeHtml(log.details || '') + '</span></div></div>';
+            activityHtml += '<div class="admin-dashboard-activity">' +
+              '<div class="admin-dashboard-activity-head"><strong>' + escapeHtml(log.userEmail || 'Sistema') + '</strong><time' +
+              (logDate ? ' datetime="' + logDate.toISOString() + '"' : '') + '>' +
+              (logDate ? logDate.toLocaleString('es-DO', { dateStyle: 'short', timeStyle: 'short' }) : '') + '</time></div>' +
+              '<p>' + escapeHtml(log.action || '') + (log.details ? ': ' + escapeHtml(log.details) : '') + '</p></div>';
           });
         }
-        activityContainer.innerHTML = activityHtml || '<div style="color:#76889e;text-align:center;padding:16px;">Sin actividad registrada</div>';
+        activityContainer.innerHTML = activityHtml || '<div class="admin-dashboard-empty">Sin actividad registrada</div>';
       }
     }
 
@@ -622,6 +701,7 @@
         }
       });
     }
+    setDashboardUpdated();
   }
 
   var allProducts = [];
@@ -4107,11 +4187,12 @@
   var mapMarkersGroup = null;
   var tempMarker = null;
   var techLocationMarker = null;
-  var pendingPaymentsCount = 0;
-  var pendingTicketsCount = 0;
+  var pendingPaymentsCount = null;
+  var pendingTicketsCount = null;
 
   function updateInternetBadge() {
-    var total = pendingPaymentsCount + pendingTicketsCount;
+    var hasCompleteCount = pendingPaymentsCount != null && pendingTicketsCount != null;
+    var total = Number(pendingPaymentsCount || 0) + Number(pendingTicketsCount || 0);
     var sidebarBadge = document.getElementById('badge-internet');
     if (sidebarBadge) {
       if (total > 0) {
@@ -4121,62 +4202,93 @@
         sidebarBadge.style.display = 'none';
       }
     }
+    setDashboardQueueCount('queue-internet', hasCompleteCount ? total : null);
   }
 
   function initRealTimeBadges() {
     // Keep listeners narrowly filtered: the previous implementation downloaded
     // every historical document in four collections on every admin login.
-    db.collection('orders').where('status', '==', 'pending').onSnapshot(function (snapshot) {
-      var pending = snapshot.size;
-      var elPending = document.getElementById('orders-count-pending');
-      if (elPending) elPending.textContent = pending;
-      var sidebarBadge = document.getElementById('badge-orders');
-      if (sidebarBadge) {
-        if (pending > 0) {
-          sidebarBadge.textContent = pending;
-          sidebarBadge.style.display = 'inline-block';
-        } else {
-          sidebarBadge.style.display = 'none';
+    if (['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'].some(currentUserHasRole)) {
+      db.collection('orders').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+        var pending = snapshot.size;
+        var elPending = document.getElementById('orders-count-pending');
+        if (elPending) elPending.textContent = pending;
+        setText('stat-orders-pending', pending);
+        setDashboardQueueCount('queue-orders', pending);
+        var sidebarBadge = document.getElementById('badge-orders');
+        if (sidebarBadge) {
+          if (pending > 0) {
+            sidebarBadge.textContent = pending;
+            sidebarBadge.style.display = 'inline-block';
+          } else {
+            sidebarBadge.style.display = 'none';
+          }
         }
-      }
-    }, function (err) {
-      console.warn('Real-time orders badge error:', err);
-    });
+      }, function (err) {
+        setDashboardQueueCount('queue-orders', null);
+        console.warn('Real-time orders badge error:', err);
+      });
+    }
 
-    db.collection('service_requests').where('status', '==', 'pending').onSnapshot(function (snapshot) {
-      var pending = snapshot.size;
-      var elPending = document.getElementById('solicitudes-count-pending');
-      if (elPending) elPending.textContent = pending;
-      var sidebarBadge = document.getElementById('badge-requests');
-      if (sidebarBadge) {
-        if (pending > 0) {
-          sidebarBadge.textContent = pending;
-          sidebarBadge.style.display = 'inline-block';
-        } else {
-          sidebarBadge.style.display = 'none';
+    if (['superadmin', 'admin', 'support_agent'].some(currentUserHasRole)) {
+      db.collection('service_requests').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+        var pending = snapshot.size;
+        var elPending = document.getElementById('solicitudes-count-pending');
+        if (elPending) elPending.textContent = pending;
+        setDashboardQueueCount('queue-requests', pending);
+        var sidebarBadge = document.getElementById('badge-requests');
+        if (sidebarBadge) {
+          if (pending > 0) {
+            sidebarBadge.textContent = pending;
+            sidebarBadge.style.display = 'inline-block';
+          } else {
+            sidebarBadge.style.display = 'none';
+          }
         }
-      }
-    }, function (err) {
-      console.warn('Real-time requests badge error:', err);
-    });
+      }, function (err) {
+        setDashboardQueueCount('queue-requests', null);
+        console.warn('Real-time requests badge error:', err);
+      });
+    }
 
-    db.collection('internet_payments').where('status', '==', 'pending').onSnapshot(function (snapshot) {
-      pendingPaymentsCount = snapshot.size;
-      var elPending = document.getElementById('internet-payments-count-pending');
-      if (elPending) elPending.textContent = pendingPaymentsCount;
-      updateInternetBadge();
-    }, function (err) {
-      console.warn('Real-time internet payments badge error:', err);
-    });
+    if (['superadmin', 'admin', 'support_agent', 'billing_clerk'].some(currentUserHasRole)) {
+      db.collection('internet_payments').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+        pendingPaymentsCount = snapshot.size;
+        var elPending = document.getElementById('internet-payments-count-pending');
+        if (elPending) elPending.textContent = pendingPaymentsCount;
+        updateInternetBadge();
+      }, function (err) {
+        pendingPaymentsCount = null;
+        updateInternetBadge();
+        console.warn('Real-time internet payments badge error:', err);
+      });
 
-    db.collection('internet_tickets').where('status', '==', 'pending').onSnapshot(function (snapshot) {
-      pendingTicketsCount = snapshot.size;
-      var elPending = document.getElementById('internet-tickets-count-pending');
-      if (elPending) elPending.textContent = pendingTicketsCount;
-      updateInternetBadge();
-    }, function (err) {
-      console.warn('Real-time internet tickets badge error:', err);
-    });
+      db.collection('internet_tickets').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+        pendingTicketsCount = snapshot.size;
+        var elPending = document.getElementById('internet-tickets-count-pending');
+        if (elPending) elPending.textContent = pendingTicketsCount;
+        updateInternetBadge();
+      }, function (err) {
+        pendingTicketsCount = null;
+        updateInternetBadge();
+        console.warn('Real-time internet tickets badge error:', err);
+      });
+    }
+
+    if (currentUserHasRole('superadmin') || currentUserHasRole('admin')) {
+      db.collection('financing_profiles').where('status', '==', 'pending_review').onSnapshot(function (snapshot) {
+        var pending = snapshot.size;
+        setDashboardQueueCount('queue-financing', pending);
+        var badge = document.getElementById('badge-financing');
+        if (badge) {
+          badge.textContent = pending;
+          badge.style.display = pending ? 'inline-flex' : 'none';
+        }
+      }, function (err) {
+        setDashboardQueueCount('queue-financing', null);
+        console.warn('Real-time financing badge error:', err);
+      });
+    }
   }
 
   // Initialize Leaflet Map
@@ -5382,6 +5494,7 @@
   window.AdminPanel = {
     init: init,
     loadPanel: loadPanel,
+    refreshDashboard: refreshDashboard,
     updateCopywritingAssistant: updateCopywritingAssistant,
     copyToClipboard: copyToClipboard,
     openNewBannerWithPreset: openNewBannerWithPreset,
