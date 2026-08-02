@@ -2763,21 +2763,7 @@ window.ERPBilling = (function () {
     if (formatSelect) {
       formatSelect.value = 'letter';
     }
-    handlePrintFormatChange('letter');
-    
-    // Adjust compact print layout classes based on items count
-    const printArea = document.getElementById('invoice-print-area');
-    if (printArea) {
-      printArea.classList.remove('print-compact-medium', 'print-compact-high', 'print-compact-ultra');
-      const itemsCount = inv.items ? inv.items.length : 0;
-      if (itemsCount > 14) {
-        printArea.classList.add('print-compact-ultra');
-      } else if (itemsCount > 10) {
-        printArea.classList.add('print-compact-high');
-      } else if (itemsCount > 6) {
-        printArea.classList.add('print-compact-medium');
-      }
-    }
+    handlePrintFormatChange('letter', { skipFit: true });
 
     // Historical documents use immutable snapshots. Legacy invoices fall back
     // to the current records without mutating the stored document.
@@ -2953,6 +2939,8 @@ window.ERPBilling = (function () {
         payBtn.style.display = 'none';
       }
     }
+
+    await applyAdaptivePrintLayout();
   }
 
   function convertQuoteToInvoice() {
@@ -6034,47 +6022,200 @@ window.ERPBilling = (function () {
     }
   }
 
-  async function printInvoiceDirectly(id) {
-    await viewInvoice(id);
-    setTimeout(() => {
-      window.print();
-    }, 300);
+  const LETTER_PAGE_WIDTH_MM = 215.9;
+  const LETTER_PAGE_HEIGHT_MM = 279.4;
+  const LETTER_PAGE_MARGIN_MM = 7;
+  const INVOICE_FIT_CLASSES = [
+    'print-fit-standard',
+    'print-fit-compact',
+    'print-fit-dense',
+    'print-fit-minimum',
+    'print-fit-multipage',
+    'print-compact-medium',
+    'print-compact-high',
+    'print-compact-ultra'
+  ];
+  const INVOICE_FIT_PROFILES = [
+    { className: 'print-fit-standard', label: '8.25 pt' },
+    { className: 'print-fit-compact', label: '7.9 pt' },
+    { className: 'print-fit-dense', label: '7.55 pt' },
+    { className: 'print-fit-minimum', label: '7.4 pt' }
+  ];
+
+  function clearAdaptivePrintClasses(element) {
+    if (element) element.classList.remove(...INVOICE_FIT_CLASSES);
   }
 
-  function downloadInvoicePDF() {
+  function setInvoiceFitStatus(message, state) {
+    const status = document.getElementById('invoice-print-fit-status');
+    if (!status) return;
+    status.className = `invoice-print-fit-bar${state ? ` ${state}` : ''}`;
+    const text = status.querySelector('span:last-child');
+    if (text) text.textContent = message;
+  }
+
+  async function waitForInvoiceAssets(root) {
+    if (document.fonts && document.fonts.ready) {
+      await Promise.race([
+        document.fonts.ready,
+        new Promise(resolve => setTimeout(resolve, 1600))
+      ]);
+    }
+    const pendingImages = Array.from(root.querySelectorAll('img')).filter(image => !image.complete);
+    if (!pendingImages.length) return;
+    await Promise.race([
+      Promise.all(pendingImages.map(image => new Promise(resolve => {
+        image.addEventListener('load', resolve, { once: true });
+        image.addEventListener('error', resolve, { once: true });
+      }))),
+      new Promise(resolve => setTimeout(resolve, 1600))
+    ]);
+  }
+
+  async function applyAdaptivePrintLayout() {
+    const printArea = document.getElementById('invoice-print-area');
+    if (!printArea) return null;
+    if (printArea.classList.contains('print-format-ticket')) {
+      clearAdaptivePrintClasses(printArea);
+      setInvoiceFitStatus('Formato ticket de 80 mm seleccionado.', '');
+      return { profile: 'ticket', pages: null, fitsOnePage: false };
+    }
+
+    setInvoiceFitStatus('Calculando el tamaño más legible que cabe en una página…', 'is-fitting');
+    await waitForInvoiceAssets(printArea);
+
+    const measurement = printArea.cloneNode(true);
+    measurement.removeAttribute('id');
+    measurement.setAttribute('aria-hidden', 'true');
+    measurement.querySelectorAll('[id]').forEach(element => element.removeAttribute('id'));
+    clearAdaptivePrintClasses(measurement);
+    measurement.classList.remove('print-format-ticket', 'print-pdf-export');
+    measurement.classList.add('invoice-print-measure');
+    document.body.appendChild(measurement);
+
+    let selectedProfile = INVOICE_FIT_PROFILES[INVOICE_FIT_PROFILES.length - 1];
+    let selectedHeight = 0;
+    let targetHeight = 0;
+    let fitsOnePage = false;
+
+    try {
+      await waitForInvoiceAssets(measurement);
+      for (const profile of INVOICE_FIT_PROFILES) {
+        clearAdaptivePrintClasses(measurement);
+        measurement.classList.add('invoice-print-measure', profile.className);
+        void measurement.offsetHeight;
+
+        const measuredWidth = measurement.getBoundingClientRect().width || 760;
+        targetHeight = measuredWidth *
+          ((LETTER_PAGE_HEIGHT_MM - (LETTER_PAGE_MARGIN_MM * 2)) /
+           (LETTER_PAGE_WIDTH_MM - (LETTER_PAGE_MARGIN_MM * 2))) * 0.975;
+        selectedHeight = Math.max(measurement.scrollHeight, measurement.getBoundingClientRect().height);
+        selectedProfile = profile;
+        if (selectedHeight <= targetHeight) {
+          fitsOnePage = true;
+          break;
+        }
+      }
+    } finally {
+      measurement.remove();
+    }
+
+    const pageCount = fitsOnePage ? 1 : Math.max(2, Math.ceil(selectedHeight / Math.max(targetHeight, 1)));
+    clearAdaptivePrintClasses(printArea);
+    printArea.classList.add(selectedProfile.className);
+    if (!fitsOnePage) printArea.classList.add('print-fit-multipage');
+    printArea.dataset.printFitProfile = selectedProfile.className;
+    printArea.dataset.printPageCount = String(pageCount);
+
+    if (fitsOnePage) {
+      const wording = selectedProfile.className === 'print-fit-standard'
+        ? 'Documento optimizado para una página con tipografía cómoda.'
+        : `Ajuste automático: una página, cuerpo principal de ${selectedProfile.label}.`;
+      setInvoiceFitStatus(wording, 'is-single-page');
+    } else {
+      setInvoiceFitStatus(
+        `Este contenido requiere aproximadamente ${pageCount} páginas para conservar un cuerpo principal legible de ${selectedProfile.label}.`,
+        'is-multipage'
+      );
+    }
+
+    return {
+      profile: selectedProfile.className,
+      pages: pageCount,
+      fitsOnePage,
+      fontSize: selectedProfile.label,
+      measuredHeight: Math.round(selectedHeight),
+      targetHeight: Math.round(targetHeight)
+    };
+  }
+
+  async function printCurrentInvoice() {
+    const printArea = document.getElementById('invoice-print-area');
+    if (!printArea) return;
+    if (!printArea.classList.contains('print-format-ticket')) await applyAdaptivePrintLayout();
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    window.print();
+  }
+
+  async function printInvoiceDirectly(id) {
+    await viewInvoice(id);
+    await printCurrentInvoice();
+  }
+
+  async function downloadInvoicePDF() {
     const element = document.getElementById('invoice-print-area');
     if (!element) return;
 
-    const invoiceNum = document.getElementById('view-invoice-number').textContent || 'Invoice';
-    
+    const invoiceNum = document.getElementById('view-invoice-number').textContent || 'Documento';
+    const documentTitle = String(document.querySelector('.billing-meta-box h3')?.textContent || 'Factura').toLocaleLowerCase('es');
+    const filenamePrefix = documentTitle.includes('cotiz') ? 'Cotizacion' : (documentTitle.includes('proforma') ? 'Proforma' : 'Factura');
+    if (!element.classList.contains('print-format-ticket')) await applyAdaptivePrintLayout();
+
     const opt = {
-      margin:       [10, 10, 10, 10],
-      filename:     `Factura_${invoiceNum}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, logging: false },
-      jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
+      margin: [LETTER_PAGE_MARGIN_MM, LETTER_PAGE_MARGIN_MM, LETTER_PAGE_MARGIN_MM, LETTER_PAGE_MARGIN_MM],
+      filename: `${filenamePrefix}_${invoiceNum}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+        windowWidth: 760,
+        scrollX: 0,
+        scrollY: 0
+      },
+      pagebreak: {
+        mode: ['css', 'legacy'],
+        avoid: ['.invoice-header', '.invoice-billing-details', '.invoice-footer-wrapper', '.invoice-signatures-area', 'tr']
+      },
+      jsPDF: { unit: 'mm', format: 'letter', orientation: 'portrait' }
     };
 
-    showToast('Generando PDF para descarga...', 'info');
-    
-    html2pdf().set(opt).from(element).save()
-      .then(() => {
-        showToast('PDF descargado con éxito.', 'success');
-      })
-      .catch((err) => {
-        console.error(err);
-        showToast('Error al generar PDF: ' + err.message, 'danger');
-      });
+    showToast('Generando PDF optimizado...', 'info');
+    element.classList.add('print-pdf-export');
+    try {
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      await html2pdf().set(opt).from(element).save();
+      showToast('PDF descargado con éxito.', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Error al generar PDF: ' + err.message, 'danger');
+    } finally {
+      element.classList.remove('print-pdf-export');
+    }
   }
 
-  function handlePrintFormatChange(format) {
+  function handlePrintFormatChange(format, options = {}) {
     const printArea = document.getElementById('invoice-print-area');
-    if (!printArea) return;
+    if (!printArea) return Promise.resolve(null);
     if (format === 'ticket') {
+      clearAdaptivePrintClasses(printArea);
       printArea.classList.add('print-format-ticket');
-    } else {
-      printArea.classList.remove('print-format-ticket');
+      setInvoiceFitStatus('Formato ticket de 80 mm seleccionado.', '');
+      return Promise.resolve({ profile: 'ticket' });
     }
+    printArea.classList.remove('print-format-ticket');
+    return options.skipFit ? Promise.resolve(null) : applyAdaptivePrintLayout();
   }
 
   function editQuote(id) {
@@ -6367,6 +6508,8 @@ window.ERPBilling = (function () {
     saveFiscalAdjustment: saveFiscalAdjustment,
     convertQuoteToInvoice: convertQuoteToInvoice,
     printInvoiceDirectly: printInvoiceDirectly,
+    printCurrentInvoice: printCurrentInvoice,
+    applyAdaptivePrintLayout: applyAdaptivePrintLayout,
     downloadInvoicePDF: downloadInvoicePDF,
     convertQuoteFromList: convertQuoteFromList,
     openRegisterPaymentFromList: openRegisterPaymentFromList,

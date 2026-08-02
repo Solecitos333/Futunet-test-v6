@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/facturacion.css?v=2.1" />
+  <link rel="stylesheet" href="css/facturacion.css?v=2.2" />
   <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
   <link rel="shortcut icon" href="favicon.ico" />
   <meta name="theme-color" content="#0f1923" />
@@ -773,11 +773,16 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Descargar PDF
             </button>
-            <button class="admin-btn admin-btn-primary" onclick="window.print()">
+            <button class="admin-btn admin-btn-primary" onclick="ERPBilling.printCurrentInvoice()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
               Imprimir / PDF
             </button>
           </div>
+        </div>
+
+        <div class="invoice-print-fit-bar" id="invoice-print-fit-status" role="status" aria-live="polite">
+          <span class="invoice-print-fit-dot" aria-hidden="true"></span>
+          <span>Preparando una versión optimizada para impresión…</span>
         </div>
 
         <!-- Printable Invoice Frame -->
@@ -1973,7 +1978,7 @@
   <script defer src="js/auth.js?v=20260628"></script>
   <script defer src="js/auth-guard.js"></script>
   <script defer src="js/billing-core.js?v=20260720"></script>
-  <script defer src="js/facturacion.js?v=20260720"></script>
+  <script defer src="js/facturacion.js?v=20260802-print-fit"></script>
   <script defer src="js/erp-extensions.js?v=20260720"></script>
 
   <script>

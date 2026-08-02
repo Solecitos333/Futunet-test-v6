@@ -1395,234 +1395,7 @@ body.erp-modal-open {
   padding-top: 4px !important;
 }
 
-@media print {
-  @page {
-    size: letter portrait;
-    margin: 4mm 4mm 4mm 4mm !important;
-  }
-  body {
-    background: #fff !important;
-    color: #000 !important;
-    font-size: 9.5pt !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) {
-    padding: 0.3cm 0.5cm !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .admin-sidebar,
-  .admin-mobile-toggle,
-  .admin-topbar,
-  .admin-topbar-actions,
-  .table-actions,
-  .admin-nav,
-  .admin-sidebar-footer,
-  .admin-pagination,
-  .admin-btn,
-  #invoice-detail-controls,
-  #invoice-form-buttons,
-  header,
-  footer {
-    display: none !important;
-  }
 
-  .admin-layout {
-    display: block !important;
-  }
-  
-  .admin-main {
-    margin-left: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-  }
-  
-  .admin-panel {
-    display: none !important;
-  }
-  
-  .admin-panel#panel-invoice-view {
-    display: block !important;
-  }
-  
-  .printable-invoice-wrapper {
-    box-shadow: none !important;
-    border: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .invoice-header, .invoice-billing-details, .invoice-items-preview-table, .invoice-footer-wrapper {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* General Print Adjustments */
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-header {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-branding img {
-    max-height: 38px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info h2 {
-    font-size: 1.05rem !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info p {
-    font-size: 6.8pt !important;
-    margin-bottom: 1px !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box {
-    padding: 4px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box h3 {
-    font-size: 1rem !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-billing-details {
-    margin-bottom: 6px !important;
-    padding: 5px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info h4,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms h4 {
-    font-size: 7.5pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info p,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-footer-wrapper {
-    margin-top: 4px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-box h5 {
-    font-size: 7pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-list li {
-    font-size: 6.5pt !important;
-    padding: 1px 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row {
-    padding: 1.5px 0 !important;
-    font-size: 7pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row-total {
-    font-size: 8pt !important;
-    padding-top: 3px !important;
-    margin-top: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-signatures-area {
-    margin-top: 8px !important;
-    display: flex !important;
-    justify-content: space-around !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-box {
-    text-align: center !important;
-    font-size: 6.8pt !important;
-    width: 170px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-line {
-    margin-top: 14px !important;
-    border-top: 1px solid #000 !important;
-    margin-bottom: 2px !important;
-  }
-
-  /* Compact medium (7-10 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-  }
-
-  /* Compact high (11-14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table th {
-    padding: 2px 4px !important;
-    font-size: 6.5pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table td {
-    padding: 2px 4px !important;
-    font-size: 6.6pt !important;
-    line-height: 1.1 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .signature-line {
-    margin-top: 12px !important;
-  }
-
-  /* Compact ultra (>14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table th {
-    padding: 1.5px 3.5px !important;
-    font-size: 6.2pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table td {
-    padding: 1.2px 3.5px !important;
-    font-size: 6.3pt !important;
-    line-height: 1.05 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-header {
-    margin-bottom: 3px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-billing-details {
-    margin-bottom: 3px !important;
-    padding: 3px 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .signature-line {
-    margin-top: 8px !important;
-  }
-  
-  /* Ensure backgrounds render appropriately in PDFs */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  
-  .invoice-items-preview-table th {
-    background: #f1f5f9 !important;
-    border-bottom: 2px solid #cbd5e1 !important;
-  }
-  
-  .badge-paid {
-    background: transparent !important;
-    color: #10b981 !important;
-    border: 1px solid #10b981 !important;
-  }
-  .badge-pending {
-    background: transparent !important;
-    color: #f59e0b !important;
-    border: 1px solid #f59e0b !important;
-  }
-  .badge-cancelled {
-    background: transparent !important;
-    color: #ef4444 !important;
-    border: 1px solid #ef4444 !important;
-  }
-}
 
 /* ─── TOUCH POS (PUNTO DE VENTA) STYLES ─── */
 .pos-layout {
@@ -2094,234 +1867,7 @@ body.erp-modal-open {
 }
 
 /* Print Overrides for Signatures */
-@media print {
-  @page {
-    size: letter portrait;
-    margin: 4mm 4mm 4mm 4mm !important;
-  }
-  body {
-    background: #fff !important;
-    color: #000 !important;
-    font-size: 9.5pt !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) {
-    padding: 0.3cm 0.5cm !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .admin-sidebar,
-  .admin-mobile-toggle,
-  .admin-topbar,
-  .admin-topbar-actions,
-  .table-actions,
-  .admin-nav,
-  .admin-sidebar-footer,
-  .admin-pagination,
-  .admin-btn,
-  #invoice-detail-controls,
-  #invoice-form-buttons,
-  header,
-  footer {
-    display: none !important;
-  }
 
-  .admin-layout {
-    display: block !important;
-  }
-  
-  .admin-main {
-    margin-left: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-  }
-  
-  .admin-panel {
-    display: none !important;
-  }
-  
-  .admin-panel#panel-invoice-view {
-    display: block !important;
-  }
-  
-  .printable-invoice-wrapper {
-    box-shadow: none !important;
-    border: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .invoice-header, .invoice-billing-details, .invoice-items-preview-table, .invoice-footer-wrapper {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* General Print Adjustments */
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-header {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-branding img {
-    max-height: 38px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info h2 {
-    font-size: 1.05rem !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info p {
-    font-size: 6.8pt !important;
-    margin-bottom: 1px !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box {
-    padding: 4px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box h3 {
-    font-size: 1rem !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-billing-details {
-    margin-bottom: 6px !important;
-    padding: 5px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info h4,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms h4 {
-    font-size: 7.5pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info p,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-footer-wrapper {
-    margin-top: 4px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-box h5 {
-    font-size: 7pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-list li {
-    font-size: 6.5pt !important;
-    padding: 1px 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row {
-    padding: 1.5px 0 !important;
-    font-size: 7pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row-total {
-    font-size: 8pt !important;
-    padding-top: 3px !important;
-    margin-top: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-signatures-area {
-    margin-top: 8px !important;
-    display: flex !important;
-    justify-content: space-around !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-box {
-    text-align: center !important;
-    font-size: 6.8pt !important;
-    width: 170px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-line {
-    margin-top: 14px !important;
-    border-top: 1px solid #000 !important;
-    margin-bottom: 2px !important;
-  }
-
-  /* Compact medium (7-10 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-  }
-
-  /* Compact high (11-14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table th {
-    padding: 2px 4px !important;
-    font-size: 6.5pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table td {
-    padding: 2px 4px !important;
-    font-size: 6.6pt !important;
-    line-height: 1.1 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .signature-line {
-    margin-top: 12px !important;
-  }
-
-  /* Compact ultra (>14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table th {
-    padding: 1.5px 3.5px !important;
-    font-size: 6.2pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table td {
-    padding: 1.2px 3.5px !important;
-    font-size: 6.3pt !important;
-    line-height: 1.05 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-header {
-    margin-bottom: 3px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-billing-details {
-    margin-bottom: 3px !important;
-    padding: 3px 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .signature-line {
-    margin-top: 8px !important;
-  }
-  
-  /* Ensure backgrounds render appropriately in PDFs */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  
-  .invoice-items-preview-table th {
-    background: #f1f5f9 !important;
-    border-bottom: 2px solid #cbd5e1 !important;
-  }
-  
-  .badge-paid {
-    background: transparent !important;
-    color: #10b981 !important;
-    border: 1px solid #10b981 !important;
-  }
-  .badge-pending {
-    background: transparent !important;
-    color: #f59e0b !important;
-    border: 1px solid #f59e0b !important;
-  }
-  .badge-cancelled {
-    background: transparent !important;
-    color: #ef4444 !important;
-    border: 1px solid #ef4444 !important;
-  }
-}
 
 /* Ticket Print Format Overrides */
 .printable-invoice-wrapper.print-format-ticket .invoice-signatures-area {
@@ -2426,234 +1972,7 @@ body.erp-modal-open {
 }
 
 /* Kitchen Ticket Print Media Styles */
-@media print {
-  @page {
-    size: letter portrait;
-    margin: 4mm 4mm 4mm 4mm !important;
-  }
-  body {
-    background: #fff !important;
-    color: #000 !important;
-    font-size: 9.5pt !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) {
-    padding: 0.3cm 0.5cm !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .admin-sidebar,
-  .admin-mobile-toggle,
-  .admin-topbar,
-  .admin-topbar-actions,
-  .table-actions,
-  .admin-nav,
-  .admin-sidebar-footer,
-  .admin-pagination,
-  .admin-btn,
-  #invoice-detail-controls,
-  #invoice-form-buttons,
-  header,
-  footer {
-    display: none !important;
-  }
 
-  .admin-layout {
-    display: block !important;
-  }
-  
-  .admin-main {
-    margin-left: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-  }
-  
-  .admin-panel {
-    display: none !important;
-  }
-  
-  .admin-panel#panel-invoice-view {
-    display: block !important;
-  }
-  
-  .printable-invoice-wrapper {
-    box-shadow: none !important;
-    border: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  .invoice-header, .invoice-billing-details, .invoice-items-preview-table, .invoice-footer-wrapper {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  /* General Print Adjustments */
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-header {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-branding img {
-    max-height: 38px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info h2 {
-    font-size: 1.05rem !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .company-info p {
-    font-size: 6.8pt !important;
-    margin-bottom: 1px !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box {
-    padding: 4px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box h3 {
-    font-size: 1rem !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-meta-box p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-billing-details {
-    margin-bottom: 6px !important;
-    padding: 5px 8px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info h4,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms h4 {
-    font-size: 7.5pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .client-info p,
-  .printable-invoice-wrapper:not(.print-format-ticket) .billing-terms p {
-    font-size: 6.8pt !important;
-    line-height: 1.2 !important;
-    margin-bottom: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table {
-    margin-bottom: 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-    line-height: 1.15 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-footer-wrapper {
-    margin-top: 4px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-box h5 {
-    font-size: 7pt !important;
-    margin-bottom: 2px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .payment-log-list li {
-    font-size: 6.5pt !important;
-    padding: 1px 0 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row {
-    padding: 1.5px 0 !important;
-    font-size: 7pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .summary-box .summary-row-total {
-    font-size: 8pt !important;
-    padding-top: 3px !important;
-    margin-top: 1px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-signatures-area {
-    margin-top: 8px !important;
-    display: flex !important;
-    justify-content: space-around !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-box {
-    text-align: center !important;
-    font-size: 6.8pt !important;
-    width: 170px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket) .signature-line {
-    margin-top: 14px !important;
-    border-top: 1px solid #000 !important;
-    margin-bottom: 2px !important;
-  }
-
-  /* Compact medium (7-10 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table th {
-    padding: 3px 5px !important;
-    font-size: 6.8pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-medium .invoice-items-preview-table td {
-    padding: 2.5px 5px !important;
-    font-size: 7pt !important;
-  }
-
-  /* Compact high (11-14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table th {
-    padding: 2px 4px !important;
-    font-size: 6.5pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .invoice-items-preview-table td {
-    padding: 2px 4px !important;
-    font-size: 6.6pt !important;
-    line-height: 1.1 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-high .signature-line {
-    margin-top: 12px !important;
-  }
-
-  /* Compact ultra (>14 items) */
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table th {
-    padding: 1.5px 3.5px !important;
-    font-size: 6.2pt !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-items-preview-table td {
-    padding: 1.2px 3.5px !important;
-    font-size: 6.3pt !important;
-    line-height: 1.05 !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-header {
-    margin-bottom: 3px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .invoice-billing-details {
-    margin-bottom: 3px !important;
-    padding: 3px 6px !important;
-  }
-  .printable-invoice-wrapper:not(.print-format-ticket).print-compact-ultra .signature-line {
-    margin-top: 8px !important;
-  }
-  
-  /* Ensure backgrounds render appropriately in PDFs */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  
-  .invoice-items-preview-table th {
-    background: #f1f5f9 !important;
-    border-bottom: 2px solid #cbd5e1 !important;
-  }
-  
-  .badge-paid {
-    background: transparent !important;
-    color: #10b981 !important;
-    border: 1px solid #10b981 !important;
-  }
-  .badge-pending {
-    background: transparent !important;
-    color: #f59e0b !important;
-    border: 1px solid #f59e0b !important;
-  }
-  .badge-cancelled {
-    background: transparent !important;
-    color: #ef4444 !important;
-    border: 1px solid #ef4444 !important;
-  }
-}
 
 /* KDS & Visual Table Styles */
 .kds-card {
@@ -2885,4 +2204,304 @@ body.erp-modal-open {
   .kds-card,
   .restaurant-table-card,
   #pos-restaurant-tables-list > div { transition: none !important; transform: none !important; }
+}
+
+/* ─── Adaptive letter-size invoice fitting ─── */
+.invoice-print-fit-bar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: min(100%, 760px);
+  margin: -12px auto 14px;
+  padding: 10px 13px;
+  border: 1px solid #bae6fd;
+  border-radius: 11px;
+  background: #f0f9ff;
+  color: #075985;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+.invoice-print-fit-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14,165,233,0.12);
+}
+.invoice-print-fit-bar.is-fitting .invoice-print-fit-dot { animation: invoiceFitPulse 0.9s ease-in-out infinite alternate; }
+.invoice-print-fit-bar.is-single-page {
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+}
+.invoice-print-fit-bar.is-single-page .invoice-print-fit-dot { background: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.12); }
+.invoice-print-fit-bar.is-multipage {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #92400e;
+}
+.invoice-print-fit-bar.is-multipage .invoice-print-fit-dot { background: #f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,0.12); }
+@keyframes invoiceFitPulse { to { opacity: 0.38; transform: scale(0.82); } }
+
+.printable-invoice-wrapper.print-fit-standard {
+  --invoice-page-pad-y: 22px;
+  --invoice-page-pad-x: 26px;
+  --invoice-body-size: 8.25pt;
+  --invoice-title-size: 12.5pt;
+  --invoice-total-size: 8.6pt;
+  --invoice-small-size: 7.45pt;
+  --invoice-table-size: 8pt;
+  --invoice-table-head-size: 7.25pt;
+  --invoice-line-height: 1.22;
+  --invoice-row-pad-y: 6px;
+  --invoice-head-pad-y: 5px;
+  --invoice-section-gap: 14px;
+  --invoice-logo-height: 48px;
+  --invoice-signature-space: 25px;
+}
+.printable-invoice-wrapper.print-fit-compact {
+  --invoice-page-pad-y: 17px;
+  --invoice-page-pad-x: 22px;
+  --invoice-body-size: 7.9pt;
+  --invoice-title-size: 12pt;
+  --invoice-total-size: 8.25pt;
+  --invoice-small-size: 7.2pt;
+  --invoice-table-size: 7.7pt;
+  --invoice-table-head-size: 7.1pt;
+  --invoice-line-height: 1.18;
+  --invoice-row-pad-y: 4.5px;
+  --invoice-head-pad-y: 4px;
+  --invoice-section-gap: 10px;
+  --invoice-logo-height: 43px;
+  --invoice-signature-space: 20px;
+}
+.printable-invoice-wrapper.print-fit-dense {
+  --invoice-page-pad-y: 13px;
+  --invoice-page-pad-x: 18px;
+  --invoice-body-size: 7.55pt;
+  --invoice-title-size: 11.5pt;
+  --invoice-total-size: 8pt;
+  --invoice-small-size: 7.05pt;
+  --invoice-table-size: 7.4pt;
+  --invoice-table-head-size: 7pt;
+  --invoice-line-height: 1.14;
+  --invoice-row-pad-y: 3px;
+  --invoice-head-pad-y: 2.6px;
+  --invoice-section-gap: 7px;
+  --invoice-logo-height: 39px;
+  --invoice-signature-space: 15px;
+}
+.printable-invoice-wrapper.print-fit-minimum {
+  --invoice-page-pad-y: 10px;
+  --invoice-page-pad-x: 15px;
+  --invoice-body-size: 7.4pt;
+  --invoice-title-size: 11.25pt;
+  --invoice-total-size: 7.8pt;
+  --invoice-small-size: 7pt;
+  --invoice-table-size: 7.25pt;
+  --invoice-table-head-size: 7pt;
+  --invoice-line-height: 1.12;
+  --invoice-row-pad-y: 2px;
+  --invoice-head-pad-y: 1.8px;
+  --invoice-section-gap: 5px;
+  --invoice-logo-height: 36px;
+  --invoice-signature-space: 12px;
+}
+
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) {
+  width: min(100%, 760px);
+  max-width: 760px;
+  padding: var(--invoice-page-pad-y) var(--invoice-page-pad-x);
+  font-size: var(--invoice-body-size);
+  line-height: var(--invoice-line-height);
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-header {
+  padding-bottom: var(--invoice-section-gap);
+  margin-bottom: var(--invoice-section-gap);
+  gap: 18px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-branding {
+  min-width: 0;
+  gap: 11px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-branding img {
+  height: var(--invoice-logo-height);
+  max-width: 135px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info {
+  min-width: 0;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info h2 {
+  margin: 0 0 2px;
+  font-size: var(--invoice-title-size);
+  line-height: 1.05;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info p,
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-meta-box p,
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .client-info p,
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-terms p {
+  margin: 1px 0;
+  color: #475569;
+  font-size: var(--invoice-small-size) !important;
+  line-height: var(--invoice-line-height) !important;
+  overflow-wrap: anywhere;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-meta-box {
+  min-width: 205px;
+  padding: 4px 7px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-meta-box h3 {
+  margin: 0 0 3px;
+  font-size: var(--invoice-title-size);
+  line-height: 1.05;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-billing-details {
+  gap: 24px;
+  margin-bottom: var(--invoice-section-gap);
+  padding: 0;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .client-info h4,
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-terms h4 {
+  margin: 0 0 3px;
+  padding-bottom: 2px;
+  font-size: var(--invoice-body-size);
+  line-height: 1.1;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table {
+  table-layout: fixed;
+  margin-bottom: var(--invoice-section-gap);
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table th {
+  padding: var(--invoice-head-pad-y) 6px;
+  font-size: var(--invoice-table-head-size);
+  line-height: 1.08;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table td {
+  padding: var(--invoice-row-pad-y) 6px;
+  font-size: var(--invoice-table-size);
+  line-height: var(--invoice-line-height);
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-preview-summary-box {
+  gap: 22px;
+  margin-top: 0;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .payment-log-box h5 {
+  margin: 0 0 3px;
+  font-size: var(--invoice-body-size);
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .payment-log-list li,
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .summary-row {
+  padding: 1px 0;
+  font-size: var(--invoice-small-size);
+  line-height: var(--invoice-line-height);
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .summary-row.summary-row-total {
+  margin-top: 1px !important;
+  padding-top: 3px !important;
+  font-size: var(--invoice-total-size);
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-signatures-area {
+  gap: 45px;
+  margin-top: var(--invoice-section-gap);
+  padding: 0 12px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .signature-line {
+  margin-top: var(--invoice-signature-space);
+  margin-bottom: 3px;
+}
+.printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .signature-box span {
+  font-size: var(--invoice-small-size);
+}
+
+.printable-invoice-wrapper.invoice-print-measure {
+  position: absolute !important;
+  top: 0 !important;
+  left: -10000px !important;
+  width: 760px !important;
+  max-width: 760px !important;
+  margin: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+.printable-invoice-wrapper.print-pdf-export {
+  width: 760px !important;
+  max-width: 760px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+@media print {
+  @page { size: letter portrait; margin: 7mm !important; }
+
+  .invoice-print-fit-bar { display: none !important; }
+
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: var(--invoice-page-pad-y) var(--invoice-page-pad-x) !important;
+    font-size: var(--invoice-body-size) !important;
+    line-height: var(--invoice-line-height) !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-branding img {
+    height: var(--invoice-logo-height) !important;
+    max-height: var(--invoice-logo-height) !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info h2,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-meta-box h3 {
+    font-size: var(--invoice-title-size) !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info p,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-meta-box p,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .client-info p,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .billing-terms p,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .payment-log-list li,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .summary-row,
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .signature-box span {
+    font-size: var(--invoice-small-size) !important;
+    line-height: var(--invoice-line-height) !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table {
+    margin-bottom: var(--invoice-section-gap) !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table th {
+    padding: var(--invoice-head-pad-y) 6px !important;
+    font-size: var(--invoice-table-head-size) !important;
+  }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .invoice-items-preview-table td {
+    padding: var(--invoice-row-pad-y) 6px !important;
+    font-size: var(--invoice-table-size) !important;
+    line-height: var(--invoice-line-height) !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table thead { display: table-header-group; }
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-items-preview-table tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-header,
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-billing-details,
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-footer-wrapper,
+  .printable-invoice-wrapper:not(.print-format-ticket) .invoice-signatures-area {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .invoice-print-fit-bar { margin-top: 0; }
+  .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) {
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invoice-print-fit-bar.is-fitting .invoice-print-fit-dot { animation: none; }
 }

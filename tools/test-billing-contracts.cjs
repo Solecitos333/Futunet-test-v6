@@ -15,6 +15,7 @@ const auth = fs.readFileSync(path.join(root, 'js', 'auth.js'), 'utf8');
 const storageRules = fs.readFileSync(path.join(root, 'storage.rules'), 'utf8');
 const authGuard = fs.readFileSync(path.join(root, 'js', 'auth-guard.js'), 'utf8');
 const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
+const billingCss = fs.readFileSync(path.join(root, 'css', 'facturacion.css'), 'utf8');
 const adminHtml = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const adminCss = fs.readFileSync(path.join(root, 'css', 'admin.css'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
@@ -159,6 +160,20 @@ test('el dashboard administrativo prioriza pendientes, accesos rápidos y navega
   assert.match(admin, /\['superadmin', 'admin', 'support_agent'\]\.some\(currentUserHasRole\)/);
   assert.match(adminCss, /\.admin-work-queue/);
   assert.match(adminCss, /@media \(max-width: 1100px\) and \(min-width: 769px\)/);
+});
+
+test('facturas y cotizaciones ajustan su impresión por altura sin bajar de un tamaño legible', () => {
+  assert.match(billing, /function applyAdaptivePrintLayout\(\)/);
+  assert.match(billing, /LETTER_PAGE_HEIGHT_MM - \(LETTER_PAGE_MARGIN_MM \* 2\)/);
+  assert.match(billing, /\{ className: 'print-fit-minimum', label: '7\.4 pt' \}/);
+  assert.match(billing, /selectedHeight <= targetHeight/);
+  assert.doesNotMatch(billing, /itemsCount > 14|itemsCount > 10|itemsCount > 6/);
+  assert.match(billing, /await applyAdaptivePrintLayout\(\)/);
+  assert.match(billingHtml, /ERPBilling\.printCurrentInvoice\(\)/);
+  assert.match(billingHtml, /id="invoice-print-fit-status"/);
+  assert.match(billingCss, /\.printable-invoice-wrapper\.print-fit-minimum/);
+  assert.match(billingCss, /break-inside: auto !important/);
+  assert.equal((billingCss.match(/^@media print/gm) || []).length, 2);
 });
 
 test('los productos vendidos se archivan sin romper reversos de inventario', () => {
