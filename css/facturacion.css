@@ -2436,10 +2436,67 @@ body.erp-modal-open {
   box-shadow: none !important;
 }
 
+.invoice-pdf-export-host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 760px;
+  min-width: 760px;
+  height: auto;
+  overflow: visible;
+  background: #fff;
+  z-index: 2147483646;
+  pointer-events: none;
+}
+.invoice-pdf-export-host .printable-invoice-wrapper.print-pdf-export {
+  position: static !important;
+  inset: auto !important;
+  float: none !important;
+  transform: none !important;
+  overflow: visible !important;
+}
+
 @media print {
   @page { size: letter portrait; margin: 7mm !important; }
 
+  html,
+  body {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+  }
+
+  .admin-layout,
+  .admin-main,
+  .admin-panel#panel-invoice-view {
+    position: static !important;
+    inset: auto !important;
+    float: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
   .invoice-print-fit-bar { display: none !important; }
+
+  #invoice-print-area {
+    position: static !important;
+    inset: auto !important;
+    left: auto !important;
+    right: auto !important;
+    float: none !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
 
   .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) {
     width: 100% !important;

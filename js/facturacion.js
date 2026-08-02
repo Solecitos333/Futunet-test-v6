@@ -6459,13 +6459,49 @@ window.ERPBilling = (function () {
     const printArea = document.getElementById('invoice-print-area');
     if (!printArea) return;
     if (!printArea.classList.contains('print-format-ticket')) await applyAdaptivePrintLayout();
+    const previousScroll = { x: window.scrollX || 0, y: window.scrollY || 0 };
+    let restored = false;
+    const restorePrintState = () => {
+      if (restored) return;
+      restored = true;
+      document.body.classList.remove('invoice-printing');
+      window.scrollTo(previousScroll.x, previousScroll.y);
+    };
+    document.body.classList.add('invoice-printing');
+    window.addEventListener('afterprint', restorePrintState, { once: true });
+    window.scrollTo(0, 0);
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    window.print();
+    try {
+      window.print();
+    } catch (error) {
+      restorePrintState();
+      throw error;
+    }
+    window.setTimeout(restorePrintState, 120000);
   }
 
   async function printInvoiceDirectly(id) {
     await viewInvoice(id);
     await printCurrentInvoice();
+  }
+
+  function createInvoicePdfSource(element) {
+    const host = document.createElement('div');
+    host.className = 'invoice-pdf-export-host';
+    host.setAttribute('aria-hidden', 'true');
+
+    const source = element.cloneNode(true);
+    source.removeAttribute('id');
+    source.querySelectorAll('[id]').forEach(node => node.removeAttribute('id'));
+    source.classList.add('print-pdf-export');
+    source.style.margin = '0';
+
+    host.appendChild(source);
+    document.body.appendChild(host);
+    return {
+      source,
+      remove: () => host.remove()
+    };
   }
 
   async function downloadInvoicePDF() {
@@ -6487,8 +6523,12 @@ window.ERPBilling = (function () {
         logging: false,
         backgroundColor: '#ffffff',
         windowWidth: 760,
+        width: 760,
+        x: 0,
+        y: 0,
         scrollX: 0,
-        scrollY: 0
+        scrollY: 0,
+        removeContainer: true
       },
       pagebreak: {
         mode: ['css', 'legacy'],
@@ -6498,16 +6538,17 @@ window.ERPBilling = (function () {
     };
 
     showToast('Generando PDF optimizado...', 'info');
-    element.classList.add('print-pdf-export');
+    const pdfExport = createInvoicePdfSource(element);
     try {
+      await waitForInvoiceAssets(pdfExport.source);
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      await html2pdf().set(opt).from(element).save();
+      await html2pdf().set(opt).from(pdfExport.source).save();
       showToast('PDF descargado con éxito.', 'success');
     } catch (err) {
       console.error(err);
       showToast('Error al generar PDF: ' + err.message, 'danger');
     } finally {
-      element.classList.remove('print-pdf-export');
+      pdfExport.remove();
     }
   }
 

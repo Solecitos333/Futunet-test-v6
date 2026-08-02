@@ -177,6 +177,11 @@ test('facturas y cotizaciones ajustan su impresión por altura sin bajar de un t
   assert.match(billingHtml, /id="invoice-print-fit-status"/);
   assert.match(billingCss, /\.printable-invoice-wrapper\.print-fit-minimum/);
   assert.match(billingCss, /break-inside: auto !important/);
+  assert.match(billingCss, /\.invoice-pdf-export-host/);
+  assert.match(billingCss, /#invoice-print-area[\s\S]*?transform: none !important/);
+  assert.match(billing, /createInvoicePdfSource/);
+  assert.match(billing, /from\(pdfExport\.source\)/);
+  assert.match(billing, /window\.scrollTo\(0, 0\)/);
   assert.equal((billingCss.match(/^@media print/gm) || []).length, 2);
 });
 
@@ -245,7 +250,7 @@ test('facturación usa paginación de servidor y evita eventos HTML ejecutables'
 test('la sesión de facturación renueva permisos y evita módulos privados obsoletos', () => {
   assert.match(auth, /getIdToken\(true\)/);
   assert.match(authGuard, /authUser\.emailVerified !== true/);
-  assert.match(billingHtml, /facturacion\.js\?v=20260802-permissions-fix/);
+  assert.match(billingHtml, /facturacion\.js\?v=20260802-print-position-fix/);
   assert.match(billing, /billingInitializationErrorMessage/);
   const serviceWorker = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
   assert.match(serviceWorker, /privateScripts/);
