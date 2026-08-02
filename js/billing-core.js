@@ -485,6 +485,126 @@
     return [ncf, invoiceDate, cancellationType];
   }
 
+  const QUOTE_WORKFLOW_STATUSES = ['draft', 'sent', 'viewed', 'accepted', 'rejected', 'expired', 'converted'];
+  const RECURRING_FREQUENCIES = ['none', 'weekly', 'monthly', 'quarterly'];
+
+  function quoteWorkflowMeta(value, dueDate, now = new Date()) {
+    let status = QUOTE_WORKFLOW_STATUSES.includes(value) ? value : 'draft';
+    const due = parseDateOnly(dueDate);
+    const today = parseDateOnly(toLocalDateInput(now));
+    if (due && today && due < today && !['accepted', 'rejected', 'converted'].includes(status)) {
+      status = 'expired';
+    }
+    const metadata = {
+      draft: { label: 'Borrador', tone: 'neutral' },
+      sent: { label: 'Enviada', tone: 'blue' },
+      viewed: { label: 'Vista', tone: 'indigo' },
+      accepted: { label: 'Aceptada', tone: 'green' },
+      rejected: { label: 'Rechazada', tone: 'red' },
+      expired: { label: 'Vencida', tone: 'orange' },
+      converted: { label: 'Convertida', tone: 'green' }
+    };
+    return { status, ...metadata[status] };
+  }
+
+  function calculateCommercialMetrics(items, globalDiscountPct = 0) {
+    const rows = Array.isArray(items) ? items : [];
+    const globalRate = Math.min(100, Math.max(0, toNumber(globalDiscountPct))) / 100;
+    let netSales = 0;
+    let knownCostSales = 0;
+    let totalCost = 0;
+    let coveredRows = 0;
+    let maxLineDiscountPct = 0;
+
+    rows.forEach(item => {
+      const quantity = Math.max(0, toNumber(item && item.qty));
+      const price = Math.max(0, toNumber(item && item.price));
+      const lineDiscountPct = Math.min(100, Math.max(0, toNumber(item && item.discount)));
+      const lineNet = price * quantity * (1 - (lineDiscountPct / 100)) * (1 - globalRate);
+      netSales += lineNet;
+      maxLineDiscountPct = Math.max(maxLineDiscountPct, lineDiscountPct);
+      if (item && item.unitCost !== undefined && item.unitCost !== null && item.unitCost !== '') {
+        const unitCost = Math.max(0, toNumber(item.unitCost));
+        totalCost += unitCost * quantity;
+        knownCostSales += lineNet;
+        coveredRows += 1;
+      }
+    });
+
+    const grossProfit = roundMoney(netSales - totalCost);
+    const marginPct = netSales > 0 ? roundMoney((grossProfit / netSales) * 100) : 0;
+    const costCoveragePct = netSales > 0 ? roundMoney((knownCostSales / netSales) * 100) : 0;
+    return {
+      netSales: roundMoney(netSales),
+      totalCost: roundMoney(totalCost),
+      grossProfit,
+      marginPct,
+      costCoveragePct,
+      coveredRows,
+      totalRows: rows.length,
+      globalDiscountPct: roundMoney(globalDiscountPct),
+      maxLineDiscountPct: roundMoney(maxLineDiscountPct),
+      maxDiscountPct: roundMoney(Math.max(toNumber(globalDiscountPct), maxLineDiscountPct))
+    };
+  }
+
+  function commercialApprovalReasons(metrics, policy) {
+    const source = metrics || {};
+    const rules = policy || {};
+    const reasons = [];
+    const maxDiscountPct = Math.max(0, toNumber(rules.maxOperatorDiscountPct, 10));
+    const minimumMarginPct = Math.max(0, toNumber(rules.minimumMarginPct, 15));
+    const minimumCoveragePct = Math.min(100, Math.max(0, toNumber(rules.minimumCostCoveragePct, 80)));
+    if (toNumber(source.maxDiscountPct) > maxDiscountPct) {
+      reasons.push(`Descuento de ${roundMoney(source.maxDiscountPct)}% supera el máximo operativo de ${maxDiscountPct}%`);
+    }
+    if (toNumber(source.costCoveragePct) >= minimumCoveragePct && toNumber(source.marginPct) < minimumMarginPct) {
+      reasons.push(`Margen de ${roundMoney(source.marginPct)}% queda por debajo del mínimo de ${minimumMarginPct}%`);
+    }
+    return reasons;
+  }
+
+  function nextRecurringDate(value, frequency) {
+    const current = parseDateOnly(value);
+    if (!current || !RECURRING_FREQUENCIES.includes(frequency) || frequency === 'none') return '';
+    const next = new Date(current.getTime());
+    if (frequency === 'weekly') next.setDate(next.getDate() + 7);
+    if (frequency === 'monthly' || frequency === 'quarterly') {
+      const originalDay = next.getDate();
+      const monthsToAdd = frequency === 'monthly' ? 1 : 3;
+      next.setDate(1);
+      next.setMonth(next.getMonth() + monthsToAdd);
+      const lastDay = new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate();
+      next.setDate(Math.min(originalDay, lastDay));
+    }
+    return toLocalDateInput(next);
+  }
+
+  function stableCommercialFingerprint(documentData) {
+    const data = documentData || {};
+    const source = JSON.stringify({
+      docType: data.docType || '',
+      clientId: data.clientId || '',
+      clientName: data.clientName || '',
+      dueDate: data.dueDate || '',
+      discountPct: roundMoney(data.discountPct),
+      items: (Array.isArray(data.items) ? data.items : []).map(item => ({
+        productId: item.productId || 'custom',
+        description: item.description || '',
+        price: roundMoney(item.price),
+        qty: roundMoney(item.qty),
+        discount: roundMoney(item.discount),
+        unitCost: item.unitCost === undefined ? null : roundMoney(item.unitCost)
+      }))
+    });
+    let hash = 2166136261;
+    for (let index = 0; index < source.length; index += 1) {
+      hash ^= source.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0).toString(36);
+  }
+
   return {
     NCF_TYPES,
     SUPPORTED_COMPANY_CODES,
@@ -524,6 +644,13 @@
     classify607Invoice,
     build607Record,
     build606Record,
-    build608Record
+    build608Record,
+    QUOTE_WORKFLOW_STATUSES,
+    RECURRING_FREQUENCIES,
+    quoteWorkflowMeta,
+    calculateCommercialMetrics,
+    commercialApprovalReasons,
+    nextRecurringDate,
+    stableCommercialFingerprint
   };
 });

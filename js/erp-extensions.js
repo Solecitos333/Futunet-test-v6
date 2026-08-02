@@ -35,7 +35,7 @@ window.ERPExtensions = (function () {
   }
   function notify(message, type) {
     const container = document.getElementById('toast-container');
-    if (!container) { alert(message); return; }
+    if (!container) { console.warn(message); return; }
     const toast = document.createElement('div');
     toast.className = `erp-extension-toast is-${type || 'success'}`;
     toast.textContent = message;
@@ -119,7 +119,7 @@ window.ERPExtensions = (function () {
       const stats = document.getElementById('erp-receivable-stats');
       if (stats) stats.innerHTML = [statCard('0-30 días', money(balances.current), 'blue'), statCard('31-60 días', money(balances.mid), 'orange'), statCard('61-90 días', money(balances.late), 'orange'), statCard('+90 días', money(balances.critical), 'orange')].join('');
       if (!rows.length) { body.innerHTML = '<tr><td colspan="8" class="erp-empty-state">No hay cuentas por cobrar pendientes.</td></tr>'; refreshIcons(); return; }
-      body.innerHTML = rows.map(item => `<tr><td><strong>${escapeHTML(item.invoiceNumber)}</strong><small>${escapeHTML(item.ncf || 'Sin NCF')}</small></td><td>${escapeHTML(item.clientName)}</td><td>${escapeHTML(formatDate(item.dueDate))}</td><td><span class="erp-status is-${item.ageDays > 60 ? 'pending' : 'reconciled'}">${escapeHTML(item.bucket)}</span></td><td>${escapeHTML(money(item.total))}</td><td>${escapeHTML(money(item.paidAmount))}</td><td><strong>${escapeHTML(money(item.balance))}</strong></td><td><button class="table-btn table-btn-primary" type="button" onclick="ERPBilling.viewInvoice('${escapeHTML(item.id)}')">Ver / cobrar</button></td></tr>`).join('');
+      body.innerHTML = rows.map(item => `<tr><td><strong>${escapeHTML(item.invoiceNumber)}</strong><small>${escapeHTML(item.ncf || 'Sin NCF')}</small></td><td>${escapeHTML(item.clientName)}</td><td>${escapeHTML(formatDate(item.dueDate))}</td><td><span class="erp-status is-${item.ageDays > 60 ? 'pending' : 'reconciled'}">${escapeHTML(item.bucket)}</span></td><td>${escapeHTML(money(item.total))}</td><td>${escapeHTML(money(item.paidAmount))}</td><td><strong>${escapeHTML(money(item.balance))}</strong></td><td><div class="table-actions"><button class="table-btn table-btn-primary" type="button" data-erp-click="ERPBilling.viewInvoice('${escapeHTML(item.id)}')">Ver / cobrar</button><button class="table-btn table-btn-secondary" type="button" data-erp-click="ERPBillingWorkflows.openReminderDialog('${escapeHTML(item.id)}')">Recordar</button></div></td></tr>`).join('');
       refreshIcons();
     } catch (error) {
       if (body) body.innerHTML = `<tr><td colspan="8" class="erp-empty-state is-error">${escapeHTML(error.message)}</td></tr>`;
@@ -167,7 +167,7 @@ window.ERPExtensions = (function () {
         <td>${escapeHTML(money(item.total))}</td>
         <td>${escapeHTML(formatDate(item.dueDate))}</td>
         <td><span class="erp-status is-${item.status}">${item.status === 'paid' ? 'Pagada' : 'Pendiente'}</span></td>
-        <td>${item.status === 'pending' ? `<button class="table-btn table-btn-primary" type="button" onclick="ERPExtensions.markPurchasePaid('${escapeHTML(item.id)}')">Marcar pagada</button>` : '—'}</td>
+        <td>${item.status === 'pending' ? `<button class="table-btn table-btn-primary" type="button" data-erp-click="ERPExtensions.markPurchasePaid('${escapeHTML(item.id)}')">Marcar pagada</button>` : '—'}</td>
       </tr>`).join('');
     refreshIcons();
   }
@@ -273,7 +273,10 @@ window.ERPExtensions = (function () {
   }
 
   async function markPurchasePaid(id) {
-    if (!confirm('¿Confirmas que esta cuenta por pagar fue saldada?')) return;
+    if (!await window.ERPBilling.confirmAction('¿Confirmas que esta cuenta por pagar fue saldada?', {
+      title: 'Saldar cuenta por pagar',
+      confirmLabel: 'Marcar pagada'
+    })) return;
     try {
       await db().collection(`${prefix}_purchases`).doc(id).update({
         status: 'paid', paymentDate: localDate(), paidAt: serverTime(), updatedAt: serverTime(), updatedBy: user.uid
@@ -350,7 +353,7 @@ window.ERPExtensions = (function () {
     if (!bankMovements.length) { body.innerHTML = '<tr><td colspan="7" class="erp-empty-state">No hay movimientos bancarios.</td></tr>'; return; }
     body.innerHTML = bankMovements.map(item => {
       const incomeMovement = isBankIncome(item.type);
-      return `<tr><td>${escapeHTML(formatDate(item.date))}</td><td>${escapeHTML(item.account)}</td><td><strong>${escapeHTML(item.reference)}</strong><small>${escapeHTML(item.description)}</small></td><td>${incomeMovement ? escapeHTML(money(item.amount)) : '—'}</td><td>${!incomeMovement ? escapeHTML(money(item.amount)) : '—'}</td><td><span class="erp-status is-${item.status}">${item.status === 'reconciled' ? 'Conciliado' : 'Pendiente'}</span></td><td>${item.status !== 'reconciled' ? `<button class="table-btn table-btn-primary" type="button" onclick="ERPExtensions.reconcileBankMovement('${escapeHTML(item.id)}')">Conciliar</button>` : '—'}</td></tr>`;
+      return `<tr><td>${escapeHTML(formatDate(item.date))}</td><td>${escapeHTML(item.account)}</td><td><strong>${escapeHTML(item.reference)}</strong><small>${escapeHTML(item.description)}</small></td><td>${incomeMovement ? escapeHTML(money(item.amount)) : '—'}</td><td>${!incomeMovement ? escapeHTML(money(item.amount)) : '—'}</td><td><span class="erp-status is-${item.status}">${item.status === 'reconciled' ? 'Conciliado' : 'Pendiente'}</span></td><td>${item.status !== 'reconciled' ? `<button class="table-btn table-btn-primary" type="button" data-erp-click="ERPExtensions.reconcileBankMovement('${escapeHTML(item.id)}')">Conciliar</button>` : '—'}</td></tr>`;
     }).join('');
   }
 
@@ -382,7 +385,10 @@ window.ERPExtensions = (function () {
   }
 
   async function reconcileBankMovement(id) {
-    if (!confirm('¿Marcar este movimiento como conciliado con el estado bancario?')) return;
+    if (!await window.ERPBilling.confirmAction('¿Marcar este movimiento como conciliado con el estado bancario?', {
+      title: 'Conciliar movimiento',
+      confirmLabel: 'Conciliar'
+    })) return;
     try {
       await db().collection(`${prefix}_bank_movements`).doc(id).update({
         status: 'reconciled', reconciledAt: serverTime(), reconciledBy: user.uid, updatedAt: serverTime()

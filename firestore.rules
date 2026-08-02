@@ -359,6 +359,15 @@ service cloud.firestore {
              request.resource.data.createdAt == resource.data.createdAt;
     }
 
+    function preservesAcceptedQuoteContent() {
+      return !('workflowStatus' in resource.data) || resource.data.workflowStatus != 'accepted' ||
+             (request.resource.data.workflowStatus in ['accepted', 'converted'] &&
+              request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                'status', 'workflowStatus', 'convertedTo', 'convertedAt',
+                'publicShareToken', 'publicShareUrl', 'sharedAt', 'updatedBy', 'updatedAt'
+              ]));
+    }
+
     function isValidBillingPayment() {
       let data = request.resource.data;
       return data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 150 &&
@@ -684,6 +693,81 @@ service cloud.firestore {
              get(/databases/$(database)/documents/financing_profiles/$(data.userId)).data.status == 'approved';
     }
 
+    function isValidBillingDraft(companyCode) {
+      let data = request.resource.data;
+      return data.ownerId == request.auth.uid && data.companyCode == companyCode &&
+             data.formType == 'invoice-editor' && data.data is map && data.updatedAt == request.time;
+    }
+
+    function isValidDocumentEvent(companyCode) {
+      let data = request.resource.data;
+      return data.companyCode == companyCode && data.documentId is string && data.documentId.size() <= 180 &&
+             data.action is string && data.action.size() > 0 && data.action.size() <= 100 &&
+             data.summary is string && data.summary.size() <= 1000 && data.metadata is map &&
+             data.userId == request.auth.uid && data.userEmail == request.auth.token.email && data.timestamp == request.time;
+    }
+
+    function isValidApprovalRequest(companyCode) {
+      let data = request.resource.data;
+      return data.companyCode == companyCode && data.fingerprint is string && data.fingerprint.size() <= 30 &&
+             data.requestedBy == request.auth.uid && data.requestedByEmail == request.auth.token.email &&
+             data.clientName is string && data.clientName.size() <= 150 && data.docType in ['invoice', 'quote', 'proforma'] &&
+             data.total is number && data.total > 0 && data.reasons is list && data.reasons.size() > 0 && data.reasons.size() <= 10 &&
+             data.metrics is map && data.documentSnapshot is map && data.status == 'pending' &&
+             data.requestedAt == request.time && data.updatedAt == request.time;
+    }
+
+    function isApprovalReviewOnly() {
+      return resource.data.status == 'pending' && request.resource.data.status in ['approved', 'rejected'] &&
+             request.resource.data.reviewedBy == request.auth.uid && request.resource.data.reviewedAt == request.time &&
+             request.resource.data.reviewReason is string && request.resource.data.reviewReason.size() > 0 && request.resource.data.reviewReason.size() <= 500 &&
+             request.resource.data.updatedAt == request.time &&
+             request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'reviewedBy', 'reviewedAt', 'reviewReason', 'updatedAt']);
+    }
+
+    function isValidCollectionReminder(companyCode) {
+      let data = request.resource.data;
+      return data.companyCode == companyCode && data.invoiceId is string && data.invoiceId.size() > 0 && data.invoiceId.size() <= 180 &&
+             data.invoiceNumber is string && data.invoiceNumber.size() <= 50 && data.clientId is string && data.clientId.size() <= 180 &&
+             data.clientName is string && data.clientName.size() <= 150 && data.scheduledFor.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
+             data.channel in ['whatsapp', 'email', 'phone'] && data.note is string && data.note.size() <= 300 &&
+             data.status in ['scheduled', 'prepared', 'completed'] && data.createdBy is string && data.createdBy.size() > 0;
+    }
+
+    function isValidBillingTemplate(companyCode) {
+      let data = request.resource.data;
+      return data.companyCode == companyCode && data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.frequency in ['none', 'weekly', 'monthly', 'quarterly'] && data.nextRunDate is string && data.nextRunDate.size() <= 10 &&
+             data.active is bool && data.snapshot is map && data.createdBy is string && data.createdBy.size() > 0;
+    }
+
+    function isValidPublicQuoteCreate(companyCode) {
+      let data = request.resource.data;
+      return data.companyCode == companyCode && data.sourceDocumentId is string && data.sourceDocumentId.size() > 0 &&
+             data.invoiceNumber is string && data.invoiceNumber.size() > 0 && data.invoiceNumber.size() <= 50 &&
+             data.docType in ['quote', 'proforma'] && data.issuer is map && data.clientName is string && data.clientName.size() <= 150 &&
+             data.clientDocumentMasked is string && data.clientDocumentMasked.size() <= 30 && data.items is list && data.items.size() > 0 && data.items.size() <= 200 &&
+             data.subtotal is number && data.itbis is number && data.total is number && data.total > 0 &&
+             data.responseStatus in ['pending', 'viewed', 'accepted', 'rejected'] && data.createdBy == request.auth.uid;
+    }
+
+    function isValidPublicQuoteResponse() {
+      let data = request.resource.data;
+      return resource.data.responseStatus in ['pending', 'viewed'] && data.updatedAt == request.time && (
+        (data.responseStatus == 'viewed' && data.viewedAt == request.time &&
+         data.diff(resource.data).affectedKeys().hasOnly(['responseStatus', 'viewedAt', 'updatedAt'])) ||
+        (data.responseStatus in ['accepted', 'rejected'] && data.signerName is string && data.signerName.size() >= 3 && data.signerName.size() <= 120 &&
+         data.responseNote is string && data.responseNote.size() <= 500 && data.acceptedTerms == true && data.respondedAt == request.time &&
+         data.diff(resource.data).affectedKeys().hasOnly(['responseStatus', 'signerName', 'responseNote', 'acceptedTerms', 'respondedAt', 'updatedAt']))
+      );
+    }
+
+    function preservesFinalPublicQuoteResponse() {
+      return (resource.data.responseStatus != 'accepted' && resource.data.responseStatus != 'rejected') ||
+             (request.resource.data.responseStatus == resource.data.responseStatus &&
+              request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt']));
+    }
+
     // ─── USERS Collection ───
     match /users/{userId} {
       // Logged-in users can read their own data, admins/editors can read all (if email verified)
@@ -926,7 +1010,7 @@ service cloud.firestore {
                          existsAfter(/databases/$(database)/documents/creaticos_ncf_registry/$(request.resource.data.ncf)) &&
                          getAfter(/databases/$(database)/documents/creaticos_ncf_registry/$(request.resource.data.ncf)).data.invoiceId == invoiceId
                        ));
-      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && hasValidBillingUpdateAudit() && (
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && preservesAcceptedQuoteContent() && hasValidBillingUpdateAudit() && (
         (isCreaticosAdmin() && isCancellationOnlyInvoiceUpdate()) ||
         (isCreaticosAdmin() && isFiscalAdjustmentOnlyInvoiceUpdate() &&
           existsAfter(/databases/$(database)/documents/creaticos_invoices/$(request.resource.data.lastAdjustmentId)) &&
@@ -1038,6 +1122,42 @@ service cloud.firestore {
       allow update: if isCreaticosOperator() && isCashSessionOwner() && isValidCashSessionUpdate();
       allow delete: if false;
     }
+    match /creaticos_billing_drafts/{draftId} {
+      allow get: if isCreaticosOperator() && resource.data.ownerId == request.auth.uid;
+      allow list: if false;
+      allow create, update: if isCreaticosOperator() && isValidBillingDraft('CREATICOS');
+      allow delete: if isCreaticosOperator() && resource.data.ownerId == request.auth.uid;
+    }
+    match /creaticos_document_events/{eventId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && isValidDocumentEvent('CREATICOS');
+      allow update, delete: if false;
+    }
+    match /creaticos_approval_requests/{requestId} {
+      allow read: if isCreaticosAdmin() || (isCreaticosOperator() && resource.data.requestedBy == request.auth.uid);
+      allow create: if isCreaticosOperator() && isValidApprovalRequest('CREATICOS');
+      allow update: if (isCreaticosAdmin() && isApprovalReviewOnly()) ||
+                       (isCreaticosOperator() && resource.data.requestedBy == request.auth.uid && isValidApprovalRequest('CREATICOS'));
+      allow delete: if false;
+    }
+    match /creaticos_collection_reminders/{reminderId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && isValidCollectionReminder('CREATICOS') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isCreaticosOperator() && isValidCollectionReminder('CREATICOS') &&
+                       request.resource.data.createdAt == resource.data.createdAt && request.resource.data.createdBy == resource.data.createdBy &&
+                       request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    match /creaticos_billing_templates/{templateId} {
+      allow read: if isCreaticosOperator();
+      allow create: if isCreaticosOperator() && isValidBillingTemplate('CREATICOS') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isCreaticosOperator() && isValidBillingTemplate('CREATICOS') &&
+                       request.resource.data.createdBy == resource.data.createdBy && request.resource.data.createdAt == resource.data.createdAt &&
+                       request.resource.data.updatedAt == request.time && (resource.data.createdBy == request.auth.uid || isCreaticosAdmin());
+      allow delete: if isCreaticosAdmin() || (isCreaticosOperator() && resource.data.createdBy == request.auth.uid);
+    }
 
     // ─── FUTUNET BILLING Collections ───
     match /futunet_invoices/{invoiceId} {
@@ -1048,7 +1168,7 @@ service cloud.firestore {
                          existsAfter(/databases/$(database)/documents/futunet_ncf_registry/$(request.resource.data.ncf)) &&
                          getAfter(/databases/$(database)/documents/futunet_ncf_registry/$(request.resource.data.ncf)).data.invoiceId == invoiceId
                        ));
-      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && hasValidBillingUpdateAudit() && (
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && preservesAcceptedQuoteContent() && hasValidBillingUpdateAudit() && (
         (isFutunetAdmin() && isCancellationOnlyInvoiceUpdate()) ||
         (isFutunetAdmin() && isFiscalAdjustmentOnlyInvoiceUpdate() &&
           existsAfter(/databases/$(database)/documents/futunet_invoices/$(request.resource.data.lastAdjustmentId)) &&
@@ -1151,12 +1271,48 @@ service cloud.firestore {
       allow update: if isFutunetOperator() && isCashSessionOwner() && isValidCashSessionUpdate();
       allow delete: if false;
     }
+    match /futunet_billing_drafts/{draftId} {
+      allow get: if isFutunetOperator() && resource.data.ownerId == request.auth.uid;
+      allow list: if false;
+      allow create, update: if isFutunetOperator() && isValidBillingDraft('FUTUNETSRL');
+      allow delete: if isFutunetOperator() && resource.data.ownerId == request.auth.uid;
+    }
+    match /futunet_document_events/{eventId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && isValidDocumentEvent('FUTUNETSRL');
+      allow update, delete: if false;
+    }
+    match /futunet_approval_requests/{requestId} {
+      allow read: if isFutunetAdmin() || (isFutunetOperator() && resource.data.requestedBy == request.auth.uid);
+      allow create: if isFutunetOperator() && isValidApprovalRequest('FUTUNETSRL');
+      allow update: if (isFutunetAdmin() && isApprovalReviewOnly()) ||
+                       (isFutunetOperator() && resource.data.requestedBy == request.auth.uid && isValidApprovalRequest('FUTUNETSRL'));
+      allow delete: if false;
+    }
+    match /futunet_collection_reminders/{reminderId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && isValidCollectionReminder('FUTUNETSRL') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isFutunetOperator() && isValidCollectionReminder('FUTUNETSRL') &&
+                       request.resource.data.createdAt == resource.data.createdAt && request.resource.data.createdBy == resource.data.createdBy &&
+                       request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    match /futunet_billing_templates/{templateId} {
+      allow read: if isFutunetOperator();
+      allow create: if isFutunetOperator() && isValidBillingTemplate('FUTUNETSRL') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isFutunetOperator() && isValidBillingTemplate('FUTUNETSRL') &&
+                       request.resource.data.createdBy == resource.data.createdBy && request.resource.data.createdAt == resource.data.createdAt &&
+                       request.resource.data.updatedAt == request.time && (resource.data.createdBy == request.auth.uid || isFutunetAdmin());
+      allow delete: if isFutunetAdmin() || (isFutunetOperator() && resource.data.createdBy == request.auth.uid);
+    }
 
     // ─── PANITAS BILLING Collections ───
     match /panitas_invoices/{invoiceId} {
       allow read: if isPanitasOperator();
       allow create: if isPanitasOperator() && isValidBillingInvoice() && hasValidNewBillingNcf() && hasValidBillingCreateAudit() && request.resource.data.companyCode == 'PANITAS';
-      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && hasValidBillingUpdateAudit() && (
+      allow update: if isValidBillingInvoice() && preservesBillingIdentity() && preservesAcceptedQuoteContent() && hasValidBillingUpdateAudit() && (
         (isPanitasAdmin() && isCancellationOnlyInvoiceUpdate()) ||
         (isPanitasOperator() && resource.data.docType in ['quote', 'proforma']) ||
         (isPanitasOperator() && isPaymentOnlyInvoiceUpdate() &&
@@ -1222,6 +1378,42 @@ service cloud.firestore {
       allow update: if isPanitasOperator() && isCashSessionOwner() && isValidCashSessionUpdate();
       allow delete: if false;
     }
+    match /panitas_billing_drafts/{draftId} {
+      allow get: if isPanitasOperator() && resource.data.ownerId == request.auth.uid;
+      allow list: if false;
+      allow create, update: if isPanitasOperator() && isValidBillingDraft('PANITAS');
+      allow delete: if isPanitasOperator() && resource.data.ownerId == request.auth.uid;
+    }
+    match /panitas_document_events/{eventId} {
+      allow read: if isPanitasOperator();
+      allow create: if isPanitasOperator() && isValidDocumentEvent('PANITAS');
+      allow update, delete: if false;
+    }
+    match /panitas_approval_requests/{requestId} {
+      allow read: if isPanitasAdmin() || (isPanitasOperator() && resource.data.requestedBy == request.auth.uid);
+      allow create: if isPanitasOperator() && isValidApprovalRequest('PANITAS');
+      allow update: if (isPanitasAdmin() && isApprovalReviewOnly()) ||
+                       (isPanitasOperator() && resource.data.requestedBy == request.auth.uid && isValidApprovalRequest('PANITAS'));
+      allow delete: if false;
+    }
+    match /panitas_collection_reminders/{reminderId} {
+      allow read: if isPanitasOperator();
+      allow create: if isPanitasOperator() && isValidCollectionReminder('PANITAS') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isPanitasOperator() && isValidCollectionReminder('PANITAS') &&
+                       request.resource.data.createdAt == resource.data.createdAt && request.resource.data.createdBy == resource.data.createdBy &&
+                       request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    match /panitas_billing_templates/{templateId} {
+      allow read: if isPanitasOperator();
+      allow create: if isPanitasOperator() && isValidBillingTemplate('PANITAS') &&
+                       request.resource.data.createdBy == request.auth.uid && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isPanitasOperator() && isValidBillingTemplate('PANITAS') &&
+                       request.resource.data.createdBy == resource.data.createdBy && request.resource.data.createdAt == resource.data.createdAt &&
+                       request.resource.data.updatedAt == request.time && (resource.data.createdBy == request.auth.uid || isPanitasAdmin());
+      allow delete: if isPanitasAdmin() || (isPanitasOperator() && resource.data.createdBy == request.auth.uid);
+    }
     match /panitas_table_orders/{tableId} {
       allow read: if isPanitasOperator() || isPanitasKitchen();
       allow create: if isPanitasOperator() &&
@@ -1256,6 +1448,27 @@ service cloud.firestore {
       allow create: if (isPanitasOperator() || isPanitasKitchen()) && isValidRestaurantOrderEvent();
       allow update: if false;
       allow delete: if isPanitasAdmin();
+    }
+
+    // Enlaces públicos con token aleatorio para revisar y responder cotizaciones.
+    match /public_quote_links/{token} {
+      allow get: if token.matches('^[a-f0-9]{48}$');
+      allow list: if isCreaticosOperator() || isFutunetOperator() || isPanitasOperator();
+      allow create: if token.matches('^[a-f0-9]{48}$') && (
+        (isCreaticosOperator() && isValidPublicQuoteCreate('CREATICOS')) ||
+        (isFutunetOperator() && isValidPublicQuoteCreate('FUTUNETSRL')) ||
+        (isPanitasOperator() && isValidPublicQuoteCreate('PANITAS'))
+      ) && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if isValidPublicQuoteResponse() || (
+        token.matches('^[a-f0-9]{48}$') && request.resource.data.sourceDocumentId == resource.data.sourceDocumentId &&
+        request.resource.data.createdAt == resource.data.createdAt && request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time && preservesFinalPublicQuoteResponse() && (
+          (isCreaticosOperator() && isValidPublicQuoteCreate('CREATICOS')) ||
+          (isFutunetOperator() && isValidPublicQuoteCreate('FUTUNETSRL')) ||
+          (isPanitasOperator() && isValidPublicQuoteCreate('PANITAS'))
+        )
+      );
+      allow delete: if isCreaticosAdmin() || isFutunetAdmin() || isPanitasAdmin();
     }
 
     // ─── IMMUTABLE AUDIT LOG ───

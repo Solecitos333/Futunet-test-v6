@@ -174,3 +174,32 @@ test('filtra registros por período fiscal válido', () => {
   assert.equal(core.recordBelongsToPeriod({ date: '2026-06-30' }, '2026-07'), false);
   assert.throws(() => core.normalizeFiscalPeriod('07-2026'));
 });
+
+test('calcula margen, cobertura de costos y excepciones comerciales', () => {
+  const metrics = core.calculateCommercialMetrics([
+    { price: 1000, qty: 2, discount: 10, unitCost: 600 },
+    { price: 500, qty: 1, discount: 0, unitCost: 200 }
+  ], 5);
+  assert.equal(metrics.netSales, 2185);
+  assert.equal(metrics.totalCost, 1400);
+  assert.equal(metrics.grossProfit, 785);
+  assert.equal(metrics.marginPct, 35.93);
+  assert.equal(metrics.costCoveragePct, 100);
+  assert.deepEqual(core.commercialApprovalReasons(metrics, {
+    minimumMarginPct: 40,
+    minimumCostCoveragePct: 80,
+    maxOperatorDiscountPct: 8
+  }), [
+    'Descuento de 10% supera el máximo operativo de 8%',
+    'Margen de 35.93% queda por debajo del mínimo de 40%'
+  ]);
+});
+
+test('resuelve el ciclo de cotizaciones y fechas recurrentes', () => {
+  assert.equal(core.quoteWorkflowMeta('sent', '2026-08-01', new Date('2026-08-02T12:00:00')).status, 'expired');
+  assert.equal(core.quoteWorkflowMeta('accepted', '2026-08-01', new Date('2026-08-02T12:00:00')).status, 'accepted');
+  assert.equal(core.nextRecurringDate('2026-01-31', 'monthly'), '2026-02-28');
+  assert.equal(core.nextRecurringDate('2026-08-02', 'weekly'), '2026-08-09');
+  assert.equal(core.stableCommercialFingerprint({ clientId: 'c1', items: [{ description: 'A', qty: 1, price: 10 }] }),
+    core.stableCommercialFingerprint({ clientId: 'c1', items: [{ description: 'A', qty: 1, price: 10 }] }));
+});

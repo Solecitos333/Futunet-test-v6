@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es" data-disable-firebase-persistence="true">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Revisar cotización</title>
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/public-quote.css?v=20260802" />
+</head>
+<body>
+  <main class="quote-shell">
+    <section class="quote-state" id="quote-loading" aria-live="polite">
+      <div class="quote-spinner" aria-hidden="true"></div>
+      <h1>Cargando cotización…</h1>
+      <p>Estamos verificando el enlace seguro.</p>
+    </section>
+
+    <section class="quote-state quote-error" id="quote-error" hidden>
+      <span aria-hidden="true">!</span>
+      <h1>No pudimos abrir la cotización</h1>
+      <p id="quote-error-message">El enlace no es válido o ya no está disponible.</p>
+    </section>
+
+    <article class="quote-document" id="quote-document" hidden>
+      <header class="quote-header">
+        <div>
+          <p class="quote-eyebrow" id="quote-document-type">Cotización</p>
+          <h1 id="quote-company-name">Futunet</h1>
+          <p id="quote-company-details"></p>
+        </div>
+        <div class="quote-number-box">
+          <span>Documento</span><strong id="quote-number">—</strong>
+          <span>Válida hasta</span><strong id="quote-valid-until">—</strong>
+        </div>
+      </header>
+
+      <section class="quote-client-grid">
+        <div><span>Preparada para</span><strong id="quote-client-name">—</strong><small id="quote-client-document"></small></div>
+        <div><span>Fecha</span><strong id="quote-date">—</strong><small id="quote-payment-terms"></small></div>
+      </section>
+
+      <div class="quote-table-scroll">
+        <table class="quote-table">
+          <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio</th><th>ITBIS</th><th>Total</th></tr></thead>
+          <tbody id="quote-items"></tbody>
+        </table>
+      </div>
+
+      <section class="quote-summary">
+        <div id="quote-notes-wrap"><span>Observaciones</span><p id="quote-notes"></p></div>
+        <dl><div><dt>Subtotal</dt><dd id="quote-subtotal">—</dd></div><div><dt>Descuento</dt><dd id="quote-discount">—</dd></div><div><dt>ITBIS</dt><dd id="quote-tax">—</dd></div><div class="is-total"><dt>Total</dt><dd id="quote-total">—</dd></div></dl>
+      </section>
+
+      <section class="quote-response" id="quote-response-form-wrap">
+        <div><p class="quote-eyebrow">Respuesta del cliente</p><h2>Confirma tu decisión</h2><p>Tu nombre y aceptación quedarán registrados junto a esta versión del documento.</p></div>
+        <form id="quote-response-form">
+          <label><span>Nombre de quien responde *</span><input id="quote-signer-name" minlength="3" maxlength="120" required autocomplete="name" /></label>
+          <label><span>Comentario opcional</span><textarea id="quote-response-note" maxlength="500" rows="3"></textarea></label>
+          <label class="quote-terms"><input type="checkbox" id="quote-accept-terms" required /><span>Confirmo que revisé los artículos, precios, condiciones y vigencia de esta cotización.</span></label>
+          <div class="quote-actions"><button type="button" id="quote-reject-button" class="quote-button is-secondary">Rechazar</button><button type="submit" class="quote-button is-primary">Aceptar cotización</button></div>
+        </form>
+      </section>
+
+      <section class="quote-response-result" id="quote-response-result" hidden aria-live="polite"><span id="quote-response-icon">✓</span><div><h2 id="quote-response-title"></h2><p id="quote-response-message"></p></div></section>
+      <footer class="quote-footer"><p>Este enlace es confidencial y fue generado únicamente para revisar este documento.</p><button type="button" id="quote-print-button" class="quote-link-button">Imprimir o guardar PDF</button></footer>
+    </article>
+  </main>
+
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/public-quote.js?v=20260802"></script>
+</body>
+</html>

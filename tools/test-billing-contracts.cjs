@@ -16,6 +16,10 @@ const storageRules = fs.readFileSync(path.join(root, 'storage.rules'), 'utf8');
 const authGuard = fs.readFileSync(path.join(root, 'js', 'auth-guard.js'), 'utf8');
 const billingHtml = fs.readFileSync(path.join(root, 'facturacion.html'), 'utf8');
 const billingCss = fs.readFileSync(path.join(root, 'css', 'facturacion.css'), 'utf8');
+const workflows = fs.readFileSync(path.join(root, 'js', 'billing-workflows.js'), 'utf8');
+const billingEvents = fs.readFileSync(path.join(root, 'js', 'billing-events.js'), 'utf8');
+const publicQuote = fs.readFileSync(path.join(root, 'js', 'public-quote.js'), 'utf8');
+const publicQuoteHtml = fs.readFileSync(path.join(root, 'cotizacion.html'), 'utf8');
 const adminHtml = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
 const adminCss = fs.readFileSync(path.join(root, 'css', 'admin.css'), 'utf8');
 const hosting = JSON.parse(fs.readFileSync(path.join(root, 'firebase.json'), 'utf8'));
@@ -202,4 +206,48 @@ test('los módulos ERP visibles registran compras, banco, alertas y auditoría',
   assert.match(extensions, /function loadReceivables\(\)/);
   assert.match(rules, /match \/creaticos_purchases\/\{purchaseId\}/);
   assert.match(rules, /match \/futunet_bank_movements\/\{movementId\}/);
+});
+
+test('el ciclo comercial conserva borradores, aprobaciones y eventos inmutables', () => {
+  assert.match(billingHtml, /id="panel-commercial"/);
+  assert.match(workflows, /billing_drafts/);
+  assert.match(workflows, /approval_requests/);
+  assert.match(workflows, /document_events/);
+  assert.match(workflows, /authorizeDocument/);
+  assert.match(rules, /match \/creaticos_billing_drafts\/\{draftId\}/);
+  assert.match(rules, /match \/futunet_approval_requests\/\{requestId\}/);
+  assert.match(rules, /match \/creaticos_document_events\/\{eventId\}[\s\S]*?allow update, delete: if false/);
+  assert.match(rules, /preservesAcceptedQuoteContent/);
+});
+
+test('las cotizaciones se comparten con token y respuesta acotada', () => {
+  assert.match(workflows, /crypto\.getRandomValues/);
+  assert.match(workflows, /public_quote_links/);
+  assert.match(publicQuoteHtml, /meta name="robots" content="noindex,nofollow,noarchive"/);
+  assert.match(publicQuote, /responseStatus: status/);
+  assert.match(rules, /token\.matches\('\^\[a-f0-9\]\{48\}\$'\)/);
+  assert.match(rules, /function isValidPublicQuoteResponse/);
+  assert.match(rules, /function preservesFinalPublicQuoteResponse/);
+  assert.match(rules, /request\.resource\.data\.workflowStatus in \['accepted', 'converted'\]/);
+  assert.match(rules, /affectedKeys\(\)\.hasOnly\(\['responseStatus', 'signerName'/);
+});
+
+test('facturación usa paginación de servidor y evita eventos HTML ejecutables', () => {
+  assert.match(billing, /\.limit\(DATA_PAGE_SIZE\)/);
+  assert.match(billing, /\.startAfter\(invoiceHistoryCursor\)/);
+  assert.match(billingHtml, /billing-events\.js/);
+  assert.match(billingEvents, /allowedMethods/);
+  assert.doesNotMatch(billingHtml, /\s(?:onclick|onchange|oninput|onsubmit)=/);
+  assert.doesNotMatch(billing, /\s(?:onclick|onchange|oninput|onsubmit)=/);
+  assert.doesNotMatch(extensions, /\s(?:onclick|onchange|oninput|onsubmit)=/);
+});
+
+test('la cobranza incluye estados de cuenta, recordatorios y recurrencia revisable', () => {
+  assert.match(workflows, /downloadStatement/);
+  assert.match(workflows, /collection_reminders/);
+  assert.match(workflows, /billing_templates/);
+  assert.match(workflows, /nextRecurringDate/);
+  assert.match(billingHtml, /id="commercial-reminders-list"/);
+  assert.match(billingHtml, /id="commercial-stock-suggestions"/);
+  assert.match(billingHtml, /id="commercial-compliance-checks"/);
 });

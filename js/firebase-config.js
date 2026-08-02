@@ -40,14 +40,17 @@
     detail: window.FutunetFirebase
   }));
 
-  // Enable Firestore offline persistence (best-effort)
-  firebase.firestore().enablePersistence({ synchronizeTabs: true }).catch(function (err) {
-    if (err.code === 'failed-precondition') {
-      console.warn('Firestore persistence: multiple tabs open');
-    } else if (err.code === 'unimplemented') {
-      console.warn('Firestore persistence: not supported in this browser');
-    }
-  });
+  // Enable Firestore offline persistence (best-effort). Public bearer-token pages opt out
+  // so confidential quote contents are not retained on shared devices.
+  if (!document.documentElement.hasAttribute('data-disable-firebase-persistence')) {
+    firebase.firestore().enablePersistence({ synchronizeTabs: true }).catch(function (err) {
+      if (err.code === 'failed-precondition') {
+        console.warn('Firestore persistence: multiple tabs open');
+      } else if (err.code === 'unimplemented') {
+        console.warn('Firestore persistence: not supported in this browser');
+      }
+    });
+  }
 
   console.log('%c🔥 Firebase inicializado', 'color: #0B7EB5; font-weight: bold;');
 })();

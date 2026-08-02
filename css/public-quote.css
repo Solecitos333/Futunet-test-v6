@@ -1,0 +1,63 @@
+:root { color-scheme: light; --ink:#142033; --muted:#64748b; --line:#dbe4ee; --primary:#0a70a2; --soft:#f4f8fb; }
+* { box-sizing: border-box; }
+body { background:linear-gradient(160deg,#edf6fb 0%,#f8fafc 46%,#eef2ff 100%); color:var(--ink); font-family:Outfit, sans-serif; margin:0; min-height:100vh; padding:32px 16px; }
+.quote-shell { margin:0 auto; max-width:920px; }
+.quote-state { align-items:center; background:#fff; border:1px solid var(--line); border-radius:22px; box-shadow:0 24px 70px rgba(15,23,42,.1); display:flex; flex-direction:column; margin:10vh auto; max-width:520px; padding:50px 28px; text-align:center; }
+.quote-state h1 { font-family:Space Grotesk,sans-serif; margin:14px 0 6px; }
+.quote-state p { color:var(--muted); margin:0; }
+.quote-spinner { animation:spin .8s linear infinite; border:3px solid #dbeafe; border-top-color:var(--primary); border-radius:50%; height:38px; width:38px; }
+.quote-error>span { align-items:center; background:#fee2e2; border-radius:50%; color:#b91c1c; display:flex; font-size:24px; font-weight:700; height:48px; justify-content:center; width:48px; }
+.quote-document { background:#fff; border:1px solid var(--line); border-radius:24px; box-shadow:0 24px 80px rgba(15,23,42,.12); overflow:hidden; }
+.quote-header { align-items:flex-start; background:linear-gradient(135deg,#0f1e2e,#123f5d); color:#fff; display:flex; gap:30px; justify-content:space-between; padding:38px 42px; }
+.quote-eyebrow { color:#7dd3fc; font-size:12px; font-weight:700; letter-spacing:.12em; margin:0 0 6px; text-transform:uppercase; }
+.quote-header h1 { font-family:Space Grotesk,sans-serif; font-size:30px; margin:0 0 8px; }
+.quote-header p:last-child { color:#cbd5e1; line-height:1.45; margin:0; max-width:530px; }
+.quote-number-box { background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.15); border-radius:14px; min-width:190px; padding:14px 16px; }
+.quote-number-box span,.quote-number-box strong { display:block; }
+.quote-number-box span { color:#bae6fd; font-size:10px; letter-spacing:.08em; margin-top:8px; text-transform:uppercase; }
+.quote-number-box span:first-child { margin-top:0; }
+.quote-number-box strong { margin-top:2px; }
+.quote-client-grid { display:grid; gap:20px; grid-template-columns:2fr 1fr; padding:26px 42px; }
+.quote-client-grid>div { background:var(--soft); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.quote-client-grid span,.quote-client-grid strong,.quote-client-grid small { display:block; }
+.quote-client-grid span { color:var(--muted); font-size:11px; text-transform:uppercase; }
+.quote-client-grid strong { margin-top:4px; }
+.quote-client-grid small { color:var(--muted); margin-top:3px; }
+.quote-table-scroll { overflow-x:auto; padding:0 42px; }
+.quote-table { border-collapse:collapse; min-width:650px; width:100%; }
+.quote-table th { background:#e8f2f8; color:#36566b; font-size:11px; letter-spacing:.04em; padding:10px; text-align:left; text-transform:uppercase; }
+.quote-table td { border-bottom:1px solid var(--line); padding:12px 10px; }
+.quote-table th:not(:first-child),.quote-table td:not(:first-child) { text-align:right; }
+.quote-summary { display:grid; gap:24px; grid-template-columns:1fr 320px; padding:24px 42px 32px; }
+.quote-summary>div { color:var(--muted); font-size:13px; }
+.quote-summary>div span { color:var(--ink); display:block; font-weight:700; margin-bottom:4px; }
+.quote-summary>div p { margin:0; white-space:pre-wrap; }
+.quote-summary dl { margin:0; }
+.quote-summary dl div { display:flex; justify-content:space-between; padding:5px 0; }
+.quote-summary dt { color:var(--muted); }
+.quote-summary dd { font-weight:600; margin:0; }
+.quote-summary .is-total { border-top:2px solid var(--ink); font-size:18px; margin-top:7px; padding-top:10px; }
+.quote-response { background:#f8fafc; border-top:1px solid var(--line); display:grid; gap:34px; grid-template-columns:1fr 1.2fr; padding:34px 42px; }
+.quote-response h2 { font-family:Space Grotesk,sans-serif; margin:0 0 6px; }
+.quote-response>div>p:last-child { color:var(--muted); line-height:1.5; }
+.quote-response form { display:grid; gap:13px; }
+.quote-response label span { display:block; font-size:12px; font-weight:600; margin-bottom:5px; }
+.quote-response input,.quote-response textarea { border:1px solid #cbd5e1; border-radius:10px; font:inherit; padding:10px 11px; width:100%; }
+.quote-terms { align-items:flex-start; display:flex; gap:9px; }
+.quote-terms input { accent-color:var(--primary); margin-top:2px; width:auto; }
+.quote-terms span { color:var(--muted); font-weight:400!important; line-height:1.35; }
+.quote-actions { display:flex; gap:9px; justify-content:flex-end; }
+.quote-button { border:0; border-radius:10px; cursor:pointer; font:600 14px Outfit,sans-serif; padding:11px 15px; }
+.quote-button.is-primary { background:var(--primary); color:#fff; }
+.quote-button.is-secondary { background:#e2e8f0; color:#334155; }
+.quote-button:disabled { cursor:not-allowed; opacity:.55; }
+.quote-response-result { align-items:center; background:#ecfdf5; border-top:1px solid #bbf7d0; display:flex; gap:14px; padding:28px 42px; }
+.quote-response-result>span { align-items:center; background:#22c55e; border-radius:50%; color:#fff; display:flex; font-weight:800; height:38px; justify-content:center; width:38px; }
+.quote-response-result h2 { font-size:18px; margin:0; }
+.quote-response-result p { color:#4b5563; margin:3px 0 0; }
+.quote-footer { align-items:center; border-top:1px solid var(--line); color:var(--muted); display:flex; font-size:12px; justify-content:space-between; padding:18px 42px; }
+.quote-link-button { background:none; border:0; color:var(--primary); cursor:pointer; font:600 12px Outfit,sans-serif; }
+[hidden] { display:none!important; }
+@keyframes spin { to { transform:rotate(360deg); } }
+@media(max-width:700px){ body{padding:0}.quote-document{border:0;border-radius:0}.quote-header,.quote-response{grid-template-columns:1fr}.quote-header{flex-direction:column;padding:28px 22px}.quote-number-box{width:100%}.quote-client-grid,.quote-summary{grid-template-columns:1fr;padding:20px 22px}.quote-table-scroll{padding:0 22px}.quote-response{padding:28px 22px}.quote-footer{align-items:flex-start;flex-direction:column;gap:8px;padding:18px 22px} }
+@media print { body{background:#fff;padding:0}.quote-document{border:0;box-shadow:none}.quote-response,.quote-footer{display:none}.quote-header{background:#fff;color:#111;padding:20px}.quote-header p:last-child,.quote-eyebrow{color:#444}.quote-number-box{border-color:#aaa}.quote-number-box span{color:#444} }

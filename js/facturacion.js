@@ -165,6 +165,84 @@ window.ERPBilling = (function () {
     }, 3000);
   }
 
+  function actionDialog(options) {
+    const config = options || {};
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'erp-action-dialog is-open';
+      overlay.setAttribute('role', 'presentation');
+      overlay.innerHTML = `
+        <section class="erp-action-dialog-card" role="dialog" aria-modal="true" aria-labelledby="erp-action-dialog-title">
+          <div class="erp-action-dialog-icon" aria-hidden="true">${config.tone === 'danger' ? '!' : '?'}</div>
+          <h2 id="erp-action-dialog-title"></h2>
+          <p class="erp-action-dialog-message"></p>
+          <label class="erp-action-dialog-input-wrap" hidden>
+            <span></span>
+            <input class="form-input" type="text" maxlength="500" />
+          </label>
+          <div class="erp-action-dialog-actions">
+            <button type="button" class="admin-btn admin-btn-ghost" data-dialog-cancel>Cancelar</button>
+            <button type="button" class="admin-btn admin-btn-primary" data-dialog-confirm>Confirmar</button>
+          </div>
+        </section>`;
+      const title = overlay.querySelector('h2');
+      const message = overlay.querySelector('.erp-action-dialog-message');
+      const inputWrap = overlay.querySelector('.erp-action-dialog-input-wrap');
+      const input = overlay.querySelector('input');
+      const confirmButton = overlay.querySelector('[data-dialog-confirm]');
+      const cancelButton = overlay.querySelector('[data-dialog-cancel]');
+      title.textContent = config.title || 'Confirmar acción';
+      message.textContent = config.message || '';
+      confirmButton.textContent = config.confirmLabel || 'Confirmar';
+      if (config.tone === 'danger') confirmButton.classList.add('is-danger');
+      if (config.input) {
+        inputWrap.hidden = false;
+        inputWrap.querySelector('span').textContent = config.inputLabel || 'Información requerida';
+        input.value = config.defaultValue || '';
+        input.placeholder = config.placeholder || '';
+      }
+      const finish = value => {
+        document.removeEventListener('keydown', onKeydown, true);
+        overlay.remove();
+        resolve(value);
+      };
+      const confirm = () => {
+        if (config.input && config.required && !input.value.trim()) {
+          input.setCustomValidity(config.requiredMessage || 'Completa este campo.');
+          input.reportValidity();
+          return;
+        }
+        finish(config.input ? input.value.trim() : true);
+      };
+      const onKeydown = event => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          finish(config.input ? null : false);
+        }
+        if (event.key === 'Enter' && (!config.input || event.target === input)) {
+          event.preventDefault();
+          confirm();
+        }
+      };
+      confirmButton.addEventListener('click', confirm);
+      cancelButton.addEventListener('click', () => finish(config.input ? null : false));
+      overlay.addEventListener('click', event => {
+        if (event.target === overlay) finish(config.input ? null : false);
+      });
+      document.addEventListener('keydown', onKeydown, true);
+      document.body.appendChild(overlay);
+      setTimeout(() => (config.input ? input : confirmButton).focus(), 0);
+    });
+  }
+
+  function confirmAction(message, options = {}) {
+    return actionDialog({ ...options, message, input: false });
+  }
+
+  function promptAction(message, options = {}) {
+    return actionDialog({ ...options, message, input: true });
+  }
+
   // System State Caches
   let settings = null;
   let activeCashSession = null;
@@ -175,6 +253,13 @@ window.ERPBilling = (function () {
   let futunetProducts = [];
   let payments = [];
   let refunds = [];
+  const DATA_PAGE_SIZE = 500;
+  const PAYMENT_PAGE_SIZE = 1000;
+  const DIRECTORY_CACHE_LIMIT = 2000;
+  let invoiceHistoryCursor = null;
+  let paymentHistoryCursor = null;
+  let hasMoreInvoiceHistory = false;
+  let hasMorePaymentHistory = false;
   
   let currentInvoiceItems = [];
   let dashboardChart = null;
@@ -260,7 +345,7 @@ window.ERPBilling = (function () {
       }
     } catch (err) {
       console.error('Error initializing ERP Billing:', err);
-      alert('Error al inicializar la base de datos de facturación: ' + err.message);
+      showToast('Error al inicializar la facturación: ' + err.message, 'danger');
     }
   }
 
@@ -344,9 +429,9 @@ window.ERPBilling = (function () {
       posCategoriesList.style.display = (isCreaticos || isPanitas) ? 'flex' : 'none';
       if (isPanitas) {
         posCategoriesList.innerHTML = `
-          <button type="button" class="pos-category-btn is-active" id="pos-cat-all" onclick="ERPBilling.filterPosCategory('all')">Todos</button>
-          <button type="button" class="pos-category-btn" id="pos-cat-comida" onclick="ERPBilling.filterPosCategory('comida')">Comida</button>
-          <button type="button" class="pos-category-btn" id="pos-cat-bebidas" onclick="ERPBilling.filterPosCategory('bebidas')">Bebidas</button>
+          <button type="button" class="pos-category-btn is-active" id="pos-cat-all" data-erp-click="ERPBilling.filterPosCategory('all')">Todos</button>
+          <button type="button" class="pos-category-btn" id="pos-cat-comida" data-erp-click="ERPBilling.filterPosCategory('comida')">Comida</button>
+          <button type="button" class="pos-category-btn" id="pos-cat-bebidas" data-erp-click="ERPBilling.filterPosCategory('bebidas')">Bebidas</button>
         `;
       }
     }
@@ -479,6 +564,12 @@ window.ERPBilling = (function () {
       if (settings.nextQuoteNum === undefined) settings.nextQuoteNum = 1001;
       if (settings.proformaPrefix === undefined) settings.proformaPrefix = 'PROF-';
       if (settings.nextProformaNum === undefined) settings.nextProformaNum = 1001;
+      if (settings.quoteValidityDays === undefined) settings.quoteValidityDays = 15;
+      if (settings.minimumMarginPct === undefined) settings.minimumMarginPct = 15;
+      if (settings.minimumCostCoveragePct === undefined) settings.minimumCostCoveragePct = 80;
+      if (settings.maxOperatorDiscountPct === undefined) settings.maxOperatorDiscountPct = 10;
+      if (settings.commercialApprovalEnabled === undefined) settings.commercialApprovalEnabled = true;
+      if (settings.collectionReminderDays === undefined) settings.collectionReminderDays = 3;
       if (settings.ncfB14Prefix === undefined) settings.ncfB14Prefix = 'B14';
       if (settings.ncfB14Seq === undefined) settings.ncfB14Seq = 1;
       if (settings.ncfB15Prefix === undefined) settings.ncfB15Prefix = 'B15';
@@ -763,11 +854,13 @@ window.ERPBilling = (function () {
       const productCollections = isPanitas
         ? [collectionProducts]
         : (isCreaticos ? ['creaticos_products', 'products'] : ['products']);
+      const invoiceQuery = database.collection(collectionInvoices).orderBy('createdAt', 'desc').limit(DATA_PAGE_SIZE);
+      const paymentQuery = database.collection(collectionPayments).orderBy('timestamp', 'desc').limit(PAYMENT_PAGE_SIZE);
       const [clientsSnap, productSnapshots, invoicesSnap, paymentsSnap, refundsSnap] = await Promise.all([
-        database.collection(collectionClients).get(),
-        Promise.all(productCollections.map(name => database.collection(name).get())),
-        database.collection(collectionInvoices).orderBy('createdAt', 'desc').get(),
-        database.collection(collectionPayments).orderBy('timestamp', 'desc').get(),
+        database.collection(collectionClients).limit(DIRECTORY_CACHE_LIMIT).get(),
+        Promise.all(productCollections.map(name => database.collection(name).limit(DIRECTORY_CACHE_LIMIT).get())),
+        invoiceQuery.get(),
+        paymentQuery.get(),
         database.collection(collectionRefunds).orderBy('timestamp', 'desc').limit(2000).get()
       ]);
 
@@ -775,6 +868,10 @@ window.ERPBilling = (function () {
       invoices = invoicesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       payments = paymentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       refunds = refundsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      invoiceHistoryCursor = invoicesSnap.docs[invoicesSnap.docs.length - 1] || null;
+      paymentHistoryCursor = paymentsSnap.docs[paymentsSnap.docs.length - 1] || null;
+      hasMoreInvoiceHistory = invoicesSnap.size === DATA_PAGE_SIZE;
+      hasMorePaymentHistory = paymentsSnap.size === PAYMENT_PAGE_SIZE;
 
       if (isPanitas) {
         products = productSnapshots[0].docs.map(doc => ({ id: doc.id, ...doc.data(), _isCreaticos: false }));
@@ -799,6 +896,59 @@ window.ERPBilling = (function () {
         const body = document.getElementById(id);
         if (body) body.innerHTML = '';
       });
+    }
+  }
+
+  async function loadMoreBillingHistory() {
+    if (!hasMoreInvoiceHistory && !hasMorePaymentHistory) {
+      showToast('Ya se cargó todo el historial disponible.', 'info');
+      return;
+    }
+    const loadButton = document.getElementById('btn-load-more-invoices');
+    if (loadButton) loadButton.disabled = true;
+    try {
+      const database = getDB();
+      const tasks = [];
+      if (hasMoreInvoiceHistory && invoiceHistoryCursor) {
+        tasks.push(database.collection(collectionInvoices)
+          .orderBy('createdAt', 'desc')
+          .startAfter(invoiceHistoryCursor)
+          .limit(DATA_PAGE_SIZE)
+          .get()
+          .then(snapshot => {
+            const existing = new Set(invoices.map(item => item.id));
+            snapshot.docs.forEach(doc => {
+              if (!existing.has(doc.id)) invoices.push({ id: doc.id, ...doc.data() });
+            });
+            invoiceHistoryCursor = snapshot.docs[snapshot.docs.length - 1] || invoiceHistoryCursor;
+            hasMoreInvoiceHistory = snapshot.size === DATA_PAGE_SIZE;
+          }));
+      }
+      if (hasMorePaymentHistory && paymentHistoryCursor) {
+        tasks.push(database.collection(collectionPayments)
+          .orderBy('timestamp', 'desc')
+          .startAfter(paymentHistoryCursor)
+          .limit(PAYMENT_PAGE_SIZE)
+          .get()
+          .then(snapshot => {
+            const existing = new Set(payments.map(item => item.id));
+            snapshot.docs.forEach(doc => {
+              if (!existing.has(doc.id)) payments.push({ id: doc.id, ...doc.data() });
+            });
+            paymentHistoryCursor = snapshot.docs[snapshot.docs.length - 1] || paymentHistoryCursor;
+            hasMorePaymentHistory = snapshot.size === PAYMENT_PAGE_SIZE;
+          }));
+      }
+      await Promise.all(tasks);
+      renderInvoicesTable();
+      initDashboard();
+      if (window.ERPBillingWorkflows) window.ERPBillingWorkflows.refreshKpis();
+      showToast('Se agregó el siguiente bloque del historial.', 'success');
+    } catch (error) {
+      console.error('Unable to load additional billing history', error);
+      showToast('No se pudo cargar el historial anterior.', 'danger');
+    } finally {
+      if (loadButton) loadButton.disabled = false;
     }
   }
 
@@ -995,14 +1145,14 @@ window.ERPBilling = (function () {
               sugBox.style.border = '1px solid rgba(16, 185, 129, 0.2)';
               sugBox.style.color = '#10b981';
               sugBox.innerHTML = `💡 DGII: ${escapeHTML(fullName)} <span style="text-decoration:underline;margin-left:5px;color:var(--primary);">[Haga clic aquí para autocompletar]</span>`;
-              sugBox.onclick = function() {
+              sugBox.addEventListener('click', function() {
                 const nameEl = document.getElementById(cfg.nameId);
                 const idEl = document.getElementById(cfg.idId);
                 if (nameEl) nameEl.value = fullName;
                 if (idEl) idEl.value = 'custom';
                 rncEl.value = data.cedula_rnc || rncEl.value;
                 sugBox.style.display = 'none';
-              };
+              });
             } else {
               sugBox.style.background = 'rgba(239, 68, 68, 0.1)';
               sugBox.style.border = '1px solid rgba(239, 68, 68, 0.2)';
@@ -1154,7 +1304,7 @@ window.ERPBilling = (function () {
       recent.forEach(inv => {
         const tr = document.createElement('tr');
         tr.style.cursor = 'pointer';
-        tr.onclick = () => viewInvoice(inv.id);
+        tr.addEventListener('click', () => viewInvoice(inv.id));
         tr.innerHTML = `
           <td><strong>${escapeHTML(inv.invoiceNumber)}</strong></td>
           <td>${escapeHTML(inv.clientName)}</td>
@@ -1464,9 +1614,11 @@ window.ERPBilling = (function () {
       
       let statusBadge = '';
       if (inv.docType === 'quote') {
-        statusBadge = '<span class="admin-badge" style="background:#e0f2fe; color:#0369a1; border: 1px solid #bae6fd;">Cotización</span>';
+        const workflow = BillingCore.quoteWorkflowMeta(inv.workflowStatus, inv.validUntil || inv.dueDate);
+        statusBadge = `<span class="admin-badge commercial-status is-${workflow.tone}">${escapeHTML(workflow.label)}</span>`;
       } else if (inv.docType === 'proforma') {
-        statusBadge = '<span class="admin-badge" style="background:#fef3c7; color:#d97706; border: 1px solid #fde68a;">Proforma</span>';
+        const workflow = BillingCore.quoteWorkflowMeta(inv.workflowStatus, inv.validUntil || inv.dueDate);
+        statusBadge = `<span class="admin-badge commercial-status is-${workflow.tone}">${escapeHTML(workflow.label)}</span>`;
       } else if (inv.docType === 'credit_note') {
         statusBadge = '<span class="admin-badge badge-credit">Nota de crédito</span>';
       } else if (inv.docType === 'debit_note') {
@@ -1493,42 +1645,51 @@ window.ERPBilling = (function () {
 
       let actionsHtml = `
         <div class="table-actions">
-          <button class="table-btn table-btn-primary" title="Ver Detalle" onclick="ERPBilling.viewInvoice('${inv.id}')">
+          <button class="table-btn table-btn-primary" title="Ver Detalle" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
-          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" onclick="ERPBilling.printInvoiceDirectly('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" data-erp-click="ERPBilling.printInvoiceDirectly('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          </button>
+          <button class="table-btn table-btn-secondary" title="Duplicar documento" data-erp-click="ERPBilling.duplicateDocument('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          </button>
+          <button class="table-btn table-btn-secondary" title="Historial del documento" data-erp-click="ERPBillingWorkflows.openHistoryDialog('${inv.id}')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>
           </button>
       `;
 
       if (inv.status !== 'cancelled' && inv.status !== 'converted' && !isFiscalAdjustment(inv)) {
-        const canEdit = inv.docType === 'quote' || inv.docType === 'proforma' ||
+        const canEdit = ((inv.docType === 'quote' || inv.docType === 'proforma') && !['accepted', 'converted'].includes(inv.workflowStatus)) ||
           (inv.docType === 'invoice' && !inv.ncf && Number(inv.paidAmount || 0) === 0);
         if (canEdit) actionsHtml += `
-          <button class="table-btn table-btn-secondary" title="Editar" onclick="ERPBilling.editQuote('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Editar" data-erp-click="ERPBilling.editQuote('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
           </button>
         `;
 
         if (inv.docType === 'quote' || inv.docType === 'proforma') {
           actionsHtml += `
-            <button class="table-btn table-btn-success" title="Convertir a Factura" onclick="ERPBilling.convertQuoteFromList('${inv.id}')">
+            <button class="table-btn table-btn-secondary" title="Compartir y solicitar aceptación" data-erp-click="ERPBillingWorkflows.openShareDialog('${inv.id}')">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
+            </button>
+            <button class="table-btn table-btn-success" title="Convertir a Factura" data-erp-click="ERPBilling.convertQuoteFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           `;
         } else if (inv.docType === 'invoice' && balance > 0) {
           actionsHtml += `
-            <button class="table-btn table-btn-success" title="Registrar Cobro" onclick="ERPBilling.openRegisterPaymentFromList('${inv.id}')">
+            <button class="table-btn table-btn-success" title="Registrar Cobro" data-erp-click="ERPBilling.openRegisterPaymentFromList('${inv.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
             </button>
           `;
         }
 
         if (isUserAdmin && inv.docType === 'invoice') actionsHtml += `
-          <button class="table-btn table-btn-secondary" title="Crear nota de crédito o débito" onclick="ERPBilling.openFiscalAdjustment('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Crear nota de crédito o débito" data-erp-click="ERPBilling.openFiscalAdjustment('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
           </button>
-          <button class="table-btn table-btn-danger" title="Anular Factura" onclick="ERPBilling.cancelInvoice('${inv.id}')">
+          <button class="table-btn table-btn-danger" title="Anular Factura" data-erp-click="ERPBilling.cancelInvoice('${inv.id}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
         `;
@@ -1563,22 +1724,25 @@ window.ERPBilling = (function () {
       <button class="pagination-btn" id="btn-page-prev" ${invoiceCurrentPage === 1 ? 'disabled' : ''}>Anterior</button>
       <span style="font-size: 0.85rem; font-weight: 500; color:var(--text-muted);">Pág. ${invoiceCurrentPage} de ${totalPages}</span>
       <button class="pagination-btn" id="btn-page-next" ${invoiceCurrentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
+      ${hasMoreInvoiceHistory || hasMorePaymentHistory ? '<button class="pagination-btn pagination-load-more" id="btn-load-more-invoices" type="button">Cargar historial anterior</button>' : ''}
     `;
 
     container.appendChild(div);
 
-    document.getElementById('btn-page-prev').onclick = () => {
+    document.getElementById('btn-page-prev').addEventListener('click', () => {
       if (invoiceCurrentPage > 1) {
         invoiceCurrentPage--;
         renderInvoicesTable();
       }
-    };
-    document.getElementById('btn-page-next').onclick = () => {
+    });
+    document.getElementById('btn-page-next').addEventListener('click', () => {
       if (invoiceCurrentPage < totalPages) {
         invoiceCurrentPage++;
         renderInvoicesTable();
       }
-    };
+    });
+    const loadMoreButton = document.getElementById('btn-load-more-invoices');
+    if (loadMoreButton) loadMoreButton.addEventListener('click', loadMoreBillingHistory);
   }
 
   // Reset form helper
@@ -1692,26 +1856,27 @@ window.ERPBilling = (function () {
     tr.innerHTML = `
       <td>
         <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
-          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." oninput="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
+          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." data-erp-input="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
           <input type="hidden" class="row-product-id" value="${itemData ? itemData.productId : 'custom'}" />
+          <input type="hidden" class="row-cost" value="${itemData && itemData.unitCost != null ? escapeAttr(String(itemData.unitCost)) : ''}" />
           <div class="autocomplete-dropdown row-autocomplete-list" style="display:none; position:absolute; left:0; right:0; z-index:100; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px;"></div>
         </div>
       </td>
       <td>
-        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required oninput="ERPBilling.handleRowPriceQtyChange(this)" />
+        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required oninput="ERPBilling.handleRowPriceQtyChange(this)" />
+        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" oninput="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
+        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" data-erp-input="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
       </td>
       <td>
-        <input type="number" class="form-input row-discount" min="0" max="100" value="${itemData && itemData.discount ? itemData.discount : '0'}" oninput="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />
+        <input type="number" class="form-input row-discount" min="0" max="100" value="${itemData && itemData.discount ? itemData.discount : '0'}" data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />
       </td>
       <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">RD$ 0.00</td>
       <td>
-        <button type="button" class="table-btn table-btn-danger" title="Quitar Fila" onclick="ERPBilling.deleteInvoiceFormItemRow('${rowId}')">
+        <button type="button" class="table-btn table-btn-danger" title="Quitar Fila" data-erp-click="ERPBilling.deleteInvoiceFormItemRow('${rowId}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       </td>
@@ -1793,14 +1958,16 @@ window.ERPBilling = (function () {
 
       item.textContent = `${pName} (${formatMoney(pPrice)}) - ${srcLabel}${codeLabel}`;
       
-      item.onclick = () => {
+      item.addEventListener('click', () => {
         input.value = pName;
         idInput.value = p._src + '_' + p.id;
         
         const priceInput = tr.querySelector('.row-price');
         const taxInput = tr.querySelector('.row-tax');
+        const costInput = tr.querySelector('.row-cost');
 
         if (priceInput) priceInput.value = pPrice.toFixed(2);
+        if (costInput) costInput.value = p.cost != null && Number.isFinite(Number(p.cost)) ? Number(p.cost).toFixed(2) : '';
         if (taxInput) {
           const productTaxPercent = (p.tax !== undefined) ? Number(p.tax) : 18;
           const qty = Number(tr.querySelector('.row-qty').value) || 1;
@@ -1811,7 +1978,7 @@ window.ERPBilling = (function () {
 
         listEl.style.display = 'none';
         calculateInvoiceFormTotals();
-      };
+      });
       listEl.appendChild(item);
     });
 
@@ -1824,10 +1991,10 @@ window.ERPBilling = (function () {
     customItem.style.fontWeight = '600';
     customItem.style.color = 'var(--text-muted)';
     customItem.textContent = `✏️ Usar concepto temporal: "${val}"`;
-    customItem.onclick = () => {
+    customItem.addEventListener('click', () => {
       idInput.value = 'custom';
       listEl.style.display = 'none';
-    };
+    });
     listEl.appendChild(customItem);
 
     if (!isUserAdmin) return;
@@ -1840,7 +2007,7 @@ window.ERPBilling = (function () {
     createItem.style.fontWeight = '600';
     createItem.style.color = 'var(--primary)';
     createItem.textContent = `➕ Crear nuevo producto: "${val}"`;
-    createItem.onclick = () => {
+    createItem.addEventListener('click', () => {
       listEl.style.display = 'none';
       localStorage.setItem('redirect_product_invoice_row', rowId);
       localStorage.setItem('redirect_product_invoice_name', val);
@@ -1853,7 +2020,7 @@ window.ERPBilling = (function () {
       if (formNameInput) {
         formNameInput.value = val;
       }
-    };
+    });
     listEl.appendChild(createItem);
   }
 
@@ -1875,6 +2042,7 @@ window.ERPBilling = (function () {
         price,
         qty,
         discount: discountPct,
+        unitCost: tr.querySelector('.row-cost') ? tr.querySelector('.row-cost').value : '',
         tax: lineItbis,
         taxMode: taxInput && taxInput.dataset.override === 'true' ? 'amount' : 'rate',
         taxRate: taxInput ? Number(taxInput.dataset.percent) || 0 : 0
@@ -1898,6 +2066,9 @@ window.ERPBilling = (function () {
     if (discountEl) discountEl.textContent = formatMoney(calculated.discountAmount);
     if (itbisEl) itbisEl.textContent = formatMoney(calculated.itbis);
     if (totalEl) totalEl.textContent = formatMoney(calculated.total);
+    if (window.ERPBillingWorkflows) {
+      window.ERPBillingWorkflows.updateFormCommercialMetrics(rawItems, globalDiscountPct);
+    }
   }
 
   // Client Auto-Complete Dropdown Search
@@ -1924,10 +2095,10 @@ window.ERPBilling = (function () {
       dgiiItem.style.fontWeight = 'bold';
       dgiiItem.style.color = 'var(--primary)';
       dgiiItem.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> 🔍 Consultar RNC "${cleanVal}" en DGII</span>`;
-      dgiiItem.onclick = function() {
+      dgiiItem.addEventListener('click', function() {
         dropdown.style.display = 'none';
         searchClientByRnc(cleanVal, 'invoice-form');
-      };
+      });
       dropdown.appendChild(dgiiItem);
     }
 
@@ -1938,22 +2109,22 @@ window.ERPBilling = (function () {
       item.style.fontWeight = 'bold';
       item.style.color = 'var(--primary)';
       item.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="16" x2="22" y1="11" y2="11"/></svg> + Registrar "${escapeHTML(val)}" como nuevo cliente</span>`;
-      item.onclick = function() {
+      item.addEventListener('click', function() {
         dropdown.style.display = 'none';
         openNewClientForm(val);
-      };
+      });
       dropdown.appendChild(item);
     } else {
       filtered.forEach(c => {
         const item = document.createElement('div');
         item.className = 'autocomplete-item';
         item.textContent = `${c.name} ${c.rnc ? `(RNC: ${c.rnc})` : ''}`;
-        item.onclick = function() {
+        item.addEventListener('click', function() {
           document.getElementById('form-invoice-client-name').value = c.name;
           document.getElementById('form-invoice-client-id').value = c.id;
           document.getElementById('form-invoice-client-rnc').value = c.rnc || 'No registrado';
           dropdown.style.display = 'none';
-        };
+        });
         dropdown.appendChild(item);
       });
     }
@@ -1987,6 +2158,9 @@ window.ERPBilling = (function () {
   // Submit and Save Invoice
   async function saveInvoice(e) {
     e.preventDefault();
+    let savedDocumentId = editingInvoiceId || '';
+    const wasEditing = Boolean(editingInvoiceId);
+    const savedConversionSourceId = conversionSourceId || '';
     const submitButton = e.submitter || document.querySelector('#invoice-editor-form button[type="submit"]');
     if (submitButton && submitButton.disabled) return;
     const originalButtonText = submitButton ? submitButton.textContent : '';
@@ -2003,7 +2177,7 @@ window.ERPBilling = (function () {
     const clientRnc = document.getElementById('form-invoice-client-rnc').value.trim();
     
     if (!clientName) {
-      alert('Por favor, introduzca el nombre del cliente.');
+      showToast('Por favor, introduce el nombre del cliente.', 'warning');
       return;
     }
     if (!clientId) {
@@ -2039,7 +2213,7 @@ window.ERPBilling = (function () {
     const tbody = document.getElementById('invoice-form-items-body');
     const rows = tbody.querySelectorAll('tr');
     if (rows.length === 0) {
-      alert('Debes agregar al menos un ítem a la factura.');
+      showToast('Debes agregar al menos un ítem al documento.', 'warning');
       return;
     }
 
@@ -2056,6 +2230,8 @@ window.ERPBilling = (function () {
       const price = Number(tr.querySelector('.row-price').value);
       const qty = Number(tr.querySelector('.row-qty').value);
       const lineTax = Number(tr.querySelector('.row-tax').value);
+      const unitCostInput = tr.querySelector('.row-cost');
+      const unitCost = unitCostInput && unitCostInput.value !== '' ? Number(unitCostInput.value) : null;
       
       const discountInput = tr.querySelector('.row-discount');
       const discountPct = discountInput ? Number(discountInput.value) : 0;
@@ -2065,7 +2241,8 @@ window.ERPBilling = (function () {
         return;
       }
       if (!Number.isFinite(price) || price < 0 || !Number.isFinite(qty) || qty <= 0 ||
-          !Number.isFinite(lineTax) || lineTax < 0 || !Number.isFinite(discountPct) || discountPct < 0 || discountPct > 100) {
+          !Number.isFinite(lineTax) || lineTax < 0 || !Number.isFinite(discountPct) || discountPct < 0 || discountPct > 100 ||
+          (unitCost !== null && (!Number.isFinite(unitCost) || unitCost < 0))) {
         showToast('Revisa precio, cantidad, ITBIS y descuento de cada artículo.', 'danger');
         return;
       }
@@ -2083,6 +2260,7 @@ window.ERPBilling = (function () {
         taxMode: tr.querySelector('.row-tax').dataset.override === 'true' ? 'amount' : 'rate',
         taxRate: Number(tr.querySelector('.row-tax').dataset.percent) || 0,
         discount: discountPct,
+        unitCost,
         total: lineSub - lineDiscount + lineTax
       });
 
@@ -2128,6 +2306,10 @@ window.ERPBilling = (function () {
         const origDocType = originalDoc.docType || originalDoc.type || docType;
         if (origDocType !== docType) {
           showToast('El tipo de un documento existente no puede cambiarse. Usa la opción Convertir.', 'danger');
+          return;
+        }
+        if (['accepted', 'converted'].includes(originalDoc.workflowStatus)) {
+          showToast('Una cotización aceptada o convertida está bloqueada. Duplica el documento para crear una nueva versión comercial.', 'warning');
           return;
         }
         if (originalDoc.docType === 'invoice' && (originalDoc.inventoryPostedAt || originalDoc.ncf || Number(originalDoc.paidAmount || 0) > 0)) {
@@ -2197,6 +2379,14 @@ window.ERPBilling = (function () {
       status: status || 'quote',
       paymentTerms: paymentTerms || 'Contado',
       notes: invoiceNotes || '',
+      workflowStatus: docType === 'quote' || docType === 'proforma'
+        ? ((editingInvoiceId && invoices.find(item => item.id === editingInvoiceId)?.workflowStatus) || 'draft')
+        : 'issued',
+      validUntil: dueDate || '',
+      version: editingInvoiceId
+        ? Number(invoices.find(item => item.id === editingInvoiceId)?.version || 1) + 1
+        : 1,
+      commercialMetrics: BillingCore.calculateCommercialMetrics(items, globalDiscountPct),
       updatedBy: userUid,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
@@ -2204,6 +2394,12 @@ window.ERPBilling = (function () {
       if (invoiceData[k] === undefined) delete invoiceData[k];
     });
     if (conversionSourceId) invoiceData.sourceDocumentId = conversionSourceId;
+
+    if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.authorizeDocument === 'function') {
+      const authorization = await window.ERPBillingWorkflows.authorizeDocument(invoiceData);
+      if (!authorization || authorization.allowed !== true) return;
+      if (authorization.approvalId) invoiceData.commercialApprovalId = authorization.approvalId;
+    }
 
     if (editingInvoiceId) {
       // Save updates to Firestore
@@ -2214,6 +2410,8 @@ window.ERPBilling = (function () {
       const settingsDocRef = dbRef.collection(collectionSettings).doc('general');
       const invoicesCollRef = dbRef.collection(collectionInvoices);
       const conversionSourceRef = conversionSourceId ? invoicesCollRef.doc(conversionSourceId) : null;
+      const newInvoiceDocRef = invoicesCollRef.doc();
+      savedDocumentId = newInvoiceDocRef.id;
 
       await dbRef.runTransaction(async (transaction) => {
         const settingsDoc = await transaction.get(settingsDocRef);
@@ -2307,7 +2505,6 @@ window.ERPBilling = (function () {
         }
 
         // Perform writes in the transaction
-        const newInvoiceDocRef = invoicesCollRef.doc();
         transaction.set(newInvoiceDocRef, invoiceData);
         if (ncfRegistryRef) {
           transaction.set(ncfRegistryRef, {
@@ -2335,6 +2532,7 @@ window.ERPBilling = (function () {
         if (conversionSourceRef) {
           transaction.update(conversionSourceRef, {
             status: 'converted',
+            workflowStatus: 'converted',
             convertedTo: newInvoiceDocRef.id,
             convertedAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedBy: currentUser.uid,
@@ -2355,6 +2553,14 @@ window.ERPBilling = (function () {
     switchSubTab('invoices', 'list');
     renderInvoicesTable();
     showToast('Documento guardado correctamente.', 'success');
+    document.dispatchEvent(new CustomEvent('erp:invoice-saved', {
+      detail: { id: savedDocumentId, docType, action: wasEditing ? 'updated' : 'created' }
+    }));
+    if (savedConversionSourceId) {
+      document.dispatchEvent(new CustomEvent('erp:document-event', {
+        detail: { documentId: savedConversionSourceId, action: 'quote_converted', summary: `Documento convertido en la factura ${invoiceData.invoiceNumber || savedDocumentId}.`, metadata: { convertedTo: savedDocumentId } }
+      }));
+    }
     } catch (error) {
       console.error('Error saving invoice:', error);
       showToast('No se pudo guardar el documento: ' + error.message, 'danger');
@@ -2369,7 +2575,7 @@ window.ERPBilling = (function () {
   // Cancel/Anular Invoice
   async function cancelInvoice(id, number) {
     if (!isUserAdmin) {
-      alert('No tienes permisos (Admin) para anular facturas.');
+      showToast('No tienes permisos de administrador para anular facturas.', 'danger');
       return;
     }
     const invoice = invoices.find(i => i.id === id);
@@ -2379,12 +2585,16 @@ window.ERPBilling = (function () {
       return;
     }
     let actualNumber = number || invoice.invoiceNumber || 'desconocida';
-    if (!confirm(`¿Está seguro de que desea ANULAR la factura ${actualNumber}? Esta acción no se puede deshacer y registrará una auditoría.`)) {
+    if (!await confirmAction(`¿Deseas anular la factura ${actualNumber}? Se registrará en la auditoría y no podrá revertirse.`, {
+      title: 'Anular factura',
+      confirmLabel: 'Anular factura',
+      tone: 'danger'
+    })) {
       return;
     }
-    const cancellationTypeInput = window.prompt(
-      'Tipo de anulación 608:\n01 Deterioro\n02 Error de impresión\n03 Impresión defectuosa\n04 Corrección de información\n05 Cambio de productos\n06 Devolución\n07 Omisión de productos\n08 Error secuencia NCF\n09 Cese de operaciones\n10 Pérdida/hurto de talonarios',
-      '04'
+    const cancellationTypeInput = await promptAction(
+      'Indica el código de anulación 608 (01 al 10).',
+      { title: 'Motivo fiscal de anulación', inputLabel: 'Código', defaultValue: '04', required: true, confirmLabel: 'Continuar' }
     );
     if (cancellationTypeInput === null) return;
     const cancellationType = String(cancellationTypeInput).replace(/\D/g, '').padStart(2, '0');
@@ -2458,9 +2668,11 @@ window.ERPBilling = (function () {
 
       await fetchAllData();
       renderInvoicesTable();
+      showToast('Factura anulada y registrada en auditoría.', 'success');
+      document.dispatchEvent(new CustomEvent('erp:document-event', { detail: { documentId: id, action: 'invoice_cancelled', summary: `Factura ${actualNumber} anulada.` } }));
     } catch (err) {
       console.error(err);
-      alert('Error al anular la factura: ' + err.message);
+      showToast('Error al anular la factura: ' + err.message, 'danger');
     }
   }
 
@@ -2740,6 +2952,7 @@ window.ERPBilling = (function () {
       await fetchAllData();
       renderInvoicesTable();
       showToast('Ajuste fiscal emitido y vinculado correctamente.', 'success');
+      document.dispatchEvent(new CustomEvent('erp:document-event', { detail: { documentId: invoiceId, action: 'fiscal_adjustment_issued', summary: `Ajuste fiscal emitido por ${formatMoney(amount)}.` } }));
     } catch (error) {
       console.error('Fiscal adjustment error:', error);
       showToast(error.message || 'No se pudo emitir el ajuste fiscal.', 'danger');
@@ -2827,15 +3040,13 @@ window.ERPBilling = (function () {
       statusEl.classList.add('badge-converted');
       statusEl.textContent = 'Convertida';
     } else if (inv.docType === 'quote') {
-      statusEl.style.background = '#e0f2fe';
-      statusEl.style.color = '#0369a1';
-      statusEl.style.border = '1px solid #bae6fd';
-      statusEl.textContent = 'Cotización';
+      const workflow = BillingCore.quoteWorkflowMeta(inv.workflowStatus, inv.validUntil || inv.dueDate);
+      statusEl.classList.add('commercial-status', `is-${workflow.tone}`);
+      statusEl.textContent = workflow.label;
     } else if (inv.docType === 'proforma') {
-      statusEl.style.background = '#fef3c7';
-      statusEl.style.color = '#d97706';
-      statusEl.style.border = '1px solid #fde68a';
-      statusEl.textContent = 'Proforma';
+      const workflow = BillingCore.quoteWorkflowMeta(inv.workflowStatus, inv.validUntil || inv.dueDate);
+      statusEl.classList.add('commercial-status', `is-${workflow.tone}`);
+      statusEl.textContent = workflow.label;
     } else if (inv.status === 'paid') {
       statusEl.classList.add('badge-paid');
       statusEl.textContent = 'Pagada';
@@ -2917,6 +3128,24 @@ window.ERPBilling = (function () {
     // Set Payment and Convert Buttons Actions
     const payBtn = document.getElementById('btn-view-register-payment');
     const convertBtn = document.getElementById('btn-view-convert-invoice');
+    const commercialResponse = document.getElementById('view-commercial-response');
+    if (commercialResponse) {
+      const isCommercialDocument = inv.docType === 'quote' || inv.docType === 'proforma';
+      commercialResponse.hidden = !isCommercialDocument;
+      if (isCommercialDocument) {
+        const workflow = BillingCore.quoteWorkflowMeta(inv.workflowStatus, inv.validUntil || inv.dueDate);
+        document.getElementById('view-commercial-response-title').textContent = `${workflow.label} · versión ${Number(inv.version || 1)}`;
+        document.getElementById('view-commercial-response-detail').textContent = inv.clientResponseName
+          ? `Respondida por ${inv.clientResponseName}${inv.clientResponseNote ? ` · ${inv.clientResponseNote}` : ''}`
+          : `Válida hasta ${formatDate(inv.validUntil || inv.dueDate)}.`;
+        const shareButton = document.getElementById('view-commercial-share-button');
+        const historyButton = document.getElementById('view-commercial-history-button');
+        shareButton.replaceWith(shareButton.cloneNode(true));
+        historyButton.replaceWith(historyButton.cloneNode(true));
+        document.getElementById('view-commercial-share-button').addEventListener('click', () => window.ERPBillingWorkflows.openShareDialog(inv.id));
+        document.getElementById('view-commercial-history-button').addEventListener('click', () => window.ERPBillingWorkflows.openHistoryDialog(inv.id));
+      }
+    }
     
     if (inv.docType === 'quote' || inv.docType === 'proforma') {
       payBtn.style.display = 'none';
@@ -2968,7 +3197,7 @@ window.ERPBilling = (function () {
     const notes = document.getElementById('form-payment-notes').value.trim();
 
     if (!Number.isFinite(amount) || amount <= 0) {
-      alert('El monto debe ser superior a cero.');
+      showToast('El monto debe ser superior a cero.', 'warning');
       return;
     }
     if (!['Efectivo', 'Tarjeta', 'Transferencia', 'Cheque'].includes(method)) {
@@ -3043,9 +3272,11 @@ window.ERPBilling = (function () {
       
       // Update details view
       viewInvoice(invoiceId);
+      showToast('Cobro registrado correctamente.', 'success');
+      document.dispatchEvent(new CustomEvent('erp:document-event', { detail: { documentId: invoiceId, action: 'payment_registered', summary: `Cobro de ${formatMoney(amount)} por ${method}.` } }));
     } catch (err) {
       console.error(err);
-      alert('No se pudo registrar el cobro: ' + err.message);
+      showToast('No se pudo registrar el cobro: ' + err.message, 'danger');
     }
   }
 
@@ -3084,13 +3315,13 @@ window.ERPBilling = (function () {
         <td>${c.address ? escapeHTML(c.address) : '—'}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-secondary" title="Ver Perfil" onclick="ERPBilling.viewClientProfile('${c.id}')" style="color: var(--primary);">
+            <button class="table-btn table-btn-secondary" title="Ver Perfil" data-erp-click="ERPBilling.viewClientProfile('${c.id}')" style="color: var(--primary);">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             </button>
-            <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditClientForm('${c.id}')">
+            <button class="table-btn table-btn-primary" title="Editar" data-erp-click="ERPBilling.openEditClientForm('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" onclick="ERPBilling.deleteClient('${c.id}')">
+            <button class="table-btn table-btn-danger" title="Eliminar" data-erp-click="ERPBilling.deleteClient('${c.id}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -3189,7 +3420,7 @@ window.ERPBilling = (function () {
           <td style="color:${balance > 0 ? '#ef4444' : 'inherit'}; font-weight:600;">${escapeHTML(formatMoney(balance))}</td>
           <td><span class="admin-badge ${statusClass}">${statusText}</span></td>
           <td>
-            <button class="table-btn table-btn-secondary" title="Ver Factura" onclick="ERPBilling.viewInvoice('${inv.id}')">
+            <button class="table-btn table-btn-secondary" title="Ver Factura" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             </button>
           </td>
@@ -3227,7 +3458,7 @@ window.ERPBilling = (function () {
               <td>${escapeHTML(formatMoney(item.price))}</td>
               <td>${escapeHTML(formatMoney(item.total || (item.price * item.qty)))}</td>
               <td>${escapeHTML(formatDate(inv.date))}</td>
-              <td><span style="cursor:pointer; color:var(--primary); text-decoration:underline;" onclick="ERPBilling.viewInvoice('${inv.id}')">${escapeHTML(inv.invoiceNumber)}</span></td>
+              <td><span style="cursor:pointer; color:var(--primary); text-decoration:underline;" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">${escapeHTML(inv.invoiceNumber)}</span></td>
             `;
             creditBody.appendChild(tr);
           });
@@ -3351,7 +3582,7 @@ window.ERPBilling = (function () {
 
   async function deleteClient(id, name) {
     if (!isUserAdmin) {
-      alert('No tienes permisos (Admin) para eliminar clientes.');
+      showToast('No tienes permisos de administrador para eliminar clientes.', 'danger');
       return;
     }
     let actualName = name;
@@ -3359,7 +3590,11 @@ window.ERPBilling = (function () {
       const client = clients.find(c => c.id === id);
       actualName = client ? client.name : 'desconocido';
     }
-    if (!confirm(`¿Está seguro de que desea eliminar al cliente "${actualName}"? Las facturas asociadas seguirán existiendo.`)) {
+    if (!await confirmAction(`¿Deseas eliminar al cliente "${actualName}"? Las facturas asociadas se conservarán.`, {
+      title: 'Eliminar cliente',
+      confirmLabel: 'Eliminar',
+      tone: 'danger'
+    })) {
       return;
     }
 
@@ -3369,7 +3604,7 @@ window.ERPBilling = (function () {
       renderClientsTable();
     } catch (e) {
       console.error(e);
-      alert('Error al eliminar cliente de la base de datos.');
+      showToast('No se pudo eliminar el cliente.', 'danger');
     }
   }
 
@@ -3431,10 +3666,10 @@ window.ERPBilling = (function () {
       }
 
       const productActions = isUserAdmin ? `
-            <button class="table-btn table-btn-primary" title="Editar" onclick="ERPBilling.openEditProductForm('${escapeAttr(p.id)}', ${isCreaticosVal})">
+            <button class="table-btn table-btn-primary" title="Editar" data-erp-click="ERPBilling.openEditProductForm('${escapeAttr(p.id)}', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Archivar" onclick="ERPBilling.deleteProduct('${escapeAttr(p.id)}', '', ${isCreaticosVal})">
+            <button class="table-btn table-btn-danger" title="Archivar" data-erp-click="ERPBilling.deleteProduct('${escapeAttr(p.id)}', '', ${isCreaticosVal})">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>` : '<span class="admin-readonly-label">Solo lectura</span>';
 
@@ -3485,6 +3720,7 @@ window.ERPBilling = (function () {
     document.getElementById('form-product-name').value = '';
     document.getElementById('form-product-description').value = '';
     document.getElementById('form-product-price').value = '';
+    document.getElementById('form-product-cost').value = '';
     document.getElementById('form-product-tax').value = settings.defaultTax.toString();
     
     document.getElementById('form-product-sku').value = '';
@@ -3501,6 +3737,7 @@ window.ERPBilling = (function () {
     }
     
     document.getElementById('form-product-stock').value = '0';
+    document.getElementById('form-product-reorder-point').value = '5';
     document.getElementById('form-product-category').value = 'Otros';
 
     handleModalSourceChange();
@@ -3526,6 +3763,7 @@ window.ERPBilling = (function () {
     document.getElementById('form-product-name').value = p.name || p.title || '';
     document.getElementById('form-product-description').value = p.description || p.desc || '';
     document.getElementById('form-product-price').value = p.price;
+    document.getElementById('form-product-cost').value = p.cost != null ? p.cost : '';
     
     document.getElementById('form-product-sku').value = p.sku || '';
     document.getElementById('form-product-reference').value = p.reference || p.ref || '';
@@ -3541,6 +3779,7 @@ window.ERPBilling = (function () {
       document.getElementById('form-product-tax').value = (p.tax !== undefined) ? p.tax.toString() : '18';
     } else {
       document.getElementById('form-product-stock').value = p.stock != null ? p.stock : '0';
+      document.getElementById('form-product-reorder-point').value = p.reorderPoint != null ? p.reorderPoint : '5';
       document.getElementById('form-product-category').value = p.category || 'Otros';
     }
 
@@ -3564,6 +3803,11 @@ window.ERPBilling = (function () {
     const skuVal = document.getElementById('form-product-sku').value.trim();
     const referenceVal = document.getElementById('form-product-reference').value.trim();
     const barcodeVal = document.getElementById('form-product-barcode').value.trim();
+    const costVal = Number(document.getElementById('form-product-cost').value || 0);
+    if (!Number.isFinite(costVal) || costVal < 0) {
+      showToast('El costo unitario debe ser un número válido.', 'danger');
+      return;
+    }
 
     try {
       if (isCreaticos) {
@@ -3576,6 +3820,7 @@ window.ERPBilling = (function () {
           name: document.getElementById('form-product-name').value.trim(),
           description: document.getElementById('form-product-description').value.trim(),
           price: priceValue,
+          cost: costVal,
           tax: taxValue,
           sku: skuVal,
           reference: referenceVal,
@@ -3592,8 +3837,9 @@ window.ERPBilling = (function () {
         const descVal = document.getElementById('form-product-description').value.trim();
         const priceVal = Number(document.getElementById('form-product-price').value);
         const stockVal = Number(document.getElementById('form-product-stock').value);
+        const reorderPointVal = Number(document.getElementById('form-product-reorder-point').value || 0);
         const categoryVal = document.getElementById('form-product-category').value;
-        if (!Number.isFinite(priceVal) || priceVal < 0 || !Number.isInteger(stockVal) || stockVal < 0) {
+        if (!Number.isFinite(priceVal) || priceVal < 0 || !Number.isInteger(stockVal) || stockVal < 0 || !Number.isInteger(reorderPointVal) || reorderPointVal < 0) {
           throw new Error('El precio o el inventario del producto no es válido.');
         }
 
@@ -3601,7 +3847,9 @@ window.ERPBilling = (function () {
           title: nameVal,
           desc: descVal,
           price: priceVal,
+          cost: costVal,
           stock: stockVal,
+          reorderPoint: reorderPointVal,
           category: categoryVal,
           department: categoryVal.toLowerCase(),
           condition: 'Nuevo',
@@ -3672,13 +3920,13 @@ window.ERPBilling = (function () {
       renderProductsTable();
     } catch (err) {
       console.error(err);
-      alert('Error al guardar el producto en la base de datos: ' + err.message);
+      showToast('Error al guardar el producto: ' + err.message, 'danger');
     }
   }
 
   async function deleteProduct(id, name, isCreaticos) {
     if (!isUserAdmin) {
-      alert('No tienes permisos (Admin) para archivar ítems.');
+      showToast('No tienes permisos de administrador para archivar ítems.', 'danger');
       return;
     }
     let actualName = name;
@@ -3687,7 +3935,11 @@ window.ERPBilling = (function () {
       const prod = list.find(p => p.id === id);
       actualName = prod ? (prod.name || prod.title) : 'desconocido';
     }
-    if (!confirm(`¿Está seguro de que desea archivar el ítem "${actualName}"? Dejará de aparecer en ventas, pero se conservará su historial.`)) {
+    if (!await confirmAction(`¿Deseas archivar el ítem "${actualName}"? Dejará de aparecer en ventas y conservará su historial.`, {
+      title: 'Archivar ítem',
+      confirmLabel: 'Archivar',
+      tone: 'danger'
+    })) {
       return;
     }
 
@@ -3703,7 +3955,7 @@ window.ERPBilling = (function () {
       renderProductsTable();
     } catch (e) {
       console.error(e);
-      alert('Error al archivar el ítem: ' + e.message);
+      showToast('Error al archivar el ítem: ' + e.message, 'danger');
     }
   }
 
@@ -3744,6 +3996,19 @@ window.ERPBilling = (function () {
     
     document.getElementById('set-proforma-prefix').value = settings.proformaPrefix || 'PROF-';
     document.getElementById('set-proforma-seq').value = settings.nextProformaNum || 1001;
+    const commercialFields = {
+      'set-quote-validity-days': settings.quoteValidityDays || 15,
+      'set-minimum-margin': settings.minimumMarginPct == null ? 15 : settings.minimumMarginPct,
+      'set-cost-coverage': settings.minimumCostCoveragePct == null ? 80 : settings.minimumCostCoveragePct,
+      'set-max-operator-discount': settings.maxOperatorDiscountPct == null ? 10 : settings.maxOperatorDiscountPct,
+      'set-collection-reminder-days': settings.collectionReminderDays == null ? 3 : settings.collectionReminderDays
+    };
+    Object.entries(commercialFields).forEach(([id, value]) => {
+      const input = document.getElementById(id);
+      if (input) input.value = value;
+    });
+    const approvalInput = document.getElementById('set-commercial-approval-enabled');
+    if (approvalInput) approvalInput.checked = settings.commercialApprovalEnabled !== false;
 
     const restaurantTablesInput = document.getElementById('set-restaurant-tables');
     if (restaurantTablesInput) {
@@ -3763,7 +4028,7 @@ window.ERPBilling = (function () {
     e.preventDefault();
 
     if (!isUserAdmin) {
-      alert('No tienes permisos (Admin) para guardar configuraciones.');
+      showToast('No tienes permisos de administrador para guardar configuraciones.', 'danger');
       return;
     }
 
@@ -3811,6 +4076,13 @@ window.ERPBilling = (function () {
       proformaPrefix: document.getElementById('set-proforma-prefix').value.trim(),
       nextProformaNum: Number(document.getElementById('set-proforma-seq').value) || 1001,
 
+      quoteValidityDays: Number(document.getElementById('set-quote-validity-days').value) || 15,
+      minimumMarginPct: Number(document.getElementById('set-minimum-margin').value),
+      minimumCostCoveragePct: Number(document.getElementById('set-cost-coverage').value),
+      maxOperatorDiscountPct: Number(document.getElementById('set-max-operator-discount').value),
+      collectionReminderDays: Number(document.getElementById('set-collection-reminder-days').value) || 3,
+      commercialApprovalEnabled: document.getElementById('set-commercial-approval-enabled').checked,
+
       ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
       ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
       ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
@@ -3840,7 +4112,12 @@ window.ERPBilling = (function () {
       updated[fields.sequence] >= updated[fields.start] &&
       updated[fields.sequence] <= updated[fields.end]
     );
-    if (!prefixesAreValid || !sequencesAreValid || !rangesAreValid || ![0, 16, 18].includes(rawDefaultTax)) {
+    const commercialRulesAreValid = Number.isInteger(updated.quoteValidityDays) && updated.quoteValidityDays >= 1 && updated.quoteValidityDays <= 365 &&
+      Number.isFinite(updated.minimumMarginPct) && updated.minimumMarginPct >= 0 && updated.minimumMarginPct <= 100 &&
+      Number.isFinite(updated.minimumCostCoveragePct) && updated.minimumCostCoveragePct >= 0 && updated.minimumCostCoveragePct <= 100 &&
+      Number.isFinite(updated.maxOperatorDiscountPct) && updated.maxOperatorDiscountPct >= 0 && updated.maxOperatorDiscountPct <= 100 &&
+      Number.isInteger(updated.collectionReminderDays) && updated.collectionReminderDays >= 0 && updated.collectionReminderDays <= 90;
+    if (!prefixesAreValid || !sequencesAreValid || !rangesAreValid || !commercialRulesAreValid || ![0, 16, 18].includes(rawDefaultTax)) {
       showToast('Revisa los prefijos, secuencias, rangos autorizados y el ITBIS predeterminado.', 'danger');
       return;
     }
@@ -3861,12 +4138,12 @@ window.ERPBilling = (function () {
       // Reload settings in cache
       await loadSettings();
       if (isPanitas) renderActiveTables();
-      alert('Configuración guardada exitosamente.');
+      showToast('Configuración guardada correctamente.', 'success');
       
       initDashboard();
     } catch (err) {
       console.error(err);
-      alert('Error al guardar configuración.');
+      showToast('No se pudo guardar la configuración.', 'danger');
     }
   }
 
@@ -4118,7 +4395,7 @@ window.ERPBilling = (function () {
         card.style.cursor = 'not-allowed';
       }
 
-      card.onclick = () => addPosCartItem(p);
+      card.addEventListener('click', () => addPosCartItem(p));
       card.innerHTML = `
         <div class="pos-prod-info">
           <div style="display:flex; align-items:center; width:100%; gap:4px; margin-bottom:4px;">
@@ -4163,12 +4440,12 @@ window.ERPBilling = (function () {
           ` : ''}
         </div>
         <div class="pos-item-qty-controls">
-          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, -1)">-</button>
+          <button type="button" class="pos-qty-btn" data-erp-click="ERPBilling.changePosCartItemQty(${index}, -1)">-</button>
           <span class="pos-qty-val">${item.qty}</span>
-          <button type="button" class="pos-qty-btn" onclick="ERPBilling.changePosCartItemQty(${index}, 1)">+</button>
+          <button type="button" class="pos-qty-btn" data-erp-click="ERPBilling.changePosCartItemQty(${index}, 1)">+</button>
         </div>
         <div class="pos-item-price">${escapeHTML(formatMoney(sub))}</div>
-        <button type="button" class="pos-btn-icon" onclick="ERPBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
+        <button type="button" class="pos-btn-icon" data-erp-click="ERPBilling.removePosCartItem(${index})" style="padding:4px; margin-left:4px;" title="Quitar item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
         </button>
       `;
@@ -4203,7 +4480,7 @@ window.ERPBilling = (function () {
 
   function addPosCartItem(p) {
     if (!activeCashSession) {
-      alert('Debes abrir una sesión de caja antes de agregar productos al carrito.');
+      showToast('Debes abrir una sesión de caja antes de agregar productos al carrito.', 'warning');
       handleCashSessionAction();
       return;
     }
@@ -4551,13 +4828,18 @@ window.ERPBilling = (function () {
     });
   }
 
-  function confirmDiscardCurrentCart(nextTable) {
+  async function confirmDiscardCurrentCart(nextTable) {
     const currentTable = document.getElementById('pos-restaurant-table').value.trim();
-    return posCart.length === 0 || currentTable === nextTable || confirm('Hay una venta u orden sin guardar. ¿Deseas descartarla para cambiar de mesa?');
+    if (posCart.length === 0 || currentTable === nextTable) return true;
+    return confirmAction('Hay una venta u orden sin guardar. ¿Deseas descartarla para cambiar de mesa?', {
+      title: 'Descartar cambios',
+      confirmLabel: 'Descartar',
+      tone: 'danger'
+    });
   }
 
-  function selectFreeTable(tableName) {
-    if (!confirmDiscardCurrentCart(tableName)) return;
+  async function selectFreeTable(tableName) {
+    if (!await confirmDiscardCurrentCart(tableName)) return;
     const tableInput = document.getElementById('pos-restaurant-table');
     const nameInput = document.getElementById('pos-restaurant-client-name');
     if (posCart.length) clearPosCart();
@@ -4569,7 +4851,7 @@ window.ERPBilling = (function () {
   }
 
   async function loadTableOrder(tableName) {
-    if (!confirmDiscardCurrentCart(tableName)) return;
+    if (!await confirmDiscardCurrentCart(tableName)) return;
     try {
       let order = restaurantOrders.find(item => (item.table || item.id) === tableName);
       if (!order) {
@@ -4745,7 +5027,13 @@ window.ERPBilling = (function () {
       showToast('Selecciona una mesa con una orden activa.', 'warning');
       return;
     }
-    const reasonInput = prompt('Indica el motivo de cancelación de la orden:');
+    const reasonInput = await promptAction('Indica por qué se cancela esta orden.', {
+      title: 'Cancelar orden',
+      inputLabel: 'Motivo',
+      required: true,
+      confirmLabel: 'Cancelar orden',
+      tone: 'danger'
+    });
     if (reasonInput === null) return;
     const reason = reasonInput.trim().slice(0, 500);
     if (reason.length < 3) {
@@ -5044,13 +5332,13 @@ window.ERPBilling = (function () {
       const item = document.createElement('div');
       item.className = 'autocomplete-item';
       item.textContent = c.name + (c.rnc ? ` (RNC: ${c.rnc})` : '');
-      item.onclick = () => {
+      item.addEventListener('click', () => {
         document.getElementById('pos-client-search').value = c.name;
         document.getElementById('pos-client-id').value = c.id;
         document.getElementById('pos-client-rnc').value = c.rnc || '';
         posClient = { id: c.id, name: c.name, rnc: c.rnc || '' };
         listEl.style.display = 'none';
-      };
+      });
       listEl.appendChild(item);
     });
   }
@@ -5200,10 +5488,10 @@ window.ERPBilling = (function () {
       activeCashSession = { id: ref.id, ...docData };
       updateCashSessionUI();
       closeModal('modal-cash-open');
-      alert('Caja abierta correctamente.');
+      showToast('Caja abierta correctamente.', 'success');
     } catch (err) {
       console.error('Error opening cash session:', err);
-      alert('Error al abrir la caja: ' + err.message);
+      showToast('Error al abrir la caja: ' + err.message, 'danger');
     }
   }
 
@@ -5262,10 +5550,10 @@ window.ERPBilling = (function () {
       activeCashSession = null;
       updateCashSessionUI();
       closeModal('modal-cash-close');
-      alert('Caja cerrada con éxito. El arqueo ha sido registrado.');
+      showToast('Caja cerrada; el arqueo quedó registrado.', 'success');
     } catch (err) {
       console.error('Error closing cash session:', err);
-      alert('Error al cerrar la caja: ' + err.message);
+      showToast('Error al cerrar la caja: ' + err.message, 'danger');
     }
   }
 
@@ -5313,7 +5601,7 @@ window.ERPBilling = (function () {
 
   function exportInvoicesToCSV() {
     if (invoices.length === 0) {
-      alert('No hay facturas registradas para exportar.');
+      showToast('No hay facturas registradas para exportar.', 'info');
       return;
     }
 
@@ -5417,7 +5705,7 @@ window.ERPBilling = (function () {
 
   function exportClientsToCSV() {
     if (clients.length === 0) {
-      alert('No hay clientes registrados para exportar.');
+      showToast('No hay clientes registrados para exportar.', 'info');
       return;
     }
 
@@ -5432,7 +5720,7 @@ window.ERPBilling = (function () {
 
   function exportProductsToCSV() {
     if (products.length === 0) {
-      alert('No hay productos registrados para exportar.');
+      showToast('No hay productos registrados para exportar.', 'info');
       return;
     }
 
@@ -5510,7 +5798,10 @@ window.ERPBilling = (function () {
         showToast('Debe seleccionar un cliente registrado para realizar una venta a crédito.', 'warning');
         return;
       }
-      if (!confirm(`¿Desea registrar esta venta a crédito para ${posClient.name}?`)) {
+      if (!await confirmAction(`¿Deseas registrar esta venta a crédito para ${posClient.name}?`, {
+        title: 'Venta a crédito',
+        confirmLabel: 'Registrar a crédito'
+      })) {
         return;
       }
     }
@@ -5989,7 +6280,7 @@ window.ERPBilling = (function () {
     }
 
     if (!scannedCode) {
-      alert('Por favor, selecciona o introduce un código.');
+      showToast('Selecciona o introduce un código.', 'warning');
       return;
     }
 
@@ -6018,7 +6309,7 @@ window.ERPBilling = (function () {
       setTimeout(() => playBeepTone(1500, 0.04), 60);
     } else {
       playBeepTone(300, 0.25);
-      alert(`Código de barras "${code}" no encontrado en el catálogo.`);
+      showToast(`Código de barras "${code}" no encontrado en el catálogo.`, 'warning');
     }
   }
 
@@ -6221,8 +6512,8 @@ window.ERPBilling = (function () {
   function editQuote(id) {
     const inv = invoices.find(i => i.id === id);
     if (!inv) return;
-    if (inv.status === 'converted') {
-      showToast('Este documento ya fue convertido a factura.', 'warning');
+    if (inv.status === 'converted' || ['accepted', 'converted'].includes(inv.workflowStatus)) {
+      showToast('Este documento está bloqueado por aceptación o conversión. Puedes duplicarlo para continuar.', 'warning');
       return;
     }
     if (inv.docType === 'invoice' && (inv.ncf || Number(inv.paidAmount || 0) > 0)) {
@@ -6304,6 +6595,86 @@ window.ERPBilling = (function () {
     }
 
     calculateInvoiceFormTotals();
+  }
+
+  function populateInvoiceForm(source, options = {}) {
+    const documentData = source || {};
+    clearInvoiceForm();
+    switchPanel('invoices');
+    switchSubTab('invoices', 'form');
+
+    const docType = ['invoice', 'quote', 'proforma'].includes(documentData.docType) ? documentData.docType : 'quote';
+    const today = BillingCore.toLocalDateInput();
+    const validityDays = Math.max(1, Number(settings && settings.quoteValidityDays || 15));
+    const due = new Date();
+    due.setDate(due.getDate() + validityDays);
+
+    document.getElementById('form-invoice-client-name').value = documentData.clientName || '';
+    document.getElementById('form-invoice-client-id').value = documentData.clientId || '';
+    document.getElementById('form-invoice-client-rnc').value = documentData.clientRnc || '';
+    document.getElementById('form-invoice-date').value = options.refreshDates ? today : (documentData.date || today);
+    document.getElementById('form-invoice-due-date').value = options.refreshDates
+      ? BillingCore.toLocalDateInput(due)
+      : (documentData.dueDate || BillingCore.toLocalDateInput(due));
+
+    const docTypeSelect = document.getElementById('form-invoice-doc-type');
+    if (docTypeSelect) {
+      docTypeSelect.value = docType;
+      handleDocTypeChange(docType);
+    }
+    const divisionSelect = document.getElementById('form-invoice-division');
+    if (divisionSelect) divisionSelect.value = documentData.division || 'general';
+    const paymentTermsSelect = document.getElementById('form-invoice-payment-terms');
+    if (paymentTermsSelect) paymentTermsSelect.value = documentData.paymentTerms || 'Contado';
+    const notesInput = document.getElementById('form-invoice-notes');
+    if (notesInput) notesInput.value = documentData.notes || '';
+    const discountInput = document.getElementById('form-invoice-discount-pct');
+    if (discountInput) discountInput.value = Number(documentData.discountPct || 0);
+
+    const tbody = document.getElementById('invoice-form-items-body');
+    tbody.innerHTML = '';
+    const sourceItems = Array.isArray(documentData.items) ? documentData.items : [];
+    sourceItems.forEach(item => addInvoiceFormItemRow(item));
+    if (!sourceItems.length) addInvoiceFormItemRow();
+
+    const title = document.getElementById('invoice-form-title');
+    if (title) title.textContent = options.title || (docType === 'quote' ? 'Nueva Cotización' : (docType === 'proforma' ? 'Nueva Proforma' : 'Nueva Factura'));
+    const submitButton = document.querySelector('#invoice-editor-form button[type="submit"]');
+    if (submitButton) submitButton.textContent = docType === 'quote' ? 'Guardar Cotización' : (docType === 'proforma' ? 'Guardar Proforma' : 'Guardar Factura');
+    calculateInvoiceFormTotals();
+  }
+
+  function duplicateDocument(id) {
+    const source = invoices.find(item => item.id === id);
+    if (!source) {
+      showToast('No se encontró el documento que deseas duplicar.', 'danger');
+      return;
+    }
+    populateInvoiceForm(source, {
+      refreshDates: true,
+      title: `Duplicado de ${source.invoiceNumber || 'documento'}`
+    });
+    showToast('Se creó una copia editable. Revisa fechas, precios y condiciones antes de guardarla.', 'success');
+  }
+
+  function getBillingSnapshot() {
+    return {
+      companyCode: activeCompanyCode,
+      prefix: isCreaticos ? 'creaticos' : (isPanitas ? 'panitas' : 'futunet'),
+      settings,
+      invoices,
+      clients,
+      products,
+      creaticosProducts,
+      futunetProducts,
+      payments,
+      currentUser,
+      isUserAdmin,
+      history: {
+        hasMoreInvoices: hasMoreInvoiceHistory,
+        hasMorePayments: hasMorePaymentHistory
+      }
+    };
   }
 
   function convertQuoteFromList(id) {
@@ -6432,7 +6803,7 @@ window.ERPBilling = (function () {
   async function searchClientByRnc(rnc, context = 'invoice-form') {
     const cleanRnc = String(rnc).replace(/[^0-9]/g, '');
     if (!cleanRnc || (cleanRnc.length !== 9 && cleanRnc.length !== 11)) {
-      alert('Por favor, introduzca un RNC válido de 9 o 11 dígitos.');
+      showToast('Introduce un RNC válido de 9 u 11 dígitos.', 'warning');
       return;
     }
 
@@ -6466,13 +6837,13 @@ window.ERPBilling = (function () {
           if (idInput) idInput.value = 'custom';
           if (rncInput) rncInput.value = data.cedula_rnc || cleanRnc;
         }
-        alert('Cliente encontrado en DGII: ' + fullName);
+        showToast('Cliente encontrado en DGII: ' + fullName, 'success');
       } else {
-        alert('No se encontraron registros para este RNC/Cédula.');
+        showToast('No se encontraron registros para este RNC o cédula.', 'info');
       }
     } catch (e) {
       console.error('RNC Lookup Error:', e);
-      alert('Error en consulta RNC: ' + e.message);
+      showToast('Error en consulta RNC: ' + e.message, 'danger');
     } finally {
       if (btn) {
         btn.innerHTML = originalText;
@@ -6490,8 +6861,13 @@ window.ERPBilling = (function () {
     
     // Invoices
     renderInvoicesTable: renderInvoicesTable,
+    loadMoreBillingHistory: loadMoreBillingHistory,
     openNewInvoiceForm: openNewInvoiceForm,
     editQuote: editQuote,
+    populateInvoiceForm: populateInvoiceForm,
+    duplicateDocument: duplicateDocument,
+    getBillingSnapshot: getBillingSnapshot,
+    reloadData: fetchAllData,
     addInvoiceFormItemRow: addInvoiceFormItemRow,
     deleteInvoiceFormItemRow: deleteInvoiceFormItemRow,
     searchRowProductAutocomplete: searchRowProductAutocomplete,
@@ -6588,6 +6964,8 @@ window.ERPBilling = (function () {
 
     // General modals
     closeModal: closeModal,
-    showToast: showToast
+    showToast: showToast,
+    confirmAction: confirmAction,
+    promptAction: promptAction
   };
 })();
