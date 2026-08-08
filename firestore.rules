@@ -1554,6 +1554,15 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
+    // ─── FUTUNET AI HUB (Superadmin internal use) ───
+    match /ai_conversations/{userId}/{document=**} {
+      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
+    }
+
+    match /ai_settings/{userId} {
+      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
+    }
+
     // ─── DENY EVERYTHING ELSE ───
     match /{document=**} {
       allow read, write: if false;

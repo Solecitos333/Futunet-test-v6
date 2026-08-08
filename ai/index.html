@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futunet AI — Asistente Inteligente</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Asistente de IA privado de Futunet">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png">
+  <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon">
+  <meta name="theme-color" content="#0f0f11">
+  
+  <!-- AI Hub CSS -->
+  <link rel="stylesheet" href="css/ai-hub.css">
+  
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <div id="loading-screen" class="loading-screen">
+    <img src="../img/logo-navbar.webp" alt="Futunet Logo" class="loading-logo">
+    <div class="spinner"></div>
+  </div>
+
+  <div id="app" class="app-container" style="display: none;">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <a href="../index.html" class="logo-link">
+          <img src="../img/logo-navbar.webp" alt="Futunet" class="sidebar-logo">
+        </a>
+        <button id="close-sidebar" class="icon-btn mobile-only" aria-label="Cerrar menú">✕</button>
+      </div>
+      
+      <button id="new-chat-btn" class="btn-primary">
+        <span>+</span> Nuevo Chat
+      </button>
+      
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Buscar chats..." autocomplete="off">
+      </div>
+      
+      <div class="chat-list-container">
+        <div id="chat-list" class="chat-list">
+          <!-- Chats list -->
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div id="user-avatar" class="avatar">U</div>
+          <span id="user-name" class="name">Usuario</span>
+        </div>
+        <button id="settings-btn" class="icon-btn" title="Ajustes">⚙️</button>
+        <button id="logout-btn" class="icon-btn" title="Cerrar sesión">🚪</button>
+      </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="main-content">
+      <header class="chat-header">
+        <button id="open-sidebar" class="icon-btn mobile-only" aria-label="Abrir menú">☰</button>
+        
+        <div class="model-selector">
+          <select id="model-select">
+            <option value="gemma4:latest">Gemma 4 (Local)</option>
+            <option value="gemini-2.5-flash">Gemini 2.5 Flash ☁️</option>
+          </select>
+        </div>
+        
+        <div id="connection-status" class="status-badge cloud">
+          ☁️ Cloud
+        </div>
+      </header>
+
+      <div id="messages-container" class="messages-container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="welcome-screen">
+          <div class="welcome-logo">✨</div>
+          <h1>Futunet AI</h1>
+          <p>Tu asistente de IA privado</p>
+          
+          <div class="suggested-prompts">
+            <button class="prompt-card" data-prompt="Explícame un concepto técnico de redes">
+              💡 Explícame un concepto técnico de redes
+            </button>
+            <button class="prompt-card" data-prompt="Ayúdame a analizar datos de clientes">
+              📊 Ayúdame a analizar datos de clientes
+            </button>
+            <button class="prompt-card" data-prompt="Redacta un correo profesional">
+              ✍️ Redacta un correo profesional
+            </button>
+            <button class="prompt-card" data-prompt="Troubleshoot: mi internet no funciona">
+              🔧 Troubleshoot: mi internet no funciona
+            </button>
+          </div>
+        </div>
+        <!-- Messages will go here -->
+        <div id="messages-list"></div>
+      </div>
+
+      <div class="input-area">
+        <div id="image-preview-container" class="image-previews"></div>
+        <div class="input-wrapper">
+          <button id="attach-btn" class="icon-btn" title="Adjuntar imagen">📎</button>
+          <input type="file" id="file-input" accept="image/*" style="display: none;">
+          
+          <textarea id="chat-input" placeholder="Escribe un mensaje... (Shift+Enter para nueva línea)"></textarea>
+          
+          <button id="send-btn" class="icon-btn send-btn" disabled>➤</button>
+          <button id="stop-btn" class="icon-btn stop-btn" style="display: none;">🛑</button>
+        </div>
+        <div class="input-footer">
+          <span id="char-count">0 caracteres</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h2>Ajustes</h2>
+      <button id="close-settings" class="close-modal">✕</button>
+      
+      <div class="settings-group">
+        <label for="ollama-url">Servidor Ollama URL</label>
+        <div class="input-with-button">
+          <input type="text" id="ollama-url" placeholder="Ej: http://localhost:11434">
+          <button id="test-ollama-btn">Probar</button>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label for="gemini-key">API Key Gemini</label>
+        <div class="password-input">
+          <input type="password" id="gemini-key" placeholder="AIzaSy...">
+          <button id="toggle-key-vis" class="icon-btn">👁️</button>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label for="default-model">Modelo por defecto</label>
+        <select id="default-model"></select>
+      </div>
+      
+      <div class="settings-actions">
+        <button id="clear-chats-btn" class="btn-danger">Borrar todas las conversaciones</button>
+        <button id="save-settings-btn" class="btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/firebase-config.js"></script>
+  <script src="js/ai-memory.js"></script>
+  <script src="js/ai-gemini.js"></script>
+  <script src="js/ai-app.js"></script>
+</body>
+</html>
