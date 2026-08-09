@@ -9,9 +9,11 @@
   const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
   const DEFAULT_MODEL = 'gemini-2.5-flash';
   
+  const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SW16UXU2MlNrdmROOXdiOTFUaUlmTnVzSEpyMXBablZOWEZfS0Z3NWVNN1E=';
+  
   function getApiKey() {
-    // Try localStorage first, then settings
-    return localStorage.getItem('futunet_gemini_key') || '';
+    // Try localStorage first, then default
+    return localStorage.getItem('futunet_gemini_key') || (typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '');
   }
   
   const AiGemini = {

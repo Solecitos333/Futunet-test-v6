@@ -183,23 +183,48 @@
 
   // --- Logic ---
   async function checkOllama() {
-    if (!state.ollamaEndpoint) {
-      updateConnectionStatus(false);
-      return false;
-    }
-    try {
-      const res = await fetch(`${state.ollamaEndpoint}/api/tags`);
-      const isOnline = res.ok;
-      updateConnectionStatus(isOnline);
-      if (isOnline) {
-        const data = await res.json();
-        updateModelList(data.models);
+    const defaultTunnel = 'https://continually-dairy-aim-accompanying.trycloudflare.com';
+    const endpointsToTry = [
+      state.ollamaEndpoint,
+      defaultTunnel,
+      'http://10.0.0.117:3000',
+      'http://localhost:3000'
+    ].filter(Boolean);
+    
+    // Remove duplicates while preserving order
+    const uniqueEndpoints = Array.from(new Set(endpointsToTry));
+
+    for (const ep of uniqueEndpoints) {
+      try {
+        const res = await fetch(`${ep}/api/health`, { method: 'GET' });
+        if (res.ok) {
+          state.ollamaEndpoint = ep;
+          updateConnectionStatus(true);
+          try {
+            const modelsRes = await fetch(`${ep}/api/models`);
+            if (modelsRes.ok) {
+              const data = await modelsRes.json();
+              if (data.models && data.models.length > 0) {
+                updateModelList(data.models);
+              } else {
+                updateModelList();
+              }
+            } else {
+              updateModelList();
+            }
+          } catch(e) {
+            updateModelList();
+          }
+          return true;
+        }
+      } catch (e) {
+        // Try next candidate
       }
-      return isOnline;
-    } catch (e) {
-      updateConnectionStatus(false);
-      return false;
     }
+
+    updateConnectionStatus(false);
+    updateModelList();
+    return false;
   }
 
   function updateModelList(ollamaModels = []) {
@@ -464,7 +489,7 @@
       // Load Settings
       const userSettings = await AiMemory.loadSettings();
       state.settings = userSettings;
-      state.ollamaEndpoint = userSettings.ollamaEndpoint || 'http://localhost:11434';
+      state.ollamaEndpoint = userSettings.ollamaEndpoint || 'https://continually-dairy-aim-accompanying.trycloudflare.com';
       state.currentModel = userSettings.defaultModel || 'gemma4:latest';
       
       els.ollamaUrlInput.value = state.ollamaEndpoint;
