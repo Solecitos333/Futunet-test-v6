@@ -489,13 +489,16 @@
                     <option value="sublimacion">Creaticos Sublimación</option>
                   </select>
                 </div>
-                <div class="form-group" style="display:flex; align-items:flex-end;">
-                  <button type="button" class="admin-btn" data-erp-click="ERPBilling.removeAllRowTaxes()" style="height:38px; border-radius:10px; color:#ef4444; border: 1.5px solid #fca5a5; background: #fef2f2; font-weight:600; display:inline-flex; align-items:center; gap:8px;">
+                <div class="form-group" style="display:flex; align-items:flex-end; gap: 8px; grid-column: span 2;">
+                  <button type="button" class="admin-btn" data-erp-click="ERPBilling.removeAllRowTaxes()" style="height:38px; border-radius:10px; color:#ef4444; border: 1.5px solid #fca5a5; background: #fef2f2; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.3 5.7 5.7 18.3M5.7 5.7l12.6 12.6"/></svg>
-                    Quitar ITBIS de todos los artículos
+                    Quitar ITBIS
+                  </button>
+                  <button type="button" class="admin-btn" data-erp-click="ERPBilling.restoreAllRowTaxes()" style="height:38px; border-radius:10px; color:#059669; border: 1.5px solid #6ee7b7; background: #ecfdf5; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    Colocar ITBIS
                   </button>
                 </div>
-                <div></div>
               </div>
 
               <!-- Items Table -->
