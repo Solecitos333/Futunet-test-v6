@@ -175,7 +175,8 @@
       'clients-map': function () { return initClientsMap(); },
       'visual-editor': function () { return loadLayout(); },
       config: function () { return loadConfig(); },
-      competitors: function () { return loadCompetitors(); }
+      competitors: function () { return loadCompetitors(); },
+      'ai-server': function () { if (window.AdminAIServer) window.AdminAIServer.init(); return Promise.resolve(); }
     };
 
     if (!loaders[panelName]) return Promise.resolve();

@@ -14,6 +14,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
   <link rel="stylesheet" href="css/admin.css?v=3.2" />
   <link rel="stylesheet" href="css/financing.css?v=20260801" />
+  <link rel="stylesheet" href="css/ai-server.css?v=1.0" />
   <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
   <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
   <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
@@ -140,6 +141,10 @@
         <button class="admin-nav-item" data-admin-nav="config">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
           Configuración
+        </button>
+        <button class="admin-nav-item" data-admin-nav="ai-server" style="background: rgba(0, 210, 255, 0.08); border: 1px solid rgba(0, 210, 255, 0.2); color: #00d2ff; font-weight: 700;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="12" cy="12" r="3"/><path d="M12 6v3M12 15v3M6 12h3M15 12h3"/></svg>
+          Servidor IA & App
         </button>
         <a href="index.html" class="admin-nav-item" style="margin-top:8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7M19 12H5"/></svg>
@@ -1360,6 +1365,212 @@
             <!-- Rendered dynamically -->
           </div>
         </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- SECTION: SERVIDOR IA & WEB APP STUDIO (SUPERADMIN ONLY) -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div class="admin-panel" data-admin-panel="ai-server">
+          <div class="ai-header-banner">
+            <div class="ai-header-title-wrap">
+              <div class="ai-header-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="12" cy="12" r="3"/><path d="M12 6v3M12 15v3M6 12h3M15 12h3"/></svg>
+              </div>
+              <div>
+                <h1>Servidor IA Futunet <span class="ai-superadmin-badge">SuperAdmin</span></h1>
+                <div class="ai-header-sub">Supercomputadora Local (Ollama, ComfyUI, Cloudflare Tunnel) & PWA Web Studio</div>
+              </div>
+            </div>
+
+            <div class="ai-header-quick-stats">
+              <div class="ai-stat-chip">
+                <span class="ai-dot-indicator" id="ai-status-ollama"></span> Ollama: 11434
+              </div>
+              <div class="ai-stat-chip">
+                <span class="ai-dot-indicator" id="ai-status-comfy"></span> ComfyUI: 8188
+              </div>
+              <div class="ai-stat-chip">
+                <span class="ai-dot-indicator" id="ai-status-remote"></span> Tunnel HTTPS
+              </div>
+              <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" id="ai-ping-btn" style="border-color:rgba(255,255,255,0.2); color:#fff;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Ping Test
+              </button>
+            </div>
+          </div>
+
+          <!-- Inner Navigation Tabs -->
+          <div class="ai-tab-nav">
+            <button type="button" class="ai-tab-btn is-active" data-ai-tab="chat">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Chat & Skills IA
+            </button>
+            <button type="button" class="ai-tab-btn" data-ai-tab="comfy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+              ComfyUI Studio
+            </button>
+            <button type="button" class="ai-tab-btn" data-ai-tab="status">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              Monitoreo & Conexiones
+            </button>
+            <button type="button" class="ai-tab-btn" data-ai-tab="pwa">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Descargar Web App (PWA)
+            </button>
+          </div>
+
+          <!-- PANE 1: CHAT & SKILLS IA -->
+          <div class="ai-view-pane is-active" id="ai-pane-chat">
+            <div class="ai-studio-grid">
+              <!-- Sidebar Chat History -->
+              <div class="ai-history-sidebar">
+                <button type="button" class="ai-new-chat-btn" id="ai-new-chat-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Nueva Conversación
+                </button>
+                <div class="ai-history-title">Conversaciones Guardadas</div>
+                <div class="ai-chats-list" id="ai-chats-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Main Chat Workspace -->
+              <div class="ai-chat-window">
+                <div class="ai-chat-toolbar">
+                  <div class="ai-model-selector-group">
+                    <span style="font-size:0.8rem; font-weight:600; color:#94a3b8;">Modelo:</span>
+                    <select class="ai-select" id="ai-model-select">
+                      <option value="llama3">Llama 3 (Ollama Local)</option>
+                    </select>
+                  </div>
+
+                  <div class="ai-skills-group">
+                    <span style="font-size:0.8rem; font-weight:600; color:#94a3b8;">Skill Activa:</span>
+                    <button type="button" class="ai-skill-chip is-active" data-skill="inventory" title="Consulta inventario, precios y stock en vivo">
+                      🛒 Inventario & Productos
+                    </button>
+                    <button type="button" class="ai-skill-chip" data-skill="copywriter" title="Redactor de ofertas y textos comerciales">
+                      ✍️ Copywriting
+                    </button>
+                    <button type="button" class="ai-skill-chip" data-skill="tech_support" title="Ingeniero de soporte de fibra, CCTV y redes">
+                      💡 Soporte Técnico
+                    </button>
+                    <button type="button" class="ai-skill-chip" data-skill="developer" title="Desarrollador web y creador de scripts">
+                      💻 Código & Scripts
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="ai-chat-messages" id="ai-chat-messages">
+                  <!-- Messages appended dynamically -->
+                </div>
+
+                <!-- Input Area -->
+                <div class="ai-chat-input-area">
+                  <textarea class="ai-chat-textarea" id="ai-chat-input" placeholder="Escribe tu mensaje a la IA o consulta sobre productos y servicios..." rows="1"></textarea>
+                  <button type="button" class="ai-send-btn" id="ai-send-btn" title="Enviar mensaje">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2: COMFYUI STUDIO -->
+          <div class="ai-view-pane" id="ai-pane-comfy">
+            <div class="ai-comfy-container">
+              <div class="ai-comfy-grid">
+                <div>
+                  <h3 style="color:#fff; margin-top:0; margin-bottom:16px;">Generador Visual de IA (ComfyUI)</h3>
+                  <div class="ai-form-group">
+                    <label class="ai-form-label" for="comfy-prompt-input">Prompt Positivo (Descripción de la Imagen)</label>
+                    <textarea class="ai-input" id="comfy-prompt-input" rows="4" placeholder="Ej. A sleek futuristic network router on a glowing blue cybernetic table, highly detailed 8k rendering..." style="resize:vertical;"></textarea>
+                  </div>
+                  <button type="button" class="admin-btn admin-btn-primary" id="comfy-generate-btn" style="background:linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%); border:none; width:100%; padding:12px; font-weight:700;">
+                    🎨 Generar Imagen con ComfyUI
+                  </button>
+                </div>
+                <div>
+                  <h3 style="color:#fff; margin-top:0; margin-bottom:16px;">Resultado & Vista Previa</h3>
+                  <div class="ai-image-preview-box" id="comfy-preview-box">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                    <div style="margin-top:12px; font-size:0.88rem;">Las imágenes generadas aparecerán aquí</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 3: STATUS & CONFIG -->
+          <div class="ai-view-pane" id="ai-pane-status">
+            <div class="ai-servers-grid">
+              <div class="ai-server-card">
+                <div class="ai-server-header">
+                  <div class="ai-server-title">🌐 Enlace Remoto HTTPS (Internet)</div>
+                  <span style="font-size:0.75rem; font-weight:700; color:#10b981;">SSL / 443</span>
+                </div>
+                <div class="ai-server-url">https://continually-dairy-aim-accompanying.trycloudflare.com</div>
+                <div style="font-size:0.8rem; color:#94a3b8;">Túnel Cloudflare seguro para acceso remoto sin IP pública.</div>
+              </div>
+
+              <div class="ai-server-card">
+                <div class="ai-server-header">
+                  <div class="ai-server-title">🤖 Ollama Engine Directo</div>
+                  <span style="font-size:0.75rem; font-weight:700; color:#10b981;">Puerto 11434</span>
+                </div>
+                <div class="ai-server-url">http://localhost:11434</div>
+                <div style="font-size:0.8rem; color:#94a3b8;">Ejecutando modelos LLM (Llama3, Mistral, DeepSeek) localmente.</div>
+              </div>
+
+              <div class="ai-server-card comfy">
+                <div class="ai-server-header">
+                  <div class="ai-server-title">🎨 ComfyUI Engine Directo</div>
+                  <span style="font-size:0.75rem; font-weight:700; color:#10b981;">Puerto 8188</span>
+                </div>
+                <div class="ai-server-url">http://localhost:8188</div>
+                <div style="font-size:0.8rem; color:#94a3b8;">Motor de generación de imágenes por difusión estable.</div>
+              </div>
+            </div>
+
+            <!-- Configuration Form -->
+            <div style="background:#0f1923; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:24px;">
+              <h3 style="color:#fff; margin-top:0; margin-bottom:16px;">Configuración de Endpoints de Servidor</h3>
+              <div class="admin-grid-form-3col">
+                <div class="ai-form-group">
+                  <label class="ai-form-label" for="ai-config-remote">Cloudflare Tunnel URL</label>
+                  <input class="ai-input" type="text" id="ai-config-remote" placeholder="https://..." />
+                </div>
+                <div class="ai-form-group">
+                  <label class="ai-form-label" for="ai-config-ollama">Ollama Local URL</label>
+                  <input class="ai-input" type="text" id="ai-config-ollama" placeholder="http://localhost:11434" />
+                </div>
+                <div class="ai-form-group">
+                  <label class="ai-form-label" for="ai-config-comfy">ComfyUI Local URL</label>
+                  <input class="ai-input" type="text" id="ai-config-comfy" placeholder="http://localhost:8188" />
+                </div>
+              </div>
+              <button type="button" class="admin-btn admin-btn-primary" id="ai-save-config-btn" style="margin-top:8px;">
+                Guardar Cambios de Configuración
+              </button>
+            </div>
+          </div>
+
+          <!-- PANE 4: PWA WEB APP DOWNLOAD -->
+          <div class="ai-view-pane" id="ai-pane-pwa">
+            <div class="ai-pwa-install-card">
+              <div class="ai-pwa-icon-large">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><circle cx="12" cy="12" r="3"/><path d="M12 6v3M12 15v3M6 12h3M15 12h3"/></svg>
+              </div>
+              <div class="ai-pwa-title">Instalar Futunet AI Web App</div>
+              <div class="ai-pwa-desc">
+                Convierte el panel de Servidor IA en una aplicación independiente instalable en tu sistema operativo (Windows, macOS, Android, iOS). Ejecución ultrarrápida sin barras de navegador, acceso directo en el escritorio y soporte de notificaciones.
+              </div>
+              <button type="button" class="ai-pwa-btn" id="ai-pwa-install-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Descargar / Instalar Web App Ahora
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -2174,6 +2385,7 @@
   <script defer src="js/supplier_inventory.js?v=20260712-gallery"></script>
   <script defer src="js/admin-panel.js?v=20260802-dashboard"></script>
   <script defer src="js/admin-financing.js?v=20260801"></script>
+  <script defer src="js/ai-server.js?v=1.0"></script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -2223,7 +2435,8 @@
           'searches': ['superadmin', 'admin', 'marketing_manager'],
           'audit': ['superadmin', 'admin'],
           'visual-editor': ['superadmin', 'admin'],
-          'config': ['superadmin', 'admin']
+          'config': ['superadmin', 'admin'],
+          'ai-server': ['superadmin']
         };
 
         var navItems = document.querySelectorAll('[data-admin-nav]');
