@@ -526,8 +526,8 @@ window.ERPBilling = (function () {
       displayName,
       rnc: base.rnc || '',
       phone: base.phone || '',
-      email: base.email || '',
-      address: base.address || '',
+      email: base.email || (isCreaticos ? 'holacreaticos@gmail.com' : ''),
+      address: base.address || (isCreaticos ? 'Las Colinas, Santiago' : ''),
       slogan: base.ticketSlogan || '',
       instagram: base.ticketInstagram || '',
       logo: isCreaticos ? 'img/logo-creaticos-full.webp' : 'img/futunet-logo-clean.png'
@@ -562,6 +562,16 @@ window.ERPBilling = (function () {
         if (settings.rnc === '131-78945-2') {
           settings.rnc = '133-73669-1';
           if (isUserAdmin) await docRef.update({ rnc: '133-73669-1' });
+        }
+        // Ensure email is set for Creaticos
+        if (!settings.email || settings.email.trim() === '') {
+          settings.email = 'holacreaticos@gmail.com';
+          if (isUserAdmin) await docRef.update({ email: 'holacreaticos@gmail.com' });
+        }
+        // Ensure address is updated to Las Colinas, Santiago
+        if (!settings.address || settings.address === 'Calle 7 Las Colinas, Santiago') {
+          settings.address = 'Las Colinas, Santiago';
+          if (isUserAdmin) await docRef.update({ address: 'Las Colinas, Santiago' });
         }
       } else {
         // Futunet migration check
@@ -605,8 +615,8 @@ window.ERPBilling = (function () {
           name: 'Creaticos Group',
           rnc: '133-73669-1',
           phone: '849-342-8525',
-          email: '',
-          address: 'Calle 7 Las Colinas, Santiago',
+          email: 'holacreaticos@gmail.com',
+          address: 'Las Colinas, Santiago',
           invoicePrefix: 'CRE-',
           nextInvoiceNum: 1001,
           quotePrefix: 'COT-',
