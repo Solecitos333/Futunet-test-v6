@@ -8,7 +8,7 @@
   // --- State ---
   const state = {
     currentChatId: null,
-    currentModel: 'gemini-2.5-flash',
+    currentModel: 'gemini-2.0-flash',
     isGenerating: false,
     isOnline: false,
     messages: [],
@@ -779,7 +779,7 @@
 
       state.settings = userSettings;
       state.ollamaEndpoint = userSettings.ollamaEndpoint || 'http://localhost:3000';
-      state.currentModel = userSettings.defaultModel || 'gemini-2.5-flash';
+      state.currentModel = userSettings.defaultModel || 'gemini-2.0-flash';
 
       // Pre-fill settings form
       els.ollamaUrlInput.value = state.ollamaEndpoint;

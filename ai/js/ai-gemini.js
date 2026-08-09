@@ -7,7 +7,7 @@
   'use strict';
   
   const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
-  const DEFAULT_MODEL = 'gemini-2.5-flash';
+  const DEFAULT_MODEL = 'gemini-2.0-flash';
   
   const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SW16UXU2MlNrdmROOXdiOTFUaUlmTnVzSEpyMXBablZOWEZfS0Z3NWVNN1E=';
   
@@ -37,8 +37,9 @@ Cuando no sepas algo, lo dices honestamente.`;
     // List available Gemini models
     models: function() {
       return [
-        { name: 'gemini-2.5-flash', displayName: 'Gemini 2.5 Flash ☁️', cloud: true },
-        { name: 'gemini-2.5-pro', displayName: 'Gemini 2.5 Pro ☁️', cloud: true }
+        { name: 'gemini-2.0-flash', displayName: 'Gemini 2.0 Flash ☁️', cloud: true },
+        { name: 'gemini-1.5-flash', displayName: 'Gemini 1.5 Flash ☁️', cloud: true },
+        { name: 'gemini-1.5-pro', displayName: 'Gemini 1.5 Pro ☁️', cloud: true }
       ];
     },
     

@@ -245,8 +245,9 @@
     var cloudGrp = document.createElement('optgroup');
     cloudGrp.label = '☁️ Cloud (Gemini)';
     [
-      { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
-      { value: 'gemini-2.5-pro',   label: 'Gemini 2.5 Pro' }
+      { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash' },
+      { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash' },
+      { value: 'gemini-1.5-pro',   label: 'Gemini 1.5 Pro' }
     ].forEach(function(m) {
       cloudGrp.appendChild(new Option(m.label, m.value));
     });
@@ -258,7 +259,7 @@
     if (!select) return;
     select.innerHTML = '';
     addGeminiOptions(select);
-    selectedModel = 'gemini-2.5-flash';
+    selectedModel = 'gemini-2.0-flash';
     if (select.options.length > 0) select.value = selectedModel;
   }
 
@@ -565,7 +566,7 @@
       throw new Error('La conversación debe comenzar con un mensaje de usuario.');
     }
 
-    var model = selectedModel.startsWith('gemini-') ? selectedModel : 'gemini-2.5-flash';
+    var model = selectedModel.startsWith('gemini-') ? selectedModel : 'gemini-2.0-flash';
     var url = GEMINI_API_BASE + '/models/' + model + ':streamGenerateContent?alt=sse&key=' + apiKey;
 
     var res = await fetch(url, {
