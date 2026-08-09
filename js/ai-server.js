@@ -10,13 +10,13 @@
   var isInitialized = false;
   var unsubscribeChats = null;
 
-  // Proxy server endpoints (our local Node server on port 3000)
-  // The proxy handles auth and forwards to Ollama
+  var LIVE_TUNNEL_URL = 'https://continually-dairy-aim-accompanying.trycloudflare.com';
+
   var DEFAULT_CONFIG = {
-    proxyUrl: 'http://10.0.0.117:3000',    // LAN IP of the AI server (this PC)
-    ollamaUrl: 'http://localhost:11434',    // Only works if admin is on the same PC
-    comfyUrl: 'http://localhost:8188',
-    remoteUrl: ''                           // Optional: Cloudflare tunnel (if configured)
+    remoteUrl: LIVE_TUNNEL_URL,
+    proxyUrl: LIVE_TUNNEL_URL,
+    ollamaUrl: 'http://localhost:11434',
+    comfyUrl: 'http://localhost:8188'
   };
 
   var config = Object.assign({}, DEFAULT_CONFIG);
@@ -92,11 +92,11 @@
   // ─── Proxy Discovery ───
   async function discoverProxy() {
     var candidates = [
-      config.proxyUrl,
       config.remoteUrl,
+      config.proxyUrl,
+      LIVE_TUNNEL_URL,
       'http://10.0.0.117:3000',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000'
+      'http://localhost:3000'
     ].filter(Boolean);
 
     var unique = candidates.filter(function(v, i, a) { return a.indexOf(v) === i; });
@@ -105,7 +105,7 @@
       var ep = unique[i];
       try {
         var ctrl = new AbortController();
-        var tid = setTimeout(function() { ctrl.abort(); }, 3000);
+        var tid = setTimeout(function() { ctrl.abort(); }, 4000);
         var res = await fetch(ep + '/api/health', { signal: ctrl.signal });
         clearTimeout(tid);
         if (res.ok) {
@@ -639,21 +639,117 @@
 
     var promptText = promptInput.value.trim();
     if (btn) btn.disabled = true;
-    previewBox.innerHTML = '<div style="color:#00d2ff;">🎨 Generando arte con ComfyUI...</div>';
+
+    var targetProxy = activeProxyUrl || config.proxyUrl || LIVE_TUNNEL_URL;
+
+    previewBox.innerHTML =
+      '<div style="text-align:center; padding: 24px; color:#00d2ff;">' +
+      '  <div style="font-size:1.5rem; margin-bottom:8px;">🎨</div>' +
+      '  <div style="font-weight:700; color:#fff; margin-bottom:4px;">Enviando trabajo a ComfyUI...</div>' +
+      '  <div style="font-size:0.85rem; color:#94a3b8;">Generando render con Stable Diffusion</div>' +
+      '</div>';
+
+    // Get Firebase token
+    var token = '';
+    try {
+      var user = firebase.auth().currentUser;
+      if (user) token = await user.getIdToken();
+    } catch(e) {}
 
     try {
-      var res = await fetch(config.comfyUrl + '/prompt', {
+      var promptPayload = {
+        prompt: {
+          "3": {
+            inputs: {
+              seed: Math.floor(Math.random() * 1e9),
+              steps: 20,
+              cfg: 7,
+              sampler_name: "euler",
+              scheduler: "normal",
+              denoise: 1,
+              model: ["4", 0],
+              positive: ["6", 0],
+              negative: ["7", 0],
+              latent_image: ["5", 0]
+            },
+            class_type: "KSampler"
+          },
+          "4": { inputs: { ckpt_name: "v1-5-pruned-emaonly.safetensors" }, class_type: "CheckpointLoaderSimple" },
+          "5": { inputs: { width: 512, height: 512, batch_size: 1 }, class_type: "EmptyLatentImage" },
+          "6": { inputs: { text: promptText, clip: ["4", 1] }, class_type: "CLIPTextEncode" },
+          "7": { inputs: { text: "ugly, blurry, distorted, low quality, bad resolution", clip: ["4", 1] }, class_type: "CLIPTextEncode" },
+          "8": { inputs: { samples: ["3", 0], vae: ["4", 2] }, class_type: "VAEDecode" },
+          "9": { inputs: { filename_prefix: "Futunet_AI", images: ["8", 0] }, class_type: "SaveImage" }
+        }
+      };
+
+      var res = await fetch(targetProxy + '/api/comfy/prompt', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: {
-          "3": { inputs: { seed: Math.floor(Math.random()*1e6), steps:20, cfg:8, sampler_name:"euler", scheduler:"normal", denoise:1, model:["4",0], positive:["6",0], negative:["7",0], latent_image:["5",0] }, class_type:"KSampler" }
-        }})
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token ? 'Bearer ' + token : ''
+        },
+        body: JSON.stringify(promptPayload)
       });
-      if (res.ok) {
-        previewBox.innerHTML = '<div style="color:#10b981;">✅ Trabajo enviado a ComfyUI. Las imágenes aparecerán en la interfaz de ComfyUI.</div>';
-      } else { throw new Error('Error ' + res.status); }
+
+      if (!res.ok) {
+        var errText = await res.text();
+        throw new Error('ComfyUI error ' + res.status + ': ' + errText);
+      }
+
+      var data = await res.json();
+      var promptId = data.prompt_id;
+
+      if (!promptId) {
+        throw new Error('No se recibió ID de trabajo de ComfyUI.');
+      }
+
+      previewBox.innerHTML =
+        '<div style="text-align:center; padding: 24px; color:#00d2ff;">' +
+        '  <div style="font-size:2rem; margin-bottom:8px;">🎨</div>' +
+        '  <div style="font-weight:700; color:#fff; margin-bottom:4px;">Procesando imagen (ID: ' + escapeHtml(promptId.slice(0, 8)) + ')...</div>' +
+        '  <div style="font-size:0.85rem; color:#94a3b8;">Renderizando difusión estable en GPU local...</div>' +
+        '</div>';
+
+      // Poll history for completion
+      var checkHistory = async function(attemptsLeft) {
+        if (attemptsLeft <= 0) {
+          previewBox.innerHTML = '<div style="color:#f59e0b; padding:16px; text-align:center;">⏱️ El render tarda más de lo habitual. Revisa la consola de ComfyUI.</div>';
+          return;
+        }
+
+        try {
+          var histRes = await fetch(targetProxy + '/api/comfy/history/' + promptId, {
+            headers: { 'Authorization': token ? 'Bearer ' + token : '' }
+          });
+
+          if (histRes.ok) {
+            var histData = await histRes.json();
+            var entry = histData[promptId];
+            if (entry && entry.outputs && entry.outputs["9"] && entry.outputs["9"].images && entry.outputs["9"].images.length > 0) {
+              var imgInfo = entry.outputs["9"].images[0];
+              var imgUrl = targetProxy + '/api/comfy/view?filename=' + encodeURIComponent(imgInfo.filename) +
+                '&subfolder=' + encodeURIComponent(imgInfo.subfolder || '') +
+                '&type=' + encodeURIComponent(imgInfo.type || 'output');
+
+              previewBox.innerHTML =
+                '<div style="text-align:center; padding:12px;">' +
+                '  <img src="' + imgUrl + '" alt="Generado con ComfyUI" style="max-width:100%; max-height:420px; border-radius:12px; box-shadow:0 8px 30px rgba(0,0,0,0.5); margin-bottom:12px; border:1px solid rgba(255,255,255,0.15);" />' +
+                '  <div style="font-size:0.88rem; color:#10b981; font-weight:700;">✅ Imagen generada exitosamente con ComfyUI</div>' +
+                '</div>';
+              return;
+            }
+          }
+        } catch(e) {}
+
+        setTimeout(function() { checkHistory(attemptsLeft - 1); }, 2500);
+      };
+
+      checkHistory(35);
+
     } catch(e) {
-      previewBox.innerHTML = '<div style="color:#ef4444;padding:16px;text-align:center;">⚠️ ComfyUI en ' + escapeHtml(config.comfyUrl) + ' no responde. Asegúrate de que esté corriendo.</div>';
+      console.error('[ComfyUI Error]', e);
+      previewBox.innerHTML = '<div style="color:#ef4444; padding:16px; text-align:center;">⚠️ Error al conectar con ComfyUI: ' + escapeHtml(e.message) + '</div>';
     } finally {
       if (btn) btn.disabled = false;
     }

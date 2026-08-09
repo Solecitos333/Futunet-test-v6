@@ -266,12 +266,12 @@
 
   // --- Ollama Connection ---
   async function checkOllama() {
-    // Try stored endpoint, then local IP, then localhost
+    const LIVE_TUNNEL = 'https://continually-dairy-aim-accompanying.trycloudflare.com';
     const endpointsToTry = [
       state.ollamaEndpoint,
+      LIVE_TUNNEL,
       'http://10.0.0.117:3000',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000'
+      'http://localhost:3000'
     ].filter(Boolean);
 
     const uniqueEndpoints = [...new Set(endpointsToTry)];
@@ -778,7 +778,7 @@
       }
 
       state.settings = userSettings;
-      state.ollamaEndpoint = userSettings.ollamaEndpoint || 'http://localhost:3000';
+      state.ollamaEndpoint = userSettings.ollamaEndpoint || 'https://continually-dairy-aim-accompanying.trycloudflare.com';
       state.currentModel = userSettings.defaultModel || 'gemini-2.0-flash';
 
       // Pre-fill settings form
