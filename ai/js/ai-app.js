@@ -8,7 +8,7 @@
   // --- State ---
   const state = {
     currentChatId: null,
-    currentModel: 'gemini-2.0-flash',
+    currentModel: 'gemini-3.6-flash',
     isGenerating: false,
     isOnline: false,
     messages: [],
@@ -779,7 +779,7 @@
 
       state.settings = userSettings;
       state.ollamaEndpoint = userSettings.ollamaEndpoint || 'https://continually-dairy-aim-accompanying.trycloudflare.com';
-      state.currentModel = userSettings.defaultModel || 'gemini-2.0-flash';
+      state.currentModel = userSettings.defaultModel || 'gemini-3.6-flash';
 
       // Pre-fill settings form
       els.ollamaUrlInput.value = state.ollamaEndpoint;
