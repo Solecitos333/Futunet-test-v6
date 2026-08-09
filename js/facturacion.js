@@ -6864,6 +6864,22 @@ window.ERPBilling = (function () {
       }
     });
     calculateInvoiceFormTotals();
+    showToast('Se eliminó el ITBIS de todos los artículos.', 'info');
+  }
+
+  function restoreAllRowTaxes() {
+    const tbody = document.getElementById('invoice-form-items-body');
+    if (!tbody) return;
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach(tr => {
+      const taxInput = tr.querySelector('.row-tax');
+      if (taxInput) {
+        taxInput.dataset.override = 'false';
+        handleRowPriceQtyChange(taxInput);
+      }
+    });
+    calculateInvoiceFormTotals();
+    showToast('Se restableció el ITBIS en todos los artículos.', 'success');
   }
 
   async function searchClientByRnc(rnc, context = 'invoice-form') {
@@ -6959,6 +6975,7 @@ window.ERPBilling = (function () {
     handleRowPriceQtyChange: handleRowPriceQtyChange,
     handleRowTaxChange: handleRowTaxChange,
     removeAllRowTaxes: removeAllRowTaxes,
+    restoreAllRowTaxes: restoreAllRowTaxes,
     searchClientByRnc: searchClientByRnc,
 
     // POS exports
