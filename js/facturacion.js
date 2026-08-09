@@ -534,15 +534,15 @@ window.ERPBilling = (function () {
     };
   }
 
-  function invoiceCustomerSnapshot(clientId, fallback) {
+  function invoiceCustomerSnapshot(clientId, fallback = {}) {
     const client = clients.find(item => item.id === clientId) || {};
     return {
       id: clientId || 'custom',
-      name: client.name || fallback.name || '',
-      rnc: client.rnc || fallback.rnc || '',
-      phone: client.phone || '',
-      email: client.email || '',
-      address: client.address || ''
+      name: (fallback.name !== undefined && fallback.name !== '') ? fallback.name : (client.name || ''),
+      rnc: (fallback.rnc !== undefined && fallback.rnc !== '') ? fallback.rnc : (client.rnc || ''),
+      phone: (fallback.phone !== undefined && fallback.phone !== '') ? fallback.phone : (client.phone || ''),
+      email: (fallback.email !== undefined && fallback.email !== '') ? fallback.email : (client.email || ''),
+      address: (fallback.address !== undefined && fallback.address !== '') ? fallback.address : (client.address || '')
     };
   }
 
@@ -1780,6 +1780,12 @@ window.ERPBilling = (function () {
     document.getElementById('form-invoice-client-name').value = '';
     document.getElementById('form-invoice-client-id').value = '';
     document.getElementById('form-invoice-client-rnc').value = '';
+    const phoneInput = document.getElementById('form-invoice-client-phone');
+    if (phoneInput) phoneInput.value = '';
+    const emailInput = document.getElementById('form-invoice-client-email');
+    if (emailInput) emailInput.value = '';
+    const addressInput = document.getElementById('form-invoice-client-address');
+    if (addressInput) addressInput.value = '';
     
     // Set default dates
     const today = new Date();
@@ -2148,6 +2154,12 @@ window.ERPBilling = (function () {
           document.getElementById('form-invoice-client-name').value = c.name;
           document.getElementById('form-invoice-client-id').value = c.id;
           document.getElementById('form-invoice-client-rnc').value = c.rnc || 'No registrado';
+          const phoneEl = document.getElementById('form-invoice-client-phone');
+          const emailEl = document.getElementById('form-invoice-client-email');
+          const addressEl = document.getElementById('form-invoice-client-address');
+          if (phoneEl) phoneEl.value = c.phone || '';
+          if (emailEl) emailEl.value = c.email || '';
+          if (addressEl) addressEl.value = c.address || '';
           dropdown.style.display = 'none';
         });
         dropdown.appendChild(item);
@@ -2200,6 +2212,9 @@ window.ERPBilling = (function () {
     let clientId = document.getElementById('form-invoice-client-id').value;
     const clientName = document.getElementById('form-invoice-client-name').value.trim();
     const clientRnc = document.getElementById('form-invoice-client-rnc').value.trim();
+    const clientPhone = document.getElementById('form-invoice-client-phone') ? document.getElementById('form-invoice-client-phone').value.trim() : '';
+    const clientEmail = document.getElementById('form-invoice-client-email') ? document.getElementById('form-invoice-client-email').value.trim() : '';
+    const clientAddress = document.getElementById('form-invoice-client-address') ? document.getElementById('form-invoice-client-address').value.trim() : '';
     
     if (!clientName) {
       showToast('Por favor, introduce el nombre del cliente.', 'warning');
@@ -2385,7 +2400,10 @@ window.ERPBilling = (function () {
       clientId: clientId || 'custom',
       clientName: clientName || '',
       clientRnc: clientRnc || '',
-      customerSnapshot: invoiceCustomerSnapshot(clientId, { name: clientName, rnc: clientRnc }),
+      clientPhone: clientPhone || '',
+      clientEmail: clientEmail || '',
+      clientAddress: clientAddress || '',
+      customerSnapshot: invoiceCustomerSnapshot(clientId, { name: clientName, rnc: clientRnc, phone: clientPhone, email: clientEmail, address: clientAddress }),
       issuerSnapshot: invoiceIssuerSnapshot(division),
       fiscalSchemaVersion: 2,
       date: date || '',
@@ -6614,6 +6632,13 @@ window.ERPBilling = (function () {
     document.getElementById('form-invoice-client-name').value = inv.clientName;
     document.getElementById('form-invoice-client-id').value = inv.clientId;
     document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
+    const snap = inv.customerSnapshot || {};
+    const clientPhoneInput = document.getElementById('form-invoice-client-phone');
+    if (clientPhoneInput) clientPhoneInput.value = snap.phone || inv.clientPhone || '';
+    const clientEmailInput = document.getElementById('form-invoice-client-email');
+    if (clientEmailInput) clientEmailInput.value = snap.email || inv.clientEmail || '';
+    const clientAddressInput = document.getElementById('form-invoice-client-address');
+    if (clientAddressInput) clientAddressInput.value = snap.address || inv.clientAddress || '';
     document.getElementById('form-invoice-date').value = inv.date;
     document.getElementById('form-invoice-due-date').value = inv.dueDate;
 
@@ -6761,6 +6786,13 @@ window.ERPBilling = (function () {
     document.getElementById('form-invoice-client-name').value = inv.clientName;
     document.getElementById('form-invoice-client-id').value = inv.clientId;
     document.getElementById('form-invoice-client-rnc').value = inv.clientRnc || '';
+    const convSnap = inv.customerSnapshot || {};
+    const convPhoneInput = document.getElementById('form-invoice-client-phone');
+    if (convPhoneInput) convPhoneInput.value = convSnap.phone || inv.clientPhone || '';
+    const convEmailInput = document.getElementById('form-invoice-client-email');
+    if (convEmailInput) convEmailInput.value = convSnap.email || inv.clientEmail || '';
+    const convAddressInput = document.getElementById('form-invoice-client-address');
+    if (convAddressInput) convAddressInput.value = convSnap.address || inv.clientAddress || '';
     
     const today = new Date();
     document.getElementById('form-invoice-date').value = BillingCore.toLocalDateInput(today);
