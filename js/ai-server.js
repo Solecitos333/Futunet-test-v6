@@ -43,11 +43,11 @@
   });
 
   function init() {
-    if (!FutunetAuth.isSuperAdmin()) {
-      console.warn('Acceso denegado: Servidor IA es exclusivo para SuperAdmin.');
+    if (isInitialized) {
+      renderChatThreadsList();
+      renderActiveThreadMessages();
       return;
     }
-    if (isInitialized) return;
     isInitialized = true;
 
     loadStoredConfig();
@@ -56,8 +56,11 @@
     checkAllServicesHealth();
     fetchOllamaModels();
 
-    if (!activeThreadId) {
+    if (!activeThreadId || chatThreads.length === 0) {
       createNewChat();
+    } else {
+      renderChatThreadsList();
+      renderActiveThreadMessages();
     }
   }
 

@@ -16,12 +16,11 @@
 }
 
 /* ─── Main Section Container ─── */
-.admin-section[data-admin-panel="ai-server"] {
+.admin-panel[data-admin-panel="ai-server"] {
   display: none;
-  padding: 24px;
   animation: aiFadeIn 0.3s ease-out;
 }
-.admin-section[data-admin-panel="ai-server"].is-active {
+.admin-panel[data-admin-panel="ai-server"].is-active {
   display: block;
 }
 
