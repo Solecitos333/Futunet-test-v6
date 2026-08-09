@@ -16,18 +16,28 @@
 }
 
 /* ─── Main Section Container ─── */
+/* Override admin-main padding to make AI panel go edge-to-edge */
+.admin-main:has([data-admin-panel="ai-server"].is-active) {
+  padding: 0;
+  background: #0b1118;
+}
+
 .admin-panel[data-admin-panel="ai-server"] {
   display: none;
-  animation: aiFadeIn 0.3s ease-out;
 }
 .admin-panel[data-admin-panel="ai-server"].is-active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px 28px;
+  background: #0b1118;
 }
 
 @keyframes aiFadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 
 /* ─── AI Header & Banner ─── */
 .ai-header-banner {
@@ -164,7 +174,8 @@
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 20px;
-  min-height: 640px;
+  flex: 1;
+  min-height: 600px;
 }
 @media (max-width: 992px) {
   .ai-studio-grid {
@@ -334,8 +345,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  min-height: 400px;
-  max-height: 520px;
+  min-height: 350px;
   background: rgba(11, 17, 24, 0.5);
 }
 

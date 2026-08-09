@@ -2504,6 +2504,18 @@
           console.warn('No se pudo guardar la sección activa:', storageError);
         }
 
+        // ─── Direct AI Server init (independent of loadPanel db check) ───
+        if (target === 'ai-server') {
+          var tryInitAI = function(attempts) {
+            if (window.AdminAIServer && typeof window.AdminAIServer.init === 'function') {
+              try { window.AdminAIServer.init(); } catch(e) { console.error('[AI] init error:', e); }
+            } else if (attempts > 0) {
+              setTimeout(function() { tryInitAI(attempts - 1); }, 300);
+            }
+          };
+          tryInitAI(10); // retry up to 10 times (3 seconds total)
+        }
+
         var loadPromise = Promise.resolve();
         if (typeof AdminPanel !== 'undefined' && typeof AdminPanel.loadPanel === 'function') {
           loadPromise = Promise.resolve(AdminPanel.loadPanel(target));
