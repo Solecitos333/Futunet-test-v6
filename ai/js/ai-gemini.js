@@ -11,8 +11,15 @@
   
   const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SW16UXU2MlNrdmROOXdiOTFUaUlmTnVzSEpyMXBablZOWEZfS0Z3NWVNN1E=';
   
+  // System prompt for Futunet AI
+  const SYSTEM_PROMPT = `Eres Futunet AI, el asistente de inteligencia artificial privado de Futunet, 
+un proveedor de servicios de internet (ISP) en República Dominicana. 
+Eres experto en redes, telecomunicaciones, soporte técnico y atención al cliente. 
+Respondes en español dominicano de manera profesional pero amigable. 
+Cuando no sepas algo, lo dices honestamente.`;
+  
   function getApiKey() {
-    // Try localStorage first, then default
+    // Try localStorage first, then default embedded key
     return localStorage.getItem('futunet_gemini_key') || (typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '');
   }
   
@@ -53,10 +60,32 @@
       const geminiModel = model || DEFAULT_MODEL;
       
       // Convert messages to Gemini format
-      const contents = messages.map(m => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      }));
+      // Filter out empty messages and fix role mapping
+      const contents = messages
+        .filter(m => m.content && m.content.trim())
+        .map(m => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }]
+        }));
+      
+      // Ensure conversation starts with a user turn
+      if (contents.length === 0 || contents[0].role !== 'user') {
+        console.warn('Gemini: conversation must start with a user message');
+        onError && onError(new Error('La conversación debe comenzar con un mensaje de usuario'));
+        return null;
+      }
+      
+      // Ensure conversation alternates roles (Gemini requirement)
+      // If two consecutive same-role messages exist, merge them
+      const mergedContents = [];
+      for (const msg of contents) {
+        if (mergedContents.length > 0 && mergedContents[mergedContents.length - 1].role === msg.role) {
+          // Merge with previous
+          mergedContents[mergedContents.length - 1].parts[0].text += '\n' + msg.parts[0].text;
+        } else {
+          mergedContents.push(msg);
+        }
+      }
       
       const url = `${GEMINI_API_BASE}/models/${geminiModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
       
@@ -64,7 +93,10 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          contents: contents,
+          system_instruction: {
+            parts: [{ text: SYSTEM_PROMPT }]
+          },
+          contents: mergedContents,
           generationConfig: {
             temperature: 0.7,
             topP: 0.95,
@@ -80,7 +112,16 @@
         signal: controller.signal
       })
       .then(response => {
-        if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
+        if (!response.ok) {
+          return response.json().then(errData => {
+            const msg = errData.error && errData.error.message
+              ? errData.error.message
+              : `Error HTTP ${response.status}`;
+            throw new Error(msg);
+          }).catch(() => {
+            throw new Error(`Error HTTP ${response.status}`);
+          });
+        }
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullText = '';

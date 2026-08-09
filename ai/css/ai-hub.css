@@ -182,15 +182,46 @@ body {
 }
 
 .chat-item {
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.75rem;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.chat-title {
+  flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.delete-chat-btn {
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0;
+  padding: 0.15rem 0.3rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: var(--transition);
+  color: var(--text-muted);
+}
+
+.chat-item:hover .delete-chat-btn {
+  opacity: 1;
+}
+
+.delete-chat-btn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
 }
 
 .chat-item:hover {
@@ -199,9 +230,18 @@ body {
 }
 
 .chat-item.active {
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(11, 126, 181, 0.12);
   color: white;
   font-weight: 500;
+  border-left: 2px solid var(--accent);
+}
+
+.chat-item.empty {
+  pointer-events: none;
+  opacity: 0.4;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 1rem;
 }
 
 .sidebar-footer {
@@ -401,11 +441,53 @@ body {
 .message-content pre {
   background-color: #1e1e2e;
   padding: 1rem;
-  border-radius: var(--radius-md);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
   overflow-x: auto;
-  margin: 1rem 0;
+  margin: 0;
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.code-block-wrapper {
+  background-color: #1e1e2e;
+  border-radius: var(--radius-md);
+  margin: 1rem 0;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.75rem;
+  background-color: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.code-lang {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.copy-code-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.copy-code-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: var(--text-primary);
 }
 
 .message-content code {
@@ -413,12 +495,44 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
-  font-size: 0.9em;
+  font-size: 0.88em;
 }
 
 .message-content pre code {
   background-color: transparent;
   padding: 0;
+}
+
+.message-content h1,
+.message-content h2,
+.message-content h3 {
+  margin: 1.2rem 0 0.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.message-content ul,
+.message-content ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.message-content li {
+  margin-bottom: 0.25rem;
+}
+
+.message-content a {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.message-content a:hover {
+  color: white;
+}
+
+.message-content hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1rem 0;
 }
 
 .message-actions {
@@ -684,14 +798,48 @@ body {
     left: -100%;
     width: 80%;
     max-width: 300px;
-    z-index: 100;
+    z-index: 200;
+    height: 100dvh;
+    box-shadow: var(--shadow-lg);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .sidebar.open {
     left: 0;
   }
+
+  /* Overlay when sidebar is open on mobile */
+  .sidebar.open::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    left: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+  }
   
   .mobile-only {
     display: block;
+  }
+
+  .messages-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .input-area {
+    padding: 0.75rem;
+  }
+
+  .welcome-screen {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .welcome-screen h1 {
+    font-size: 1.8rem;
+  }
+
+  .suggested-prompts {
+    grid-template-columns: 1fr;
   }
 }
