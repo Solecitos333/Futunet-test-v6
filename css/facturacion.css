@@ -651,7 +651,8 @@ body {
   gap: 16px;
 }
 .company-branding img {
-  height: 60px;
+  height: 75px;
+  max-height: 85px;
   width: auto;
   object-fit: contain;
   border-radius: 8px;
@@ -899,7 +900,7 @@ body {
     margin-bottom: 6px !important;
   }
   .printable-invoice-wrapper:not(.print-format-ticket) .company-branding img {
-    max-height: 38px !important;
+    max-height: 80px !important;
   }
   .printable-invoice-wrapper:not(.print-format-ticket) .company-info h2 {
     font-size: 1.05rem !important;
@@ -2257,7 +2258,7 @@ body.erp-modal-open {
   --invoice-row-pad-y: 6px;
   --invoice-head-pad-y: 5px;
   --invoice-section-gap: 14px;
-  --invoice-logo-height: 48px;
+  --invoice-logo-height: 80px;
   --invoice-signature-space: 25px;
 }
 .printable-invoice-wrapper.print-fit-compact {
@@ -2273,7 +2274,7 @@ body.erp-modal-open {
   --invoice-row-pad-y: 4.5px;
   --invoice-head-pad-y: 4px;
   --invoice-section-gap: 10px;
-  --invoice-logo-height: 43px;
+  --invoice-logo-height: 72px;
   --invoice-signature-space: 20px;
 }
 .printable-invoice-wrapper.print-fit-dense {
@@ -2289,7 +2290,7 @@ body.erp-modal-open {
   --invoice-row-pad-y: 3px;
   --invoice-head-pad-y: 2.6px;
   --invoice-section-gap: 7px;
-  --invoice-logo-height: 39px;
+  --invoice-logo-height: 64px;
   --invoice-signature-space: 15px;
 }
 .printable-invoice-wrapper.print-fit-minimum {
@@ -2305,7 +2306,7 @@ body.erp-modal-open {
   --invoice-row-pad-y: 2px;
   --invoice-head-pad-y: 1.8px;
   --invoice-section-gap: 5px;
-  --invoice-logo-height: 36px;
+  --invoice-logo-height: 56px;
   --invoice-signature-space: 12px;
 }
 
@@ -2327,7 +2328,7 @@ body.erp-modal-open {
 }
 .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-branding img {
   height: var(--invoice-logo-height);
-  max-width: 135px;
+  max-width: 180px;
 }
 .printable-invoice-wrapper:is(.print-fit-standard, .print-fit-compact, .print-fit-dense, .print-fit-minimum):not(.print-format-ticket) .company-info {
   min-width: 0;
