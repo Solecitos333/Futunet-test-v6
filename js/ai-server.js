@@ -656,6 +656,30 @@
       if (user) token = await user.getIdToken();
     } catch(e) {}
 
+    // Fetch installed checkpoint name dynamically
+    var ckptName = 'v1-5-pruned-emaonly.safetensors';
+    try {
+      var infoRes = await fetch(targetProxy + '/api/comfy/object_info/CheckpointLoaderSimple', {
+        headers: { 'Authorization': token ? 'Bearer ' + token : '' }
+      });
+      if (infoRes.ok) {
+        var infoData = await infoRes.json();
+        var ckpts = infoData && infoData.CheckpointLoaderSimple && infoData.CheckpointLoaderSimple.input && infoData.CheckpointLoaderSimple.input.required && infoData.CheckpointLoaderSimple.input.required.ckpt_name ? infoData.CheckpointLoaderSimple.input.required.ckpt_name[0] : [];
+        if (ckpts && ckpts.length > 0) {
+          ckptName = ckpts[0];
+        } else {
+          previewBox.innerHTML =
+            '<div style="color:#f59e0b; padding:20px; text-align:center; line-height:1.6;">' +
+            '  <div style="font-size:1.8rem; margin-bottom:8px;">⚠️</div>' +
+            '  <strong style="color:#fff; font-size:1rem;">ComfyUI está conectado, pero falta el modelo de IA (.safetensors)</strong><br>' +
+            '  <span style="font-size:0.85rem; color:#94a3b8;">Por favor coloca un modelo de Stable Diffusion (ej. <code>v1-5-pruned-emaonly.safetensors</code>) en la carpeta <code>ComfyUI/models/checkpoints/</code> de tu servidor para generar imágenes.</span>' +
+            '</div>';
+          if (btn) btn.disabled = false;
+          return;
+        }
+      }
+    } catch(e) {}
+
     try {
       var promptPayload = {
         prompt: {
@@ -674,7 +698,7 @@
             },
             class_type: "KSampler"
           },
-          "4": { inputs: { ckpt_name: "v1-5-pruned-emaonly.safetensors" }, class_type: "CheckpointLoaderSimple" },
+          "4": { inputs: { ckpt_name: ckptName }, class_type: "CheckpointLoaderSimple" },
           "5": { inputs: { width: 512, height: 512, batch_size: 1 }, class_type: "EmptyLatentImage" },
           "6": { inputs: { text: promptText, clip: ["4", 1] }, class_type: "CLIPTextEncode" },
           "7": { inputs: { text: "ugly, blurry, distorted, low quality, bad resolution", clip: ["4", 1] }, class_type: "CLIPTextEncode" },
