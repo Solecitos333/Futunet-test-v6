@@ -1,0 +1,3 @@
+## YYYY-MM-DD - Missing aria-label on dynamically generated buttons
+**Learning:** Dynamically generated HTML components in JavaScript (e.g., cart and product quantity controls using template literals) lack static analysis coverage for accessibility. This causes missing aria-labels on icon-only buttons, especially in regular (non-compact) view variants.
+**Action:** Always add aria-labels to icon-only buttons. When applying UX or accessibility fixes to dynamically generated HTML components, ensure all conditional view variants (such as 'compact' vs 'regular' layouts) are updated, as they often use separate template literal branches.
