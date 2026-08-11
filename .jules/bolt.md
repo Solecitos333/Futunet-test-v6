@@ -1,0 +1,3 @@
+## 2024-11-20 - Cache normalized search strings
+**Learning:** String normalization (lowercasing, diacritic removal, etc.) inside inner loops executed frequently (like every keystroke during a search query over thousands of items) is a significant bottleneck. Using `Object.defineProperty` with `enumerable: false` allows safe caching of these computations directly on the data objects without leaking into serialization or causing side-effects.
+**Action:** When filtering arrays of objects using string manipulation, implement lazy evaluation and non-enumerable caching on the objects to turn O(N) string processing operations per keypress into O(1) property lookups.
