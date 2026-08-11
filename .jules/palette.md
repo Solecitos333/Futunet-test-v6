@@ -1,0 +1,3 @@
+## 2024-05-21 - Accessible dynamically generated quantity controls
+**Learning:** In dynamically built UIs (like cart drop-downs or catalog item cards), standard HTML accessibility features like `aria-label`s on icon-only buttons (`+`, `-`) are often missed. Since they aren't written in standard HTML files, typical linting may not catch them, leading to poor screen reader experiences.
+**Action:** When building or modifying dynamically generated template literals for UI components, ensure that all icon-only buttons include explicit `aria-label` attributes to maintain accessibility parity with statically rendered buttons.
