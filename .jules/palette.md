@@ -1,0 +1,3 @@
+## 2024-03-24 - Accessibility gaps in dynamic vanilla JS template literals
+**Learning:** Dynamically generated HTML components in JavaScript (e.g., cart and product quantity controls using template literals) lack static analysis coverage for accessibility. This causes elements like icon-only or symbol-only buttons ('-', '+') to frequently miss essential ARIA labels.
+**Action:** When working in codebases heavily reliant on vanilla JS template literals for UI rendering, manually search for interactive elements generated dynamically to ensure they have proper `aria-label` or `aria-labelledby` attributes.
