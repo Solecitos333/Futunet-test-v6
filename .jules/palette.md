@@ -1,0 +1,3 @@
+## 2026-05-11 - Adding aria-labels to dynamically generated icon-only buttons
+**Learning:** Icon-only buttons (like quantity controls using -, + or lucide icons) that are dynamically generated via template strings in JavaScript lack static analysis coverage for accessibility. This leads to missing `aria-label`s and poor screen reader support, unlike standard static HTML templates.
+**Action:** When dynamically generating HTML controls via JS string literals, always explicitly attach descriptive `aria-label` attributes to any buttons that rely solely on icons or non-textual symbols for their meaning.
