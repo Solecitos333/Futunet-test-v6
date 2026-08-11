@@ -1,0 +1,3 @@
+## 2024-03-24 - Missing Accessibility Labels on Dynamically Generated UI Controls
+**Learning:** Icon-only buttons (like `+` and `-` for quantity adjustments) generated dynamically via JavaScript template literals often miss accessibility attributes (`aria-label`) since static analysis tools may not easily catch them.
+**Action:** Always verify accessibility attributes when dynamically generating interactive HTML elements, especially icon-only buttons, and ensure `aria-label`s are explicitly added in the template strings.
