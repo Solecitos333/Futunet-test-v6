@@ -1454,12 +1454,6 @@ function setCategory(catName) {
   scrollCatalogToTop();
 }
 
-function setBrand(brandName) {
-  state.brand = brandName;
-  state.page = 0;
-  renderUI();
-}
-
 
 /* -------------------------------------------------------------
    6. PRODUCT MODAL (MARKETPLACE)
