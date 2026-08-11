@@ -1,0 +1,3 @@
+## 2024-06-09 - [Search Normalization Memoization]
+**Learning:** String normalization (`normalizeSearch`) using regex and `.normalize('NFD')` in JavaScript is expensive when called inside search filtering loops over large lists (e.g., thousands of products). Caching normalized strings is necessary. However, mutating the data objects themselves with `Object.defineProperty` is an anti-pattern as it risks `TypeError`s if objects are frozen. Using a `WeakMap` to store side-cache data keyed by object reference is a cleaner, safer approach that achieves the same memoization without mutating the underlying data structures.
+**Action:** Use `WeakMap` to lazily cache results of expensive processing on objects that are iterated over frequently.
