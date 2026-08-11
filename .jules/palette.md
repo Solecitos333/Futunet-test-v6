@@ -1,0 +1,3 @@
+## 2024-05-08 - Added ARIA labels to dynamically generated quantity control buttons
+**Learning:** Dynamically generated HTML components in JavaScript (e.g., cart and product quantity controls using template literals in `js/cart.js` and `js/catalog.js`) lack static analysis coverage for accessibility. This leads to icon-only buttons like `-` and `+` missing essential `aria-label` attributes.
+**Action:** Always ensure `aria-label` attributes are explicitly added to icon-only buttons during dynamic generation in JavaScript template literals, as these are often missed by standard static analysis tools.
