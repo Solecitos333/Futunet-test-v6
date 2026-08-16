@@ -7,7 +7,7 @@ const output = path.join(root, 'dist');
 const publicDirectories = ['css', 'images', 'img', 'js', 'cotizaciones_de_soporte', 'ai'];
 const publicRootFiles = new Set([
   'CNAME', 'manifest.json', 'robots.txt', 'sitemap.xml', 'sw.js',
-  'favicon.ico', 'favicon.png'
+  'favicon.ico', 'favicon.png', 'BingSiteAuth.xml'
 ]);
 
 await fs.rm(output, { recursive: true, force: true });
