@@ -1,0 +1,3 @@
+## 2026-05-23 - Accessibility of dynamically generated icon buttons
+**Learning:** Icon-only buttons that are dynamically generated in JavaScript (like those for quantity control in carts) often lack accessibility features like `aria-label` because static analysis tools may not catch them as easily as static HTML. Screen reader users need proper context for these buttons.
+**Action:** When dynamically generating HTML components containing interactive elements, always explicitly add descriptive `aria-label` attributes to icon-only buttons (like `-` and `+` controls) to ensure they are accessible.
