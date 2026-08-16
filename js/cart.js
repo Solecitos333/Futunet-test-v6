@@ -15,6 +15,22 @@
 
   let activeCoupon = null;
   const COUPONS = {
+    BACKTOSCHOOL2026: {
+      code: 'BACKTOSCHOOL2026',
+      discount: 0.10,
+      departments: ['equipos', 'redes', 'oficina'],
+      validFrom: '2026-07-26',
+      validUntil: '2026-08-31',
+      description: '10% de descuento en Laptops, Impresión y Conectividad Escolar/Universitaria'
+    },
+    RESTAURACION2026: {
+      code: 'RESTAURACION2026',
+      discount: 0.10,
+      departments: ['equipos', 'redes', 'oficina', 'energia', 'seguridad'],
+      validFrom: '2026-08-15',
+      validUntil: '2026-08-23',
+      description: '10% de descuento Especial Semana de la Restauración Dominicana'
+    },
     PAPASMART2026: {
       code: 'PAPASMART2026',
       discount: 0.10,
@@ -28,8 +44,8 @@
       discount: 0.10,
       departments: ['energia'],
       validFrom: '2026-06-01',
-      validUntil: '2026-06-30',
-      description: '10% de descuento en Energía y Respaldo (Junio 2026)'
+      validUntil: '2026-09-30',
+      description: '10% de descuento en Energía y Respaldo Ciclónico'
     }
   };
 
