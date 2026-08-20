@@ -751,7 +751,7 @@
             </div>
             
             <div id="checkout-guest-warning" class="checkout-warning-box" style="display:none; margin-top:12px;">
-              <p>⚠️ Para pagar mediante transferencia y subir tu comprobante directamente en la web, debes <a href="login.html" style="text-decoration:underline; font-weight:600; color:#0A70A2;">iniciar sesión</a> o registrarte. De lo contrario, puedes solicitar tu pedido por WhatsApp y acordar el pago allí.</p>
+              <p>Para pagar mediante transferencia y subir tu comprobante directamente en la web, debes <a href="login.html" style="text-decoration:underline; font-weight:600; color:#0A70A2;">iniciar sesión</a> o registrarte. De lo contrario, puedes solicitar tu pedido por WhatsApp y acordar el pago allí.</p>
             </div>
           </div>
 
@@ -766,7 +766,7 @@
             <!-- Detalles específicos por método de pago -->
             <div id="checkout-step3-whatsapp-details" style="display:none; margin-top:16px;">
               <div class="checkout-info-box">
-                <p>💡 <strong>Pedido por WhatsApp:</strong> Al confirmar, abriremos un chat con nuestro asesor Orbis Espinal para coordinar los detalles finales de entrega y facturación con todo el listado de tu carrito listo.</p>
+                <p><strong>Pedido por WhatsApp:</strong> Al confirmar, abriremos un chat con nuestro asesor para coordinar los detalles finales de entrega y facturación con todo el listado de tu carrito listo.</p>
               </div>
             </div>
 
@@ -780,7 +780,7 @@
                   <div><strong>Cuenta:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('9605759674')">9605759674</span></div>
                   <div><strong>RNC:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('132702077')">132702077</span></div>
                 </div>
-                <small class="click-to-copy-hint">💡 Toca el titular, cuenta o RNC para copiarlos al portapapeles.</small>
+                <small class="click-to-copy-hint">Toca el titular, cuenta o RNC para copiarlos al portapapeles.</small>
               </div>
 
               <div class="checkout-upload-area" style="margin-top:16px;">
@@ -836,7 +836,7 @@
         const coupon = COUPONS[code];
         if (!coupon) {
           activeCoupon = null;
-          couponFeedback.textContent = '❌ Código de cupón inválido o expirado.';
+          couponFeedback.textContent = 'Código de cupón inválido o expirado.';
           couponFeedback.style.color = '#e74c3c';
           return;
         }
@@ -844,7 +844,7 @@
         const today = new Date().toISOString().slice(0, 10);
         if (today < coupon.validFrom || today > coupon.validUntil) {
           activeCoupon = null;
-          couponFeedback.textContent = '❌ Este cupón todavía no está activo o ya expiró.';
+          couponFeedback.textContent = 'Este cupón todavía no está activo o ya expiró.';
           couponFeedback.style.color = '#e74c3c';
           return;
         }
@@ -857,13 +857,13 @@
 
         if (!hasQualifyingItems) {
           activeCoupon = null;
-          couponFeedback.textContent = `⚠️ El cupón no aplica a los productos en tu carrito.`;
+          couponFeedback.textContent = `El cupón no aplica a los productos en tu carrito.`;
           couponFeedback.style.color = '#f39c12';
           return;
         }
 
         activeCoupon = coupon;
-        couponFeedback.textContent = `✓ Cupón ${coupon.code} aplicado: ${coupon.description}`;
+        couponFeedback.textContent = `Cupón ${coupon.code} aplicado: ${coupon.description}`;
         couponFeedback.style.color = '#2ecc71';
         showCartToast(`Cupón ${coupon.code} aplicado con éxito.`, 'success');
       });
@@ -1137,7 +1137,7 @@
             if (data.documentNumber && document.getElementById('chk-document-number')) {
               document.getElementById('chk-document-number').value = data.documentNumber;
               const hintEl = document.getElementById('chk-document-hint');
-              if (hintEl) hintEl.textContent = '✓ Documento guardado en tu cuenta';
+              if (hintEl) hintEl.textContent = 'Documento guardado en tu cuenta';
             }
           }
           const financingDoc = await db.collection('financing_profiles').doc(user.uid).get();

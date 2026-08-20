@@ -1,5 +1,6 @@
 /**
  * FUTUNET - ZONA GAMING INTERACTIVE LOGIC (gaming.js)
+ * Clean Corporate Light Edition
  */
 
 (function () {
@@ -40,7 +41,7 @@
       category: 'PCs Gamer',
       price: 'RD$ 28,900.00',
       img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-525-01.jpg&w=720&output=webp&q=75',
-      specs: ['AMD Ryzen 5 5600GT', '16GB RAM RGB', '500GB SSD NVMe', 'Case Cristal 4 Fans RGB', 'Fuente 550W 80+']
+      specs: ['AMD Ryzen 5 5600GT', '16GB RAM RGB', '500GB SSD NVMe', 'Case Cristal 4 Fans', 'Fuente 550W 80+']
     },
     {
       id: 'gm_pc_esports_rtx4060',
@@ -85,7 +86,7 @@
       category: 'Monitores Gaming',
       price: 'RD$ 21,500.00',
       img: 'https://wsrv.nl/?url=images.samsung.com/is/image/samsung/p6pim/latin/ls27bg400elxzl/gallery/latin-odyssey-g4-g40b-432822-ls27bg400elxzl-533471018?$720_576_PNG$&w=720&output=webp&q=75',
-      specs: ['27" IPS Full HD', '240Hz Ultra Fast', '1ms GtG Response', 'G-Sync + FreeSync', 'Base Ergonomica Pivot']
+      specs: ['27" IPS Full HD', '240Hz Ultra Fast', '1ms GtG Response', 'G-Sync + FreeSync', 'Base Pivot']
     },
     {
       id: 'gm_teclado_redragon_kumara',
@@ -94,72 +95,70 @@
       category: 'Periféricos Gaming',
       price: 'RD$ 2,650.00',
       img: 'https://wsrv.nl/?url=redragon.es/content/uploads/2021/04/KUMARA-K552-RGB-1.png&w=720&output=webp&q=75',
-      specs: ['Formato Compacto TKL', 'Switches Mecanicos Hot-Swap', 'RGB Chroma Configurable', 'Layout Español']
+      specs: ['Formato Compacto TKL', 'Switches Mecánicos', 'RGB Configurable', 'Layout Español']
     },
     {
       id: 'gm_mouse_logitech_g502_hero',
-      title: 'Mouse Gamer Logitech G502 HERO 25K DPI RGB con Pesas Ajustables',
-      brand: 'LOGITECH',
+      title: 'Mouse Gamer Logitech G502 HERO Sensor 25K 25,600 DPI Pesas Ajustables',
+      brand: 'LOGITECH G',
       category: 'Periféricos Gaming',
       price: 'RD$ 3,450.00',
       img: 'https://wsrv.nl/?url=resource.logitechg.com/w_692,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g502-hero/g502-hero-gallery-1.png?v=1&w=720&output=webp&q=75',
-      specs: ['Sensor HERO 25,600 DPI', '11 Botones Programables', '5 Pesas de 3.6g extraibles', 'RGB LIGHTSYNC']
+      specs: ['Sensor HERO 25K', '11 Botones Programables', 'Pesas Ajustables 3.6g', 'LIGHTSYNC RGB']
     },
     {
       id: 'gm_headset_hyperx_cloud2',
-      title: 'Headset Gamer HyperX Cloud II Sonido Envolvente 7.1 Almohadillas Memory Foam',
+      title: 'Auriculares Gamer HyperX Cloud II Sonido Envolvente 7.1 Micrófono Cancelación',
       brand: 'HYPERX',
       category: 'Periféricos Gaming',
-      price: 'RD$ 5,400.00',
-      img: 'https://wsrv.nl/?url=hyperx.com/cdn/shop/products/hyperx_cloud_ii_red_1_main.jpg?v=1661434316&w=720&output=webp&q=75',
-      specs: ['Drivers de 53mm', 'Audio 7.1 Surround DSP', 'Almohadillas Memory Foam', 'Microfono Cancelacion Ruido']
+      price: 'RD$ 4,890.00',
+      img: 'https://wsrv.nl/?url=row.hyperx.com/cdn/shop/products/hyperx_cloud_ii_red_1_main.jpg?v=1662446736&w=720&output=webp&q=75',
+      specs: ['Sonido Virtual 7.1', 'Almohadillas Memory Foam', 'Micrófono Desmontable', 'Estructura de Aluminio']
     },
     {
-      id: 'gm_fibra_gamer_200mb',
-      title: 'Plan Internet Fibra Gamer Futunet 200 Mbps Simétricos Low Ping',
+      id: 'gm_fibra_gamer_200m',
+      title: 'Internet Fibra Gamer 200 Mbps Simétricos con Baja Latencia QoS y Wi-Fi 6',
       brand: 'FUTUNET FIBRA',
       category: 'Internet Gamer',
       price: 'RD$ 2,495.00 / mes',
-      img: 'img/productos/tp-link-deco-x50.webp',
-      specs: ['200 Mbps Descarga + 200 Mbps Subida', 'Rutas BGP Low Ping (<25ms)', 'Router Wi-Fi 6 Gigabit', 'Soporte VIP 24/7']
+      img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=720&q=75',
+      specs: ['200M Bajada / 200M Subida', 'Rutas BGP Prioritarias', 'Ping < 25ms en Servidores', 'Router Wi-Fi 6 Gigabit']
     }
   ];
 
   function parsePrice(priceStr) {
     if (!priceStr) return 0;
-    var clean = String(priceStr).replace(/[^0-9.]/g, '');
-    return parseFloat(clean) || 0;
-  }
-
-  function formatDOP(num) {
-    return 'RD$ ' + Number(num).toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    var cleaned = String(priceStr).replace(/[^0-9.]/g, '');
+    return parseFloat(cleaned) || 0;
   }
 
   function estimateInstallment(priceStr) {
-    if (String(priceStr).includes('/ mes')) return 'Plan mensual recurrente';
-    var price = parsePrice(priceStr);
-    if (price <= 0) return 'Consulta financiamiento';
-    // Estimated 18 months installment calculation (approx with nominal interest)
-    var monthly = Math.round((price * 1.18) / 18);
-    return 'o desde ' + formatDOP(monthly) + ' / mes (hasta 18 cuotas)';
+    var val = parsePrice(priceStr);
+    if (val <= 0 || String(priceStr).includes('/ mes')) {
+      return 'Plan mensual';
+    }
+    // Estimated 12-month installment with basic interest
+    var monthly = Math.round((val * 1.15) / 12);
+    return 'o cuotas desde RD$ ' + monthly.toLocaleString('es-DO') + ' / mes';
   }
 
   function initGamingCatalog() {
-    var rawProducts = [];
-
-    // Check if supplierFeeds or FutunetData is loaded
-    if (window.FutunetData && Array.isArray(window.FutunetData.products) && window.FutunetData.products.length > 0) {
-      rawProducts = window.FutunetData.products.filter(function (p) {
-        var txt = (p.title + ' ' + (p.category || '') + ' ' + (p.department || '')).toLowerCase();
-        return txt.includes('gamer') || txt.includes('gaming') || txt.includes('rtx') || txt.includes('ryzen') || p.supplier === 'gaming';
+    var supplierProducts = [];
+    if (window.SUPPLIER_INVENTORY_FEED && Array.isArray(window.SUPPLIER_INVENTORY_FEED)) {
+      supplierProducts = window.SUPPLIER_INVENTORY_FEED.filter(function (item) {
+        return item.supplier === 'gaming' ||
+          (item.category && item.category.toLowerCase().includes('gaming')) ||
+          (item.title && /rtx|gtx|gamer|gaming|144hz|240hz|ryzen 5|ryzen 7|esports/i.test(item.title));
       });
     }
 
-    if (rawProducts.length === 0) {
-      rawProducts = FALLBACK_GAMING_PRODUCTS;
+    if (supplierProducts.length >= 6) {
+      gamingState.products = supplierProducts;
+    } else {
+      gamingState.products = FALLBACK_GAMING_PRODUCTS;
     }
 
-    gamingState.products = rawProducts;
+    gamingState.filteredProducts = gamingState.products.slice();
     applyFilters();
     setupEventListeners();
   }
@@ -170,9 +169,8 @@
     // 1. Category Filter
     if (gamingState.activeCategory !== 'all') {
       list = list.filter(function (p) {
-        var cat = (p.category || '').toLowerCase();
-        var filter = gamingState.activeCategory.toLowerCase();
-        return cat.includes(filter) || filter.includes(cat);
+        if (!p.category) return false;
+        return p.category.toLowerCase() === gamingState.activeCategory.toLowerCase();
       });
     }
 
@@ -213,40 +211,28 @@
     if (empty) empty.style.display = 'none';
 
     grid.innerHTML = gamingState.filteredProducts.map(function (p) {
-      var isLease = String(p.price).includes('/ mes');
       var installmentText = estimateInstallment(p.price);
-      var specsHtml = '';
-      if (Array.isArray(p.specs) && p.specs.length > 0) {
-        specsHtml = p.specs.slice(0, 3).map(function (s) {
-          return '<span class="spec-chip">' + escapeHTML(s) + '</span>';
-        }).join('');
-      }
-
+      var specsText = Array.isArray(p.specs) ? p.specs.slice(0, 4).join(' • ') : '';
       var escapedTitle = escapeHTML(p.title);
       var escapedId = escapeHTML(p.id);
 
       return [
-        '<div class="gaming-card" data-id="' + escapedId + '">',
-        '  <div class="gaming-card-top">',
-        '    <span class="card-tag-badge">' + escapeHTML(p.category || 'Gaming') + '</span>',
+        '<div class="gaming-product-card" data-id="' + escapedId + '">',
+        '  <span class="g-card-badge">' + escapeHTML(p.category || 'Gaming') + '</span>',
+        '  <div class="g-card-img-wrap">',
         '    <img src="' + escapeHTML(p.img || 'img/laptops.jpg') + '" alt="' + escapedTitle + '" loading="lazy" />',
         '  </div>',
-        '  <div class="gaming-card-body">',
-        '    <div class="card-brand">' + escapeHTML(p.brand || 'Futunet') + '</div>',
-        '    <h3 class="card-title" title="' + escapedTitle + '">' + escapedTitle + '</h3>',
-        '    <div class="card-specs-summary">' + specsHtml + '</div>',
-        '    <div class="card-price-container">',
-        '      <div class="card-main-price">' + escapeHTML(p.price) + '</div>',
-        '      <div class="card-installment-estimate">' + installmentText + '</div>',
+        '  <div class="g-card-category">' + escapeHTML(p.brand || 'Futunet') + '</div>',
+        '  <h3 class="g-card-title" title="' + escapedTitle + '">' + escapedTitle + '</h3>',
+        '  <p class="g-card-specs">' + escapeHTML(specsText) + '</p>',
+        '  <div class="g-card-bottom">',
+        '    <div>',
+        '      <span class="g-card-price">' + escapeHTML(p.price) + '</span>',
+        '      <span class="g-card-installment">' + installmentText + '</span>',
         '    </div>',
-        '    <div class="gaming-card-actions">',
-        '      <button type="button" class="btn-card-cart" onclick="window.FutunetGaming.addToCart(\'' + escapedId + '\')">',
-        '        <i data-lucide="shopping-cart" style="width:14px; height:14px;"></i> Agregar',
-        '      </button>',
-        '      <button type="button" class="btn-card-cuotas" onclick="window.FutunetGaming.requestFinancing(\'' + escapedId + '\')">',
-        '        <i data-lucide="calendar-check" style="width:14px; height:14px;"></i> Cuotas',
-        '      </button>',
-        '    </div>',
+        '    <button type="button" class="g-card-btn" onclick="window.FutunetGaming.addToCart(\'' + escapedId + '\')">',
+        '      <i data-lucide="shopping-cart" style="width:14px; height:14px;"></i> Agregar',
+        '    </button>',
         '  </div>',
         '</div>'
       ].join('\n');
@@ -341,7 +327,7 @@
       
       if (item) {
         var msg = 'Hola Futunet, me interesa solicitar financiamiento en cuotas para el equipo: ' + item.title + ' (' + item.price + ').';
-        window.open('https://wa.me/18095874000?text=' + encodeURIComponent(msg), '_blank');
+        window.open('https://wa.me/18297411041?text=' + encodeURIComponent(msg), '_blank');
       }
     },
     resetFilters: function () {

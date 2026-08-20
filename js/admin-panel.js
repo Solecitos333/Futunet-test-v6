@@ -5386,12 +5386,12 @@
   var copywritingData = {
     enero: {
       whatsapp: "¡Hola! Comienza el año renovando tu oficina. Pregunta por nuestros escritorios ergonómicos, cableado estructurado e internet de fibra óptica simétrica corporativa.",
-      social: "¿Listo para llevar tu empresa al siguiente nivel en este 2026? 🚀 En Futunet diseñamos y equipamos tu oficina ideal: desde mobiliario ergonómico hasta redes de alta velocidad y cableado de datos. ¡Cotiza hoy mismo y empieza el año con el pie derecho! #FutunetSantiago #OficinaNueva #B2B",
+      social: "¿Listo para llevar tu empresa al siguiente nivel en este 2026?  En Futunet diseñamos y equipamos tu oficina ideal: desde mobiliario ergonómico hasta redes de alta velocidad y cableado de datos. ¡Cotiza hoy mismo y empieza el año con el pie derecho! #FutunetSantiago #OficinaNueva #B2B",
       email: "Asunto: Diseña tu oficina para el éxito este 2026 con Futunet\n\nEstimado cliente,\n\nQueremos apoyarte en tus metas del nuevo año. Te ofrecemos soluciones completas para renovar tu espacio de trabajo:\n- Mobiliario corporativo\n- Cableado estructurado y redes WiFi 6\n- Laptops empresariales Dell y HP con garantía local.\n\nContáctanos para un levantamiento gratuito."
     },
     febrero: {
       whatsapp: "¡Hola! En el mes del amor, mantente conectado con quienes más quieres. Instala hoy Internet de Fibra Óptica Futunet y recibe el doble de velocidad por 3 meses.",
-      social: "¡El amor se comparte mejor a alta velocidad! 💻❤️ Conecta tu hogar con la estabilidad del Internet de Fibra Óptica simétrica de Futunet en Santiago. Planes residenciales rápidos para streaming, teletrabajo y clases online. ¡Solicita tu instalación hoy! #InternetSantiago #FibraOptica #Futunet",
+      social: "¡El amor se comparte mejor a alta velocidad! ❤️ Conecta tu hogar con la estabilidad del Internet de Fibra Óptica simétrica de Futunet en Santiago. Planes residenciales rápidos para streaming, teletrabajo y clases online. ¡Solicita tu instalación hoy! #InternetSantiago #FibraOptica #Futunet",
       email: "Asunto: Disfruta de la mejor conexión en el mes del amor con Futunet\n\nEstimado(a),\n\nQue la distancia no sea un límite. Descubre nuestros planes residenciales de Fibra Óptica Simétrica. Sin caídas, sin interrupciones. Conecta tu Smart Home con la red más estable del Cibao."
     },
     marzo: {
@@ -5406,7 +5406,7 @@
     },
     mayo: {
       whatsapp: "¡Hola! Celebra a mamá con el mejor regalo tecnológico. Pregunta por nuestras cerraduras inteligentes, cámaras wifi y laptops de alto rendimiento.",
-      social: "¡Mamá se merece estar siempre conectada y segura! 🌸💻 Sorpréndela con regalos de domótica: cámaras wifi de monitoreo inteligente, cerraduras digitales para su tranquilidad, o una laptop para sus proyectos. ¡Entra a nuestro catálogo Futunet! #DiaDeLasMadres #RegalosTech #Futunet",
+      social: "¡Mamá se merece estar siempre conectada y segura! 🌸 Sorpréndela con regalos de domótica: cámaras wifi de monitoreo inteligente, cerraduras digitales para su tranquilidad, o una laptop para sus proyectos. ¡Entra a nuestro catálogo Futunet! #DiaDeLasMadres #RegalosTech #Futunet",
       email: "Asunto: Encuentra el regalo tecnológico ideal para Mamá en Futunet\n\nQuerido cliente,\n\nSorprende a mamá en su mes especial con tecnología que facilita su vida. Desde cámaras wifi interiores para estar en contacto, hasta cerraduras inteligentes de alta seguridad. Conoce los combos especiales de Mayo."
     },
     junio: {
@@ -5416,7 +5416,7 @@
     },
     julio: {
       whatsapp: "¡Hola! En el mes de los padres, regala potencia y conectividad. Obtén un 10% de descuento en laptops de alto rendimiento y routers WiFi 6 usando el código PAPASMART2026. ¡Visítanos!",
-      social: "¿Papá trabaja duro o le apasiona el gaming? 🎮💼 Celebra el Día de los Padres regalándole la potencia y conectividad que se merece. Usa el código PAPASMART2026 y obtén 10% de descuento en laptops seleccionadas y routers WiFi 6 de largo alcance. Visita nuestro catálogo Futunet en Santiago. ¡Promoción válida todo julio! #DiaDeLosPadres #PapáSmart #GamingRD #Futunet",
+      social: "¿Papá trabaja duro o le apasiona el gaming? 💼 Celebra el Día de los Padres regalándole la potencia y conectividad que se merece. Usa el código PAPASMART2026 y obtén 10% de descuento en laptops seleccionadas y routers WiFi 6 de largo alcance. Visita nuestro catálogo Futunet en Santiago. ¡Promoción válida todo julio! #DiaDeLosPadres #PapáSmart #GamingRD #Futunet",
       email: "Asunto: Sorprende a Papá con tecnología de punta - 10% de Descuento con el código PAPASMART2026\n\nEstimado cliente,\n\nCelebra el mes de los padres con el regalo perfecto. En Futunet hemos seleccionado laptops de alto rendimiento para productividad o gaming, y routers WiFi 6 de última generación. Usa el código PAPASMART2026 en tu cotización para obtener un 10% de descuento inmediato. Válido del 1 al 31 de julio de 2026. ¡Cotiza hoy mismo!"
     },
     agosto: {
@@ -5436,7 +5436,7 @@
     },
     noviembre: {
       whatsapp: "¡Hola! Llegó el Black Month a Futunet. Descuentos increíbles en todo el catálogo de tecnología, laptops y seguridad. ¡Aprovecha ya!",
-      social: "🔥 ¡Llegó el Black Friday a Futunet! El mes con los descuentos más grandes del año en Santiago en cámaras, UPS, laptops y cableado. Visita nuestro catálogo e-commerce y cotiza antes de que se agoten. #BlackFridayRD #DescuentosTecnologia #Futunet",
+      social: " ¡Llegó el Black Friday a Futunet! El mes con los descuentos más grandes del año en Santiago en cámaras, UPS, laptops y cableado. Visita nuestro catálogo e-commerce y cotiza antes de que se agoten. #BlackFridayRD #DescuentosTecnologia #Futunet",
       email: "Asunto: Ofertas Exclusivas de Black Friday Futunet - Solo por esta semana\n\nEstimado cliente,\n\nNo dejes pasar la oportunidad de adquirir equipamiento tecnológico con hasta un 30% de descuento directo en nuestro catálogo online. Cotiza y asegura tu pedido hoy."
     },
     diciembre: {
@@ -5476,14 +5476,14 @@
   function openNewBannerWithPreset(presetName) {
     openNewBanner();
     if (presetName === 'Respaldo Energético') {
-      setVal('banner-title', '⚡ ¿Tu negocio está listo para la <strong>temporada ciclónica</strong>?');
+      setVal('banner-title', ' ¿Tu negocio está listo para la <strong>temporada ciclónica</strong>?');
       setVal('banner-subtitle', 'Garantiza la continuidad de tu empresa con UPS de doble conversión, inversores y paneles solares con instalación prioritaria.');
       setVal('banner-link', 'catalogo.html?cat=energia');
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-06-01');
       setVal('banner-end-date', '2026-06-30');
     } else if (presetName === 'Papá Smart & Gaming') {
-      setVal('banner-title', '🎮 Mes del Padre con <strong>Rendimiento y Potencia</strong>');
+      setVal('banner-title', ' Mes del Padre con <strong>Rendimiento y Potencia</strong>');
       setVal('banner-subtitle', 'Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código PAPASMART2026.');
       setVal('banner-link', 'catalogo.html?cat=equipos');
       setVal('banner-order', 1);

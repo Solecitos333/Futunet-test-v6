@@ -1,806 +1,804 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="canonical" href="https://futunet.com.do/mi-cuenta.html" />
+ <link rel="canonical" href="https://futunet.com.do/mi-cuenta.html" />
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mi Cuenta — Futunet</title>
-  <meta name="robots" content="noindex, nofollow, noarchive" />
-  <meta name="description" content="Gestiona tu cuenta Futunet: perfil, carritos guardados, favoritos y más." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="css/main.css?v=3.2" />
-  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
-  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="css/financing.css?v=20260801" />
-  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
-  <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
-  <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
-  <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="manifest" href="manifest.json" />
-  <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
-  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
-  <style>
-    /* ─── User Panel Styles (inline for this page) ─── */
-    .up-page {
-      min-height: 100vh;
-      background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%);
-      padding-top: 100px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .up-page.is-loaded { opacity: 1; }
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Mi Cuenta — Futunet</title>
+ <meta name="robots" content="noindex, nofollow, noarchive" />
+ <meta name="description" content="Gestiona tu cuenta Futunet: perfil, carritos guardados, favoritos y más." />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
+ <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
+ <link rel="stylesheet" href="css/main.css?v=3.2" />
+ <link rel="stylesheet" href="css/navbar.css?v=3.6" />
+ <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
+ <link rel="stylesheet" href="css/financing.css?v=20260801" />
+ <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
+ <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
+ <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
+ <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
+ <link rel="shortcut icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
+ <meta name="theme-color" content="#ffffff" />
+ <link rel="manifest" href="manifest.json" />
+ <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+ <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+ <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
+ <noscript><link rel="stylesheet" href="css/chatbot.css?v=3.0" /></noscript>
+ <style>
+  /* User Panel Styles (inline for this page) */
+  .up-page {
+   min-height: 100vh;
+   background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%);
+   padding-top: 100px;
+   opacity: 0;
+   transition: opacity 0.4s ease;
+  }
+  .up-page.is-loaded { opacity: 1; }
 
-    .up-container { max-width: 960px; margin: 0 auto; padding: 24px 18px 60px; }
+  .up-container { max-width: 960px; margin: 0 auto; padding: 24px 18px 60px; }
 
-    /* ─── Header ─── */
-    .up-header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 32px;
-      padding: 28px 32px;
-      background: #fff;
-      border: 1px solid rgba(10,112,162,0.06);
-      border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(10,112,162,0.05);
-    }
+  /* Header */
+  .up-header {
+   display: flex;
+   align-items: center;
+   gap: 20px;
+   margin-bottom: 32px;
+   padding: 28px 32px;
+   background: #fff;
+   border: 1px solid rgba(10,112,162,0.06);
+   border-radius: 24px;
+   box-shadow: 0 8px 24px rgba(10,112,162,0.05);
+  }
 
-    .up-avatar {
-      width: 64px; height: 64px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #0a7ab0, #22a4e0);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.6rem; font-weight: 700;
-      flex-shrink: 0;
-    }
+  .up-avatar {
+   width: 64px; height: 64px;
+   border-radius: 50%;
+   background: linear-gradient(135deg, #0a7ab0, #22a4e0);
+   display: flex; align-items: center; justify-content: center;
+   color: #fff;
+   font-family: 'Space Grotesk', sans-serif;
+   font-size: 1.6rem; font-weight: 700;
+   flex-shrink: 0;
+  }
 
-    .up-header-info h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.3rem; font-weight: 700;
-      color: #0a101d; margin: 0;
-    }
+  .up-header-info h1 {
+   font-family: 'Space Grotesk', sans-serif;
+   font-size: 1.3rem; font-weight: 700;
+   color: #0a101d; margin: 0;
+  }
 
-    .up-header-info p {
-      font-size: 0.85rem; color: #76889e; margin: 2px 0 0;
-    }
+  .up-header-info p {
+   font-size: 0.85rem; color: #76889e; margin: 2px 0 0;
+  }
 
-    .up-role-badge {
-      display: inline-block;
-      padding: 3px 10px; border-radius: 50px;
-      font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.5px;
-      margin-top: 6px;
-    }
-    .up-role-superadmin { background: rgba(231,76,60,0.08); color: #c0392b; }
-    .up-role-admin { background: rgba(10,112,162,0.08); color: #0A70A2; }
-    .up-role-editor { background: rgba(0,194,129,0.08); color: #0e8a5f; }
-    .up-role-user { background: rgba(118,136,158,0.08); color: #76889e; }
+  .up-role-badge {
+   display: inline-block;
+   padding: 3px 10px; border-radius: 50px;
+   font-size: 0.7rem; font-weight: 700;
+   text-transform: uppercase; letter-spacing: 0.5px;
+   margin-top: 6px;
+  }
+  .up-role-superadmin { background: rgba(231,76,60,0.08); color: #c0392b; }
+  .up-role-admin { background: rgba(10,112,162,0.08); color: #0A70A2; }
+  .up-role-editor { background: rgba(0,194,129,0.08); color: #0e8a5f; }
+  .up-role-user { background: rgba(118,136,158,0.08); color: #76889e; }
 
-    /* ─── Tabs ─── */
-    .up-tabs {
-      display: flex; gap: 4px;
-      background: #f3f7fc;
-      border-radius: 16px; padding: 4px;
-      margin-bottom: 24px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .up-tabs::-webkit-scrollbar {
-      display: none;
-    }
+  /* Tabs */
+  .up-tabs {
+   display: flex; gap: 4px;
+   background: #f3f7fc;
+   border-radius: 16px; padding: 4px;
+   margin-bottom: 24px;
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+   scrollbar-width: none;
+   -ms-overflow-style: none;
+  }
+  .up-tabs::-webkit-scrollbar {
+   display: none;
+  }
 
-    .up-tab {
-      flex: 1; min-width: max-content;
-      padding: 12px 18px;
-      border: none; background: transparent;
-      border-radius: 12px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.82rem; font-weight: 600;
-      color: #76889e; cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 6px;
-      justify-content: center;
-      white-space: nowrap;
-    }
-    .up-tab svg { width: 16px; height: 16px; }
-    .up-tab:hover { color: #0A70A2; }
-    .up-tab.is-active {
-      background: #fff; color: #0a101d;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
+  .up-tab {
+   flex: 1; min-width: max-content;
+   padding: 12px 18px;
+   border: none; background: transparent;
+   border-radius: 12px;
+   font-family: 'Outfit', sans-serif;
+   font-size: 0.82rem; font-weight: 600;
+   color: #76889e; cursor: pointer;
+   transition: all 0.2s ease;
+   display: flex; align-items: center; gap: 6px;
+   justify-content: center;
+   white-space: nowrap;
+  }
+  .up-tab svg { width: 16px; height: 16px; }
+  .up-tab:hover { color: #0A70A2; }
+  .up-tab.is-active {
+   background: #fff; color: #0a101d;
+   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
 
-    /* ─── Panels ─── */
-    .up-panel { display: none; animation: upFadeIn 0.3s ease; }
-    .up-panel.is-active { display: block; }
-    @keyframes upFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+  /* Panels */
+  .up-panel { display: none; animation: upFadeIn 0.3s ease; }
+  .up-panel.is-active { display: block; }
+  @keyframes upFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 
-    .up-card {
-      background: #fff;
-      border: 1px solid rgba(10,112,162,0.06);
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 4px 16px rgba(10,112,162,0.04);
-      margin-bottom: 16px;
-    }
+  .up-card {
+   background: #fff;
+   border: 1px solid rgba(10,112,162,0.06);
+   border-radius: 20px;
+   padding: 28px;
+   box-shadow: 0 4px 16px rgba(10,112,162,0.04);
+   margin-bottom: 16px;
+  }
 
-    .up-card h3 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.1rem; font-weight: 700;
-      color: #0a101d; margin: 0 0 18px;
-    }
+  .up-card h3 {
+   font-family: 'Space Grotesk', sans-serif;
+   font-size: 1.1rem; font-weight: 700;
+   color: #0a101d; margin: 0 0 18px;
+  }
 
-    /* ─── Profile Form ─── */
-    .up-form-group { margin-bottom: 16px; }
-    .up-form-label {
-      display: block; font-size: 0.78rem; font-weight: 600;
-      color: #394c60; margin-bottom: 6px;
-      text-transform: uppercase; letter-spacing: 0.3px;
-    }
-    .up-form-input {
-      width: 100%; padding: 12px 16px;
-      background: #f3f7fc; border: 1.5px solid #e5eef8;
-      border-radius: 14px; color: #0a101d;
-      font-family: 'Outfit', sans-serif; font-size: 0.9rem;
-      transition: all 0.3s; outline: none; box-sizing: border-box;
-    }
-    .up-form-input:focus {
-      border-color: #0A70A2; background: #fff;
-      box-shadow: 0 0 0 3px rgba(10,112,162,0.1);
-    }
-    .up-form-input[readonly] { opacity: 0.6; cursor: default; }
+  /* Profile Form */
+  .up-form-group { margin-bottom: 16px; }
+  .up-form-label {
+   display: block; font-size: 0.78rem; font-weight: 600;
+   color: #394c60; margin-bottom: 6px;
+   text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .up-form-input {
+   width: 100%; padding: 12px 16px;
+   background: #f3f7fc; border: 1.5px solid #e5eef8;
+   border-radius: 14px; color: #0a101d;
+   font-family: 'Outfit', sans-serif; font-size: 0.9rem;
+   transition: all 0.3s; outline: none; box-sizing: border-box;
+  }
+  .up-form-input:focus {
+   border-color: #0A70A2; background: #fff;
+   box-shadow: 0 0 0 3px rgba(10,112,162,0.1);
+  }
+  .up-form-input[readonly] { opacity: 0.6; cursor: default; }
 
-    .up-btn-save {
-      padding: 12px 28px; border: none;
-      border-radius: 14px; font-family: 'Outfit', sans-serif;
-      font-size: 0.88rem; font-weight: 700; cursor: pointer;
-      background: linear-gradient(135deg, #0a7ab0, #22a4e0);
-      color: #fff;
-      box-shadow: 0 6px 18px rgba(10,112,162,0.2);
-      transition: all 0.3s;
-    }
-    .up-btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(10,112,162,0.28); }
-    .up-btn-save:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .up-btn-save {
+   padding: 12px 28px; border: none;
+   border-radius: 14px; font-family: 'Outfit', sans-serif;
+   font-size: 0.88rem; font-weight: 700; cursor: pointer;
+   background: linear-gradient(135deg, #0a7ab0, #22a4e0);
+   color: #fff;
+   box-shadow: 0 6px 18px rgba(10,112,162,0.2);
+   transition: all 0.3s;
+  }
+  .up-btn-save:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(10,112,162,0.28); }
+  .up-btn-save:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-    /* ─── Cart Cards ─── */
-    .up-cart-card {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px;
-      background: #f9fbff; border: 1px solid #e5eef8;
-      border-radius: 14px; margin-bottom: 10px;
-      transition: border-color 0.2s;
-    }
-    .up-cart-card:hover { border-color: #0A70A2; }
-    .up-cart-info strong { display: block; font-size: 0.9rem; color: #0a101d; }
-    .up-cart-info span { font-size: 0.78rem; color: #76889e; }
-    .up-cart-actions { display: flex; gap: 6px; }
-    .up-btn-sm {
-      padding: 6px 14px; border: none; border-radius: 8px;
-      font-family: 'Outfit', sans-serif; font-size: 0.78rem;
-      font-weight: 600; cursor: pointer; transition: all 0.2s;
-    }
-    .up-btn-load { background: rgba(10,112,162,0.08); color: #0A70A2; }
-    .up-btn-load:hover { background: rgba(10,112,162,0.15); }
-    .up-btn-delete { background: rgba(231,76,60,0.06); color: #e74c3c; }
-    .up-btn-delete:hover { background: rgba(231,76,60,0.12); }
+  /* Cart Cards */
+  .up-cart-card {
+   display: flex; align-items: center; justify-content: space-between;
+   padding: 16px 20px;
+   background: #f9fbff; border: 1px solid #e5eef8;
+   border-radius: 14px; margin-bottom: 10px;
+   transition: border-color 0.2s;
+  }
+  .up-cart-card:hover { border-color: #0A70A2; }
+  .up-cart-info strong { display: block; font-size: 0.9rem; color: #0a101d; }
+  .up-cart-info span { font-size: 0.78rem; color: #76889e; }
+  .up-cart-actions { display: flex; gap: 6px; }
+  .up-btn-sm {
+   padding: 6px 14px; border: none; border-radius: 8px;
+   font-family: 'Outfit', sans-serif; font-size: 0.78rem;
+   font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .up-btn-load { background: rgba(10,112,162,0.08); color: #0A70A2; }
+  .up-btn-load:hover { background: rgba(10,112,162,0.15); }
+  .up-btn-delete { background: rgba(231,76,60,0.06); color: #e74c3c; }
+  .up-btn-delete:hover { background: rgba(231,76,60,0.12); }
 
-    .up-btn-save-cart {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 10px 20px; border: 1.5px dashed #e5eef8;
-      border-radius: 14px; background: transparent;
-      font-family: 'Outfit', sans-serif; font-size: 0.85rem;
-      font-weight: 600; color: #0A70A2; cursor: pointer;
-      transition: all 0.2s; margin-bottom: 16px;
-    }
-    .up-btn-save-cart:hover { border-color: #0A70A2; background: rgba(10,112,162,0.04); }
+  .up-btn-save-cart {
+   display: inline-flex; align-items: center; gap: 6px;
+   padding: 10px 20px; border: 1.5px dashed #e5eef8;
+   border-radius: 14px; background: transparent;
+   font-family: 'Outfit', sans-serif; font-size: 0.85rem;
+   font-weight: 600; color: #0A70A2; cursor: pointer;
+   transition: all 0.2s; margin-bottom: 16px;
+  }
+  .up-btn-save-cart:hover { border-color: #0A70A2; background: rgba(10,112,162,0.04); }
 
-    /* ─── Empty State ─── */
-    .up-empty {
-      text-align: center; padding: 32px 16px;
-      color: #76889e; font-size: 0.88rem;
-    }
+  /* Empty State */
+  .up-empty {
+   text-align: center; padding: 32px 16px;
+   color: #76889e; font-size: 0.88rem;
+  }
 
-    /* ─── Toast ─── */
-    .up-toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
-      padding: 12px 24px; border-radius: 14px;
-      font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600;
-      z-index: 9999; opacity: 0; transition: all 0.3s ease;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.12);
-    }
-    .up-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
-    .up-toast-success { background: #0e8a5f; color: #fff; }
-    .up-toast-error { background: #c0392b; color: #fff; }
+  /* Toast */
+  .up-toast {
+   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+   padding: 12px 24px; border-radius: 14px;
+   font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600;
+   z-index: 9999; opacity: 0; transition: all 0.3s ease;
+   box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+  }
+  .up-toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .up-toast-success { background: #0e8a5f; color: #fff; }
+  .up-toast-error { background: #c0392b; color: #fff; }
 
-    /* ─── Logout Button ─── */
-    .up-logout-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 24px; border: 1.5px solid rgba(231,76,60,0.15);
-      border-radius: 14px; background: transparent;
-      font-family: 'Outfit', sans-serif; font-size: 0.88rem;
-      font-weight: 600; color: #e74c3c; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .up-logout-btn:hover { background: rgba(231,76,60,0.06); border-color: #e74c3c; }
+  /* Logout Button */
+  .up-logout-btn {
+   display: inline-flex; align-items: center; gap: 8px;
+   padding: 12px 24px; border: 1.5px solid rgba(231,76,60,0.15);
+   border-radius: 14px; background: transparent;
+   font-family: 'Outfit', sans-serif; font-size: 0.88rem;
+   font-weight: 600; color: #e74c3c; cursor: pointer;
+   transition: all 0.2s;
+  }
+  .up-logout-btn:hover { background: rgba(231,76,60,0.06); border-color: #e74c3c; }
 
-    /* ─── Responsive ─── */
-    @media (max-width: 640px) {
-      .up-page { padding-top: 80px; }
-      .up-container { padding: 16px 12px 40px; }
-      .up-header { flex-direction: column; text-align: center; padding: 22px 18px; }
-      .up-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
-      .up-header-info h1 { font-size: 1.1rem; }
+  /* Responsive */
+  @media (max-width: 640px) {
+   .up-page { padding-top: 80px; }
+   .up-container { padding: 16px 12px 40px; }
+   .up-header { flex-direction: column; text-align: center; padding: 22px 18px; }
+   .up-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
+   .up-header-info h1 { font-size: 1.1rem; }
 
-      .up-tabs {
-        gap: 6px; padding: 4px;
-        overflow-x: auto;
-        justify-content: flex-start;
-        -webkit-overflow-scrolling: touch;
-      }
-      .up-tab { padding: 10px 16px; font-size: 0.82rem; flex-shrink: 0; }
-      .up-tab svg { display: none; }
+   .up-tabs {
+    gap: 6px; padding: 4px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+   }
+   .up-tab { padding: 10px 16px; font-size: 0.82rem; flex-shrink: 0; }
+   .up-tab svg { display: none; }
 
-      .up-card { padding: 20px 16px; border-radius: 16px; }
-      .up-form-group input { font-size: 16px; padding: 14px 16px; } /* Prevents iOS zoom */
+   .up-card { padding: 20px 16px; border-radius: 16px; }
+   .up-form-group input { font-size: 16px; padding: 14px 16px; } /* Prevents iOS zoom */
 
-      .up-cart-card { flex-direction: column; gap: 12px; align-items: stretch; }
-      .up-cart-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
-      .up-btn-sm { text-align: center; padding: 10px 0; font-size: 0.85rem; }
+   .up-cart-card { flex-direction: column; gap: 12px; align-items: stretch; }
+   .up-cart-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+   .up-btn-sm { text-align: center; padding: 10px 0; font-size: 0.85rem; }
 
-      .up-btn-save { width: 100%; }
-      .up-btn-save-cart { width: 100%; justify-content: center; }
-    }
+   .up-btn-save { width: 100%; }
+   .up-btn-save-cart { width: 100%; justify-content: center; }
+  }
 
-    /* ─── Orders Section ─── */
-    .up-badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 50px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .up-badge-pending { background: rgba(241,196,15,0.08); color: #b7950b; }
-    .up-badge-processing { background: rgba(52,152,219,0.08); color: #2980b9; }
-    .up-badge-shipped { background: rgba(155,89,182,0.08); color: #8e44ad; }
-    .up-badge-delivered { background: rgba(46,204,113,0.08); color: #27ae60; }
+  /* Orders Section */
+  .up-badge {
+   display: inline-block;
+   padding: 3px 8px;
+   border-radius: 50px;
+   font-size: 0.72rem;
+   font-weight: 700;
+   text-transform: uppercase;
+  }
+  .up-badge-pending { background: rgba(241,196,15,0.08); color: #b7950b; }
+  .up-badge-processing { background: rgba(52,152,219,0.08); color: #2980b9; }
+  .up-badge-shipped { background: rgba(155,89,182,0.08); color: #8e44ad; }
+  .up-badge-delivered { background: rgba(46,204,113,0.08); color: #27ae60; }
 
-    .up-table-row {
-      border-bottom: 1px solid #e5eef8;
-      transition: background-color 0.2s;
-    }
-    .up-table-row:hover { background-color: #fcfdfe; }
-    .up-table-cell {
-      padding: 14px 10px;
-      color: #394c60;
-    }
-    .up-order-id {
-      font-family: monospace;
-      font-weight: 600;
-      color: #0a101d;
-    }
-  </style>
+  .up-table-row {
+   border-bottom: 1px solid #e5eef8;
+   transition: background-color 0.2s;
+  }
+  .up-table-row:hover { background-color: #fcfdfe; }
+  .up-table-cell {
+   padding: 14px 10px;
+   color: #394c60;
+  }
+  .up-order-id {
+   font-family: monospace;
+   font-weight: 600;
+   color: #0a101d;
+  }
+ </style>
 </head>
 <body>
 
-  <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
-    <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-    </symbol>
-  </svg>
+ <svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" style="display:none;">
+  <symbol id="wa-icon" viewBox="0 0 24 24" fill="white">
+   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </symbol>
+ </svg>
 
-          <header class="site-header" role="banner">
-    <!-- Top Bar estilo Claro -->
-    <div class="claro-top-bar">
-      <div class="container">
-        <ul class="claro-top-links">
-          <li><a href="index.html" class="top-link-personas">Personas</a></li>
-          <li><a href="corporativo.html" class="top-link-corporativo">Corporativo</a></li>
-          <li><a href="gaming.html" style="color:#6366f1; font-weight:700;">Zona Gaming 🎮</a></li>
-        </ul>
-        <div class="claro-top-right">
-          <div class="top-bar-dropdown">
-            <span class="top-bar-dropdown-trigger">Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:2px;"></i></span>
-            <ul class="top-bar-dropdown-menu">
-              <li><a href="nosotros.html"><i class="fas fa-info-circle"></i> Nosotros</a></li>
-              <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
-              <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i> Sucursales</a></li>
-            </ul>
-          </div>
-          <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i> Santiago</span>
-        </div>
-      </div>
+     <header class="site-header" role="banner">
+  <!-- Top Bar estilo Claro -->
+  <div class="claro-top-bar">
+   <div class="container">
+    <ul class="claro-top-links">
+     <li><a href="index.html" class="top-link-personas">Personas</a></li>
+     <li><a href="corporativo.html" class="top-link-corporativo">Corporativo</a></li>
+     <li><a href="gaming.html">Zona Gaming</a></li>
+    </ul>
+    <div class="claro-top-right">
+     <div class="top-bar-dropdown">
+      <span class="top-bar-dropdown-trigger">Más de Futunet <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:2px;"></i></span>
+      <ul class="top-bar-dropdown-menu">
+       <li><a href="nosotros.html"><i class="fas fa-info-circle"></i>Nosotros</a></li>
+       <li><a href="index.html#contacto"><i class="fas fa-envelope"></i>Contacto</a></li>
+       <li><a href="https://maps.app.goo.gl/mySNxSfamvRfFqZA9" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt"></i>Sucursales</a></li>
+      </ul>
+     </div>
+     <span><i class="fas fa-map-marker-alt" style="color:#0A70A2; margin-right:4px;"></i>Santiago</span>
     </div>
-
-    <nav id="navbar">
-      <div class="nav-inner">
-        <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
-          <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
-        </a>
-
-        <!-- Buscador compacto visible al hacer scroll -->
-        <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
-          <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-          <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
-          <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
-        </div>
-
-        <ul class="nav-menu">
-          <li><a href="index.html#inicio">Inicio</a></li>
-
-          <!-- Pestaña Servicios con Mega Menu -->
-          <li class="has-mega">
-            <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
-            <div class="mega-menu-container">
-              <div class="mega-menu-grid">
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i> Servicios Hogar</h5>
-                  <ul>
-                    <li><a href="internet.html"><i class="fas fa-wifi"></i> Internet Fijo</a></li>
-                    <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i> Internet Simétrico</a></li>
-                    <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i> Fibra Óptica</a></li>
-                    <li><a href="internet.html"><i class="fas fa-satellite-dish"></i> Internet Inalámbrico</a></li>
-                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i> Servicios Empresas</h5>
-                  <ul>
-                    <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i> Redes y Datos</a></li>
-                    <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i> Seguridad Electrónica</a></li>
-                    <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i> Climatización y Energía</a></li>
-                    <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i> Remozamiento e Infraestructura</a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i> Equipamiento B2B</h5>
-                  <ul>
-                    <li><a href="equipos-oficina.html"><i class="fas fa-laptop"></i> Equipos de Oficina y Cómputo</a></li>
-                    <li><a href="mobiliario-suministros.html"><i class="fas fa-chair"></i> Mobiliario y Suministros</a></li>
-                    <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i> Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i> Ofertas y Promos</h5>
-                  <ul>
-                    <li><a href="internet.html#planes"><i class="fas fa-gift"></i> Instalación Gratis</a></li>
-                    <li><a href="internet.html#planes"><i class="fas fa-percentage"></i> Descuento Multiplan</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <!-- Pestaña Tienda con Mega Menu -->
-          <li class="has-mega">
-            <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
-            <div class="mega-menu-container">
-              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i> Equipos y Accesorios</h5>
-                  <ul>
-                    <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i> Computadoras y Laptops</a></li>
-                    <li><a href="gaming.html" style="color:#6366f1; font-weight:700;"><i class="fas fa-gamepad" style="color:#6366f1;"></i> Zona Gaming & Esports <span style="font-size:0.65rem; background:#6366f1; color:#fff; padding:1px 5px; border-radius:4px; margin-left:4px;">NUEVO</span></a></li>
-                    <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i> Routers y Repetidores WiFi</a></li>
-                    <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i> Cámaras de Seguridad</a></li>
-                    <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i> Suministros e Impresoras</a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i> Facilidades de Compra</h5>
-                  <ul>
-                    <li><a href="catalogo.html"><i class="fas fa-clock"></i> Equipos en Cuotas</a></li>
-                    <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i> Financiamiento B2B</a></li>
-                    <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i> Catálogo Completo</a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
-                    <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i> Oferta de la Semana</h6>
-                    <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
-                    <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <!-- Pestaña Zona Gaming -->
-          <li>
-            <a href="gaming.html" style="display:inline-flex; align-items:center; gap:5px; text-decoration:none; padding: 6px 4px;">
-              <span style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color:#ffffff; font-size:0.75rem; font-weight:800; padding:4px 9px; border-radius:6px; box-shadow: 0 0 12px rgba(99,102,241,0.5);">🎮 GAMING</span>
-            </a>
-          </li>
-
-          <!-- Pestaña Soporte con Mega Menu -->
-          <li class="has-mega">
-            <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
-            <div class="mega-menu-container">
-              <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i> Hazlo tú mismo</h5>
-                  <ul>
-                    <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i> Gestionar mi Wi-Fi</a></li>
-                    <li><a href="internet.html#faqs"><i class="fas fa-key"></i> Cambiar clave del módem</a></li>
-                    <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i> Mide tu velocidad</a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i> Consultas y Transacciones</h5>
-                  <ul>
-                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i> Reportar avería técnica</a></li>
-                    <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i> Pagar mi factura online</a></li>
-                    <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i> Preguntas frecuentes</a></li>
-                  </ul>
-                </div>
-                <div class="mega-menu-col">
-                  <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i> Contáctanos</h5>
-                  <ul>
-                    <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" style="color:#25d366;"></i> WhatsApp Soporte</a></li>
-                    <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i> Sucursales y Atención</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-
-        <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
-          <!-- Botón Mi Cuenta con Auth dinámico -->
-          <div class="navbar-auth-container"></div>
-          <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
-            <svg width="15" height="15"><use href="#wa-icon"/></svg>
-            829-741-1041
-          </a>
-        </div>
-
-        <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </nav>
-
-    <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
-      <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
-
-      <!-- Acordeones móviles nativos usando details -->
-      <details class="mobile-details">
-        <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
-        <div class="mobile-details-content">
-          <div class="mobile-details-section">Servicios Hogar</div>
-          <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
-          <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
-          <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-
-          <div class="mobile-details-section">Servicios Empresas</div>
-          <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
-          <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
-          <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
-          <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
-
-          <div class="mobile-details-section">Equipamiento B2B</div>
-          <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
-          <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
-
-          <div class="mobile-details-section">Entretenimiento</div>
-          <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
-        </div>
-      </details>
-
-      <details class="mobile-details">
-        <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
-        <div class="mobile-details-content">
-          <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
-          <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
-          <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
-          <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
-        </div>
-      </details>
-
-      <details class="mobile-details">
-        <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
-        <div class="mobile-details-content">
-          <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
-          <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
-          <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
-          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
-          <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
-        </div>
-      </details>
-
-      <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
-        <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
-        829-741-1041
-      </a>
-      <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
-      <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
-    </div>
-  </header>
-
-  <main id="user-panel-page" class="up-page">
-    <div class="up-container">
-      <!-- Header -->
-      <div class="up-header">
-        <div class="up-avatar" id="user-avatar">?</div>
-        <div class="up-header-info">
-          <h1 id="user-name">Cargando...</h1>
-          <p id="user-email"></p>
-          <span class="up-role-badge" id="user-role-badge"></span>
-        </div>
-      </div>
-
-      <!-- Tabs -->
-      <div class="up-tabs">
-        <button class="up-tab is-active" data-up-tab="profile">
-          <i data-lucide="user"></i> Perfil
-        </button>
-        <button class="up-tab" data-up-tab="orders">
-          <i data-lucide="package"></i> Mis Pedidos
-        </button>
-        <button class="up-tab" data-up-tab="financing">
-          <i data-lucide="landmark"></i> Financiamiento
-        </button>
-        <button class="up-tab" data-up-tab="carts">
-          <i data-lucide="shopping-cart"></i> Carritos
-        </button>
-        <button class="up-tab" data-up-tab="favorites">
-          <i data-lucide="heart"></i> Favoritos
-        </button>
-        <button class="up-tab" data-up-tab="settings">
-          <i data-lucide="settings"></i> Ajustes
-        </button>
-      </div>
-
-      <!-- Panel: Profile -->
-      <div class="up-panel is-active" data-up-panel="profile">
-        <div class="up-card">
-          <h3>Información personal</h3>
-          <form id="profile-form">
-            <div class="up-form-group">
-              <label class="up-form-label" for="profile-name">Nombre completo</label>
-              <input class="up-form-input" type="text" id="profile-name" required />
-            </div>
-            <div class="up-form-group">
-              <label class="up-form-label" for="profile-email">Correo electrónico</label>
-              <input class="up-form-input" type="email" id="profile-email" readonly value="" />
-            </div>
-            <div class="up-form-group">
-              <label class="up-form-label" for="profile-phone">Teléfono</label>
-              <input class="up-form-input" type="tel" id="profile-phone" placeholder="809-000-0000" />
-            </div>
-            <div class="up-form-group">
-              <label class="up-form-label" for="profile-address">Dirección</label>
-              <input class="up-form-input" type="text" id="profile-address" placeholder="Tu dirección" />
-            </div>
-            <div class="fin-grid">
-              <div class="up-form-group">
-                <label class="up-form-label" for="profile-document-type">Tipo de documento</label>
-                <select class="up-form-input" id="profile-document-type">
-                  <option value="cedula">Cédula</option>
-                  <option value="passport">Pasaporte</option>
-                </select>
-              </div>
-              <div class="up-form-group">
-                <label class="up-form-label" for="profile-document-number">Cédula o pasaporte (Opcional)</label>
-                <input class="up-form-input" type="text" id="profile-document-number" maxlength="20" placeholder="Ej. 001-1234567-8" />
-                <small style="font-size:0.75rem; color:#76889e; display:block; margin-top:2px;">Requerido para financiamientos y pedidos en la web.</small>
-              </div>
-            </div>
-            <label class="fin-consent" id="profile-terms-wrap">
-              <input type="checkbox" id="profile-terms" />
-              <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a> de Futunet.</span>
-            </label>
-            <button type="submit" class="up-btn-save" id="profile-save-btn">Guardar cambios</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Panel: Financing -->
-      <div class="up-panel" data-up-panel="financing">
-        <div class="up-card">
-          <h3>Expediente de financiamiento</h3>
-          <div class="fin-status-banner" id="financing-profile-status">
-            <div><strong>Verificando expediente</strong><span>Estamos consultando el estado de tu solicitud.</span></div>
-            <span class="fin-status-pill fin-status-not_started">Cargando</span>
-          </div>
-
-          <form id="financing-profile-form" hidden>
-            <p style="color:#64748b;font-size:.86rem;line-height:1.55;margin:0 0 18px;">Para proteger tu identidad y solicitar artículos o servicios a cuotas, completa estos datos. Los documentos solo serán visibles para ti y el personal autorizado.</p>
-            <div class="fin-grid">
-              <div class="up-form-group">
-                <label class="up-form-label" for="fin-document-type">Tipo de documento</label>
-                <select class="up-form-input" id="fin-document-type" required>
-                  <option value="cedula">Cédula</option>
-                  <option value="passport">Pasaporte</option>
-                </select>
-              </div>
-              <div class="up-form-group">
-                <label class="up-form-label" for="fin-document-number">Número</label>
-                <input class="up-form-input" id="fin-document-number" required maxlength="20" />
-              </div>
-              <div class="up-form-group">
-                <label class="up-form-label" for="fin-phone">Teléfono</label>
-                <input class="up-form-input" type="tel" id="fin-phone" required placeholder="809-000-0000" />
-              </div>
-              <div class="up-form-group">
-                <label class="up-form-label" for="fin-address">Dirección residencial</label>
-                <input class="up-form-input" id="fin-address" required maxlength="300" />
-              </div>
-              <label class="fin-file-field">
-                <strong>Foto frontal del documento</strong>
-                <span class="fin-help">Imagen clara, completa y sin reflejos. JPG, PNG o WEBP; máximo 5 MB.</span>
-                <input type="file" id="fin-id-photo" accept="image/jpeg,image/png,image/webp" required />
-              </label>
-              <label class="fin-file-field">
-                <strong>Foto tuya sosteniendo el documento</strong>
-                <span class="fin-help">Tu rostro y el documento deben verse claramente. Máximo 5 MB.</span>
-                <input type="file" id="fin-selfie-photo" accept="image/jpeg,image/png,image/webp" required />
-              </label>
-              <div class="full">
-                <label class="up-form-label">Firma digital</label>
-                <div class="fin-signature-wrap">
-                  <canvas id="fin-signature-canvas" width="900" height="260" aria-label="Área para dibujar la firma"></canvas>
-                  <div class="fin-signature-tools"><span>Firma dentro del recuadro usando el dedo o el mouse.</span><button type="button" class="fin-link-button" id="fin-clear-signature">Limpiar</button></div>
-                </div>
-              </div>
-              <label class="fin-consent full">
-                <input type="checkbox" id="financing-terms" required />
-                <span>Declaro que la información es verdadera, autorizo su revisión para fines de crédito y acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener">política de tratamiento de datos</a>.</span>
-              </label>
-              <div class="full"><button type="submit" class="up-btn-save" id="financing-submit-btn">Enviar expediente para revisión</button></div>
-            </div>
-          </form>
-        </div>
-
-        <div class="up-card" style="margin-top:20px;">
-          <h3>Mi cuenta de cuotas y abonos</h3>
-          <div class="fin-summary">
-            <div class="fin-summary-card"><span>Total financiado</span><strong id="fin-total-financed">RD$ 0.00</strong></div>
-            <div class="fin-summary-card"><span>Total abonado</span><strong id="fin-total-paid">RD$ 0.00</strong></div>
-            <div class="fin-summary-card"><span>Balance pendiente</span><strong id="fin-total-balance">RD$ 0.00</strong></div>
-          </div>
-          <div id="financing-accounts-list"><div class="fin-empty">Cargando cuentas...</div></div>
-        </div>
-      </div>
-
-      <!-- Panel: Saved Carts -->
-      <div class="up-panel" data-up-panel="carts">
-        <div class="up-card">
-          <h3>Carritos guardados</h3>
-          <button type="button" class="up-btn-save-cart" onclick="saveCurrentCart()">
-            <i data-lucide="plus"></i> Guardar carrito actual
-          </button>
-          <div id="saved-carts-list">
-            <div class="up-empty"><p>Cargando...</p></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel: Favorites -->
-      <div class="up-panel" data-up-panel="favorites">
-        <div class="up-card">
-          <h3>Mis favoritos</h3>
-          <div id="favorites-list">
-            <div class="up-empty"><p>Cargando...</p></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel: Orders -->
-      <div class="up-panel" data-up-panel="orders">
-        <div class="up-card">
-          <h3>Mis pedidos realizados</h3>
-          <div style="overflow-x:auto;">
-            <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem; font-family:Outfit, sans-serif;">
-              <thead>
-                <tr style="border-bottom:2px solid #e5eef8; color:#76889e;">
-                  <th style="padding:12px 10px;">Pedido</th>
-                  <th style="padding:12px 10px;">Fecha</th>
-                  <th style="padding:12px 10px;">Total</th>
-                  <th style="padding:12px 10px;">Método</th>
-                  <th style="padding:12px 10px;">Estado</th>
-                  <th style="padding:12px 10px; text-align:right;">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="user-orders-list-body">
-                <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando tus pedidos...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel: Settings -->
-      <div class="up-panel" data-up-panel="settings">
-        <div class="up-card">
-          <h3>Ajustes de cuenta</h3>
-          <p style="color:#76889e; font-size:0.88rem; margin-bottom:20px;">Gestiona tu sesión y configuración.</p>
-          <button type="button" class="up-logout-btn" id="user-logout-btn">
-            <i data-lucide="log-out"></i> Cerrar sesión
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Modal de Detalle de Pedido (Cliente) -->
-  <div class="admin-modal" id="user-order-detail-modal" style="position:fixed; inset:0; background:rgba(10,16,29,0.5); backdrop-filter:blur(6px); z-index:100000; display:none; align-items:center; justify-content:center; padding:16px;">
-    <div class="admin-modal-overlay" style="position:absolute; inset:0;" onclick="closeUserOrderModal()"></div>
-    <div class="admin-modal-card" style="position:relative; background:#fff; width:100%; max-width:540px; border-radius:20px; box-shadow:0 24px 64px rgba(10,112,162,0.12); display:flex; flex-direction:column; overflow:hidden; z-index:100001; animation: modalScaleUp 0.28s ease;">
-      <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e5eef8;">
-        <h3 style="font-family:Space Grotesk, sans-serif; font-size:1.15rem; font-weight:700; color:#0a101d; margin:0;">Detalles de Pedido</h3>
-        <button onclick="closeUserOrderModal()" style="background:none; border:none; font-size:1.5rem; color:#76889e; cursor:pointer;">&times;</button>
-      </div>
-      <div id="user-order-detail-content" style="padding:20px; overflow-y:auto; max-height:70vh; font-family:Outfit, sans-serif;">
-        <!-- Dinámico -->
-      </div>
-    </div>
+   </div>
   </div>
 
-  <style>
-    @keyframes modalScaleUp {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+  <nav id="navbar">
+   <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Volver al inicio de Futunet">
+     <img src="img/logo-navbar.webp" alt="Futunet" width="972" height="303" />
+    </a>
+
+    <!-- Buscador compacto visible al hacer scroll -->
+    <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
+     <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
+    </div>
+
+    <ul class="nav-menu">
+     <li><a href="index.html#inicio">Inicio</a></li>
+
+     <!-- Pestaña Servicios con Mega Menu -->
+     <li class="has-mega">
+      <a href="index.html#servicios" class="mega-trigger">Servicios <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+      <div class="mega-menu-container">
+       <div class="mega-menu-grid">
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-home" style="margin-right:6px; color:#0A70A2;"></i>Servicios Hogar</h5>
+         <ul>
+          <li><a href="internet.html"><i class="fas fa-wifi"></i>Internet Fijo</a></li>
+          <li><a href="internet.html?type=simetrico"><i class="fas fa-exchange-alt"></i>Internet Simétrico</a></li>
+          <li><a href="internet.html#cobertura"><i class="fas fa-map-marker-alt"></i>Fibra Óptica</a></li>
+          <li><a href="internet.html"><i class="fas fa-satellite-dish"></i>Internet Inalámbrico</a></li>
+          <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i>Servicios Empresas</h5>
+         <ul>
+          <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i>Redes y Datos</a></li>
+          <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i>Seguridad Electrónica</a></li>
+          <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i>Climatización y Energía</a></li>
+          <li><a href="infraestructura-remozamiento.html"><i class="fas fa-hammer"></i>Remozamiento e Infraestructura</a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-desktop" style="margin-right:6px; color:#0A70A2;"></i>Equipamiento B2B</h5>
+         <ul>
+          <li><a href="equipos-oficina.html"><i class="fas fa-laptop"></i>Equipos de Oficina y Cómputo</a></li>
+          <li><a href="mobiliario-suministros.html"><i class="fas fa-chair"></i>Mobiliario y Suministros</a></li>
+          <li><a href="internet.html?type=multiplan"><i class="fas fa-tv"></i>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Pronto</span></a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-tags" style="margin-right:6px; color:#0A70A2;"></i>Ofertas y Promos</h5>
+         <ul>
+          <li><a href="internet.html#planes"><i class="fas fa-gift"></i>Instalación Gratis</a></li>
+          <li><a href="internet.html#planes"><i class="fas fa-percentage"></i>Descuento Multiplan</a></li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </li>
+
+     <!-- Pestaña Tienda con Mega Menu -->
+     <li class="has-mega">
+      <a href="catalogo.html" class="mega-trigger">Tienda <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+      <div class="mega-menu-container">
+       <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-laptop" style="margin-right:6px; color:#0A70A2;"></i>Equipos y Accesorios</h5>
+         <ul>
+          <li><a href="catalogo.html?cat=equipos"><i class="fas fa-desktop"></i>Computadoras y Laptops</a></li>
+          <li><a href="gaming.html"><i class="fas fa-gamepad" style="color:#0A70A2;"></i>Zona Gaming</a></li>
+          <li><a href="catalogo.html?cat=redes"><i class="fas fa-router"></i>Routers y Repetidores WiFi</a></li>
+          <li><a href="catalogo.html?cat=seguridad"><i class="fas fa-video"></i>Cámaras de Seguridad</a></li>
+          <li><a href="catalogo.html?cat=oficina"><i class="fas fa-print"></i>Suministros e Impresoras</a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-hands-helping" style="margin-right:6px; color:#0A70A2;"></i>Facilidades de Compra</h5>
+         <ul>
+          <li><a href="catalogo.html"><i class="fas fa-clock"></i>Equipos en Cuotas</a></li>
+          <li><a href="index.html#contacto"><i class="fas fa-file-invoice-dollar"></i>Financiamiento B2B</a></li>
+          <li><a href="catalogo.html"><i class="fas fa-shopping-cart"></i>Catálogo Completo</a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <div style="background: rgba(10, 112, 162, 0.04); padding: 18px; border-radius: 16px; border: 1px solid rgba(10, 112, 162, 0.08);">
+          <h6 style="font-size: 0.88rem; font-weight: 700; color: #0A70A2; margin-bottom: 6px;"><i class="fas fa-percentage"></i>Oferta de la Semana</h6>
+          <p style="font-size: 0.78rem; color: #475569; margin-bottom: 10px; line-height: 1.4;">Obtén tu Router Mesh TP-Link Deco con 15% de descuento en la contratación de cualquier plan de internet superior a 50 Megas.</p>
+          <a href="internet.html#planes" class="btn btn-primary btn-sm" style="min-height:34px; padding:0 14px; border-radius:8px; display:inline-flex;">Ver Planes</a>
+         </div>
+        </div>
+       </div>
+      </div>
+     </li>
+
+     <!-- Pestaña Zona Gaming -->
+     <li>
+      <a href="gaming.html">Zona Gaming</a>
+     </li>
+
+     <!-- Pestaña Soporte con Mega Menu -->
+     <li class="has-mega">
+      <a href="index.html#contacto" class="mega-trigger">Soporte <i class="fas fa-chevron-down" style="font-size:0.65rem; margin-left:4px;"></i></a>
+      <div class="mega-menu-container">
+       <div class="mega-menu-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i>Hazlo tú mismo</h5>
+         <ul>
+          <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i>Gestionar mi Wi-Fi</a></li>
+          <li><a href="internet.html#faqs"><i class="fas fa-key"></i>Cambiar clave del módem</a></li>
+          <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer"><i class="fas fa-tachometer-alt"></i>Mide tu velocidad</a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-wallet" style="margin-right:6px; color:#0A70A2;"></i>Consultas y Transacciones</h5>
+         <ul>
+          <li><a href="login.html?redirect=internet.html"><i class="fas fa-tools"></i>Reportar avería técnica</a></li>
+          <li><a href="login.html?redirect=internet.html"><i class="fas fa-file-invoice"></i>Pagar mi factura online</a></li>
+          <li><a href="internet.html#faqs"><i class="fas fa-question-circle"></i>Preguntas frecuentes</a></li>
+         </ul>
+        </div>
+        <div class="mega-menu-col">
+         <h5><i class="fas fa-phone-alt" style="margin-right:6px; color:#0A70A2;"></i>Contáctanos</h5>
+         <ul>
+          <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" style="color:#25d366;"></i>WhatsApp Soporte</a></li>
+          <li><a href="index.html#contacto"><i class="fas fa-map-marker-alt"></i>Sucursales y Atención</a></li>
+         </ul>
+        </div>
+       </div>
+      </div>
+     </li>
+    </ul>
+
+    <div style="margin-left:auto; display:flex; align-items:center; gap:12px;">
+     <!-- Botón Mi Cuenta con Auth dinámico -->
+     <div class="navbar-auth-container"></div>
+     <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="nav-wa-btn">
+      <svg width="15" height="15"><use href="#wa-icon"/></svg>
+      829-741-1041
+     </a>
+    </div>
+
+    <button class="hamburger" type="button" data-mobile-toggle aria-controls="mobileMenu" aria-expanded="false" aria-label="Abrir menú">
+     <span></span><span></span><span></span>
+    </button>
+   </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu" aria-label="Menú principal">
+   <a href="index.html#inicio" data-close-mobile-menu>Inicio</a>
+
+   <!-- Acordeones móviles nativos usando details -->
+   <details class="mobile-details">
+    <summary class="mobile-summary">Servicios <i class="fas fa-chevron-down"></i></summary>
+    <div class="mobile-details-content">
+     <div class="mobile-details-section">Servicios Hogar</div>
+     <a href="internet.html" data-close-mobile-menu>Internet Fijo</a>
+     <a href="internet.html?type=simetrico" data-close-mobile-menu>Internet Simétrico</a>
+     <a href="internet.html?type=multiplan" data-close-mobile-menu>Multiplan Doble (Internet + TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
+
+     <div class="mobile-details-section">Servicios Empresas</div>
+     <a href="redes-datos.html" data-close-mobile-menu>Redes y Datos</a>
+     <a href="seguridad-electronica.html" data-close-mobile-menu>Seguridad Electrónica</a>
+     <a href="energia-climatizacion.html" data-close-mobile-menu>Energía y Climatización</a>
+     <a href="infraestructura-remozamiento.html" data-close-mobile-menu>Remozamiento e Infraestructura</a>
+
+     <div class="mobile-details-section">Equipamiento B2B</div>
+     <a href="equipos-oficina.html" data-close-mobile-menu>Equipos de Oficina y Cómputo</a>
+     <a href="mobiliario-suministros.html" data-close-mobile-menu>Mobiliario y Suministros</a>
+
+     <div class="mobile-details-section">Entretenimiento</div>
+     <a href="internet.html?type=multiplan" data-close-mobile-menu>Futunet Play (TV) <span style="font-size: 0.65rem; background: #f59e0b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 700;">Pronto</span></a>
+    </div>
+   </details>
+
+   <details class="mobile-details">
+    <summary class="mobile-summary">Tienda <i class="fas fa-chevron-down"></i></summary>
+    <div class="mobile-details-content">
+     <a href="catalogo.html?cat=equipos" data-close-mobile-menu>Computadoras y Laptops</a>
+     <a href="catalogo.html?cat=redes" data-close-mobile-menu>Routers y WiFi</a>
+     <a href="catalogo.html?cat=seguridad" data-close-mobile-menu>Cámaras de Seguridad</a>
+     <a href="catalogo.html" data-close-mobile-menu>Equipos en Cuotas</a>
+    </div>
+   </details>
+
+   <details class="mobile-details">
+    <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
+    <div class="mobile-details-content">
+     <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+     <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
+     <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
+     <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
+     <a href="login.html?redirect=internet.html" data-close-mobile-menu>Pagar factura online</a>
+    </div>
+   </details>
+
+   <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="mobile-menu-wa-link">
+    <i data-lucide="phone" class="mobile-menu-wa-icon"></i>
+    829-741-1041
+   </a>
+   <hr style="border:none; border-top:1px solid rgba(0,0,0,0.1); width:100%; margin: 12px 0;">
+   <div class="navbar-auth-container" style="display:flex; justify-content:center; width:100%;"></div>
+  </div>
+ </header>
+
+ <main id="user-panel-page" class="up-page">
+  <div class="up-container">
+   <!-- Header -->
+   <div class="up-header">
+    <div class="up-avatar" id="user-avatar">?</div>
+    <div class="up-header-info">
+     <h1 id="user-name">Cargando...</h1>
+     <p id="user-email"></p>
+     <span class="up-role-badge" id="user-role-badge"></span>
+    </div>
+   </div>
+
+   <!-- Tabs -->
+   <div class="up-tabs">
+    <button class="up-tab is-active" data-up-tab="profile">
+     <i data-lucide="user"></i>Perfil
+    </button>
+    <button class="up-tab" data-up-tab="orders">
+     <i data-lucide="package"></i>Mis Pedidos
+    </button>
+    <button class="up-tab" data-up-tab="financing">
+     <i data-lucide="landmark"></i>Financiamiento
+    </button>
+    <button class="up-tab" data-up-tab="carts">
+     <i data-lucide="shopping-cart"></i>Carritos
+    </button>
+    <button class="up-tab" data-up-tab="favorites">
+     <i data-lucide="heart"></i>Favoritos
+    </button>
+    <button class="up-tab" data-up-tab="settings">
+     <i data-lucide="settings"></i>Ajustes
+    </button>
+   </div>
+
+   <!-- Panel: Profile -->
+   <div class="up-panel is-active" data-up-panel="profile">
+    <div class="up-card">
+     <h3>Información personal</h3>
+     <form id="profile-form">
+      <div class="up-form-group">
+       <label class="up-form-label" for="profile-name">Nombre completo</label>
+       <input class="up-form-input" type="text" id="profile-name" required />
+      </div>
+      <div class="up-form-group">
+       <label class="up-form-label" for="profile-email">Correo electrónico</label>
+       <input class="up-form-input" type="email" id="profile-email" readonly value="" />
+      </div>
+      <div class="up-form-group">
+       <label class="up-form-label" for="profile-phone">Teléfono</label>
+       <input class="up-form-input" type="tel" id="profile-phone" placeholder="809-000-0000" />
+      </div>
+      <div class="up-form-group">
+       <label class="up-form-label" for="profile-address">Dirección</label>
+       <input class="up-form-input" type="text" id="profile-address" placeholder="Tu dirección" />
+      </div>
+      <div class="fin-grid">
+       <div class="up-form-group">
+        <label class="up-form-label" for="profile-document-type">Tipo de documento</label>
+        <select class="up-form-input" id="profile-document-type">
+         <option value="cedula">Cédula</option>
+         <option value="passport">Pasaporte</option>
+        </select>
+       </div>
+       <div class="up-form-group">
+        <label class="up-form-label" for="profile-document-number">Cédula o pasaporte (Opcional)</label>
+        <input class="up-form-input" type="text" id="profile-document-number" maxlength="20" placeholder="Ej. 001-1234567-8" />
+        <small style="font-size:0.75rem; color:#76889e; display:block; margin-top:2px;">Requerido para financiamientos y pedidos en la web.</small>
+       </div>
+      </div>
+      <label class="fin-consent" id="profile-terms-wrap">
+       <input type="checkbox" id="profile-terms" />
+       <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a>y la <a href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>de Futunet.</span>
+      </label>
+      <button type="submit" class="up-btn-save" id="profile-save-btn">Guardar cambios</button>
+     </form>
+    </div>
+   </div>
+
+   <!-- Panel: Financing -->
+   <div class="up-panel" data-up-panel="financing">
+    <div class="up-card">
+     <h3>Expediente de financiamiento</h3>
+     <div class="fin-status-banner" id="financing-profile-status">
+      <div><strong>Verificando expediente</strong><span>Estamos consultando el estado de tu solicitud.</span></div>
+      <span class="fin-status-pill fin-status-not_started">Cargando</span>
+     </div>
+
+     <form id="financing-profile-form" hidden>
+      <p style="color:#64748b;font-size:.86rem;line-height:1.55;margin:0 0 18px;">Para proteger tu identidad y solicitar artículos o servicios a cuotas, completa estos datos. Los documentos solo serán visibles para ti y el personal autorizado.</p>
+      <div class="fin-grid">
+       <div class="up-form-group">
+        <label class="up-form-label" for="fin-document-type">Tipo de documento</label>
+        <select class="up-form-input" id="fin-document-type" required>
+         <option value="cedula">Cédula</option>
+         <option value="passport">Pasaporte</option>
+        </select>
+       </div>
+       <div class="up-form-group">
+        <label class="up-form-label" for="fin-document-number">Número</label>
+        <input class="up-form-input" id="fin-document-number" required maxlength="20" />
+       </div>
+       <div class="up-form-group">
+        <label class="up-form-label" for="fin-phone">Teléfono</label>
+        <input class="up-form-input" type="tel" id="fin-phone" required placeholder="809-000-0000" />
+       </div>
+       <div class="up-form-group">
+        <label class="up-form-label" for="fin-address">Dirección residencial</label>
+        <input class="up-form-input" id="fin-address" required maxlength="300" />
+       </div>
+       <label class="fin-file-field">
+        <strong>Foto frontal del documento</strong>
+        <span class="fin-help">Imagen clara, completa y sin reflejos. JPG, PNG o WEBP; máximo 5 MB.</span>
+        <input type="file" id="fin-id-photo" accept="image/jpeg,image/png,image/webp" required />
+       </label>
+       <label class="fin-file-field">
+        <strong>Foto tuya sosteniendo el documento</strong>
+        <span class="fin-help">Tu rostro y el documento deben verse claramente. Máximo 5 MB.</span>
+        <input type="file" id="fin-selfie-photo" accept="image/jpeg,image/png,image/webp" required />
+       </label>
+       <div class="full">
+        <label class="up-form-label">Firma digital</label>
+        <div class="fin-signature-wrap">
+         <canvas id="fin-signature-canvas" width="900" height="260" aria-label="Área para dibujar la firma"></canvas>
+         <div class="fin-signature-tools"><span>Firma dentro del recuadro usando el dedo o el mouse.</span><button type="button" class="fin-link-button" id="fin-clear-signature">Limpiar</button></div>
+        </div>
+       </div>
+       <label class="fin-consent full">
+        <input type="checkbox" id="financing-terms" required />
+        <span>Declaro que la información es verdadera, autorizo su revisión para fines de crédito y acepto los <a href="terminos.html" target="_blank" rel="noopener">términos y condiciones</a>y la <a href="privacidad.html" target="_blank" rel="noopener">política de tratamiento de datos</a>.</span>
+       </label>
+       <div class="full"><button type="submit" class="up-btn-save" id="financing-submit-btn">Enviar expediente para revisión</button></div>
+      </div>
+     </form>
+    </div>
+
+    <div class="up-card" style="margin-top:20px;">
+     <h3>Mi cuenta de cuotas y abonos</h3>
+     <div class="fin-summary">
+      <div class="fin-summary-card"><span>Total financiado</span><strong id="fin-total-financed">RD$ 0.00</strong></div>
+      <div class="fin-summary-card"><span>Total abonado</span><strong id="fin-total-paid">RD$ 0.00</strong></div>
+      <div class="fin-summary-card"><span>Balance pendiente</span><strong id="fin-total-balance">RD$ 0.00</strong></div>
+     </div>
+     <div id="financing-accounts-list"><div class="fin-empty">Cargando cuentas...</div></div>
+    </div>
+   </div>
+
+   <!-- Panel: Saved Carts -->
+   <div class="up-panel" data-up-panel="carts">
+    <div class="up-card">
+     <h3>Carritos guardados</h3>
+     <button type="button" class="up-btn-save-cart" onclick="saveCurrentCart()">
+      <i data-lucide="plus"></i>Guardar carrito actual
+     </button>
+     <div id="saved-carts-list">
+      <div class="up-empty"><p>Cargando...</p></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Panel: Favorites -->
+   <div class="up-panel" data-up-panel="favorites">
+    <div class="up-card">
+     <h3>Mis favoritos</h3>
+     <div id="favorites-list">
+      <div class="up-empty"><p>Cargando...</p></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Panel: Orders -->
+   <div class="up-panel" data-up-panel="orders">
+    <div class="up-card">
+     <h3>Mis pedidos realizados</h3>
+     <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem; font-family:Outfit, sans-serif;">
+       <thead>
+        <tr style="border-bottom:2px solid #e5eef8; color:#76889e;">
+         <th style="padding:12px 10px;">Pedido</th>
+         <th style="padding:12px 10px;">Fecha</th>
+         <th style="padding:12px 10px;">Total</th>
+         <th style="padding:12px 10px;">Método</th>
+         <th style="padding:12px 10px;">Estado</th>
+         <th style="padding:12px 10px; text-align:right;">Acciones</th>
+        </tr>
+       </thead>
+       <tbody id="user-orders-list-body">
+        <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando tus pedidos...</td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+
+   <!-- Panel: Settings -->
+   <div class="up-panel" data-up-panel="settings">
+    <div class="up-card">
+     <h3>Ajustes de cuenta</h3>
+     <p style="color:#76889e; font-size:0.88rem; margin-bottom:20px;">Gestiona tu sesión y configuración.</p>
+     <button type="button" class="up-logout-btn" id="user-logout-btn">
+      <i data-lucide="log-out"></i>Cerrar sesión
+     </button>
+    </div>
+   </div>
+  </div>
+ </main>
+
+ <!-- Modal de Detalle de Pedido (Cliente) -->
+ <div class="admin-modal" id="user-order-detail-modal" style="position:fixed; inset:0; background:rgba(10,16,29,0.5); backdrop-filter:blur(6px); z-index:100000; display:none; align-items:center; justify-content:center; padding:16px;">
+  <div class="admin-modal-overlay" style="position:absolute; inset:0;" onclick="closeUserOrderModal()"></div>
+  <div class="admin-modal-card" style="position:relative; background:#fff; width:100%; max-width:540px; border-radius:20px; box-shadow:0 24px 64px rgba(10,112,162,0.12); display:flex; flex-direction:column; overflow:hidden; z-index:100001; animation: modalScaleUp 0.28s ease;">
+   <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e5eef8;">
+    <h3 style="font-family:Space Grotesk, sans-serif; font-size:1.15rem; font-weight:700; color:#0a101d; margin:0;">Detalles de Pedido</h3>
+    <button onclick="closeUserOrderModal()" style="background:none; border:none; font-size:1.5rem; color:#76889e; cursor:pointer;">&times;</button>
+   </div>
+   <div id="user-order-detail-content" style="padding:20px; overflow-y:auto; max-height:70vh; font-family:Outfit, sans-serif;">
+    <!-- Dinámico -->
+   </div>
+  </div>
+ </div>
+
+ <style>
+  @keyframes modalScaleUp {
+   from { transform: scale(0.95); opacity: 0; }
+   to { transform: scale(1); opacity: 1; }
+  }
+ </style>
+
+ <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
+  <a href="catalogo.html" class="mobile-bottom-bar__action">
+   <i data-lucide="layout-grid"></i>
+   <span>Catálogo</span>
+  </a>
+  <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
+   <i data-lucide="message-circle"></i>
+   <span>WhatsApp</span>
+  </a>
+ </div>
+
+ <!-- Firebase SDK -->
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+ <script defer src="js/firebase-config.js?v=20260628"></script>
+ <script defer src="js/auth.js?v=20260628"></script>
+ <script defer src="js/auth-guard.js"></script>
+ <script defer src="js/chatbot.js?v=20260628"></script>
+ <script defer src="js/main.js?v=20260712"></script>
+ <script defer src="js/user-panel.js?v=20260712"></script>
+ <script defer src="js/financing.js?v=20260801"></script>
+ <script>
+  window.addEventListener('DOMContentLoaded', function () {
+   if (window.lucide) lucide.createIcons();
+
+   // Profile email (read-only, set from auth)
+   FutunetAuth.authReady.then(function () {
+    var user = FutunetAuth.getCurrentUser();
+    if (user) {
+     var emailField = document.getElementById('profile-email');
+     if (emailField) emailField.value = user.email || '';
     }
-  </style>
+   });
 
-  <div class="mobile-bottom-bar" aria-label="Accesos rápidos móviles">
-    <a href="catalogo.html" class="mobile-bottom-bar__action">
-      <i data-lucide="layout-grid"></i>
-      <span>Catálogo</span>
-    </a>
-    <a href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener noreferrer" class="mobile-bottom-bar__action mobile-bottom-bar__action--wa">
-      <i data-lucide="message-circle"></i>
-      <span>WhatsApp</span>
-    </a>
-  </div>
-
-  <!-- Firebase SDK -->
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
-  <script defer src="js/firebase-config.js?v=20260628"></script>
-  <script defer src="js/auth.js?v=20260628"></script>
-  <script defer src="js/auth-guard.js"></script>
-  <script defer src="js/chatbot.js?v=20260628"></script>
-  <script defer src="js/main.js?v=20260712"></script>
-  <script defer src="js/user-panel.js?v=20260712"></script>
-  <script defer src="js/financing.js?v=20260801"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      if (window.lucide) lucide.createIcons();
-
-      // Profile email (read-only, set from auth)
-      FutunetAuth.authReady.then(function () {
-        var user = FutunetAuth.getCurrentUser();
-        if (user) {
-          var emailField = document.getElementById('profile-email');
-          if (emailField) emailField.value = user.email || '';
-        }
-      });
-
-      // Logout button
-      var logoutBtn = document.getElementById('user-logout-btn');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', function () {
-          FutunetAuth.signOut().then(function () {
-            window.location.href = 'index.html';
-          });
-        });
-      }
+   // Logout button
+   var logoutBtn = document.getElementById('user-logout-btn');
+   if (logoutBtn) {
+    logoutBtn.addEventListener('click', function () {
+     FutunetAuth.signOut().then(function () {
+      window.location.href = 'index.html';
+     });
     });
-  </script>
+   }
+  });
+ </script>
 </body>
 </html>
