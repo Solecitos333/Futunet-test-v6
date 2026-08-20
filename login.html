@@ -109,20 +109,6 @@
             <input class="auth-input" type="email" id="register-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
           </div>
 
-          <div style="display:grid;grid-template-columns:minmax(120px,.7fr) minmax(180px,1.3fr);gap:12px;">
-            <div class="auth-form-group">
-              <label class="auth-label" for="register-document-type">Documento</label>
-              <select class="auth-input" id="register-document-type" required>
-                <option value="cedula">Cédula</option>
-                <option value="passport">Pasaporte</option>
-              </select>
-            </div>
-            <div class="auth-form-group">
-              <label class="auth-label" for="register-document-number">Número de documento</label>
-              <input class="auth-input" type="text" id="register-document-number" placeholder="000-0000000-0" required maxlength="20" autocomplete="off" />
-            </div>
-          </div>
-
           <div class="auth-form-group">
             <label class="auth-label" for="register-password">Contraseña</label>
             <div class="auth-password-wrap">
@@ -302,11 +288,6 @@
       function redirectByRole(userData) {
         if (!userData) { window.location.href = 'index.html'; return; }
 
-        if ((userData.role || 'user') === 'user' && (!userData.documentType || !userData.documentNumber || userData.termsAccepted !== true)) {
-          window.location.href = 'mi-cuenta.html?completeProfile=1';
-          return;
-        }
-
         // Revisar si existe un parámetro de redirección en la URL
         var params = new URLSearchParams(window.location.search);
         var redirectUrl = params.get('redirect');
@@ -316,7 +297,7 @@
             var redirectFile = (redirectTarget.pathname.split('/').pop() || '').toLowerCase();
             var allowedRedirects = [
               'index.html', 'internet.html', 'mi-cuenta.html', 'catalogo.html', 'producto.html',
-              'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
+              'gaming.html', 'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
               'energia-climatizacion.html', 'equipos-oficina.html',
               'mobiliario-suministros.html', 'infraestructura-remozamiento.html'
             ];
@@ -450,8 +431,6 @@
         var name = document.getElementById('register-name').value.trim();
         var email = document.getElementById('register-email').value.trim();
         var password = document.getElementById('register-password').value;
-        var documentType = document.getElementById('register-document-type').value;
-        var documentNumber = document.getElementById('register-document-number').value.trim();
         var acceptedTerms = document.getElementById('register-terms').checked;
 
         if (name.length < 2) {
@@ -466,14 +445,6 @@
           return;
         }
 
-        try {
-          FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
-        } catch (identityError) {
-          showMessage('register-message', identityError.message, 'error');
-          setLoading('register-btn', false);
-          return;
-        }
-
         // Validación de fortaleza de contraseña en cliente (sincronizada con auth.js)
         var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
         if (!passwordRegex.test(password)) {
@@ -484,8 +455,6 @@
 
         try {
           await FutunetAuth.signUp(email, password, name, {
-            documentType: documentType,
-            documentNumber: documentNumber,
             termsAccepted: acceptedTerms
           });
           showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
@@ -495,7 +464,7 @@
           setTimeout(function () {
             showPanel('panel-login');
             showMessage('login-message', 'Te hemos enviado un correo de verificación. Confírmalo e inicia sesión aquí.', 'success');
-          }, 5000);
+          }, 4000);
         } catch (err) {
           console.error('Register error:', err);
           showMessage('register-message', translateError(err.code, err.message), 'error');
@@ -521,17 +490,7 @@
           showMessage('register-message', 'Debes aceptar los términos y la política de privacidad para crear una cuenta.', 'error');
           return;
         }
-        var documentType = document.getElementById('register-document-type').value;
-        var documentNumber = document.getElementById('register-document-number').value.trim();
-        try {
-          FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
-        } catch (identityError) {
-          showMessage('register-message', identityError.message, 'error');
-          return;
-        }
         handleGoogleSignIn({
-          documentType: documentType,
-          documentNumber: documentNumber,
           termsAccepted: true
         });
       });

@@ -347,6 +347,19 @@
 
   function buildCheckoutMessage(items, serverSummary = null) {
     const lines = ['Hola Futunet, quiero solicitar este carrito:'];
+    const chkName = document.getElementById('chk-name')?.value?.trim();
+    const chkPhone = document.getElementById('chk-phone')?.value?.trim();
+    const chkDocType = document.getElementById('chk-document-type')?.value || 'cedula';
+    const chkDocNum = document.getElementById('chk-document-number')?.value?.trim();
+    const chkAddress = document.getElementById('chk-address')?.value?.trim();
+
+    if (chkName) lines.push(`👤 Cliente: ${chkName}`);
+    if (chkDocNum) lines.push(`📄 ${chkDocType === 'passport' ? 'Pasaporte' : 'Cédula'}: ${chkDocNum}`);
+    if (chkPhone) lines.push(`📞 Teléfono: ${chkPhone}`);
+    if (chkAddress) lines.push(`📍 Dirección: ${chkAddress}`);
+    lines.push('');
+    lines.push('📦 Detalle del pedido:');
+
     let total = 0;
     let totalLease = 0;
     let discountAmount = 0;
@@ -536,8 +549,13 @@
       });
     }
 
+    const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
+    const docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+    const docLabel = docType === 'passport' ? 'Pasaporte' : 'Cédula';
+
     summaryCard.innerHTML = `
       <div class="summary-field"><strong>Nombre:</strong> <span>${escapeHTML(name)}</span></div>
+      <div class="summary-field"><strong>${escapeHTML(docLabel)}:</strong> <span>${escapeHTML(docNum || 'No especificado')}</span></div>
       <div class="summary-field"><strong>Teléfono:</strong> <span>${escapeHTML(phone)}</span></div>
       <div class="summary-field"><strong>Correo:</strong> <span>${escapeHTML(email)}</span></div>
       <div class="summary-field"><strong>Dirección:</strong> <span>${escapeHTML(address)}</span></div>
@@ -662,6 +680,18 @@
               <div class="checkout-form-group">
                 <label for="chk-email">Correo Electrónico *</label>
                 <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" required>
+              </div>
+              <div class="checkout-form-group">
+                <label for="chk-document-type">Tipo de Documento *</label>
+                <select id="chk-document-type" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family: inherit; font-size: 0.9rem; background: #fff;">
+                  <option value="cedula">Cédula Dominicana</option>
+                  <option value="passport">Pasaporte</option>
+                </select>
+              </div>
+              <div class="checkout-form-group">
+                <label for="chk-document-number">Número de Cédula o Documento *</label>
+                <input type="text" id="chk-document-number" placeholder="Ej. 001-1234567-8" required>
+                <small id="chk-document-hint" style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">Requerido para facturación legal de tu primera compra</small>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-address">Dirección de Entrega *</label>
@@ -860,7 +890,7 @@
 
     btnNext.addEventListener('click', () => {
       if (currentStep === 1) {
-        const fields = ['chk-name', 'chk-phone', 'chk-email', 'chk-address'];
+        const fields = ['chk-name', 'chk-phone', 'chk-email', 'chk-document-number', 'chk-address'];
         let isValid = true;
         fields.forEach(fid => {
           const el = document.getElementById(fid);
@@ -869,6 +899,25 @@
           }
         });
         if (!isValid) return;
+
+        const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
+        const docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+
+        if (docType === 'cedula') {
+          const cleanCedula = docNum.replace(/\D/g, '');
+          if (cleanCedula.length !== 11) {
+            showCartToast('La cédula debe contener exactamente 11 dígitos.', 'error');
+            const docInput = document.getElementById('chk-document-number');
+            if (docInput) docInput.focus();
+            return;
+          }
+        } else if (docNum.length < 6 || docNum.length > 20) {
+          showCartToast('El pasaporte debe contener entre 6 y 20 caracteres.', 'error');
+          const docInput = document.getElementById('chk-document-number');
+          if (docInput) docInput.focus();
+          return;
+        }
+
         currentStep = 2;
         updateWizardUI();
       } else if (currentStep === 2) {
@@ -1082,6 +1131,14 @@
             if (data.email && emailField) {
               emailField.value = data.email;
             }
+            if (data.documentType && document.getElementById('chk-document-type')) {
+              document.getElementById('chk-document-type').value = data.documentType;
+            }
+            if (data.documentNumber && document.getElementById('chk-document-number')) {
+              document.getElementById('chk-document-number').value = data.documentNumber;
+              const hintEl = document.getElementById('chk-document-hint');
+              if (hintEl) hintEl.textContent = '✓ Documento guardado en tu cuenta';
+            }
           }
           const financingDoc = await db.collection('financing_profiles').doc(user.uid).get();
           checkoutFinancingApproved = financingDoc.exists && financingDoc.data().status === 'approved';
@@ -1176,9 +1233,28 @@
       return;
     }
     
+    const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
+    let docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+    if (docType === 'cedula') docNum = docNum.replace(/\D/g, '');
+    else docNum = docNum.toUpperCase();
+
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
+    const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;
     const storage = window.FutunetFirebase && window.FutunetFirebase.storage ? window.FutunetFirebase.storage : null;
     
+    // Auto-guardar documento en el perfil del usuario en su primera compra
+    if (user && db && docNum) {
+      try {
+        await db.collection('users').doc(user.uid).update({
+          documentType: docType,
+          documentNumber: docNum,
+          identityProfileComplete: true
+        });
+      } catch (docSaveErr) {
+        console.warn('No se pudo auto-guardar documento en perfil:', docSaveErr);
+      }
+    }
+
     let downloadUrl = null;
     let storagePath = null;
     
@@ -1231,6 +1307,8 @@
         user_name: name,
         user_email: email,
         user_phone: phone,
+        user_document_type: docType,
+        user_document_number: docNum,
         shipping_address: address,
         shipping_notes: notes,
         payment_method: paymentMethod,

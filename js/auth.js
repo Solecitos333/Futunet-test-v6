@@ -51,9 +51,17 @@
     };
   }
 
-  function normalizeIdentityDocument(type, value) {
+  function normalizeIdentityDocument(type, value, required = false) {
     var documentType = type === 'passport' ? 'passport' : 'cedula';
     var documentNumber = String(value || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    if (!documentNumber) {
+      if (required) {
+        var reqError = new Error('El número de documento es obligatorio para esta acción.');
+        reqError.code = 'auth/invalid-document';
+        throw reqError;
+      }
+      return { documentType: documentType, documentNumber: '' };
+    }
     if (documentType === 'cedula') {
       documentNumber = documentNumber.replace(/\D/g, '');
       if (documentNumber.length !== 11) {
@@ -82,7 +90,7 @@
         email: data.email || '',
         phone: data.phone || '',
         address: '',
-        documentType: data.documentType || '',
+        documentType: data.documentType || 'cedula',
         documentNumber: data.documentNumber || '',
         identityProfileComplete: !!(data.documentType && data.documentNumber),
         termsAccepted: data.termsAccepted === true,
@@ -112,7 +120,7 @@
       termsError.code = 'auth/terms-required';
       throw termsError;
     }
-    var identity = normalizeIdentityDocument(identityData.documentType, identityData.documentNumber);
+    var identity = normalizeIdentityDocument(identityData.documentType, identityData.documentNumber, false);
     var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^_\.\-\/])[A-Za-z\d@$!%*?&#^_\.\-\/]{8,}$/;
     if (!passwordRegex.test(password)) {
       var err = new Error('La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un carácter especial.');
@@ -123,7 +131,7 @@
     var cred = await auth.createUserWithEmailAndPassword(email, password);
     await cred.user.updateProfile({ displayName: displayName });
 
-    // Create the required identity record before considering registration complete.
+    // Create the user record in Firestore
     var createdRole = await ensureUserDoc(cred.user.uid, {
       displayName: displayName,
       email: email,
@@ -134,7 +142,7 @@
     });
     if (!createdRole) {
       try { await cred.user.delete(); } catch (deleteError) { await auth.signOut(); }
-      var profileCreateError = new Error('No se pudo guardar el perfil de identidad. Intenta crear la cuenta nuevamente.');
+      var profileCreateError = new Error('No se pudo guardar el perfil de usuario. Intenta crear la cuenta nuevamente.');
       profileCreateError.code = 'auth/profile-create-failed';
       throw profileCreateError;
     }
@@ -247,28 +255,22 @@
     }
 
     if (!userDoc.exists) {
-      if (!registrationData || registrationData.termsAccepted !== true || !registrationData.documentNumber) {
-        try { await cred.user.delete(); } catch (deleteError) { await getAuth().signOut(); }
-        var incompleteGoogleError = new Error('Para crear una cuenta con Google, abre “Crear cuenta”, completa tu cédula o pasaporte y acepta las políticas.');
-        incompleteGoogleError.code = 'auth/identity-required';
-        throw incompleteGoogleError;
-      }
       var googleIdentity = null;
       if (registrationData && registrationData.documentNumber) {
-        googleIdentity = normalizeIdentityDocument(registrationData.documentType, registrationData.documentNumber);
+        googleIdentity = normalizeIdentityDocument(registrationData.documentType, registrationData.documentNumber, false);
       }
       var googleRole = await ensureUserDoc(cred.user.uid, {
         displayName: cred.user.displayName || '',
         email: cred.user.email || '',
         phone: cred.user.phoneNumber || '',
-        documentType: googleIdentity ? googleIdentity.documentType : '',
+        documentType: googleIdentity ? googleIdentity.documentType : 'cedula',
         documentNumber: googleIdentity ? googleIdentity.documentNumber : '',
-        termsAccepted: !!(registrationData && registrationData.termsAccepted),
+        termsAccepted: true,
         status: 'active'
       });
       if (!googleRole) {
         try { await cred.user.delete(); } catch (deleteError) { await getAuth().signOut(); }
-        var googleProfileError = new Error('No se pudo guardar el perfil de identidad. Intenta registrarte nuevamente.');
+        var googleProfileError = new Error('No se pudo guardar el perfil de usuario. Intenta registrarte nuevamente.');
         googleProfileError.code = 'auth/profile-create-failed';
         throw googleProfileError;
       }
@@ -332,10 +334,15 @@
     }
 
     if (!userDoc.exists) {
-      try { await cred.user.delete(); } catch (deleteError) { await auth.signOut(); }
-      var identityRequiredError = new Error('Este enlace no corresponde a una cuenta registrada. Crea tu cuenta e ingresa la cédula o pasaporte requerido.');
-      identityRequiredError.code = 'auth/identity-required';
-      throw identityRequiredError;
+      await ensureUserDoc(cred.user.uid, {
+        displayName: cred.user.displayName || email.split('@')[0] || '',
+        email: email,
+        phone: '',
+        documentType: 'cedula',
+        documentNumber: '',
+        termsAccepted: true,
+        status: 'active'
+      });
     } else {
       getDB().collection('users').doc(cred.user.uid).update({
         lastLogin: firebase.firestore.FieldValue.serverTimestamp()

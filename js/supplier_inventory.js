@@ -1,5 +1,11 @@
 (function () {
   const SUPPLIER_POLICIES = {
+    gaming: {
+      label: 'Zona Gaming & Esports Futunet',
+      allowedConcepts: ['gaming', 'esports', 'rtx', 'ryzen', 'laptop', 'computadora', 'monitor', 'periferico', 'headset', 'teclado', 'mouse', 'internet', 'fibra'],
+      defaultDepartment: 'equipos',
+      defaultCategory: 'Zona Gaming'
+    },
     cecomsa: {
       label: 'Mayorista de tecnología',
       allowedConcepts: ['laptop', 'computadora', 'monitor', 'periferico', 'televisor'],
@@ -29,6 +35,176 @@
   //   specs: ['Intel Core i5', '8 GB RAM', 'SSD 512 GB']
   // }
   const supplierFeeds = {
+    gaming: [
+      {
+        id: 'gm_laptop_asus_tuf_f15',
+        title: 'Laptop Gamer ASUS TUF Gaming F15 Core i7 13va Gen 16GB RTX 4060 144Hz',
+        brand: 'ASUS',
+        category: 'Laptops Gamer',
+        price: 'RD$ 68,900.00',
+        img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/497e685f-eb5e-49b0-9a3b-2ea3954f9a0c/w800&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/497e685f-eb5e-49b0-9a3b-2ea3954f9a0c/w800&w=720&output=webp&q=75',
+          'img/laptops.jpg'
+        ],
+        desc: 'Laptop gamer de alto rendimiento para esports, streaming y títulos AAA. Equipada con procesador Intel Core i7 de 13va generación y gráfica NVIDIA GeForce RTX 4060 con DLSS 3.',
+        specs: ['Intel Core i7-13620H (10 núcleos, hasta 4.9 GHz)', '16 GB DDR5 4800 MHz (Expandible a 64GB)', '512 GB SSD NVMe M.2 PCIe 4.0', 'NVIDIA GeForce RTX 4060 8GB GDDR6 (140W TGP)', 'Pantalla 15.6" FHD (1920x1080) 144Hz IPS Anti-Glare', 'Teclado RGB retroiluminado con teclas WASD resaltadas', 'Wi-Fi 6 + Bluetooth 5.2 + Audio Dolby Atmos']
+      },
+      {
+        id: 'gm_laptop_lenovo_legion_5',
+        title: 'Laptop Gamer Lenovo Legion Pro 5 Ryzen 7 16GB 1TB RTX 4070 165Hz WQXGA',
+        brand: 'LENOVO',
+        category: 'Laptops Gamer',
+        price: 'RD$ 89,500.00',
+        img: 'https://wsrv.nl/?url=p3-ofp.static.pub//fes/cms/2024/02/20/dckq1kdr1u66v6q569u1n29q7p12u3175815.png&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=p3-ofp.static.pub//fes/cms/2024/02/20/dckq1kdr1u66v6q569u1n29q7p12u3175815.png&w=720&output=webp&q=75',
+          'img/laptops.jpg'
+        ],
+        desc: 'Potencia extrema con chasis de aluminio Legion ColdFront 5.0. Diseñada para creadores de contenido profesionales y gaming competitivo a resolución 2K.',
+        specs: ['AMD Ryzen 7 7735H (8 núcleos / 16 hilos hasta 4.75 GHz)', '16 GB DDR5 5600 MHz Dual Channel', '1 TB SSD M.2 2280 PCIe 4.0 NVMe', 'NVIDIA GeForce RTX 4070 8GB GDDR6 (140W)', 'Pantalla 16" WQXGA (2560x1600) 165Hz 100% sRGB 300 nits', 'Teclado Legion TrueStrike con RGB por zona', 'Refrigeración con cámara de vapor y doble ventilador']
+      },
+      {
+        id: 'gm_pc_starter_ryzen5',
+        title: 'PC Gamer Futunet Starter Edition Ryzen 5 5600GT 16GB RGB 500GB SSD 550W',
+        brand: 'FUTUNET GAMING',
+        category: 'PCs Gamer',
+        price: 'RD$ 28,900.00',
+        img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-525-01.jpg&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-525-01.jpg&w=720&output=webp&q=75',
+          'img/productos/dell-optiplex-i7.jpg'
+        ],
+        desc: 'Ensamble gamer optimizado para iniciarse en PC Gaming y Esports (Valorant, Fortnite, Free Fire, LoL, CS:GO 2, Roblox y GTA V) a excelentes FPS a 1080p.',
+        specs: ['AMD Ryzen 5 5600GT (6 núcleos / 12 hilos, Radeon Graphics Vega 7)', '16 GB RAM DDR4 3200MHz Dual Channel RGB', '500 GB SSD NVMe M.2 de alta velocidad', 'Motherboard Chipset AMD B550 / A520M', 'Fuente de poder 550W Certificada 80 Plus Bronze', 'Gabinete Gamer con panel de cristal templado y 4 ventiladores ARGB', 'Windows 11 Pro instalado y optimizado para gaming']
+      },
+      {
+        id: 'gm_pc_esports_rtx4060',
+        title: 'PC Gamer Futunet Esports Pro Core i5 13400F 16GB DDR5 1TB RTX 4060 8GB',
+        brand: 'FUTUNET GAMING',
+        category: 'PCs Gamer',
+        price: 'RD$ 58,400.00',
+        img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-534-01.jpg&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-534-01.jpg&w=720&output=webp&q=75',
+          'img/productos/dell-optiplex-i7.jpg'
+        ],
+        desc: 'La máquina definitiva para jugar en Ultra a 1080p y 1440p con trazado de rayos (Ray Tracing) y DLSS 3. Lista para renderizado, edición de video y streaming.',
+        specs: ['Intel Core i5-13400F (10 núcleos / 16 hilos hasta 4.6 GHz)', '16 GB RAM DDR5 5200MHz', '1 TB SSD NVMe PCIe 4.0 (Lectura 5000 MB/s)', 'NVIDIA GeForce RTX 4060 8GB GDDR6 OC', 'Motherboard Intel B760 con disipadores VRM', 'Fuente 650W 80 Plus Bronze', 'Gabinete Mesh de flujo de aire con 4 fans ARGB', 'Garantía local y ensamblado profesional']
+      },
+      {
+        id: 'gm_pc_streamer_ultra_rtx4070ti',
+        title: 'PC Gamer Futunet Streamer Ultra Ryzen 7 7800X3D 32GB DDR5 1TB RTX 4070 Ti Super',
+        brand: 'FUTUNET GAMING',
+        category: 'PCs Gamer',
+        price: 'RD$ 119,000.00',
+        img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-536-01.jpg&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-536-01.jpg&w=720&output=webp&q=75',
+          'img/productos/dell-optiplex-i7.jpg'
+        ],
+        desc: 'El procesador gaming número 1 del mundo (7800X3D con 3D V-Cache) combinado con la gráfica RTX 4070 Ti SUPER 16GB. Máximo rendimiento 4K a 144+ FPS.',
+        specs: ['AMD Ryzen 7 7800X3D (8 núcleos / 16 hilos con 96MB 3D V-Cache)', 'Refrigeración Líquida AIO 240mm RGB', '32 GB RAM DDR5 6000MHz CL30 AMD EXPO RGB', '1 TB SSD M.2 NVMe Gen4 (Lectura 7000 MB/s)', 'NVIDIA GeForce RTX 4070 Ti SUPER 16GB GDDR6X', 'Motherboard ASUS TUF Gaming B650-PLUS Wi-Fi', 'Fuente de poder 750W 80 Plus Gold Modular', 'Chasis Premium Aquarium Dual Chamber RGB']
+      },
+      {
+        id: 'gm_gpu_asus_rtx4060',
+        title: 'Tarjeta Gráfica ASUS Dual GeForce RTX 4060 EVO OC Edition 8GB GDDR6',
+        brand: 'ASUS',
+        category: 'Componentes Gaming',
+        price: 'RD$ 26,500.00',
+        img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/3bf441ad-ae52-4752-bf62-31e97dc2b406/w800&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/3bf441ad-ae52-4752-bf62-31e97dc2b406/w800&w=720&output=webp&q=75',
+          'img/papeleria.jpg'
+        ],
+        desc: 'Arquitectura Ada Lovelace con núcleos Tensor de 4ta generación para DLSS 3 y núcleos RT de 3ra generación. Dos ventiladores Axial-tech con tecnología 0dB.',
+        specs: ['Memoria: 8GB GDDR6 (128-bit)', 'Reloj OC: 2535 MHz (Boost Clock)', 'Salidas: 1x HDMI 2.1a, 3x DisplayPort 1.4a', 'Soporta DLSS 3, NVIDIA Reflex y Ray Tracing en tiempo real', 'Consumo: 115W (Fuente recomendada 550W)']
+      },
+      {
+        id: 'gm_monitor_asus_tuf_165hz',
+        title: 'Monitor Gamer ASUS TUF Gaming 24" VG249Q1A IPS Full HD 165Hz 1ms',
+        brand: 'ASUS',
+        category: 'Monitores Gaming',
+        price: 'RD$ 13,900.00',
+        img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/28b8cf4f-4d2b-426c-941a-68a83eeecae2/w800&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/28b8cf4f-4d2b-426c-941a-68a83eeecae2/w800&w=720&output=webp&q=75',
+          'img/productos/hp-monitor-widescreen.jpg'
+        ],
+        desc: 'Monitor para esports con tasa de refresco ultra rápida de 165Hz y tecnología ASUS Extreme Low Motion Blur (ELMB) con 1ms MPRT para eliminar el ghosting.',
+        specs: ['Panel IPS 23.8" Full HD (1920x1080)', 'Tasa de refresco: 165 Hz (DisplayPort) / 144 Hz (HDMI)', 'Tiempo de respuesta: 1 ms (MPRT)', 'FreeSync Premium & Shadow Boost', 'Conectividad: 2x HDMI 1.4, 1x DisplayPort 1.2, Salida audio jack 3.5mm', 'Altavoces estéreo integrados de 2W x 2']
+      },
+      {
+        id: 'gm_monitor_samsung_odyssey_g4_240hz',
+        title: 'Monitor Gamer Samsung Odyssey G4 27" IPS FHD 240Hz 1ms G-Sync Pivot',
+        brand: 'SAMSUNG',
+        category: 'Monitores Gaming',
+        price: 'RD$ 21,500.00',
+        img: 'https://wsrv.nl/?url=images.samsung.com/is/image/samsung/p6pim/latin/ls27bg400elxzl/gallery/latin-odyssey-g4-g40b-432822-ls27bg400elxzl-533471018?$720_576_PNG$&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=images.samsung.com/is/image/samsung/p6pim/latin/ls27bg400elxzl/gallery/latin-odyssey-g4-g40b-432822-ls27bg400elxzl-533471018?$720_576_PNG$&w=720&output=webp&q=75',
+          'img/productos/hp-monitor-widescreen.jpg'
+        ],
+        desc: 'Fluidez sin límites competitiva a 240Hz. Panel IPS de 27 pulgadas con soporte ergonómico ajustable en altura, giro, inclinación y modo vertical (Pivot).',
+        specs: ['Tamaño: 27 pulgadas IPS Full HD (1920 x 1080)', 'Tasa de refresco: 240 Hz nativos', 'Tiempo de respuesta: 1 ms (GtG)', 'Compatible con NVIDIA G-Sync y AMD FreeSync Premium', 'Soporte HAS ergonómico (Ajustable en altura y rotación 90°)', 'HDR10, Auto Source Switch+, Modo Eye Saver']
+      },
+      {
+        id: 'gm_teclado_redragon_kumara',
+        title: 'Teclado Mecánico Redragon Kumara K552 RGB Switches Red/Blue Español',
+        brand: 'REDRAGON',
+        category: 'Periféricos Gaming',
+        price: 'RD$ 2,650.00',
+        img: 'https://wsrv.nl/?url=redragon.es/content/uploads/2021/04/KUMARA-K552-RGB-1.png&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=redragon.es/content/uploads/2021/04/KUMARA-K552-RGB-1.png&w=720&output=webp&q=75',
+          'img/papeleria.jpg'
+        ],
+        desc: 'El teclado mecánico TKL más vendido. Construcción robusta en ABS reforzado y placa de acero, switches mecánicos Outemu intercambiables y retroiluminación RGB Chroma.',
+        specs: ['Formato: Compacto TKL (Tenkeyless sin teclado numérico)', 'Switches mecánicos Outemu Red / Blue con sistema Hot-Swap', 'Iluminación RGB configurable con 18 efectos y brillo ajustable', '100% Anti-Ghosting con N-Key Rollover', 'Teclas moldeadas por inyección de doble disparo con layout en Español', 'Cable reforzado USB con conector bañado en oro']
+      },
+      {
+        id: 'gm_mouse_logitech_g502_hero',
+        title: 'Mouse Gamer Logitech G502 HERO 25K DPI RGB con Pesas Ajustables',
+        brand: 'LOGITECH',
+        category: 'Periféricos Gaming',
+        price: 'RD$ 3,450.00',
+        img: 'https://wsrv.nl/?url=resource.logitechg.com/w_692,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g502-hero/g502-hero-gallery-1.png?v=1&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=resource.logitechg.com/w_692,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g502-hero/g502-hero-gallery-1.png?v=1&w=720&output=webp&q=75',
+          'img/papeleria.jpg'
+        ],
+        desc: 'El mouse de gaming más popular del mundo. Sensor HERO 25K de máxima precisión, rueda de desplazamiento hiperrápido de modo dual y 5 pesas de 3.6g extraíbles.',
+        specs: ['Sensor HERO de 100 a 25,600 DPI sin suavizado ni aceleración', '11 botones totalmente programables mediante Logitech G HUB', 'Sistema de peso ajustable (5 pesas de 3.6 g)', 'Iluminación RGB LIGHTSYNC con 16.8 millones de colores', 'Memoria integrada para hasta 5 perfiles de juego', 'Switches mecánicos principales con durabilidad de 50 millones de clics']
+      },
+      {
+        id: 'gm_headset_hyperx_cloud2',
+        title: 'Headset Gamer HyperX Cloud II Sonido Envolvente 7.1 Almohadillas Memory Foam',
+        brand: 'HYPERX',
+        category: 'Periféricos Gaming',
+        price: 'RD$ 5,400.00',
+        img: 'https://wsrv.nl/?url=hyperx.com/cdn/shop/products/hyperx_cloud_ii_red_1_main.jpg?v=1661434316&w=720&output=webp&q=75',
+        gallery: [
+          'https://wsrv.nl/?url=hyperx.com/cdn/shop/products/hyperx_cloud_ii_red_1_main.jpg?v=1661434316&w=720&output=webp&q=75',
+          'img/papeleria.jpg'
+        ],
+        desc: 'Confort legendario y audio de nivel profesional. Caja de control de audio USB con tarjeta de sonido DSP integrada que amplifica el sonido y la voz para una experiencia 7.1 inmersiva.',
+        specs: ['Controladores de 53 mm con imanes de neodimio', 'Sonido envolvente virtual 7.1 conmutado por hardware', 'Estructura duradera de aluminio con almohadillas Memory Foam intercambiables', 'Micrófono desmontable con cancelación de ruido y certificado por Discord/TeamSpeak', 'Compatibilidad: PC, PS5, PS4, Xbox Series X/S, Nintendo Switch y Móviles']
+      },
+      {
+        id: 'gm_fibra_gamer_200mb',
+        title: 'Plan Internet Fibra Gamer Futunet 200 Mbps Simétricos Low Ping',
+        brand: 'FUTUNET FIBRA',
+        category: 'Internet Gamer',
+        price: 'RD$ 2,495.00 / mes',
+        img: 'img/productos/tp-link-deco-x50.webp',
+        gallery: [
+          'img/productos/tp-link-deco-x50.webp',
+          'img/portada-internet.webp'
+        ],
+        desc: 'Internet 100% fibra óptica pura con enrutamiento prioritario para servidores competitivos de gaming en Norteamérica y Latinoamérica. Latencia ultrabaja (<25ms) sin packet loss.',
+        specs: ['Velocidad: 200 Mbps de Descarga + 200 Mbps de Subida (100% Simétrico)', 'Rutas BGP optimizadas con baja latencia (Anti-Jitter y 0% Pérdida de paquetes)', 'IP Pública dinámica (Ideal para hosts de partidas, Discord y Open NAT)', 'Módem Router Óptico Wi-Fi 6 Gigabit de última generación sin costo adicional', 'Instalación profesional de fibra óptica incluida', 'Soporte técnico preferencial 24/7']
+      }
+    ],
     cecomsa: [],
     selektronic: [    {
       title: 'CORE i5 2.7/3.4 Mhz 8GB RAM  160/250GB DD USADOS DELL SFF - DESKTOP GENERACION 3',

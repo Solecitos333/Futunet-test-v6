@@ -1388,10 +1388,14 @@
       if (currentUserData && currentUserData.role === 'superadmin') {
         historyBtn = '<button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.showUserHistory(\'' + u.id + '\')" title="Ver historial" style="margin-left:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>';
       }
+      var docDisplay = u.documentNumber
+        ? '<span style="font-family:monospace;font-weight:600;color:#0A70A2;">' + escapeHtml(u.documentNumber) + '</span>'
+        : '<span style="color:#a0b0c4;font-size:0.75rem;">Sin registrar (Básico)</span>';
+
       html += '<tr>' +
         '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(u.displayName || 'Sin nombre') + '</strong></td>' +
         '<td data-label="Email">' + escapeHtml(u.email || '') + '</td>' +
-        '<td data-label="Documento">' + escapeHtml(u.documentNumber || 'Pendiente') + '</td>' +
+        '<td data-label="Documento">' + docDisplay + '</td>' +
         '<td data-label="Rol"><span class="admin-role-badge role-' + (u.role || 'user') + '">' + (u.role || 'user') + '</span></td>' +
         '<td data-label="Estado"><span class="admin-status-badge status-' + (u.status || 'active') + '">' + (u.status || 'active') + '</span></td>' +
         '<td data-label="Acciones">' +
@@ -1987,11 +1991,15 @@
         voucherHtml += '</div>';
       }
       
+      var docLabel = o.userDocumentType === 'passport' ? 'Pasaporte' : 'Cédula';
+      var docInfo = o.userDocumentNumber ? '<div style="font-size:0.85rem; color:#394c60; margin-top:2px;">' + docLabel + ': <strong style="color:#0a70a2;">' + escapeHtml(o.userDocumentNumber) + '</strong></div>' : '';
+
       var contentHtml = '<div style="font-family:Outfit, sans-serif;">' +
         '<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; background:#f3f7fc; padding:16px; border-radius:12px; border:1px solid #e5eef8;">' +
         '<div>' +
         '<div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700;">Información del Cliente</div>' +
         '<div style="font-weight:700; color:#0a101d; margin-top:4px; font-size:1rem;">' + escapeHtml(o.userName || '—') + '</div>' +
+        docInfo +
         '<div style="font-size:0.85rem; color:#394c60; margin-top:2px;">Email: ' + escapeHtml(o.userEmail || '—') + '</div>' +
         '<div style="font-size:0.85rem; color:#394c60; margin-top:2px;">Teléfono: ' + escapeHtml(o.userPhone || '—') + '</div>' +
         '</div>' +

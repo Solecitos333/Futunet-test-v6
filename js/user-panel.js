@@ -20,8 +20,10 @@
     loadUserOrders();
     setupProfileForm();
     if (window.FutunetFinancing) window.FutunetFinancing.init(user, data);
-    if (!data.documentType || !data.documentNumber || data.termsAccepted !== true) {
-      showToast('Completa tu documento de identidad y acepta las políticas para finalizar el registro.', 'info');
+    
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('completeProfile') === '1' && (!data.documentType || !data.documentNumber)) {
+      showToast('Completa tu documento de identidad para compras y financiamientos.', 'info');
     }
   }
 
@@ -86,14 +88,14 @@
       }
 
       try {
-        var identity = FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
+        var identity = FutunetAuth.normalizeIdentityDocument(documentType, documentNumber, false);
         var updateData = {
           displayName: name,
           phone: phone,
           address: address,
           documentType: identity.documentType,
           documentNumber: identity.documentNumber,
-          identityProfileComplete: true,
+          identityProfileComplete: !!(identity.documentNumber && identity.documentType),
           termsAccepted: true
         };
         if (userData.termsAccepted !== true) {
@@ -107,7 +109,7 @@
         showToast('Perfil actualizado correctamente', 'success');
       } catch (err) {
         console.error('Profile update error:', err);
-        showToast('Error al guardar. Intenta de nuevo.', 'error');
+        showToast('Error al guardar: ' + (err.message || 'Intenta de nuevo.'), 'error');
       }
       if (btn) btn.disabled = false;
     });
