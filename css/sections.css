@@ -1933,3 +1933,240 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
 @media (min-width: 768px) and (max-width: 1023px) {
   .catshowcase-carousel-section .catshowcase-card { flex: 0 0 200px; }
 }
+
+/* =============================================================
+   16. ZONA GAMING (index.html)
+   ============================================================= */
+.gaming-section {
+  background:
+    radial-gradient(circle at top right, rgba(10, 112, 162, 0.05), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+}
+
+/* Header row: title left, link right */
+.gaming-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.gaming-header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.gaming-header__link svg { width: 16px; height: 16px; transition: transform .3s ease; }
+.gaming-header__link:hover { color: var(--brand-dark); }
+.gaming-header__link:hover svg { transform: translateX(3px); }
+
+/* Main layout: banner left, card list right */
+.gaming-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .gaming-layout { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px) {
+  .gaming-layout { grid-template-columns: 5fr 4fr; gap: 28px; }
+}
+
+/* ── Banner panel ── */
+.gaming-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 380px;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.gaming-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.gaming-banner__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+.gaming-banner:hover .gaming-banner__bg { transform: scale(1.04); }
+
+.gaming-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,16,29,.82) 40%, rgba(10,16,29,.18) 100%);
+}
+
+.gaming-banner__body {
+  position: relative;
+  padding: 32px 28px;
+  z-index: 1;
+}
+.gaming-banner__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(10, 112, 162, 0.9);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 14px;
+}
+.gaming-banner__eyebrow svg { width: 13px; height: 13px; }
+.gaming-banner__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+.gaming-banner__desc {
+  font-size: .88rem;
+  color: rgba(255,255,255,.78);
+  line-height: 1.6;
+  margin: 0 0 22px;
+  max-width: 340px;
+}
+.gaming-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: .84rem;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
+}
+.gaming-banner__cta svg { width: 15px; height: 15px; transition: transform .3s ease; }
+.gaming-banner:hover .gaming-banner__cta { background: var(--brand); color: #fff; }
+.gaming-banner:hover .gaming-banner__cta svg { transform: translateX(3px); }
+
+/* ── Cards panel ── */
+.gaming-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gaming-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+.gaming-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--brand);
+  opacity: 0;
+  transition: opacity .3s ease;
+  border-radius: 0 2px 2px 0;
+}
+.gaming-card:hover {
+  border-color: rgba(10, 112, 162, 0.22);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(4px);
+}
+.gaming-card:hover::before { opacity: 1; }
+
+.gaming-card__icon {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  background: linear-gradient(135deg, var(--brand-pale), rgba(10,112,162,.1));
+  border: 1px solid rgba(10,112,162,.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+  transition: var(--transition);
+}
+.gaming-card__icon svg { width: 20px; height: 20px; }
+.gaming-card:hover .gaming-card__icon {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+.gaming-card__body { flex: 1; min-width: 0; }
+.gaming-card__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 3px;
+}
+.gaming-card__desc {
+  font-size: .79rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 7px;
+}
+.gaming-card__price {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.gaming-card__arrow {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.gaming-card:hover .gaming-card__arrow {
+  color: var(--brand);
+  transform: translate(2px, -2px);
+}
+
+/* Fiber card accent */
+.gaming-card--fiber .gaming-card__icon {
+  background: linear-gradient(135deg, rgba(29,161,219,.1), rgba(10,112,162,.08));
+  border-color: rgba(29,161,219,.15);
+  color: var(--brand-light);
+}
+.gaming-card--fiber:hover .gaming-card__icon {
+  background: var(--brand-light);
+  border-color: var(--brand-light);
+  color: #fff;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767px) {
+  .gaming-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .gaming-banner { min-height: 280px; }
+  .gaming-banner__title { font-size: 1.25rem; }
+  .gaming-card { padding: 14px 16px; gap: 12px; }
+  .gaming-card__icon { width: 40px; height: 40px; border-radius: 12px; }
+  .gaming-card__icon svg { width: 17px; height: 17px; }
+  .gaming-card__title { font-size: .9rem; }
+}
