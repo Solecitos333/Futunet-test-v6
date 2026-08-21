@@ -22,7 +22,7 @@
       brand: 'ASUS',
       category: 'Laptops Gamer',
       price: 'RD$ 68,900.00',
-      img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/497e685f-eb5e-49b0-9a3b-2ea3954f9a0c/w800&w=720&output=webp&q=75',
+      img: 'img/gaming/laptop-asus-tuf.webp',
       specs: ['Intel Core i7-13620H', '16GB DDR5', '512GB SSD NVMe', 'RTX 4060 8GB GDDR6', '15.6" 144Hz FHD']
     },
     {
@@ -31,7 +31,7 @@
       brand: 'LENOVO',
       category: 'Laptops Gamer',
       price: 'RD$ 89,500.00',
-      img: 'https://wsrv.nl/?url=p3-ofp.static.pub//fes/cms/2024/02/20/dckq1kdr1u66v6q569u1n29q7p12u3175815.png&w=720&output=webp&q=75',
+      img: 'img/gaming/laptop-lenovo-legion.webp',
       specs: ['AMD Ryzen 7 7735H', '16GB DDR5', '1TB SSD NVMe', 'RTX 4070 8GB', '16" 165Hz 2K']
     },
     {
@@ -40,7 +40,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 28,900.00',
-      img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-525-01.jpg&w=720&output=webp&q=75',
+      img: 'img/gaming/pc-starter-ryzen5.webp',
       specs: ['AMD Ryzen 5 5600GT', '16GB RAM RGB', '500GB SSD NVMe', 'Case Cristal 4 Fans', 'Fuente 550W 80+']
     },
     {
@@ -49,7 +49,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 58,400.00',
-      img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-534-01.jpg&w=720&output=webp&q=75',
+      img: 'img/gaming/pc-esports-rtx4060.webp',
       specs: ['Intel Core i5-13400F', '16GB DDR5', '1TB SSD Gen4', 'RTX 4060 8GB OC', 'Fuente 650W Bronze']
     },
     {
@@ -58,7 +58,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 119,000.00',
-      img: 'https://wsrv.nl/?url=c1.neweggimages.com/ProductImageCompressAll1280/83-360-536-01.jpg&w=720&output=webp&q=75',
+      img: 'img/gaming/pc-streamer-ultra.webp',
       specs: ['AMD Ryzen 7 7800X3D', 'Líquida AIO 240mm', '32GB DDR5 6000MHz', 'RTX 4070 Ti SUPER 16GB', 'Fuente 750W Gold']
     },
     {
@@ -67,7 +67,7 @@
       brand: 'ASUS',
       category: 'Componentes Gaming',
       price: 'RD$ 26,500.00',
-      img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/3bf441ad-ae52-4752-bf62-31e97dc2b406/w800&w=720&output=webp&q=75',
+      img: 'img/gaming/gpu-asus-rtx4060.webp',
       specs: ['8GB GDDR6 128-bit', 'DLSS 3 & Ray Tracing', 'Dual Fan 0dB Tech', 'HDMI 2.1a + 3x DP 1.4a']
     },
     {
@@ -76,7 +76,7 @@
       brand: 'ASUS',
       category: 'Monitores Gaming',
       price: 'RD$ 13,900.00',
-      img: 'https://wsrv.nl/?url=dlcdnwebimgs.asus.com/gain/28b8cf4f-4d2b-426c-941a-68a83eeecae2/w800&w=720&output=webp&q=75',
+      img: 'img/gaming/monitor-asus-tuf.webp',
       specs: ['23.8" IPS Full HD', '165Hz Refresh Rate', '1ms MPRT ELMB', 'FreeSync Premium']
     },
     {
@@ -85,7 +85,7 @@
       brand: 'SAMSUNG',
       category: 'Monitores Gaming',
       price: 'RD$ 21,500.00',
-      img: 'https://wsrv.nl/?url=images.samsung.com/is/image/samsung/p6pim/latin/ls27bg400elxzl/gallery/latin-odyssey-g4-g40b-432822-ls27bg400elxzl-533471018?$720_576_PNG$&w=720&output=webp&q=75',
+      img: 'img/gaming/monitor-samsung-odyssey.webp',
       specs: ['27" IPS Full HD', '240Hz Ultra Fast', '1ms GtG Response', 'G-Sync + FreeSync', 'Base Pivot']
     },
     {
@@ -94,7 +94,7 @@
       brand: 'REDRAGON',
       category: 'Periféricos Gaming',
       price: 'RD$ 2,650.00',
-      img: 'https://wsrv.nl/?url=redragon.es/content/uploads/2021/04/KUMARA-K552-RGB-1.png&w=720&output=webp&q=75',
+      img: 'img/gaming/teclado-redragon.webp',
       specs: ['Formato Compacto TKL', 'Switches Mecánicos', 'RGB Configurable', 'Layout Español']
     },
     {
@@ -103,7 +103,7 @@
       brand: 'LOGITECH G',
       category: 'Periféricos Gaming',
       price: 'RD$ 3,450.00',
-      img: 'https://wsrv.nl/?url=resource.logitechg.com/w_692,c_limit,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/products/g502-hero/g502-hero-gallery-1.png?v=1&w=720&output=webp&q=75',
+      img: 'img/gaming/mouse-logitech-g502.webp',
       specs: ['Sensor HERO 25K', '11 Botones Programables', 'Pesas Ajustables 3.6g', 'LIGHTSYNC RGB']
     },
     {
@@ -112,7 +112,7 @@
       brand: 'HYPERX',
       category: 'Periféricos Gaming',
       price: 'RD$ 4,890.00',
-      img: 'https://wsrv.nl/?url=row.hyperx.com/cdn/shop/products/hyperx_cloud_ii_red_1_main.jpg?v=1662446736&w=720&output=webp&q=75',
+      img: 'img/gaming/headset-hyperx-cloud2.webp',
       specs: ['Sonido Virtual 7.1', 'Almohadillas Memory Foam', 'Micrófono Desmontable', 'Estructura de Aluminio']
     },
     {
@@ -121,7 +121,7 @@
       brand: 'FUTUNET FIBRA',
       category: 'Internet Gamer',
       price: 'RD$ 2,495.00 / mes',
-      img: 'https://wsrv.nl/?url=images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=720&q=75',
+      img: 'img/gaming/fibra-gamer.webp',
       specs: ['200M Bajada / 200M Subida', 'Rutas BGP Prioritarias', 'Ping < 25ms en Servidores', 'Router Wi-Fi 6 Gigabit']
     }
   ];
@@ -220,7 +220,7 @@
         '<div class="gaming-product-card" data-id="' + escapedId + '">',
         '  <span class="g-card-badge">' + escapeHTML(p.category || 'Gaming') + '</span>',
         '  <div class="g-card-img-wrap">',
-        '    <img src="' + escapeHTML(p.img || 'img/laptops.jpg') + '" alt="' + escapedTitle + '" loading="lazy" />',
+        '    <img src="' + escapeHTML(p.img || 'img/laptops.jpg') + '" alt="' + escapedTitle + '" loading="lazy" onerror="this.onerror=null;this.src=\'img/laptops.jpg\';" />',
         '  </div>',
         '  <div class="g-card-category">' + escapeHTML(p.brand || 'Futunet') + '</div>',
         '  <h3 class="g-card-title" title="' + escapedTitle + '">' + escapedTitle + '</h3>',
