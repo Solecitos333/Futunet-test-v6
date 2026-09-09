@@ -22,7 +22,7 @@
       brand: 'ASUS',
       category: 'Laptops Gamer',
       price: 'RD$ 68,900.00',
-      img: 'img/gaming/laptop-asus-tuf.webp',
+      img: 'img/gaming/verified/laptop-asus-tuf-f15-2023.webp',
       specs: ['Intel Core i7-13620H', '16GB DDR5', '512GB SSD NVMe', 'RTX 4060 8GB GDDR6', '15.6" 144Hz FHD']
     },
     {
@@ -31,7 +31,7 @@
       brand: 'LENOVO',
       category: 'Laptops Gamer',
       price: 'RD$ 89,500.00',
-      img: 'img/gaming/laptop-lenovo-legion.webp',
+      img: 'img/gaming/foto-pendiente.svg',
       specs: ['AMD Ryzen 7 7735H', '16GB DDR5', '1TB SSD NVMe', 'RTX 4070 8GB', '16" 165Hz 2K']
     },
     {
@@ -40,7 +40,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 28,900.00',
-      img: 'img/gaming/pc-starter-ryzen5.webp',
+      img: 'img/gaming/foto-pendiente.svg',
       specs: ['AMD Ryzen 5 5600GT', '16GB RAM RGB', '500GB SSD NVMe', 'Case Cristal 4 Fans', 'Fuente 550W 80+']
     },
     {
@@ -49,7 +49,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 58,400.00',
-      img: 'img/gaming/pc-esports-rtx4060.webp',
+      img: 'img/gaming/foto-pendiente.svg',
       specs: ['Intel Core i5-13400F', '16GB DDR5', '1TB SSD Gen4', 'RTX 4060 8GB OC', 'Fuente 650W Bronze']
     },
     {
@@ -58,7 +58,7 @@
       brand: 'FUTUNET GAMING',
       category: 'PCs Gamer',
       price: 'RD$ 119,000.00',
-      img: 'img/gaming/pc-streamer-ultra.webp',
+      img: 'img/gaming/foto-pendiente.svg',
       specs: ['AMD Ryzen 7 7800X3D', 'Líquida AIO 240mm', '32GB DDR5 6000MHz', 'RTX 4070 Ti SUPER 16GB', 'Fuente 750W Gold']
     },
     {
@@ -67,7 +67,7 @@
       brand: 'ASUS',
       category: 'Componentes Gaming',
       price: 'RD$ 26,500.00',
-      img: 'img/gaming/gpu-asus-rtx4060.webp',
+      img: 'img/gaming/verified/gpu-asus-rtx4060-evo.webp',
       specs: ['8GB GDDR6 128-bit', 'DLSS 3 & Ray Tracing', 'Dual Fan 0dB Tech', 'HDMI 2.1a + 3x DP 1.4a']
     },
     {
@@ -76,7 +76,7 @@
       brand: 'ASUS',
       category: 'Monitores Gaming',
       price: 'RD$ 13,900.00',
-      img: 'img/gaming/monitor-asus-tuf.webp',
+      img: 'img/gaming/verified/monitor-asus-vg249q1a.webp',
       specs: ['23.8" IPS Full HD', '165Hz Refresh Rate', '1ms MPRT ELMB', 'FreeSync Premium']
     },
     {
@@ -85,7 +85,7 @@
       brand: 'SAMSUNG',
       category: 'Monitores Gaming',
       price: 'RD$ 21,500.00',
-      img: 'img/gaming/monitor-samsung-odyssey.webp',
+      img: 'img/gaming/verified/monitor-samsung-g4-27.webp',
       specs: ['27" IPS Full HD', '240Hz Ultra Fast', '1ms GtG Response', 'G-Sync + FreeSync', 'Base Pivot']
     },
     {
@@ -94,7 +94,7 @@
       brand: 'REDRAGON',
       category: 'Periféricos Gaming',
       price: 'RD$ 2,650.00',
-      img: 'img/gaming/teclado-redragon.webp',
+      img: 'img/gaming/verified/keyboard-redragon-kumara-k552.webp',
       specs: ['Formato Compacto TKL', 'Switches Mecánicos', 'RGB Configurable', 'Layout Español']
     },
     {
@@ -103,7 +103,7 @@
       brand: 'LOGITECH G',
       category: 'Periféricos Gaming',
       price: 'RD$ 3,450.00',
-      img: 'img/gaming/mouse-logitech-g502.webp',
+      img: 'img/gaming/verified/mouse-logitech-g502-hero.webp',
       specs: ['Sensor HERO 25K', '11 Botones Programables', 'Pesas Ajustables 3.6g', 'LIGHTSYNC RGB']
     },
     {
@@ -112,7 +112,7 @@
       brand: 'HYPERX',
       category: 'Periféricos Gaming',
       price: 'RD$ 4,890.00',
-      img: 'img/gaming/headset-hyperx-cloud2.webp',
+      img: 'img/gaming/verified/headset-hyperx-cloud-ii.webp',
       specs: ['Sonido Virtual 7.1', 'Almohadillas Memory Foam', 'Micrófono Desmontable', 'Estructura de Aluminio']
     },
     {
@@ -121,7 +121,7 @@
       brand: 'FUTUNET FIBRA',
       category: 'Internet Gamer',
       price: 'RD$ 2,495.00 / mes',
-      img: 'img/gaming/fibra-gamer.webp',
+      img: 'img/gaming/servicio-fibra.svg',
       specs: ['200M Bajada / 200M Subida', 'Rutas BGP Prioritarias', 'Ping < 25ms en Servidores', 'Router Wi-Fi 6 Gigabit']
     }
   ];
@@ -215,12 +215,14 @@
       var specsText = Array.isArray(p.specs) ? p.specs.slice(0, 4).join(' • ') : '';
       var escapedTitle = escapeHTML(p.title);
       var escapedId = escapeHTML(p.id);
+      var image = p.img || 'img/gaming/foto-pendiente.svg';
+      var imageAlt = image.includes('foto-pendiente.svg') ? 'Foto pendiente: ' + p.title : p.title;
 
       return [
         '<div class="gaming-product-card" data-id="' + escapedId + '">',
         '  <span class="g-card-badge">' + escapeHTML(p.category || 'Gaming') + '</span>',
         '  <div class="g-card-img-wrap">',
-        '    <img src="' + escapeHTML(p.img || 'img/laptops.jpg') + '" alt="' + escapedTitle + '" loading="lazy" onerror="this.onerror=null;this.src=\'img/laptops.jpg\';" />',
+        '    <img src="' + escapeHTML(image) + '" alt="' + escapeHTML(imageAlt) + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'img/gaming/foto-pendiente.svg\';this.alt=\'Foto del producto pendiente\';" />',
         '  </div>',
         '  <div class="g-card-category">' + escapeHTML(p.brand || 'Futunet') + '</div>',
         '  <h3 class="g-card-title" title="' + escapedTitle + '">' + escapedTitle + '</h3>',

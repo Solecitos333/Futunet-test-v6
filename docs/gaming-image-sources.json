@@ -1,0 +1,97 @@
+{
+  "reviewedAt": "2026-09-09",
+  "products": [
+    {
+      "id": "gm_laptop_asus_tuf_f15",
+      "image": "img/gaming/verified/laptop-asus-tuf-f15-2023.webp",
+      "status": "manufacturer",
+      "sha256": "ed8cafd458a38d6e7f8fc65eabf041b4aea3faa9e0321bded891f65d1acbe544",
+      "page": "https://www.asus.com/laptops/for-gaming/tuf-gaming/asus-tuf-gaming-f15-2023/",
+      "sourceImage": "https://dlcdnwebimgs.asus.com/gain/1d7ff1ce-d5ed-4184-bbfa-2cee7150b1fc/w800"
+    },
+    {
+      "id": "gm_laptop_lenovo_legion_5",
+      "image": "img/gaming/foto-pendiente.svg",
+      "status": "pending",
+      "sha256": "a2aeb5246c4f3b58fd37938b7d3385c9b5020e3c25f8aac1fcd512466415f5d0"
+    },
+    {
+      "id": "gm_pc_starter_ryzen5",
+      "image": "img/gaming/foto-pendiente.svg",
+      "status": "pending",
+      "sha256": "a2aeb5246c4f3b58fd37938b7d3385c9b5020e3c25f8aac1fcd512466415f5d0"
+    },
+    {
+      "id": "gm_pc_esports_rtx4060",
+      "image": "img/gaming/foto-pendiente.svg",
+      "status": "pending",
+      "sha256": "a2aeb5246c4f3b58fd37938b7d3385c9b5020e3c25f8aac1fcd512466415f5d0"
+    },
+    {
+      "id": "gm_pc_streamer_ultra_rtx4070ti",
+      "image": "img/gaming/foto-pendiente.svg",
+      "status": "pending",
+      "sha256": "a2aeb5246c4f3b58fd37938b7d3385c9b5020e3c25f8aac1fcd512466415f5d0"
+    },
+    {
+      "id": "gm_gpu_asus_rtx4060",
+      "image": "img/gaming/verified/gpu-asus-rtx4060-evo.webp",
+      "status": "manufacturer",
+      "sha256": "a3acfec8955af1cef032db3a1137118ab8af61f3cfd75833e04d263820e21a10",
+      "page": "https://www.asus.com/latin/motherboards-components/graphics-cards/dual/dual-rtx4060-o8g-evo/",
+      "sourceImage": "https://dlcdnwebimgs.asus.com/gain/9fe54894-dcf5-4abf-be34-36db3ce4ada5/w800"
+    },
+    {
+      "id": "gm_monitor_asus_tuf_165hz",
+      "image": "img/gaming/verified/monitor-asus-vg249q1a.webp",
+      "status": "manufacturer",
+      "sha256": "00012fadaedb472ad1bce87e142b346b448df01ccc5638806ba567759ed2efc7",
+      "page": "https://www.asus.com/uk/displays-desktops/monitors/tuf-gaming/tuf-gaming-vg249q1a/",
+      "sourceImage": "https://dlcdnwebimgs.asus.com/gain/0f372e3e-f38e-4a9b-824a-978bc7689a99/"
+    },
+    {
+      "id": "gm_monitor_samsung_odyssey_g4_240hz",
+      "image": "img/gaming/verified/monitor-samsung-g4-27.webp",
+      "status": "manufacturer",
+      "sha256": "cf43862e6a43fdfa118300184ea13bf584a15bbd0ef48b81afee61927288d6bd",
+      "page": "https://www.samsung.com/uk/monitors/gaming/odyssey-g4-g40b-27-inch-ls27bg400euxxu/",
+      "sourceImage": "https://images.samsung.com/is/image/samsung/p6pim/uk/ls27bg400euxxu/gallery/uk-odyssey-g4-27g40b-ls27bg400euxxu-532868456?$1164_776_PNG$"
+    },
+    {
+      "id": "gm_teclado_redragon_kumara",
+      "image": "img/gaming/verified/keyboard-redragon-kumara-k552.webp",
+      "status": "manufacturer",
+      "sha256": "6970fa2eb8cc3e7eff89df984c12ab591cf6e9f9d980710f79b0dfa83f36492e",
+      "page": "https://redragon.es/products/best-seller/teclado-mecanico-tkl-kumara-k552/",
+      "sourceImage": "https://redragon.es/content/uploads/2021/04/KUMARA.png"
+    },
+    {
+      "id": "gm_mouse_logitech_g502_hero",
+      "image": "img/gaming/verified/mouse-logitech-g502-hero.webp",
+      "status": "manufacturer",
+      "sha256": "99c713c0233a6b94f50170759887590e16ce69adc810e8486835457a3cc0b09b",
+      "page": "https://www.logitechg.com/es-es/shop/p/g502-hero-gaming-mouse.910-005471",
+      "sourceImage": "https://resource.logitechg.com/w_544,h_466,ar_7:6,c_pad,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/gaming/en/non-braid/hyjal-g502-hero/2025/g502-hero-mouse-top-angle-gallery-1.png"
+    },
+    {
+      "id": "gm_headset_hyperx_cloud2",
+      "image": "img/gaming/verified/headset-hyperx-cloud-ii.webp",
+      "status": "manufacturer",
+      "sha256": "3c6a6d833c33cdf0531a9967bafc4cad5df3433bb96c168b0c0829f93d34de36",
+      "page": "https://hyperx.com/products/hyperx-cloud-ii",
+      "sourceImage": "https://hyperx.com/cdn/shop/files/hyperx_cloud_ii_red_1_main.jpg?v=1763563198"
+    },
+    {
+      "id": "gm_fibra_gamer_200m",
+      "image": "img/gaming/servicio-fibra.svg",
+      "status": "service",
+      "sha256": "fb8d7df4356ea4a87ec504a62d19e76207924c1df572023ac2fe6d3b81116c5a"
+    },
+    {
+      "id": "gm_fibra_gamer_200mb",
+      "image": "img/gaming/servicio-fibra.svg",
+      "status": "service",
+      "sha256": "fb8d7df4356ea4a87ec504a62d19e76207924c1df572023ac2fe6d3b81116c5a"
+    }
+  ]
+}

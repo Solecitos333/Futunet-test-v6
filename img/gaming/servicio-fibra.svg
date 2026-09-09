@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">Servicio Internet Fibra Gamer Futunet</title>
+  <desc id="desc">Plan de conexión de 200 Mbps. No representa un modelo de router.</desc>
+  <rect width="800" height="500" rx="24" fill="#f3f7fc"/>
+  <g fill="none" stroke="#0a70a2" stroke-width="10" stroke-linecap="round">
+    <path d="M320 160 Q400 90 480 160 M345 189 Q400 140 455 189 M373 217 Q400 190 427 217"/>
+  </g>
+  <circle cx="400" cy="242" r="8" fill="#0a70a2"/>
+  <text x="400" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="38" font-weight="700" fill="#0a101d">Fibra Gamer · 200 Mbps</text>
+  <text x="400" y="370" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#394c60">Servicio de Internet Futunet</text>
+</svg>

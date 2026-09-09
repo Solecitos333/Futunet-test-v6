@@ -151,7 +151,8 @@
 
 
 /* ── 3. CONTACTO ── */
-#contacto { background: var(--bg-secondary); }
+/* The contact anchor is also used by footers; only tint the contact section. */
+section#contacto { background: var(--bg-secondary); }
 .contact-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 36px; }
 .contact-items { display: flex; flex-direction: column; gap: 10px; }
 .contact-card {
@@ -263,7 +264,7 @@ footer {
   background:
     radial-gradient(circle at top right, rgba(11,126,181,0.08), transparent 24%),
     linear-gradient(180deg, #0f1923 0%, #09121b 100%);
-  padding: 48px 0 24px; color: rgba(255,255,255,0.6);
+  padding: 48px 0 24px; color: rgba(255,255,255,0.75);
   position: relative;
 }
 
@@ -294,7 +295,7 @@ footer::before {
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .footer-brand p {
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.72);
   font-size: .88rem; margin-top: 12px;
   line-height: 1.75; max-width: 320px;
 }
@@ -307,7 +308,7 @@ footer::before {
 }
 .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .footer-col ul a {
-  font-size: .86rem; color: rgba(255,255,255,0.5);
+  font-size: .86rem; color: rgba(255,255,255,0.72);
   transition: color .3s ease, padding-left .3s ease;
   display: inline-flex; align-items: center; gap: 6px;
   position: relative;
@@ -318,11 +319,42 @@ footer::before {
   gap: 4px; text-align: center;
   padding-top: 20px;
   font-size: .78rem;
-  color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.66);
   letter-spacing: .03em;
 }
 
 footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
+
+/* Four-column footer variant used by Gaming. */
+.site-footer .footer-grid > * { min-width: 0; }
+.footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.footer-social .social-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  color: #fff;
+}
+.footer-social .social-icon:hover,
+.footer-social .social-icon:focus-visible { background: var(--brand-dark); }
+.footer-social svg { width: 20px; height: 20px; stroke: currentColor; }
+.footer-contact li { display: flex; align-items: flex-start; gap: 8px; }
+.footer-contact .footer-icon { flex-shrink: 0; margin-top: 6px; stroke: currentColor; }
+.footer-contact a .footer-icon { margin-top: 0; }
+.footer-contact a { overflow-wrap: anywhere; }
+.footer-bottom-inner {
+  width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.footer-bottom-inner .footer-legal { margin: 0; padding: 0; border: 0; }
+.site-footer a:focus-visible { outline-color: #fff; }
+
+@media (min-width: 768px) {
+  .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer-bottom-inner { flex-direction: row; justify-content: space-between; }
+}
+@media (min-width: 1024px) {
+  .site-footer .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; }
+}
 
 /* ── 5. CATEGORIAS GRID (Home) ── */
 .categories-grid {

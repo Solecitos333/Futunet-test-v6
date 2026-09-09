@@ -21,6 +21,20 @@ Este registro documenta únicamente recursos incorporados al sitio. Las imágene
 - Archivos locales: `img/productos/tgm/tgm-fixed-speed-*.webp`, `img/productos/tgm/tgm-mwfot-official-specs.webp`, `img/productos/tgm/tgm-mwfot-official-features.webp`
 - Nota: la ficha oficial muestra la unidad interior, la tabla técnica y funciones generales. No se incorporaron fotografías de control remoto o unidad exterior porque no se localizaron en una fuente oficial verificable.
 
-## Pendientes
+## Zona Gaming — revisión del 9 de septiembre de 2026
+
+La correspondencia entre cada ID de producto, archivo local, página del fabricante y URL de la foto está registrada en [gaming-image-sources.json](gaming-image-sources.json). El registro incluye el SHA-256 de cada imagen revisada visualmente.
+
+Se incorporaron fotos de fabricante del ASUS TUF F15 (2023), ASUS Dual RTX 4060 EVO OC, ASUS VG249Q1A, Samsung Odyssey G4 de 27 pulgadas, Redragon Kumara K552, Logitech G502 HERO y HyperX Cloud II. Se conservan sus proporciones con `object-fit: contain`, sin recortar ni reconstruir el producto. Las fotos de fabricante representan el modelo; las variantes de color, distribución del teclado y configuración deben confirmarse con la unidad disponible.
+
+Se eliminaron de las galerías Gaming las fotos genéricas de laptops, computadoras Dell, monitores HP y papelería. La página Gaming y el feed del catálogo usan ahora las mismas imágenes locales verificadas. Los fallos de carga muestran una indicación neutral de foto pendiente.
+
+- **PCs Futunet Starter, Esports Pro y Streamer Ultra:** falta una foto propia del ensamble disponible. No se atribuyen gabinetes o componentes de equipos ajenos a estas configuraciones. El equipo destacado usa el mismo estado que su tarjeta del catálogo.
+- **Lenovo Legion Pro 5:** falta confirmar el número de modelo/MTM. El inventario indica Ryzen 7 7735H y RTX 4070; la [ficha oficial de Legion Pro 5 16ARX8](https://psref.lenovo.com/syspool/Sys/PDF/Legion/Legion_Pro_5_16ARX8/Legion_Pro_5_16ARX8_Spec.html) enumera procesadores HX, incluido 7745HX. No se cambian las especificaciones comerciales ni se asigna una foto de otra variante por aproximación.
+- **Internet Fibra Gamer:** se usa un gráfico propio que identifica el servicio de 200 Mbps y no representa un modelo de router.
+
+Los cuatro equipos pendientes conservan una tarjeta visible con «Foto pendiente» hasta disponer de la fotografía o identificación necesaria.
+
+## Otras imágenes pendientes
 
 Las demás laptops del inventario conservan su imagen existente y una sola vista. No se ampliaron sus galerías porque todavía no se ha documentado el origen de la imagen actual o la variante exacta (configuración, color y región) de cada unidad reacondicionada.

@@ -19,11 +19,13 @@
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+ <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
  <link rel="stylesheet" href="css/main.css?v=3.2" />
  <link rel="stylesheet" href="css/navbar.css?v=3.6" />
  <link rel="stylesheet" href="css/catalog.css?v=20260705-release" />
- <link rel="stylesheet" href="css/sections.css?v=3.5" />
- <link rel="stylesheet" href="css/gaming.css?v=2.0" />
+ <link rel="stylesheet" href="css/sections.css?v=20260909-footer" />
+ <link rel="stylesheet" href="css/gaming.css?v=20260909-images" />
  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
  <link rel="stylesheet" href="css/chatbot.css?v=3.0" media="print" onload="this.media='all'" />
@@ -171,7 +173,7 @@
     <div class="gaming-hero-visual">
      <div class="gaming-card-featured">
       <div class="featured-tag">Equipo Destacado</div>
-      <img src="img/gaming/pc-esports-pro.webp" alt="PC Gamer Futunet Esports Pro" class="featured-img" loading="lazy" />
+      <img src="img/gaming/foto-pendiente.svg" alt="Foto pendiente del PC Gamer Futunet Esports Pro; solicita fotos del ensamble a un asesor" class="featured-img" width="800" height="500" />
       <div class="featured-info">
        <h3>PC Gamer Futunet Esports Pro</h3>
        <p class="featured-specs">Intel Core i5 13va Gen • RTX 4060 8GB GDDR6 • 16GB DDR5 • 1TB SSD NVMe</p>
@@ -489,13 +491,15 @@
  <!-- Footer Compartido -->
  <footer id="contacto" class="site-footer" role="contentinfo">
   <div class="container footer-grid">
-   <div class="footer-col footer-col--brand">
-    <img src="img/logo.webp" alt="Futunet" class="footer-logo" width="497" height="155" />
+   <div class="footer-brand">
+    <a href="index.html" class="footer-logo-link" aria-label="Volver al inicio de Futunet">
+     <img src="img/logo-navbar.webp" alt="Futunet" class="footer-logo-img" width="972" height="303" loading="lazy" decoding="async" />
+    </a>
     <p class="footer-desc">Soluciones integrales de conectividad, tecnología y equipamiento en Santiago y toda República Dominicana.</p>
     <div class="footer-social">
-     <a href="https://www.instagram.com/futunetsrl/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram de Futunet"><i class="fab fa-instagram"></i></a>
-     <a href="https://www.facebook.com/futunetsrl" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook de Futunet"><i class="fab fa-facebook-f"></i></a>
-     <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp de Futunet"><i class="fab fa-whatsapp"></i></a>
+     <a href="https://www.instagram.com/futunetsrl/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram de Futunet"><i data-lucide="instagram" aria-hidden="true"></i></a>
+     <a href="https://www.facebook.com/futunetsrl" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook de Futunet"><i data-lucide="facebook" aria-hidden="true"></i></a>
+     <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp de Futunet"><i data-lucide="message-circle" aria-hidden="true"></i></a>
     </div>
    </div>
    <div class="footer-col">
@@ -519,19 +523,19 @@
    <div class="footer-col">
     <h4 class="footer-heading">Contacto</h4>
     <ul class="footer-contact">
-     <li><i class="fas fa-map-marker-alt"></i>Av. 27 de Febrero, Santiago, RD</li>
-     <li><i class="fas fa-phone-alt"></i>(829) 741-1041</li>
-     <li><i class="fas fa-envelope"></i>info@futunet.com.do</li>
+     <li><i data-lucide="map-pin" class="footer-icon" aria-hidden="true"></i>Av. 27 de Febrero, Santiago, RD</li>
+     <li><a href="tel:+18297411041"><i data-lucide="phone" class="footer-icon" aria-hidden="true"></i>(829) 741-1041</a></li>
+     <li><a href="mailto:info@futunet.com.do"><i data-lucide="mail" class="footer-icon" aria-hidden="true"></i>info@futunet.com.do</a></li>
     </ul>
    </div>
   </div>
   <div class="footer-bottom">
    <div class="container footer-bottom-inner">
     <p>&copy; 2026 Futunet SRL. Todos los derechos reservados.</p>
-    <div class="footer-legal">
+    <nav class="footer-legal" aria-label="Enlaces legales">
      <a href="privacidad.html">Privacidad</a>
      <a href="terminos.html">Términos</a>
-    </div>
+    </nav>
    </div>
   </div>
  </footer>
@@ -544,8 +548,8 @@
  <script src="js/auth.js"></script>
  <script src="js/cart.js"></script>
  <script src="js/inventory_data.js"></script>
- <script src="js/supplier_inventory.js"></script>
+ <script src="js/supplier_inventory.js?v=20260909-images"></script>
  <script src="js/main.js"></script>
- <script src="js/gaming.js"></script>
+ <script src="js/gaming.js?v=20260909-images"></script>
 </body>
 </html>
