@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build:hosting": "node tools/prepare-hosting.mjs && node tools/validate-hosting.mjs",
-    "test": "node --test tools/test-billing-core.cjs tools/test-billing-contracts.cjs tools/test-internet-experience.cjs tools/test-gaming-images.cjs tools/test-support-core.cjs tools/test-support-ui.cjs tools/test-chatbot.cjs",
+    "test": "node --test tools/test-billing-core.cjs tools/test-billing-contracts.cjs tools/test-internet-experience.cjs tools/test-gaming-images.cjs tools/test-support-core.cjs tools/test-support-ui.cjs tools/test-chatbot.cjs tools/test-chatbot-firebase.cjs",
     "test:support:rules": "firebase emulators:exec --project demo-futunet-support --config firebase.emulators.json --only firestore \"node --test tools/test-support-rules.cjs\"",
     "preview:support:emulators": "firebase emulators:start --project demo-futunet-support --config firebase.emulators.json --only firestore,auth",
     "validate": "node tools/validate-site.mjs && npm run build:hosting"

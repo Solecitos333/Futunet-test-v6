@@ -1,6 +1,6 @@
 # Soporte y reclamaciones
 
-Implementación local, septiembre de 2026. Los tickets funcionan sin IA. El asistente público con Gemini es opcional y requiere configurar el backend según [CHATBOT.md](CHATBOT.md). La publicación de Hosting, reglas e índices es una operación separada.
+Publicado en septiembre de 2026. Los tickets funcionan sin IA. El asistente público usa Gemini mediante Firebase AI Logic según [CHATBOT.md](CHATBOT.md). Se publicaron el frontend, las reglas y los índices y se verificaron tickets reales con imágenes, respuestas, notas internas y aislamiento entre cuentas; los datos de prueba se eliminaron al finalizar.
 
 ## Uso
 

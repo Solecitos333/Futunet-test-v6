@@ -8,7 +8,7 @@ const config = JSON.parse(await fs.readFile(path.join(root, 'firebase.json'), 'u
 const errors = [];
 
 if (config.hosting?.public !== 'dist') errors.push('firebase.json: hosting.public debe apuntar a dist');
-for (const required of ['index.html', 'facturacion.html', 'login.html', 'sw.js', 'js/facturacion.js', 'css/facturacion.css', 'soporte.html', 'css/support.css', 'js/support-core.js', 'js/support-service.js', 'js/support-ui.js', 'js/chatbot.js', 'js/chatbot-settings.js', 'css/chatbot.css']) {
+for (const required of ['index.html', 'facturacion.html', 'login.html', 'sw.js', 'js/facturacion.js', 'css/facturacion.css', 'soporte.html', 'css/support.css', 'js/support-core.js', 'js/support-service.js', 'js/support-ui.js', 'js/chatbot.js', 'js/chatbot-firebase.mjs', 'js/chatbot-settings.js', 'css/chatbot.css']) {
   try { await fs.access(path.join(dist, required)); }
   catch { errors.push(`dist: falta ${required}`); }
 }

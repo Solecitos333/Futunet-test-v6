@@ -5,13 +5,11 @@ if (!['localhost', '127.0.0.1'].includes(location.hostname)) throw new Error('So
 window.FutunetAuth = { getCurrentUser: () => null, getUserData: () => null, authReady: Promise.resolve() };
 window.FutunetSupportService = { identity: () => { throw new Error('Inicia sesión para enviar el caso.'); }, newId: () => 'T'.repeat(20) };
 document.addEventListener('DOMContentLoaded', () => { if (new URLSearchParams(location.search).has('open')) setTimeout(() => window.dispatchEvent(new Event('futunet-open-chat')), 0); });
-const originalFetch = window.fetch.bind(window);
-window.fetch = async (url, options) => {
-  if (url !== 'https://futunet-backend.onrender.com/api/chatbot/message') return originalFetch(url, options);
-  const mode = document.getElementById('fixture-mode').value, request = JSON.parse(options.body);
-  if (mode !== 'success') return { ok: false, status: mode === 'limit' ? 429 : 503 };
-  return { ok: true, json: async () => ({ provider: 'gemini', intent: 'support', products: [],
+window.FutunetChatTransport = { send: async request => {
+  const mode = document.getElementById('fixture-mode').value;
+  if (mode !== 'success') throw new Error(mode === 'limit' ? 'busy' : 'unavailable');
+  return { provider: 'gemini', intent: 'support', products: [],
     reply: request.history.length ? 'Preparé un resumen con lo que explicaste. Puedes revisarlo, añadir capturas y enviarlo al equipo de soporte.' : 'Entiendo que el botón de cotizar no responde. ¿Ocurre en catálogo y qué has intentado hasta ahora?',
-    ticket: request.history.length ? { type: 'bug', title: 'El botón de cotizar no responde', description: request.history.filter(t => t.role === 'user').map(t => t.text).concat(request.message).join('\n\n'), attempted: '', reference: '' } : null }) };
-};
+    ticket: request.history.length ? { type: 'bug', title: 'El botón de cotizar no responde', description: request.history.filter(t => t.role === 'user').map(t => t.text).concat(request.message).join('\n\n'), attempted: '', reference: '' } : null };
+} };
 </script><script src="js/support-core.js"></script><script src="js/support-ui.js?v=20260912gemini-final"></script><script src="js/chatbot.js?v=20260912gemini-final"></script></body></html>

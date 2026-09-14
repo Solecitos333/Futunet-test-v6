@@ -12,6 +12,11 @@ async function setup(fetcher, settings = false, role = 'superadmin') {
   let user = { uid: 'u1', emailVerified: true, getIdToken: async () => 'test-token' }, profile = { role };
   w.FutunetAuth = { getCurrentUser: () => user, getUserData: () => profile, authReady: Promise.resolve() };
   w.fetch = async (url, options) => { calls.push({ url, ...options, data: options.body ? JSON.parse(options.body) : null }); return fetcher ? fetcher(url, options) : { ok: true, json: async () => reply }; };
+  w.FutunetChatTransport = { send: async (data, signal) => {
+    const r = await w.fetch('mock:firebase', { method: 'POST', body: JSON.stringify(data), signal, credentials: 'omit', headers: {} });
+    if (!r.ok) throw new Error(r.status === 429 ? 'busy' : 'unavailable');
+    return r.json();
+  } };
   w.eval(fs.readFileSync(path.join(__dirname, settings ? '../js/chatbot-settings.js' : '../js/chatbot.js'), 'utf8'));
   w.document.dispatchEvent(new w.Event('DOMContentLoaded')); await tick();
   const $ = id => w.document.getElementById(id);
@@ -76,14 +81,13 @@ test('evita consultas duplicadas y descarta respuestas tardías al cambiar de cu
   assert.equal(ui.$('cb-send-btn').disabled, false); ui.dom.window.close();
 });
 
-test('configuración solo visible para superadmin y reutilización de clave exige pulsar el botón', async () => {
-  const ui = await setup((url, options) => ({ ok: true, json: async () => options.method === 'GET' ? { configured: true, enabled: true, model: 'gemini-3.6-flash' } : { saved: true } }), true);
+test('configuración de Firebase solo visible para superadmin y no lee claves privadas', async () => {
+  const ui = await setup(null, true);
   ui.w.localStorage.setItem('futunet_gemini_key', 'test-key-never-used-with-google');
-  assert.equal(ui.$('chatbot-settings').hidden, false); assert.ok(ui.calls.every(call => call.method === 'GET'));
-  ui.$('cg-reuse').click(); await tick();
-  const saved = ui.calls.find(call => call.method === 'PUT');
-  assert.equal(saved.data.api_key, 'test-key-never-used-with-google'); assert.equal(saved.headers.Authorization, 'Bearer test-token');
-  assert.doesNotMatch(ui.$('cg-status').textContent, /test-key/);
+  assert.equal(ui.$('chatbot-settings').hidden, false); assert.equal(ui.calls.length, 0);
+  assert.equal(ui.$('cg-reuse'), null);
+  assert.match(ui.$('chatbot-settings').textContent, /Firebase AI Logic/);
+  assert.doesNotMatch(ui.$('chatbot-settings').textContent, /test-key/);
   await ui.session({ uid: 'u2', emailVerified: true }, { role: 'admin' }); assert.equal(ui.$('chatbot-settings').hidden, true);
   ui.dom.window.close();
   const limited = await setup(null, true, 'support_agent'); assert.equal(limited.calls.length, 0); limited.dom.window.close();

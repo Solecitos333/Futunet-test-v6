@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { label: 'Hacer una reclamación', key: 'reclamacion' },
     { label: 'Elegir un producto', key: 'productos' }
   ] };
-  const API = 'https://futunet-backend.onrender.com/api/chatbot/message';
   const HANDOFF = 'futunet_support_handoff';
   let history = [], userMessages = [], ticketDraft = null, pending = null, epoch = 0;
   let owner = window.FutunetAuth?.getCurrentUser()?.uid || null;
@@ -269,13 +268,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const timer = setTimeout(() => controller.abort(), 32000);
     setBusy(true);
     try {
-      const response = await fetch(API, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        credentials: 'omit', cache: 'no-store', signal: controller.signal,
-        body: JSON.stringify({ message: text, history, page: location.pathname.split('/').pop() || 'index.html' })
-      });
-      if (!response.ok) throw new Error(response.status === 429 ? 'busy' : 'unavailable');
-      const result = await response.json();
+      const transport = window.FutunetChatTransport || await import('./chatbot-firebase.mjs?v=20260914firebase');
+      const result = await Promise.race([
+        transport.send({ message: text, history, page: location.pathname.split('/').pop() || 'index.html' }, controller.signal),
+        new Promise((_, reject) => {
+          if (controller.signal.aborted) reject(new Error('aborted'));
+          else controller.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true });
+        })
+      ]);
       if (currentEpoch !== epoch) return;
       if (typeof result.reply !== 'string' || !result.reply.trim() || result.reply.length > 3500) throw new Error('invalid');
       const actions = (Array.isArray(result.products) ? result.products : []).slice(0, 5)
