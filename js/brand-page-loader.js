@@ -32,7 +32,7 @@ const BRAND_PREVIEW_IMAGES = {
   'tesla':             'img/brands-preview/tesla.webp',
   'uniview':           'img/brands-preview/uniview.webp',
   'victron energy':    'img/brands-preview/victronenergy.webp',
-  'mitsubishi':        'img/brands-preview/mitsubishi.png',
+  'mitsubishi':        'img/brands-preview/mitsubishi.webp',
 };
 
 // Mapa de servicios sugeridos y descripciones de venta cruzada por marca

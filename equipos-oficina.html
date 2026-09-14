@@ -1854,7 +1854,7 @@ Me gustaría recibir una propuesta formal y coordinar facturación con NCF corpo
        ${featured.map(p =>`
         <div class="product-mini-card">
          <div class="mini-card-img">
-          <img src="${p.img}" alt="${p.title}" loading="lazy" />
+          <img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='img/placeholder.svg'" />
          </div>
          <div class="mini-card-body" style="display:flex; flex-direction:column; flex:1;">
           <span class="mini-card-brand">${p.brand || 'FUTUNET'}</span>

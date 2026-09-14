@@ -294,12 +294,16 @@
     if (redirectUrl) {
      try {
       var redirectTarget = new URL(redirectUrl, window.location.href);
-      var redirectFile = (redirectTarget.pathname.split('/').pop() || '').toLowerCase();
+      var redirectFile = (redirectTarget.pathname.split('/').pop() || 'index.html').toLowerCase();
+      if (!redirectFile.endsWith('.html') && !redirectFile.includes('.')) {
+        redirectFile += '.html';
+      }
       var allowedRedirects = [
        'index.html', 'internet.html', 'mi-cuenta.html', 'catalogo.html', 'producto.html',
        'gaming.html', 'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
        'energia-climatizacion.html', 'equipos-oficina.html',
-       'mobiliario-suministros.html', 'infraestructura-remozamiento.html'
+       'mobiliario-suministros.html', 'infraestructura-remozamiento.html',
+       'soporte.html', 'nosotros.html', 'privacidad.html', 'terminos.html'
       ];
 
       if (redirectTarget.origin === window.location.origin && allowedRedirects.includes(redirectFile)) {
@@ -365,6 +369,18 @@
    document.getElementById('login-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('login-message');
+
+    // Control de intentos fallidos y throttling contra fuerza bruta
+    var failedAttemptsKey = 'futunet_failed_logins';
+    var lockoutKey = 'futunet_login_lockout_until';
+    var now = Date.now();
+    var lockoutUntil = Number(sessionStorage.getItem(lockoutKey) || 0);
+    if (lockoutUntil && now < lockoutUntil) {
+      var waitSecs = Math.ceil((lockoutUntil - now) / 1000);
+      showMessage('login-message', 'Demasiados intentos fallidos. Por seguridad, espera ' + waitSecs + ' segundos antes de volver a intentar.', 'error');
+      return;
+    }
+
     setLoading('login-btn', true);
 
     var companyCode = document.getElementById('login-company').value.trim().toUpperCase();
@@ -381,6 +397,10 @@
       setLoading('login-btn', false);
       return;
      }
+     // Limpiar contador de intentos fallidos al tener éxito
+     sessionStorage.removeItem(failedAttemptsKey);
+     sessionStorage.removeItem(lockoutKey);
+
      // Conservar el contexto corporativo solo cuando el usuario lo indicó.
      if (companyCode) {
       var normalizedCompanyCode = companyCode === 'FUTUNET' ? 'FUTUNETSRL' : companyCode;
@@ -394,6 +414,14 @@
      setTimeout(function () { redirectByRole(userData); }, 800);
     } catch (err) {
      console.error('Login error:', err);
+
+     // Incrementar contador de intentos fallidos para mitigar ataques de fuerza bruta
+     var attempts = Number(sessionStorage.getItem(failedAttemptsKey) || 0) + 1;
+     sessionStorage.setItem(failedAttemptsKey, String(attempts));
+     if (attempts >= 4) {
+       var lockoutDuration = Math.min(60000, (attempts - 3) * 15000); // 15s, 30s, max 60s
+       sessionStorage.setItem(lockoutKey, String(Date.now() + lockoutDuration));
+     }
      if (err.code === 'auth/email-not-verified') {
       var msgEl = document.getElementById('login-message');
       if (msgEl) {
@@ -499,12 +527,23 @@
    document.getElementById('reset-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('reset-message');
+
+    var resetCooldownKey = 'futunet_reset_cooldown_until';
+    var now = Date.now();
+    var cooldownUntil = Number(sessionStorage.getItem(resetCooldownKey) || 0);
+    if (cooldownUntil && now < cooldownUntil) {
+      var waitSecs = Math.ceil((cooldownUntil - now) / 1000);
+      showMessage('reset-message', 'Por favor, espera ' + waitSecs + ' segundos antes de solicitar otro enlace.', 'error');
+      return;
+    }
+
     setLoading('reset-btn', true);
 
     var email = document.getElementById('reset-email').value.trim();
 
     try {
      await FutunetAuth.sendPasswordReset(email);
+     sessionStorage.setItem(resetCooldownKey, String(Date.now() + 30000));
      showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
     } catch (err) {
      console.error('Reset error:', err);
@@ -517,6 +556,18 @@
    document.getElementById('magic-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('magic-message');
+
+    if (!isCompletingSignInLink) {
+      var magicCooldownKey = 'futunet_magic_cooldown_until';
+      var now = Date.now();
+      var cooldownUntil = Number(sessionStorage.getItem(magicCooldownKey) || 0);
+      if (cooldownUntil && now < cooldownUntil) {
+        var waitSecs = Math.ceil((cooldownUntil - now) / 1000);
+        showMessage('magic-message', 'Por favor, espera ' + waitSecs + ' segundos antes de solicitar otro enlace.', 'error');
+        return;
+      }
+    }
+
     setLoading('magic-btn', true);
 
     var email = document.getElementById('magic-email').value.trim();
@@ -529,6 +580,7 @@
       setTimeout(function () { redirectByRole(userData); }, 1000);
      } else {
       await FutunetAuth.sendSignInLink(email);
+      sessionStorage.setItem(magicCooldownKey, String(Date.now() + 30000));
       showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
       document.getElementById('magic-email').value = '';
      }

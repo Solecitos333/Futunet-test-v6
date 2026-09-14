@@ -22,13 +22,11 @@
   var config = Object.assign({}, DEFAULT_CONFIG);
   var activeProxyUrl = ''; // Will be determined by connectivity check
 
-  // ─── Gemini Fallback (uses same key as ai/js/ai-gemini.js) ───
+  // ─── Gemini Fallback (configured via localStorage 'futunet_gemini_key') ───
   var GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
-  var GEMINI_KEY_B64  = 'QVEuQWI4Uk42SW16UXU2MlNrdmROOXdiOTFUaUlmTnVzSEpyMXBablZOWEZfS0Z3NWVNN1E=';
 
   function getGeminiKey() {
-    return localStorage.getItem('futunet_gemini_key') ||
-           (typeof atob === 'function' ? atob(GEMINI_KEY_B64) : '');
+    return localStorage.getItem('futunet_gemini_key') || '';
   }
 
   // Chat State

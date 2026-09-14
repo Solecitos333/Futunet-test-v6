@@ -625,11 +625,12 @@ service cloud.firestore {
     }
 
     function isValidIdentityData(data) {
-      return data.documentType in ['cedula', 'passport'] &&
+      return (data.documentType in ['cedula', 'passport'] || data.documentType == '') &&
              data.documentNumber is string &&
-             ((data.documentType == 'cedula' && data.documentNumber.matches('^[0-9]{11}$')) ||
+             (data.documentNumber == '' ||
+              (data.documentType == 'cedula' && data.documentNumber.matches('^[0-9]{11}$')) ||
               (data.documentType == 'passport' && data.documentNumber.matches('^[A-Z0-9-]{6,20}$'))) &&
-             data.identityProfileComplete == true &&
+             data.identityProfileComplete is bool &&
              data.termsAccepted == true &&
              data.termsVersion is string && data.termsVersion.size() <= 20;
     }
@@ -1554,7 +1555,15 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
-    // ─── DENY EVERYTHING ELSE ───
+    // ─── FUTUNET AI HUB (Superadmin internal use) ───
+    match /ai_conversations/{userId}/{document=**} {
+      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
+    }
+
+    match /ai_settings/{userId} {
+      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
+    }
+
     // Support is isolated from legacy Internet tickets and tenant ERP permissions.
     function supportUser() {
       return isEmailVerified() &&
@@ -1669,6 +1678,7 @@ service cloud.firestore {
         getAfter(/databases/$(database)/documents/support_tickets/$(request.resource.data.ticketId)).data.createdAt == request.time;
     }
 
+    // ─── DENY EVERYTHING ELSE ───
     // Gemini credentials are accessible only through the authenticated backend.
     match /chatbot_secrets/{document=**} {
       allow read, write: if false;

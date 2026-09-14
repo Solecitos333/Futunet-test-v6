@@ -1186,6 +1186,19 @@
          <textarea id="p-hir-notes" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="2" placeholder="Ej: Llamar antes de llegar, timbre dañado..."></textarea>
         </div>
 
+        <!-- Campo trampa antispam (Honeypot para bots) -->
+        <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+         <label for="p-hir-hp-check">No llenar este campo</label>
+         <input type="text" id="p-hir-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="request-form-group" style="margin-top: 10px;">
+         <label style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:#a0b0c4;line-height:1.4;cursor:pointer;">
+          <input type="checkbox" id="p-hir-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+          <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#00B2FE;text-decoration:underline;">política de privacidad</a> y autorizo el tratamiento de mis datos para agendar la instalación.</span>
+         </label>
+        </div>
+
         <div class="form-actions">
          <button type="button" class="btn-portal-action" style="background:rgba(255,255,255,0.05); color:#fff; border: 1px solid rgba(255,255,255,0.1); width: 48%; display: inline-block;" onclick="prevHiringStep(1)">Atrás</button>
          <button type="submit" class="btn-portal-action btn-action-primary" id="p-hir-submit-btn" style="width: 48%; display: inline-block; float: right;">Agendar Instalación</button>
@@ -1354,6 +1367,19 @@
       <div class="request-form-group" style="margin-top: 10px;">
        <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-address">Dirección de Instalación</label>
        <textarea id="p-guest-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); padding:8px 12px;" rows="2" required placeholder="Calle, sector, número de casa y referencias de tu ubicación en Santiago..."></textarea>
+      </div>
+
+      <!-- Campo trampa antispam (Honeypot para bots) -->
+      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+       <label for="p-guest-hp-check">No llenar este campo</label>
+       <input type="text" id="p-guest-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="request-form-group" style="margin-top: 12px;">
+       <label style="display:flex;align-items:flex-start;gap:8px;font-size:0.8rem;color:#a0b0c4;line-height:1.4;cursor:pointer;">
+        <input type="checkbox" id="p-guest-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+        <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#00B2FE;text-decoration:underline;">política de privacidad</a> y autorizo el tratamiento de mis datos para agendar la instalación.</span>
+       </label>
       </div>
 
       <button type="submit" class="btn-portal-action btn-action-primary" id="p-guest-submit-btn" style="margin-top:16px; width:100%;">

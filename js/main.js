@@ -1101,6 +1101,48 @@ function normalizeSiteNavigation() {
       link.setAttribute('aria-current', 'page');
     });
   }
+
+  // Ensure navbar auth UI is rendered if auth session already initialized
+  if (window.FutunetAuth && typeof window.FutunetAuth.renderNavbarAuth === 'function') {
+    window.FutunetAuth.renderNavbarAuth();
+  }
+
+  // Enable clicking the navbar search icon to submit query or focus input
+  const searchForm = document.getElementById('nav-search-compact');
+  const searchIcon = searchForm?.querySelector('.nav-search-compact__icon');
+  if (searchIcon && searchForm) {
+    searchIcon.style.cursor = 'pointer';
+    searchIcon.addEventListener('click', () => {
+      const input = searchForm.querySelector('input[name="q"]') || searchForm.querySelector('input[type="search"]') || document.getElementById('search-navbar');
+      if (input && input.value.trim()) {
+        if (typeof searchForm.submit === 'function') {
+          searchForm.submit();
+        } else {
+          window.location.href = 'catalogo.html?q=' + encodeURIComponent(input.value.trim());
+        }
+      } else if (input) {
+        input.focus();
+      }
+    });
+  }
+
+  // Ensure Enter key on navbar search input submits cleanly on all page layouts
+  const navSearchInput = document.getElementById('search-navbar');
+  if (navSearchInput) {
+    navSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = navSearchInput.value.trim();
+        if (val) {
+          const form = navSearchInput.closest('form');
+          if (form && typeof form.submit === 'function') {
+            return;
+          }
+          e.preventDefault();
+          window.location.href = 'catalogo.html?q=' + encodeURIComponent(val);
+        }
+      }
+    });
+  }
 }
 
 

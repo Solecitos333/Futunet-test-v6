@@ -284,6 +284,28 @@
     var form = document.getElementById('service-request-form');
     if (!form) return;
 
+    // Inyectar campo trampa Honeypot para neutralizar bots
+    if (!form.querySelector('[name="_hp_security_check"]')) {
+      var hpContainer = document.createElement('div');
+      hpContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;';
+      hpContainer.setAttribute('aria-hidden', 'true');
+      hpContainer.innerHTML = '<label for="req-hp-check">No llenar este campo</label><input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />';
+      form.appendChild(hpContainer);
+    }
+
+    // Inyectar casilla de consentimiento de privacidad antes del botón de envío si no existe
+    var submitBtnEl = document.getElementById('req-submit-btn');
+    if (submitBtnEl && !document.getElementById('req-privacy-consent')) {
+      var consentWrap = document.createElement('div');
+      consentWrap.className = 'request-form-privacy';
+      consentWrap.style.cssText = 'margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;';
+      consentWrap.innerHTML = '<label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">' +
+        '<input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />' +
+        '<span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>' +
+        '</label>';
+      form.insertBefore(consentWrap, submitBtnEl);
+    }
+
     // Auto-completado de campos si el usuario está autenticado
     function autofillUserData(userData) {
       if (!userData) return;
@@ -321,9 +343,52 @@
       var btn = document.getElementById('req-submit-btn');
       if (btn) btn.disabled = true;
 
-      var name = document.getElementById('req-name').value.trim();
-      var phone = document.getElementById('req-phone').value.trim();
-      var email = document.getElementById('req-email').value.trim();
+      // 1. Verificación Honeypot (Trampa antispam para bots)
+      var hpInput = form.querySelector('[name="_hp_security_check"]');
+      if (hpInput && hpInput.value) {
+        console.warn('Bot submission blocked via honeypot.');
+        showToast('Solicitud enviada exitosamente.', 'success');
+        form.reset();
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // 2. Cooldown / rate-limiting en cliente (15s)
+      var lastReqKey = 'futunet_last_service_req_ts';
+      var now = Date.now();
+      var lastReq = sessionStorage.getItem(lastReqKey);
+      if (lastReq && (now - Number(lastReq)) < 15000) {
+        var remainingSecs = Math.ceil((15000 - (now - Number(lastReq))) / 1000);
+        showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otra solicitud.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
+      var consentBox = document.getElementById('req-privacy-consent');
+      if (consentBox && !consentBox.checked) {
+        showToast('Debes aceptar la política de privacidad para enviar tu solicitud.', 'error');
+        consentBox.focus();
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // Función de sanitización para mitigar inyecciones XSS y caracteres de control
+      function sanitizeField(val) {
+        if (!val) return '';
+        return String(val)
+          .replace(/<[^>]*>/g, '')
+          .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+          .trim();
+      }
+
+      var nameEl = document.getElementById('req-name');
+      var phoneEl = document.getElementById('req-phone');
+      var emailEl = document.getElementById('req-email');
+
+      var name = sanitizeField(nameEl ? nameEl.value : '');
+      var phone = sanitizeField(phoneEl ? phoneEl.value : '');
+      var email = sanitizeField(emailEl ? emailEl.value : '');
       
       // Validaciones de formato
       var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -342,8 +407,8 @@
       }
       
       // Validaciones de longitud para alinearse con Firestore rules
-      if (name.length > 100) {
-        showToast('El nombre no debe superar los 100 caracteres.', 'error');
+      if (name.length < 2 || name.length > 100) {
+        showToast('El nombre debe tener entre 2 y 100 caracteres.', 'error');
         if (btn) btn.disabled = false;
         return;
       }
@@ -359,7 +424,7 @@
       }
       
       var companyEl = document.getElementById('req-company');
-      var company = companyEl ? companyEl.value.trim() : '';
+      var company = sanitizeField(companyEl ? companyEl.value : '');
       if (company.length > 100) {
         showToast('El nombre de la empresa no debe superar los 100 caracteres.', 'error');
         if (btn) btn.disabled = false;
@@ -369,7 +434,8 @@
       var profileEl = document.getElementById('req-profile');
       var profile = profileEl ? profileEl.value : '';
 
-      var message = document.getElementById('req-message').value.trim();
+      var msgEl = document.getElementById('req-message');
+      var message = sanitizeField(msgEl ? msgEl.value : '');
       if (message.length > 1500) {
         showToast('El mensaje no debe superar los 1500 caracteres.', 'error');
         if (btn) btn.disabled = false;
@@ -412,7 +478,7 @@
             waMessage += 'Detalles: ' + message;
             
             var waText = encodeURIComponent(waMessage);
-            window.open('https://wa.me/18297411041?text=' + waText, '_blank');
+            window.open('https://wa.me/18297411041?text=' + waText, '_blank', 'noopener,noreferrer');
             showToast('Enviando solicitud por WhatsApp...', 'success');
           } else {
             showToast('Solicitud cancelada.', 'info');
@@ -420,6 +486,9 @@
           if (btn) btn.disabled = false;
           return;
         }
+
+        // Registrar timestamp de envío para cooldown
+        sessionStorage.setItem(lastReqKey, String(now));
 
         showToast('Solicitud enviada exitosamente. Nos pondremos en contacto contigo.', 'success');
         form.reset();

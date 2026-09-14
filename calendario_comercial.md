@@ -31,70 +31,113 @@ Futunet opera en tres pilares de alta demanda:
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 26 de Julio - 2 de Agosto de 2026)
+## ⚡ Plan de Acción Semanal (Semana Actual: 13 de Septiembre - 19 de Septiembre de 2026)
 
-### 📌 Contexto del Período y Transición Estratégica
-* **Semana Clave**: Nos encontramos en el domingo 26 de Julio de 2026, fecha estelar del **Día de los Padres en República Dominicana** y puente de lanzamiento directo hacia la campaña **"Regreso a Clases Tecnológico & Universidad 2026"**.
-* **Estrategia de Doble Impacto**:
-  1. *Fase Cierre Relámpago (26 de Julio - Hoy)*: Últimas 24 horas para compras de última hora de "Papá Smart & Gaming" con el cupón `PAPASMART2026` (10% Off).
-  2. *Fase Lanzamiento Primario (27 de Julio - 31 de Agosto)*: Arranque oficial de la temporada "Back to School & Universidad 2026" con el nuevo cupón `BACKTOSCHOOL2026` (10% Off en Laptops estudiantiles, Impresoras EcoTank y Routers Mesh).
-* **Foco Secundario Permanente**: **Respaldo Energético (Ciclónico)** – La pico de la temporada de lluvias y tormentas del Caribe exige mantener visibilidad para UPS e inversores que protejan las computadoras y equipos escolares recién adquiridos.
-
----
-
-### 1. Transición Estratégica de UI/UX (Home Page & Banner Rotativo)
-
-* **Configuración del Slider Principal (Home)**:
-  * **Banner 1 (Foco Primario - Back to School 2026)**:
-    * *Título*: `🎒 Regreso a Clases y Universidad 2026: Equipados para Ganar`
-    * *Subtítulo*: `Laptops livianas, impresoras de tanque de tinta de alta eficiencia y combos de Internet Fibra Óptica Lite con 10% OFF usando el código BACKTOSCHOOL2026.`
-    * *Acción*: Dirigir a `catalogo.html?cat=equipos` o sección escolar.
-  * **Banner 2 (Transición / Cierre Papá Smart)**:
-    * *Título*: `🎮 ÚLTIMAS HORAS: Mes del Padre con Rendimiento y Potencia`
-    * *Subtítulo*: `Último día para usar el código PAPASMART2026 en laptops de alto rendimiento y routers WiFi 6 con 10% de descuento.`
-    * *Acción*: Dirigir a `catalogo.html?cat=equipos`.
-  * **Banner 3 (Respaldo Energético & Continuidad)**:
-    * *Título*: `⚡ Protege tus Equipos Escolares y Corporativos`
-    * *Subtítulo*: `UPS online de doble conversión, inversores y paneles solares con instalación prioritaria en Santiago.`
-    * *Acción*: Dirigir a `catalogo.html?cat=energia`.
-  * **Banner 4 (Internet Fibra Estudiantil / Residencial)**:
-    * *Título*: `📶 Fibra Óptica Simétrica para tus Videoclases y Trabajos`
-    * *Subtítulo*: `Conexión ultra estable desde 50 Mbps con instalación rápida y router WiFi 6 para que nada interrumpa el estudio.`
-    * *Acción*: Dirigir a `internet.html`.
+### 📌 Contexto del Período y Transición Estratégica (Semana 2 - Aceleración B2B & Continuidad Operativa)
+* **Semana Clave**: Nos encontramos en la segunda semana de Septiembre de 2026 (13 al 19 de Septiembre). Entramos en la fase de **aceleración de prospección B2B y blindaje de continuidad operativa**.
+* **Estrategia B2B / Corporativa de la Semana**:
+  1. *Fase de Aceleración y Cierre de Levantamientos Técnicos*: Enfocada en decisores clave (Gerentes de TI, Directores de Operaciones y Gerentes Generales) en Santiago, zonas francas (Víctor Espaillat Mera, Pisano), centros médicos y colegios que deben definir ejecuciones de presupuesto antes del cierre de Q3 (30 de septiembre).
+  2. *Lead Magnet Activo*: **Levantamiento Técnico y Auditoría de Red 100% Gratuita** con el código `INFRA2026` (incluye informe diagnóstico de rack, certificación de puntos y plano lógico).
+  3. *Beneficio Económico*: 15% de descuento en mano de obra especializada de cableado Cat 6A, patch panels y canalización perimetral.
+* **Vector de Continuidad Crítica & Temporada Ciclónica (Septiembre)**:
+  * El mes de septiembre representa el pico histórico de actividad ciclónica y tormentas tropicales en la República Dominicana.
+  * **Campaña Cruzada de Respaldo Energético**: Activación estratégica de la protección para cuartos de servidores y racks con UPS Online de Doble Conversión (1kVA a 10kVA) usando el código complementario `RESPALDO2026` (10% de descuento en categoría de energía).
+  * **Conectividad Simétrica Ininterrumpida**: Enlaces de Fibra Óptica dedicada con SLA 99.8% para evitar pérdidas financieras por cortes de telecomunicaciones públicas.
 
 ---
 
-### 2. Estrategia de Contenidos (Content Manager)
-* **Tema Editorial Semanal**: *"Guía Completa de Tecnología para el Regreso a Clases y la Universidad 2026"*.
-* **Selección de Productos Destacados**:
-  * **Laptops Estudiantiles & Universitarias**: Dell Inspiron 15, HP Pavilion / 15-fc, ASUS Vivobook y Lenovo IdeaPad con procesadores de última generación y SSD NVMe.
-  * **Impresión de Alta Eficiencia**: Impresoras Epson EcoTank y HP Smart Tank con tanques de tinta recargables (cero cartuchos costosos).
-  * **Conectividad en Casa**: Routers Mesh TP-Link Deco WiFi 6 para cobertura total sin zonas muertas en habitaciones de estudiantes.
-  * **Protección de Energía**: UPS Reguladores de 750VA a 1.5KVA para escritorios de estudio y teletrabajo.
-  * **Mobiliario Ergonómico**: Sillas de estudio ergonómicas con soporte lumbar y escritorios compactos.
+### 1. Transición Estratégica de UI/UX (Hero Slider & Embudo Web)
+
+* **Arquitectura del Slider Principal (`index.html`)**:
+  * **Slide 1 (Foco Estelar - Infraestructura y Redes Premium B2B)**:
+    * *Etiqueta*: `🏢 Infraestructura & Redes`
+    * *Título*: `Moderniza tu Empresa con Redes de Alta Velocidad`
+    * *Subtítulo*: `Cableado estructurado Cat 6A, organización de racks y Wi-Fi 6 corporativo. Solicita tu levantamiento técnico gratuito en Santiago con el código INFRA2026.`
+    * *Acción*: Botón primario a `redes-datos.html` + Botón WhatsApp con mensaje pre-rellenado para auditoría gratis.
+    * *Fondo*: `img/banners/redes.webp`.
+  * **Slide 2 (Telecomunicaciones Residencial & Home Office)**:
+    * *Etiqueta*: `🌐 Fibra Óptica Simétrica`
+    * *Título*: `Internet Residencial con Fibra Óptica Simétrica`
+    * *Subtítulo*: `Máxima velocidad y estabilidad en Santiago para teletrabajo, streaming en 4K y gaming sin latencia.`
+    * *Acción*: `internet.html` y WhatsApp para contratación inmediata.
+    * *Fondo*: `img/banners/internet.webp`.
+  * **Slide 3 (Continuidad & Energía Crítica ante Temporada Ciclónica)**:
+    * *Etiqueta*: `⚡ Respaldo Eléctrico & Continuidad`
+    * *Título*: `Protege tus Servidores y Racks de Datos`
+    * *Subtítulo*: `UPS online de doble conversión (1kVA a 10kVA) y sistemas de respaldo energético ininterrumpido. 10% de descuento con el código RESPALDO2026.`
+    * *Acción*: `energia-climatizacion.html` y cotización vía WhatsApp.
+    * *Fondo*: `img/banners/energia.webp`.
+  * **Slide 4 (Equipamiento de Oficinas y Cómputo)**:
+    * *Etiqueta*: `💻 Equipos de Oficina`
+    * *Título*: `Equipamos tu oficina con todo lo que necesita`
+    * *Subtítulo*: `Laptops corporativas, monitores, impresoras multifuncionales y periféricos listos para operar.`
+    * *Acción*: `catalogo.html?cat=equipos`.
+  * **Slide 5 (Seguridad Electrónica y Control Corporativo)**:
+    * *Etiqueta*: `🛡️ Seguridad Electrónica`
+    * *Título*: `Protege tu negocio con tecnología inteligente`
+    * *Subtítulo*: `CCTV IP de alta definición, control de acceso biométrico facial y alarmas monitoreadas.`
+    * *Acción*: `catalogo.html?cat=seguridad`.
+  * **Slide 6 (Telecomunicaciones Corporativas Dedicadas)**:
+    * *Etiqueta*: `🏢 Internet Corporativo B2B`
+    * *Título*: `Soluciones de Internet y Redes para Empresas`
+    * *Subtítulo*: `Enlaces de fibra óptica punto a punto, ancho de banda garantizado 1:1 e IPs fijas públicas.`
+    * *Acción*: `corporativo.html`.
+
+* **Cintillos Promocionales en Páginas de Destino (Landing CRO)**:
+  * `redes-datos.html`: Cintillo superior de alta visibilidad para solicitar la auditoría de red presencial sin costo con el código `INFRA2026`.
+  * `energia-climatizacion.html`: Cintillo de alerta y prevención ciclónica con cupón `RESPALDO2026` para soluciones de respaldo UPS e inversores.
 
 ---
 
-### 3. Activación de Disparadores Comerciales y Cupones (Marketing)
+### 2. Estrategia de Contenidos y Copywriting (Content Manager)
 
-* **Código de Descuento Activo (Back to School)**: `BACKTOSCHOOL2026`
-  * **Beneficio**: 10% de descuento directo en laptops seleccionadas, impresoras y repetidores/routers WiFi.
-  * **Vigencia**: 26 de Julio al 31 de Agosto de 2026.
-  * **Mensaje Clave**: *"Prepárate para el año escolar y universitario con las mejores herramientas tecnológicas de Santiago. Usa el código BACKTOSCHOOL2026 y obtén 10% de descuento en tu compra."*
-
-* **Código de Descuento Cierre (Papá Smart)**: `PAPASMART2026`
-  * **Vigencia Final**: Vence hoy 26 de Julio a las 23:59 hrs.
+* **Tema Editorial de la Semana**:
+  *"¿Cuánto le cuesta a tu empresa 1 hora de caída de red o de apagón? Guía de auditoría de infraestructura y protección de servidores para el cierre de año"*.
+* **Matriz de Mensajes Semanales Multicanal**:
+  * **WhatsApp Business B2B**:
+    > *"¡Hola! En Futunet sabemos que una interrupción en tu red paraliza tus ventas y operaciones. Durante este mes de septiembre, solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado Cat 6A y peinado de racks. ¿Agendamos una visita técnica esta semana?"*
+  * **LinkedIn / Redes Sociales B2B**:
+    > *"¿Tus racks de comunicaciones parecen una maraña de cables o experimentas caídas intermitentes de red? 🔌 En Futunet convertimos el caos en orden, velocidad y estabilidad garantizada. Ofrecemos cableado estructurado Cat 6A certificado, switches gestionables PoE+, Wi-Fi 6 de alta concurrencia y protección con UPS Online de doble conversión. Agenda tu auditoría técnica presencial gratuita en Santiago usando el código INFRA2026. #RedesCorporativas #CableadoEstructurado #SantiagoRD #FutunetB2B #ContinuidadOperativa"*
+  * **Email Marketing para Gerentes de TI y Operaciones**:
+    > **Asunto**: Auditoría de Red e Infraestructura 100% Gratuita para su empresa en Santiago
+    > 
+    > Estimado(a) Director(a) de Tecnología / Operaciones:
+    > 
+    > Con la proximidad del último trimestre y las demandas de alto tráfico de fin de año, contar con una red local certificada y energía ininterrumpida es vital para garantizar cero caídas.
+    > 
+    > En Futunet ponemos a su disposición a nuestro equipo de ingenieros para realizar un **Levantamiento Técnico y Diagnóstico de Red completamente gratuito** en sus instalaciones con el código promocional **INFRA2026**.
+    > 
+    > **¿Qué incluye la auditoría?**
+    > 1. Inspección física de racks, patch panels y peinado de cables.
+    > 2. Medición de rendimiento de puntos de red y cobertura Wi-Fi.
+    > 3. Evaluación de respaldo energético (UPS y protecciones eléctricas).
+    > 4. Informe con recomendaciones técnicas y presupuesto preferencial con 15% de descuento.
+    > 
+    > Responda a este mensaje o contáctenos por WhatsApp al 829-741-1041 para coordinar la fecha de la visita.
 
 ---
 
-## 🛠️ Implementaciones Técnicas Realizadas y Propuestas
+### 3. Disparadores Comerciales y Cupones Activos
 
-1. **Programación Automatizada de Banners por Fecha (Firestore)**:
-   * Implementada la lógica en `js/promo-carousel.js` para filtrar automáticamente banners basados en `startDate` y `endDate`.
-   * Agregado el selector de fecha inicio/fin en la interfaz de administración (`admin.html`).
+* **Cupón Primario B2B**: `INFRA2026`
+  * **Beneficio**: Levantamiento técnico gratuito + 15% de descuento en mano de obra de canalización, cableado y certificación de red.
+  * **Vigencia**: 1 al 30 de Septiembre de 2026.
+  * **Departamentos**: Redes, Seguridad, Energía, Equipos y Oficina.
+* **Cupón Complementario de Continuidad**: `RESPALDO2026`
+  * **Beneficio**: 10% de descuento directo en UPS, inversores y sistemas de energía.
+  * **Vigencia**: 1 de Junio al 30 de Septiembre de 2026 (Temporada Ciclónica).
+  * **Departamentos**: Energía y Climatización.
 
-2. **Presets de Campañas en el Admin Dashboard (`admin-panel.js`)**:
-   * Integrado el preset dinámico **"Regreso a Clases"** en `openNewBannerWithPreset()` para que el administrador cree el banner de la semana con 1 solo clic.
+---
 
-3. **Asistente de Redacción Publicitaria (Copywriting Assistant)**:
-   * Generador de scripts automáticos para WhatsApp, publicaciones en redes sociales y newsletters de correo electrónico directo desde el Admin Panel.
+## 🛠️ Implementaciones Técnicas Realizadas y Sincronizadas
+
+1. **Optimización del Hero Carousel (`index.html`)**:
+   * Incorporado el slide estelar de **Respaldo Eléctrico & Continuidad Operativa** con cupón `RESPALDO2026`, eliminando duplicidades y reforzando la campaña cruzada ante eventos meteorológicos.
+2. **Cintillos de Conversión en Landings Verticales**:
+   * Integrado el cintillo promocional en `redes-datos.html` (Auditoría gratuita `INFRA2026`).
+   * Integrado el cintillo de contingencia energética en `energia-climatizacion.html` (Protección UPS `RESPALDO2026`).
+3. **Actualización del Dashboard de Administración (`admin-panel.js` & `admin.html`)**:
+   * Enriquecidos los textos del asistente de copywriting para el mes de septiembre con el código promocional y llamadas a la acción inmediatas a WhatsApp.
+   * Añadido el preset dinámico "Respaldo y Continuidad" para lanzamientos rápidos de campañas de energía en el gestor de banners.
+

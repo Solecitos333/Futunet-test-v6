@@ -268,19 +268,25 @@
         var statusLabel = escapeHtml(statusMap[o.status] || o.status || 'Pendiente');
         var statusClass = 'up-badge up-badge-' + escapeHtml(o.status || 'pending');
 
-        html += '<tr class="up-table-row">' +
+          html += '<tr class="up-table-row">' +
           '  <td class="up-table-cell up-order-id">#' + o.id.substring(0, 8) + '</td>' +
           '  <td class="up-table-cell">' + date + '</td>' +
           '  <td class="up-table-cell" style="font-weight:700;">' + totalFormatted + '</td>' +
           '  <td class="up-table-cell">' + method + '</td>' +
           '  <td class="up-table-cell"><span class="' + statusClass + '">' + statusLabel + '</span></td>' +
           '  <td class="up-table-cell" style="text-align:right;">' +
-          '    <button class="up-btn-sm up-btn-load" onclick="window.showUserOrderDetail(\'' + o.id + '\')">Ver</button>' +
+          '    <button type="button" class="up-btn-sm up-btn-load" data-order-id="' + escapeHtml(o.id) + '">Ver</button>' +
           '  </td>' +
           '</tr>';
       });
 
       tbody.innerHTML = html;
+      tbody.querySelectorAll('button[data-order-id]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var orderId = this.getAttribute('data-order-id');
+          if (orderId) window.showUserOrderDetail(orderId);
+        });
+      });
     } catch (err) {
       console.error('Error loading orders:', err);
       tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar tus pedidos.</td></tr>';
@@ -318,7 +324,7 @@
       if (isSafeUrl) {
         voucherHtml = '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #e5eef8;">' +
           '  <div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Pago</div>' +
-          '  <a href="' + escapeHtml(safeVoucherUrl) + '" target="_blank" style="display:inline-flex; align-items:center; gap:6px; color:#0A70A2; font-weight:600; font-size:0.82rem; text-decoration:underline;">' +
+          '  <a href="' + escapeHtml(safeVoucherUrl) + '" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:6px; color:#0A70A2; font-weight:600; font-size:0.82rem; text-decoration:underline;">' +
           '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' +
           '    Ver Comprobante Adjunto' +
           '  </a>' +
