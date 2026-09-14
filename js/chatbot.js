@@ -1,37 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('cb-window')) return;
   const INFO = {
     whatsapp: '18297411041',
-    horario: 'Nuestro horario es de lunes a sabado de 8:00 AM a 6:00 PM.',
-    ubicacion: 'Estamos en Avenida Cuesta Colorada, sector Las Colinas, Santiago de los Caballeros, Republica Dominicana.',
-    envios: 'Podemos orientarte con entregas y envios segun el producto y tu zona.',
-    intro: 'Hola. Soy el asistente virtual de Futunet. Elige una opcion y te ayudo a llegar mas rapido a lo que necesitas.'
+    intro: 'Hola, soy el asistente virtual de Futunet. Cuéntame qué necesitas: productos, ayuda con la web o una reclamación. Puedo preparar tu caso para soporte. Tus mensajes se procesan con Gemini; no compartas contraseñas ni datos de pago.'
   };
-
-  const CONFIG = {
-    avatar: 'img/chatbot/assistant-avatar.svg'
-  };
-
-  const QUICK_ACTIONS = {
-    main: [
-      { label: 'Horario', key: 'horario' },
-      { label: 'Ubicacion', key: 'ubicacion' },
-      { label: 'Envios', key: 'envios' },
-      { label: 'Proyectores', key: 'proyectores' },
-      { label: 'Impresoras Epson', key: 'impresoras-epson' },
-      { label: 'Camaras', key: 'camaras' },
-      { label: 'Servicios', key: 'servicios' }
-    ],
-    catalogo: [
-      { label: 'Catálogo completo', key: 'catalogo' },
-      { label: 'Hablar con un agente', key: 'agente' }
-    ]
-  };
+  const CONFIG = { avatar: 'img/chatbot/assistant-avatar.svg' };
+  const QUICK_ACTIONS = { main: [
+    { label: 'Tengo un problema', key: 'soporte' },
+    { label: 'Hacer una reclamación', key: 'reclamacion' },
+    { label: 'Elegir un producto', key: 'productos' }
+  ] };
+  const API = 'https://futunet-backend.onrender.com/api/chatbot/message';
+  const HANDOFF = 'futunet_support_handoff';
+  let history = [], userMessages = [], ticketDraft = null, pending = null, epoch = 0;
+  let owner = window.FutunetAuth?.getCurrentUser()?.uid || null;
 
   // Chatbot styles loaded from css/chatbot.css
 
   const root = document.createElement('div');
   root.innerHTML = `
-    <div class="chatbot-window" id="cb-window" aria-hidden="true">
+    <div class="chatbot-window" id="cb-window" aria-hidden="true" inert>
       <div class="chatbot-header">
         <div class="chatbot-header-main">
           <img class="chatbot-avatar" src="${CONFIG.avatar}" alt="Asistente Futunet">
@@ -39,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="chatbot-title">Asistente Futunet</div>
             <div class="chatbot-status">
               <span class="chatbot-status-dot"></span>
-              <span>En línea</span>
+              <span id="cb-status">Asistente virtual · Gemini</span>
             </div>
           </div>
         </div>
@@ -52,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <!-- Entrada de texto libre -->
         <div class="chatbot-input-container">
-          <input type="text" id="cb-input-text" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Escribe tu mensaje" />
+          <input type="text" id="cb-input-text" maxlength="1500" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Escribe tu mensaje" />
           <button type="button" id="cb-send-btn" aria-label="Enviar" class="chatbot-send-btn">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -61,7 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </button>
         </div>
 
-        <button class="chatbot-wa" id="cb-wa" type="button">Hablar con un Agente (WhatsApp)</button>
+        <button class="cb-support-button" id="cb-ticket" type="button">Preparar ticket para soporte</button>
+        <div class="cb-footer-links"><button class="cb-reset" id="cb-reset" type="button">Nueva conversación</button>
+        <button class="cb-reset" id="cb-wa" type="button">Agente por WhatsApp ↗</button></div>
       </div>
     </div>
     <button class="chatbot-fab" id="cb-fab" aria-label="Abrir asistente">
@@ -207,86 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : 'catalogo.html';
   }
 
-  function getResponseByKey(key) {
-    const responses = {
-      horario: {
-        text: INFO.horario,
-        actions: [
-          { kind: 'wa', label: 'Confirmar por WhatsApp', message: 'Hola Futunet, quisiera confirmar su horario de atencion.' }
-        ],
-        chips: QUICK_ACTIONS.main
-      },
-      ubicacion: {
-        text: `${INFO.ubicacion} Si quieres, te paso con un asesor para darte la ubicacion exacta.`,
-        actions: [
-          { kind: 'wa', label: 'Pedir ubicacion', message: 'Hola Futunet, quisiera su ubicacion exacta.' }
-        ],
-        chips: QUICK_ACTIONS.main
-      },
-      envios: {
-        text: `${INFO.envios} Si quieres, te paso con un asesor para validar disponibilidad y entrega.`,
-        actions: [
-          { kind: 'wa', label: 'Consultar envio', message: 'Hola Futunet, quisiera consultar opciones de envio.' }
-        ],
-        chips: QUICK_ACTIONS.main
-      },
-      proyectores: {
-        text: 'Puedo llevarte directo a los proyectores disponibles en el catálogo y también ayudarte a cotizar uno por WhatsApp.',
-        actions: [
-          { kind: 'catalog', label: 'Ver proyectores', query: 'proyector' },
-          { kind: 'wa', label: 'Cotizar proyector', message: 'Hola Futunet, estoy interesado en un proyector.' }
-        ],
-        chips: QUICK_ACTIONS.catalogo
-      },
-      'impresoras-epson': {
-        text: 'Si buscas una impresora Epson, te llevo directo a esa busqueda para que revises opciones y precio.',
-        actions: [
-          { kind: 'catalog', label: 'Ver impresoras Epson', query: 'impresora Epson' },
-          { kind: 'wa', label: 'Cotizar Epson', message: 'Hola Futunet, estoy buscando una impresora Epson.' }
-        ],
-        chips: QUICK_ACTIONS.catalogo
-      },
-      camaras: {
-        text: 'Puedo llevarte a camaras de seguridad o pasarte con un asesor para orientarte segun tu necesidad.',
-        actions: [
-          { kind: 'catalog', label: 'Ver camaras', query: 'camara' },
-          { kind: 'wa', label: 'Asesoria de camaras', message: 'Hola Futunet, quiero asesoria para camaras de seguridad.' }
-        ],
-        chips: QUICK_ACTIONS.catalogo
-      },
-      servicios: {
-        text: 'Futunet también ofrece servicios. Si quieres, te llevo al catálogo o te paso directo con un asesor para cotizar.',
-        actions: [
-          { kind: 'catalog', label: 'Ver servicios', query: 'servicios' },
-          { kind: 'wa', label: 'Cotizar servicio', message: 'Hola Futunet, quiero cotizar un servicio.' }
-        ],
-        chips: QUICK_ACTIONS.catalogo
-      },
-      catalogo: {
-        text: 'Te llevo al catálogo completo para que explores todo con calma.',
-        actions: [
-          { kind: 'catalog', label: 'Abrir catálogo', query: '' }
-        ],
-        chips: QUICK_ACTIONS.main
-      },
-      agente: {
-        text: 'Perfecto. Te paso directo con un asesor por WhatsApp.',
-        actions: [
-          { kind: 'wa', label: 'Abrir WhatsApp', message: 'Hola Futunet, quiero hablar con un asesor.' }
-        ],
-        chips: QUICK_ACTIONS.main
-      }
-    };
-
-    return responses[key] || responses.agente;
-  }
-
-  function showResponse(key, label) {
-    const response = getResponseByKey(key);
-    addUserMessage(label);
-    addBotMessage(response.text, response.actions);
-    renderChips(response.chips || QUICK_ACTIONS.main);
-  }
+  function showResponse(key, label) { sendMessage(label); }
 
   function initConversation() {
     addBotMessage(INFO.intro);
@@ -310,8 +221,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openChat() {
     win.classList.add('active');
+    win.inert = false;
     win.setAttribute('aria-hidden', 'false');
     fab.classList.add('is-hidden');
+    fab.tabIndex = -1;
     setFabIcon(true);
     syncChatViewportState();
 
@@ -323,8 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closeChat() {
     win.classList.remove('active');
+    win.inert = true;
     win.setAttribute('aria-hidden', 'true');
     fab.classList.remove('is-hidden');
+    fab.tabIndex = 0;
     setFabIcon(false);
     syncChatViewportState();
   }
@@ -334,101 +249,110 @@ document.addEventListener('DOMContentLoaded', () => {
     else openChat();
   }
 
-  function botSearchProducts(query) {
-    const products = window.mockDatabase || [];
-    if (!products.length) return [];
-    
-    const words = query.toLowerCase().split(/\s+/).filter(w => w.length >= 2);
-    if (!words.length) return [];
-    
-    const scored = products.map(p => {
-      let score = 0;
-      const title = (p.title || '').toLowerCase();
-      const brand = (p.brand || '').toLowerCase();
-      const cat = (p.category || '').toLowerCase();
-      const desc = (p.desc || '').toLowerCase();
-      
-      words.forEach(w => {
-        if (title.includes(w)) score += 10;
-        if (brand.includes(w)) score += 5;
-        if (cat.includes(w)) score += 3;
-        if (desc.includes(w)) score += 1;
-      });
-      
-      return { product: p, score };
-    }).filter(item => item.score > 0);
-    
-    scored.sort((a, b) => b.score - a.score);
-    return scored.map(item => item.product).slice(0, 3);
+  function setBusy(busy) {
+    cbSendBtn.disabled = busy;
+    chips.querySelectorAll('button').forEach(button => { button.disabled = busy; });
+    messages.setAttribute('aria-busy', String(busy));
+    document.getElementById('cb-status').textContent = busy ? 'Preparando respuesta…' : 'Asistente virtual · Gemini';
   }
 
-  function handleFreeTextInput() {
-    const text = cbInputText.value.trim();
-    if (!text) return;
-    
+  async function sendMessage(value) {
+    const text = value.trim().slice(0, 1500);
+    if (!text || pending) return;
     cbInputText.value = '';
     addUserMessage(text);
-    
-    const query = text.toLowerCase();
-    
-    // Saludo
-    if (query.match(/\b(hola|buenos|buenas|buen|holaa|saludos|que tal)\b/)) {
-      addBotMessage("¡Hola! ¿Cómo puedo ayudarte hoy? Puedes preguntarme por productos específicos (como proyectores, impresoras, cámaras) o sobre nuestro horario y ubicación.", QUICK_ACTIONS.main);
-      renderChips(QUICK_ACTIONS.main);
-      return;
-    }
-    
-    // Redirecciones rápidas
-    if (query.includes("horario") || query.includes("hora") || query.includes("abierto")) {
-      const response = getResponseByKey('horario');
-      addBotMessage(response.text, response.actions);
-      renderChips(response.chips || QUICK_ACTIONS.main);
-      return;
-    }
-    if (query.includes("ubicacion") || query.includes("donde") || query.includes("direccion") || query.includes("sucursal") || query.includes("mapa")) {
-      const response = getResponseByKey('ubicacion');
-      addBotMessage(response.text, response.actions);
-      renderChips(response.chips || QUICK_ACTIONS.main);
-      return;
-    }
-    if (query.includes("envio") || query.includes("entrega") || query.includes("delivery") || query.includes("domicilio")) {
-      const response = getResponseByKey('envios');
-      addBotMessage(response.text, response.actions);
-      renderChips(response.chips || QUICK_ACTIONS.main);
-      return;
-    }
-    if (query.includes("servicio") || query.includes("instalacion") || query.includes("soporte") || query.includes("mantenimiento")) {
-      const response = getResponseByKey('servicios');
-      addBotMessage(response.text, response.actions);
-      renderChips(response.chips || QUICK_ACTIONS.main);
-      return;
-    }
-    
-    // Búsqueda de Productos
-    const matchingProducts = botSearchProducts(query);
-    if (matchingProducts.length > 0) {
-      let botResponse = `He encontrado estos productos que coinciden con tu consulta:`;
-      const actions = matchingProducts.map(p => ({
-        kind: 'product',
-        label: p.title.length > 25 ? p.title.substring(0, 22) + '...' : p.title,
-        id: p.id
-      }));
-      actions.push({
-        kind: 'wa',
-        label: 'Consultar con Asesor',
-        message: `Hola Futunet, me interesa el producto: ${matchingProducts[0].title}`
+    userMessages.push(text);
+    userMessages = userMessages.slice(-12);
+    ticketDraft = null; // A new fact makes an earlier generated draft stale.
+    const currentEpoch = epoch;
+    const controller = new AbortController(); pending = controller;
+    const timer = setTimeout(() => controller.abort(), 32000);
+    setBusy(true);
+    try {
+      const response = await fetch(API, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        credentials: 'omit', cache: 'no-store', signal: controller.signal,
+        body: JSON.stringify({ message: text, history, page: location.pathname.split('/').pop() || 'index.html' })
       });
-      
-      addBotMessage(botResponse, actions);
-      renderChips(QUICK_ACTIONS.catalogo);
-    } else {
-      addBotMessage("Disculpa, no encontré productos específicos para tu búsqueda. ¿Te gustaría ver el catálogo de la tienda o hablar con un asesor por WhatsApp?", [
-        { kind: 'catalog', label: 'Ver catálogo', query: '' },
-        { kind: 'wa', label: 'Hablar con Asesor', message: `Hola Futunet, necesito información sobre: ${text}` }
-      ]);
-      renderChips(QUICK_ACTIONS.main);
+      if (!response.ok) throw new Error(response.status === 429 ? 'busy' : 'unavailable');
+      const result = await response.json();
+      if (currentEpoch !== epoch) return;
+      if (typeof result.reply !== 'string' || !result.reply.trim() || result.reply.length > 3500) throw new Error('invalid');
+      const actions = (Array.isArray(result.products) ? result.products : []).slice(0, 5)
+        .filter(p => typeof p.title === 'string' && /^[A-Za-z0-9_-]{1,150}$/.test(p.id))
+        .map(p => ({ kind: 'product', label: p.title.slice(0, 80), id: p.id }));
+      if (result.ticket && ['bug', 'complaint', 'help'].includes(result.ticket.type)
+          && typeof result.ticket.title === 'string' && result.ticket.title.length >= 5
+          && typeof result.ticket.description === 'string' && result.ticket.description.length >= 20) {
+        ticketDraft = result.ticket;
+      }
+      if (ticketDraft || ['support', 'complaint'].includes(result.intent)) actions.push({ kind: 'ticket', label: 'Revisar caso y adjuntar capturas' });
+      addBotMessage(result.reply, actions);
+      history.push({ role: 'user', text }, { role: 'model', text: result.reply });
+      trimHistory();
+    } catch (error) {
+      if (currentEpoch !== epoch) return;
+      const reply = error.message === 'busy'
+        ? 'El asistente está ocupado. Espera un minuto para volver a consultar. Puedes preparar tu ticket ahora con lo que ya escribiste.'
+        : 'No pude conectar con la asistencia inteligente. Puedes volver a preguntar o continuar con un ticket: conservaré lo que explicaste para que lo revises y añadas capturas.';
+      addBotMessage(reply, [{ kind: 'ticket', label: 'Continuar con soporte' }, { kind: 'catalog', label: 'Ver catálogo' }]);
+      // Keep the user's report even when the provider fails; later turns retain context.
+      history.push({ role: 'user', text }, { role: 'model', text: reply });
+      trimHistory();
+      document.getElementById('cb-status').textContent = 'Soporte disponible';
+    } finally {
+      clearTimeout(timer);
+      if (currentEpoch === epoch) { pending = null; setBusy(false); }
     }
   }
+
+  function trimHistory() {
+    while (history.length > 12 || history.reduce((total, item) => total + item.text.length, 0) > 10000) history.splice(0, 2);
+  }
+
+  function handleFreeTextInput() { sendMessage(cbInputText.value); }
+
+  function prepareTicket() {
+    const transcript = userMessages.join('\n\n').slice(-3900);
+    if (!transcript) { location.href = 'soporte.html#sp-new-case'; return; }
+    const draft = ticketDraft || {
+      type: /reclama|devoluci|reembolso/i.test(transcript) ? 'complaint' : /error|falla|no funciona|bot[oó]n/i.test(transcript) ? 'bug' : 'help',
+      title: 'Consulta desde el asistente de Futunet',
+      description: 'Lo que expliqué al asistente:\n\n' + transcript
+    };
+    const handoff = { createdAt: Date.now(), ownerId: owner, fields: {
+      type: draft.type, title: draft.title.slice(0, 120), description: draft.description.slice(0, 4000),
+      attempted: String(draft.attempted || '').slice(0, 800), reference: String(draft.reference || '').slice(0, 100),
+      page: location.origin + location.pathname
+    } };
+    try {
+      sessionStorage.setItem(HANDOFF, JSON.stringify(handoff));
+      if (document.getElementById('sp-root')?.dataset.mode === 'public') {
+        window.dispatchEvent(new Event('futunet-support-draft')); closeChat();
+      } else { location.href = 'soporte.html#sp-new-case'; }
+    } catch (_) {
+      addBotMessage('No pude trasladar el borrador. Copia tu descripción y abre soporte para enviarla.', [{ kind: 'link', label: 'Abrir soporte', href: 'soporte.html' }]);
+    }
+  }
+
+  function resetConversation() {
+    epoch++; pending?.abort(); pending = null; history = []; userMessages = []; ticketDraft = null;
+    cbInputText.value = ''; messages.replaceChildren(); setBusy(false);
+    try { sessionStorage.removeItem(HANDOFF); } catch (_) {}
+    initialized = true; initConversation();
+  }
+
+  document.getElementById('cb-ticket').addEventListener('click', prepareTicket);
+  document.getElementById('cb-reset').addEventListener('click', resetConversation);
+  window.addEventListener('futunet-open-chat', openChat);
+  const syncOwner = () => {
+    const next = window.FutunetAuth?.getCurrentUser()?.uid || null;
+    if (owner && next !== owner) resetConversation();
+    owner = next;
+  };
+  window.FutunetAuth?.authReady?.then(syncOwner);
+  window.addEventListener('futunet-auth-ready', syncOwner);
+  window.addEventListener('pagehide', () => { epoch++; pending?.abort(); pending = null; setBusy(false); });
 
   setFabIcon(false);
   syncChatViewportState();
@@ -458,6 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!button) return;
 
     const kind = button.dataset.kind;
+    if (kind === 'ticket') { prepareTicket(); return; }
     if (kind === 'catalog') {
       openCatalogSearch(button.dataset.query || '');
       return;

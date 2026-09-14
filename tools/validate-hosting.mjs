@@ -8,12 +8,12 @@ const config = JSON.parse(await fs.readFile(path.join(root, 'firebase.json'), 'u
 const errors = [];
 
 if (config.hosting?.public !== 'dist') errors.push('firebase.json: hosting.public debe apuntar a dist');
-for (const required of ['index.html', 'facturacion.html', 'login.html', 'sw.js', 'js/facturacion.js', 'css/facturacion.css']) {
+for (const required of ['index.html', 'facturacion.html', 'login.html', 'sw.js', 'js/facturacion.js', 'css/facturacion.css', 'soporte.html', 'css/support.css', 'js/support-core.js', 'js/support-service.js', 'js/support-ui.js', 'js/chatbot.js', 'js/chatbot-settings.js', 'css/chatbot.css']) {
   try { await fs.access(path.join(dist, required)); }
   catch { errors.push(`dist: falta ${required}`); }
 }
 
-for (const forbidden of ['firebase.json', 'firestore.rules', 'storage.rules', 'tools', 'scratch', 'calendario_comercial.md']) {
+for (const forbidden of ['firebase.json', 'firebase.emulators.json', 'firestore.indexes.json', 'firestore.rules', 'storage.rules', 'tools', 'scratch', 'calendario_comercial.md']) {
   try {
     await fs.access(path.join(dist, forbidden));
     errors.push(`dist: archivo interno publicado (${forbidden})`);

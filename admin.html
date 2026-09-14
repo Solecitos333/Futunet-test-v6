@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-disable-firebase-persistence>
 <head>
  <link rel="canonical" href="https://futunet.com.do/admin.html" />
 
@@ -13,6 +13,7 @@
  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" onload="this.rel='stylesheet'" />
  <noscript><link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" /></noscript>
  <link rel="stylesheet" href="css/admin.css?v=3.2" />
+ <link rel="stylesheet" href="css/support.css?v=20260912" />
  <link rel="stylesheet" href="css/financing.css?v=20260801" />
  <link rel="stylesheet" href="css/ai-server.css?v=2.1" />
  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
@@ -71,6 +72,10 @@
     </button>
 
     <div class="admin-nav-label">Operaciones</div>
+    <button class="admin-nav-item" data-admin-nav="support">
+     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg>
+     Soporte y errores <span class="admin-nav-badge" id="badge-support" style="display:none;"></span>
+    </button>
     <button class="admin-nav-item" data-admin-nav="orders">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
      Pedidos <span class="admin-nav-badge" id="badge-orders" style="display:none;"></span>
@@ -170,6 +175,11 @@
 
   <!-- MAIN -->
   <main class="admin-main" id="admin-main-content" tabindex="-1">
+   <div class="admin-panel" data-admin-panel="support" aria-labelledby="support-title">
+    <div class="admin-page-header"><h1 id="support-title">Soporte y errores</h1><p>Casos de clientes, reclamaciones y reportes internos de la página web.</p></div>
+    <div id="chatbot-settings" class="sp" hidden></div>
+    <div id="sp-root" class="sp" data-mode="admin"></div>
+   </div>
 
    <!-- DASHBOARD PANEL -->
    <div class="admin-panel is-active" data-admin-panel="dashboard" aria-labelledby="dashboard-title">
@@ -2383,6 +2393,10 @@
  <script defer src="js/auth.js?v=20260628"></script>
  <script defer src="js/config.js"></script>
  <script defer src="js/auth-guard.js"></script>
+ <script defer src="js/support-core.js?v=20260912"></script>
+ <script defer src="js/support-service.js?v=20260912"></script>
+ <script defer src="js/support-ui.js?v=20260912gemini-final"></script>
+ <script defer src="js/chatbot-settings.js?v=20260912"></script>
  <script defer src="js/backup_data.js"></script>
  <script defer src="js/inventory_data.js?v=20260712"></script>
  <script defer src="js/supplier_inventory.js?v=20260712-gallery"></script>
@@ -2408,7 +2422,7 @@
     if (name) name.textContent = userData.displayName || userData.email || '';
 
     // Map display role
-    var roles = Array.isArray(userData.roles) ? userData.roles : [userData.role || 'user'];
+    var roles = Array.from(new Set([userData.role || 'user', ...(Array.isArray(userData.roles) ? userData.roles : [])]));
     var isSuper = roles.includes('superadmin');
     var isAdmin = roles.includes('admin') || isSuper;
 
@@ -2423,6 +2437,7 @@
     // Hide navigation tabs not permitted for the user's roles
     var permissions = {
      'dashboard': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk', 'marketing_manager'],
+     'support': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk', 'marketing_manager'],
      'inventory': ['superadmin', 'admin', 'editor'],
      'orders': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'],
      'service-requests': ['superadmin', 'admin', 'support_agent'],

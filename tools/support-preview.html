@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prueba local de soporte</title><link rel="stylesheet" href="../css/support.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script></head>
+<body class="sp sp-public"><div class="sp-container" style="padding-top:24px"><h1>Prueba local · Centro de soporte</h1><p>Datos ficticios en emuladores. Esta herramienta no se incluye en el sitio publicado.</p><nav class="sp-actions"><a class="sp-btn" href="?actor=customer">Vista cliente</a><a class="sp-btn" href="?actor=support">Vista soporte</a><a class="sp-btn" href="?actor=editor">Vista editor</a></nav><p id="preview-session" role="status">Conectando…</p><div id="sp-root"></div></div>
+<script>
+if (!['localhost', '127.0.0.1'].includes(location.hostname)) throw new Error('Solo se permite ejecutar esta prueba en localhost.');
+const actor = ['customer', 'support', 'editor'].includes(new URLSearchParams(location.search).get('actor')) ? new URLSearchParams(location.search).get('actor') : 'customer';
+firebase.initializeApp({ apiKey: 'demo-key', projectId: 'demo-futunet-support', authDomain: 'demo-futunet-support.firebaseapp.com' });
+firebase.auth().useEmulator('http://127.0.0.1:9098', { disableWarnings: true });
+firebase.firestore().useEmulator('127.0.0.1', 8088);
+window.FutunetFirebase = { db: firebase.firestore() };
+document.getElementById('sp-root').dataset.mode = actor === 'customer' ? 'public' : 'admin';
+let previewUser, previewProfile;
+window.FutunetAuth = {
+ getCurrentUser: () => previewUser,
+ getUserData: () => previewProfile,
+ authReady: firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => firebase.auth().signInWithEmailAndPassword(actor + '@support.test', 'local-preview-only')).then(async credential => {
+  previewUser = credential.user;
+  previewProfile = (await firebase.firestore().collection('users').doc(previewUser.uid).get()).data();
+  document.getElementById('preview-session').textContent = 'Sesión de prueba: ' + actor;
+ }).catch(error => { document.getElementById('preview-session').textContent = error.message; throw error; })
+};
+</script><script src="../js/support-core.js"></script><script src="../js/support-service.js"></script><script src="../js/support-ui.js"></script></body></html>

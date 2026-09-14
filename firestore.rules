@@ -625,12 +625,11 @@ service cloud.firestore {
     }
 
     function isValidIdentityData(data) {
-      return (data.documentType in ['cedula', 'passport'] || data.documentType == '') &&
+      return data.documentType in ['cedula', 'passport'] &&
              data.documentNumber is string &&
-             (data.documentNumber == '' ||
-              (data.documentType == 'cedula' && data.documentNumber.matches('^[0-9]{11}$')) ||
+             ((data.documentType == 'cedula' && data.documentNumber.matches('^[0-9]{11}$')) ||
               (data.documentType == 'passport' && data.documentNumber.matches('^[A-Z0-9-]{6,20}$'))) &&
-             data.identityProfileComplete is bool &&
+             data.identityProfileComplete == true &&
              data.termsAccepted == true &&
              data.termsVersion is string && data.termsVersion.size() <= 20;
     }
@@ -1555,16 +1554,126 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
-    // ─── FUTUNET AI HUB (Superadmin internal use) ───
-    match /ai_conversations/{userId}/{document=**} {
-      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
-    }
-
-    match /ai_settings/{userId} {
-      allow read, write: if isSuperAdmin() && request.auth.uid == userId;
-    }
-
     // ─── DENY EVERYTHING ELSE ───
+    // Support is isolated from legacy Internet tickets and tenant ERP permissions.
+    function supportUser() {
+      return isEmailVerified() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('status', 'active') != 'disabled';
+    }
+    function supportStaff() {
+      return supportUser() && isPlatformStaff(['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk', 'marketing_manager']);
+    }
+    function supportManager(data) {
+      return supportUser() && (isPlatformSupport() || (data.source == 'internal' && supportStaff()));
+    }
+    function supportReader(data) {
+      return supportUser() && (data.ownerId == request.auth.uid || supportManager(data));
+    }
+    function supportString(value, min, max) {
+      return value is string && value.size() >= min && value.size() <= max;
+    }
+    match /support_tickets/{ticketId} {
+      function ticket() { return get(/databases/$(database)/documents/support_tickets/$(ticketId)).data; }
+      function validCreate() {
+        let d = request.resource.data;
+        return d.keys().hasOnly(['type', 'source', 'title', 'description', 'page', 'reference', 'attempted',
+          'environment', 'guided', 'ownerId', 'ownerName', 'ownerEmail', 'status', 'priority', 'assignedTo',
+          'assignedName', 'attachmentCount', 'createdAt', 'updatedAt', 'updatedBy', 'lastMessageId', 'revision']) &&
+          ticketId.matches('^[A-Za-z0-9]{20}$') && d.ownerId == request.auth.uid &&
+          d.ownerEmail == request.auth.token.email && supportString(d.ownerName, 1, 150) &&
+          d.source in ['internal', 'external'] && (d.source == 'external' || (supportStaff() && d.type == 'bug')) &&
+          d.type in ['bug', 'complaint', 'help'] && supportString(d.title, 5, 120) &&
+          supportString(d.description, 20, 5000) && supportString(d.page, 0, 500) &&
+          (d.page == '' || d.page.matches('^https?://[^?#@]+$')) &&
+          supportString(d.reference, 0, 100) && supportString(d.attempted, 0, 1000) &&
+          supportString(d.environment, 0, 500) && d.guided is bool &&
+          d.status == 'open' && d.priority == 'normal' && d.assignedTo == '' && d.assignedName == '' &&
+          d.attachmentCount is int && d.attachmentCount >= 0 && d.attachmentCount <= 3 &&
+          (d.attachmentCount < 1 || existsAfter(/databases/$(database)/documents/support_tickets/$(ticketId)/attachments/0)) &&
+          (d.attachmentCount < 2 || existsAfter(/databases/$(database)/documents/support_tickets/$(ticketId)/attachments/1)) &&
+          (d.attachmentCount < 3 || existsAfter(/databases/$(database)/documents/support_tickets/$(ticketId)/attachments/2)) &&
+          d.createdAt == request.time && d.updatedAt == request.time && d.updatedBy == request.auth.uid &&
+          d.lastMessageId == '' && d.revision == 0;
+      }
+      function replyUpdate() {
+        let d = request.resource.data;
+        let message = getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)/messages/$(d.lastMessageId)).data;
+        return resource.data.status != 'closed' && d.lastMessageId != resource.data.lastMessageId &&
+          d.diff(resource.data).affectedKeys().hasOnly(['updatedAt', 'updatedBy', 'lastMessageId', 'revision', 'status']) &&
+          message.authorId == request.auth.uid && message.createdAt == request.time &&
+          (d.status == resource.data.status ||
+            (resource.data.ownerId == request.auth.uid && d.status == 'open' && resource.data.status in ['waiting', 'resolved']));
+      }
+      function managerUpdate() {
+        let d = request.resource.data;
+        return supportManager(resource.data) &&
+          d.diff(resource.data).affectedKeys().hasOnly(['status', 'priority', 'assignedTo', 'assignedName', 'updatedAt', 'updatedBy', 'revision']) &&
+          d.status in ['open', 'in_progress', 'waiting', 'resolved', 'closed'] &&
+          d.priority in ['normal', 'high', 'urgent'] && supportString(d.assignedName, 0, 150) &&
+          ((d.assignedTo == resource.data.assignedTo && d.assignedName == resource.data.assignedName) ||
+            (d.assignedTo == request.auth.uid && d.assignedName.size() > 0) || (d.assignedTo == '' && d.assignedName == ''));
+      }
+      // Reading a missing ID allows idempotent create transactions without exposing existing cases.
+      allow get: if supportUser() && (resource == null || supportReader(resource.data));
+      allow list: if supportReader(resource.data) && request.query.limit <= 200;
+      allow create: if supportUser() && validCreate() &&
+        getAfter(/databases/$(database)/documents/support_rate_limits/$(request.auth.uid)).data.ticketId == ticketId &&
+        getAfter(/databases/$(database)/documents/support_rate_limits/$(request.auth.uid)).data.createdAt == request.time;
+      allow update: if supportReader(resource.data) && request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid && request.resource.data.revision == resource.data.revision + 1 &&
+        (managerUpdate() || replyUpdate());
+      allow delete: if false;
+
+      match /attachments/{attachmentId} {
+        allow read: if supportReader(ticket());
+        // Immutable JPEGs, re-encoded by the UI, stored separately from list metadata.
+        allow create: if supportUser() && !exists(/databases/$(database)/documents/support_tickets/$(ticketId)) &&
+          getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.ownerId == request.auth.uid &&
+          ((attachmentId == '0' && getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.attachmentCount >= 1) ||
+           (attachmentId == '1' && getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.attachmentCount >= 2) ||
+           (attachmentId == '2' && getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.attachmentCount == 3)) &&
+          request.resource.data.keys().hasOnly(['name', 'dataUrl']) && supportString(request.resource.data.name, 1, 120) &&
+          supportString(request.resource.data.dataUrl, 24, 350000) &&
+          request.resource.data.dataUrl.matches('^data:image/jpeg;base64,[A-Za-z0-9+/=]+$');
+        allow update, delete: if false;
+      }
+      match /messages/{messageId} {
+        allow read: if supportReader(ticket());
+        allow create: if supportReader(ticket()) && ticket().status != 'closed' &&
+          validMessage(request.resource.data, supportManager(ticket()) ? 'staff' : 'customer') &&
+          getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.lastMessageId == messageId &&
+          getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.updatedAt == request.time &&
+          getAfter(/databases/$(database)/documents/support_tickets/$(ticketId)).data.revision == ticket().revision + 1;
+        allow update, delete: if false;
+      }
+      match /notes/{noteId} {
+        allow read: if supportManager(ticket());
+        allow create: if supportManager(ticket()) && validMessage(request.resource.data, 'staff');
+        allow update, delete: if false;
+      }
+    }
+    function validMessage(d, role) {
+      return d.keys().hasOnly(['body', 'authorId', 'authorName', 'authorRole', 'createdAt']) &&
+        supportString(d.body, 1, 5000) && supportString(d.authorName, 1, 150) &&
+        d.authorId == request.auth.uid && d.authorRole == role && d.createdAt == request.time;
+    }
+    match /support_rate_limits/{userId} {
+      allow get: if supportUser() && request.auth.uid == userId;
+      allow create, update: if supportUser() && request.auth.uid == userId &&
+        request.resource.data.keys().hasOnly(['createdAt', 'ticketId']) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.ticketId.matches('^[A-Za-z0-9]{20}$') &&
+        (resource == null || request.time >= resource.data.createdAt + duration.value(30, 's')) &&
+        !exists(/databases/$(database)/documents/support_tickets/$(request.resource.data.ticketId)) &&
+        getAfter(/databases/$(database)/documents/support_tickets/$(request.resource.data.ticketId)).data.ownerId == request.auth.uid &&
+        getAfter(/databases/$(database)/documents/support_tickets/$(request.resource.data.ticketId)).data.createdAt == request.time;
+    }
+
+    // Gemini credentials are accessible only through the authenticated backend.
+    match /chatbot_secrets/{document=**} {
+      allow read, write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

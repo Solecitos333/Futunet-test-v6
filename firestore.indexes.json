@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    { "collectionGroup": "support_tickets", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "ownerId", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "support_tickets", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "source", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] }
+  ],
+  "fieldOverrides": [
+    { "collectionGroup": "attachments", "fieldPath": "dataUrl", "indexes": [] }
+  ]
+}

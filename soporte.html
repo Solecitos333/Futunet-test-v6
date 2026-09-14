@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" data-disable-firebase-persistence>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soporte y reclamaciones — Futunet</title>
+  <meta name="description" content="Recibe orientación, reporta errores y envía reclamaciones a Futunet. Consulta tus tickets y conversa con nuestro equipo de soporte.">
+  <link rel="canonical" href="https://futunet.com.do/soporte.html">
+  <meta name="theme-color" content="#0b2940">
+  <link rel="icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/support.css?v=20260912">
+  <link rel="stylesheet" href="css/chatbot.css?v=20260913support">
+  <script defer src="js/chatbot.js?v=20260913support"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script defer src="js/firebase-config.js?v=20260628"></script>
+  <script defer src="js/auth.js?v=20260628"></script>
+  <script defer src="js/support-core.js?v=20260912"></script>
+  <script defer src="js/support-service.js?v=20260912"></script>
+  <script defer src="js/support-ui.js?v=20260912gemini-final"></script>
+</head>
+<body class="sp sp-public">
+  <a class="sp-skip" href="#sp-root">Saltar al centro de soporte</a>
+  <header class="sp-site-header"><a href="index.html" aria-label="Futunet, inicio"><img src="img/logo-navbar.webp" width="160" height="50" alt="Futunet"></a><nav aria-label="Navegación de soporte"><a href="catalogo.html">Tienda</a><a href="internet.html">Internet</a><a href="mi-cuenta.html">Mi cuenta ↗</a></nav></header>
+  <main>
+    <section class="sp-hero"><div class="sp-hero-inner"><div><span class="sp-eyebrow">ESTAMOS PARA AYUDARTE</span><h1>Una solución empieza<br>por escucharte.</h1><p>Reporta un problema, presenta una reclamación o recibe ayuda. Aquí puedes conversar con el equipo y seguir cada paso de tu caso.</p><a href="#sp-cases" class="sp-hero-link">Consultar mis tickets <span aria-hidden="true">↗</span></a></div><div class="sp-hero-aside"><span class="sp-hero-mark" aria-hidden="true">?</span><p><strong>Tu caso, en un solo lugar.</strong><br>Orientación inicial → Ticket → Seguimiento</p></div></div></section>
+    <div class="sp-container"><div class="sp-topic-grid" aria-label="Elige el motivo de tu consulta">
+      <button class="sp-topic" type="button" data-support-topic="bug"><span class="sp-topic-icon" aria-hidden="true">⌘</span><strong>Reportar un error</strong><span>Algo en la web no funciona como debería.</span><b aria-hidden="true">↗</b></button>
+      <button class="sp-topic" type="button" data-support-topic="complaint"><span class="sp-topic-icon" aria-hidden="true">≡</span><strong>Hacer una reclamación</strong><span>Cuéntanos qué ocurrió con tu compra o servicio.</span><b aria-hidden="true">↗</b></button>
+      <button class="sp-topic" type="button" data-support-topic="help"><span class="sp-topic-icon" aria-hidden="true">?</span><strong>Necesito ayuda</strong><span>Te orientamos con productos y servicios.</span><b aria-hidden="true">↗</b></button>
+    </div><div class="sp-contact-strip"><div><strong>Te ayudamos a explicar el problema</strong><p>Conversa con el asistente y revisa el caso antes de enviarlo a soporte.</p></div><button type="button" class="sp-btn" data-open-assistant>Conversar con el asistente</button></div><div id="sp-root" data-mode="public"><p class="sp-card">Cargando centro de soporte… Si no carga, puedes <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer">contactarnos por WhatsApp</a>.</p></div>
+    <noscript><p class="sp-card">Activa JavaScript para crear y consultar tickets. También puedes <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer">contactarnos por WhatsApp</a>.</p></noscript>
+    <aside class="sp-contact-strip"><div><strong>¿No puedes acceder a tu cuenta?</strong><p>También podemos ayudarte por WhatsApp.</p></div><a class="sp-btn" href="https://wa.me/18297411041?text=Necesito%20ayuda%20con%20mi%20cuenta%20de%20Futunet" target="_blank" rel="noopener noreferrer">Contactar con Futunet ↗</a></aside></div>
+  </main>
+  <footer class="sp-footer"><span>Futunet · Tecnología y servicio a tu lado</span><div><a href="privacidad.html">Privacidad</a><a href="terminos.html">Términos</a><a href="index.html">Volver al inicio</a></div></footer>
+</body>
+</html>

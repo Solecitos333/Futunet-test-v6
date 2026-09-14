@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v14';
+const CACHE_NAME = 'futunet-cache-v18';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -61,7 +61,9 @@ const CRITICAL_ASSETS = [
 
 // Assets opcionales (si fallan, no se rompe la instalación)
 const OPTIONAL_ASSETS = [
-  './producto.html'
+  './producto.html',
+  './soporte.html',
+  './css/support.css'
 ];
 
 // Install Event — cachear assets críticos
@@ -112,6 +114,10 @@ self.addEventListener('fetch', event => {
     '/login', '/login.html'
   ]);
   const privateScripts = new Set([
+    '/js/chatbot-settings.js',
+    '/js/support-core.js',
+    '/js/support-service.js',
+    '/js/support-ui.js',
     '/js/auth.js',
     '/js/auth-guard.js',
     '/js/firebase-config.js',

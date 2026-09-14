@@ -72,7 +72,7 @@ var FUTUNET_CONFIG = {
 
   function handleMaintenance() {
     var path = window.location.pathname.toLowerCase();
-    var isAdmin = path.includes('admin.html') || path.includes('login.html');
+    var isAdmin = path.includes('admin.html') || path.includes('login.html') || path.includes('soporte.html');
     
     if (FUTUNET_CONFIG.MAINTENANCE_MODE && !isAdmin) {
       var bypass = false;

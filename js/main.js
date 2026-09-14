@@ -994,12 +994,14 @@ function normalizeSiteNavigation() {
           </div>
         </li>
         <li class="has-mega">
-          <a href="index.html#contacto" class="mega-trigger" aria-haspopup="true">Soporte <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
+          <a href="soporte.html" class="mega-trigger" aria-haspopup="true">Soporte <i class="fas fa-chevron-down" aria-hidden="true"></i></a>
           <div class="mega-menu-container mega-menu-container--compact">
             <div class="mega-menu-grid mega-menu-grid--single">
               <div class="mega-menu-col">
                 <div class="mega-menu-title">Ayuda y autogestión</div>
                 <ul>
+                  <li><a href="soporte.html">Soporte, errores y reclamaciones</a></li>
+                  <li><a href="soporte.html#sp-cases">Consultar mis tickets</a></li>
                   <li><a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer">WhatsApp de soporte</a></li>
                   <li><a href="internet.html#faqs">Preguntas frecuentes</a></li>
                   <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer">Medir velocidad</a></li>
@@ -1065,6 +1067,8 @@ function normalizeSiteNavigation() {
     <details class="mobile-details">
       <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
       <div class="mobile-details-content">
+        <a href="soporte.html" data-close-mobile-menu>Soporte, errores y reclamaciones</a>
+        <a href="soporte.html#sp-cases" data-close-mobile-menu>Consultar mis tickets</a>
         <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>WhatsApp de soporte</a>
         <a href="internet.html#faqs" data-close-mobile-menu>Preguntas frecuentes</a>
         <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Medir velocidad</a>
