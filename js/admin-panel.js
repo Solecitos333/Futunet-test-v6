@@ -171,6 +171,7 @@
       searches: function () { return loadSearchQueries(); },
       audit: function () { return loadAuditLogs(); },
       'service-requests': function () { return loadServiceRequests(); },
+      suggestions: function () { return loadSuggestions(); },
       'internet-management': function () { return Promise.all([loadInternetClients(), loadInternetPayments()]); },
       'clients-map': function () { return initClientsMap(); },
       'visual-editor': function () { return loadLayout(); },
@@ -4269,6 +4270,23 @@
         setDashboardQueueCount('queue-requests', null);
         console.warn('Real-time requests badge error:', err);
       });
+
+      db.collection('suggestions').where('status', '==', 'pending').onSnapshot(function (snapshot) {
+        var pending = snapshot.size;
+        var elPending = document.getElementById('suggestions-count-pending');
+        if (elPending) elPending.textContent = pending;
+        var sidebarBadge = document.getElementById('badge-suggestions');
+        if (sidebarBadge) {
+          if (pending > 0) {
+            sidebarBadge.textContent = pending;
+            sidebarBadge.style.display = 'inline-block';
+          } else {
+            sidebarBadge.style.display = 'none';
+          }
+        }
+      }, function (err) {
+        console.warn('Real-time suggestions badge error:', err);
+      });
     }
 
     if (['superadmin', 'admin', 'support_agent', 'billing_clerk'].some(currentUserHasRole)) {
@@ -5426,14 +5444,14 @@
       email: "Asunto: Temporada de Huracanes 2026: Asegura la continuidad de tu empresa con Futunet\n\nEstimado cliente corporativo,\n\nLas interrupciones eléctricas son la principal causa de fallas en servidores y pérdidas financieras durante el invierno ciclónico. Futunet te ofrece:\n1. UPS de Doble Conversión (1KVA a 10KVA) con bypass automático.\n2. Inversores y baterías de ciclo profundo.\n3. Sistemas de paneles solares híbridos.\n\nContáctanos hoy y asegura continuidad operativa."
     },
     julio: {
-      whatsapp: "¡Hola! En el mes de los padres, regala potencia y conectividad. Obtén un 10% de descuento en laptops de alto rendimiento y routers WiFi 6 usando el código PAPASMART2026. ¡Visítanos!",
-      social: "¿Papá trabaja duro o le apasiona el gaming? 💼 Celebra el Día de los Padres regalándole la potencia y conectividad que se merece. Usa el código PAPASMART2026 y obtén 10% de descuento en laptops seleccionadas y routers WiFi 6 de largo alcance. Visita nuestro catálogo Futunet en Santiago. ¡Promoción válida todo julio! #DiaDeLosPadres #PapáSmart #GamingRD #Futunet",
-      email: "Asunto: Sorprende a Papá con tecnología de punta - 10% de Descuento con el código PAPASMART2026\n\nEstimado cliente,\n\nCelebra el mes de los padres con el regalo perfecto. En Futunet hemos seleccionado laptops de alto rendimiento para productividad o gaming, y routers WiFi 6 de última generación. Usa el código PAPASMART2026 en tu cotización para obtener un 10% de descuento inmediato. Válido del 1 al 31 de julio de 2026. ¡Cotiza hoy mismo!"
+      whatsapp: "¡Hola! ¿Buscas maximizar tu rendimiento o dar el salto en gaming? En Futunet disponemos de laptops de alto rendimiento, routers Wi-Fi 6 de baja latencia y monitores de alta tasa de refresco.",
+      social: "¿Trabajo intensivo o pasión por el gaming? 💼 En Futunet te ofrecemos la potencia y conectividad que necesitas: laptops avanzadas, routers Wi-Fi 6 de largo alcance y periféricos de precisión. Visita nuestro catálogo en Santiago. #GamingRD #Rendimiento #Futunet",
+      email: "Asunto: Tecnología de Alto Rendimiento y Gaming con Futunet\n\nEstimado cliente,\n\nEn Futunet hemos seleccionado laptops de alto rendimiento para diseño, ingeniería y gaming, junto a routers WiFi 6 de última generación. Conoce nuestro catálogo y cotiza hoy mismo."
     },
     agosto: {
-      whatsapp: "¡Hola! Prepárate para el regreso a clases. Descubre ofertas en laptops estudiantiles, impresoras con tanques de tinta e internet de fibra óptica Lite.",
-      social: "🎒 ¡Prepárate para el éxito escolar y universitario! Laptops livianas Dell y HP, impresoras de alta eficiencia con tanque de tinta de regalo y el Internet de Fibra Óptica que no los dejará a mitad de una videoclase. Combos escolares listos en Santiago. #RegresoAClases #EstudiantesRD #Futunet",
-      email: "Asunto: Equipados para el Regreso a Clases con Futunet\n\nEstimados padres,\n\nFaciliten el aprendizaje de sus hijos con herramientas tecnológicas confiables. Impresoras Epson EcoTank, laptops de excelente relación calidad-precio y planes de internet rápidos y económicos. Cotiza tu combo aquí."
+      whatsapp: "¡Hola! Equípate con laptops estudiantiles, impresoras EcoTank de alta durabilidad e Internet de fibra óptica para el ciclo escolar y universitario.",
+      social: "🎒 ¡Rendimiento para tus estudios! Laptops livianas, impresoras EcoTank de alta eficiencia y conexión de Fibra Óptica simétrica para clases y proyectos sin interrupciones. Descubre los equipos en nuestro catálogo Futunet. #EstudiantesRD #Tecnologia #Futunet",
+      email: "Asunto: Soluciones de Cómputo e Impresión con Futunet\n\nEstimados clientes,\n\nFaciliten el aprendizaje y trabajo diario con herramientas tecnológicas confiables: impresoras multifuncionales de bajo costo por copia y laptops de gran durabilidad. Cotiza en línea hoy."
     },
     septiembre: {
       whatsapp: "¡Hola! En Futunet sabemos que una red lenta o inestable paraliza tus operaciones. Este mes de septiembre solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado estructurado Cat 6A y peinado de racks. ¿Te gustaría coordinar una visita técnica esta semana?",
@@ -5441,9 +5459,24 @@
       email: "Asunto: Auditoría de Red e Infraestructura 100% Gratuita para su empresa en Santiago - Cupón INFRA2026\n\nEstimados directores de TI y Operaciones:\n\nUn cableado obsoleto o switches desordenados pueden provocar caídas de servicio y reducir hasta un 30% la productividad de sus colaboradores. En Futunet ponemos a su disposición a nuestros ingenieros certificados para realizar un Levantamiento Técnico y Diagnóstico de Red completamente gratuito en sus instalaciones en Santiago.\n\nBeneficios incluidos:\n1. Diagnóstico físico y lógico de racks y patch panels.\n2. Certificación de velocidad de puntos de red y cobertura Wi-Fi.\n3. Evaluación de respaldo eléctrico para servidores (UPS).\n4. Presupuesto formal con 15% de descuento en mano de obra con el código INFRA2026.\n\nContáctenos hoy vía WhatsApp al 829-741-1041 o responda a este correo para coordinar la visita."
     },
     octubre: {
-      whatsapp: "¡Hola! Controla el acceso a tu empresa. Conoce nuestros lectores biométricos de huella/rostro, sistemas de control de asistencia y CCTV industrial.",
-      social: "Optimiza la seguridad y el control operativo de tu negocio. 🏢🔒 Implementa cerraduras electromagnéticas, barreras vehiculares y control de asistencia con biometría facial de Futunet. Seguridad industrial garantizada para almacenes y oficinas. #SeguridadIndustrial #ControlDeAcceso #Futunet",
-      email: "Asunto: Automatiza el control de asistencia y acceso en tu empresa con Futunet\n\nEstimados gerentes de Recursos Humanos y Seguridad,\n\nEviten accesos no autorizados y automaticen el registro de jornadas con nuestros relojes controladores y sistemas biométricos integrados. Ofrecemos asesoría y soporte técnico especializado."
+      whatsapp: "¡Hola! En Futunet sabemos que la seguridad de tu empresa no puede dejarse al azar. Durante este mes de octubre solicita una EVALUACIÓN PERIMETRAL Y PLANO DE COBERTURA CCTV 100% GRATIS en Santiago con el código SEGURIDAD2026. Además, obtén 15% de descuento en cámaras IP 4K ColorVu y control de acceso biométrico facial ZKTeco. ¿Coordinamos una visita técnica para evaluar tus instalaciones?",
+      social: "¿Tienes certeza de quién entra y sale de tus almacenes u oficinas en tiempo real? 🏢🔒 La seguridad corporativa moderna combina inteligencia artificial visual con control biométrico sin contacto. En Futunet diseñamos e instalamos soluciones de CCTV IP con analíticas de intrusión, lectura de placas vehiculares y torniquetes con biometría facial. Aprovecha 15% de descuento y auditoría perimetral gratuita con el cupón SEGURIDAD2026. #SeguridadCorporativa #CCTV #ControlDeAcceso #SantiagoRD #FutunetB2B",
+      email: "Asunto: Auditoría de Seguridad Perimetral y Biometría Gratuita para su empresa en Santiago - Cupón SEGURIDAD2026\n\nEstimados directores de Operaciones y Seguridad:\n\nProteger el patrimonio corporativo y optimizar el registro de jornadas laborales requiere equipamiento confiable, libre de puntos ciegos y con monitoreo en alta definición 24/7.\n\nDurante este mes, el equipo de ingeniería de Futunet pone a su disposición un Levantamiento Técnico de Seguridad y Cobertura CCTV completamente gratuito con el cupón SEGURIDAD2026.\n\nNuestras soluciones incluyen:\n1. Cámaras IP 4K con tecnología ColorVu (visión nocturna a color real 24/7).\n2. Control de asistencia y acceso con reconocimiento facial y tarjeta RFID (ZKTeco/Hikvision).\n3. Barreras vehiculares automáticas y cercos eléctricos perimetrales certificados.\n4. 15% de descuento directo en equipamiento e instalación profesional.\n\nContáctenos respondiendo a este correo o al WhatsApp 829-741-1041 para coordinar la inspección en sus instalaciones."
+    },
+    gaming: {
+      whatsapp: "¡Hola! ¿Buscando máximo rendimiento para streaming y gaming competitivo? En Futunet tenemos fibra óptica simétrica con la menor latencia de Santiago y combos especiales con 10% de descuento usando el código GAMING2026.",
+      social: "🎮 ¡Lleva tu setup al siguiente nivel! Conéctate con Fibra Óptica Simétrica de ultra-baja latencia y equípate con laptops gamer, monitores de 144Hz-240Hz y periféricos mecánicos pro. Usa el cupón GAMING2026 para 10% de descuento en la Zona Gaming de Futunet. #GamingRD #EsportsRD #SantiagoTech #FutunetGaming",
+      email: "Asunto: Potencia tu rendimiento: Fibra Gamer y Periféricos Pro con Futunet\n\nHola Gamer / Creador:\n\nEn el gaming y el streaming profesional, cada milisegundo de ping cuenta. Futunet te ofrece enlaces de fibra óptica simétrica con enrutamiento prioritario y un catálogo seleccionado de hardware de alta tasa de refresco. Conoce los combos con 10% de descuento con el código GAMING2026."
+    },
+    pos: {
+      whatsapp: "¡Hola! Moderniza el cobro en tu negocio. En Futunet tenemos terminales Touch Screen POS, impresoras térmicas de alta velocidad y lectores de código de barra con 12% de descuento usando el cupón POS2026.",
+      social: "🛒 ¿Filas lentas en caja o descuadres en tu inventario? Automatiza tu punto de venta con Futunet: terminales POS táctiles, impresoras térmicas de 80mm ultrarrápidas y lectores 2D de alta precisión. Solicita una demostración y obtén 12% de descuento con el código POS2026. #RetailTech #PuntoDeVenta #SantiagoComercio #FutunetPOS",
+      email: "Asunto: Modernice la facturación y cobro de su negocio con Sistemas POS Futunet\n\nEstimado comerciante / Gerente de Tienda:\n\nUn sistema de punto de venta rápido y estable evita pérdidas de clientes por demoras en caja y brinda control estricto de inventario. En Futunet le ofrecemos kits completos listos para operar con factura fiscal y garantía local. Aproveche 12% de descuento con el cupón POS2026."
+    },
+    remozamiento: {
+      whatsapp: "¡Hola! ¿Planeando renovar o ampliar tus oficinas antes de fin de año? En Futunet realizamos remozamientos comerciales llave en mano: canalización, falso techo, iluminación LED y cableado de red.",
+      social: "Transforma los espacios de trabajo de tu empresa. 🏗️ En Futunet nos encargamos del remozamiento integral de oficinas y naves comerciales: tabiquería, falsos techos, iluminación eficiente, puestos de trabajo ergonómicos y cableado estructurado estético. Proyectos ejecutados sin frenar tu operación. #Remozamiento #OficinasModernas #SantiagoRD #FutunetInfraestructura",
+      email: "Asunto: Proyectos Llave en Mano: Remozamiento e Infraestructura de Oficinas con Futunet\n\nEstimados gerentes administrativos y de compras:\n\nCrear ambientes de trabajo modernos y productivos incrementa la satisfacción del equipo y la imagen ante sus clientes. Diseñamos, canalizamos y adecuamos sus oficinas con cronogramas de entrega garantizados y facturación fiscal NCF."
     },
     noviembre: {
       whatsapp: "¡Hola! Llegó el Black Month a Futunet. Descuentos increíbles en todo el catálogo de tecnología, laptops y seguridad. ¡Aprovecha ya!",
@@ -5493,20 +5526,6 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-09-01');
       setVal('banner-end-date', '2026-09-30');
-    } else if (presetName === 'Papá Smart & Gaming') {
-      setVal('banner-title', ' Mes del Padre con <strong>Rendimiento y Potencia</strong>');
-      setVal('banner-subtitle', 'Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código PAPASMART2026.');
-      setVal('banner-link', 'catalogo.html?cat=equipos');
-      setVal('banner-order', 1);
-      setVal('banner-start-date', '2026-07-01');
-      setVal('banner-end-date', '2026-07-31');
-    } else if (presetName === 'Regreso a Clases') {
-      setVal('banner-title', '🎒 <strong>Regreso a Clases y Universidad 2026</strong>');
-      setVal('banner-subtitle', 'Laptops estudiantiles, impresoras EcoTank con tinta de regalo e Internet Fibra Óptica Lite con el código BACKTOSCHOOL2026.');
-      setVal('banner-link', 'catalogo.html?cat=equipos');
-      setVal('banner-order', 1);
-      setVal('banner-start-date', '2026-07-26');
-      setVal('banner-end-date', '2026-08-31');
     } else if (presetName === 'Infraestructura y Redes' || presetName === 'Redes & Infraestructura') {
       setVal('banner-title', '🏢 Moderniza tu Empresa con <strong>Redes de Alta Velocidad</strong>');
       setVal('banner-subtitle', 'Cableado estructurado Cat 6A, organización de racks y Wi-Fi 6 corporativo. Solicita tu levantamiento técnico gratuito en Santiago con el código INFRA2026.');
@@ -5514,13 +5533,334 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-09-01');
       setVal('banner-end-date', '2026-09-30');
-    } else if (presetName === 'Protección Corporativa' || presetName === 'Seguridad Industrial') {
+    } else if (presetName === 'Protección Corporativa' || presetName === 'Seguridad Industrial' || presetName === 'Seguridad Electrónica') {
       setVal('banner-title', '🛡️ Protege tu Empresa con <strong>Seguridad Inteligente</strong>');
-      setVal('banner-subtitle', 'CCTV industrial, control de acceso biométrico y sistemas de asistencia para almacenes y oficinas corporativas.');
+      setVal('banner-subtitle', 'CCTV IP 4K ColorVu, biometría facial ZKTeco y alarmas perimetrales. 15% de descuento con el código SEGURIDAD2026.');
       setVal('banner-link', 'seguridad-electronica.html');
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-10-01');
       setVal('banner-end-date', '2026-10-31');
+    } else if (presetName === 'Zona Gaming' || presetName === 'Gaming Pro') {
+      setVal('banner-title', '🎮 Potencia tu Setup con <strong>Zona Gaming Futunet</strong>');
+      setVal('banner-subtitle', 'Fibra simétrica de baja latencia, periféricos pro y monitores gamer. 10% de descuento con el cupón GAMING2026.');
+      setVal('banner-link', 'gaming.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-09-01');
+      setVal('banner-end-date', '2026-12-31');
+    } else if (presetName === 'Punto de Venta POS' || presetName === 'Retail POS') {
+      setVal('banner-title', '🛒 Automatiza tu Negocio con <strong>Sistemas POS</strong>');
+      setVal('banner-subtitle', 'Terminales Touch, impresoras térmicas de 80mm y lectores 2D de alta velocidad. 12% de descuento con el cupón POS2026.');
+      setVal('banner-link', 'punto-de-venta.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-09-01');
+      setVal('banner-end-date', '2026-12-31');
+    } else if (presetName === 'Black Friday' || presetName === 'Black Month') {
+      setVal('banner-title', '🚀 <strong>Black Month Tecnológico 2026</strong>');
+      setVal('banner-subtitle', 'Descuentos de hasta 30% en tecnología, redes, laptops y seguridad para empresas y hogares.');
+      setVal('banner-link', 'catalogo.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-11-01');
+      setVal('banner-end-date', '2026-11-30');
+    } else if (presetName === 'Cierre de Año' || presetName === 'Proyectos 2027') {
+      setVal('banner-title', '🎄 Cierra el Año con <strong>Infraestructura Renovada</strong>');
+      setVal('banner-subtitle', 'Ejecuta tu presupuesto en remozamiento, redes y equipamiento con entrega e instalación garantizada.');
+      setVal('banner-link', 'corporativo.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-12-01');
+      setVal('banner-end-date', '2026-12-31');
+    }
+  }
+
+  // ═══════════════════════════════════
+  // BUZÓN DE SUGERENCIAS E IDEAS
+  // ═══════════════════════════════════
+  var currentSelectedSuggestionId = null;
+  var cachedSuggestionsList = [];
+
+  var suggestionCategoryLabels = {
+    web_platform: 'Página Web',
+    services_support: 'Servicios e Instalación',
+    catalog_products: 'Catálogo y Productos',
+    customer_service: 'Atención y Cobros',
+    other: 'Otra Idea'
+  };
+
+  var suggestionStatusLabels = {
+    pending: { label: 'Pendiente', cls: 'badge-out-of-stock' },
+    in_review: { label: 'En evaluación', cls: 'up-role-editor' },
+    planned: { label: 'Planificada', cls: 'up-role-admin' },
+    implemented: { label: 'Implementada', cls: 'badge-in-stock' },
+    archived: { label: 'Archivada', cls: 'badge-low' }
+  };
+
+  async function loadSuggestions() {
+    var tbody = document.getElementById('suggestions-table-body');
+    if (!tbody) return;
+
+    try {
+      var catFilter = document.getElementById('suggestions-category-filter') ? document.getElementById('suggestions-category-filter').value : 'all';
+      var statusFilter = document.getElementById('suggestions-status-filter') ? document.getElementById('suggestions-status-filter').value : 'all';
+      var audienceFilter = document.getElementById('suggestions-audience-filter') ? document.getElementById('suggestions-audience-filter').value : 'all';
+
+      var query = db.collection('suggestions');
+      if (statusFilter !== 'all') {
+        query = query.where('status', '==', statusFilter);
+      }
+      if (catFilter !== 'all') {
+        query = query.where('category', '==', catFilter);
+      }
+
+      var snapshot = await query.get();
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#76889e;">No hay sugerencias registradas con estos filtros.</td></tr>';
+        updateSuggestionCounters([]);
+        return;
+      }
+
+      var list = [];
+      snapshot.forEach(function (doc) {
+        var d = doc.data();
+        d.id = doc.id;
+        list.push(d);
+      });
+
+      if (audienceFilter === 'anon') {
+        list = list.filter(function (item) { return item.isAnonymous === true; });
+      } else if (audienceFilter === 'client') {
+        list = list.filter(function (item) { return item.targetAudience === 'client' && !item.isAnonymous; });
+      } else if (audienceFilter === 'staff') {
+        list = list.filter(function (item) { return item.targetAudience === 'staff'; });
+      }
+
+      list.sort(function (a, b) {
+        var tA = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        var tB = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return tB - tA;
+      });
+
+      cachedSuggestionsList = list;
+      updateSuggestionCounters(list);
+
+      var html = '';
+      list.forEach(function (sug) {
+        var dateStr = sug.createdAt && sug.createdAt.seconds ? new Date(sug.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
+        var catName = suggestionCategoryLabels[sug.category] || sug.category || 'General';
+        var statusInfo = suggestionStatusLabels[sug.status] || { label: sug.status || 'Pendiente', cls: 'badge-out-of-stock' };
+        
+        var authorHtml = '';
+        if (sug.isAnonymous) {
+          authorHtml = '<span class="up-role-badge" style="background:#f1f5f9; color:#64748b; font-size:0.7rem;">Anónimo</span>';
+        } else {
+          var authorName = sug.authorName || 'Cliente';
+          var authorSub = sug.authorEmail || sug.authorPhone || '';
+          authorHtml = '<strong>' + escapeHtml(authorName) + '</strong>';
+          if (authorSub) {
+            authorHtml += '<br><span style="font-size:0.75rem;color:#76889e;">' + escapeHtml(authorSub) + '</span>';
+          }
+        }
+
+        var ratingHtml = '—';
+        if (sug.rating && sug.rating > 0) {
+          ratingHtml = '<span style="color:#f59e0b; font-weight:700;">' + '★'.repeat(sug.rating) + '</span>';
+        }
+
+        var searchStr = (sug.title + ' ' + (sug.description || '') + ' ' + (sug.authorName || '') + ' ' + (sug.authorEmail || '')).toLowerCase();
+
+        html += '<tr data-search-sug="' + escapeHtml(searchStr) + '">' +
+          '  <td><strong>' + escapeHtml(sug.title) + '</strong></td>' +
+          '  <td><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(catName) + '</span></td>' +
+          '  <td>' + authorHtml + '</td>' +
+          '  <td>' + ratingHtml + '</td>' +
+          '  <td><span class="product-card-badge ' + statusInfo.cls + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + escapeHtml(statusInfo.label) + '</span></td>' +
+          '  <td>' + dateStr + '</td>' +
+          '  <td style="text-align:right;">' +
+          '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openSuggestionModal(\x27' + escapeJs(sug.id) + '\x27)">Ver y gestionar</button>' +
+          '  </td>' +
+          '</tr>';
+      });
+
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error al cargar sugerencias:', err);
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar sugerencias: ' + escapeHtml(err.message || '') + '</td></tr>';
+    }
+  }
+
+  function updateSuggestionCounters(list) {
+    var total = list.length;
+    var pending = 0;
+    var web = 0;
+    var services = 0;
+    var ratingSum = 0;
+    var ratingCount = 0;
+
+    list.forEach(function (s) {
+      if (s.status === 'pending') pending++;
+      if (s.category === 'web_platform') web++;
+      else services++;
+      if (s.rating && s.rating > 0) {
+        ratingSum += s.rating;
+        ratingCount++;
+      }
+    });
+
+    setText('suggestions-count-total', total);
+    setText('suggestions-count-pending', pending);
+    setText('suggestions-count-web', web);
+    setText('suggestions-count-services', services);
+    setText('suggestions-rating-avg', ratingCount > 0 ? (ratingSum / ratingCount).toFixed(1) + ' ★' : '—');
+  }
+
+  function filterSuggestionsTable() {
+    var searchEl = document.getElementById('suggestions-search');
+    if (!searchEl) return;
+    var query = searchEl.value.toLowerCase().trim();
+    var rows = document.querySelectorAll('#suggestions-table-body tr');
+
+    rows.forEach(function (row) {
+      var attr = row.getAttribute('data-search-sug');
+      if (!attr) return;
+      row.style.display = attr.indexOf(query) > -1 ? '' : 'none';
+    });
+  }
+
+  async function openSuggestionModal(id) {
+    currentSelectedSuggestionId = id;
+    try {
+      var doc = await db.collection('suggestions').doc(id).get();
+      if (!doc.exists) return;
+      var sug = doc.data();
+
+      setText('sug-modal-title', sug.title || 'Sin título');
+      setText('sug-modal-cat-badge', suggestionCategoryLabels[sug.category] || sug.category || 'General');
+
+      var authorText = 'Remitente: Anónimo';
+      if (!sug.isAnonymous) {
+        authorText = 'Remitente: ' + (sug.authorName || 'Cliente');
+        if (sug.authorEmail) authorText += ' (' + sug.authorEmail + ')';
+        if (sug.authorPhone) authorText += ' · Tel: ' + sug.authorPhone;
+      }
+      setText('sug-modal-author', authorText);
+
+      setText('sug-modal-rating', sug.rating ? '★ ' + sug.rating + '/5' : 'Sin calificar');
+      var dateStr = sug.createdAt && sug.createdAt.seconds ? new Date(sug.createdAt.seconds * 1000).toLocaleString('es-DO') : '—';
+      setText('sug-modal-date', 'Fecha: ' + dateStr);
+
+      var audienceText = sug.targetAudience === 'staff' ? 'Origen: Usuario del Sistema / Personal' : (sug.isAnonymous ? 'Origen: Visitante Anónimo' : 'Origen: Cliente');
+      setText('sug-modal-audience', audienceText);
+      setText('sug-modal-page', sug.pageUrl ? 'Página: ' + sug.pageUrl : 'Página: Web');
+
+      setText('sug-modal-desc', sug.description || '');
+
+      var benefitGroup = document.getElementById('sug-modal-benefit-group');
+      if (benefitGroup) {
+        if (sug.benefit) {
+          benefitGroup.hidden = false;
+          setText('sug-modal-benefit', sug.benefit);
+        } else {
+          benefitGroup.hidden = true;
+        }
+      }
+
+      setVal('sug-modal-status-select', sug.status || 'pending');
+      setVal('sug-modal-admin-notes', sug.adminNotes || '');
+
+      openModal('suggestion-detail-modal');
+    } catch (err) {
+      console.error('Error al abrir detalle de sugerencia:', err);
+      alert('No se pudo cargar el detalle de la sugerencia.');
+    }
+  }
+
+  async function saveSuggestionChanges() {
+    if (!currentSelectedSuggestionId) return;
+    var btn = document.getElementById('btn-save-suggestion-modal');
+    if (btn) btn.disabled = true;
+
+    try {
+      var newStatus = document.getElementById('sug-modal-status-select').value;
+      var newNotes = document.getElementById('sug-modal-admin-notes').value.trim();
+
+      var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
+      var reviewer = currentUser ? (currentUser.displayName || currentUser.email || 'Admin') : 'Admin';
+
+      await db.collection('suggestions').doc(currentSelectedSuggestionId).update({
+        status: newStatus,
+        adminNotes: newNotes,
+        reviewedBy: reviewer,
+        reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      closeModal('suggestion-detail-modal');
+      await loadSuggestions();
+    } catch (err) {
+      console.error('Error al guardar gestión de sugerencia:', err);
+      alert('Error al guardar los cambios: ' + (err.message || ''));
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  function openNewInternalSuggestionModal() {
+    var form = document.getElementById('form-internal-suggestion');
+    if (form) form.reset();
+    openModal('internal-suggestion-modal');
+  }
+
+  async function submitInternalSuggestion() {
+    var title = (document.getElementById('internal-sug-title').value || '').trim();
+    var cat = (document.getElementById('internal-sug-cat').value || 'web_platform');
+    var desc = (document.getElementById('internal-sug-desc').value || '').trim();
+    var benefit = (document.getElementById('internal-sug-benefit').value || '').trim();
+
+    if (title.length < 3) {
+      alert('Por favor escribe un título claro de al menos 3 caracteres.');
+      return;
+    }
+    if (desc.length < 5) {
+      alert('Por favor describe la propuesta con al menos 5 caracteres.');
+      return;
+    }
+
+    var btn = document.getElementById('btn-save-internal-suggestion');
+    if (btn) btn.disabled = true;
+
+    try {
+      var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
+      var userData = window.FutunetAuth ? window.FutunetAuth.getUserData() : null;
+
+      var sugData = {
+        title: title,
+        category: cat,
+        description: desc,
+        targetAudience: 'staff',
+        status: 'pending',
+        isAnonymous: false,
+        source: 'admin_internal',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (benefit) sugData.benefit = benefit;
+      if (currentUser) {
+        sugData.authorName = currentUser.displayName || (userData && userData.nombre) || 'Personal de Futunet';
+        sugData.authorEmail = currentUser.email || '';
+        sugData.userId = currentUser.uid;
+      }
+      if (userData && userData.role) {
+        sugData.userRole = userData.role;
+      }
+
+      await db.collection('suggestions').add(sugData);
+
+      closeModal('internal-suggestion-modal');
+      await loadSuggestions();
+      alert('¡Propuesta interna registrada exitosamente!');
+    } catch (err) {
+      console.error('Error al guardar sugerencia interna:', err);
+      alert('Error al registrar sugerencia interna: ' + (err.message || ''));
+    } finally {
+      if (btn) btn.disabled = false;
     }
   }
 
@@ -5597,6 +5937,14 @@
     filterRequestsTable: filterRequestsTable,
     openRequestModal: openRequestModal,
     markRequestCompleted: markRequestCompleted,
+    
+    // Suggestions Box Exports
+    loadSuggestions: loadSuggestions,
+    filterSuggestionsTable: filterSuggestionsTable,
+    openSuggestionModal: openSuggestionModal,
+    saveSuggestionChanges: saveSuggestionChanges,
+    openNewInternalSuggestionModal: openNewInternalSuggestionModal,
+    submitInternalSuggestion: submitInternalSuggestion,
     switchInternetTab: switchInternetTab,
     loadInternetClients: loadInternetClients,
     openInternetClientModal: openInternetClientModal,

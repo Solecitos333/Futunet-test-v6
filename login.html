@@ -127,6 +127,12 @@
       <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">términos de uso</a>y confirmo que leí la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</span>
      </label>
 
+     <!-- Honeypot de seguridad -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="reg-hp-check">No llenar este campo</label>
+      <input type="text" id="reg-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
+
      <button type="submit" class="auth-btn auth-btn-primary" id="register-btn">
       <span>Crear cuenta</span>
      </button>
@@ -303,7 +309,7 @@
        'gaming.html', 'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
        'energia-climatizacion.html', 'equipos-oficina.html',
        'mobiliario-suministros.html', 'infraestructura-remozamiento.html',
-       'soporte.html', 'nosotros.html', 'privacidad.html', 'terminos.html'
+       'soporte.html', 'sugerencias.html', 'punto-de-venta.html', 'nosotros.html', 'privacidad.html', 'terminos.html'
       ];
 
       if (redirectTarget.origin === window.location.origin && allowedRedirects.includes(redirectFile)) {
@@ -454,6 +460,26 @@
    document.getElementById('register-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('register-message');
+
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    var hpField = document.getElementById('reg-hp-check');
+    if (hpField && hpField.value.trim() !== '') {
+     console.warn('Bot registration blocked via honeypot.');
+     showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación.', 'success');
+     document.getElementById('register-form').reset();
+     return;
+    }
+
+    // 2. Cooldown de registro (Rate-limiting en cliente 10s)
+    var regCooldownKey = 'futunet_last_register_ts';
+    var now = Date.now();
+    var lastReg = sessionStorage.getItem(regCooldownKey);
+    if (lastReg && (now - Number(lastReg)) < 10000) {
+     var waitSecs = Math.ceil((10000 - (now - Number(lastReg))) / 1000);
+     showMessage('register-message', 'Por favor, espera ' + waitSecs + ' segundos antes de intentar crear otra cuenta.', 'error');
+     return;
+    }
+
     setLoading('register-btn', true);
 
     var name = document.getElementById('register-name').value.trim();
@@ -485,6 +511,7 @@
      await FutunetAuth.signUp(email, password, name, {
       termsAccepted: acceptedTerms
      });
+     sessionStorage.setItem(regCooldownKey, String(Date.now()));
      showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
      document.getElementById('register-form').reset();
      setLoading('register-btn', false);

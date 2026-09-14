@@ -1,14 +1,17 @@
 # 📅 Calendario Comercial y Plan de Marketing Digital - Futunet (2026)
 
-Este documento define la estrategia comercial, de contenido y de diseño UI/UX para la plataforma e-commerce de **Futunet** (Santiago, República Dominicana), orientada tanto al segmento B2C (hogares, estudiantes, profesionales independientes) como B2B (empresas, universidades, colegios e instituciones del Estado).
+Este documento define la estrategia comercial, de contenido y de diseño UI/UX para la plataforma e-commerce de **Futunet** (Santiago, República Dominicana), orientada tanto al segmento B2C (hogares, estudiantes, gamers, profesionales independientes) como B2B (empresas, industrias de zona franca, comercios retail, centros médicos y colegios).
 
 ---
 
-## 🎯 Enfoque Estratégico de Futunet
-Futunet opera en tres pilares de alta demanda:
-1. **Telecomunicaciones**: Internet de Fibra Óptica Simétrica (Residencial, Estudiantil y Corporativo).
-2. **Tecnología e Infraestructura**: Equipos de oficina, laptops, impresoras, redes de datos, mobiliario y remozamientos.
-3. **Seguridad y Respaldo**: Seguridad electrónica (CCTV, control de acceso) y energía (UPS, inversores, paneles solares).
+## 🎯 Enfoque Estratégico y Verticales de Futunet
+
+Futunet opera con una propuesta de valor integral estructurada en cinco pilares clave:
+1. **Telecomunicaciones de Fibra Óptica**: Internet simétrico residencial, planes estudiantiles y enlaces dedicados corporativos con SLA 99.8% e IPs públicas fijas.
+2. **Infraestructura & Redes Corporativas**: Cableado estructurado Cat 6A, organización de racks, switches PoE+, certificación de puntos y Wi-Fi 6 de alta densidad.
+3. **Seguridad Electrónica & Control de Accesos**: Circuitos cerrados de televisión (CCTV IP 4K ColorVu), control de acceso biométrico/facial, barreras vehiculares y alarmas monitoreadas.
+4. **Continuidad Eléctrica & Climatización**: UPS Online de doble conversión (1kVA a 10kVA), inversores de onda pura, baterías de ciclo profundo y acondicionamiento térmico de cuartos de telecomunicaciones.
+5. **Retail Tech & Equipamiento B2B**: Sistemas de Punto de Venta (POS), cómputo corporativo, impresoras de alto rendimiento y remozamiento arquitectónico de oficinas.
 
 ---
 
@@ -22,122 +25,103 @@ Futunet opera en tres pilares de alta demanda:
 | **Abril** | *Espacios Seguros* | Seguridad Electrónica, Controles de Acceso | B2B / Residencial | Solicitar auditoría de seguridad gratis |
 | **Mayo** | *Mamá Conectada y Segura* | Smart Home, Laptops, Internet de alta velocidad | B2C | Comprar regalo tecnológico / Internet |
 | **Junio** | *Temporada de Respaldo Energético* | UPS Doble Conversión, Inversores, Solar | B2B / B2C | Comprar UPS / Cotizar Paneles Solares |
-| **Julio** | *Papá Smart & Gaming* | Laptops de alto rendimiento, Redes WiFi 6 | B2C / Profesionales | Comprar gadgets y equipos avanzados |
+| **Julio** | *Papá Smart & Gaming* | Laptops de alto rendimiento, Redes WiFi 6 | B2C / Gamers | Comprar gadgets y periféricos pro |
 | **Agosto** | *Regreso a Clases Tecnológico* | Laptops, Impresoras, Suministros, Internet Lite | B2C (Estudiantes/Padres) | Adquirir combos educativos |
-| **Septiembre**| *Infraestructura y Redes Premium* | Cableado estructurado, Racks, Remozamiento | B2B (Upgrade anual) | Solicitar levantamiento técnico |
-| **Octubre** | *Protección Corporativa* | Biométricos, Sistemas de Alarma, CCTV Industrial| B2B | Cotizar seguridad corporativa |
+| **Septiembre**| *Infraestructura y Redes Premium* | Cableado estructurado, Racks, Remozamiento | B2B (Cierre Q3) | Solicitar levantamiento técnico gratis |
+| **Octubre** | *Protección Corporativa y Control* | Biométricos, Control de Asistencia, CCTV 4K | B2B (Seguridad total)| Cotizar seguridad corporativa |
 | **Noviembre** | *Black Friday / Black Month* | Todo el catálogo con ofertas agresivas | B2C / B2B | Compras inmediatas con descuento |
-| **Diciembre** | *Cierre de Año y Proyectos 2027* | Renovación de flotas, Remozamiento, Proyectos | B2B (Gasto de presupuesto)| Contratar proyectos llave en mano |
+| **Diciembre** | *Cierre de Año y Proyectos 2027* | Remozamiento físico, Racks, Renovación TI | B2B (Gasto de presupuesto)| Contratar proyectos llave en mano |
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 13 de Septiembre - 19 de Septiembre de 2026)
+## ⚡ Plan de Acción Semanal (Semana Actual: 13 al 19 de Septiembre de 2026)
 
-### 📌 Contexto del Período y Transición Estratégica (Semana 2 - Aceleración B2B & Continuidad Operativa)
-* **Semana Clave**: Nos encontramos en la segunda semana de Septiembre de 2026 (13 al 19 de Septiembre). Entramos en la fase de **aceleración de prospección B2B y blindaje de continuidad operativa**.
-* **Estrategia B2B / Corporativa de la Semana**:
-  1. *Fase de Aceleración y Cierre de Levantamientos Técnicos*: Enfocada en decisores clave (Gerentes de TI, Directores de Operaciones y Gerentes Generales) en Santiago, zonas francas (Víctor Espaillat Mera, Pisano), centros médicos y colegios que deben definir ejecuciones de presupuesto antes del cierre de Q3 (30 de septiembre).
-  2. *Lead Magnet Activo*: **Levantamiento Técnico y Auditoría de Red 100% Gratuita** con el código `INFRA2026` (incluye informe diagnóstico de rack, certificación de puntos y plano lógico).
-  3. *Beneficio Económico*: 15% de descuento en mano de obra especializada de cableado Cat 6A, patch panels y canalización perimetral.
-* **Vector de Continuidad Crítica & Temporada Ciclónica (Septiembre)**:
-  * El mes de septiembre representa el pico histórico de actividad ciclónica y tormentas tropicales en la República Dominicana.
-  * **Campaña Cruzada de Respaldo Energético**: Activación estratégica de la protección para cuartos de servidores y racks con UPS Online de Doble Conversión (1kVA a 10kVA) usando el código complementario `RESPALDO2026` (10% de descuento en categoría de energía).
-  * **Conectividad Simétrica Ininterrumpida**: Enlaces de Fibra Óptica dedicada con SLA 99.8% para evitar pérdidas financieras por cortes de telecomunicaciones públicas.
-
----
-
-### 1. Transición Estratégica de UI/UX (Hero Slider & Embudo Web)
-
-* **Arquitectura del Slider Principal (`index.html`)**:
-  * **Slide 1 (Foco Estelar - Infraestructura y Redes Premium B2B)**:
-    * *Etiqueta*: `🏢 Infraestructura & Redes`
-    * *Título*: `Moderniza tu Empresa con Redes de Alta Velocidad`
-    * *Subtítulo*: `Cableado estructurado Cat 6A, organización de racks y Wi-Fi 6 corporativo. Solicita tu levantamiento técnico gratuito en Santiago con el código INFRA2026.`
-    * *Acción*: Botón primario a `redes-datos.html` + Botón WhatsApp con mensaje pre-rellenado para auditoría gratis.
-    * *Fondo*: `img/banners/redes.webp`.
-  * **Slide 2 (Telecomunicaciones Residencial & Home Office)**:
-    * *Etiqueta*: `🌐 Fibra Óptica Simétrica`
-    * *Título*: `Internet Residencial con Fibra Óptica Simétrica`
-    * *Subtítulo*: `Máxima velocidad y estabilidad en Santiago para teletrabajo, streaming en 4K y gaming sin latencia.`
-    * *Acción*: `internet.html` y WhatsApp para contratación inmediata.
-    * *Fondo*: `img/banners/internet.webp`.
-  * **Slide 3 (Continuidad & Energía Crítica ante Temporada Ciclónica)**:
-    * *Etiqueta*: `⚡ Respaldo Eléctrico & Continuidad`
-    * *Título*: `Protege tus Servidores y Racks de Datos`
-    * *Subtítulo*: `UPS online de doble conversión (1kVA a 10kVA) y sistemas de respaldo energético ininterrumpido. 10% de descuento con el código RESPALDO2026.`
-    * *Acción*: `energia-climatizacion.html` y cotización vía WhatsApp.
-    * *Fondo*: `img/banners/energia.webp`.
-  * **Slide 4 (Equipamiento de Oficinas y Cómputo)**:
-    * *Etiqueta*: `💻 Equipos de Oficina`
-    * *Título*: `Equipamos tu oficina con todo lo que necesita`
-    * *Subtítulo*: `Laptops corporativas, monitores, impresoras multifuncionales y periféricos listos para operar.`
-    * *Acción*: `catalogo.html?cat=equipos`.
-  * **Slide 5 (Seguridad Electrónica y Control Corporativo)**:
-    * *Etiqueta*: `🛡️ Seguridad Electrónica`
-    * *Título*: `Protege tu negocio con tecnología inteligente`
-    * *Subtítulo*: `CCTV IP de alta definición, control de acceso biométrico facial y alarmas monitoreadas.`
-    * *Acción*: `catalogo.html?cat=seguridad`.
-  * **Slide 6 (Telecomunicaciones Corporativas Dedicadas)**:
-    * *Etiqueta*: `🏢 Internet Corporativo B2B`
-    * *Título*: `Soluciones de Internet y Redes para Empresas`
-    * *Subtítulo*: `Enlaces de fibra óptica punto a punto, ancho de banda garantizado 1:1 e IPs fijas públicas.`
-    * *Acción*: `corporativo.html`.
-
-* **Cintillos Promocionales en Páginas de Destino (Landing CRO)**:
-  * `redes-datos.html`: Cintillo superior de alta visibilidad para solicitar la auditoría de red presencial sin costo con el código `INFRA2026`.
-  * `energia-climatizacion.html`: Cintillo de alerta y prevención ciclónica con cupón `RESPALDO2026` para soluciones de respaldo UPS e inversores.
+### 📌 Contexto del Período y Aceleración B2B (Cierre de Trimestre Q3)
+* **Semana Clave**: Nos encontramos en la fase de aceleración de fin de Q3. Directores de TI, Gerentes de Operaciones y Administradores de Santiago y Zonas Francas (Pisano, Víctor Espaillat Mera) disponen de 17 días para comprometer presupuestos antes del 30 de septiembre.
+* **Oferta Comercial Activa**:
+  * **Lead Magnet B2B**: Levantamiento Técnico y Auditoría de Red Presencial 100% Gratuito en Santiago con cupón `INFRA2026` (valorado en $15,000 DOP).
+  * **Beneficio Transaccional**: 15% de descuento en mano de obra y equipamiento de canalización, switches y racks.
+* **Vector de Continuidad Crítica (Pico Ciclónico Septiembre)**:
+  * Septiembre es el mes con mayor actividad meteorológica y de tormentas en República Dominicana.
+  * **Campaña Cruzada de Respaldo**: 10% de descuento directo en UPS Online (1kVA-10kVA) e inversores con el código `RESPALDO2026`.
+* **Implementación Web**:
+  * Barra superior (*Announcement Bar*) dinámica global con cuenta regresiva al 30 de Septiembre.
+  * Slide estelar en Hero Carousel de `index.html` enfocado en Infraestructura y Redes.
+  * Cintillo de auditoría en `redes-datos.html` y cintillo de contingencia energética en `energia-climatizacion.html`.
 
 ---
 
-### 2. Estrategia de Contenidos y Copywriting (Content Manager)
+## 🛡️ Pre-Diseño de Campaña: Octubre 2026 ("Protección Corporativa y Seguridad Inteligente")
 
-* **Tema Editorial de la Semana**:
-  *"¿Cuánto le cuesta a tu empresa 1 hora de caída de red o de apagón? Guía de auditoría de infraestructura y protección de servidores para el cierre de año"*.
-* **Matriz de Mensajes Semanales Multicanal**:
-  * **WhatsApp Business B2B**:
-    > *"¡Hola! En Futunet sabemos que una interrupción en tu red paraliza tus ventas y operaciones. Durante este mes de septiembre, solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado Cat 6A y peinado de racks. ¿Agendamos una visita técnica esta semana?"*
-  * **LinkedIn / Redes Sociales B2B**:
-    > *"¿Tus racks de comunicaciones parecen una maraña de cables o experimentas caídas intermitentes de red? 🔌 En Futunet convertimos el caos en orden, velocidad y estabilidad garantizada. Ofrecemos cableado estructurado Cat 6A certificado, switches gestionables PoE+, Wi-Fi 6 de alta concurrencia y protección con UPS Online de doble conversión. Agenda tu auditoría técnica presencial gratuita en Santiago usando el código INFRA2026. #RedesCorporativas #CableadoEstructurado #SantiagoRD #FutunetB2B #ContinuidadOperativa"*
-  * **Email Marketing para Gerentes de TI y Operaciones**:
-    > **Asunto**: Auditoría de Red e Infraestructura 100% Gratuita para su empresa en Santiago
-    > 
-    > Estimado(a) Director(a) de Tecnología / Operaciones:
-    > 
-    > Con la proximidad del último trimestre y las demandas de alto tráfico de fin de año, contar con una red local certificada y energía ininterrumpida es vital para garantizar cero caídas.
-    > 
-    > En Futunet ponemos a su disposición a nuestro equipo de ingenieros para realizar un **Levantamiento Técnico y Diagnóstico de Red completamente gratuito** en sus instalaciones con el código promocional **INFRA2026**.
-    > 
-    > **¿Qué incluye la auditoría?**
-    > 1. Inspección física de racks, patch panels y peinado de cables.
-    > 2. Medición de rendimiento de puntos de red y cobertura Wi-Fi.
-    > 3. Evaluación de respaldo energético (UPS y protecciones eléctricas).
-    > 4. Informe con recomendaciones técnicas y presupuesto preferencial con 15% de descuento.
-    > 
-    > Responda a este mensaje o contáctenos por WhatsApp al 829-741-1041 para coordinar la fecha de la visita.
+### 1. Definición Comercial y Audiencia Target
+* **Concepto Central**: *"Blindaje y Control Total: Protege los activos, colaboradores y operaciones de tu empresa con tecnología biométrica e inteligencia visual"*.
+* **Segmento Target**: Parques industriales, centros logísticos, clínicas, plazas comerciales, instituciones educativas y condominios residenciales en Santiago.
+* **Cupón Activo**: `SEGURIDAD2026`
+  * **Beneficio**: 15% de descuento en kits de videovigilancia IP 4K, controles de acceso biométrico y cerraduras magnéticas.
+  * **Lead Magnet**: Inspección de vulnerabilidades perimetrales y plano de cobertura de cámaras sin costo.
+  * **Vigencia**: 1 de Octubre al 31 de Octubre de 2026.
 
----
-
-### 3. Disparadores Comerciales y Cupones Activos
-
-* **Cupón Primario B2B**: `INFRA2026`
-  * **Beneficio**: Levantamiento técnico gratuito + 15% de descuento en mano de obra de canalización, cableado y certificación de red.
-  * **Vigencia**: 1 al 30 de Septiembre de 2026.
-  * **Departamentos**: Redes, Seguridad, Energía, Equipos y Oficina.
-* **Cupón Complementario de Continuidad**: `RESPALDO2026`
-  * **Beneficio**: 10% de descuento directo en UPS, inversores y sistemas de energía.
-  * **Vigencia**: 1 de Junio al 30 de Septiembre de 2026 (Temporada Ciclónica).
-  * **Departamentos**: Energía y Climatización.
+### 2. Arquitectura de Mensajes Multicanal (Octubre)
+* **WhatsApp Business B2B**:
+  > *"¡Hola! En Futunet sabemos que la seguridad de tu empresa no puede dejarse al azar. Durante este mes de octubre, solicita una INSPECCIÓN DE VULNERABILIDADES Y PLANO DE COBERTURA CCTV 100% GRATIS en Santiago con el código SEGURIDAD2026. Además, obtén 15% de descuento en cámaras IP 4K ColorVu y control de acceso biométrico facial ZKTeco. ¿Coordinamos una visita técnica para evaluar tus instalaciones?"*
+* **LinkedIn / Redes Corporativas**:
+  > *"¿Tienes certeza de quién entra y sale de tus almacenes u oficinas en tiempo real? 🏢🔒 La seguridad corporativa moderna combina inteligencia artificial visual con control biométrico sin contacto. En Futunet diseñamos e instalamos soluciones de CCTV IP con analíticas de intrusión, lectura de placas vehiculares y torniquetes con biometría facial. Aprovecha 15% de descuento y auditoría perimetral gratuita con el cupón SEGURIDAD2026. #SeguridadCorporativa #CCTV #ControlDeAcceso #SantiagoRD #FutunetB2B"*
+* **Email Marketing para Gerentes de Seguridad, Operaciones y RRHH**:
+  > **Asunto**: Auditoría de Seguridad Perimetral y Biometría Gratuita para su empresa en Santiago
+  > 
+  > Estimado(a) Director(a) de Operaciones / Seguridad:
+  > 
+  > Proteger el patrimonio corporativo y optimizar el registro de jornadas laborales requiere equipamiento confiable, libre de puntos ciegos y con monitoreo en alta definición 24/7.
+  > 
+  > Durante este mes, el equipo de ingeniería de Futunet pone a su disposición un **Levantamiento Técnico de Seguridad y Cobertura CCTV completamente gratuito** con el cupón **SEGURIDAD2026**.
+  > 
+  > **Nuestras soluciones incluyen:**
+  > 1. Cámaras IP 4K con tecnología ColorVu (visión nocturna a color real).
+  > 2. Control de asistencia y acceso con reconocimiento facial y tarjeta RFID (ZKTeco/Hikvision).
+  > 3. Barreras vehiculares automáticas y cercos eléctricos perimetrales certificados.
+  > 4. 15% de descuento directo en equipamiento e instalación profesional.
+  > 
+  > Contáctenos respondiendo a este mensaje o al WhatsApp 829-741-1041 para agendar la inspección en sus instalaciones.
 
 ---
 
-## 🛠️ Implementaciones Técnicas Realizadas y Sincronizadas
+## 🎮 Estrategia para Verticales de Alto Crecimiento
 
-1. **Optimización del Hero Carousel (`index.html`)**:
-   * Incorporado el slide estelar de **Respaldo Eléctrico & Continuidad Operativa** con cupón `RESPALDO2026`, eliminando duplicidades y reforzando la campaña cruzada ante eventos meteorológicos.
-2. **Cintillos de Conversión en Landings Verticales**:
-   * Integrado el cintillo promocional en `redes-datos.html` (Auditoría gratuita `INFRA2026`).
-   * Integrado el cintillo de contingencia energética en `energia-climatizacion.html` (Protección UPS `RESPALDO2026`).
-3. **Actualización del Dashboard de Administración (`admin-panel.js` & `admin.html`)**:
-   * Enriquecidos los textos del asistente de copywriting para el mes de septiembre con el código promocional y llamadas a la acción inmediatas a WhatsApp.
-   * Añadido el preset dinámico "Respaldo y Continuidad" para lanzamientos rápidos de campañas de energía en el gestor de banners.
+### Vertical 1: Zona Gaming & Creadores de Contenido (`gaming.html`)
+* **Público**: Jóvenes profesionales, entusiastas de e-sports, streamers y diseñadores 3D.
+* **Propuesta de Valor**: Fibra óptica simétrica con enrutamiento de baja latencia (ping mínimo a servidores internacionales), monitores 144Hz-240Hz, laptops gamer y accesorios mecánicos.
+* **Cupón Activo**: `GAMING2026` (10% de descuento en periféricos pro y combos gamer).
+* **CTA Principal**: Solicitar plan de Fibra Gamer con IP pública o adquirir combos en cuotas.
 
+### Vertical 2: Punto de Venta (POS) & Retail Tech (`punto-de-venta.html`)
+* **Público**: Supermercados, farmacias, ferreterías, tiendas de ropa, restaurantes y colmados en el Cibao.
+* **Propuesta de Valor**: Terminales Touch Screen integradas, impresoras térmicas de 80mm de alta velocidad, lectores omnidireccionales 2D de código de barra y gavetas de dinero metálicas.
+* **Cupón Activo**: `POS2026` (12% de descuento en kits completos de facturación).
+* **CTA Principal**: Solicitar demostración de equipamiento POS con asesor técnico presencial.
+
+### Vertical 3: Infraestructura, Remozamiento & Proyectos Llave en Mano (`infraestructura-remozamiento.html`)
+* **Público**: Empresas en expansión, centros de llamadas (Call Centers), coworkings y colegios privados.
+* **Propuesta de Valor**: Integración total de canalización estética, tabiquería ligera (sheetrock), falso techo registrable, iluminación LED para puestos de trabajo y mobiliario ergonómico.
+* **Estrategia Comercial**: Proyecto llave en mano con cronograma de ejecución rápida para no interrumpir operaciones comerciales.
+
+---
+
+## 📊 Matriz de Desempeño y Protocolo Semanal de Optimización
+
+Para garantizar que el sitio web y los canales comerciales generen resultados medibles, el equipo senior evalúa semanalmente los siguientes KPIs:
+
+| Indicador (KPI) | Meta Semanal | Canal de Medición | Acción Correctiva si no se cumple |
+| :--- | :--- | :--- | :--- |
+| **CTR Hero Slider** | > 4.5% | Google Analytics / Eventos | Cambiar imagen de fondo o simplificar el titular del banner activo. |
+| **Clicks en Cupón (Announcement Bar)** | > 3.0% | `main.js` Event Tracking | Modificar el microcopy del cintillo y reforzar el incentivo de urgencia. |
+| **Aperturas de Chat WhatsApp B2B** | > 25 chats calificados | Enlaces `wa.me` con tags | Ajustar el mensaje pre-llenado de WhatsApp para hacerlo más directo. |
+| **Tasa de Canje de Cupones** | > 8% en carritos iniciados | `cart.js` checkout logs | Validar claridad del descuento y departamentos aplicables en checkout. |
+| **Tiempo de Carga (LCP)** | < 1.8 segundos | PageSpeed / Lighthouse | Comprimir assets WebP y asegurar carga asíncrona de scripts de analítica. |
+
+---
+
+## 🛠️ Registro de Herramientas y Sincronización Web
+
+1. **Barra Global de Anuncios (`promo-announcement-bar`)**: Integrada en todas las páginas con cuenta regresiva sincronizada a la campaña activa.
+2. **Lógica de Descuentos (`cart.js`)**: Soporte activo para `INFRA2026`, `RESPALDO2026`, `SEGURIDAD2026`, `GAMING2026` y `POS2026`.
+3. **Admin Dashboard (`admin.html` / `admin-panel.js`)**: Presets rápidos de 1 clic para lanzar creatividades de Septiembre (Redes), Octubre (Seguridad), Gaming y POS.

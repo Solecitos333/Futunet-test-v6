@@ -54,6 +54,30 @@
       validFrom: '2026-09-01',
       validUntil: '2026-09-30',
       description: '15% de descuento en Redes, Infraestructura y Seguridad (Septiembre 2026)'
+    },
+    SEGURIDAD2026: {
+      code: 'SEGURIDAD2026',
+      discount: 0.15,
+      departments: ['seguridad', 'redes', 'equipos'],
+      validFrom: '2026-10-01',
+      validUntil: '2026-10-31',
+      description: '15% de descuento en Seguridad Electrónica, CCTV y Control de Acceso (Octubre 2026)'
+    },
+    GAMING2026: {
+      code: 'GAMING2026',
+      discount: 0.10,
+      departments: ['gaming', 'equipos', 'redes'],
+      validFrom: '2026-09-01',
+      validUntil: '2026-12-31',
+      description: '10% de descuento en Zona Gaming, Periféricos y Routers de Baja Latencia'
+    },
+    POS2026: {
+      code: 'POS2026',
+      discount: 0.12,
+      departments: ['equipos', 'oficina', 'redes'],
+      validFrom: '2026-09-01',
+      validUntil: '2026-12-31',
+      description: '12% de descuento en Sistemas de Punto de Venta (POS) y Facturación Comercial'
     }
   };
 

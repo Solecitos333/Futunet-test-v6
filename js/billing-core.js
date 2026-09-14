@@ -104,6 +104,48 @@
     return /^\d{4}-\d{2}-\d{2}$/.test(due) && due < toLocalDateInput(now);
   }
 
+  function extractTimestampMs(value) {
+    if (!value) return 0;
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (value instanceof Date) return Number.isNaN(value.getTime()) ? 0 : value.getTime();
+    if (typeof value.toMillis === 'function') return value.toMillis();
+    if (typeof value.toDate === 'function') {
+      const d = value.toDate();
+      return d instanceof Date && !Number.isNaN(d.getTime()) ? d.getTime() : 0;
+    }
+    if (typeof value === 'object' && Number.isFinite(value.seconds)) {
+      return (value.seconds * 1000) + Math.round((value.nanoseconds || 0) / 1e6);
+    }
+    if (typeof value === 'string') {
+      const parsed = Date.parse(value);
+      return Number.isNaN(parsed) ? 0 : parsed;
+    }
+    return 0;
+  }
+
+  function getDocumentModificationTime(doc) {
+    if (!doc || typeof doc !== 'object') return 0;
+    const updated = extractTimestampMs(doc.updatedAt);
+    if (updated > 0) return updated;
+    const clientResponded = extractTimestampMs(doc.clientRespondedAt);
+    if (clientResponded > 0) return clientResponded;
+    const shared = extractTimestampMs(doc.sharedAt);
+    if (shared > 0) return shared;
+    const converted = extractTimestampMs(doc.convertedAt);
+    if (converted > 0) return converted;
+    const statusChanged = extractTimestampMs(doc.statusChangedAt);
+    if (statusChanged > 0) return statusChanged;
+    const cancelled = extractTimestampMs(doc.cancelledAt);
+    if (cancelled > 0) return cancelled;
+    const created = extractTimestampMs(doc.createdAt);
+    if (created > 0) return created;
+    const inventoryPosted = extractTimestampMs(doc.inventoryPostedAt);
+    if (inventoryPosted > 0) return inventoryPosted;
+    const issueDate = parseDateOnly(doc.date);
+    if (issueDate) return issueDate.getTime();
+    return 0;
+  }
+
   function normalizeNcfPrefix(value, expectedType) {
     const type = String(expectedType || '').toUpperCase();
     if (!NCF_TYPES.includes(type)) throw new Error('Tipo de NCF no soportado.');
@@ -621,6 +663,8 @@
     parseDateOnly,
     formatDate,
     isOverdue,
+    extractTimestampMs,
+    getDocumentModificationTime,
     normalizeNcfPrefix,
     buildNcf,
     isValidNcf,

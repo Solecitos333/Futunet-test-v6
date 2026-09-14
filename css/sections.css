@@ -2202,3 +2202,220 @@ footer .nav-logo-name { color: #fff; font-size: 1.3rem; }
   .gaming-card__icon svg { width: 17px; height: 17px; }
   .gaming-card__title { font-size: .9rem; }
 }
+
+/* =============================================================
+   17. TERMINALES Y SISTEMAS PUNTO DE VENTA (POS) (index.html)
+   ============================================================= */
+.pos-home-section {
+  background:
+    radial-gradient(circle at top left, rgba(10, 112, 162, 0.05), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.pos-home-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.pos-home-header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+
+.pos-home-header__link svg { width: 16px; height: 16px; transition: transform .3s ease; }
+.pos-home-header__link:hover { color: var(--brand-dark); }
+.pos-home-header__link:hover svg { transform: translateX(3px); }
+
+.pos-home-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 768px) {
+  .pos-home-layout { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1024px) {
+  .pos-home-layout { grid-template-columns: 5fr 4fr; gap: 28px; }
+}
+
+.pos-home-banner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 380px;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.pos-home-banner:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.pos-home-banner__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+.pos-home-banner:hover .pos-home-banner__bg { transform: scale(1.04); }
+
+.pos-home-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,16,29,.85) 40%, rgba(10,16,29,.2) 100%);
+}
+
+.pos-home-banner__body {
+  position: relative;
+  padding: 32px 28px;
+  z-index: 1;
+}
+
+.pos-home-banner__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(10, 112, 162, 0.9);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 14px;
+}
+.pos-home-banner__eyebrow svg { width: 13px; height: 13px; }
+
+.pos-home-banner__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+
+.pos-home-banner__desc {
+  font-size: .88rem;
+  color: rgba(255,255,255,.82);
+  line-height: 1.6;
+  margin: 0 0 22px;
+  max-width: 360px;
+}
+
+.pos-home-banner__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #ffffff;
+  color: var(--brand);
+  font-size: .84rem;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition);
+}
+.pos-home-banner__cta svg { width: 15px; height: 15px; transition: transform .3s ease; }
+.pos-home-banner:hover .pos-home-banner__cta { background: var(--brand); color: #fff; }
+.pos-home-banner:hover .pos-home-banner__cta svg { transform: translateX(3px); }
+
+.pos-home-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pos-home-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  overflow: hidden;
+}
+.pos-home-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--brand);
+  opacity: 0;
+  transition: opacity .3s ease;
+  border-radius: 0 2px 2px 0;
+}
+.pos-home-card:hover {
+  border-color: rgba(10, 112, 162, 0.22);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(4px);
+}
+.pos-home-card:hover::before { opacity: 1; }
+
+.pos-home-card__icon {
+  flex-shrink: 0;
+  width: 46px; height: 46px;
+  background: linear-gradient(135deg, var(--brand-pale), rgba(10,112,162,.1));
+  border: 1px solid rgba(10,112,162,.1);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+  transition: var(--transition);
+}
+.pos-home-card__icon svg { width: 20px; height: 20px; }
+.pos-home-card:hover .pos-home-card__icon {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+
+.pos-home-card__body { flex: 1; min-width: 0; }
+.pos-home-card__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 3px;
+}
+.pos-home-card__desc {
+  font-size: .79rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 7px;
+}
+.pos-home-card__price {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.pos-home-card__arrow {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+.pos-home-card:hover .pos-home-card__arrow {
+  color: var(--brand);
+  transform: translate(2px, -2px);
+}
+

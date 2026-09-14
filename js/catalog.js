@@ -1134,9 +1134,12 @@ function renderEmptyState(title, description) {
     <div class="empty-state-icon"><i data-lucide="search-x"></i></div>
     <h3>${escapeHTML(title)}</h3>
     <p>${escapeHTML(description)}</p>
-    <div class="empty-state-actions">
+    <div class="empty-state-actions" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
       <button class="btn btn-outline empty-state-reset-btn" type="button">
         <i data-lucide="arrow-left"></i> Ver Catálogo Completo
+      </button>
+      <button class="btn empty-state-ai-btn" type="button" style="background: linear-gradient(135deg, #0b5fc6, #0284c7); color: #fff; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <i data-lucide="sparkles"></i> Preguntar a Futunet AI
       </button>
       <a class="btn btn-wa empty-state-wa-btn" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20no%20encontr%C3%A9%20lo%20que%20buscaba%20en%20el%20cat%C3%A1logo%20y%20quisiera%20ayuda." target="_blank">
         <i data-lucide="message-circle"></i> Pedir ayuda por WhatsApp
@@ -1146,6 +1149,16 @@ function renderEmptyState(title, description) {
   container.appendChild(div);
   const resetButton = div.querySelector('.empty-state-reset-btn');
   if (resetButton) resetButton.addEventListener('click', clearSearch);
+  const aiButton = div.querySelector('.empty-state-ai-btn');
+  if (aiButton) {
+    aiButton.addEventListener('click', () => {
+      const searchInput = document.getElementById('search-catalog-page');
+      const query = searchInput ? searchInput.value.trim() : '';
+      if (window.FutunetAI) {
+        window.FutunetAI.ask(query ? `Hola, busqué "${query}" en el catálogo de Futunet y no lo encontré, ¿qué opciones o equipos compatibles me recomiendas?` : 'Hola, ¿qué opciones de productos me recomiendas en el catálogo de Futunet?');
+      }
+    });
+  }
   if (typeof lucide !== 'undefined') lucide.createIcons({ root: div });
 }
 

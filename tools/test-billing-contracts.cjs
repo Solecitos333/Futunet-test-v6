@@ -242,6 +242,11 @@ test('facturación usa paginación de servidor y evita eventos HTML ejecutables'
   assert.match(billing, /\.startAfter\(invoiceHistoryCursor\)/);
   assert.match(billingHtml, /billing-events\.js/);
   assert.match(billingEvents, /allowedMethods/);
+  assert.match(billingEvents, /'restoreAllRowTaxes'/);
+  assert.match(billing, /getDocumentModificationTime/);
+  assert.match(workflows, /getDocumentModificationTime/);
+  assert.match(billingHtml, /id="invoice-sort-order"/);
+  assert.match(billingHtml, /value="overdue"/);
   assert.doesNotMatch(billingHtml, /\s(?:onclick|onchange|oninput|onsubmit)=/);
   assert.doesNotMatch(billing, /\s(?:onclick|onchange|oninput|onsubmit)=/);
   assert.doesNotMatch(extensions, /\s(?:onclick|onchange|oninput|onsubmit)=/);

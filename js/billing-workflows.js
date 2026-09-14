@@ -332,7 +332,11 @@ window.ERPBillingWorkflows = (function () {
   function renderQuotes(rows) {
     const body = document.getElementById('commercial-quotes-body');
     if (!body) return;
-    const sorted = rows.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+    const sorted = rows.slice().sort((a, b) => {
+      const diff = Core.getDocumentModificationTime(b) - Core.getDocumentModificationTime(a);
+      if (diff !== 0) return diff;
+      return String(b.invoiceNumber || b.id || '').localeCompare(String(a.invoiceNumber || a.id || ''));
+    });
     if (!sorted.length) {
       body.innerHTML = '<tr><td colspan="7" class="erp-empty-state">Todavía no hay cotizaciones o proformas.</td></tr>';
       return;

@@ -382,6 +382,22 @@
       }
     }
 
+    const aiAdvisorBtn = document.getElementById('product-ai-advisor-btn');
+    if (aiAdvisorBtn) {
+      aiAdvisorBtn.onclick = () => {
+        if (window.FutunetAI) {
+          window.FutunetAI.askProduct({
+            id: detail.id,
+            title: detail.title,
+            price: detail.price,
+            brand: detail.brand,
+            category: detail.category,
+            img: detail.img
+          });
+        }
+      };
+    }
+
     refreshIcons();
   }
 

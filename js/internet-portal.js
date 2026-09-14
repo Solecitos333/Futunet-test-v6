@@ -522,6 +522,14 @@
 
   // ─── FORMULARIOS ───
   function setupForms() {
+    function sanitizePortalInput(val) {
+      if (!val) return '';
+      return String(val)
+        .replace(/<[^>]*>/g, '')
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        .trim();
+    }
+
     // 1. Formulario de Pago (Reporte de transferencia)
     var payForm = document.getElementById('payment-report-form');
     if (payForm) {
@@ -530,6 +538,27 @@
         
         var btn = document.getElementById('pay-submit-btn');
         if (btn) btn.disabled = true;
+
+        // 1. Verificación Honeypot (Trampa antispam para bots)
+        var hpVal = document.getElementById('pay-hp-check') ? document.getElementById('pay-hp-check').value : '';
+        if (hpVal) {
+          console.warn('Bot submission blocked via honeypot.');
+          if (window.showToast) window.showToast('Pago reportado exitosamente. Lo verificaremos a la brevedad.', 'success');
+          closePortalModals();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 2. Cooldown de envío (Rate-limiting en cliente 15s)
+        var lastPaymentKey = 'futunet_last_payment_report_ts';
+        var now = Date.now();
+        var lastPayment = sessionStorage.getItem(lastPaymentKey);
+        if (lastPayment && (now - Number(lastPayment)) < 15000) {
+          var remainingSecs = Math.ceil((15000 - (now - Number(lastPayment))) / 1000);
+          if (window.showToast) window.showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otro reporte de pago.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
 
         var amount = document.getElementById('pay-amount').value;
         var bank = document.getElementById('pay-bank').value;
@@ -590,6 +619,7 @@
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
 
+          sessionStorage.setItem(lastPaymentKey, String(Date.now()));
           if (window.showToast) window.showToast('Pago reportado exitosamente. Lo verificaremos a la brevedad.', 'success');
           closePortalModals();
         } catch (err) {
@@ -609,9 +639,30 @@
         var btn = document.getElementById('support-submit-btn');
         if (btn) btn.disabled = true;
 
-        var type = document.getElementById('support-type').value;
-        var details = document.getElementById('support-details').value.trim();
-        var newSpeed = document.getElementById('support-new-speed').value;
+        // 1. Verificación Honeypot (Trampa antispam para bots)
+        var hpVal = document.getElementById('support-hp-check') ? document.getElementById('support-hp-check').value : '';
+        if (hpVal) {
+          console.warn('Bot submission blocked via honeypot.');
+          if (window.showToast) window.showToast('Solicitud enviada correctamente.', 'success');
+          closePortalModals();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 2. Cooldown de envío (Rate-limiting en cliente 15s)
+        var lastSupportKey = 'futunet_last_support_ticket_ts';
+        var now = Date.now();
+        var lastSupport = sessionStorage.getItem(lastSupportKey);
+        if (lastSupport && (now - Number(lastSupport)) < 15000) {
+          var remainingSecs = Math.ceil((15000 - (now - Number(lastSupport))) / 1000);
+          if (window.showToast) window.showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otra solicitud.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        var type = sanitizePortalInput(document.getElementById('support-type').value);
+        var details = sanitizePortalInput(document.getElementById('support-details').value);
+        var newSpeed = sanitizePortalInput(document.getElementById('support-new-speed').value);
 
         if (details.length > 1500) {
           if (window.showToast) window.showToast('El detalle de la solicitud no debe superar los 1500 caracteres.', 'error');
@@ -642,6 +693,7 @@
 
         try {
           await db.collection('internet_tickets').add(ticketData);
+          sessionStorage.setItem(lastSupportKey, String(Date.now()));
           if (window.showToast) window.showToast('Solicitud enviada correctamente.', 'success');
           closePortalModals();
           supportForm.reset();

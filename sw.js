@@ -13,6 +13,7 @@ const CRITICAL_ASSETS = [
   './mobiliario-suministros.html',
   './redes-datos.html',
   './seguridad-electronica.html',
+  './punto-de-venta.html',
   './nosotros.html',
   './manifest.json',
   './css/main.css',
@@ -27,6 +28,7 @@ const CRITICAL_ASSETS = [
   './css/equipos-oficina.css',
   './css/redes-datos.css',
   './css/seguridad-electronica.css',
+  './css/punto-de-venta.css',
   './css/b2b-subpage-base.css',
   './css/nosotros.css',
   './css/service-polish.css',
@@ -63,6 +65,10 @@ const CRITICAL_ASSETS = [
 const OPTIONAL_ASSETS = [
   './producto.html',
   './soporte.html',
+  './sugerencias.html',
+  './css/suggestions.css',
+  './js/suggestions.js',
+  './js/chatbot-firebase.mjs',
   './css/support.css'
 ];
 

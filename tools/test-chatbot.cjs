@@ -105,3 +105,25 @@ test('abrir el asistente desde soporte no lo cierra por propagación del mismo c
   assert.equal(ui.$('cb-window').getAttribute('aria-hidden'), 'false');
   assert.equal(ui.$('cb-window').inert, false); ui.dom.window.close();
 });
+
+test('window.FutunetAI expone API pública y responde a eventos globales con mensaje predeterminado', async () => {
+  const ui = await setup(); ui.$('cb-close').click();
+  assert.ok(ui.w.FutunetAI, 'window.FutunetAI debe existir');
+  assert.equal(typeof ui.w.FutunetAI.open, 'function');
+  assert.equal(typeof ui.w.FutunetAI.ask, 'function');
+  assert.equal(typeof ui.w.FutunetAI.askInternet, 'function');
+  assert.equal(typeof ui.w.FutunetAI.askProduct, 'function');
+
+  // Test askProduct
+  ui.w.FutunetAI.askProduct({ title: 'Terminal POS Touch', price: 26500, category: 'punto-de-venta' });
+  await new Promise(r => setTimeout(r, 260));
+  await tick();
+  assert.equal(ui.$('cb-window').getAttribute('aria-hidden'), 'false');
+  assert.match(ui.$('cb-messages').textContent, /Terminal POS Touch/);
+
+  // Test close
+  ui.w.FutunetAI.close();
+  assert.equal(ui.$('cb-window').getAttribute('aria-hidden'), 'true');
+
+  ui.dom.window.close();
+});

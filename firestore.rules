@@ -1555,6 +1555,52 @@ service cloud.firestore {
       allow delete: if isSuperAdmin();
     }
 
+    // ─── SUGGESTIONS BOX Collection ───
+    match /suggestions/{suggestionId} {
+      function isValidSuggestionCreate() {
+        let d = request.resource.data;
+        return d.keys().hasAll(['title', 'description', 'category', 'status', 'createdAt', 'isAnonymous']) &&
+               d.keys().hasOnly([
+                 'title', 'description', 'category', 'status', 'createdAt', 'isAnonymous',
+                 'targetAudience', 'authorName', 'authorEmail', 'authorPhone',
+                 'benefit', 'rating', 'source', 'pageUrl', 'userId', 'userRole'
+               ]) &&
+               d.title is string && d.title.size() >= 3 && d.title.size() <= 150 &&
+               d.description is string && d.description.size() >= 5 && d.description.size() <= 3000 &&
+               d.category in ['web_platform', 'services_support', 'catalog_products', 'customer_service', 'other'] &&
+               d.status == 'pending' &&
+               d.isAnonymous is bool &&
+               d.createdAt == request.time &&
+               (!('targetAudience' in d) || (d.targetAudience in ['client', 'staff', 'guest'])) &&
+               (!('authorName' in d) || (d.authorName is string && d.authorName.size() <= 120)) &&
+               (!('authorEmail' in d) || (d.authorEmail is string && d.authorEmail.size() <= 120)) &&
+               (!('authorPhone' in d) || (d.authorPhone is string && d.authorPhone.size() <= 50)) &&
+               (!('benefit' in d) || (d.benefit is string && d.benefit.size() <= 1000)) &&
+               (!('rating' in d) || (d.rating is int && d.rating >= 0 && d.rating <= 5)) &&
+               (!('source' in d) || (d.source is string && d.source.size() <= 50)) &&
+               (!('pageUrl' in d) || (d.pageUrl is string && d.pageUrl.size() <= 500)) &&
+               (!('userId' in d) || (d.userId is string && d.userId.size() <= 128)) &&
+               (!('userRole' in d) || (d.userRole is string && d.userRole.size() <= 50));
+      }
+
+      function isValidSuggestionUpdate() {
+        let d = request.resource.data;
+        return d.diff(resource.data).affectedKeys().hasOnly([
+                 'status', 'adminNotes', 'reviewedBy', 'reviewedAt', 'updatedAt'
+               ]) &&
+               d.status in ['pending', 'in_review', 'planned', 'implemented', 'archived'] &&
+               (!('adminNotes' in d) || (d.adminNotes is string && d.adminNotes.size() <= 2000)) &&
+               (!('reviewedBy' in d) || (d.reviewedBy is string && d.reviewedBy.size() <= 120)) &&
+               d.updatedAt == request.time;
+      }
+
+      allow create: if isValidSuggestionCreate();
+      allow read: if isEditorOrAbove() || isPlatformSupport() ||
+                     (isSignedIn() && 'userId' in resource.data && resource.data.userId == request.auth.uid);
+      allow update: if (isEditorOrAbove() || isPlatformSupport()) && isValidSuggestionUpdate();
+      allow delete: if isSuperAdmin();
+    }
+
     // ─── FUTUNET AI HUB (Superadmin internal use) ───
     match /ai_conversations/{userId}/{document=**} {
       allow read, write: if isSuperAdmin() && request.auth.uid == userId;

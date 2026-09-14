@@ -60,11 +60,13 @@
       renderChatThreadsList();
       renderActiveThreadMessages();
       loadStoredConfig();
+      loadClientBotConfig();
       return;
     }
     isInitialized = true;
 
     loadStoredConfig();
+    loadClientBotConfig();
     loadChatHistory();
     setupEventListeners();
 
@@ -908,12 +910,139 @@
     // ComfyUI
     var comfyBtn = document.getElementById('comfy-generate-btn');
     if (comfyBtn) comfyBtn.addEventListener('click', generateComfyImage);
+
+    // Client Bot Management
+    var clientSaveBtn = document.getElementById('ai-client-save-btn');
+    if (clientSaveBtn) clientSaveBtn.addEventListener('click', saveClientBotConfig);
+
+    var clientToggle = document.getElementById('ai-client-enabled-toggle');
+    if (clientToggle) {
+      clientToggle.addEventListener('change', function() {
+        var badge = document.getElementById('ai-client-status-badge');
+        if (badge) {
+          badge.textContent = this.checked ? 'Activo en Web' : 'Pausado';
+          badge.style.color = this.checked ? '#10b981' : '#ef4444';
+        }
+      });
+    }
+
+    var clientTestBtn = document.getElementById('ai-client-test-send-btn');
+    if (clientTestBtn) clientTestBtn.addEventListener('click', testClientBotQuery);
+
+    var clientTestInput = document.getElementById('ai-client-test-query');
+    if (clientTestInput) {
+      clientTestInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); testClientBotQuery(); }
+      });
+    }
+  }
+
+  // ─── Client Bot Management ───
+  function loadClientBotConfig() {
+    try {
+      var raw = localStorage.getItem('futunet_ai_client_config');
+      var cfg = raw ? JSON.parse(raw) : { enabled: true, model: 'gemini-2.5-flash', whatsapp: '18297411041' };
+      var toggle = document.getElementById('ai-client-enabled-toggle');
+      var modelSel = document.getElementById('ai-client-model-select');
+      var waInput = document.getElementById('ai-client-wa-number');
+      var statusBadge = document.getElementById('ai-client-status-badge');
+
+      if (toggle) toggle.checked = cfg.enabled !== false;
+      if (modelSel) modelSel.value = cfg.model || 'gemini-2.5-flash';
+      if (waInput) waInput.value = cfg.whatsapp || '18297411041';
+      if (statusBadge) {
+        statusBadge.textContent = (cfg.enabled !== false) ? 'Activo en Web' : 'Pausado';
+        statusBadge.style.color = (cfg.enabled !== false) ? '#10b981' : '#ef4444';
+      }
+    } catch(e) {}
+  }
+
+  function saveClientBotConfig() {
+    var toggle = document.getElementById('ai-client-enabled-toggle');
+    var modelSel = document.getElementById('ai-client-model-select');
+    var waInput = document.getElementById('ai-client-wa-number');
+    var statusBadge = document.getElementById('ai-client-status-badge');
+
+    var cfg = {
+      enabled: toggle ? toggle.checked : true,
+      model: modelSel ? modelSel.value : 'gemini-2.5-flash',
+      whatsapp: waInput ? waInput.value.trim() : '18297411041',
+      currency: 'DOP'
+    };
+
+    try {
+      localStorage.setItem('futunet_ai_client_config', JSON.stringify(cfg));
+      if (statusBadge) {
+        statusBadge.textContent = cfg.enabled ? 'Activo en Web' : 'Pausado';
+        statusBadge.style.color = cfg.enabled ? '#10b981' : '#ef4444';
+      }
+      showAdminToast('Configuración del asistente de clientes guardada', 'success');
+    } catch(e) {
+      showAdminToast('Error al guardar configuración de clientes', 'error');
+    }
+  }
+
+  function testClientBotQuery() {
+    var input = document.getElementById('ai-client-test-query');
+    var resultBox = document.getElementById('ai-client-test-result');
+    if (!input || !resultBox) return;
+
+    var query = input.value.trim();
+    if (!query) {
+      resultBox.textContent = 'Por favor ingresa una pregunta o consulta de prueba.';
+      return;
+    }
+
+    resultBox.innerHTML = '<span style="color:#00d2ff;">⏳ Simulando respuesta del asistente para clientes...</span>';
+
+    var lower = query.toLowerCase();
+    var isFiber = lower.includes('internet') || lower.includes('fibra') || lower.includes('mega') || lower.includes('plan') || lower.includes('cobertura');
+
+    setTimeout(function() {
+      var simulatedText = '';
+      if (isFiber) {
+        simulatedText = '¡Hola! Con gusto te oriento sobre los planes de Internet de Fibra Óptica FTTH de Futunet en Santiago:\n\n' +
+          '• **Plan Básico (20 Megas)**: RD$ 1,000 / mes — Navegación y tareas básicas.\n' +
+          '• **Plan Plata (50 Megas)**: RD$ 1,400 / mes — Streaming HD y hogares pequeños.\n' +
+          '• **Plan Oro (100 Megas)**: RD$ 1,900 / mes — Ideal para teletrabajo, clases y 4K.\n' +
+          '• **Plan Platino (200 Megas)**: RD$ 2,500 / mes — Velocidad simétrica y gaming de baja latencia.\n' +
+          '• **Plan Diamante (300 Megas)**: RD$ 3,200 / mes — Máxima potencia sin interrupciones.\n\n' +
+          '📍 **Cobertura activa**: Ensanche Dolores, Pueblo Nuevo, Cuesta Colorada y sectores de Santiago.\n' +
+          '📲 Los clientes reciben acceso directo al WhatsApp oficial (829-741-1041) para contratar de inmediato.';
+      } else {
+        var products = (typeof window !== 'undefined' && Array.isArray(window.mockDatabase)) ? window.mockDatabase : [];
+        var matches = products.filter(function(p) {
+          var t = (p.title || '').toLowerCase();
+          var c = (p.category || '').toLowerCase();
+          var d = (p.desc || '').toLowerCase();
+          return t.includes(lower) || c.includes(lower) || d.includes(lower);
+        }).slice(0, 3);
+
+        if (matches.length > 0) {
+          simulatedText = '¡Excelente! En nuestro catálogo encontré estas soluciones:\n\n' +
+            matches.map(function(p) {
+              var price = typeof p.price === 'number' ? 'RD$ ' + p.price.toLocaleString('es-DO') : (p.price || 'Consultar');
+              return '• **' + p.title + '** (' + price + ')\n  Categoría: ' + (p.category || 'General') + ' — ' + (p.desc ? p.desc.slice(0, 80) + '...' : '');
+            }).join('\n\n') +
+            '\n\n✨ *En la tienda el cliente ve tarjetas interactivas con foto, precio en DOP y enlace de WhatsApp.*';
+        } else {
+          var selectedModelName = document.getElementById('ai-client-model-select') ? document.getElementById('ai-client-model-select').value : 'gemini-2.5-flash';
+          simulatedText = 'Consulta recibida: "' + query + '"\n\n' +
+            'El asistente procesará esta consulta con el motor **' + selectedModelName + '** entregando asesoría personalizada, información de stock y soporte técnico guiado.';
+        }
+      }
+
+      resultBox.innerHTML = formatMarkdown(simulatedText);
+    }, 400);
   }
 
   // Public API
   window.AdminAIServer = {
     init: init,
     checkAllServicesHealth: checkAllServicesHealth,
-    installPwaApp: installPwaApp
+    installPwaApp: installPwaApp,
+    loadClientBotConfig: loadClientBotConfig,
+    saveClientBotConfig: saveClientBotConfig,
+    testClientBotQuery: testClientBotQuery
   };
 })();

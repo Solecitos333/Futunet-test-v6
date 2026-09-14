@@ -344,7 +344,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('cb-ticket').addEventListener('click', prepareTicket);
   document.getElementById('cb-reset').addEventListener('click', resetConversation);
-  window.addEventListener('futunet-open-chat', openChat);
+  function sendPrompt(promptText) {
+    if (!promptText || typeof promptText !== 'string') return;
+    openChat();
+    setTimeout(() => {
+      if (cbInputText) cbInputText.value = promptText;
+      sendMessage(promptText);
+    }, 200);
+  }
+
+  window.addEventListener('futunet-open-chat', (event) => {
+    openChat();
+    if (event && event.detail && event.detail.prompt) {
+      sendPrompt(event.detail.prompt);
+    }
+  });
+
+  window.FutunetAI = {
+    open(prompt) {
+      openChat();
+      if (prompt) sendPrompt(prompt);
+    },
+    ask(prompt) {
+      sendPrompt(prompt);
+    },
+    askInternet(customPrompt) {
+      const p = customPrompt || 'Hola, quisiera que me asesores para elegir el mejor plan de Internet de fibra óptica según mis necesidades.';
+      sendPrompt(p);
+    },
+    askProduct(product) {
+      const title = product?.title || 'este producto';
+      const price = product?.price ? ` (precio: RD$ ${Number(product.price).toLocaleString('es-DO')})` : '';
+      const cat = product?.category ? ` en la categoría ${product.category}` : '';
+      const p = `Hola, me interesa obtener más detalles y asesoría sobre ${title}${price}${cat}. ¿Qué características técnicas tiene y cómo es el proceso de entrega o instalación?`;
+      sendPrompt(p);
+    },
+    close: closeChat,
+    toggle: toggleChat
+  };
   const syncOwner = () => {
     const next = window.FutunetAuth?.getCurrentUser()?.uid || null;
     if (owner && next !== owner) resetConversation();

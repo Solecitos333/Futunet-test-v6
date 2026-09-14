@@ -76,6 +76,10 @@
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg>
      Soporte y errores <span class="admin-nav-badge" id="badge-support" style="display:none;"></span>
     </button>
+    <button class="admin-nav-item" data-admin-nav="suggestions">
+     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg>
+     Buzón de sugerencias <span class="admin-nav-badge" id="badge-suggestions" style="display:none;"></span>
+    </button>
     <button class="admin-nav-item" data-admin-nav="orders">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/><path d="M9 12h6M9 16h6"/></svg>
      Pedidos <span class="admin-nav-badge" id="badge-orders" style="display:none;"></span>
@@ -617,9 +621,18 @@
       </div>
      </div>
 
-     <div style="display: flex; gap: 12px; margin-top: 8px;">
+     <div style="display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
       <button class="admin-btn" style="background: white; color: #0A70A2; border: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" onclick="AdminPanel.openNewBannerWithPreset('Infraestructura y Redes')">
-       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Programar Banner de Campaña
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Banner Redes (INFRA2026)
+      </button>
+      <button class="admin-btn" style="background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" onclick="AdminPanel.openNewBannerWithPreset('Protección Corporativa')">
+       🛡️ Banner Seguridad (SEGURIDAD2026)
+      </button>
+      <button class="admin-btn" style="background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" onclick="AdminPanel.openNewBannerWithPreset('Zona Gaming')">
+       🎮 Banner Gaming (GAMING2026)
+      </button>
+      <button class="admin-btn" style="background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.3); font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" onclick="AdminPanel.openNewBannerWithPreset('Punto de Venta POS')">
+       🛒 Banner POS (POS2026)
       </button>
       <button class="admin-btn" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); font-weight: 600;" onclick="document.getElementById('marketing-assist-select').value='septiembre'; AdminPanel.updateCopywritingAssistant();">
        Ver Asistente de Contenidos
@@ -828,8 +841,11 @@
         <option value="junio">Junio: Respaldo Energético (Temporada Ciclónica)</option>
         <option value="julio">Julio: Papá Smart & Gaming</option>
         <option value="agosto">Agosto: Regreso a Clases Tecnológico</option>
-        <option value="septiembre" selected>Septiembre: Redes e Infraestructura Premium</option>
-        <option value="octubre">Octubre: Seguridad Corporativa e Industrial</option>
+        <option value="septiembre" selected>Septiembre: Redes e Infraestructura Premium (INFRA2026)</option>
+        <option value="octubre">Octubre: Seguridad Corporativa e Industrial (SEGURIDAD2026)</option>
+        <option value="gaming">Zona Gaming & Creadores Pro (GAMING2026)</option>
+        <option value="pos">Punto de Venta (POS) & Retail Tech (POS2026)</option>
+        <option value="remozamiento">Infraestructura & Remozamiento Llave en Mano</option>
         <option value="noviembre">Noviembre: Black Friday / Black Month</option>
         <option value="diciembre">Diciembre: Navidad y Cierre de Proyectos 2027</option>
        </select>
@@ -1048,6 +1064,97 @@
        </thead>
        <tbody id="requests-table-body">
         <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando solicitudes...</td></tr>
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+
+   <!-- SUGGESTIONS PANEL -->
+   <div class="admin-panel" data-admin-panel="suggestions">
+    <div class="admin-topbar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+     <div>
+      <h1>Buzón de Sugerencias e Ideas</h1>
+      <p style="margin:4px 0 0; color:#76889e; font-size:0.88rem;">Propuestas de clientes y personal para mejorar la página web y los servicios de Futunet.</p>
+     </div>
+     <button type="button" class="admin-btn admin-btn-primary" onclick="AdminPanel.openNewInternalSuggestionModal()" style="display:flex; align-items:center; gap:8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Aportar idea interna
+     </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="admin-stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:20px;">
+     <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+      <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Total Recibidas</span>
+      <h2 id="suggestions-count-total" style="font-size:1.8rem; margin:8px 0 0; color:#0b2940;">0</h2>
+     </div>
+     <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+      <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Pendientes</span>
+      <h2 id="suggestions-count-pending" style="font-size:1.8rem; margin:8px 0 0; color:#e67e22;">0</h2>
+     </div>
+     <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+      <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Página Web</span>
+      <h2 id="suggestions-count-web" style="font-size:1.8rem; margin:8px 0 0; color:#0B7EB5;">0</h2>
+     </div>
+     <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+      <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Servicios / Otros</span>
+      <h2 id="suggestions-count-services" style="font-size:1.8rem; margin:8px 0 0; color:#8e44ad;">0</h2>
+     </div>
+     <div class="admin-stat-card" style="background:#fff; padding:16px; border-radius:12px; border:1px solid #e5eef8;">
+      <span style="font-size:0.75rem; color:#76889e; font-weight:700; text-transform:uppercase;">Satisfacción Promedio</span>
+      <h2 id="suggestions-rating-avg" style="font-size:1.8rem; margin:8px 0 0; color:#f1c40f;">—</h2>
+     </div>
+    </div>
+
+    <!-- Table Card -->
+    <div class="admin-table-card">
+     <div class="admin-table-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+      <h3>Propuestas registradas</h3>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+       <select id="suggestions-category-filter" aria-label="Filtrar por categoría" style="padding: 9px 14px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadSuggestions()">
+        <option value="all">Todas las categorías</option>
+        <option value="web_platform">Página Web</option>
+        <option value="services_support">Servicios e Instalación</option>
+        <option value="catalog_products">Catálogo y Productos</option>
+        <option value="customer_service">Atención y Cobros</option>
+        <option value="other">Otras ideas</option>
+       </select>
+       <select id="suggestions-status-filter" aria-label="Filtrar por estado" style="padding: 9px 14px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadSuggestions()">
+        <option value="all">Todos los estados</option>
+        <option value="pending">Pendiente</option>
+        <option value="in_review">En evaluación</option>
+        <option value="planned">Planificada</option>
+        <option value="implemented">Implementada</option>
+        <option value="archived">Archivada</option>
+       </select>
+       <select id="suggestions-audience-filter" aria-label="Filtrar por origen" style="padding: 9px 14px; border: 1.5px solid #e5eef8; border-radius: 12px; font-size: 0.82rem; font-weight:600; font-family: Outfit, sans-serif; background-color: #f3f7fc; color: #394c60; outline: none; cursor:pointer;" onchange="AdminPanel.loadSuggestions()">
+        <option value="all">Todos los orígenes</option>
+        <option value="client">Clientes / Público</option>
+        <option value="staff">Usuarios del Sistema</option>
+        <option value="anon">Anónimos</option>
+       </select>
+       <div class="admin-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="suggestions-search" placeholder="Buscar sugerencia..." aria-label="Buscar sugerencias" onkeyup="AdminPanel.filterSuggestionsTable()" />
+       </div>
+      </div>
+     </div>
+     <div style="overflow-x:auto;">
+      <table class="admin-table">
+       <thead>
+        <tr>
+         <th>Título / Idea</th>
+         <th>Área</th>
+         <th>Remitente</th>
+         <th>Calificación</th>
+         <th>Estado</th>
+         <th>Fecha</th>
+         <th style="text-align:right;">Acción</th>
+        </tr>
+       </thead>
+       <tbody id="suggestions-table-body">
+        <tr><td colspan="7" style="text-align:center;padding:32px;color:#76889e;">Cargando sugerencias...</td></tr>
        </tbody>
       </table>
      </div>
@@ -1414,6 +1521,10 @@
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
        Chat & Skills IA
       </button>
+      <button type="button" class="ai-tab-btn" data-ai-tab="client-bot">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+       Asistente Clientes (Web)
+      </button>
       <button type="button" class="ai-tab-btn" data-ai-tab="comfy">
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
        ComfyUI Studio
@@ -1582,6 +1693,102 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Descargar / Instalar Web App Ahora
        </button>
+      </div>
+     </div>
+
+     <!-- PANE 5: ASISTENTE PÚBLICO / CLIENTES -->
+     <div class="ai-view-pane" id="ai-pane-client-bot">
+      <div class="ai-client-bot-container" style="background:#0f1923; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:24px;">
+       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+        <div>
+         <h3 style="color:#fff; margin:0 0 6px 0; font-size:1.25rem;">Asistente Inteligente para Clientes (Futunet AI)</h3>
+         <p style="color:#94a3b8; margin:0; font-size:0.88rem;">Supervisa y configura el asistente que atiende a los clientes en la tienda, catálogo y planes de fibra óptica.</p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+         <span style="font-size:0.8rem; color:#94a3b8;">Estado del Widget:</span>
+         <label style="display:inline-flex; align-items:center; cursor:pointer; gap:8px;">
+          <input type="checkbox" id="ai-client-enabled-toggle" checked style="accent-color:#00d2ff; width:18px; height:18px;">
+          <span style="color:#10b981; font-weight:600; font-size:0.85rem;" id="ai-client-status-badge">Activo en Web</span>
+         </label>
+        </div>
+       </div>
+
+       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:20px; margin-bottom:24px;">
+        <!-- Card: Parámetros del Asistente -->
+        <div style="background:#16222f; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:18px;">
+         <h4 style="color:#00d2ff; margin-top:0; margin-bottom:14px; font-size:1rem; display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Configuración Operativa
+         </h4>
+
+         <div class="ai-form-group" style="margin-bottom:14px;">
+          <label class="ai-form-label" for="ai-client-model-select">Modelo de Asistencia</label>
+          <select class="ai-select" id="ai-client-model-select" style="width:100%;">
+           <option value="gemini-2.5-flash">Gemini 2.5 Flash (Recomendado - Ultrarrápido y Preciso)</option>
+           <option value="gemini-2.5-pro">Gemini 2.5 Pro (Razonamiento Complejo)</option>
+           <option value="ollama-local">Ollama Local (Servidor Propio)</option>
+          </select>
+         </div>
+
+         <div class="ai-form-group" style="margin-bottom:14px;">
+          <label class="ai-form-label" for="ai-client-wa-number">WhatsApp de Cierre Comercial y Soporte</label>
+          <input class="ai-input" type="text" id="ai-client-wa-number" value="18297411041" placeholder="Ej: 18297411041" style="width:100%;" />
+          <span style="font-size:0.75rem; color:#64748b;">Número directo para el botón de compra o contratación con el que la IA conecta al cliente.</span>
+         </div>
+
+         <div class="ai-form-group" style="margin-bottom:14px;">
+          <label class="ai-form-label" for="ai-client-currency">Moneda de Catálogo</label>
+          <input class="ai-input" type="text" id="ai-client-currency" value="DOP (Pesos Dominicanos RD$)" readonly style="width:100%; opacity:0.8;" />
+         </div>
+
+         <button type="button" class="admin-btn admin-btn-primary" id="ai-client-save-btn" style="width:100%; margin-top:8px;">
+          Guardar Configuración de Clientes
+         </button>
+        </div>
+
+        <!-- Card: Capacidades Activas -->
+        <div style="background:#16222f; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:18px;">
+         <h4 style="color:#00d2ff; margin-top:0; margin-bottom:14px; font-size:1rem; display:flex; align-items:center; gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Habilidades Activas para Clientes
+         </h4>
+
+         <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+           <span style="color:#cbd5e1; font-size:0.85rem;"><i class="fas fa-box" style="color:#38bdf8; margin-right:8px;"></i>Recomendación de Catálogo (Tarjetas interactivas)</span>
+           <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 8px; border-radius:12px; font-weight:600;">Activo</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+           <span style="color:#cbd5e1; font-size:0.85rem;"><i class="fas fa-wifi" style="color:#38bdf8; margin-right:8px;"></i>Asesor de Fibra Óptica (Santiago)</span>
+           <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 8px; border-radius:12px; font-weight:600;">Activo</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+           <span style="color:#cbd5e1; font-size:0.85rem;"><i class="fas fa-shield-alt" style="color:#38bdf8; margin-right:8px;"></i>Modo Resiliente / Offline Fallback</span>
+           <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 8px; border-radius:12px; font-weight:600;">Siempre Activo</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+           <span style="color:#cbd5e1; font-size:0.85rem;"><i class="fab fa-whatsapp" style="color:#25d366; margin-right:8px;"></i>Cierre comercial directo por WhatsApp</span>
+           <span style="font-size:0.75rem; background:rgba(16,185,129,0.15); color:#10b981; padding:2px 8px; border-radius:12px; font-weight:600;">Activo</span>
+          </div>
+         </div>
+        </div>
+       </div>
+
+       <!-- Consola de Simulación de Consulta de Cliente -->
+       <div style="background:#16222f; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:18px;">
+        <h4 style="color:#00d2ff; margin-top:0; margin-bottom:12px; font-size:1rem; display:flex; align-items:center; gap:8px;">
+         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+         Simulador de Consulta de Cliente
+        </h4>
+        <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:14px;">Prueba en tiempo real cómo responderá el asistente a los clientes sin necesidad de abrir la tienda.</p>
+        <div style="display:flex; gap:10px; margin-bottom:14px;">
+         <input class="ai-input" type="text" id="ai-client-test-query" placeholder="Ej: ¿Qué cámara wifi o plan de 100 megas me recomiendas?" style="flex:1;" />
+         <button type="button" class="admin-btn admin-btn-primary" id="ai-client-test-send-btn">
+          Probar Respuesta
+         </button>
+        </div>
+        <div id="ai-client-test-result" style="background:#09101d; border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:14px; min-height:80px; font-size:0.88rem; color:#e2e8f0; line-height:1.5; white-space:pre-wrap;">Ingresa una pregunta y pulsa "Probar Respuesta" para ver el resultado simulado del asistente...</div>
+       </div>
       </div>
      </div>
     </div>
@@ -2384,6 +2591,122 @@
   </div>
  </div>
 
+ <!-- MODAL: DETALLE Y GESTIÓN DE SUGERENCIA -->
+ <div class="admin-modal-overlay" id="suggestion-detail-modal" onclick="if (event.target === this) AdminPanel.closeModal('suggestion-detail-modal')">
+  <div class="admin-modal" style="max-width:620px;">
+   <div class="admin-modal-header">
+    <h3 id="sug-modal-header-title">Detalle de Sugerencia</h3>
+    <button class="admin-modal-close" onclick="AdminPanel.closeModal('suggestion-detail-modal')">
+     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+   </div>
+   <div class="admin-modal-body" style="padding:24px;">
+    
+    <!-- Encabezado de la propuesta -->
+    <div style="background:#f3f7fc; padding:18px; border-radius:14px; border:1px solid #e5eef8; margin-bottom:20px;">
+     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px;">
+      <h4 id="sug-modal-title" style="font-family:'Space Grotesk',sans-serif; margin:0; color:#0a101d; font-size:1.15rem; font-weight:700; line-height:1.3;">Título de la Sugerencia</h4>
+      <span id="sug-modal-cat-badge" class="up-role-badge up-role-admin" style="font-size:0.75rem; flex-shrink:0;">Página Web</span>
+     </div>
+     <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.84rem; color:#64748b; font-family:'Outfit',sans-serif;">
+      <span id="sug-modal-author">Remitente: Juan Pérez</span>
+      <span id="sug-modal-rating" style="color:#f59e0b; font-weight:600;">★ 5/5</span>
+      <span id="sug-modal-date">Fecha: 14/09/2026</span>
+     </div>
+     <div id="sug-modal-origin-wrap" style="margin-top:6px; font-size:0.8rem; color:#0B7EB5;">
+      <span id="sug-modal-audience">Origen: Cliente</span> · <span id="sug-modal-page">Página de procedencia</span>
+     </div>
+    </div>
+
+    <!-- Descripción -->
+    <div style="margin-bottom:18px;">
+     <label style="display:block; font-size:0.75rem; font-weight:700; color:#394c60; text-transform:uppercase; margin-bottom:6px;">Propuesta / Descripción Detallada</label>
+     <div id="sug-modal-desc" style="background:#fdfefe; border:1.5px solid #e5eef8; border-radius:12px; padding:16px; font-size:0.9rem; color:#0a101d; line-height:1.6; white-space:pre-wrap; max-height:220px; overflow-y:auto;">Descripción de la propuesta...</div>
+    </div>
+
+    <!-- Impacto / Beneficio -->
+    <div id="sug-modal-benefit-group" style="margin-bottom:20px;">
+     <label style="display:block; font-size:0.75rem; font-weight:700; color:#394c60; text-transform:uppercase; margin-bottom:6px;">Impacto o Beneficio Esperado</label>
+     <div id="sug-modal-benefit" style="background:#fdfefe; border:1.5px solid #e5eef8; border-radius:12px; padding:14px; font-size:0.86rem; color:#475569; line-height:1.5; white-space:pre-wrap;">Beneficio para clientes o la plataforma...</div>
+    </div>
+
+    <!-- Gestión Administrativa: Estado y Notas -->
+    <div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:12px; padding:18px; margin-top:20px;">
+     <h5 style="margin:0 0 12px; font-size:0.88rem; font-weight:700; color:#0b2940; text-transform:uppercase; letter-spacing:0.5px;">Gestión y Evaluación del Equipo</h5>
+     
+     <div class="auth-form-group" style="margin-bottom:14px;">
+      <label class="auth-label" for="sug-modal-status-select" style="font-weight:600;">Estado de la propuesta</label>
+      <select id="sug-modal-status-select" class="auth-input" style="background:#f8fafc; font-weight:600;">
+       <option value="pending">Pendiente de revisión</option>
+       <option value="in_review">En evaluación por el equipo</option>
+       <option value="planned">Planificada para implementación</option>
+       <option value="implemented">Implementada</option>
+       <option value="archived">Archivada / Descartada</option>
+      </select>
+     </div>
+
+     <div class="auth-form-group" style="margin-bottom:0;">
+      <label class="auth-label" for="sug-modal-admin-notes" style="font-weight:600;">Notas internas de evaluación</label>
+      <textarea id="sug-modal-admin-notes" class="auth-input" rows="3" placeholder="Añade notas del equipo sobre viabilidad, estimación o resolución..." style="resize:vertical;"></textarea>
+     </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div style="display:flex; gap:10px; margin-top:24px; justify-content:flex-end;">
+     <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('suggestion-detail-modal')">Cerrar</button>
+     <button class="admin-btn admin-btn-primary" id="btn-save-suggestion-modal" onclick="AdminPanel.saveSuggestionChanges()">Guardar gestión</button>
+    </div>
+
+   </div>
+  </div>
+ </div>
+
+ <!-- MODAL: REGISTRAR SUGERENCIA INTERNA DEL PERSONAL -->
+ <div class="admin-modal-overlay" id="internal-suggestion-modal" onclick="if (event.target === this) AdminPanel.closeModal('internal-suggestion-modal')">
+  <div class="admin-modal" style="max-width:540px;">
+   <div class="admin-modal-header">
+    <h3>Aportar Idea Interna (Personal / Sistema)</h3>
+    <button class="admin-modal-close" onclick="AdminPanel.closeModal('internal-suggestion-modal')">
+     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+   </div>
+   <div class="admin-modal-body" style="padding:24px;">
+    <form id="form-internal-suggestion" onsubmit="event.preventDefault(); AdminPanel.submitInternalSuggestion();">
+     <div class="auth-form-group">
+      <label class="auth-label" for="internal-sug-title">Título / Resumen de la idea <span style="color:#e74c3c;">*</span></label>
+      <input type="text" id="internal-sug-title" class="auth-input" placeholder="Ej.: Automatizar alertas de stock bajo por correo" maxlength="150" required />
+     </div>
+
+     <div class="auth-form-group">
+      <label class="auth-label" for="internal-sug-cat">Área de Impacto <span style="color:#e74c3c;">*</span></label>
+      <select id="internal-sug-cat" class="auth-input" required>
+       <option value="web_platform">Página Web y Plataforma</option>
+       <option value="services_support">Servicios e Instalación</option>
+       <option value="catalog_products">Catálogo y Productos</option>
+       <option value="customer_service">Atención al Cliente y Cobros</option>
+       <option value="other">Otra Área / Proceso General</option>
+      </select>
+     </div>
+
+     <div class="auth-form-group">
+      <label class="auth-label" for="internal-sug-desc">Descripción de la propuesta <span style="color:#e74c3c;">*</span></label>
+      <textarea id="internal-sug-desc" class="auth-input" rows="4" placeholder="Describe los detalles de la mejora y cómo funcionaría…" maxlength="3000" required style="resize:vertical;"></textarea>
+     </div>
+
+     <div class="auth-form-group">
+      <label class="auth-label" for="internal-sug-benefit">Impacto o Beneficio para Futunet</label>
+      <textarea id="internal-sug-benefit" class="auth-input" rows="2" placeholder="Tiempo ahorrado, mejora en la satisfacción del cliente, etc." maxlength="1000" style="resize:vertical;"></textarea>
+     </div>
+
+     <div class="admin-modal-footer" style="padding:16px 0 0; border-top:1px solid #e5eef8; display:flex; justify-content:flex-end; gap:10px;">
+      <button type="button" class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('internal-suggestion-modal')">Cancelar</button>
+      <button type="submit" class="admin-btn admin-btn-primary" id="btn-save-internal-suggestion">Registrar idea</button>
+     </div>
+    </form>
+   </div>
+  </div>
+ </div>
+
  <!-- Firebase SDK -->
  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -2441,6 +2764,7 @@
      'inventory': ['superadmin', 'admin', 'editor'],
      'orders': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk'],
      'service-requests': ['superadmin', 'admin', 'support_agent'],
+     'suggestions': ['superadmin', 'admin', 'editor', 'support_agent', 'billing_clerk', 'marketing_manager'],
      'internet-management': ['superadmin', 'admin', 'support_agent', 'billing_clerk'],
      'clients-map': ['superadmin', 'admin', 'support_agent'],
      'competitors': ['superadmin', 'admin', 'editor', 'marketing_manager'],

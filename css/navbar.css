@@ -877,3 +877,185 @@
     margin-right: 12px !important;
   }
 }
+
+/* =============================================================
+   PROMO ANNOUNCEMENT BAR — Cintillo Dinámico de Campaña Global
+   ============================================================= */
+.promo-announcement-bar {
+  background: linear-gradient(90deg, #062f49 0%, #0A70A2 50%, #05486a 100%);
+  color: #ffffff;
+  padding: 7px 16px;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  position: relative;
+  z-index: 10050;
+  box-shadow: 0 2px 10px rgba(10, 112, 162, 0.25);
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.promo-announcement-bar.is-hidden {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  pointer-events: none;
+  border: none;
+}
+
+.pab-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.pab-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.pab-badge-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2ecc71;
+  box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  animation: pabPulse 2s infinite;
+}
+
+@keyframes pabPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(46, 204, 113, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+}
+
+.pab-message {
+  color: #f1f5f9;
+}
+
+.pab-message strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.pab-coupon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #0A70A2;
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px dashed #0A70A2;
+  transition: all 0.2s ease;
+  position: relative;
+  user-select: none;
+}
+
+.pab-coupon:hover {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #22c55e;
+  transform: translateY(-1px);
+}
+
+.pab-coupon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.pab-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #fed7aa;
+}
+
+.pab-countdown i {
+  color: #fb923c;
+  font-size: 0.75rem;
+}
+
+.pab-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #25D366;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.74rem;
+  box-shadow: 0 2px 6px rgba(37, 211, 102, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pab-cta:hover {
+  transform: scale(1.03);
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.5);
+  color: #ffffff;
+}
+
+.pab-close {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-left: auto;
+  transition: color 0.2s, background 0.2s;
+}
+
+.pab-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .promo-announcement-bar {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  .pab-container {
+    gap: 8px;
+  }
+  .pab-countdown {
+    display: none; /* Mantener limpio en móviles */
+  }
+  .pab-close {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

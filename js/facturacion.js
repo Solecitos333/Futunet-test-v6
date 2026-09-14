@@ -844,11 +844,17 @@ window.ERPBilling = (function () {
         products = futunetProducts;
       }
 
-      const invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').get();
+      let invoicesSnap;
+      try {
+        invoicesSnap = await getDB().collection(collectionInvoices).orderBy('updatedAt', 'desc').get();
+      } catch (err) {
+        invoicesSnap = await getDB().collection(collectionInvoices).orderBy('createdAt', 'desc').get();
+      }
       invoices = [];
       invoicesSnap.forEach(doc => {
         invoices.push({ id: doc.id, ...doc.data() });
       });
+      invoices.sort((a, b) => BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a));
 
       const paymentsSnap = await getDB().collection(collectionPayments).orderBy('timestamp', 'desc').get();
       payments = [];
@@ -879,18 +885,19 @@ window.ERPBilling = (function () {
       const productCollections = isPanitas
         ? [collectionProducts]
         : (isCreaticos ? ['creaticos_products', 'products'] : ['products']);
-      const invoiceQuery = database.collection(collectionInvoices).orderBy('createdAt', 'desc').limit(DATA_PAGE_SIZE);
+      const invoiceQuery = database.collection(collectionInvoices).orderBy('updatedAt', 'desc').limit(DATA_PAGE_SIZE);
       const paymentQuery = database.collection(collectionPayments).orderBy('timestamp', 'desc').limit(PAYMENT_PAGE_SIZE);
       const [clientsSnap, productSnapshots, invoicesSnap, paymentsSnap, refundsSnap] = await Promise.all([
         database.collection(collectionClients).limit(DIRECTORY_CACHE_LIMIT).get(),
         Promise.all(productCollections.map(name => database.collection(name).limit(DIRECTORY_CACHE_LIMIT).get())),
-        invoiceQuery.get(),
+        invoiceQuery.get().catch(() => database.collection(collectionInvoices).orderBy('createdAt', 'desc').limit(DATA_PAGE_SIZE).get()),
         paymentQuery.get(),
         database.collection(collectionRefunds).orderBy('timestamp', 'desc').limit(2000).get()
       ]);
 
       clients = clientsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       invoices = invoicesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      invoices.sort((a, b) => BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a));
       payments = paymentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       refunds = refundsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       invoiceHistoryCursor = invoicesSnap.docs[invoicesSnap.docs.length - 1] || null;
@@ -936,15 +943,21 @@ window.ERPBilling = (function () {
       const tasks = [];
       if (hasMoreInvoiceHistory && invoiceHistoryCursor) {
         tasks.push(database.collection(collectionInvoices)
-          .orderBy('createdAt', 'desc')
+          .orderBy('updatedAt', 'desc')
           .startAfter(invoiceHistoryCursor)
           .limit(DATA_PAGE_SIZE)
           .get()
+          .catch(() => database.collection(collectionInvoices)
+            .orderBy('createdAt', 'desc')
+            .startAfter(invoiceHistoryCursor)
+            .limit(DATA_PAGE_SIZE)
+            .get())
           .then(snapshot => {
             const existing = new Set(invoices.map(item => item.id));
             snapshot.docs.forEach(doc => {
               if (!existing.has(doc.id)) invoices.push({ id: doc.id, ...doc.data() });
             });
+            invoices.sort((a, b) => BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a));
             invoiceHistoryCursor = snapshot.docs[snapshot.docs.length - 1] || invoiceHistoryCursor;
             hasMoreInvoiceHistory = snapshot.size === DATA_PAGE_SIZE;
           }));
@@ -1553,20 +1566,28 @@ window.ERPBilling = (function () {
   function renderInvoicesTable() {
     switchPanel('invoices');
 
-    const startDateVal = document.getElementById('filter-invoice-start-date').value;
-    const endDateVal = document.getElementById('filter-invoice-end-date').value;
-    const statusFilter = document.getElementById('invoice-status-filter').value;
-    const ncfFilter = document.getElementById('invoice-ncf-filter').value;
-    const searchVal = document.getElementById('invoice-search').value.toLowerCase().trim();
+    const startDateVal = document.getElementById('filter-invoice-start-date')?.value || '';
+    const endDateVal = document.getElementById('filter-invoice-end-date')?.value || '';
+    const statusFilter = document.getElementById('invoice-status-filter')?.value || 'all';
+    const ncfFilter = document.getElementById('invoice-ncf-filter')?.value || 'all';
+    const searchVal = (document.getElementById('invoice-search')?.value || '').toLowerCase().trim();
+    const sortOrder = document.getElementById('invoice-sort-order')?.value || 'updated-desc';
 
     // Filter array
     let filtered = invoices.filter(inv => {
       // 1. Status Filter
       let matchStatus = true;
       if (statusFilter !== 'all') {
-        matchStatus = statusFilter === 'quote' || statusFilter === 'proforma'
-          ? inv.docType === statusFilter
-          : inv.status === statusFilter;
+        if (statusFilter === 'quote' || statusFilter === 'proforma') {
+          matchStatus = inv.docType === statusFilter;
+        } else if (statusFilter === 'overdue') {
+          const balanceValue = invoiceBalance(inv);
+          matchStatus = BillingCore.isOverdue(inv.dueDate, balanceValue);
+        } else if (statusFilter === 'pending') {
+          matchStatus = (inv.status === 'pending' || inv.status === 'unpaid') && invoiceBalance(inv) > 0;
+        } else {
+          matchStatus = inv.status === statusFilter;
+        }
       }
 
       // 2. NCF Filter
@@ -1615,6 +1636,33 @@ window.ERPBilling = (function () {
       }
 
       return matchStatus && matchNcf && matchDate && matchSearch;
+    });
+
+    // Sort array (defaulting to modification time descending)
+    filtered.sort((a, b) => {
+      if (sortOrder === 'date-desc') {
+        const diff = String(b.date || '').localeCompare(String(a.date || ''));
+        if (diff !== 0) return diff;
+        return BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a);
+      }
+      if (sortOrder === 'date-asc') {
+        const diff = String(a.date || '').localeCompare(String(b.date || ''));
+        if (diff !== 0) return diff;
+        return BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a);
+      }
+      if (sortOrder === 'total-desc') {
+        const diff = Number(b.total || 0) - Number(a.total || 0);
+        if (diff !== 0) return diff;
+        return BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a);
+      }
+      if (sortOrder === 'total-asc') {
+        const diff = Number(a.total || 0) - Number(b.total || 0);
+        if (diff !== 0) return diff;
+        return BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a);
+      }
+      const diff = BillingCore.getDocumentModificationTime(b) - BillingCore.getDocumentModificationTime(a);
+      if (diff !== 0) return diff;
+      return String(b.invoiceNumber || b.id || '').localeCompare(String(a.invoiceNumber || a.id || ''));
     });
 
     // Pagination bounds
@@ -2153,7 +2201,7 @@ window.ERPBilling = (function () {
         item.addEventListener('click', function() {
           document.getElementById('form-invoice-client-name').value = c.name;
           document.getElementById('form-invoice-client-id').value = c.id;
-          document.getElementById('form-invoice-client-rnc').value = c.rnc || 'No registrado';
+          document.getElementById('form-invoice-client-rnc').value = c.rnc || '';
           const phoneEl = document.getElementById('form-invoice-client-phone');
           const emailEl = document.getElementById('form-invoice-client-email');
           const addressEl = document.getElementById('form-invoice-client-address');
@@ -3613,7 +3661,13 @@ window.ERPBilling = (function () {
       returnToInvoice = false;
       document.getElementById('form-invoice-client-name').value = clientData.name;
       document.getElementById('form-invoice-client-id').value = savedId;
-      document.getElementById('form-invoice-client-rnc').value = clientData.rnc || 'No registrado';
+      document.getElementById('form-invoice-client-rnc').value = clientData.rnc || '';
+      const phoneInput = document.getElementById('form-invoice-client-phone');
+      if (phoneInput) phoneInput.value = clientData.phone || '';
+      const emailInput = document.getElementById('form-invoice-client-email');
+      if (emailInput) emailInput.value = clientData.email || '';
+      const addressInput = document.getElementById('form-invoice-client-address');
+      if (addressInput) addressInput.value = clientData.address || '';
       
       switchPanel('invoices');
       switchSubTab('invoices', 'form');
@@ -5665,7 +5719,7 @@ window.ERPBilling = (function () {
       ].join(',') + '\n';
     });
 
-    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    const companyName = (settings && settings.name) ? String(settings.name).replace(/[^a-zA-Z0-9]/g, '_') : (activeCompanyCode || 'Empresa');
     downloadCSV(`Facturas_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
@@ -5757,7 +5811,7 @@ window.ERPBilling = (function () {
       csv += [c.name, c.rnc, c.phone, c.email, c.address].map(BillingCore.csvCell).join(',') + '\n';
     });
 
-    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    const companyName = (settings && settings.name) ? String(settings.name).replace(/[^a-zA-Z0-9]/g, '_') : (activeCompanyCode || 'Empresa');
     downloadCSV(`Clientes_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
@@ -5779,7 +5833,7 @@ window.ERPBilling = (function () {
       ].join(',') + '\n';
     });
 
-    const companyName = settings ? settings.name.replace(/[^a-zA-Z0-9]/g, '_') : 'Company';
+    const companyName = (settings && settings.name) ? String(settings.name).replace(/[^a-zA-Z0-9]/g, '_') : (activeCompanyCode || 'Empresa');
     downloadCSV(`Productos_${companyName}_${BillingCore.toLocalDateInput()}.csv`, csv);
   }
 
@@ -6703,6 +6757,13 @@ window.ERPBilling = (function () {
     document.getElementById('form-invoice-client-name').value = documentData.clientName || '';
     document.getElementById('form-invoice-client-id').value = documentData.clientId || '';
     document.getElementById('form-invoice-client-rnc').value = documentData.clientRnc || '';
+    const snap = documentData.customerSnapshot || {};
+    const clientPhoneInput = document.getElementById('form-invoice-client-phone');
+    if (clientPhoneInput) clientPhoneInput.value = snap.phone || documentData.clientPhone || '';
+    const clientEmailInput = document.getElementById('form-invoice-client-email');
+    if (clientEmailInput) clientEmailInput.value = snap.email || documentData.clientEmail || '';
+    const clientAddressInput = document.getElementById('form-invoice-client-address');
+    if (clientAddressInput) clientAddressInput.value = snap.address || documentData.clientAddress || '';
     document.getElementById('form-invoice-date').value = options.refreshDates ? today : (documentData.date || today);
     document.getElementById('form-invoice-due-date').value = options.refreshDates
       ? BillingCore.toLocalDateInput(due)
@@ -6922,9 +6983,10 @@ window.ERPBilling = (function () {
     }
 
     // Find the button inside the event target context
-    const btn = window.event ? window.event.currentTarget : null;
+    const eventTarget = (typeof event !== 'undefined' && event && event.target) ? event.target : (window.event && window.event.target ? window.event.target : null);
+    const btn = (eventTarget && typeof eventTarget.closest === 'function') ? eventTarget.closest('button') : (eventTarget instanceof HTMLElement ? eventTarget : null);
     let originalText = '';
-    if (btn) {
+    if (btn && btn instanceof HTMLElement) {
       originalText = btn.innerHTML;
       btn.innerHTML = '⚡ Consultando...';
       btn.disabled = true;
@@ -6959,7 +7021,7 @@ window.ERPBilling = (function () {
       console.error('RNC Lookup Error:', e);
       showToast('Error en consulta RNC: ' + e.message, 'danger');
     } finally {
-      if (btn) {
+      if (btn && btn instanceof HTMLElement) {
         btn.innerHTML = originalText;
         btn.disabled = false;
       }

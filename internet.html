@@ -167,6 +167,7 @@
         <div class="mega-menu-col">
          <h5><i class="fas fa-briefcase" style="margin-right:6px; color:#0A70A2;"></i>Servicios Empresas</h5>
          <ul>
+          <li><a href="punto-de-venta.html" style="font-weight:700; color:#0A70A2;"><i class="fas fa-cash-register"></i>Punto de Venta (POS) <span style="font-size: 0.65rem; background: #0A70A2; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 4px; font-weight: 700;">Nuevo</span></a></li>
           <li><a href="redes-datos.html"><i class="fas fa-network-wired"></i>Redes y Datos</a></li>
           <li><a href="seguridad-electronica.html"><i class="fas fa-shield-alt"></i>Seguridad Electrónica</a></li>
           <li><a href="energia-climatizacion.html"><i class="fas fa-zap"></i>Climatización y Energía</a></li>
@@ -539,9 +540,14 @@
       <!-- [4] Quiz CTA: visible arriba del grid -->
       <div class="quiz-cta-bar">
        <span class="quiz-cta-text"><i class="fas fa-wand-magic-sparkles"></i>¿No sabes cuál elegir? Te recomendamos uno según tu uso.</span>
-       <button type="button" class="quiz-cta-btn" onclick="openQuizModal()">
-        Recomendarme un plan <i class="fas fa-arrow-right"></i>
-       </button>
+       <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <button type="button" class="quiz-cta-btn" onclick="openQuizModal()">
+         Test rápido <i class="fas fa-arrow-right"></i>
+        </button>
+        <button type="button" class="quiz-cta-btn" style="background: linear-gradient(135deg, #0b5fc6, #0284c7) !important;" onclick="if(window.FutunetAI){window.FutunetAI.askInternet();}else{alert('Iniciando asistente...');}">
+         <i class="fas fa-robot"></i> Asesor con IA
+        </button>
+       </div>
       </div>
 
       <!-- [1] Barra de comparación (oculta hasta que se seleccionan 2+ planes) -->
@@ -1431,6 +1437,12 @@
       </div>
      </div>
 
+      <!-- Honeypot de seguridad -->
+      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+       <label for="pay-hp-check">No llenar este campo</label>
+       <input type="text" id="pay-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+      </div>
+
      <button type="submit" class="btn-portal-action btn-action-primary" id="pay-submit-btn" style="margin-top:16px;">
       Enviar Reporte
      </button>
@@ -1448,6 +1460,12 @@
 
     <form id="support-form">
      <input type="hidden" id="support-type" value="tech_support" />
+
+     <!-- Honeypot de seguridad -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="support-hp-check">No llenar este campo</label>
+      <input type="text" id="support-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
 
      <div class="request-form-group" id="support-speed-selection" style="display:none;">
       <label class="request-form-label" style="color:#a0b0c4;" for="support-new-speed">Seleccionar Velocidad Deseada</label>
@@ -1529,6 +1547,7 @@
  <script src="js/internet-plans.js?v=20260629-elite3"></script>
  <script src="js/main.js?v=20260913support"></script>
  <script defer src="js/internet-portal.js?v=20260712"></script>
+ <script defer src="js/chatbot.js?v=20260914firebase2"></script>
  <script>
   function toggleFaq(btn) {
    var item = btn.parentElement;

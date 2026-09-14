@@ -335,6 +335,7 @@
         <select id="invoice-status-filter" class="form-input" style="height:38px; appearance:none;" data-erp-change="ERPBilling.renderInvoicesTable()">
          <option value="all">Todos los estados</option>
          <option value="pending">Pendientes</option>
+         <option value="overdue">Vencidas</option>
          <option value="partial">Abono parcial</option>
          <option value="unpaid">Ventas a crédito</option>
          <option value="paid">Pagadas</option>
@@ -355,6 +356,16 @@
          <option value="B12">Único de Ingresos (B12)</option>
         </select>
        </div>
+        <div class="form-group" style="margin:0;">
+         <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Ordenar por</label>
+         <select id="invoice-sort-order" class="form-input" style="height:38px; appearance:none;" data-erp-change="ERPBilling.renderInvoicesTable()">
+          <option value="updated-desc" selected>Última modificación (Recientes primero)</option>
+          <option value="date-desc">Fecha de emisión (Descendente)</option>
+          <option value="date-asc">Fecha de emisión (Ascendente)</option>
+          <option value="total-desc">Total (Mayor a menor)</option>
+          <option value="total-asc">Total (Menor a mayor)</option>
+         </select>
+        </div>
        <div class="form-group" style="margin:0; display:flex; align-items:flex-end;">
         <div class="admin-search" style="margin:0; width:100%; height:38px;">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:12px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>

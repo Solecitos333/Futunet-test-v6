@@ -812,8 +812,9 @@ function initEstimatorAccessibility() {
 // BOOTSTRAPPING CENTRALIZADO - UNICO LISTENER DOMContentLoaded
 // =============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Inicialización de logo, navbar y vistas adaptables
+  // Inicialización de logo, navbar, anuncio y vistas adaptables
   normalizeSiteNavigation();
+  initAnnouncementBar();
   initLogoFlip();
   syncViewportUIVars();
   syncHomeTrustBarPlacement();
@@ -1002,6 +1003,7 @@ function normalizeSiteNavigation() {
                 <ul>
                   <li><a href="soporte.html">Soporte, errores y reclamaciones</a></li>
                   <li><a href="soporte.html#sp-cases">Consultar mis tickets</a></li>
+                  <li><a href="sugerencias.html">💡 Buzón de sugerencias e ideas</a></li>
                   <li><a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer">WhatsApp de soporte</a></li>
                   <li><a href="internet.html#faqs">Preguntas frecuentes</a></li>
                   <li><a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer">Medir velocidad</a></li>
@@ -1069,6 +1071,7 @@ function normalizeSiteNavigation() {
       <div class="mobile-details-content">
         <a href="soporte.html" data-close-mobile-menu>Soporte, errores y reclamaciones</a>
         <a href="soporte.html#sp-cases" data-close-mobile-menu>Consultar mis tickets</a>
+        <a href="sugerencias.html" data-close-mobile-menu>💡 Buzón de sugerencias</a>
         <a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>WhatsApp de soporte</a>
         <a href="internet.html#faqs" data-close-mobile-menu>Preguntas frecuentes</a>
         <a href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Medir velocidad</a>
@@ -1144,5 +1147,133 @@ function normalizeSiteNavigation() {
     });
   }
 }
+
+/* =============================================================
+   PROMO ANNOUNCEMENT BAR — Lógica Dinámica de Campaña Global
+   ============================================================= */
+function initAnnouncementBar() {
+  if (typeof window === 'undefined') return;
+  try {
+    if (sessionStorage.getItem('futunet_promo_bar_closed') === 'true') return;
+  } catch (e) {}
+
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  // Evitar duplicados
+  if (document.getElementById('promo-announcement-bar')) return;
+
+  const waNum = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
+  const now = new Date();
+  const currentMonth = now.getMonth(); // 8 = Sep, 9 = Oct
+
+  // Campaña activa según fecha (o Septiembre por defecto para calendario 2026)
+  let campaign = {
+    badge: '⚡ CIERRE Q3 & CONTINUIDAD',
+    message: 'Auditoría de Red 100% GRATIS en Santiago + 15% Descuento con',
+    coupon: 'INFRA2026',
+    endDate: new Date('2026-09-30T23:59:59'),
+    ctaText: 'Agendar Visita',
+    waMsg: 'Hola Futunet, quiero solicitar mi levantamiento técnico gratuito de red con el código INFRA2026.'
+  };
+
+  if (currentMonth === 9 || now > new Date('2026-09-30T23:59:59')) {
+    // Octubre: Campaña de Seguridad Corporativa
+    campaign = {
+      badge: '🛡️ PROTECCIÓN CORPORATIVA',
+      message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
+      coupon: 'SEGURIDAD2026',
+      endDate: new Date('2026-10-31T23:59:59'),
+      ctaText: 'Cotizar Seguridad',
+      waMsg: 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.'
+    };
+  }
+
+  const bar = document.createElement('div');
+  bar.id = 'promo-announcement-bar';
+  bar.className = 'promo-announcement-bar';
+  bar.setAttribute('role', 'region');
+  bar.setAttribute('aria-label', 'Anuncio de promoción comercial');
+
+  const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(campaign.waMsg)}`;
+
+  bar.innerHTML = `
+    <div class="pab-container">
+      <span class="pab-badge"><span class="pab-badge-pulse"></span> ${campaign.badge}</span>
+      <span class="pab-message">${campaign.message}</span>
+      <span class="pab-coupon" id="pab-coupon-btn" title="Clic para copiar código de descuento" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <span class="coupon-text">${campaign.coupon}</span>
+      </span>
+      <span class="pab-countdown" id="pab-countdown" aria-live="polite">
+        <i class="fas fa-clock"></i> <span id="pab-timer-text">Calculando...</span>
+      </span>
+      <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="pab-cta">
+        ${campaign.ctaText} <i class="fas fa-arrow-right" style="font-size:0.65rem;"></i>
+      </a>
+      <button type="button" class="pab-close" id="pab-close-btn" aria-label="Cerrar anuncio">&times;</button>
+    </div>
+  `;
+
+  // Insertar al inicio del header antes de cualquier otro elemento
+  header.insertBefore(bar, header.firstChild);
+
+  // Copiado interactivo de cupón
+  const couponBtn = document.getElementById('pab-coupon-btn');
+  if (couponBtn) {
+    const couponSpan = couponBtn.querySelector('.coupon-text');
+    const originalText = campaign.coupon;
+    couponBtn.addEventListener('click', () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(originalText).then(() => {
+          couponSpan.textContent = '¡Copiado! ✓';
+          couponBtn.style.background = '#dcfce7';
+          couponBtn.style.color = '#15803d';
+          setTimeout(() => {
+            couponSpan.textContent = originalText;
+            couponBtn.style.background = '';
+            couponBtn.style.color = '';
+          }, 2000);
+        }).catch(() => {});
+      }
+    });
+    couponBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        couponBtn.click();
+      }
+    });
+  }
+
+  // Cerrar barra
+  const closeBtn = document.getElementById('pab-close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      bar.classList.add('is-hidden');
+      try {
+        sessionStorage.setItem('futunet_promo_bar_closed', 'true');
+      } catch (e) {}
+    });
+  }
+
+  // Temporizador en vivo
+  function updateTimer() {
+    const timerText = document.getElementById('pab-timer-text');
+    if (!timerText) return;
+    const diff = campaign.endDate.getTime() - new Date().getTime();
+    if (diff <= 0) {
+      timerText.textContent = '¡Últimas horas!';
+      return;
+    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    timerText.textContent = `${days}d ${hours}h ${mins}m restantes`;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 60000);
+}
+
 
 

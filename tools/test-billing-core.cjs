@@ -203,3 +203,38 @@ test('resuelve el ciclo de cotizaciones y fechas recurrentes', () => {
   assert.equal(core.stableCommercialFingerprint({ clientId: 'c1', items: [{ description: 'A', qty: 1, price: 10 }] }),
     core.stableCommercialFingerprint({ clientId: 'c1', items: [{ description: 'A', qty: 1, price: 10 }] }));
 });
+
+test('determina la marca de modificación y ordena documentos por actividad reciente sin perder fechas variantes', () => {
+  const olderDateWithRecentUpdate = {
+    id: 'cot-1',
+    invoiceNumber: 'COT-1001',
+    date: '2025-01-15',
+    createdAt: { seconds: 1736899200, nanoseconds: 0 },
+    updatedAt: new Date('2026-09-13T18:00:00Z')
+  };
+  const recentDateWithoutUpdate = {
+    id: 'cot-2',
+    invoiceNumber: 'COT-1002',
+    date: '2026-09-10',
+    createdAt: new Date('2026-09-10T10:00:00Z'),
+    updatedAt: new Date('2026-09-10T10:00:00Z')
+  };
+  const docWithOnlyDate = {
+    id: 'cot-3',
+    invoiceNumber: 'COT-1003',
+    date: '2026-08-01'
+  };
+
+  const time1 = core.getDocumentModificationTime(olderDateWithRecentUpdate);
+  const time2 = core.getDocumentModificationTime(recentDateWithoutUpdate);
+  const time3 = core.getDocumentModificationTime(docWithOnlyDate);
+
+  assert.ok(time1 > time2, 'El documento modificado hoy debe tener mayor marca temporal que el de hace 3 días');
+  assert.ok(time2 > time3, 'El documento de septiembre debe tener mayor marca que el de agosto');
+
+  const list = [recentDateWithoutUpdate, docWithOnlyDate, olderDateWithRecentUpdate];
+  list.sort((a, b) => core.getDocumentModificationTime(b) - core.getDocumentModificationTime(a));
+  assert.equal(list[0].id, 'cot-1', 'La cotización con fecha de 2025 pero editada hoy queda de primera en la lista');
+  assert.equal(list[1].id, 'cot-2');
+  assert.equal(list[2].id, 'cot-3');
+});

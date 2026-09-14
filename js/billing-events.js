@@ -7,7 +7,7 @@
       'initDashboard', 'exportInvoicesToCSV', 'exportDGII607ToCSV', 'exportDGII608',
       'openNewInvoiceForm', 'switchSubTab', 'renderInvoicesTable', 'saveInvoice',
       'handleDocTypeChange', 'searchClientAutocomplete', 'searchClientByRnc',
-      'handleNcfTypeChange', 'removeAllRowTaxes', 'addInvoiceFormItemRow',
+      'handleNcfTypeChange', 'removeAllRowTaxes', 'restoreAllRowTaxes', 'addInvoiceFormItemRow',
       'calculateInvoiceFormTotals', 'handleCashSessionAction', 'clearPosCart',
       'searchPosClient', 'openNewClientFormFromPos', 'printKitchenTicket',
       'saveTableOrder', 'handlePosNcfTypeChange', 'handlePosDocTypeChange',
