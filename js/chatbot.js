@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const timer = setTimeout(() => controller.abort(), 32000);
     setBusy(true);
     try {
-      const transport = window.FutunetChatTransport || await import('./chatbot-firebase.mjs?v=20260914firebase');
+      const transport = window.FutunetChatTransport || await import('./chatbot-firebase.mjs?v=20260914firebase2');
       const result = await Promise.race([
         transport.send({ message: text, history, page: location.pathname.split('/').pop() || 'index.html' }, controller.signal),
         new Promise((_, reject) => {

@@ -88,7 +88,7 @@ export async function send({ message, history, page }, signal) {
     const [client, context] = await Promise.all([getModel(), publicContext(message + ' ' + turns.filter(t => t.role === 'user').slice(-2).map(t => t.text).join(' '), page, signal)]);
     await client.checkSDK.getToken(client.appCheck);
     if (signal?.aborted) throw new Error('aborted');
-    const response = await client.model.generateContent(TEMPLATE, { message: clean(message, 1500), history: JSON.stringify(turns), context: JSON.stringify(context) });
+    const response = await client.model.generateContent(TEMPLATE, { message: clean(message, 1500), prior_messages: JSON.stringify(turns), context: JSON.stringify(context) });
     if (signal?.aborted) throw new Error('aborted');
     return parseAnswer(response.response.text(), context.products);
   } catch (error) {
