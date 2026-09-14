@@ -46,6 +46,14 @@
       validFrom: '2026-06-01',
       validUntil: '2026-09-30',
       description: '10% de descuento en Energía y Respaldo Ciclónico'
+    },
+    INFRA2026: {
+      code: 'INFRA2026',
+      discount: 0.15,
+      departments: ['redes', 'seguridad', 'energia', 'equipos', 'oficina'],
+      validFrom: '2026-09-01',
+      validUntil: '2026-09-30',
+      description: '15% de descuento en Redes, Infraestructura y Seguridad (Septiembre 2026)'
     }
   };
 
@@ -704,7 +712,7 @@
               <div class="checkout-form-group full-width" style="margin-top: 8px;">
                 <label for="chk-coupon">Código de Descuento (Opcional)</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="chk-coupon" placeholder="Ej. PAPASMART2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. INFRA2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
                   <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
                 </div>
                 <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>
@@ -802,6 +810,18 @@
                 <p><strong>Solicitud protegida:</strong> Tu expediente de identidad ya fue aprobado. Un administrador revisará el pedido y, si procede, te asignará la cuenta con el detalle de cuotas en “Mi cuenta”.</p>
               </div>
             </div>
+            <!-- Campo trampa antispam (Honeypot para bots) -->
+            <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+              <label for="chk-hp-check">No llenar este campo</label>
+              <input type="text" id="chk-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="checkout-privacy-consent" style="margin-top: 16px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+              <label style="display:flex;align-items:flex-start;gap:8px;font-size:0.82rem;color:#475569;line-height:1.45;cursor:pointer;">
+                <input type="checkbox" id="chk-accept-terms" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+                <span>He leído y acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer" style="color:#0A70A2;text-decoration:underline;font-weight:600;">Términos y Condiciones</a> y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0A70A2;text-decoration:underline;font-weight:600;">Política de Privacidad</a> de Futunet.</span>
+              </label>
+            </div>
           </div>
 
           <div class="cart-checkout-modal-footer">
@@ -875,12 +895,6 @@
 
     btnPrev.addEventListener('click', () => {
       if (currentStep === 1) {
-        closeCheckoutModal();
-      } else if (paymentMethod === 'financing') {
-        showCartToast(resData.message || 'Solicitud de financiamiento registrada para evaluación.', 'success');
-        cartState.items = {};
-        saveCartState();
-        updateCartCount();
         closeCheckoutModal();
       } else {
         currentStep--;
@@ -1198,17 +1212,43 @@
     
     const submitBtn = document.getElementById('btn-submit-checkout');
     const originalBtnText = submitBtn ? submitBtn.innerHTML : "Confirmar y Enviar Pedido";
+
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    const hpVal = document.getElementById('chk-hp-check') ? document.getElementById('chk-hp-check').value : '';
+    if (hpVal) {
+      console.warn('Bot detected via honeypot in checkout.');
+      showCartToast('Pedido registrado con éxito.', 'success');
+      closeCheckoutModal();
+      return;
+    }
+
+    // 2. Verificación de Consentimiento de Términos y Privacidad (Ley 172-13 / RGPD)
+    const acceptTerms = document.getElementById('chk-accept-terms');
+    if (acceptTerms && !acceptTerms.checked) {
+      showCartToast('Debes aceptar los Términos y Condiciones y la Política de Privacidad para confirmar tu pedido.', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      acceptTerms.focus();
+      return;
+    }
     
     if (submitBtn) {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Procesando pedido...';
     }
+
+    const sanitizeText = (val) => String(val || '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
     
-    const name = document.getElementById('chk-name').value.trim();
-    const phone = document.getElementById('chk-phone').value.trim();
-    const email = document.getElementById('chk-email').value.trim();
-    const address = document.getElementById('chk-address').value.trim();
-    const notes = document.getElementById('chk-notes').value.trim();
+    const name = sanitizeText(document.getElementById('chk-name').value);
+    const phone = sanitizeText(document.getElementById('chk-phone').value);
+    const email = sanitizeText(document.getElementById('chk-email').value);
+    const address = sanitizeText(document.getElementById('chk-address').value);
+    const notes = sanitizeText(document.getElementById('chk-notes').value);
     const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
     
     // Validaciones de formato en frontend para mitigar envío de datos inválidos
@@ -1363,6 +1403,14 @@
         saveCartState();
         updateCartCount();
         closeCheckoutModal();
+      } else if (paymentMethod === 'financing') {
+        showCartToast(resData.message || 'Solicitud de financiamiento registrada para evaluación.', 'success');
+        
+        // Vaciar carrito
+        cartState.items = {};
+        saveCartState();
+        updateCartCount();
+        closeCheckoutModal();
       } else {
         // Método WhatsApp
         showCartToast(resData.message || 'Pedido registrado. Abriendo WhatsApp...', 'success');
@@ -1372,7 +1420,7 @@
         
         // Esperar un momento breve para que el usuario pueda ver el Toast de éxito
         setTimeout(() => {
-          window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank');
+          window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
         }, 1000);
         
         cartState.items = {};
@@ -1412,7 +1460,7 @@
         card.className = 'cart-item';
         const qty = cartState.items[product.id]?.qty || 0;
         card.innerHTML = `
-          <div class="cart-item__image"><img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" onerror="this.src='img/placeholder.svg'" /></div>
+          <div class="cart-item__image"><img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" onerror="this.onerror=null;this.src='img/placeholder.svg'" /></div>
           <div class="cart-item__info">
             <div class="cart-item__title">${escapeHTML(product.title)}</div>
             <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>

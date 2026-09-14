@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v18';
+const CACHE_NAME = 'futunet-cache-v19';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -125,7 +125,11 @@ self.addEventListener('fetch', event => {
     '/js/facturacion.js',
     '/js/erp-extensions.js',
     '/js/billing-workflows.js',
-    '/js/billing-events.js'
+    '/js/billing-events.js',
+    '/js/admin-panel.js',
+    '/js/admin-financing.js',
+    '/js/user-panel.js',
+    '/js/financing.js'
   ]);
 
   // Skip cross-origin requests, POST requests, and firebase/firestore API calls

@@ -3418,6 +3418,17 @@
       .replace(/'/g, '&#39;');
   }
   function escapeAttr(s) { return (s || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+  function escapeJs(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/</g, '\\x3c')
+      .replace(/>/g, '\\x3e');
+  }
   function formatPrice(p) {
     if (p == null || p === '' || p === 'Contactar') return '<span style="color:#0A70A2;font-weight:600;">Contactar</span>';
     var num = parseFloat(p);
@@ -5425,9 +5436,9 @@
       email: "Asunto: Equipados para el Regreso a Clases con Futunet\n\nEstimados padres,\n\nFaciliten el aprendizaje de sus hijos con herramientas tecnológicas confiables. Impresoras Epson EcoTank, laptops de excelente relación calidad-precio y planes de internet rápidos y económicos. Cotiza tu combo aquí."
     },
     septiembre: {
-      whatsapp: "¡Hola! Optimiza tu red. Realizamos cableado estructurado categoría 6A, organización de gabinetes/racks y remozamiento de oficinas.",
-      social: "¿Tus cables de red son un caos o tienes zonas muertas de WiFi? 🔌 En Futunet optimizamos tu infraestructura física y de telecomunicaciones con cableado estructurado de alta velocidad y antenas Access Point industriales. ¡Mejora el rendimiento de tu red hoy! #CableadoEstructurado #RedesYDatos #SantiagoRD",
-      email: "Asunto: Auditoría de Red e Infraestructura de Datos para tu negocio\n\nEstimados directores de TI,\n\nUn mal cableado o equipamiento antiguo merma hasta el 30% del rendimiento de sus colaboradores. Futunet provee servicios profesionales de reestructuración de racks de datos, fibra interna y canalizaciones. Solicite levantamiento."
+      whatsapp: "¡Hola! En Futunet sabemos que una red lenta o inestable paraliza tus operaciones. Este mes de septiembre solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado estructurado Cat 6A y peinado de racks. ¿Te gustaría coordinar una visita técnica esta semana?",
+      social: "¿Tus racks de comunicaciones parecen una maraña de cables o experimentas caídas intermitentes en la oficina? 🔌 En Futunet optimizamos la infraestructura tecnológica de tu empresa con cableado estructurado Cat 6A certificado, Wi-Fi 6 empresarial y protección ininterrumpida con UPS Online. Solicita tu auditoría presencial GRATUITA en Santiago con el código INFRA2026. #RedesCorporativas #CableadoEstructurado #SantiagoRD #FutunetB2B",
+      email: "Asunto: Auditoría de Red e Infraestructura 100% Gratuita para su empresa en Santiago - Cupón INFRA2026\n\nEstimados directores de TI y Operaciones:\n\nUn cableado obsoleto o switches desordenados pueden provocar caídas de servicio y reducir hasta un 30% la productividad de sus colaboradores. En Futunet ponemos a su disposición a nuestros ingenieros certificados para realizar un Levantamiento Técnico y Diagnóstico de Red completamente gratuito en sus instalaciones en Santiago.\n\nBeneficios incluidos:\n1. Diagnóstico físico y lógico de racks y patch panels.\n2. Certificación de velocidad de puntos de red y cobertura Wi-Fi.\n3. Evaluación de respaldo eléctrico para servidores (UPS).\n4. Presupuesto formal con 15% de descuento en mano de obra con el código INFRA2026.\n\nContáctenos hoy vía WhatsApp al 829-741-1041 o responda a este correo para coordinar la visita."
     },
     octubre: {
       whatsapp: "¡Hola! Controla el acceso a tu empresa. Conoce nuestros lectores biométricos de huella/rostro, sistemas de control de asistencia y CCTV industrial.",
@@ -5475,13 +5486,13 @@
 
   function openNewBannerWithPreset(presetName) {
     openNewBanner();
-    if (presetName === 'Respaldo Energético') {
-      setVal('banner-title', ' ¿Tu negocio está listo para la <strong>temporada ciclónica</strong>?');
-      setVal('banner-subtitle', 'Garantiza la continuidad de tu empresa con UPS de doble conversión, inversores y paneles solares con instalación prioritaria.');
-      setVal('banner-link', 'catalogo.html?cat=energia');
+    if (presetName === 'Respaldo Energético' || presetName === 'Respaldo & Continuidad') {
+      setVal('banner-title', '⚡ Protege tus Servidores con <strong>Respaldo Ininterrumpido</strong>');
+      setVal('banner-subtitle', 'UPS online de doble conversión e inversores ante la temporada ciclónica. 10% de descuento con el código RESPALDO2026.');
+      setVal('banner-link', 'energia-climatizacion.html');
       setVal('banner-order', 1);
-      setVal('banner-start-date', '2026-06-01');
-      setVal('banner-end-date', '2026-06-30');
+      setVal('banner-start-date', '2026-09-01');
+      setVal('banner-end-date', '2026-09-30');
     } else if (presetName === 'Papá Smart & Gaming') {
       setVal('banner-title', ' Mes del Padre con <strong>Rendimiento y Potencia</strong>');
       setVal('banner-subtitle', 'Laptops de alto rendimiento, routers WiFi 6 y accesorios con 10% de descuento usando el código PAPASMART2026.');
@@ -5496,6 +5507,20 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-07-26');
       setVal('banner-end-date', '2026-08-31');
+    } else if (presetName === 'Infraestructura y Redes' || presetName === 'Redes & Infraestructura') {
+      setVal('banner-title', '🏢 Moderniza tu Empresa con <strong>Redes de Alta Velocidad</strong>');
+      setVal('banner-subtitle', 'Cableado estructurado Cat 6A, organización de racks y Wi-Fi 6 corporativo. Solicita tu levantamiento técnico gratuito en Santiago con el código INFRA2026.');
+      setVal('banner-link', 'redes-datos.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-09-01');
+      setVal('banner-end-date', '2026-09-30');
+    } else if (presetName === 'Protección Corporativa' || presetName === 'Seguridad Industrial') {
+      setVal('banner-title', '🛡️ Protege tu Empresa con <strong>Seguridad Inteligente</strong>');
+      setVal('banner-subtitle', 'CCTV industrial, control de acceso biométrico y sistemas de asistencia para almacenes y oficinas corporativas.');
+      setVal('banner-link', 'seguridad-electronica.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-10-01');
+      setVal('banner-end-date', '2026-10-31');
     }
   }
 

@@ -660,9 +660,51 @@
         var btn = document.getElementById('p-hir-submit-btn');
         if (btn) btn.disabled = true;
 
-        var name = document.getElementById('p-hir-name').value.trim();
-        var email = document.getElementById('p-hir-email').value.trim();
-        var phone = document.getElementById('p-hir-phone').value.trim();
+        // 1. Verificación Honeypot (Trampa antispam para bots)
+        var hpVal = document.getElementById('p-hir-hp-check') ? document.getElementById('p-hir-hp-check').value : '';
+        if (hpVal) {
+          console.warn('Bot submission blocked via honeypot.');
+          if (window.showToast) window.showToast('¡Solicitud enviada con éxito! Nos contactaremos a la brevedad.', 'success');
+          portalHiringForm.reset();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 2. Cooldown de envío (Rate-limiting en cliente 15s)
+        var lastHiringKey = 'futunet_last_portal_hiring_ts';
+        var now = Date.now();
+        var lastHiring = sessionStorage.getItem(lastHiringKey);
+        if (lastHiring && (now - Number(lastHiring)) < 15000) {
+          var remainingSecs = Math.ceil((15000 - (now - Number(lastHiring))) / 1000);
+          if (window.showToast) window.showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otra solicitud.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
+        var consentBox = document.getElementById('p-hir-privacy-consent');
+        if (consentBox && !consentBox.checked) {
+          if (window.showToast) window.showToast('Debes aceptar la política de privacidad para agendar la instalación.', 'error');
+          consentBox.focus();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        function sanitizePortalInput(val) {
+          if (!val) return '';
+          return String(val)
+            .replace(/<[^>]*>/g, '')
+            .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+            .trim();
+        }
+
+        var rawName = document.getElementById('p-hir-name') ? document.getElementById('p-hir-name').value : '';
+        var rawEmail = document.getElementById('p-hir-email') ? document.getElementById('p-hir-email').value : '';
+        var rawPhone = document.getElementById('p-hir-phone') ? document.getElementById('p-hir-phone').value : '';
+
+        var name = sanitizePortalInput(rawName);
+        var email = sanitizePortalInput(rawEmail);
+        var phone = sanitizePortalInput(rawPhone);
 
         // Validaciones de formato
         var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -682,8 +724,8 @@
 
         var date = document.getElementById('p-hir-date').value;
         var schedule = document.getElementById('p-hir-schedule').value;
-        var address = document.getElementById('p-hir-address').value.trim();
-        var notes = document.getElementById('p-hir-notes').value.trim();
+        var address = sanitizePortalInput(document.getElementById('p-hir-address').value);
+        var notes = sanitizePortalInput(document.getElementById('p-hir-notes').value);
         var planName = document.getElementById('p-hir-plan-name').value;
         var planId = document.getElementById('p-hir-plan-id').value;
         var selectedPlan = getActiveCatalogPlan(planId);
@@ -696,8 +738,8 @@
         planName = selectedPlan.fullName;
 
         // Validaciones de longitud para alinearse con Firestore rules
-        if (name.length > 100) {
-          if (window.showToast) window.showToast('El nombre no debe superar los 100 caracteres.', 'error');
+        if (name.length < 2 || name.length > 100) {
+          if (window.showToast) window.showToast('El nombre debe contener entre 2 y 100 caracteres.', 'error');
           if (btn) btn.disabled = false;
           return;
         }
@@ -771,6 +813,7 @@
 
           goToHiringStep(3);
           portalHiringForm.reset();
+          sessionStorage.setItem(lastHiringKey, String(Date.now()));
           
           // Reiniciar iconos de Lucide en la pantalla de éxito
           if (window.lucide) {
@@ -792,9 +835,51 @@
         var btn = document.getElementById('p-guest-submit-btn');
         if (btn) btn.disabled = true;
 
-        var name = document.getElementById('p-guest-name').value.trim();
-        var email = document.getElementById('p-guest-email').value.trim();
-        var phone = document.getElementById('p-guest-phone').value.trim();
+        // 1. Verificación Honeypot (Trampa para bots automáticos)
+        var hpVal = document.getElementById('p-guest-hp-check') ? document.getElementById('p-guest-hp-check').value : '';
+        if (hpVal) {
+          console.warn('Bot submission blocked via honeypot.');
+          if (window.showToast) window.showToast('¡Solicitud enviada con éxito! Nos contactaremos a la brevedad.', 'success');
+          guestHiringForm.reset();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 2. Cooldown de envío (Rate-limiting en cliente 15s)
+        var lastHiringKey = 'futunet_last_guest_hiring_ts';
+        var now = Date.now();
+        var lastHiring = sessionStorage.getItem(lastHiringKey);
+        if (lastHiring && (now - Number(lastHiring)) < 15000) {
+          var remainingSecs = Math.ceil((15000 - (now - Number(lastHiring))) / 1000);
+          if (window.showToast) window.showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otra solicitud.', 'error');
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
+        var consentBox = document.getElementById('p-guest-privacy-consent');
+        if (consentBox && !consentBox.checked) {
+          if (window.showToast) window.showToast('Debes aceptar la política de privacidad para agendar la instalación.', 'error');
+          consentBox.focus();
+          if (btn) btn.disabled = false;
+          return;
+        }
+
+        function sanitizeGuestInput(val) {
+          if (!val) return '';
+          return String(val)
+            .replace(/<[^>]*>/g, '')
+            .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+            .trim();
+        }
+
+        var rawName = document.getElementById('p-guest-name') ? document.getElementById('p-guest-name').value : '';
+        var rawEmail = document.getElementById('p-guest-email') ? document.getElementById('p-guest-email').value : '';
+        var rawPhone = document.getElementById('p-guest-phone') ? document.getElementById('p-guest-phone').value : '';
+
+        var name = sanitizeGuestInput(rawName);
+        var email = sanitizeGuestInput(rawEmail);
+        var phone = sanitizeGuestInput(rawPhone);
 
         // Validaciones de formato
         var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

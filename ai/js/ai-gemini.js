@@ -9,8 +9,6 @@
   const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
   const DEFAULT_MODEL = 'gemini-3.6-flash';
   
-  const DEFAULT_KEY_B64 = 'QVEuQWI4Uk42SW16UXU2MlNrdmROOXdiOTFUaUlmTnVzSEpyMXBablZOWEZfS0Z3NWVNN1E=';
-  
   // System prompt for Futunet AI
   const SYSTEM_PROMPT = `Eres Futunet AI, el asistente de inteligencia artificial privado de Futunet, 
 un proveedor de servicios de internet (ISP) en República Dominicana. 
@@ -19,8 +17,8 @@ Respondes en español dominicano de manera profesional pero amigable.
 Cuando no sepas algo, lo dices honestamente.`;
   
   function getApiKey() {
-    // Try localStorage first, then default embedded key
-    return localStorage.getItem('futunet_gemini_key') || (typeof atob === 'function' ? atob(DEFAULT_KEY_B64) : '');
+    // Requires explicit admin configuration in localStorage
+    return localStorage.getItem('futunet_gemini_key') || '';
   }
   
   const AiGemini = {

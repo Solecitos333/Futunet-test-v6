@@ -1352,7 +1352,7 @@ function renderProductsGrid(productsList, options = {}) {
     card.innerHTML = `
       <a class="product-card__image-link" href="${productUrl}" aria-label="Ver detalles de ${escapeHTML(product.title)}">
         <div class="product-img-wrapper${previewCard ? ' product-img-wrapper--preview-mobile' : compactCard ? ' product-img-wrapper--compact-mobile' : ''}">
-          <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300">
+          <img src="${escapeHTML(product.img)}" alt="${escapeHTML(product.title)}" loading="lazy" width="400" height="300" onerror="this.onerror=null;this.src='img/placeholder.svg'">
           ${quoteOnlyItem ? '' : `<span class="product-badge">${escapeHTML(badgeText)}</span>`}
           ${quoteOnlyItem || previewCard ? '' : `<span class="product-available">${escapeHTML(availabilityText)}</span>`}
         </div>
@@ -1959,7 +1959,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const minParam = Number(params.get('min'));
     const maxParam = Number(params.get('max'));
 
-    state.dept = params.get('cat') || 'all';
+    state.dept = params.get('cat') || params.get('dept') || 'all';
     state.category = params.get('category') || 'all';
     state.brand = brand || 'all';
     state.availability = availability || 'all';
@@ -1973,6 +1973,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const initialInput = document.getElementById('search-catalog-page');
     if (initialInput && q) initialInput.value = q;
+    const navInput = document.getElementById('search-navbar');
+    if (navInput && q) navInput.value = q;
     const brandControl = document.querySelector('[data-catalog-brand-filter]');
     if (brandControl) brandControl.value = state.brand;
     const availabilityControl = document.querySelector('[data-catalog-availability-filter]');
