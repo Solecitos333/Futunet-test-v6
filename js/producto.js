@@ -123,7 +123,7 @@
             refreshIcons();
           }, 1800);
         } catch (error) {
-          window.open(shareUrl, '_blank');
+          window.open(shareUrl, '_blank', 'noopener,noreferrer');
         }
       };
     }
@@ -139,7 +139,7 @@
             refreshIcons();
           }, 1800);
         } catch (error) {
-          window.open(shareUrl, '_blank');
+          window.open(shareUrl, '_blank', 'noopener,noreferrer');
         }
       };
     }
@@ -359,7 +359,7 @@
       primaryAction.onclick = () => {
         const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
         if (detail.requiresQuote) {
-          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`, '_blank');
+          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`, '_blank', 'noopener,noreferrer');
           return;
         }
         if (window.FutunetCart) {
@@ -377,7 +377,7 @@
         quoteAction.innerHTML = '<i data-lucide="message-circle"></i> Cotizar por WhatsApp';
         quoteAction.onclick = () => {
           const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
-          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`, '_blank');
+          window.open(`https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`, '_blank', 'noopener,noreferrer');
         };
       }
     }

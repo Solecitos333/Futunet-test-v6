@@ -351,6 +351,31 @@
         </div>
       </div>
 
+      <!-- Herramienta de Consulta y Seguimiento de Sugerencias -->
+      <section class="sug-track-section" id="sug-track-box" aria-labelledby="sug-track-heading">
+        <div class="sug-track-header">
+          <div class="sug-track-icon">
+            <i data-lucide="search" style="width:20px; height:20px;"></i>
+          </div>
+          <div>
+            <h3 id="sug-track-heading" class="sug-track-title">¿Ya enviaste una sugerencia? Consulta su estado</h3>
+          </div>
+        </div>
+        <p class="sug-track-desc">
+          Ingresa el código de referencia (ej. <code>SUG-A1B2C</code>) que recibiste al enviar tu propuesta para conocer si fue revisada, si está planificada o leer la respuesta oficial de nuestro equipo.
+        </p>
+
+        <form id="sug-track-form" class="sug-track-form" onsubmit="event.preventDefault();">
+          <input type="text" id="sug-track-input" class="sug-track-input" placeholder="Ej: SUG-A1B2C o ID del ticket" maxlength="40" autocomplete="off" required aria-label="Código de referencia de la sugerencia" />
+          <button type="button" id="sug-track-btn" class="sug-track-btn">
+            <span class="sug-track-btn-text">Consultar estado</span>
+            <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+          </button>
+        </form>
+
+        <div id="sug-track-result" class="sug-track-result" hidden></div>
+      </section>
+
       <!-- Sección Informativa: Proceso de Evaluación -->
       <section class="sug-process-section" aria-labelledby="sug-process-heading">
         <div class="sug-process-header">
@@ -376,6 +401,17 @@
             <h4 class="sug-step-title">Planificación y Lanzamiento</h4>
             <p class="sug-step-desc">Las propuestas aprobadas se programan en nuestras actualizaciones web o en las mejoras de atención al cliente.</p>
           </div>
+        </div>
+      </section>
+
+      <!-- Muro de Ideas Comunitarias e Implementadas -->
+      <section class="sug-comm-section" id="sug-community-showcase" aria-labelledby="sug-comm-heading">
+        <div class="sug-process-header">
+          <h3 id="sug-comm-heading">Ideas de la Comunidad en Marcha</h3>
+          <p>La voz de nuestros usuarios impulsa mejoras reales en Futunet cada semana.</p>
+        </div>
+        <div id="sug-community-grid" class="sug-comm-grid">
+          <!-- Tarjetas cargadas dinámicamente desde Firestore o fallback -->
         </div>
       </section>
 

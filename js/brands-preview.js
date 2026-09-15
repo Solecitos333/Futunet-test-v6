@@ -42,19 +42,21 @@
   if (dynamicBrands.length > 0) {
     grid.innerHTML = '';
     dynamicBrands.forEach(b => {
+      const bName = String(b.name || '').trim();
+      if (!bName) return;
       const itemLink = document.createElement('a');
-      itemLink.href = `catalogo.html?brand=${encodeURIComponent(b.name)}`;
+      itemLink.href = `catalogo.html?brand=${encodeURIComponent(bName)}`;
       itemLink.className = 'brand-item';
-      itemLink.setAttribute('data-brand-preview', b.name.toLowerCase());
-      itemLink.setAttribute('title', `Ver productos ${b.name}`);
-      itemLink.setAttribute('aria-label', `Ver productos ${b.name}`);
+      itemLink.setAttribute('data-brand-preview', bName.toLowerCase());
+      itemLink.setAttribute('title', `Ver productos ${bName}`);
+      itemLink.setAttribute('aria-label', `Ver productos ${bName}`);
       
       const logoUrl = b.logo || 'img/logo.webp';
       itemLink.innerHTML = `
-        <img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(b.name)}" loading="lazy" />
+        <img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(bName)}" loading="lazy" />
         <div class="brand-preview-popup">
-          <img src="${escapeHtml(logoUrl)}" alt="Productos ${escapeHtml(b.name)}" class="brand-preview-img" style="object-fit:contain; background:#ffffff; padding:10px; border-radius:8px;" loading="lazy" />
-          <span class="brand-preview-btn">Ver productos ${escapeHtml(b.name)}</span>
+          <img src="${escapeHtml(logoUrl)}" alt="Productos ${escapeHtml(bName)}" class="brand-preview-img" style="object-fit:contain; background:#ffffff; padding:10px; border-radius:8px;" loading="lazy" />
+          <span class="brand-preview-btn">Ver productos ${escapeHtml(bName)}</span>
         </div>
       `;
       grid.appendChild(itemLink);

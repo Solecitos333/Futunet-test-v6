@@ -718,3 +718,209 @@ body.sug-body {
   border: 1px solid #fecaca;
   color: #b91c1c;
 }
+
+/* ─── Herramienta de Consulta y Seguimiento de Sugerencias ─── */
+.sug-track-section {
+  margin-top: 36px;
+  background: var(--sug-surface);
+  border: 1.5px solid var(--sug-border);
+  border-radius: var(--sug-radius-lg);
+  padding: 28px;
+  box-shadow: var(--sug-shadow-sm);
+}
+
+.sug-track-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sug-track-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--sug-primary-light);
+  color: var(--sug-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sug-track-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--sug-navy);
+  margin: 0;
+}
+
+.sug-track-desc {
+  font-size: 0.88rem;
+  color: var(--sug-text-muted);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.sug-track-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sug-track-input {
+  flex: 1 1 260px;
+  padding: 12px 16px;
+  border: 1.5px solid var(--sug-border);
+  border-radius: var(--sug-radius);
+  font-size: 0.95rem;
+  font-family: 'Outfit', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sug-text);
+  background: #f8fafc;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.sug-track-input:focus {
+  border-color: var(--sug-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px var(--sug-primary-ring);
+}
+
+.sug-track-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--sug-radius);
+  background: var(--sug-navy);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.sug-track-btn:hover {
+  background: var(--sug-primary);
+  transform: translateY(-1px);
+}
+
+.sug-track-result {
+  margin-top: 24px;
+  padding: 20px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--sug-radius);
+  animation: sugFadeIn 0.3s ease;
+}
+
+@keyframes sugFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sug-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sug-status-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.sug-status-in_review { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+.sug-status-planned { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+.sug-status-implemented { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+.sug-status-archived { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+.sug-response-box {
+  margin-top: 16px;
+  padding: 16px;
+  background: #ffffff;
+  border-left: 4px solid var(--sug-primary);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.sug-response-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--sug-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.sug-response-body {
+  font-size: 0.9rem;
+  color: var(--sug-text);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* ─── Muro Comunitario de Ideas Realizadas ─── */
+.sug-comm-section {
+  margin-top: 48px;
+}
+
+.sug-comm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.sug-comm-card {
+  background: var(--sug-surface);
+  border: 1.5px solid var(--sug-border);
+  border-radius: var(--sug-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+}
+
+.sug-comm-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sug-shadow-md);
+  border-color: var(--sug-primary);
+}
+
+.sug-comm-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.sug-comm-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sug-navy);
+  margin: 0 0 8px;
+  line-height: 1.35;
+}
+
+.sug-comm-desc {
+  font-size: 0.85rem;
+  color: var(--sug-text-muted);
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+

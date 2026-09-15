@@ -600,7 +600,7 @@
       ${items.map(p => `
         <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:#475569; margin-bottom:4px; padding-left:8px;">
           <span>${escapeHTML(p.title)} (x${cartState.items[p.id].qty})</span>
-          <span>${p.price}</span>
+          <span>${escapeHTML(p.price)}</span>
         </div>
       `).join('')}
       

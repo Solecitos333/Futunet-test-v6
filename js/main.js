@@ -1,4 +1,45 @@
-/* =============================================================
+/* =============================================================================
+   🛡️ FUTUNET DEVSECOPS & CYBERSECURITY AUDIT LEDGER (BITÁCORA EN CÓDIGO)
+   =============================================================================
+   Rol: Ingeniero DevSecOps & Especialista en Ciberseguridad Senior
+   Objetivo Diario: Auditoría continua de código, frontend, formularios, OWASP Top 10
+                    y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras.
+   Documento Maestro: docs/DEVSECOPS_SECURITY_LEDGER.md
+
+   DIAGRAMA DE FLUJO DE AUDITORÍA Y MITIGACIÓN INCREMENTAL:
+   +-----------------------+     +-----------------------+
+   | 1. Detección Estática | --> | 2. Clasificación      |
+   |    (OWASP / PII)      |     |    (CVSS / ASVS v4.0) |
+   +-----------------------+     +-----------------------+
+               |
+               v
+   +-----------------------+     +-----------------------+
+   | 3. Mitigación Segura  | --> | 4. Verificación       |
+   |    (Incremental)      |     |    (Regresión Zero)   |
+   +-----------------------+     +-----------------------+
+               |
+               v
+   +-----------------------------------------------------+
+   | 5. Actualización de Bitácora & Memoria de Seguridad |
+   +-----------------------------------------------------+
+
+   ESTADO ACTUAL DE DEFENSAS AUDITADAS (ACTUALIZADO DIARIAMENTE):
+   [OK] Formularios Públicos: Trampas Honeypot activas en 8 formularios clave.
+   [OK] Privacidad (Ley 172-13): Checkboxes de consentimiento informado obligatorio (rel="noopener noreferrer").
+   [OK] Rate Limiting en Cliente: Cooldowns en sugerencias (15s), soporte, pagos y registro (10s), lockout en login.
+   [OK] Sanitización Contextual: Neutralización de tags HTML y caracteres de control ASCII invisibles.
+   [OK] Autenticación & Redirección: Protección contra Open Redirect con allowlist estricta de origen.
+   [OK] Cabeceras de Seguridad: HSTS, X-Frame-Options DENY, nosniff, COOP, CORP y CSP en firebase.json.
+   [OK] Reglas de Storage: Restricción estricta de tipos MIME (img/pdf) y tamaños máximos (5MB/8MB).
+
+   PRÓXIMOS PASOS / BACKLOG PRIORITARIO:
+   1. Endurecimiento de CSP (reducir 'unsafe-inline' en scripts/estilos).
+   2. Auditoría exhaustiva de 'innerHTML' dinámico en renderers (posible DOM XSS).
+   3. Revisión de persistencia de datos sensibles en localStorage/sessionStorage.
+
+   COMANDO DE VERIFICACIÓN RÁPIDA:
+   node tools/test-forms-security.cjs
+   =============================================================================
    MAIN.JS — Futunet SRL
    Funcionalidad global del sitio:
    - Efecto de scroll en el navbar (opacidad al bajar)
@@ -6,7 +47,7 @@
    - Animación de revelado en scroll (IntersectionObserver)
    - Botón "Volver Arriba"
    - Preloader suave
-   ============================================================= */
+   ============================================================================= */
 
 
 /* -------------------------------------------------------------

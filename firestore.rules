@@ -1563,7 +1563,7 @@ service cloud.firestore {
                d.keys().hasOnly([
                  'title', 'description', 'category', 'status', 'createdAt', 'isAnonymous',
                  'targetAudience', 'authorName', 'authorEmail', 'authorPhone',
-                 'benefit', 'rating', 'source', 'pageUrl', 'userId', 'userRole'
+                 'benefit', 'rating', 'source', 'pageUrl', 'userId', 'userRole', 'refCode'
                ]) &&
                d.title is string && d.title.size() >= 3 && d.title.size() <= 150 &&
                d.description is string && d.description.size() >= 5 && d.description.size() <= 3000 &&
@@ -1580,23 +1580,29 @@ service cloud.firestore {
                (!('source' in d) || (d.source is string && d.source.size() <= 50)) &&
                (!('pageUrl' in d) || (d.pageUrl is string && d.pageUrl.size() <= 500)) &&
                (!('userId' in d) || (d.userId is string && d.userId.size() <= 128)) &&
-               (!('userRole' in d) || (d.userRole is string && d.userRole.size() <= 50));
+               (!('userRole' in d) || (d.userRole is string && d.userRole.size() <= 50)) &&
+               (!('refCode' in d) || (d.refCode is string && d.refCode.size() <= 40));
       }
 
       function isValidSuggestionUpdate() {
         let d = request.resource.data;
         return d.diff(resource.data).affectedKeys().hasOnly([
-                 'status', 'adminNotes', 'reviewedBy', 'reviewedAt', 'updatedAt'
+                 'status', 'adminNotes', 'officialResponse', 'respondedBy', 'respondedAt',
+                 'reviewedBy', 'reviewedAt', 'updatedAt'
                ]) &&
                d.status in ['pending', 'in_review', 'planned', 'implemented', 'archived'] &&
                (!('adminNotes' in d) || (d.adminNotes is string && d.adminNotes.size() <= 2000)) &&
+               (!('officialResponse' in d) || (d.officialResponse is string && d.officialResponse.size() <= 3000)) &&
+               (!('respondedBy' in d) || (d.respondedBy is string && d.respondedBy.size() <= 120)) &&
                (!('reviewedBy' in d) || (d.reviewedBy is string && d.reviewedBy.size() <= 120)) &&
                d.updatedAt == request.time;
       }
 
       allow create: if isValidSuggestionCreate();
       allow read: if isEditorOrAbove() || isPlatformSupport() ||
-                     (isSignedIn() && 'userId' in resource.data && resource.data.userId == request.auth.uid);
+                     (isSignedIn() && 'userId' in resource.data && resource.data.userId == request.auth.uid) ||
+                     (resource.data.status in ['planned', 'implemented']) ||
+                     ('refCode' in resource.data);
       allow update: if (isEditorOrAbove() || isPlatformSupport()) && isValidSuggestionUpdate();
       allow delete: if isSuperAdmin();
     }

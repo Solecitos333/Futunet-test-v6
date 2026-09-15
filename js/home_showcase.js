@@ -22,15 +22,25 @@
       .replace(/Ã±/g, 'ñ')
       .replace(/Ã/g, 'Á')
       .replace(/Ã‰/g, 'É')
-      .replace(/Ã/g, 'Í')
+      .replace(/Ã /g, 'Í')
       .replace(/Ã“/g, 'Ó')
       .replace(/Ãš/g, 'Ú')
       .replace(/â€“/g, '–')
       .replace(/â€”/g, '—')
       .replace(/â€œ/g, '“')
-      .replace(/â€/g, '”')
+      .replace(/â€ /g, '”')
       .replace(/Â/g, '')
       .trim();
+  }
+
+  function escapeHtml(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function getCatalogData() {
@@ -81,19 +91,23 @@
   }
 
   function buildCard(item) {
-    const title = normalizeText(item.title);
-    const meta = normalizeText(item.brand || item.category || 'Catálogo');
-    const price = isQuoteOnly(item) ? 'Consultar precio' : normalizeText(item.price || 'Cotizar');
+    const rawTitle = normalizeText(item.title);
+    const rawMeta = normalizeText(item.brand || item.category || 'Catálogo');
+    const rawPrice = isQuoteOnly(item) ? 'Consultar precio' : normalizeText(item.price || 'Cotizar');
+    const safeTitle = escapeHtml(rawTitle);
+    const safeMeta = escapeHtml(rawMeta);
+    const safePrice = escapeHtml(rawPrice);
+    const safeImg = escapeHtml(item.img || 'img/placeholder.svg');
 
     return `
-      <a class="showcase-card" href="catalogo.html?q=${encodeURIComponent(item.title)}" aria-label="Ver ${title} en el catálogo">
+      <a class="showcase-card" href="catalogo.html?q=${encodeURIComponent(rawTitle)}" aria-label="Ver ${safeTitle} en el catálogo">
         <div class="showcase-card__media">
-          <img src="${item.img}" alt="${title}" loading="lazy" decoding="async" />
+          <img src="${safeImg}" alt="${safeTitle}" loading="lazy" decoding="async" />
         </div>
         <div class="showcase-card__body">
-          <span class="showcase-card__meta">${meta}</span>
-          <h3 class="showcase-card__title">${title}</h3>
-          <span class="showcase-card__price">${price}</span>
+          <span class="showcase-card__meta">${safeMeta}</span>
+          <h3 class="showcase-card__title">${safeTitle}</h3>
+          <span class="showcase-card__price">${safePrice}</span>
         </div>
       </a>
     `;

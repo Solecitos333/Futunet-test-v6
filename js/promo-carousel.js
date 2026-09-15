@@ -140,8 +140,10 @@
       slideDiv.setAttribute('data-slide', 'banner');
       
       const linkUrl = sanitizeUrl(banner.link || '#');
-      const cleanWaMsg = `Hola Futunet, me interesa la promoción: ${banner.title.replace(/<[^>]*>/g, '')}`;
-      const waUrl = `https://wa.me/${FUTUNET_CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(cleanWaMsg)}`;
+      const bannerTitle = String(banner.title || '');
+      const cleanWaMsg = `Hola Futunet, me interesa la promoción: ${bannerTitle.replace(/<[^>]*>/g, '')}`;
+      const waNumber = (typeof FUTUNET_CONFIG !== 'undefined' && FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
+      const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(cleanWaMsg)}`;
 
       slideDiv.innerHTML = `
         <div class="hb-bg" style="background-image:url('${escapeAttr(banner.image || 'img/logo.webp')}')"></div>

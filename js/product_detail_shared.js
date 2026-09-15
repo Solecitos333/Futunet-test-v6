@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   const DEPARTMENT_LABELS = {
     all: 'Catálogo',
     seguridad: 'Cámaras y Seguridad',
@@ -30,22 +30,38 @@
 
   function normalizeCopy(value) {
     return String(value || '')
-      .replace(/ÃƒÆ’Ã‚¡/g, 'a')
+      .replace(/ÃƒÆ’Ã‚Â¡/g, 'a')
       .replace(/ÃƒÆ’Ã‚Â©/g, 'e')
       .replace(/ÃƒÆ’Ã‚Â­/g, 'i')
       .replace(/ÃƒÆ’Ã‚Â³/g, 'o')
       .replace(/ÃƒÆ’Ã‚Âº/g, 'u')
       .replace(/ÃƒÆ’Ã‚Â±/g, 'n')
-      .replace(/ÃƒÆ’Ã‚Â/g, 'A')
+      .replace(/ÃƒÆ’Ã‚Â /g, 'A')
       .replace(/ÃƒÆ’Ã¢â‚¬Â°/g, 'E')
-      .replace(/ÃƒÆ’Ã‚Â/g, 'I')
+      .replace(/ÃƒÆ’Ã‚Â /g, 'I')
       .replace(/ÃƒÆ’Ã¢â‚¬Å“/g, 'O')
       .replace(/ÃƒÆ’Ã…¡/g, 'U')
-      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“/g, '-')
-      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â/g, '-')
-      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ|ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â/g, '"')
-      .replace(/Ã£â‚¬Â|Ã£â‚¬â€˜/g, '')
+      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â /g, '-')
+      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â /g, '-')
+      .replace(/ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ|ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â /g, '"')
+      .replace(/Ã£â‚¬Â |Ã£â‚¬â€˜/g, '')
       .replace(/Ãƒâ€š/g, '')
+      .replace(/Ã¡/g, 'á')
+      .replace(/Ã©/g, 'é')
+      .replace(/Ã­/g, 'í')
+      .replace(/Ã³/g, 'ó')
+      .replace(/Ãº/g, 'ú')
+      .replace(/Ã±/g, 'ñ')
+      .replace(/Ã /g, 'Á')
+      .replace(/Ã‰/g, 'É')
+      .replace(/Ã /g, 'Í')
+      .replace(/Ã“/g, 'Ó')
+      .replace(/Ãš/g, 'Ú')
+      .replace(/â€“/g, '–')
+      .replace(/â€”/g, '—')
+      .replace(/â€œ/g, '“')
+      .replace(/â€ /g, '”')
+      .replace(/Â/g, '')
       .trim();
   }
 

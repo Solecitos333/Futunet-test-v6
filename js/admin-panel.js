@@ -1973,13 +1973,13 @@
                 '</div>';
             } else {
               voucherHtml += '<div style="text-align:center; background:#fff; border:1px solid #e5eef8; border-radius:8px; padding:8px;">' +
-                '<a href="' + escapedVoucherUrl + '" target="_blank">' +
+                '<a href="' + escapedVoucherUrl + '" target="_blank" rel="noopener noreferrer">' +
                 '<img src="' + escapedVoucherUrl + '" style="max-width:100%; max-height:220px; object-fit:contain; border-radius:6px;">' +
                 '</a>' +
                 '</div>';
             }
             voucherHtml += '<div style="margin-top:10px; text-align:right;">' +
-              '<a href="' + escapedVoucherUrl + '" target="_blank" class="admin-btn admin-btn-ghost admin-btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">' +
+              '<a href="' + escapedVoucherUrl + '" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-ghost admin-btn-sm" style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">' +
               '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>' +
               'Descargar Comprobante</a>' +
               '</div>';
@@ -2026,7 +2026,7 @@
         
         '<div style="display:flex; gap:12px; justify-content:flex-end;">' +
         '<button class="admin-btn admin-btn-ghost" data-close-modal onclick="AdminPanel.closeModal(\'order-detail-modal\')">Cerrar</button>' +
-        (cleanPhone ? '<a href="' + waUrl + '" target="_blank" class="admin-btn admin-btn-primary" style="display:inline-flex; align-items:center; gap:6px; background-color:#25d366; border-color:#25d366;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.734-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436 0 9.851-4.388 9.854-9.782.002-2.613-1.013-5.07-2.861-6.92C16.371 2.05 13.915.825 12.009.825 6.613.825 2.225 5.216 2.221 10.61c0 1.54.437 3.047 1.266 4.386L2.52 19.3l4.127-1.08c1.6.953 3.19 1.45 4.62 1.451z"/></svg>Enviar WhatsApp</a>' : '') +
+        (cleanPhone ? '<a href="' + waUrl + '" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-primary" style="display:inline-flex; align-items:center; gap:6px; background-color:#25d366; border-color:#25d366;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.734-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436 0 9.851-4.388 9.854-9.782.002-2.613-1.013-5.07-2.861-6.92C16.371 2.05 13.915.825 12.009.825 6.613.825 2.225 5.216 2.221 10.61c0 1.54.437 3.047 1.266 4.386L2.52 19.3l4.127-1.08c1.6.953 3.19 1.45 4.62 1.451z"/></svg>Enviar WhatsApp</a>' : '') +
         '</div>' +
         '</div>';
         
@@ -4419,7 +4419,7 @@
           if (cleanWaPhone && !cleanWaPhone.startsWith('1') && cleanWaPhone.length === 10) {
             cleanWaPhone = '1' + cleanWaPhone;
           }
-          var waBtnHtml = cleanWaPhone ? '<a href="https://wa.me/' + cleanWaPhone + '" target="_blank" class="admin-btn admin-btn-sm" style="background:#25d366; color:white; border-color:#25d366; display:inline-flex; align-items:center; gap:4px; padding:4px 8px; margin-top:8px; font-size:0.75rem; text-decoration:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.734-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436 0 9.851-4.388 9.854-9.782.002-2.613-1.013-5.07-2.861-6.92C16.371 2.05 13.915.825 12.009.825 6.613.825 2.225 5.216 2.221 10.61c0 1.54.437 3.047 1.266 4.386L2.52 19.3l4.127-1.08c1.6.953 3.19 1.45 4.62 1.451z"/></svg> WhatsApp</a>' : '';
+          var waBtnHtml = cleanWaPhone ? '<a href="https://wa.me/' + cleanWaPhone + '" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-sm" style="background:#25d366; color:white; border-color:#25d366; display:inline-flex; align-items:center; gap:4px; padding:4px 8px; margin-top:8px; font-size:0.75rem; text-decoration:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.501-5.734-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.451 5.436 0 9.851-4.388 9.854-9.782.002-2.613-1.013-5.07-2.861-6.92C16.371 2.05 13.915.825 12.009.825 6.613.825 2.225 5.216 2.221 10.61c0 1.54.437 3.047 1.266 4.386L2.52 19.3l4.127-1.08c1.6.953 3.19 1.45 4.62 1.451z"/></svg> WhatsApp</a>' : '';
 
           var editLocBtnHtml = '<button onclick="AdminPanel.editClientLocationFromMap(\'' + doc.id + '\')" class="admin-btn admin-btn-ghost admin-btn-sm" style="padding:4px 8px; font-size:0.75rem; margin-top:8px; margin-left:6px;">Editar Ubicación</button>';
 

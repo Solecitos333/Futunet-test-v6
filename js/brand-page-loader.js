@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   enrichBrandHero(brandName);
 
   // Insertar banner de venta cruzada si la marca tiene un servicio sugerido
-  const serviceInfo = BRAND_SERVICE_MAPPING[brandName.toLowerCase().trim()];
+  const serviceInfo = BRAND_SERVICE_MAPPING[(brandName || '').toLowerCase().trim()];
   if (serviceInfo) {
     const bannerDiv = document.createElement('div');
     bannerDiv.className = 'cross-selling-banner reveal';
@@ -245,12 +245,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             <i class="fas ${serviceInfo.icon}"></i>
           </div>
           <div>
-            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">Instalación técnica de equipos ${brandName}</h4>
+            <h4 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; font-weight: 700; color: white; margin: 0 0 4px;">Instalación técnica de equipos ${escapeHTML(brandName)}</h4>
             <p style="color: #94a3b8; font-size: 0.82rem; margin: 0; line-height: 1.4;">${serviceInfo.text} Además de la venta, proveemos servicios especializados de diseño y soporte en República Dominicana.</p>
           </div>
         </div>
         <a href="${serviceInfo.url}" class="btn btn-outline" style="border-radius: 50px; padding: 10px 24px; font-weight: 700; border: 2px solid var(--brand); color: var(--brand); background: transparent; transition: all 0.3s; white-space: nowrap; font-size: 0.82rem; text-decoration: none;">
-          Ver Servicio de ${serviceInfo.name}
+          Ver Servicio de ${escapeHTML(serviceInfo.name)}
         </a>
       </div>
     `;
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           Actualmente no tenemos artículos de <strong>${escapeHTML(brandName)}</strong> publicados en el catálogo en línea. Podemos consultar disponibilidad y preparar una cotización bajo pedido.
         </p>
         <div class="empty-state-actions" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-          <a class="btn btn-wa" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quisiera%20cotizar%20equipos%20de%20la%20marca%20${encodeURIComponent(brandName)}." target="_blank" style="display: inline-flex; align-items: center; gap: 8px;">
+          <a class="btn btn-wa" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20quisiera%20cotizar%20equipos%20de%20la%20marca%20${encodeURIComponent(brandName)}." target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px;">
             <i data-lucide="message-circle"></i> Cotizar ${escapeHTML(brandName)} por WhatsApp
           </a>
           <a class="btn btn-outline" href="catalogo.html" style="display: inline-flex; align-items: center; gap: 8px;">

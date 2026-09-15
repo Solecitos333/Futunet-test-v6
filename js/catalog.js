@@ -1141,7 +1141,7 @@ function renderEmptyState(title, description) {
       <button class="btn empty-state-ai-btn" type="button" style="background: linear-gradient(135deg, #0b5fc6, #0284c7); color: #fff; border: none; padding: 10px 18px; border-radius: 50px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
         <i data-lucide="sparkles"></i> Preguntar a Futunet AI
       </button>
-      <a class="btn btn-wa empty-state-wa-btn" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20no%20encontr%C3%A9%20lo%20que%20buscaba%20en%20el%20cat%C3%A1logo%20y%20quisiera%20ayuda." target="_blank">
+      <a class="btn btn-wa empty-state-wa-btn" href="https://wa.me/18297411041?text=Hola%20Futunet%2C%20no%20encontr%C3%A9%20lo%20que%20buscaba%20en%20el%20cat%C3%A1logo%20y%20quisiera%20ayuda." target="_blank" rel="noopener noreferrer">
         <i data-lucide="message-circle"></i> Pedir ayuda por WhatsApp
       </a>
     </div>
@@ -1618,7 +1618,7 @@ function requestQuote(product, brand, price, serviceItem = false, quoteOnlyItem 
   const phone = typeof FUTUNET_CONFIG !== 'undefined' && FUTUNET_CONFIG.WHATSAPP_NUMBER
     ? FUTUNET_CONFIG.WHATSAPP_NUMBER
     : '18297411041';
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
 }
 
 
