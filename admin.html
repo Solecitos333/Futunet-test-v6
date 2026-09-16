@@ -2616,6 +2616,15 @@
      <div id="sug-modal-origin-wrap" style="margin-top:6px; font-size:0.8rem; color:#0B7EB5;">
       <span id="sug-modal-audience">Origen: Cliente</span> · <span id="sug-modal-page">Página de procedencia</span>
      </div>
+     <div style="display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px dashed #cbd5e1;">
+      <div style="display:flex; align-items:center; gap:8px;">
+       <span style="font-size:0.8rem; color:#475569; font-weight:600;">Código de Referencia:</span>
+       <strong id="sug-modal-refcode" style="font-family:monospace; background:#e2e8f0; padding:3px 8px; border-radius:4px; font-size:0.85rem; color:#0f172a;">SUG-XXXXX</strong>
+      </div>
+      <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" style="padding:3px 10px; font-size:0.75rem;" onclick="AdminPanel.copySuggestionRefCode()">
+       Copiar código
+      </button>
+     </div>
     </div>
 
     <!-- Descripción -->
@@ -2645,9 +2654,20 @@
       </select>
      </div>
 
+     <div class="auth-form-group" style="margin-bottom:14px;">
+      <label class="auth-label" for="sug-modal-official-response" style="font-weight:600; color:#0B7EB5;">Respuesta oficial para el solicitante / cliente (Pública en seguimiento)</label>
+      <textarea id="sug-modal-official-response" class="auth-input" rows="3" placeholder="Escribe aquí la respuesta oficial que verá el usuario cuando consulte su código de seguimiento o reciba respuesta..." style="resize:vertical; border-color:#93c5fd; background:#f0f9ff;"></textarea>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+       <span style="font-size:0.75rem; color:#64748b;">Esta respuesta se mostrará al usuario al consultar su código en el portal web.</span>
+       <a id="sug-modal-email-btn" href="#" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-ghost admin-btn-sm" style="font-size:0.75rem; padding:4px 10px; display:none;">
+        <i class="fa-solid fa-envelope"></i> Responder por correo
+       </a>
+      </div>
+     </div>
+
      <div class="auth-form-group" style="margin-bottom:0;">
-      <label class="auth-label" for="sug-modal-admin-notes" style="font-weight:600;">Notas internas de evaluación</label>
-      <textarea id="sug-modal-admin-notes" class="auth-input" rows="3" placeholder="Añade notas del equipo sobre viabilidad, estimación o resolución..." style="resize:vertical;"></textarea>
+      <label class="auth-label" for="sug-modal-admin-notes" style="font-weight:600;">Notas internas del personal (Confidencial)</label>
+      <textarea id="sug-modal-admin-notes" class="auth-input" rows="2" placeholder="Añade notas del equipo sobre viabilidad, estimación o resolución..." style="resize:vertical;"></textarea>
      </div>
     </div>
 

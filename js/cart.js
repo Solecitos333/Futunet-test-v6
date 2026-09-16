@@ -545,12 +545,13 @@
     const summaryCard = document.getElementById('checkout-step3-summary-card');
     if (!summaryCard) return;
 
-    const name = document.getElementById('chk-name').value;
-    const phone = document.getElementById('chk-phone').value;
-    const email = document.getElementById('chk-email').value;
-    const address = document.getElementById('chk-address').value;
-    const notes = document.getElementById('chk-notes').value;
-    const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
+    const name = (document.getElementById('chk-name')?.value || '').trim();
+    const phone = (document.getElementById('chk-phone')?.value || '').trim();
+    const email = (document.getElementById('chk-email')?.value || '').trim();
+    const address = (document.getElementById('chk-address')?.value || '').trim();
+    const notes = (document.getElementById('chk-notes')?.value || '').trim();
+    const checkedMethod = document.querySelector('input[name="chk-payment-method"]:checked');
+    const paymentMethod = checkedMethod ? checkedMethod.value : 'whatsapp';
     const pmDisplay = paymentMethod === 'bank_transfer' ? 'Transferencia Bancaria' : (paymentMethod === 'financing' ? 'Solicitud de financiamiento' : 'WhatsApp (Pedido Rápido)');
 
     const items = getCartItems();
@@ -1113,11 +1114,37 @@
   }
 
   function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-      showCartToast('Copiado al portapapeles', 'success');
-    }).catch(() => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        showCartToast('Copiado al portapapeles', 'success');
+      }).catch(() => {
+        fallbackCopyText(text);
+      });
+    } else {
+      fallbackCopyText(text);
+    }
+  }
+
+  function fallbackCopyText(text) {
+    try {
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      tempInput.style.position = 'fixed';
+      tempInput.style.left = '-9999px';
+      tempInput.style.top = '-9999px';
+      document.body.appendChild(tempInput);
+      tempInput.focus();
+      tempInput.select();
+      const successful = document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      if (successful) {
+        showCartToast('Copiado al portapapeles', 'success');
+      } else {
+        showCartToast('Error al copiar', 'error');
+      }
+    } catch (e) {
       showCartToast('Error al copiar', 'error');
-    });
+    }
   }
 
   let checkoutModalCleanup = null;
@@ -1135,7 +1162,8 @@
     document.body.style.overflow = 'hidden';
     
     // Reset form
-    document.getElementById('cart-checkout-form').reset();
+    const chkForm = document.getElementById('cart-checkout-form');
+    if (chkForm) chkForm.reset();
     removeCheckoutFile();
     activeCoupon = null;
     const couponFeedback = document.getElementById('coupon-feedback');
@@ -1163,17 +1191,22 @@
           const userDoc = await db.collection('users').doc(user.uid).get();
           if (userDoc.exists) {
             const data = userDoc.data();
-            document.getElementById('chk-name').value = data.displayName || '';
-            document.getElementById('chk-phone').value = data.phone || '';
-            document.getElementById('chk-address').value = data.address || '';
+            const chkName = document.getElementById('chk-name');
+            if (chkName) chkName.value = data.displayName || '';
+            const chkPhone = document.getElementById('chk-phone');
+            if (chkPhone) chkPhone.value = data.phone || '';
+            const chkAddress = document.getElementById('chk-address');
+            if (chkAddress) chkAddress.value = data.address || '';
             if (data.email && emailField) {
               emailField.value = data.email;
             }
-            if (data.documentType && document.getElementById('chk-document-type')) {
-              document.getElementById('chk-document-type').value = data.documentType;
+            const chkDocType = document.getElementById('chk-document-type');
+            if (data.documentType && chkDocType) {
+              chkDocType.value = data.documentType;
             }
-            if (data.documentNumber && document.getElementById('chk-document-number')) {
-              document.getElementById('chk-document-number').value = data.documentNumber;
+            const chkDocNum = document.getElementById('chk-document-number');
+            if (data.documentNumber && chkDocNum) {
+              chkDocNum.value = data.documentNumber;
               const hintEl = document.getElementById('chk-document-hint');
               if (hintEl) hintEl.textContent = 'Documento guardado en tu cuenta';
             }
@@ -1268,12 +1301,13 @@
       .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
       .trim();
     
-    const name = sanitizeText(document.getElementById('chk-name').value);
-    const phone = sanitizeText(document.getElementById('chk-phone').value);
-    const email = sanitizeText(document.getElementById('chk-email').value);
-    const address = sanitizeText(document.getElementById('chk-address').value);
-    const notes = sanitizeText(document.getElementById('chk-notes').value);
-    const paymentMethod = document.querySelector('input[name="chk-payment-method"]:checked').value;
+    const name = sanitizeText(document.getElementById('chk-name')?.value);
+    const phone = sanitizeText(document.getElementById('chk-phone')?.value);
+    const email = sanitizeText(document.getElementById('chk-email')?.value);
+    const address = sanitizeText(document.getElementById('chk-address')?.value);
+    const notes = sanitizeText(document.getElementById('chk-notes')?.value);
+    const checkedMethod = document.querySelector('input[name="chk-payment-method"]:checked');
+    const paymentMethod = checkedMethod ? checkedMethod.value : 'whatsapp';
     
     // Validaciones de formato en frontend para mitigar envío de datos inválidos
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

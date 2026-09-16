@@ -5664,14 +5664,16 @@
           ratingHtml = '<span style="color:#f59e0b; font-weight:700;">' + '★'.repeat(sug.rating) + '</span>';
         }
 
-        var searchStr = (sug.title + ' ' + (sug.description || '') + ' ' + (sug.authorName || '') + ' ' + (sug.authorEmail || '')).toLowerCase();
+        var refBadge = sug.refCode ? ('<br><span style="font-family:monospace;font-size:0.75rem;color:#0B7EB5;">' + escapeHtml(sug.refCode) + '</span>') : '';
+        var respIndicator = sug.officialResponse ? (' <span title="Con respuesta oficial" style="color:#10b981;font-size:0.75rem;margin-left:4px;">✔ Respondida</span>') : '';
+        var searchStr = (sug.title + ' ' + (sug.refCode || '') + ' ' + (sug.description || '') + ' ' + (sug.authorName || '') + ' ' + (sug.authorEmail || '')).toLowerCase();
 
         html += '<tr data-search-sug="' + escapeHtml(searchStr) + '">' +
-          '  <td><strong>' + escapeHtml(sug.title) + '</strong></td>' +
+          '  <td><strong>' + escapeHtml(sug.title) + '</strong>' + refBadge + '</td>' +
           '  <td><span class="up-role-badge up-role-admin" style="font-size:0.72rem;">' + escapeHtml(catName) + '</span></td>' +
           '  <td>' + authorHtml + '</td>' +
           '  <td>' + ratingHtml + '</td>' +
-          '  <td><span class="product-card-badge ' + statusInfo.cls + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + escapeHtml(statusInfo.label) + '</span></td>' +
+          '  <td><span class="product-card-badge ' + statusInfo.cls + '" style="position:static;padding:3px 8px;font-size:0.7rem;">' + escapeHtml(statusInfo.label) + '</span>' + respIndicator + '</td>' +
           '  <td>' + dateStr + '</td>' +
           '  <td style="text-align:right;">' +
           '    <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.openSuggestionModal(\x27' + escapeJs(sug.id) + '\x27)">Ver y gestionar</button>' +
@@ -5762,8 +5764,22 @@
         }
       }
 
+      setText('sug-modal-refcode', sug.refCode || ('SUG-' + id.slice(0, 5).toUpperCase()));
       setVal('sug-modal-status-select', sug.status || 'pending');
+      setVal('sug-modal-official-response', sug.officialResponse || '');
       setVal('sug-modal-admin-notes', sug.adminNotes || '');
+
+      var emailBtn = document.getElementById('sug-modal-email-btn');
+      if (emailBtn) {
+        if (!sug.isAnonymous && sug.authorEmail) {
+          emailBtn.style.display = 'inline-flex';
+          var subject = encodeURIComponent('Respuesta a tu sugerencia en Futunet (' + (sug.refCode || id) + ')');
+          var body = encodeURIComponent('Hola ' + (sug.authorName || 'estimado usuario') + ',\n\nGracias por compartir tu sugerencia "' + (sug.title || '') + '" con el equipo de Futunet.\n\nQueremos informarte sobre el estado de tu propuesta:\n\n' + (sug.officialResponse || 'Tu sugerencia ha sido revisada.') + '\n\nPuedes consultar el estado en cualquier momento con tu código en https://futunet.com.do/sugerencias.html\n\nAtentamente,\nEquipo de Futunet\nhttps://futunet.com.do');
+          emailBtn.href = 'mailto:' + encodeURIComponent(sug.authorEmail) + '?subject=' + subject + '&body=' + body;
+        } else {
+          emailBtn.style.display = 'none';
+        }
+      }
 
       openModal('suggestion-detail-modal');
     } catch (err) {
@@ -5779,18 +5795,27 @@
 
     try {
       var newStatus = document.getElementById('sug-modal-status-select').value;
+      var newOfficialResponse = (document.getElementById('sug-modal-official-response').value || '').trim();
       var newNotes = document.getElementById('sug-modal-admin-notes').value.trim();
 
       var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
-      var reviewer = currentUser ? (currentUser.displayName || currentUser.email || 'Admin') : 'Admin';
+      var reviewer = currentUser ? (currentUser.displayName || currentUser.email || 'Admin Futunet') : 'Admin Futunet';
 
-      await db.collection('suggestions').doc(currentSelectedSuggestionId).update({
+      var updateData = {
         status: newStatus,
         adminNotes: newNotes,
+        officialResponse: newOfficialResponse,
         reviewedBy: reviewer,
         reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      };
+
+      if (newOfficialResponse) {
+        updateData.respondedBy = reviewer;
+        updateData.respondedAt = firebase.firestore.FieldValue.serverTimestamp();
+      }
+
+      await db.collection('suggestions').doc(currentSelectedSuggestionId).update(updateData);
 
       closeModal('suggestion-detail-modal');
       await loadSuggestions();
@@ -5799,6 +5824,22 @@
       alert('Error al guardar los cambios: ' + (err.message || ''));
     } finally {
       if (btn) btn.disabled = false;
+    }
+  }
+
+  function copySuggestionRefCode() {
+    var refEl = document.getElementById('sug-modal-refcode');
+    if (refEl && refEl.textContent) {
+      var code = refEl.textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(function () {
+          alert('Código copiado al portapapeles: ' + code);
+        }).catch(function () {
+          prompt('Copia este código de referencia:', code);
+        });
+      } else {
+        prompt('Copia este código de referencia:', code);
+      }
     }
   }
 
@@ -5830,6 +5871,7 @@
       var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
       var userData = window.FutunetAuth ? window.FutunetAuth.getUserData() : null;
 
+      var internalRefCode = 'SUG-' + Math.random().toString(36).substring(2, 7).toUpperCase();
       var sugData = {
         title: title,
         category: cat,
@@ -5837,6 +5879,7 @@
         targetAudience: 'staff',
         status: 'pending',
         isAnonymous: false,
+        refCode: internalRefCode,
         source: 'admin_internal',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
@@ -5945,6 +5988,7 @@
     saveSuggestionChanges: saveSuggestionChanges,
     openNewInternalSuggestionModal: openNewInternalSuggestionModal,
     submitInternalSuggestion: submitInternalSuggestion,
+    copySuggestionRefCode: copySuggestionRefCode,
     switchInternetTab: switchInternetTab,
     loadInternetClients: loadInternetClients,
     openInternetClientModal: openInternetClientModal,

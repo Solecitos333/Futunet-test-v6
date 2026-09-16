@@ -555,6 +555,9 @@
     <button class="up-tab" data-up-tab="favorites">
      <i data-lucide="heart"></i>Favoritos
     </button>
+    <button class="up-tab" data-up-tab="suggestions">
+     <i data-lucide="lightbulb"></i>Mis Sugerencias
+    </button>
     <button class="up-tab" data-up-tab="settings">
      <i data-lucide="settings"></i>Ajustes
     </button>
@@ -715,6 +718,24 @@
         <tr><td colspan="6" style="text-align:center;padding:32px;color:#76889e;">Cargando tus pedidos...</td></tr>
        </tbody>
       </table>
+     </div>
+    </div>
+   </div>
+
+   <!-- Panel: Suggestions -->
+   <div class="up-panel" data-up-panel="suggestions">
+    <div class="up-card">
+     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+      <div>
+       <h3 style="margin:0;">Mis sugerencias y propuestas</h3>
+       <p style="margin:4px 0 0; font-size:0.85rem; color:#76889e;">Seguimiento de tus ideas de mejora y respuestas oficiales del equipo de Futunet.</p>
+      </div>
+      <a href="sugerencias.html" class="up-btn-save" style="text-decoration:none; padding:8px 16px; font-size:0.85rem; width:auto; display:inline-flex; align-items:center; gap:6px;">
+       <i data-lucide="plus"></i>Nueva sugerencia
+      </a>
+     </div>
+     <div id="user-suggestions-list">
+      <div class="up-empty">Cargando tus sugerencias...</div>
      </div>
     </div>
    </div>

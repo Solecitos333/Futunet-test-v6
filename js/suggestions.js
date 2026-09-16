@@ -30,6 +30,10 @@
   var successCard = document.getElementById('sug-success-card');
   var refCodeDisplay = document.getElementById('sug-ref-code');
   var btnAnother = document.getElementById('sug-btn-another');
+  var trackInput = document.getElementById('sug-track-input');
+  var trackBtn = document.getElementById('sug-track-btn');
+  var trackResult = document.getElementById('sug-track-result');
+  var communityGrid = document.getElementById('sug-community-grid');
 
   // Inicialización cuando el DOM esté listo
   document.addEventListener('DOMContentLoaded', function () {
@@ -39,6 +43,8 @@
     initAnonymousToggle();
     initCharCounters();
     checkCurrentUser();
+    initTracking();
+    initCommunityWall();
     if (form) {
       form.addEventListener('submit', handleFormSubmit);
     }
@@ -282,6 +288,7 @@
         targetAudience: selectedAudience,
         status: 'pending',
         isAnonymous: isAnon,
+        refCode: refCode,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
@@ -355,6 +362,269 @@
       formCard.hidden = false;
       formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  // 10. Utilidades de formato y escape
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function getStatusBadge(status) {
+    var s = status || 'pending';
+    var map = {
+      'pending': { label: 'Pendiente de Revisión', cls: 'sug-status-pending' },
+      'in_review': { label: 'En Evaluación Técnica', cls: 'sug-status-in_review' },
+      'planned': { label: 'Planificada en Roadmap', cls: 'sug-status-planned' },
+      'implemented': { label: '¡Implementada con Éxito!', cls: 'sug-status-implemented' },
+      'archived': { label: 'Procesada / Archivada', cls: 'sug-status-archived' }
+    };
+    var item = map[s] || map['pending'];
+    return '<span class="sug-status-badge ' + item.cls + '">' + escapeHtml(item.label) + '</span>';
+  }
+
+  function getCategoryName(cat) {
+    var map = {
+      'web_platform': 'Plataforma Web y Catálogo',
+      'services_support': 'Servicios y Soporte Técnico',
+      'catalog_products': 'Productos e Inventario',
+      'customer_service': 'Atención al Cliente y Cobros',
+      'other': 'Propuesta General'
+    };
+    return map[cat] || 'General';
+  }
+
+  // 11. Consulta y Seguimiento de Sugerencia por Código
+  function initTracking() {
+    if (trackBtn) {
+      trackBtn.addEventListener('click', handleTrackSuggestion);
+    }
+    if (trackInput) {
+      trackInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleTrackSuggestion();
+        }
+      });
+    }
+
+    try {
+      var urlParams = new URLSearchParams(window.location.search);
+      var refParam = urlParams.get('ref') || urlParams.get('code');
+      if (refParam && trackInput) {
+        trackInput.value = refParam.trim().toUpperCase();
+        handleTrackSuggestion();
+      }
+    } catch (e) {
+      // Ignorar fallo de URLSearchParams en navegadores antiguos
+    }
+  }
+
+  async function handleTrackSuggestion() {
+    if (!trackInput || !trackResult) return;
+    var raw = trackInput.value.trim();
+    if (!raw) {
+      trackResult.hidden = false;
+      trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">Por favor escribe tu código de referencia (ej: SUG-A1B2C).</p>';
+      return;
+    }
+
+    var code = raw.toUpperCase();
+    var db = window.FutunetFirebase ? window.FutunetFirebase.db : (window.firebase ? firebase.firestore() : null);
+    if (!db) {
+      trackResult.hidden = false;
+      trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">No pudimos conectar con el servidor en este momento. Revisa tu conexión.</p>';
+      return;
+    }
+
+    trackResult.hidden = false;
+    trackResult.innerHTML = '<p style="color:#64748b; margin:0; font-size:0.9rem;"><i class="fas fa-spinner fa-spin"></i> Consultando estado de la propuesta…</p>';
+
+    try {
+      var foundDoc = null;
+      var docData = null;
+
+      // 1. Búsqueda por refCode exacto
+      var snap = await db.collection('suggestions').where('refCode', '==', code).limit(1).get();
+      if (!snap.empty) {
+        foundDoc = snap.docs[0];
+        docData = foundDoc.data();
+      } else if (raw.length >= 12) {
+        // 2. Si introdujo un ID de documento Firestore directo
+        try {
+          var directDoc = await db.collection('suggestions').doc(raw).get();
+          if (directDoc.exists) {
+            foundDoc = directDoc;
+            docData = directDoc.data();
+          }
+        } catch (eDoc) {
+          // Ignorar fallo de búsqueda directa
+        }
+      }
+
+      if (!foundDoc || !docData) {
+        trackResult.innerHTML = '<div style="padding:10px 0;">' +
+          '<h4 style="margin:0 0 6px; color:#b91c1c; font-size:1rem; font-weight:700;">Propuesta no encontrada</h4>' +
+          '<p style="margin:0; font-size:0.88rem; color:#64748b;">No encontramos ninguna sugerencia con el código <strong>' + escapeHtml(code) + '</strong>. Verifica que esté bien escrito o comunícate con nosotros.</p>' +
+          '</div>';
+        return;
+      }
+
+      renderTrackResult(docData, foundDoc.id);
+
+    } catch (err) {
+      console.error('Error al consultar sugerencia:', err);
+      trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">Error al consultar el estado: ' + escapeHtml(err.message || 'Error de red') + '</p>';
+    }
+  }
+
+  function renderTrackResult(data, docId) {
+    var dateStr = 'Reciente';
+    if (data.createdAt && data.createdAt.toDate) {
+      var d = data.createdAt.toDate();
+      dateStr = d.toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+    } else if (data.createdAt && data.createdAt.seconds) {
+      var dSec = new Date(data.createdAt.seconds * 1000);
+      dateStr = dSec.toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    var badgeHtml = getStatusBadge(data.status);
+    var catName = getCategoryName(data.category);
+
+    var responseHtml = '';
+    if (data.officialResponse) {
+      var respDateStr = '';
+      if (data.respondedAt && data.respondedAt.toDate) {
+        respDateStr = ' — ' + data.respondedAt.toDate().toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+      } else if (data.respondedAt && data.respondedAt.seconds) {
+        respDateStr = ' — ' + new Date(data.respondedAt.seconds * 1000).toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
+      var responder = data.respondedBy ? (' por ' + escapeHtml(data.respondedBy)) : '';
+      responseHtml = '<div class="sug-response-box">' +
+        '<div class="sug-response-header">' +
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
+          '<span>Respuesta Oficial de Futunet' + responder + respDateStr + '</span>' +
+        '</div>' +
+        '<p class="sug-response-body">' + escapeHtml(data.officialResponse) + '</p>' +
+      '</div>';
+    } else {
+      responseHtml = '<div style="margin-top:14px; padding:12px 14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; font-size:0.88rem; color:#1e40af;">' +
+        '<strong>Tu sugerencia está en evaluación:</strong> Nuestro equipo directivo y técnico revisa periódicamente cada propuesta recibida. Cuando tengamos una resolución o respuesta oficial, podrás verla aquí ingresando tu código.' +
+      '</div>';
+    }
+
+    trackResult.innerHTML = '<div style="display:flex; flex-direction:column; gap:12px;">' +
+      '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
+        '<div>' +
+          '<span style="font-size:0.75rem; font-weight:700; color:var(--sug-primary); text-transform:uppercase;">' + escapeHtml(catName) + '</span>' +
+          '<h4 style="margin:4px 0 0; font-size:1.15rem; color:var(--sug-navy); font-weight:700;">' + escapeHtml(data.title) + '</h4>' +
+        '</div>' +
+        badgeHtml +
+      '</div>' +
+      '<p style="margin:0; font-size:0.9rem; color:#475569; line-height:1.5;">' + escapeHtml(data.description) + '</p>' +
+      '<div style="font-size:0.8rem; color:#94a3b8; display:flex; gap:12px; flex-wrap:wrap;">' +
+        '<span>Código: <strong style="font-family:monospace; color:#0f172a;">' + escapeHtml(data.refCode || docId) + '</strong></span>' +
+        '<span>Fecha de registro: ' + escapeHtml(dateStr) + '</span>' +
+      '</div>' +
+      responseHtml +
+    '</div>';
+
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
+  }
+
+  // 12. Muro de Ideas Comunitarias Implementadas / Planificadas
+  async function initCommunityWall() {
+    if (!communityGrid) return;
+
+    var db = window.FutunetFirebase ? window.FutunetFirebase.db : (window.firebase ? firebase.firestore() : null);
+    if (!db) {
+      renderFallbackCommunityWall();
+      return;
+    }
+
+    try {
+      var snap = await db.collection('suggestions')
+        .where('status', 'in', ['implemented', 'planned'])
+        .limit(6)
+        .get();
+
+      if (snap.empty) {
+        renderFallbackCommunityWall();
+        return;
+      }
+
+      var html = '';
+      snap.forEach(function (doc) {
+        var d = doc.data();
+        html += renderCommunityCard(d);
+      });
+      communityGrid.innerHTML = html;
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+      }
+    } catch (e) {
+      renderFallbackCommunityWall();
+    }
+  }
+
+  function renderCommunityCard(d) {
+    var catName = getCategoryName(d.category);
+    var badgeHtml = getStatusBadge(d.status);
+    var responseText = d.officialResponse ? escapeHtml(d.officialResponse) : 'Propuesta evaluada positivamente y en camino para nuestros usuarios.';
+    return '<div class="sug-comm-card">' +
+      '<div>' +
+        '<div class="sug-comm-top">' +
+          '<span style="font-size:0.75rem; font-weight:700; color:var(--sug-primary); text-transform:uppercase;">' + escapeHtml(catName) + '</span>' +
+          badgeHtml +
+        '</div>' +
+        '<h4 class="sug-comm-title">' + escapeHtml(d.title) + '</h4>' +
+        '<p class="sug-comm-desc">' + escapeHtml(d.description) + '</p>' +
+      '</div>' +
+      '<div style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:10px 12px; border-radius:6px; font-size:0.82rem; color:#334155; margin-top:12px;">' +
+        '<strong style="color:var(--sug-primary); display:block; margin-bottom:2px;">Respuesta Futunet:</strong>' +
+        responseText +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderFallbackCommunityWall() {
+    if (!communityGrid) return;
+    var samples = [
+      {
+        title: 'Buscador y seguimiento de sugerencias por código',
+        category: 'web_platform',
+        status: 'implemented',
+        description: 'Permitir a los usuarios y clientes ingresar el código SUG-XXXXX para revisar en qué fase está su idea y qué respondió el equipo.',
+        officialResponse: '¡Implementado! Ya puedes consultar tu código directamente desde esta página y en Mi Cuenta.'
+      },
+      {
+        title: 'Incorporación de proyectores y pantallas al catálogo de oficinas',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Ampliar la oferta tecnológica corporativa incluyendo proyectores Epson multimedia de alta luminosidad para salas de reuniones.',
+        officialResponse: '¡Cumplido! Se añadieron proyectores Epson PowerLite y pantallas retráctiles con garantía en Equipos de Oficina.'
+      },
+      {
+        title: 'Filtro rápido por marcas y disponibilidad en smartphones',
+        category: 'web_platform',
+        status: 'implemented',
+        description: 'Optimizar la barra del catálogo en pantallas móviles para filtrar marcas y disponibilidad de manera inmediata sin desplazarse demasiado.',
+        officialResponse: '¡Implementado! Se añadió la barra táctil de filtros rápidos por marca y disponibilidad sobre la lista de productos para compras ágiles.'
+      }
+    ];
+
+    var html = '';
+    samples.forEach(function (s) {
+      html += renderCommunityCard(s);
+    });
+    communityGrid.innerHTML = html;
   }
 
 })();

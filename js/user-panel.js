@@ -18,6 +18,7 @@
     loadSavedCarts();
     renderFavorites();
     loadUserOrders();
+    loadUserSuggestions(user);
     setupProfileForm();
     if (window.FutunetFinancing) window.FutunetFinancing.init(user, data);
     
@@ -363,6 +364,107 @@
     var modal = document.getElementById('user-order-detail-modal');
     if (modal) modal.style.display = 'none';
   };
+
+  // ─── Suggestions Section ───
+  async function loadUserSuggestions(user) {
+    var container = document.getElementById('user-suggestions-list');
+    if (!container || !db || !user) return;
+
+    try {
+      var snap = await db.collection('suggestions')
+        .where('userId', '==', user.uid)
+        .limit(20)
+        .get();
+
+      var items = [];
+      snap.forEach(function (doc) {
+        items.push(Object.assign({ id: doc.id }, doc.data()));
+      });
+
+      if (items.length === 0 && user.email) {
+        try {
+          var snapEmail = await db.collection('suggestions')
+            .where('authorEmail', '==', user.email)
+            .limit(20)
+            .get();
+          snapEmail.forEach(function (doc) {
+            items.push(Object.assign({ id: doc.id }, doc.data()));
+          });
+        } catch (eEmail) { }
+      }
+
+      // Sort by date descending
+      items.sort(function (a, b) {
+        var tA = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+        var tB = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+        return tB - tA;
+      });
+
+      if (items.length === 0) {
+        container.innerHTML = '<div class="up-empty" style="text-align:center; padding:36px 16px;">' +
+          '<div style="font-size:2.4rem; margin-bottom:8px;">💡</div>' +
+          '<h4 style="margin:0 0 6px; font-weight:700; color:#1e293b;">Aún no has registrado sugerencias</h4>' +
+          '<p style="margin:0 0 16px; color:#64748b; font-size:0.88rem; max-width:420px; margin-inline:auto;">¿Tienes una idea para la plataforma, nuevos productos o mejoras en el servicio? Aporta tu propuesta y recibe respuesta directa de nuestro equipo.</p>' +
+          '<a href="sugerencias.html" class="up-btn-save" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; padding:10px 20px; font-size:0.88rem; width:auto;">Enviar mi primera sugerencia</a>' +
+        '</div>';
+        return;
+      }
+
+      var html = '<div style="display:flex; flex-direction:column; gap:16px;">';
+      items.forEach(function (item) {
+        var dateStr = 'Reciente';
+        if (item.createdAt && item.createdAt.toDate) {
+          dateStr = item.createdAt.toDate().toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+        } else if (item.createdAt && item.createdAt.seconds) {
+          dateStr = new Date(item.createdAt.seconds * 1000).toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        var statusMap = {
+          'pending': { label: 'Pendiente', color: '#b45309', bg: '#fef3c7' },
+          'in_review': { label: 'En Evaluación', color: '#0369a1', bg: '#e0f2fe' },
+          'planned': { label: 'Planificada', color: '#6d28d9', bg: '#ede9fe' },
+          'implemented': { label: '¡Implementada!', color: '#15803d', bg: '#dcfce7' },
+          'archived': { label: 'Archivada', color: '#475569', bg: '#f1f5f9' }
+        };
+        var st = statusMap[item.status] || statusMap['pending'];
+
+        var responseHtml = '';
+        if (item.officialResponse) {
+          responseHtml = '<div style="margin-top:12px; padding:12px 14px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; font-size:0.85rem; color:#14532d;">' +
+            '<div style="font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;">' +
+              '<span>✔ Respuesta oficial de Futunet</span>' +
+              (item.respondedBy ? '<span style="font-weight:normal; opacity:0.8;">— ' + escapeHtml(item.respondedBy) + '</span>' : '') +
+            '</div>' +
+            '<p style="margin:0; line-height:1.45;">' + escapeHtml(item.officialResponse) + '</p>' +
+          '</div>';
+        } else {
+          responseHtml = '<div style="margin-top:10px; font-size:0.8rem; color:#64748b; font-style:italic;">' +
+            '⏳ En revisión por nuestro equipo técnico y directivo.' +
+          '</div>';
+        }
+
+        html += '<div style="border:1px solid #e2e8f0; border-radius:14px; padding:16px 18px; background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,0.03);">' +
+          '<div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:8px;">' +
+            '<div>' +
+              '<span style="display:inline-block; font-family:monospace; font-weight:700; font-size:0.82rem; background:#f1f5f9; padding:2px 8px; border-radius:6px; color:#0f172a; margin-right:8px;">' + escapeHtml(item.refCode || item.id) + '</span>' +
+              '<span style="font-size:0.8rem; color:#94a3b8;">' + escapeHtml(dateStr) + '</span>' +
+              '<h4 style="margin:6px 0 0; font-size:1.05rem; font-weight:700; color:#0f172a;">' + escapeHtml(item.title) + '</h4>' +
+            '</div>' +
+            '<span style="display:inline-block; padding:4px 10px; border-radius:999px; font-size:0.75rem; font-weight:700; color:' + st.color + '; background:' + st.bg + ';">' + escapeHtml(st.label) + '</span>' +
+          '</div>' +
+          '<p style="margin:0; font-size:0.88rem; color:#475569; line-height:1.5;">' + escapeHtml(item.description) + '</p>' +
+          responseHtml +
+        '</div>';
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    } catch (err) {
+      console.error('Error cargando sugerencias de usuario:', err);
+      container.innerHTML = '<div class="up-empty" style="color:#b91c1c;">No pudimos cargar tus sugerencias en este momento.</div>';
+    }
+  }
 
   // ─── Tab Navigation ───
   function setupTabs() {

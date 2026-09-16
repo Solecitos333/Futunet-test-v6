@@ -8,7 +8,7 @@
     },
     cecomsa: {
       label: 'Mayorista de tecnología',
-      allowedConcepts: ['laptop', 'computadora', 'monitor', 'periferico', 'televisor'],
+      allowedConcepts: ['laptop', 'computadora', 'monitor', 'periferico', 'televisor', 'proyector', 'proyectores', 'epson'],
       defaultDepartment: 'equipos',
       defaultCategory: 'Equipos de Oficina'
     },
@@ -169,7 +169,52 @@
         specs: ['Velocidad: 200 Mbps de Descarga + 200 Mbps de Subida (100% Simétrico)', 'Rutas BGP optimizadas con baja latencia (Anti-Jitter y 0% Pérdida de paquetes)', 'IP Pública dinámica (Ideal para hosts de partidas, Discord y Open NAT)', 'Módem Router Óptico Wi-Fi 6 Gigabit de última generación sin costo adicional', 'Instalación profesional de fibra óptica incluida', 'Soporte técnico preferencial 24/7']
       }
     ],
-    cecomsa: [],
+    cecomsa: [
+      {
+        id: 'cec_proyector_epson_co_fh02',
+        title: 'Proyector Epson Portátil Full HD 1080p con Android TV CO-FH02',
+        brand: 'Epson',
+        department: 'equipos',
+        category: 'Equipos de Oficina',
+        price: 'RD$ 53,150.00',
+        img: 'img/productos/epson-co-fh02.jpg',
+        gallery: [
+          'img/productos/epson-co-fh02.jpg',
+          'https://wsrv.nl/?url=m.media-amazon.com%2Fimages%2FI%2F71utQyFDbRL._AC_SL1500_.jpg&w=720&output=webp&q=72'
+        ],
+        desc: 'Proyector Epson CO-FH02 con resolución Full HD nativa y compatibilidad con Android TV para presentaciones ejecutivas, salas de juntas, aulas y proyección de alta definición. Hasta 3,000 lúmenes de brillo con tecnología 3LCD.',
+        specs: [
+          'Tecnología de proyección: 3LCD de 3 chips',
+          'Resolución nativa: Full HD 1080p (1920 x 1080)',
+          'Brillo: 3,000 lúmenes en blanco y en color',
+          'Conectividad: HDMI, USB-A, Wi-Fi integrado y Android TV',
+          'Audio integrado y corrección trapezoidal automática',
+          'Garantía oficial y soporte técnico directo en RD con Futunet'
+        ]
+      },
+      {
+        id: 'cec_proyector_epson_powerlite_e20',
+        title: 'Proyector Epson PowerLite E20 3LCD 3400 Lúmenes XGA HDMI',
+        brand: 'Epson',
+        department: 'equipos',
+        category: 'Equipos de Oficina',
+        price: 'RD$ 38,900.00',
+        img: 'img/productos/epson-co-fh02.jpg',
+        gallery: [
+          'img/productos/epson-co-fh02.jpg',
+          'https://wsrv.nl/?url=m.media-amazon.com%2Fimages%2FI%2F71utQyFDbRL._AC_SL1500_.jpg&w=720&output=webp&q=72'
+        ],
+        desc: 'El proyector Epson PowerLite E20 es ideal para aulas y salas de reuniones de empresas. Ofrece 3.400 lúmenes de brillo en blanco y color, larga vida útil de lámpara (hasta 12.000 horas en modo Eco) y conectividad HDMI versátil.',
+        specs: [
+          'Tecnología: 3LCD de 3 chips de alto contraste',
+          'Luminosidad: 3,400 lúmenes en color y blanco',
+          'Resolución: XGA (1024 x 768) con escalado a Full HD',
+          'Lámpara de larga duración: hasta 12,000 horas',
+          'Altavoz integrado de 5W y puertos HDMI, VGA y USB',
+          'Garantía de 2 años en equipos para empresas en Futunet'
+        ]
+      }
+    ],
     selektronic: [    {
       title: 'CORE i5 2.7/3.4 Mhz 8GB RAM  160/250GB DD USADOS DELL SFF - DESKTOP GENERACION 3',
       brand: 'Usadas',

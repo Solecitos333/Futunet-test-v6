@@ -178,15 +178,125 @@ function syncCatalogUrl() {
 
 function populateBrandFilter() {
   const selects = document.querySelectorAll('[data-catalog-brand-filter]');
-  if (!selects.length) return;
   const brands = [...new Set(mockDatabase.map((product) => String(product.brand || '').trim()).filter(Boolean))]
     .sort((a, b) => a.localeCompare(b, 'es'));
-  selects.forEach((select) => {
-    const current = select.value || state.brand;
-    select.innerHTML = '<option value="all">Todas las marcas</option>' + brands
-      .map((brand) => `<option value="${escapeHTML(brand)}">${escapeHTML(brand)}</option>`)
-      .join('');
-    select.value = brands.includes(current) ? current : 'all';
+  if (selects.length) {
+    selects.forEach((select) => {
+      const current = select.value || state.brand;
+      select.innerHTML = '<option value="all">Todas las marcas</option>' + brands
+        .map((brand) => `<option value="${escapeHTML(brand)}">${escapeHTML(brand)}</option>`)
+        .join('');
+      select.value = brands.includes(current) ? current : 'all';
+    });
+  }
+  renderQuickFilterChips(brands);
+}
+
+function renderQuickFilterChips(brands) {
+  const container = document.getElementById('catalog-quick-chips');
+  const sheetContainer = document.getElementById('mobile-sheet-brand-chips');
+  if (!container && !sheetContainer) return;
+
+  const currentBrand = (state.brand || 'all').toLowerCase();
+  const isAvail = state.availability === 'available';
+
+  if (container) {
+    let html = `
+      <button type="button" class="catalog-chip catalog-chip--avail ${isAvail ? 'is-active' : ''}" data-quick-avail="available" aria-pressed="${isAvail}" title="Ver solo productos registrados como disponibles">
+        <i data-lucide="check-circle-2"></i>
+        <span>En Stock</span>
+      </button>
+      <div class="catalog-quick-divider" aria-hidden="true"></div>
+      <button type="button" class="catalog-chip ${currentBrand === 'all' ? 'is-active' : ''}" data-quick-brand="all" aria-pressed="${currentBrand === 'all'}">
+        <span>Todas las marcas</span>
+      </button>
+    `;
+
+    brands.forEach((brand) => {
+      const active = currentBrand === brand.toLowerCase();
+      html += `
+        <button type="button" class="catalog-chip ${active ? 'is-active' : ''}" data-quick-brand="${escapeHTML(brand)}" aria-pressed="${active}">
+          <span>${escapeHTML(brand)}</span>
+        </button>
+      `;
+    });
+
+    container.innerHTML = html;
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons({ root: container });
+    }
+  }
+
+  if (sheetContainer) {
+    let sheetHtml = `
+      <button type="button" class="catalog-chip ${currentBrand === 'all' ? 'is-active' : ''}" data-quick-brand="all" aria-pressed="${currentBrand === 'all'}">
+        <span>Todas</span>
+      </button>
+    `;
+    brands.forEach((brand) => {
+      const active = currentBrand === brand.toLowerCase();
+      sheetHtml += `
+        <button type="button" class="catalog-chip ${active ? 'is-active' : ''}" data-quick-brand="${escapeHTML(brand)}" aria-pressed="${active}">
+          <span>${escapeHTML(brand)}</span>
+        </button>
+      `;
+    });
+    sheetContainer.innerHTML = sheetHtml;
+  }
+
+  bindQuickFilterEvents();
+}
+
+function bindQuickFilterEvents() {
+  document.querySelectorAll('[data-quick-brand]').forEach((btn) => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const targetBrand = btn.dataset.quickBrand;
+      if (state.brand.toLowerCase() === targetBrand.toLowerCase() && targetBrand !== 'all') {
+        state.brand = 'all';
+      } else {
+        state.brand = targetBrand;
+      }
+      state.page = 0;
+      const selects = document.querySelectorAll('[data-catalog-brand-filter]');
+      selects.forEach(s => { s.value = state.brand; });
+      syncQuickFilterChips();
+      renderUI();
+      if (isMobileFilterSheetOpen()) closeMobileFilters();
+    };
+  });
+
+  document.querySelectorAll('[data-quick-avail]').forEach((btn) => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      if (state.availability === 'available') {
+        state.availability = 'all';
+      } else {
+        state.availability = 'available';
+      }
+      state.page = 0;
+      const selects = document.querySelectorAll('[data-catalog-availability-filter]');
+      selects.forEach(s => { s.value = state.availability; });
+      syncQuickFilterChips();
+      renderUI();
+    };
+  });
+}
+
+function syncQuickFilterChips() {
+  const currentBrand = (state.brand || 'all').toLowerCase();
+  const isAvail = state.availability === 'available';
+
+  document.querySelectorAll('[data-quick-brand]').forEach((btn) => {
+    const b = (btn.dataset.quickBrand || 'all').toLowerCase();
+    const isActive = b === currentBrand;
+    btn.classList.toggle('is-active', isActive);
+    btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+
+  document.querySelectorAll('[data-quick-avail]').forEach((btn) => {
+    btn.classList.toggle('is-active', isAvail);
+    btn.setAttribute('aria-pressed', isAvail ? 'true' : 'false');
   });
 }
 
@@ -355,6 +465,30 @@ function renderCompactMobileCatalogView() {
     return price >= state.minPrice && price <= state.maxPrice;
   });
   db = sortCatalogProducts(applyAvailabilityFilter(db));
+
+  // Si hay una marca filtrada o filtro de disponibilidad activo, mostrar productos directamente
+  if (state.brand !== 'all' || (state.availability !== 'all' && state.dept === 'all' && state.category === 'all')) {
+    const brandLabel = state.brand !== 'all' ? `Marca: ${state.brand}` : 'Disponibles';
+    updateCatalogContextBar({
+      title: state.brand !== 'all' ? state.brand : 'Productos Disponibles',
+      description: `${db.length} producto${db.length !== 1 ? 's' : ''} para tu selección.`,
+      resultsLabel: `${db.length} producto${db.length !== 1 ? 's' : ''}`,
+      activeLabel: brandLabel,
+      canReset: true
+    });
+
+    if (db.length === 0) {
+      renderEmptyState(
+        'Sin resultados',
+        'No encontramos productos con los filtros seleccionados. Prueba con otra marca o limpia los filtros.'
+      );
+    } else {
+      state.allFilteredProducts = db;
+      state.page = 0;
+      renderPaginatedProducts();
+    }
+    return true;
+  }
 
   if (state.category === 'all') {
     if (state.dept === 'all') {
@@ -794,6 +928,7 @@ function renderMobilePreviewSection({ eyebrow, title, actionLabel, onAction, pro
 
 function getCatalogResetLabel() {
   if (state.searchQuery) return 'Limpiar búsqueda';
+  if (state.brand !== 'all' || state.availability !== 'all') return 'Limpiar filtros';
   if (state.category !== 'all') return 'Volver a categorías';
   if (state.dept !== 'all') return 'Ver todo';
   return 'Reiniciar vista';
@@ -804,6 +939,18 @@ function handleCatalogResetAction() {
 
   if (state.searchQuery) {
     clearSearch();
+    return;
+  }
+
+  if (state.brand !== 'all' || state.availability !== 'all') {
+    state.brand = 'all';
+    state.availability = 'all';
+    const brandSelects = document.querySelectorAll('[data-catalog-brand-filter]');
+    brandSelects.forEach(s => { s.value = 'all'; });
+    const availSelects = document.querySelectorAll('[data-catalog-availability-filter]');
+    availSelects.forEach(s => { s.value = 'all'; });
+    syncQuickFilterChips();
+    renderUI();
     return;
   }
 
@@ -1009,6 +1156,38 @@ function renderUI() {
 
   // NIVEL 1: CUBÍCULOS DE SUBCATEGORÍAS
   if (state.category === 'all') {
+    if (state.brand !== 'all') {
+      updateCatalogContextBar({
+        title: `Productos ${state.brand}`,
+        description: `${db.length} producto${db.length !== 1 ? 's' : ''} disponibles de la marca ${state.brand}.`,
+        resultsLabel: `${db.length} artículo${db.length !== 1 ? 's' : ''}`,
+        activeLabel: `Marca: ${state.brand}`,
+        canReset: true
+      });
+
+      renderHeader(
+        `Marca: ${state.brand}`,
+        `${db.length} producto${db.length !== 1 ? 's' : ''} registrado${db.length !== 1 ? 's' : ''}`,
+        true,
+        () => {
+          state.brand = 'all';
+          const brandSelects = document.querySelectorAll('[data-catalog-brand-filter]');
+          brandSelects.forEach(s => { s.value = 'all'; });
+          syncQuickFilterChips();
+          renderUI();
+        }
+      );
+
+      if (db.length === 0) {
+        renderEmptyState('Sin resultados', `No encontramos productos para la marca ${state.brand}.`);
+      } else {
+        state.allFilteredProducts = db;
+        state.page = 0;
+        renderPaginatedProducts();
+      }
+      return;
+    }
+
     const categoriesGroups = {};
     db.forEach(p => {
       if (!categoriesGroups[p.category]) categoriesGroups[p.category] = 0;
@@ -1481,6 +1660,8 @@ function setBrand(brandName) {
 let lastModalTrigger = null;
 
 function openProductModal(id) {
+  const modal = document.getElementById('product-modal');
+  if (!modal) return;
   const product = mockDatabase.find(p => p.id === id);
   if (!product) return;
   const serviceItem = isServiceItem(product);
@@ -1490,74 +1671,95 @@ function openProductModal(id) {
   lastModalTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   if (purchasableProduct) setModalCartProduct(id);
 
-  document.getElementById('modal-title').textContent = product.title;
-  document.getElementById('modal-price').textContent = quoteOnlyItem ? 'Consultar precio' : product.price;
-  document.getElementById('modal-brand').textContent = serviceItem ? 'SERVICIO' : product.brand;
+  const titleEl = document.getElementById('modal-title');
+  if (titleEl) titleEl.textContent = product.title;
+
+  const priceEl = document.getElementById('modal-price');
+  if (priceEl) priceEl.textContent = quoteOnlyItem ? 'Consultar precio' : product.price;
+
+  const brandEl = document.getElementById('modal-brand');
+  if (brandEl) brandEl.textContent = serviceItem ? 'SERVICIO' : product.brand;
+
   const availabilityPill = document.getElementById('modal-availability');
   if (availabilityPill) {
     availabilityPill.textContent = serviceItem ? 'A medida' : quoteOnlyItem ? 'Sujeto a disponibilidad' : 'Disponible';
     availabilityPill.classList.toggle('modal-availability-pill--service', serviceItem);
   }
-  document.getElementById('modal-desc').textContent = product.desc;
+
+  const descEl = document.getElementById('modal-desc');
+  if (descEl) descEl.textContent = product.desc;
+
   const metaSummary = document.getElementById('modal-meta-summary');
   if (metaSummary) {
     metaSummary.textContent = serviceItem
       ? `${getDeptDisplayName(product.department)} · ${product.category}`
       : `${product.brand} · ${product.category}`;
   }
+
   const specsTitle = document.querySelector('.specs-title');
   if (specsTitle) {
     specsTitle.textContent = serviceItem ? 'Alcance del Servicio' : 'Especificaciones Técnicas';
   }
 
   const mainImg = document.getElementById('modal-main-img');
-  mainImg.src = product.img;
-  mainImg.style.objectPosition = product.imagePosition || '50% 50%';
-  mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
+  if (mainImg) {
+    mainImg.src = product.img;
+    mainImg.style.objectPosition = product.imagePosition || '50% 50%';
+    mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
+  }
 
   const thumbsContainer = document.getElementById('modal-thumbnails');
-  thumbsContainer.innerHTML = '';
-  thumbsContainer.hidden = !product.gallery || product.gallery.length <= 1;
+  if (thumbsContainer) {
+    thumbsContainer.innerHTML = '';
+    thumbsContainer.hidden = !product.gallery || product.gallery.length <= 1;
 
-  if (product.gallery && product.gallery.length > 0) {
-    product.gallery.forEach((url, i) => {
-      const thumb = document.createElement('img');
-      thumb.className = i === 0 ? 'thumb-img active' : 'thumb-img';
-      thumb.src = url;
-      thumb.alt = `${product.title} - Imagen ${i + 1}`;
-      thumb.onerror = function () { this.style.display = 'none'; };
-      thumb.addEventListener('click', () => {
-        mainImg.src = url;
-        mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
-        document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
+    if (product.gallery && product.gallery.length > 0) {
+      product.gallery.forEach((url, i) => {
+        const thumb = document.createElement('img');
+        thumb.className = i === 0 ? 'thumb-img active' : 'thumb-img';
+        thumb.src = url;
+        thumb.alt = `${product.title} - Imagen ${i + 1}`;
+        thumb.onerror = function () { this.style.display = 'none'; };
+        thumb.addEventListener('click', () => {
+          if (mainImg) {
+            mainImg.src = url;
+            mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
+          }
+          document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+        });
+        thumbsContainer.appendChild(thumb);
       });
-      thumbsContainer.appendChild(thumb);
-    });
+    }
   }
 
   const specsList = document.getElementById('modal-specs');
-  specsList.innerHTML = '';
-  if (product.specs && product.specs.length > 0) {
-    product.specs.forEach(spec => {
-      const li = document.createElement('li');
-      const icon = document.createElement('i');
-      icon.setAttribute('data-lucide', 'check-circle-2');
-      const span = document.createElement('span');
-      span.textContent = spec;
-      li.appendChild(icon);
-      li.appendChild(span);
-      specsList.appendChild(li);
-    });
+  if (specsList) {
+    specsList.innerHTML = '';
+    if (product.specs && product.specs.length > 0) {
+      product.specs.forEach(spec => {
+        const li = document.createElement('li');
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', 'check-circle-2');
+        const span = document.createElement('span');
+        span.textContent = spec;
+        li.appendChild(icon);
+        li.appendChild(span);
+        specsList.appendChild(li);
+      });
+    }
   }
 
   const btnQuote = document.getElementById('modal-quote-btn');
-  btnQuote.textContent = '';
-  const quoteIcon = document.createElement('i');
-  quoteIcon.setAttribute('data-lucide', 'message-circle');
-  btnQuote.appendChild(quoteIcon);
-  btnQuote.appendChild(document.createTextNode(' ' + (serviceItem ? 'Solicitar este servicio' : quoteOnlyItem ? 'Consultar precio' : 'Cotizar Modelo Exacto')));
-  btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem, quoteOnlyItem); };
+  if (btnQuote) {
+    btnQuote.textContent = '';
+    const quoteIcon = document.createElement('i');
+    quoteIcon.setAttribute('data-lucide', 'message-circle');
+    btnQuote.appendChild(quoteIcon);
+    btnQuote.appendChild(document.createTextNode(' ' + (serviceItem ? 'Solicitar este servicio' : quoteOnlyItem ? 'Consultar precio' : 'Cotizar Modelo Exacto')));
+    btnQuote.onclick = () => { requestQuote(product.title, product.brand, product.price, serviceItem, quoteOnlyItem); };
+  }
+
   const btnAddCart = document.getElementById('modal-add-cart-btn');
   if (btnAddCart) {
     btnAddCart.hidden = !purchasableProduct;
@@ -1566,10 +1768,9 @@ function openProductModal(id) {
   }
 
   if (typeof lucide !== 'undefined') {
-    lucide.createIcons({ root: document.getElementById('product-modal') });
+    lucide.createIcons({ root: modal });
   }
 
-  const modal = document.getElementById('product-modal');
   const modalContent = modal.querySelector('.modal-content');
   modal.style.display = 'flex';
   modal.setAttribute('aria-hidden', 'false');
@@ -1919,6 +2120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     brandFilter.addEventListener('change', (e) => {
       state.brand = e.target.value;
       state.page = 0;
+      syncQuickFilterChips();
       renderUI();
     });
   }
@@ -1928,6 +2130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     availabilityFilter.addEventListener('change', (e) => {
       state.availability = e.target.value;
       state.page = 0;
+      syncQuickFilterChips();
       renderUI();
     });
   }
@@ -1983,6 +2186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     syncFilterButtons(state.dept);
     syncPriceControlsFromState();
+    syncQuickFilterChips();
 
     const initialInput = document.getElementById('search-catalog-page');
     if (initialInput && q) initialInput.value = q;

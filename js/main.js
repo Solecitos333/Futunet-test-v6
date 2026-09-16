@@ -1264,19 +1264,44 @@ function initAnnouncementBar() {
   if (couponBtn) {
     const couponSpan = couponBtn.querySelector('.coupon-text');
     const originalText = campaign.coupon;
-    couponBtn.addEventListener('click', () => {
+    const showCopiedState = () => {
+      if (couponSpan) couponSpan.textContent = '¡Copiado! ✓';
+      couponBtn.style.background = '#dcfce7';
+      couponBtn.style.color = '#15803d';
+      setTimeout(() => {
+        if (couponSpan) couponSpan.textContent = originalText;
+        couponBtn.style.background = '';
+        couponBtn.style.color = '';
+      }, 2000);
+    };
+
+    const copyWithFallback = (text) => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(originalText).then(() => {
-          couponSpan.textContent = '¡Copiado! ✓';
-          couponBtn.style.background = '#dcfce7';
-          couponBtn.style.color = '#15803d';
-          setTimeout(() => {
-            couponSpan.textContent = originalText;
-            couponBtn.style.background = '';
-            couponBtn.style.color = '';
-          }, 2000);
-        }).catch(() => {});
+        navigator.clipboard.writeText(text).then(showCopiedState).catch(() => {
+          fallbackPromoCopy(text);
+        });
+      } else {
+        fallbackPromoCopy(text);
       }
+    };
+
+    const fallbackPromoCopy = (text) => {
+      try {
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.style.position = 'fixed';
+        temp.style.left = '-9999px';
+        document.body.appendChild(temp);
+        temp.focus();
+        temp.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(temp);
+        if (ok) showCopiedState();
+      } catch (err) {}
+    };
+
+    couponBtn.addEventListener('click', () => {
+      copyWithFallback(originalText);
     });
     couponBtn.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {

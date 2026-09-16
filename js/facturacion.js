@@ -1788,6 +1788,7 @@ window.ERPBilling = (function () {
 
   function renderPaginationControls(totalPages) {
     const container = document.getElementById('invoices-pagination');
+    if (!container) return;
     container.innerHTML = '';
 
     const div = document.createElement('div');
@@ -1802,19 +1803,27 @@ window.ERPBilling = (function () {
 
     container.appendChild(div);
 
-    document.getElementById('btn-page-prev').addEventListener('click', () => {
-      if (invoiceCurrentPage > 1) {
-        invoiceCurrentPage--;
-        renderInvoicesTable();
-      }
-    });
-    document.getElementById('btn-page-next').addEventListener('click', () => {
-      if (invoiceCurrentPage < totalPages) {
-        invoiceCurrentPage++;
-        renderInvoicesTable();
-      }
-    });
-    const loadMoreButton = document.getElementById('btn-load-more-invoices');
+    const prevBtn = div.querySelector('#btn-page-prev');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (invoiceCurrentPage > 1) {
+          invoiceCurrentPage--;
+          renderInvoicesTable();
+        }
+      });
+    }
+
+    const nextBtn = div.querySelector('#btn-page-next');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (invoiceCurrentPage < totalPages) {
+          invoiceCurrentPage++;
+          renderInvoicesTable();
+        }
+      });
+    }
+
+    const loadMoreButton = div.querySelector('#btn-load-more-invoices');
     if (loadMoreButton) loadMoreButton.addEventListener('click', loadMoreBillingHistory);
   }
 
