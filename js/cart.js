@@ -117,7 +117,11 @@
       try {
         const saved = window.localStorage.getItem('futunetCustomOfficeBundle');
         if (saved) {
-          return JSON.parse(saved);
+          const parsedBundle = JSON.parse(saved);
+          if (parsedBundle && typeof parsedBundle === 'object' && !parsedBundle.department) {
+            parsedBundle.department = 'oficina';
+          }
+          return parsedBundle;
         }
       } catch (e) {
         console.warn('Error reading custom bundle:', e);
@@ -125,6 +129,7 @@
       return {
         id: 'custom_office_bundle',
         title: 'Configuración Personalizada de Oficina',
+        department: 'oficina',
         category: 'Equipos de Oficina',
         brand: 'FUTUNET B2B',
         price: 'RD$ 0',
@@ -862,7 +867,7 @@
     document.body.appendChild(modal);
 
     // Bind events
-    document.getElementById('close-checkout-modal').addEventListener('click', closeCheckoutModal);
+    document.getElementById('close-checkout-modal')?.addEventListener('click', closeCheckoutModal);
 
     // Coupon logic
     const btnApplyCoupon = document.getElementById('btn-apply-coupon');
@@ -1626,6 +1631,21 @@
     const user = event.detail.user;
     if (user) {
       await syncCartToFirestore(user);
+    }
+  });
+
+  // Sincronizar reactivamente cuando otro script (p. ej. Mi Cuenta) o pestaña actualice el carrito
+  function handleExternalCartUpdate() {
+    loadCartState();
+    renderCartDrawer();
+    if (typeof window.updateInlineCartButtons === 'function') {
+      window.updateInlineCartButtons();
+    }
+  }
+  window.addEventListener('futunet-cart-updated', handleExternalCartUpdate);
+  window.addEventListener('storage', function(event) {
+    if (event.key === CART_STORAGE_KEY) {
+      handleExternalCartUpdate();
     }
   });
 })();

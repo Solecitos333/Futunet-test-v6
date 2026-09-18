@@ -268,8 +268,8 @@
       notice('sp-form-notice', 'Hay un borrador del asistente listo. Puedes reemplazar el formulario actual cuando termines de revisarlo.');
       const button = document.createElement('button'); button.type = 'button'; button.className = 'sp-btn';
       button.textContent = 'Usar borrador del asistente';
-      button.addEventListener('click', () => { if (!$('sp-send').disabled) apply(); });
-      $('sp-form-notice').append(button);
+      button.addEventListener('click', () => { if (!$('sp-send')?.disabled) apply(); });
+      $('sp-form-notice')?.append(button);
     } else apply();
   }
   function init() {
@@ -280,18 +280,26 @@
     window.addEventListener('futunet-support-draft', importChatDraft);
     document.querySelectorAll('[data-open-assistant]').forEach(button => button.addEventListener('click', event => { event.stopPropagation(); window.dispatchEvent(new Event('futunet-open-chat')); }));
     ['sp-search', 'sp-status', 'sp-source'].forEach(id => $(id)?.addEventListener('input', renderList));
-    $('sp-refresh').addEventListener('click', watchList);
-    $('sp-list').addEventListener('click', event => { const button = event.target.closest('[data-ticket]'); if (button) openDetail(button.dataset.ticket); });
-    $('sp-find-form').addEventListener('submit', event => { event.preventDefault(); try { S.identity(); openDetail($('sp-find-id').value.trim()); } catch (e) { notice('sp-list-notice', errorText(e), true); } });
+    $('sp-refresh')?.addEventListener('click', watchList);
+    $('sp-list')?.addEventListener('click', event => { const button = event.target.closest('[data-ticket]'); if (button) openDetail(button.dataset.ticket); });
+    $('sp-find-form')?.addEventListener('submit', event => { event.preventDefault(); try { S.identity(); openDetail($('sp-find-id')?.value.trim()); } catch (e) { notice('sp-list-notice', errorText(e), true); } });
     document.querySelectorAll('[data-support-topic]').forEach(button => button.addEventListener('click', () => {
-      $('sp-type').value = button.dataset.supportTopic; $('sp-type').dispatchEvent(new Event('change'));
-      $('sp-review').hidden = true; $('sp-edit-fields').hidden = false;
-      $('sp-new-case').scrollIntoView({ block: 'start' }); focus('sp-title');
+      const typeEl = $('sp-type');
+      if (typeEl) {
+        typeEl.value = button.dataset.supportTopic;
+        typeEl.dispatchEvent(new Event('change'));
+      }
+      const revEl = $('sp-review'); if (revEl) revEl.hidden = true;
+      const editEl = $('sp-edit-fields'); if (editEl) editEl.hidden = false;
+      $('sp-new-case')?.scrollIntoView({ block: 'start' }); focus('sp-title');
     }));
     if (window.FutunetAuth) {
       FutunetAuth.authReady.then(sessionChanged);
       window.addEventListener('futunet-auth-ready', sessionChanged);
-    } else { notice('sp-list-notice', 'No se pudo conectar con el servicio. Recarga la página o utiliza WhatsApp.', true); $('sp-signin').hidden = false; }
+    } else {
+      notice('sp-list-notice', 'No se pudo conectar con el servicio. Recarga la página o utiliza WhatsApp.', true);
+      const signin = $('sp-signin'); if (signin) signin.hidden = false;
+    }
     if (location.hash === '#sp-cases') {
       setTimeout(() => $('sp-cases')?.scrollIntoView({ behavior: 'smooth' }), 60);
     } else if (location.hash === '#sp-new-case') {

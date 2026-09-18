@@ -1076,13 +1076,13 @@
         department: 'oficina',
         category: 'Mobiliario',
         brand: 'Futunet Mobiliario',
-        title: 'Escritorio ejecutivo negro con cubierta de vidrio',
-        desc: 'Superficie de vidrio negro y almacenamiento lateral integrado.',
+        title: 'Librero de madera ejecutivo para oficina',
+        desc: 'Librero y estantería de madera para archivo de expedientes, carpetas y libros ejecutivos.',
         price: 'Cotizar',
         img: 'img/productos/mobiliario/mob-7.jpeg',
         gallery: ['img/productos/mobiliario/mob-7.jpeg'],
         imagePosition: '50% 50%',
-        specs: ['Cubierta de vidrio negro', 'Almacenamiento lateral', 'Diseño ejecutivo']
+        specs: ['Estructura de madera resistente', 'Estantes reforzados para archivo y libros', 'Acabado ejecutivo de alta durabilidad', 'Instalación corporativa disponible']
       },
       {
         id: 'mob_oficina_8',

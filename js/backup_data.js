@@ -5464,9 +5464,9 @@ const mockDatabase = [
     "title": "Video Balum AHD",
     "desc": "Calidad Premium. Video Balum AHD. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 150.00",
-    "img": "img/productos/catalogo/camaras.jpg",
+    "img": "img/camaras.jpg",
     "gallery": [
-      "img/productos/catalogo/camaras.jpg"
+      "img/camaras.jpg"
     ],
     "specs": [
       "Garantía premium directa: Genérico",
@@ -5685,17 +5685,18 @@ const mockDatabase = [
     "department": "oficina",
     "category": "Mobiliario",
     "brand": "Futunet Mobiliario",
-    "title": "Librero de Madera",
-    "desc": "Mobiliario de alta calidad para optimizar tu espacio de trabajo.",
+    "title": "Librero de madera ejecutivo para oficina",
+    "desc": "Librero y estantería de madera para archivo de expedientes, carpetas y libros ejecutivos.",
     "price": "Cotizar",
     "img": "img/productos/mobiliario/mob-7.jpeg",
     "gallery": [
       "img/productos/mobiliario/mob-7.jpeg"
     ],
     "specs": [
-      "Diseño ergonómico",
-      "Materiales de alta durabilidad",
-      "Instalación disponible"
+      "Estructura de madera resistente",
+      "Estantes reforzados para archivo y libros",
+      "Acabado ejecutivo de alta durabilidad",
+      "Instalación corporativa disponible"
     ]
   },
   {

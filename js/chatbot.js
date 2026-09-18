@@ -252,7 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cbSendBtn.disabled = busy;
     chips.querySelectorAll('button').forEach(button => { button.disabled = busy; });
     messages.setAttribute('aria-busy', String(busy));
-    document.getElementById('cb-status').textContent = busy ? 'Preparando respuesta…' : 'Asistente virtual · Gemini';
+    const statusEl = document.getElementById('cb-status');
+    if (statusEl) statusEl.textContent = busy ? 'Preparando respuesta…' : 'Asistente virtual · Gemini';
   }
 
   async function sendMessage(value) {
@@ -299,7 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Keep the user's report even when the provider fails; later turns retain context.
       history.push({ role: 'user', text }, { role: 'model', text: reply });
       trimHistory();
-      document.getElementById('cb-status').textContent = 'Soporte disponible';
+      const statusEl = document.getElementById('cb-status');
+      if (statusEl) statusEl.textContent = 'Soporte disponible';
     } finally {
       clearTimeout(timer);
       if (currentEpoch === epoch) { pending = null; setBusy(false); }
@@ -342,8 +344,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initialized = true; initConversation();
   }
 
-  document.getElementById('cb-ticket').addEventListener('click', prepareTicket);
-  document.getElementById('cb-reset').addEventListener('click', resetConversation);
+  document.getElementById('cb-ticket')?.addEventListener('click', prepareTicket);
+  document.getElementById('cb-reset')?.addEventListener('click', resetConversation);
   function sendPrompt(promptText) {
     if (!promptText || typeof promptText !== 'string') return;
     openChat();

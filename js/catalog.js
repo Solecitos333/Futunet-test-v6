@@ -178,8 +178,30 @@ function syncCatalogUrl() {
 
 function populateBrandFilter() {
   const selects = document.querySelectorAll('[data-catalog-brand-filter]');
-  const brands = [...new Set(mockDatabase.map((product) => String(product.brand || '').trim()).filter(Boolean))]
-    .sort((a, b) => a.localeCompare(b, 'es'));
+  const preferredNames = {
+    dell: 'Dell',
+    hp: 'HP',
+    lenovo: 'Lenovo',
+    epson: 'Epson',
+    tgm: 'TGM',
+    asus: 'ASUS',
+    acer: 'Acer',
+    apple: 'Apple',
+    intel: 'Intel',
+    gigabyte: 'Gigabyte',
+    dahua: 'Dahua',
+    hikvision: 'Hikvision',
+    grandstream: 'Grandstream'
+  };
+  const rawBrands = mockDatabase.map((product) => String(product.brand || '').trim()).filter(Boolean);
+  const brandMap = new Map();
+  rawBrands.forEach((b) => {
+    const key = b.toLowerCase();
+    if (!brandMap.has(key)) {
+      brandMap.set(key, preferredNames[key] || b);
+    }
+  });
+  const brands = Array.from(brandMap.values()).sort((a, b) => a.localeCompare(b, 'es'));
   if (selects.length) {
     selects.forEach((select) => {
       const current = select.value || state.brand;
@@ -200,6 +222,16 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
+  const orderedBrands = [...brands].sort((a, b) => {
+    const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
+    const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.localeCompare(b, 'es');
+  });
+
   if (container) {
     let html = `
       <button type="button" class="catalog-chip catalog-chip--avail ${isAvail ? 'is-active' : ''}" data-quick-avail="available" aria-pressed="${isAvail}" title="Ver solo productos registrados como disponibles">
@@ -212,7 +244,7 @@ function renderQuickFilterChips(brands) {
       </button>
     `;
 
-    brands.forEach((brand) => {
+    orderedBrands.forEach((brand) => {
       const active = currentBrand === brand.toLowerCase();
       html += `
         <button type="button" class="catalog-chip ${active ? 'is-active' : ''}" data-quick-brand="${escapeHTML(brand)}" aria-pressed="${active}">
@@ -233,7 +265,7 @@ function renderQuickFilterChips(brands) {
         <span>Todas</span>
       </button>
     `;
-    brands.forEach((brand) => {
+    orderedBrands.forEach((brand) => {
       const active = currentBrand === brand.toLowerCase();
       sheetHtml += `
         <button type="button" class="catalog-chip ${active ? 'is-active' : ''}" data-quick-brand="${escapeHTML(brand)}" aria-pressed="${active}">

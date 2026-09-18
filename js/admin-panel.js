@@ -3780,6 +3780,31 @@
         if (btnComplete) btnComplete.style.display = 'block';
       }
 
+      var btnWhatsApp = document.getElementById('sr-whatsapp-btn');
+      if (btnWhatsApp) {
+        var cleanPhone = String(req.phone || '').replace(/\D/g, '');
+        if (cleanPhone) {
+          if (cleanPhone.length === 10) cleanPhone = '1' + cleanPhone;
+          var waMsg = encodeURIComponent('¡Hola ' + (req.name || '') + '! Nos comunicamos de Futunet respecto a su solicitud de ' + (req.serviceTitle || 'servicio') + '.');
+          btnWhatsApp.href = 'https://wa.me/' + cleanPhone + '?text=' + waMsg;
+          btnWhatsApp.style.display = 'inline-flex';
+        } else {
+          btnWhatsApp.style.display = 'none';
+        }
+      }
+
+      var btnEmail = document.getElementById('sr-email-btn');
+      if (btnEmail) {
+        if (req.email && req.email.includes('@')) {
+          var mailSubject = encodeURIComponent('Futunet - Respuesta a su solicitud de ' + (req.serviceTitle || 'servicio'));
+          var mailBody = encodeURIComponent('Estimado/a ' + (req.name || 'cliente') + ',\n\nGracias por comunicarse con Futunet. Nos ponemos en contacto en relación con su solicitud:\n\n"' + (req.message || '') + '"\n\nQuedamos atentos a sus requerimientos.\n\nAtentamente,\nEquipo Futunet');
+          btnEmail.href = 'mailto:' + encodeURIComponent(req.email) + '?subject=' + mailSubject + '&body=' + mailBody;
+          btnEmail.style.display = 'inline-flex';
+        } else {
+          btnEmail.style.display = 'none';
+        }
+      }
+
       openModal('service-request-detail-modal');
     } catch (err) {
       showToast('Error al abrir solicitud', 'error');

@@ -75,12 +75,12 @@
       var btn = document.getElementById('profile-save-btn');
       if (btn) btn.disabled = true;
 
-      var name = document.getElementById('profile-name').value.trim();
-      var phone = document.getElementById('profile-phone').value.trim();
-      var address = document.getElementById('profile-address').value.trim();
-      var documentType = document.getElementById('profile-document-type').value;
-      var documentNumber = document.getElementById('profile-document-number').value.trim();
-      var acceptedTerms = document.getElementById('profile-terms').checked;
+      var name = (document.getElementById('profile-name')?.value || '').trim();
+      var phone = (document.getElementById('profile-phone')?.value || '').trim();
+      var address = (document.getElementById('profile-address')?.value || '').trim();
+      var documentType = document.getElementById('profile-document-type')?.value || 'cedula';
+      var documentNumber = (document.getElementById('profile-document-number')?.value || '').trim();
+      var acceptedTerms = !!document.getElementById('profile-terms')?.checked;
 
       if (!acceptedTerms) {
         showToast('Debes aceptar los términos y la política de privacidad.', 'error');

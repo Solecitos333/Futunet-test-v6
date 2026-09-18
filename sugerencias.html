@@ -334,9 +334,15 @@
           Tu sugerencia ha sido registrada exitosamente. Nuestro equipo revisa periódicamente cada aporte para mejorar continuamente la web y nuestros servicios en general.
         </p>
 
-        <div>
-          <span style="display:block; font-size:0.85rem; color:var(--sug-text-muted); margin-bottom:6px;">Código de referencia de tu sugerencia:</span>
-          <div id="sug-ref-code" class="sug-code-badge">SUG-XXXXX</div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <span style="display:block; font-size:0.85rem; color:var(--sug-text-muted);">Código de referencia de tu sugerencia:</span>
+          <div style="display:flex; align-items:center; gap:10px; justify-content:center; flex-wrap:wrap;">
+            <div id="sug-ref-code" class="sug-code-badge">SUG-XXXXX</div>
+            <button type="button" id="sug-copy-code-btn" class="sug-btn-secondary" style="padding:8px 16px; font-size:0.88rem; border-radius:8px; display:inline-flex; align-items:center; gap:6px; cursor:pointer;" aria-label="Copiar código de referencia">
+              <i data-lucide="copy" id="sug-copy-btn-icon" style="width:16px; height:16px;"></i>
+              <span id="sug-copy-btn-text">Copiar código</span>
+            </button>
+          </div>
         </div>
 
         <div class="sug-success-actions">

@@ -547,28 +547,40 @@
     <div class="request-card">
      <h3>Solicitar evaluación</h3>
      <p>Completa los datos básicos para que podamos contextualizar tu proyecto.</p>
-     <form id="service-request-form">
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-name">Nombre completo</label>
-       <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-       <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-email">Correo electrónico</label>
-       <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
-       <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-message">Detalles del espacio</label>
-       <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: oficina en Santiago, dos divisiones de sheetrock, pintura e iluminación para un área aproximada de 80 m²."></textarea>
-      </div>
-      <button type="submit" class="request-btn-submit" id="req-submit-btn">
+      <form id="service-request-form">
+       <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+        <label for="req-hp-check">No llenar este campo</label>
+        <input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-name">Nombre completo</label>
+        <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+        <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-email">Correo electrónico</label>
+        <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
+        <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-message">Detalles del espacio</label>
+        <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: oficina en Santiago, dos divisiones de sheetrock, pintura e iluminación para un área aproximada de 80 m²."></textarea>
+       </div>
+
+       <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+         <input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+         <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>
+        </label>
+       </div>
+
+       <button type="submit" class="request-btn-submit" id="req-submit-btn">
        <i data-lucide="send" aria-hidden="true"></i>
        Enviar solicitud
       </button>

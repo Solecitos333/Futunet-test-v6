@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v21';
+const CACHE_NAME = 'futunet-cache-v22';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -66,7 +66,13 @@ const OPTIONAL_ASSETS = [
   './producto.html',
   './soporte.html',
   './sugerencias.html',
+  './gaming.html',
+  './corporativo.html',
+  './privacidad.html',
+  './terminos.html',
   './css/suggestions.css',
+  './css/gaming.css',
+  './js/gaming.js',
   './js/suggestions.js',
   './js/chatbot-firebase.mjs',
   './css/support.css'

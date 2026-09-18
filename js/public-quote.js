@@ -70,15 +70,18 @@
   }
 
   async function respond(status) {
-    const name = document.getElementById('quote-signer-name').value.trim();
-    const acceptedTerms = document.getElementById('quote-accept-terms').checked;
-    if (name.length < 3) { document.getElementById('quote-signer-name').reportValidity(); return; }
-    if (!acceptedTerms) { document.getElementById('quote-accept-terms').reportValidity(); return; }
+    const nameEl = document.getElementById('quote-signer-name');
+    const termsEl = document.getElementById('quote-accept-terms');
+    const name = (nameEl?.value || '').trim();
+    const acceptedTerms = !!termsEl?.checked;
+    if (name.length < 3) { nameEl?.reportValidity(); return; }
+    if (!acceptedTerms) { termsEl?.reportValidity(); return; }
     const buttons = document.querySelectorAll('#quote-response-form button');
     buttons.forEach(button => { button.disabled = true; });
     try {
+      const noteVal = (document.getElementById('quote-response-note')?.value || '').trim();
       await db().collection('public_quote_links').doc(token).update({
-        responseStatus: status, signerName: name, responseNote: document.getElementById('quote-response-note').value.trim(),
+        responseStatus: status, signerName: name, responseNote: noteVal,
         acceptedTerms: true, respondedAt: serverTime(), updatedAt: serverTime()
       });
       showResult(status);
@@ -104,8 +107,8 @@
     } catch (error) { fail('No pudimos verificar la cotización. Revisa tu conexión o solicita un enlace nuevo.'); }
   }
 
-  document.getElementById('quote-response-form').addEventListener('submit', event => { event.preventDefault(); respond('accepted'); });
-  document.getElementById('quote-reject-button').addEventListener('click', () => respond('rejected'));
-  document.getElementById('quote-print-button').addEventListener('click', () => window.print());
+  document.getElementById('quote-response-form')?.addEventListener('submit', event => { event.preventDefault(); respond('accepted'); });
+  document.getElementById('quote-reject-button')?.addEventListener('click', () => respond('rejected'));
+  document.getElementById('quote-print-button')?.addEventListener('click', () => window.print());
   window.addEventListener('load', init);
 })();

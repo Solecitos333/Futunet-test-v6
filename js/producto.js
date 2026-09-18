@@ -282,17 +282,21 @@
     if (breadcrumbSection) breadcrumbSection.textContent = detail.category || detail.departmentLabel;
     if (breadcrumbCurrent) breadcrumbCurrent.textContent = detail.title;
 
-    document.getElementById('product-detail-brand').textContent = detail.brand;
-    document.getElementById('product-detail-availability').textContent = detail.availabilityLabel;
-    document.getElementById('product-detail-availability').classList.toggle('modal-availability-pill--service', detail.isService);
-    document.getElementById('product-detail-title').textContent = detail.title;
-    document.getElementById('product-detail-meta').textContent = detail.isService
+    const setElemText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || ''; };
+    setElemText('product-detail-brand', detail.brand);
+    const availEl = document.getElementById('product-detail-availability');
+    if (availEl) {
+      availEl.textContent = detail.availabilityLabel || '';
+      availEl.classList.toggle('modal-availability-pill--service', !!detail.isService);
+    }
+    setElemText('product-detail-title', detail.title);
+    setElemText('product-detail-meta', detail.isService
       ? `${detail.departmentLabel} · Servicio`
-      : `${detail.brand} · ${detail.category}`;
-    document.getElementById('product-detail-price').textContent = detail.price;
-    document.getElementById('product-detail-summary').textContent = detail.summary;
-    document.getElementById('product-detail-code').textContent = detail.productCode;
-    document.getElementById('product-description-text').textContent = detail.description;
+      : `${detail.brand} · ${detail.category}`);
+    setElemText('product-detail-price', detail.price);
+    setElemText('product-detail-summary', detail.summary);
+    setElemText('product-detail-code', detail.productCode);
+    setElemText('product-description-text', detail.description);
 
     function injectProductJsonLd(detail) {
       const existingScript = document.getElementById('product-jsonld');

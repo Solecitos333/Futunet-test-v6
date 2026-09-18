@@ -137,30 +137,35 @@
   async function submitProfile(event) {
     event.preventDefault();
     var button = document.getElementById('financing-submit-btn');
-    var idFile = document.getElementById('fin-id-photo').files[0];
-    var selfieFile = document.getElementById('fin-selfie-photo').files[0];
-    var accepted = document.getElementById('financing-terms').checked;
+    var idInput = document.getElementById('fin-id-photo');
+    var selfieInput = document.getElementById('fin-selfie-photo');
+    var idFile = idInput?.files?.[0];
+    var selfieFile = selfieInput?.files?.[0];
+    var accepted = !!document.getElementById('financing-terms')?.checked;
 
     try {
-      var identity = FutunetAuth.normalizeIdentityDocument(
-        document.getElementById('fin-document-type').value,
-        document.getElementById('fin-document-number').value
-      );
+      var docType = document.getElementById('fin-document-type')?.value || '';
+      var docNum = document.getElementById('fin-document-number')?.value || '';
+      var identity = FutunetAuth.normalizeIdentityDocument(docType, docNum);
       validateImage(idFile, 'la foto del documento');
       validateImage(selfieFile, 'la foto sosteniendo el documento');
       if (!signatureDrawn) throw new Error('Dibuja tu firma digital antes de enviar.');
       if (!accepted) throw new Error('Debes aceptar las políticas y condiciones de financiamiento.');
 
-      button.disabled = true;
-      button.textContent = 'Protegiendo y subiendo documentos...';
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Protegiendo y subiendo documentos...';
+      }
       var stamp = Date.now();
       var basePath = 'financing-documents/' + currentUser.uid + '/';
       var idUpload = await uploadFile(idFile, basePath + 'document_' + stamp + extensionFor(idFile));
       var selfieUpload = await uploadFile(selfieFile, basePath + 'selfie_' + stamp + extensionFor(selfieFile));
-      var signatureBlob = await canvasBlob(document.getElementById('fin-signature-canvas'));
+      var canvas = document.getElementById('fin-signature-canvas');
+      if (!canvas) throw new Error('No se encontró el lienzo de firma digital.');
+      var signatureBlob = await canvasBlob(canvas);
       var signatureUpload = await uploadFile(signatureBlob, basePath + 'signature_' + stamp + '.png', 'image/png');
-      var phone = document.getElementById('fin-phone').value.trim();
-      var address = document.getElementById('fin-address').value.trim();
+      var phone = (document.getElementById('fin-phone')?.value || '').trim();
+      var address = (document.getElementById('fin-address')?.value || '').trim();
       if (phone.length < 7) throw new Error('Ingresa un teléfono válido.');
       if (address.length < 8) throw new Error('Ingresa tu dirección residencial completa.');
 

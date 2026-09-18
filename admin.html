@@ -2406,9 +2406,21 @@
      </div>
     </div>
 
-    <div style="display:flex; gap:10px; margin-top:24px; justify-content:flex-end;">
-     <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('service-request-detail-modal')">Cerrar</button>
-     <button class="admin-btn admin-btn-primary" id="btn-complete-request" onclick="AdminPanel.markRequestCompleted()">Marcar como Completado</button>
+    <div style="display:flex; gap:10px; margin-top:24px; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+     <div style="display:flex; gap:8px; align-items:center;">
+      <a href="#" id="sr-whatsapp-btn" target="_blank" rel="noopener noreferrer" class="admin-btn" style="background:#25D366; color:#fff; display:inline-flex; align-items:center; gap:6px; font-size:0.85rem; padding:8px 14px; border-radius:8px; text-decoration:none;" title="Contactar al cliente por WhatsApp">
+       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.073-2.127-.521-1.625-.673-2.67-2.327-2.751-2.435-.082-.108-.66-8.777-.66-1.674 0-.797.42-1.19.57-1.345.15-.156.326-.195.434-.195.109 0 .218.001.312.006.1.005.234-.038.366.279.136.327.464 1.132.505 1.215.041.083.068.18.014.289-.054.108-.082.176-.163.272-.082.096-.172.214-.246.287-.082.08-.168.167-.072.332.096.165.426.702.915 1.137.628.56 1.158.733 1.323.815.165.082.261.072.358-.041.096-.112.414-.482.524-.648.109-.166.218-.138.366-.083.15.055.946.446 1.109.528.164.082.273.123.313.191.04.068.04 3.96-.104.801z"/></svg>
+       <span>WhatsApp</span>
+      </a>
+      <a href="#" id="sr-email-btn" class="admin-btn admin-btn-secondary" style="display:inline-flex; align-items:center; gap:6px; font-size:0.85rem; padding:8px 14px; border-radius:8px; text-decoration:none;" title="Responder por Correo">
+       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><rect width="20" height="16" x="2" y="4" rx="2"/></svg>
+       <span>Correo</span>
+      </a>
+     </div>
+     <div style="display:flex; gap:10px;">
+      <button class="admin-btn admin-btn-ghost" onclick="AdminPanel.closeModal('service-request-detail-modal')">Cerrar</button>
+      <button class="admin-btn admin-btn-primary" id="btn-complete-request" onclick="AdminPanel.markRequestCompleted()">Marcar como Completado</button>
+     </div>
     </div>
    </div>
   </div>

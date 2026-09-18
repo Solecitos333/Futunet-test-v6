@@ -741,40 +741,51 @@
        <h3>Contacto B2B</h3>
        <p>Envíanos los requerimientos de tu local o proyecto corporativo y te enviaremos una propuesta formal en 24 horas.</p>
 
-       <form id="service-request-form">
-        <input type="hidden" id="req-service-type" value="Corporativo B2B" />
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-name">Nombre de Contacto</label>
-         <input type="text" id="req-name" class="request-form-input" required />
-        </div>
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-         <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
-        </div>
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-email">Correo Institucional</label>
-         <input type="email" id="req-email" class="request-form-input" required />
-        </div>
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-company">Empresa / Razón Social</label>
-         <input type="text" id="req-company" class="request-form-input" required placeholder="Ej. Tiendas del Cibao SRL" />
-        </div>
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-profile">Perfil de tu Empresa</label>
-         <select id="req-profile" class="request-form-input" required style="width: 100%; border: 1.5px solid #e5eef8; border-radius: 12px; padding: 11px 14px; background: #f3f7fc;">
-          <option value="pyme">Pyme / Negocio Local / Local Comercial</option>
-          <option value="corporativo">Gran Empresa / Corporación / Nave Industrial</option>
-         </select>
-        </div>
-        <div class="request-form-group">
-         <label class="request-form-label" for="req-message">Especificaciones de tu requerimiento</label>
-         <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe brevemente tus necesidades (ej: cotizar plan de 200 Megas, cámaras para almacén y cableado estructurado)..."></textarea>
-        </div>
+        <form id="service-request-form">
+         <input type="hidden" id="req-service-type" value="Corporativo B2B" />
+         <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+          <label for="req-hp-check">No llenar este campo</label>
+          <input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-name">Nombre de Contacto</label>
+          <input type="text" id="req-name" class="request-form-input" required />
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+          <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-email">Correo Institucional</label>
+          <input type="email" id="req-email" class="request-form-input" required />
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-company">Empresa / Razón Social</label>
+          <input type="text" id="req-company" class="request-form-input" required placeholder="Ej. Tiendas del Cibao SRL" />
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-profile">Perfil de tu Empresa</label>
+          <select id="req-profile" class="request-form-input" required style="width: 100%; border: 1.5px solid #e5eef8; border-radius: 12px; padding: 11px 14px; background: #f3f7fc;">
+           <option value="pyme">Pyme / Negocio Local / Local Comercial</option>
+           <option value="corporativo">Gran Empresa / Corporación / Nave Industrial</option>
+          </select>
+         </div>
+         <div class="request-form-group">
+          <label class="request-form-label" for="req-message">Especificaciones de tu requerimiento</label>
+          <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Describe brevemente tus necesidades (ej: cotizar plan de 200 Megas, cámaras para almacén y cableado estructurado)..."></textarea>
+         </div>
 
-        <button type="submit" class="request-btn-submit" id="req-submit-btn">
-         <i data-lucide="send"></i>Solicitar Propuesta Corporativa
-        </button>
-       </form>
+         <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;">
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+           <input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+           <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>
+          </label>
+         </div>
+
+         <button type="submit" class="request-btn-submit" id="req-submit-btn">
+          <i data-lucide="send"></i>Solicitar Propuesta Corporativa
+         </button>
+        </form>
       </div>
      </div>
     </div>

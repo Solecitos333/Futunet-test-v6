@@ -29,6 +29,7 @@
   var formCard = document.getElementById('sug-form-card');
   var successCard = document.getElementById('sug-success-card');
   var refCodeDisplay = document.getElementById('sug-ref-code');
+  var copyCodeBtn = document.getElementById('sug-copy-code-btn');
   var btnAnother = document.getElementById('sug-btn-another');
   var trackInput = document.getElementById('sug-track-input');
   var trackBtn = document.getElementById('sug-track-btn');
@@ -44,6 +45,7 @@
     initCharCounters();
     checkCurrentUser();
     initTracking();
+    initCopyCode();
     initCommunityWall();
     if (form) {
       form.addEventListener('submit', handleFormSubmit);
@@ -233,13 +235,13 @@
     }
 
     // 3. Sanitización y captura de campos
-    var title = sanitizeText(document.getElementById('sug-title').value || '');
-    var desc = sanitizeText(document.getElementById('sug-desc').value || '');
-    var benefit = sanitizeText(document.getElementById('sug-benefit').value || '');
+    var title = sanitizeText(document.getElementById('sug-title')?.value || '');
+    var desc = sanitizeText(document.getElementById('sug-desc')?.value || '');
+    var benefit = sanitizeText(document.getElementById('sug-benefit')?.value || '');
     var isAnon = anonCheckbox ? anonCheckbox.checked : false;
-    var name = isAnon ? '' : sanitizeText(document.getElementById('sug-name').value || '');
-    var email = isAnon ? '' : sanitizeText(document.getElementById('sug-email').value || '');
-    var phone = isAnon ? '' : sanitizeText(document.getElementById('sug-phone').value || '');
+    var name = isAnon ? '' : sanitizeText(document.getElementById('sug-name')?.value || '');
+    var email = isAnon ? '' : sanitizeText(document.getElementById('sug-email')?.value || '');
+    var phone = isAnon ? '' : sanitizeText(document.getElementById('sug-phone')?.value || '');
 
     // 4. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
     var privacyConsent = document.getElementById('sug-privacy-consent');
@@ -310,7 +312,8 @@
 
       // Mostrar confirmación
       if (refCodeDisplay) {
-        refCodeDisplay.textContent = refCode + ' (' + docRef.id.slice(0, 6).toUpperCase() + ')';
+        refCodeDisplay.textContent = refCode;
+        refCodeDisplay.setAttribute('data-ref-code', refCode);
       }
       if (formCard) formCard.hidden = true;
       if (successCard) {
@@ -425,6 +428,59 @@
     }
   }
 
+  // 11b. Copiar código de seguimiento (SUG-B6410)
+  function initCopyCode() {
+    if (!copyCodeBtn) return;
+    copyCodeBtn.addEventListener('click', function () {
+      var code = refCodeDisplay ? refCodeDisplay.getAttribute('data-ref-code') || refCodeDisplay.textContent.trim() : '';
+      if (!code) return;
+      var cleanCode = (code.match(/SUG-[A-Z0-9]{5}/i) || [code])[0].toUpperCase();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cleanCode).then(onCodeCopied).catch(function () {
+          fallbackCopyText(cleanCode);
+          onCodeCopied();
+        });
+      } else {
+        fallbackCopyText(cleanCode);
+        onCodeCopied();
+      }
+      // Pre-llenar campo de consulta si existe
+      if (trackInput) {
+        trackInput.value = cleanCode;
+      }
+    });
+  }
+
+  function fallbackCopyText(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '-9999px';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  function onCodeCopied() {
+    var btnText = document.getElementById('sug-copy-btn-text');
+    var btnIcon = document.getElementById('sug-copy-btn-icon');
+    if (btnText) btnText.textContent = '¡Copiado!';
+    if (btnIcon) btnIcon.setAttribute('data-lucide', 'check');
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
+    setTimeout(function () {
+      if (btnText) btnText.textContent = 'Copiar código';
+      if (btnIcon) btnIcon.setAttribute('data-lucide', 'copy');
+      if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+      }
+    }, 2200);
+  }
+
   async function handleTrackSuggestion() {
     if (!trackInput || !trackResult) return;
     var raw = trackInput.value.trim();
@@ -434,7 +490,8 @@
       return;
     }
 
-    var code = raw.toUpperCase();
+    var match = raw.match(/SUG-[A-Z0-9]{5}/i);
+    var code = match ? match[0].toUpperCase() : raw.toUpperCase();
     var db = window.FutunetFirebase ? window.FutunetFirebase.db : (window.firebase ? firebase.firestore() : null);
     if (!db) {
       trackResult.hidden = false;
@@ -617,6 +674,20 @@
         status: 'implemented',
         description: 'Optimizar la barra del catálogo en pantallas móviles para filtrar marcas y disponibilidad de manera inmediata sin desplazarse demasiado.',
         officialResponse: '¡Implementado! Se añadió la barra táctil de filtros rápidos por marca y disponibilidad sobre la lista de productos para compras ágiles.'
+      },
+      {
+        title: 'Libreros de madera ejecutivos para oficina en el catálogo',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Añadir opciones de libreros y estanterías de madera para archivo de documentos y expedientes corporativos en Mobiliario de Oficina.',
+        officialResponse: '¡Atendido! Ya se encuentra disponible el Librero de madera ejecutivo para oficina en Mobiliario con estantes reforzados y cotización en línea.'
+      },
+      {
+        title: 'Aires acondicionados TGM Mini-Split y climatización con filtro rápido',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Facilitar la búsqueda y cotización de equipos de climatización TGM Mini-Split de 12,000 a 24,000 BTU en el catálogo corporativo.',
+        officialResponse: '¡Implementado! Incorporamos los modelos TGM Mini-Split Inverter con filtro directo por marca en el catálogo y paquetes de instalación.'
       }
     ];
 

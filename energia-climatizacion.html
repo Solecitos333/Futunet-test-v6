@@ -1027,6 +1027,10 @@
        <p>Comparte el contexto inicial para revisar la factibilidad y preparar el siguiente paso.</p>
 
        <form id="service-request-form">
+        <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+         <label for="req-hp-check">No llenar este campo</label>
+         <input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+        </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-name">Nombre y Apellidos</label>
          <input type="text" id="req-name" class="request-form-input" required placeholder="Ej. Juan Pérez" />
@@ -1046,6 +1050,13 @@
         <div class="request-form-group">
          <label class="request-form-label" for="req-message">Especificaciones de su Requerimiento</label>
          <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Detalle qué equipos necesita respaldar o su consumo promedio en RD$..."></textarea>
+        </div>
+
+        <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;">
+         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+          <input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+          <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>
+         </label>
         </div>
 
         <button type="submit" class="request-btn-submit" id="req-submit-btn">

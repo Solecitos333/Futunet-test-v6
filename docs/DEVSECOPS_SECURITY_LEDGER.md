@@ -71,7 +71,12 @@ graph LR
   - Sanitización estricta con `escapeHtml` en interpolaciones dinámicas de `home_showcase.js`, `cart.js` y `brand-page-loader.js`.
   - Inclusión de `rel="noopener noreferrer"` en todos los hipervínculos con `target="_blank"` (`catalog.js`, `brand-page-loader.js`, `admin-panel.js`) y `'noopener,noreferrer'` en `window.open` (`producto.js`, `catalog.js`).
   - Protección preventiva de `TypeError` en `promo-carousel.js` y `brands-preview.js` ante propiedades indefinidas en documentos de Firestore.
-  - Corrección de ancla `#cotizador` en `seguridad-electronica.html` para navegación fluida y sin saltos rotos.
+  - Corrección de ancla `#cotizador` en `seguridad-electronica.html` y ancla `#sp-cases` en `soporte.html` para navegación fluida y sin saltos rotos.
+  - Sincronización reactiva del carrito entre pestañas y panel de usuario mediante eventos `futunet-cart-updated` y `storage`.
+  - Protección estática de formularios B2B: honeypots y consentimiento de privacidad Ley 172-13 integrados directamente en el HTML de las 6 páginas de servicios (`corporativo`, `energia-climatizacion`, `equipos-oficina`, `redes-datos`, `infraestructura-remozamiento`, `seguridad-electronica`).
+  - Blindaje defensivo de DOM contra `null dereference` en `cart.js`, `chatbot.js`, `public-quote.js`, `suggestions.js`, `producto.js` y `user-panel.js`.
+  - Actualización de Service Worker a `futunet-cache-v22` con precaching opcional de `gaming.html`, `corporativo.html`, `terminos.html` y `privacidad.html`.
+  - Auditoría de integridad de activos del catálogo: validación del 100% (251 referencias de imagen) y corrección de ruta rota en `prod_irpyxjvid` (`img/camaras.jpg`).
 
 ---
 
@@ -95,6 +100,7 @@ npm run validate
 
 1. [ ] **CSP Hardening**: Analizar reducción del uso de `'unsafe-inline'` en `script-src` y `style-src` en `firebase.json`.
 2. [x] **Auditoría DOM XSS**: Revisión exhaustiva del uso de `innerHTML` en componentes dinámicos de catálogo, carruseles y detalle de producto.
-3. [ ] **Protección de Almacenamiento Local**: Verificar que no se almacenen datos personales o financieros sensibles sin cifrar en `localStorage`.
-4. [ ] **Backend Genkit / LLM Security**: Auditar endpoints de chatbot para evitar prompt injection o evasión de restricciones.
+3. [x] **Formularios B2B Estáticos**: Honeypots y Ley 172-13 integrados en HTML estático para eliminar CLS y robustecer seguridad previa a JS.
+4. [ ] **Protección de Almacenamiento Local**: Verificar que no se almacenen datos personales o financieros sensibles sin cifrar en `localStorage`.
+5. [ ] **Backend Genkit / LLM Security**: Auditar endpoints de chatbot para evitar prompt injection o evasión de restricciones.
 

@@ -165,4 +165,66 @@ test('Mejora demandada por usuarios: filtros rápidos de marcas y disponibilidad
   assert.ok(sugJs.includes("title: 'Filtro rápido por marcas y disponibilidad en smartphones'") && sugJs.includes("status: 'implemented'"), 'SUG-M5204 debe figurar como implemented en suggestions.js');
 });
 
+test('Mejora demandada por usuarios: Librero de madera en catálogo y búsquedas (SUG-L4920)', () => {
+  const code = fs.readFileSync(path.join(projectRoot, 'js', 'supplier_inventory.js'), 'utf8');
+  let window = {};
+  var mockDatabase = [];
+  eval(code);
+
+  const catalog = window.supplierInventory.getMergedCatalog();
+  const librero = catalog.find(p => p.id === 'mob_oficina_7');
+  assert.ok(librero, 'Debe existir el producto mob_oficina_7 en el catálogo');
+  assert.ok(librero.title.toLowerCase().includes('librero de madera'), 'mob_oficina_7 debe titularse Librero de madera');
+  assert.strictEqual(librero.category, 'Mobiliario', 'mob_oficina_7 debe pertenecer a categoría Mobiliario');
+
+  // Búsqueda por término "librero"
+  const searchResults = catalog.filter(p => {
+    const text = ((p.title || '') + ' ' + (p.desc || '')).toLowerCase();
+    return text.includes('librero');
+  });
+  assert.ok(searchResults.length >= 1, 'Debe haber al menos 1 resultado para búsqueda de librero');
+  assert.strictEqual(searchResults[0].id, 'mob_oficina_7');
+
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L4920'") && seedCjs.includes("status: 'implemented'"), 'SUG-L4920 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes("Libreros de madera ejecutivos para oficina en el catálogo"), 'Libreros de madera debe figurar en el muro de suggestions.js');
+});
+
+test('Mejora demandada por usuarios: Prioridad de marcas TGM y Mini-Split en catálogo (SUG-T1802)', () => {
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'TGM'"), 'catalog.js debe priorizar la marca TGM en priorityList');
+
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T1802'") && seedCjs.includes("status: 'implemented'"), 'SUG-T1802 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes("Aires acondicionados TGM Mini-Split"), 'TGM Mini-Split debe figurar en el muro de suggestions.js');
+});
+
+test('Mejora demandada por usuarios: Botón de copiar código de seguimiento y respuesta rápida a solicitudes (SUG-B6410)', () => {
+  // Botón de copiado en sugerencias.html
+  const sugHtml = fs.readFileSync(path.join(projectRoot, 'sugerencias.html'), 'utf8');
+  assert.ok(sugHtml.includes('id="sug-copy-code-btn"'), 'sugerencias.html debe incluir #sug-copy-code-btn');
+
+  // Lógica de copiado y extracción en suggestions.js
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('initCopyCode'), 'suggestions.js debe incluir función initCopyCode');
+  assert.ok(sugJs.includes('/SUG-[A-Z0-9]{5}/i'), 'suggestions.js debe admitir regex para códigos SUG');
+
+  // Botones de WhatsApp y Correo para solicitudes de servicio en admin.html y admin-panel.js
+  const adminHtml = fs.readFileSync(path.join(projectRoot, 'admin.html'), 'utf8');
+  assert.ok(adminHtml.includes('id="sr-whatsapp-btn"'), 'admin.html debe tener botón WhatsApp en modal de servicio');
+  assert.ok(adminHtml.includes('id="sr-email-btn"'), 'admin.html debe tener botón Correo en modal de servicio');
+
+  const adminJs = fs.readFileSync(path.join(projectRoot, 'js', 'admin-panel.js'), 'utf8');
+  assert.ok(adminJs.includes('sr-whatsapp-btn'), 'admin-panel.js debe configurar el botón WhatsApp');
+  assert.ok(adminJs.includes('sr-email-btn'), 'admin-panel.js debe configurar el botón Correo');
+
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-B6410'") && seedCjs.includes("status: 'implemented'"), 'SUG-B6410 debe figurar como implemented en seed-suggestions.cjs');
+});
+
+
 
