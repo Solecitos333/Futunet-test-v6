@@ -688,6 +688,27 @@
         status: 'implemented',
         description: 'Facilitar la búsqueda y cotización de equipos de climatización TGM Mini-Split de 12,000 a 24,000 BTU en el catálogo corporativo.',
         officialResponse: '¡Implementado! Incorporamos los modelos TGM Mini-Split Inverter con filtro directo por marca en el catálogo y paquetes de instalación.'
+      },
+      {
+        title: 'Impresoras multifuncionales EcoTank y térmicas POS en el catálogo',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Habilitar las impresoras Epson de tinta continua y modelos térmicos para facturación y puntos de venta.',
+        officialResponse: '¡Cumplido! Activamos las multifuncionales Epson EcoTank L3250, Brother, Canon e impresoras térmicas POS de 80mm en stock.'
+      },
+      {
+        title: 'Disponibilidad de Apple AirPods y auriculares con garantía local',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Añadir al catálogo Apple AirPods originales y accesorios de audio de alta fidelidad para llamadas y trabajo.',
+        officialResponse: '¡Disponible! Se integraron los Apple AirPods (2.ª gen) originales con estuche de carga y despacho garantizado.'
+      },
+      {
+        title: 'Teclados cableados Dell USB y periféricos resistentes de oficina',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Facilitar la reposición de teclados de oficina duraderos para digitación continua con teclado numérico.',
+        officialResponse: '¡Implementado! Incorporamos el Teclado Dell KB216 USB formato completo para despachos y áreas administrativas.'
       }
     ];
 

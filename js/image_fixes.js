@@ -14,6 +14,7 @@
     // ── TECNOLOGÍA → dept:equipos, cat:Periféricos y Partes ──
     'prod_ad1d2a977b': {img:b+'airpods-2gen.jpg', brand:'Apple', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_yny47xadr':  {img:b+'airpods-2gen.jpg', brand:'Apple', dept:'equipos', cat:'Periféricos y Partes'},
+    'prod_9p6f6zzh6':  {brand:'DELL', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_ppho60uwv':  {img:b+'tv-smart.jpg', brand:'KTC', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_tubkzzpxi':  {img:b+'tv-smart.jpg', brand:'KTC', dept:'equipos', cat:'Periféricos y Partes'},
     'prod_jfwxxu99l':  {img:b+'sandisk-32gb.jpg', brand:'SanDisk', dept:'equipos', cat:'Periféricos y Partes'},
@@ -26,6 +27,8 @@
     'prod_j7viwqx46':  {dept:'energia', cat:'Energía y Respaldo'},
 
     // ── IMPRESORAS → dept:equipos, cat:Impresoras y Consumibles ──
+    'prod_ev8mssce4':  {img:'img/productos/epson-l3250.jpg', brand:'Epson', dept:'equipos', cat:'Impresoras y Consumibles'},
+    'prod_tk6it44v0':  {img:'img/impresoras.jpg', brand:'2Connect', dept:'equipos', cat:'Punto de Venta'},
     'prod_p0wqnr5bc':  {img:b+'brother-t720dw.jpg', brand:'Brother', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_oh55hargc':  {img:b+'canon-pixma-g2110.jpg', brand:'Canon', dept:'equipos', cat:'Impresoras y Consumibles'},
     'prod_3bma5wlf5':  {brand:'Canon', dept:'equipos', cat:'Impresoras y Consumibles'},

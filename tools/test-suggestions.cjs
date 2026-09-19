@@ -226,5 +226,48 @@ test('Mejora demandada por usuarios: Botón de copiar código de seguimiento y r
   assert.ok(seedCjs.includes("refCode: 'SUG-B6410'") && seedCjs.includes("status: 'implemented'"), 'SUG-B6410 debe figurar como implemented en seed-suggestions.cjs');
 });
 
+test('Mejora demandada por usuarios: Disponibilidad de impresoras multifuncionales y térmicas POS (SUG-P5512)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P5512'") && seedCjs.includes("status: 'implemented'"), 'SUG-P5512 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Impresoras multifuncionales EcoTank y térmicas POS'), 'Impresoras multifuncionales debe figurar en el muro de suggestions.js');
+
+  const fixesJs = fs.readFileSync(path.join(projectRoot, 'js', 'image_fixes.js'), 'utf8');
+  assert.ok(fixesJs.includes('prod_ev8mssce4') && fixesJs.includes('prod_tk6it44v0'), 'image_fixes.js debe mapear imagen y categoría para Epson y 2Connect');
+
+  const suppJs = fs.readFileSync(path.join(projectRoot, 'js', 'supplier_inventory.js'), 'utf8');
+  assert.ok(suppJs.includes('impresora') && suppJs.includes('Impresoras y Consumibles'), 'supplier_inventory.js debe inferir categoría de impresoras');
+});
+
+test('Mejora demandada por usuarios: Disponibilidad de Apple AirPods y audio de calidad (SUG-A7291)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A7291'") && seedCjs.includes("status: 'implemented'"), 'SUG-A7291 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Apple AirPods y auriculares'), 'Apple AirPods debe figurar en el muro de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('prod_yny47xadr'), 'backup_data.js debe contener prod_yny47xadr');
+  assert.ok(backupJs.includes('2.ª generación'), 'backup_data.js debe tener la codificación limpia UTF-8 para AirPods');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'Apple'"), 'catalog.js debe incluir Apple en priorityList');
+});
+
+test('Mejora demandada por usuarios: Teclados de oficina Dell USB y periféricos cableados (SUG-K3844)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-K3844'") && seedCjs.includes("status: 'implemented'"), 'SUG-K3844 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Teclados cableados Dell USB'), 'Teclados cableados Dell USB debe figurar en el muro de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('prod_9p6f6zzh6'), 'backup_data.js debe contener prod_9p6f6zzh6');
+
+  const fixesJs = fs.readFileSync(path.join(projectRoot, 'js', 'image_fixes.js'), 'utf8');
+  assert.ok(fixesJs.includes('prod_9p6f6zzh6'), 'image_fixes.js debe registrar marca DELL y categoría para prod_9p6f6zzh6');
+});
+
 
 

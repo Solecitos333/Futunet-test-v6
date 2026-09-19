@@ -75,7 +75,12 @@ const OPTIONAL_ASSETS = [
   './js/gaming.js',
   './js/suggestions.js',
   './js/chatbot-firebase.mjs',
-  './css/support.css'
+  './css/support.css',
+  './js/support-core.js',
+  './js/support-service.js',
+  './js/support-ui.js',
+  './js/firebase-config.js',
+  './js/auth.js'
 ];
 
 // Install Event — cachear assets críticos

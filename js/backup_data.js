@@ -5498,8 +5498,8 @@ const mockDatabase = [
     "department": "equipos",
     "category": "Periféricos y Partes",
     "brand": "Apple",
-    "title": "Apple AirPods (2.Âª generación) con estuche de carga",
-    "desc": "Auriculares inalámbricos Apple AirPods de segunda generación con estuche de carga Lightning. Integran el chip H1 para emparejamiento rápido con dispositivos Apple, control por voz con â€œOye Siriâ€ y un perfil de uso cómodo para llamadas, música y videollamadas.",
+    "title": "Apple AirPods (2.ª generación) con estuche de carga",
+    "desc": "Auriculares y audífonos inalámbricos Apple AirPods de segunda generación con estuche de carga Lightning. Integran el chip H1 para emparejamiento rápido con dispositivos Apple, control por voz con \"Oye Siri\" y un perfil de uso cómodo para llamadas, música y videollamadas.",
     "price": "RD$ 5,400.00",
     "img": "img/productos/catalogo/airpods-2gen.jpg",
     "gallery": [

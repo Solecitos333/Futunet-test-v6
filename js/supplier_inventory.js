@@ -1176,22 +1176,40 @@
 
   function normalizeCopy(value) {
     return String(value || '')
+      .replace(/ÃƒÆ’Ã‚Â¡/g, 'á')
+      .replace(/ÃƒÆ’Ã‚Â©/g, 'é')
+      .replace(/ÃƒÆ’Ã‚Â­/g, 'í')
+      .replace(/ÃƒÆ’Ã‚Â³/g, 'ó')
+      .replace(/ÃƒÆ’Ã‚Âº/g, 'ú')
+      .replace(/ÃƒÆ’Ã‚Â±/g, 'ñ')
+      .replace(/ÃƒÆ’Ã‚Â /g, 'Á')
+      .replace(/ÃƒÆ’Ã¢â‚¬Â°/g, 'É')
+      .replace(/ÃƒÆ’Ã‚Â /g, 'Í')
+      .replace(/ÃƒÆ’Ã¢â‚¬Å“/g, 'Ó')
+      .replace(/ÃƒÆ’Ã…¡/g, 'Ú')
       .replace(/Ãƒ¡/g, 'á')
       .replace(/ÃƒÂ©/g, 'é')
       .replace(/ÃƒÂ­/g, 'í')
       .replace(/ÃƒÂ³/g, 'ó')
       .replace(/ÃƒÂº/g, 'ú')
       .replace(/ÃƒÂ±/g, 'ñ')
-      .replace(/ÃƒÂ/g, 'Á')
-      .replace(/Ãƒâ€°/g, 'Ã‰')
-      .replace(/ÃƒÂ/g, 'Í')
-      .replace(/Ãƒâ€œ/g, 'Ã“')
-      .replace(/ÃƒÅ¡/g, 'Ãš')
-      .replace(/Ã¢â‚¬â€œ/g, 'â€“')
-      .replace(/Ã¢â‚¬â€/g, 'â€”')
-      .replace(/Ã¢â‚¬Å“/g, 'â€œ')
-      .replace(/Ã¢â‚¬Â/g, 'â€')
+      .replace(/ÃƒÂ /g, 'Á')
+      .replace(/Ãƒâ€°/g, 'É')
+      .replace(/ÃƒÂ /g, 'Í')
+      .replace(/Ãƒâ€œ/g, 'Ó')
+      .replace(/ÃƒÅ¡/g, 'Ú')
+      .replace(/Ã¢â‚¬â€œ/g, '–')
+      .replace(/Ã¢â‚¬â€ /g, '—')
+      .replace(/Ã¢â‚¬Å“/g, '“')
+      .replace(/Ã¢â‚¬Â /g, '”')
+      .replace(/â€“/g, '–')
+      .replace(/â€”/g, '—')
+      .replace(/â€œ/g, '“')
+      .replace(/â€ /g, '”')
+      .replace(/Âª/g, 'ª')
+      .replace(/Âº/g, 'º')
       .replace(/Ã‚/g, '')
+      .replace(/Â/g, '')
       .trim();
   }
 
@@ -1199,7 +1217,7 @@
     const category = slugify(item.category || '');
     const title = slugify(item.title || '');
 
-    if (/(laptop|computadora|monitor|periferico|teclado|mouse|televisor)/.test(`${category} ${title}`)) {
+    if (/(laptop|computadora|monitor|periferico|teclado|mouse|televisor|impresora|scanner|escaner|audifono|auricular)/.test(`${category} ${title}`)) {
       return 'equipos';
     }
     if (/(papeleria|archivo|silla|escritorio|mobiliario|suministro)/.test(`${category} ${title}`)) {
@@ -1213,10 +1231,13 @@
     if (explicitCategory) return explicitCategory;
 
     const title = slugify(item.title || '');
+    if (/(impresora|scanner|escaner|multifuncional)/.test(title)) {
+      return 'Impresoras y Consumibles';
+    }
     if (/(laptop|computadora|monitor|televisor)/.test(title)) {
       return 'Equipos de Oficina';
     }
-    if (/(teclado|mouse|periferico|audifono|webcam)/.test(title)) {
+    if (/(teclado|mouse|periferico|audifono|auricular|webcam)/.test(title)) {
       return 'Periféricos y Partes';
     }
     if (/(papeleria|archivo|silla|escritorio|mobiliario)/.test(title)) {

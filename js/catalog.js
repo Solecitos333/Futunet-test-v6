@@ -89,6 +89,9 @@ function scoreProductMatch(product, normalizedQuery) {
   const desc = normalizeSearch(product.desc);
   const category = normalizeSearch(product.category);
   const brand = normalizeSearch(product.brand);
+  const specs = Array.isArray(product.specs) ? normalizeSearch(product.specs.join(' ')) : '';
+  const combined = `${title} ${brand} ${category} ${desc} ${specs}`.trim();
+
   let score = 0;
   if (title.includes(normalizedQuery)) score += 100;
   else if (fuzzyMatch(title, normalizedQuery)) score += 60;
@@ -97,6 +100,15 @@ function scoreProductMatch(product, normalizedQuery) {
   if (category.includes(normalizedQuery)) score += 70;
   else if (fuzzyMatch(category, normalizedQuery)) score += 35;
   if (fuzzyMatch(desc, normalizedQuery)) score += 20;
+  if (specs && (specs.includes(normalizedQuery) || fuzzyMatch(specs, normalizedQuery))) score += 25;
+
+  // Si los términos de búsqueda están repartidos en varios campos (ej. "laptop dell", "teclado usb")
+  if (score === 0 && fuzzyMatch(combined, normalizedQuery)) {
+    score += 50;
+  } else if (score > 0 && fuzzyMatch(combined, normalizedQuery)) {
+    score += 15;
+  }
+
   return score;
 }
 
@@ -222,7 +234,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
@@ -1906,7 +1918,7 @@ function initSmartSearch(inputId, dropdownId) {
       const nDesc = normalizeSearch(p.desc);
       if (fuzzyMatch(nCat, nq)) resultCats.add(p.category);
       if (fuzzyMatch(nBrand, nq)) resultBrands.add(p.brand);
-      if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq)) {
+      if (fuzzyMatch(nTitle, nq) || fuzzyMatch(nDesc, nq) || scoreProductMatch(p, nq) > 0) {
         resultModels.push(p);
       }
     });
