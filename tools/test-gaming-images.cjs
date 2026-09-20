@@ -30,7 +30,7 @@ function supplierFeed() {
 
 test('Gaming y las galerías del catálogo conservan las fotos revisadas por producto', () => {
   const feed = supplierFeed();
-  assert.equal(feed.length, 12);
+  assert.equal(feed.length, 24);
   for (const item of feed) {
     const source = reviewed.find(p => p.id === item.id);
     assert.ok(source, item.id);
@@ -43,7 +43,7 @@ test('Gaming y las galerías del catálogo conservan las fotos revisadas por pro
   }
   for (const html of [renderGaming(), renderGaming(feed)]) {
     const cards = [...html.matchAll(/data-id="([^"]+)"[\s\S]*?<img src="([^"]+)"/g)];
-    assert.equal(cards.length, 12);
+    assert.equal(cards.length, 24);
     for (const [, id, image] of cards) {
       assert.equal(image, reviewed.find(p => p.id === id).image, id);
     }

@@ -5478,6 +5478,11 @@
       social: "🎒 ¡Rendimiento para tus estudios! Laptops livianas, impresoras EcoTank de alta eficiencia y conexión de Fibra Óptica simétrica para clases y proyectos sin interrupciones. Descubre los equipos en nuestro catálogo Futunet. #EstudiantesRD #Tecnologia #Futunet",
       email: "Asunto: Soluciones de Cómputo e Impresión con Futunet\n\nEstimados clientes,\n\nFaciliten el aprendizaje y trabajo diario con herramientas tecnológicas confiables: impresoras multifuncionales de bajo costo por copia y laptops de gran durabilidad. Cotiza en línea hoy."
     },
+    sprint_q3: {
+      whatsapp: "¡Hola! Cuenta regresiva de fin de trimestre: restan solo 10 días para el cierre de Q3 (30 de Septiembre). En Futunet apoyamos a tu empresa a comprometer sus presupuestos de TI con un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado Cat 6A y switches. ¿Coordinamos la visita de un ingeniero esta semana?",
+      social: "⏱️ ¡Sprint Final de Cierre Q3! ¿Tu empresa necesita comprometer el presupuesto tecnológico de este trimestre antes del 30 de septiembre? En Futunet realizamos levantamientos técnicos y auditorías de infraestructura sin costo en Santiago. Optimiza tu red con cableado Cat 6A, enlaces dedicados y racks peinados con 15% de descuento usando el código INFRA2026. #CierreQ3 #InfraestructuraTI #SantiagoRD #FutunetB2B #PresupuestoTI",
+      email: "Asunto: [Urgente Cierre Q3] Ejecución de Presupuesto TI y Auditoría de Red Gratuita - Código INFRA2026\n\nEstimados directores de TI, Operaciones y Finanzas:\n\nA solo 10 días de finalizar el tercer trimestre (30 de septiembre), muchas organizaciones en Santiago y parques industriales buscan comprometer sus partidas presupuestarias remanentes de TI en activos de alto impacto y deducción fiscal formal (NCF).\n\nEn Futunet ponemos a su disposición a nuestro equipo de ingenieros para ejecutar:\n1. Auditoría física y lógica de racks y cableado estructurado Cat 6A (100% GRATIS).\n2. Certificación de enlaces troncales y cobertura Wi-Fi 6 de alta densidad.\n3. 15% de descuento en mano de obra e instalación con el código INFRA2026.\n4. Facturación con Comprobante Fiscal (NCF) y entrega de informe técnico de cierre.\n\nContáctenos hoy respondiendo a este correo o vía WhatsApp directo al 829-741-1041 para agendar antes del 30 de septiembre."
+    },
     septiembre: {
       whatsapp: "¡Hola! En Futunet sabemos que una red lenta o inestable paraliza tus operaciones. Este mes de septiembre solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado estructurado Cat 6A y peinado de racks. ¿Te gustaría coordinar una visita técnica esta semana?",
       social: "¿Tus racks de comunicaciones parecen una maraña de cables o experimentas caídas intermitentes en la oficina? 🔌 En Futunet optimizamos la infraestructura tecnológica de tu empresa con cableado estructurado Cat 6A certificado, Wi-Fi 6 empresarial y protección ininterrumpida con UPS Online. Solicita tu auditoría presencial GRATUITA en Santiago con el código INFRA2026. #RedesCorporativas #CableadoEstructurado #SantiagoRD #FutunetB2B",
@@ -5531,20 +5536,39 @@
     var el = document.getElementById(elementId);
     if (!el) return;
     
-    el.select();
-    el.setSelectionRange(0, 99999);
-    
-    try {
-      document.execCommand('copy');
-      showToast('Texto copiado al portapapeles', 'success');
-    } catch (err) {
-      showToast('Error al copiar texto', 'error');
+    var text = el.value || el.textContent || '';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        showToast('Texto copiado al portapapeles', 'success');
+      }).catch(function () {
+        fallbackCopy();
+      });
+    } else {
+      fallbackCopy();
+    }
+
+    function fallbackCopy() {
+      try {
+        el.select();
+        el.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        showToast('Texto copiado al portapapeles', 'success');
+      } catch (err) {
+        showToast('Error al copiar texto', 'error');
+      }
     }
   }
 
   function openNewBannerWithPreset(presetName) {
     openNewBanner();
-    if (presetName === 'Respaldo Energético' || presetName === 'Respaldo & Continuidad') {
+    if (presetName === 'Sprint Cierre Q3' || presetName === 'Cierre Q3' || presetName === 'Presupuestos TI') {
+      setVal('banner-title', '⚡ Sprint Cierre Q3: <strong>Presupuestos TI 2026</strong>');
+      setVal('banner-subtitle', 'Últimos 10 días para comprometer tu presupuesto. Auditoría presencial 100% GRATIS en Santiago + 15% OFF con cupón INFRA2026.');
+      setVal('banner-link', 'corporativo.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-09-20');
+      setVal('banner-end-date', '2026-09-30');
+    } else if (presetName === 'Respaldo Energético' || presetName === 'Respaldo & Continuidad') {
       setVal('banner-title', '⚡ Protege tus Servidores con <strong>Respaldo Ininterrumpido</strong>');
       setVal('banner-subtitle', 'UPS online de doble conversión e inversores ante la temporada ciclónica. 10% de descuento con el código RESPALDO2026.');
       setVal('banner-link', 'energia-climatizacion.html');

@@ -138,11 +138,20 @@
         specs: []
       };
     }
-    if (typeof mockDatabase !== 'undefined') {
-      return mockDatabase.find(p => p.id === productId);
+    if (typeof productId === 'object' && productId !== null && productId.id) {
+      return productId;
     }
-    if (window.FutunetProductDetail) {
-      return window.FutunetProductDetail.getCatalogData().find(p => p.id === productId);
+    if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)) {
+      const found = mockDatabase.find(p => p && p.id === productId);
+      if (found) return found;
+    }
+    if (window.FutunetProductDetail && typeof window.FutunetProductDetail.getCatalogData === 'function') {
+      const found = window.FutunetProductDetail.getCatalogData().find(p => p && p.id === productId);
+      if (found) return found;
+    }
+    if (window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
+      const found = window.supplierInventory.getMergedCatalog().find(p => p && p.id === productId);
+      if (found) return found;
     }
     return null;
   }
@@ -1613,6 +1622,19 @@
     state: cartState,
     load: loadCartState,
     add: addToCart,
+    addItem: function (productOrId, qty) {
+      const quantity = Math.max(1, Number(qty) || 1);
+      if (typeof productOrId === 'object' && productOrId !== null && productOrId.id) {
+        if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)) {
+          if (!mockDatabase.some(p => p && p.id === productOrId.id)) {
+            mockDatabase.push(productOrId);
+          }
+        }
+        addToCart(productOrId.id, quantity);
+      } else {
+        addToCart(productOrId, quantity);
+      }
+    },
     remove: removeFromCart,
     changeQty: changeCartQuantity,
     toggleDrawer: toggleCartDrawer,

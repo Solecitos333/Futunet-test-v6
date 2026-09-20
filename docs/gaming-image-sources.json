@@ -92,6 +92,78 @@
       "image": "img/gaming/servicio-fibra.svg",
       "status": "service",
       "sha256": "fb8d7df4356ea4a87ec504a62d19e76207924c1df572023ac2fe6d3b81116c5a"
+    },
+    {
+      "id": "gm_cpu_amd_ryzen7_7800x3d",
+      "image": "img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg",
+      "status": "campaign",
+      "sha256": "22f26c6b52bc792ee4dd050a71c02ef7288c74a4855887044c6e883cdc1352cd"
+    },
+    {
+      "id": "gm_cpu_amd_ryzen9_9950x",
+      "image": "img/gaming/componentes/cpu-amd-ryzen-9-9950x.jpg",
+      "status": "campaign",
+      "sha256": "3963a35cfdf1047b9d6401b65e3b98caebbce0dc7d21350ae68757d279d46800"
+    },
+    {
+      "id": "gm_mob_asus_tuf_x870e",
+      "image": "img/gaming/componentes/motherboard-asus-tuf-x870e-plus-wifi7.jpg",
+      "status": "campaign",
+      "sha256": "2916b15e84f17d16193db4ac59b4ada525852628c49b0d1109abb7b268fd2c88"
+    },
+    {
+      "id": "gm_ram_kingston_fury_64gb",
+      "image": "img/gaming/componentes/ram-kingston-fury-beast-ddr5-64gb.jpg",
+      "status": "campaign",
+      "sha256": "f65384f6a6b162a3285e7afd5b33cc55b053ce8107128200ac8f297a51c9517b"
+    },
+    {
+      "id": "gm_ssd_samsung_9100_pro_2tb",
+      "image": "img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg",
+      "status": "campaign",
+      "sha256": "ec318e7f0bc0c24edeb05a29b5dd9a5436ae5dc29815b977a596a11f4a98c9b4"
+    },
+    {
+      "id": "gm_ssd_crucial_p310_2tb",
+      "image": "img/gaming/componentes/ssd-crucial-p310-2tb.jpg",
+      "status": "campaign",
+      "sha256": "8a7bf985600766a2c74e5f09bdd4fe981a26a76d27a864bb625c7eb11a1709f1"
+    },
+    {
+      "id": "gm_ssd_crucial_p310_1tb",
+      "image": "img/gaming/componentes/ssd-crucial-p310-1tb.jpg",
+      "status": "campaign",
+      "sha256": "59f57d314122a91aaa8f6bd20180db7930cf7272942cdb9d8607516556529e2b"
+    },
+    {
+      "id": "gm_cooler_tryx_panorama_360",
+      "image": "img/gaming/componentes/cooler-tryx-panorama-360-argb.jpg",
+      "status": "campaign",
+      "sha256": "e74193cc2a91a35ff0ea94e2360c6c802b60aba1422104698639410523cd35b4"
+    },
+    {
+      "id": "gm_cooler_nzxt_kraken_elite_360",
+      "image": "img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg",
+      "status": "campaign",
+      "sha256": "afeea3a9f76b447f592dd418e580a9579d04112f7ea9d81cfc85657181abc642"
+    },
+    {
+      "id": "gm_case_lian_li_o11_dynamic_evo",
+      "image": "img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg",
+      "status": "campaign",
+      "sha256": "bcffe6bcdc227855213c2d6a5a9ccb8f5901c776849a117e2b592c920b5a5b48"
+    },
+    {
+      "id": "gm_case_msi_mag_pano_100r",
+      "image": "img/gaming/componentes/case-msi-mag-pano-100r.jpg",
+      "status": "campaign",
+      "sha256": "c4369d8da7d09364f52ede2263af38d5ed69bf6ae57a5654fa14f7c10983e757"
+    },
+    {
+      "id": "gm_psu_msi_mag_a1000gs",
+      "image": "img/gaming/componentes/psu-msi-mag-a1000gs-pcie5.jpg",
+      "status": "campaign",
+      "sha256": "74150768e10e736cfc61056c1c6ed423651c6be4919d0cbd970943005bb4dca4"
     }
   ]
 }

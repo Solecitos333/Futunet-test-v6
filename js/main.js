@@ -1207,21 +1207,50 @@ function initAnnouncementBar() {
   const waNum = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
   const now = new Date();
   const currentMonth = now.getMonth(); // 8 = Sep, 9 = Oct
+  const currentPath = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname.toLowerCase() : '';
 
-  // Campaña activa según fecha (o Septiembre por defecto para calendario 2026)
+  // Campaña activa dinámica según vertical o calendario comercial 2026
   let campaign = {
-    badge: '⚡ CIERRE Q3 & CONTINUIDAD',
-    message: 'Auditoría de Red 100% GRATIS en Santiago + 15% Descuento con',
+    badge: '⚡ SPRINT FINAL CIERRE Q3',
+    message: 'Últimos 10 días para comprometer presupuesto TI: Auditoría GRATIS + 15% OFF con',
     coupon: 'INFRA2026',
     endDate: new Date('2026-09-30T23:59:59'),
-    ctaText: 'Agendar Visita',
-    waMsg: 'Hola Futunet, quiero solicitar mi levantamiento técnico gratuito de red con el código INFRA2026.'
+    ctaText: 'Aprovechar Cierre Q3',
+    waMsg: 'Hola Futunet, quiero aprovechar el sprint de cierre Q3 y solicitar mi levantamiento técnico gratuito con el código INFRA2026.'
   };
 
-  if (currentMonth === 9 || now > new Date('2026-09-30T23:59:59')) {
+  // Contextualización inteligente por página
+  if (currentPath.includes('gaming.html')) {
+    campaign = {
+      badge: '🎮 ZONA GAMING PRO',
+      message: '10% de Descuento en Periféricos Pro y Enlaces de Baja Latencia con',
+      coupon: 'GAMING2026',
+      endDate: new Date('2026-12-31T23:59:59'),
+      ctaText: 'Ver Setup Gamer',
+      waMsg: 'Hola Futunet, quiero cotizar equipos y conectividad gamer con el código GAMING2026.'
+    };
+  } else if (currentPath.includes('punto-de-venta.html')) {
+    campaign = {
+      badge: '🛒 RETAIL TECH & POS',
+      message: '12% de Descuento en Terminales Táctiles e Impresoras Térmicas con',
+      coupon: 'POS2026',
+      endDate: new Date('2026-12-31T23:59:59'),
+      ctaText: 'Cotizar POS',
+      waMsg: 'Hola Futunet, quiero cotizar un kit de Punto de Venta con el código POS2026.'
+    };
+  } else if (currentPath.includes('energia-climatizacion.html')) {
+    campaign = {
+      badge: '⚡ RESPALDO CICLÓNICO',
+      message: '10% de Descuento en UPS Online de Doble Conversión e Inversores con',
+      coupon: 'RESPALDO2026',
+      endDate: new Date('2026-09-30T23:59:59'),
+      ctaText: 'Proteger Servidores',
+      waMsg: 'Hola Futunet, quiero cotizar UPS de respaldo con el código RESPALDO2026.'
+    };
+  } else if (currentMonth === 9 || now > new Date('2026-09-30T23:59:59')) {
     // Octubre: Campaña de Seguridad Corporativa
     campaign = {
-      badge: '🛡️ PROTECCIÓN CORPORATIVA',
+      badge: '🛡️ OCTUBRE: SEGURIDAD CORPORATIVA',
       message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
       coupon: 'SEGURIDAD2026',
       endDate: new Date('2026-10-31T23:59:59'),

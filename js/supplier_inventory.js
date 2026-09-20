@@ -167,6 +167,211 @@
         gallery: ['img/gaming/servicio-fibra.svg'],
         desc: 'Internet 100% fibra óptica pura con enrutamiento prioritario para servidores competitivos de gaming en Norteamérica y Latinoamérica. Latencia ultrabaja (<25ms) sin packet loss.',
         specs: ['Velocidad: 200 Mbps de Descarga + 200 Mbps de Subida (100% Simétrico)', 'Rutas BGP optimizadas con baja latencia (Anti-Jitter y 0% Pérdida de paquetes)', 'IP Pública dinámica (Ideal para hosts de partidas, Discord y Open NAT)', 'Módem Router Óptico Wi-Fi 6 Gigabit de última generación sin costo adicional', 'Instalación profesional de fibra óptica incluida', 'Soporte técnico preferencial 24/7']
+      },
+      {
+        id: 'gm_cpu_amd_ryzen7_7800x3d',
+        title: 'Procesador AMD Ryzen 7 7800X3D 8 Núcleos 16 Hilos 5.0GHz AM5 con 3D V-Cache',
+        brand: 'AMD',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 21,955.00',
+        img: 'img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg',
+        gallery: ['img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg'],
+        desc: 'El procesador gamer por excelencia para esports y títulos AAA. Tecnología AMD 3D V-Cache con 96MB de caché L3 para una tasa de cuadros por segundo insuperable en Socket AM5.',
+        specs: [
+          '8 núcleos / 16 hilos con arquitectura Zen 4',
+          'Tecnología AMD 3D V-Cache (96MB L3)',
+          'Frecuencia boost hasta 5.0 GHz en Socket AM5',
+          'Open Box con garantía local en Santiago y envío nacional'
+        ]
+      },
+      {
+        id: 'gm_cpu_amd_ryzen9_9950x',
+        title: 'Procesador AMD Ryzen 9 9950X 16 Núcleos 32 Hilos 5.7GHz AM5 Arquitectura Zen 5',
+        brand: 'AMD',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 31,875.00',
+        img: 'img/gaming/componentes/cpu-amd-ryzen-9-9950x.jpg',
+        gallery: ['img/gaming/componentes/cpu-amd-ryzen-9-9950x.jpg'],
+        desc: 'Potencia extraordinaria para streaming, render 3D, desarrollo, IA y gaming sin límites. 16 núcleos físicos y 32 hilos con la avanzada microarquitectura Zen 5.',
+        specs: [
+          '16 núcleos / 32 hilos de rendimiento de élite',
+          'Frecuencia boost máxima hasta 5.7 GHz',
+          '80 MB de memoria caché total (L2 + L3)',
+          'Arquitectura Zen 5 para Socket AM5 de última generación'
+        ]
+      },
+      {
+        id: 'gm_mob_asus_tuf_x870e',
+        title: 'Tarjeta Madre ASUS TUF GAMING X870E-PLUS WIFI7 ATX Socket AM5 DDR5 PCIe 5.0',
+        brand: 'ASUS',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 15,130.00',
+        img: 'img/gaming/componentes/motherboard-asus-tuf-x870e-plus-wifi7.jpg',
+        gallery: ['img/gaming/componentes/motherboard-asus-tuf-x870e-plus-wifi7.jpg'],
+        desc: 'Motherboard gamer de grado militar diseñada para la nueva generación de procesadores AMD Ryzen 7000, 8000 y 9000. Incorpora PCIe 5.0, Wi-Fi 7 y disipación térmica reforzada.',
+        specs: [
+          'Socket AM5 compatible con Ryzen 7000/8000/9000',
+          '4 ranuras DDR5 hasta 192GB de memoria',
+          'Ranuras PCIe 5.0 para GPUs y unidades M.2 NVMe',
+          'Conectividad ultra rápida Wi-Fi 7 + Ethernet de alta velocidad',
+          'Formato ATX con componentes de durabilidad TUF Gaming'
+        ]
+      },
+      {
+        id: 'gm_ram_kingston_fury_64gb',
+        title: 'Memoria RAM Kingston Fury Beast DDR5 RGB 64GB (2x32GB) 6000 MT/s CL30',
+        brand: 'KINGSTON',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 69,700.00',
+        img: 'img/gaming/componentes/ram-kingston-fury-beast-ddr5-64gb.jpg',
+        gallery: ['img/gaming/componentes/ram-kingston-fury-beast-ddr5-64gb.jpg'],
+        desc: 'Kit de memoria RAM de alto desempeño de 64GB DDR5 a 6000 MT/s con latencia ultrabaja CL30. Diseñada para builds entusiastas, streaming simultáneo y multitarea pesada.',
+        specs: [
+          'Kit Dual Channel 64GB (2 x 32GB) DDR5',
+          'Frecuencia 6000 MT/s con latencia ultra baja CL30',
+          'Iluminación RGB personalizable con Infrared Sync',
+          'Compatibilidad garantizada con plataformas Intel y AMD'
+        ]
+      },
+      {
+        id: 'gm_ssd_samsung_9100_pro_2tb',
+        title: 'SSD Samsung 9100 PRO 2TB M.2 NVMe PCIe 5.0 x4 Lectura 14,700 MB/s',
+        brand: 'SAMSUNG',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 24,300.00',
+        img: 'img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg',
+        gallery: ['img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg'],
+        desc: 'Velocidad sin límites en almacenamiento de estado sólido PCIe 5.0. Hasta 14,700 MB/s de lectura y 13,400 MB/s de escritura secuencial para eliminar tiempos de carga en juegos y proyectos pesados.',
+        specs: [
+          'Capacidad de 2TB NVMe PCIe 5.0 x4',
+          'Lectura secuencial hasta 14,700 MB/s',
+          'Escritura secuencial hasta 13,400 MB/s',
+          'Disponibilidad inmediata en condición Open Box con garantía'
+        ]
+      },
+      {
+        id: 'gm_ssd_crucial_p310_2tb',
+        title: 'SSD Crucial P310 2TB M.2 NVMe PCIe Gen4 x4 Lectura 7,100 MB/s',
+        brand: 'CRUCIAL',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 18,240.00',
+        img: 'img/gaming/componentes/ssd-crucial-p310-2tb.jpg',
+        gallery: ['img/gaming/componentes/ssd-crucial-p310-2tb.jpg'],
+        desc: 'Rendimiento de próxima generación para acelerar el arranque, carga de mapas y transferencia de archivos en PCs, laptops y PlayStation 5 con hasta 7,100 MB/s de velocidad.',
+        specs: [
+          'Capacidad de 2TB en formato estándar M.2 2280',
+          'Lectura secuencial hasta 7,100 MB/s',
+          'Escritura secuencial hasta 6,000 MB/s',
+          'Interfaz PCIe Gen4 NVMe de alta eficiencia térmica y fluidez'
+        ]
+      },
+      {
+        id: 'gm_ssd_crucial_p310_1tb',
+        title: 'SSD Crucial P310 1TB M.2 NVMe PCIe Gen4 x4 Lectura 7,100 MB/s',
+        brand: 'CRUCIAL',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 10,125.00',
+        img: 'img/gaming/componentes/ssd-crucial-p310-1tb.jpg',
+        gallery: ['img/gaming/componentes/ssd-crucial-p310-1tb.jpg'],
+        desc: 'Unidad SSD NVMe de 1TB de alta velocidad para dar un salto notable de fluidez y reducir los tiempos de carga en cualquier PC gaming o portátil compatible con PCIe Gen4.',
+        specs: [
+          'Capacidad de 1TB M.2 2280 PCIe Gen4',
+          'Lectura secuencial hasta 7,100 MB/s',
+          'Escritura secuencial hasta 6,000 MB/s',
+          'Durabilidad y confiabilidad comprobada Micron'
+        ]
+      },
+      {
+        id: 'gm_cooler_tryx_panorama_360',
+        title: 'Enfriamiento Líquido TRYX PANORAMA 360 ARGB Pantalla AMOLED Curva 6.5"',
+        brand: 'TRYX',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 16,915.00',
+        img: 'img/gaming/componentes/cooler-tryx-panorama-360-argb.jpg',
+        gallery: ['img/gaming/componentes/cooler-tryx-panorama-360-argb.jpg'],
+        desc: 'Refrigeración líquida All-in-One revolucionaria con pantalla AMOLED curvada de 6.5 pulgadas en el bloque para visualizar animaciones GIF, imágenes y temperaturas del sistema en tiempo real.',
+        specs: [
+          'Pantalla curva AMOLED de 6.5 pulgadas personalizable',
+          '3 ventiladores ARGB de 120mm silenciosos de alto flujo',
+          'Radiador de 360mm de máxima disipación térmica',
+          'Fácil montaje compatible con sockets Intel y AMD'
+        ]
+      },
+      {
+        id: 'gm_cooler_nzxt_kraken_elite_360',
+        title: 'Cooler Líquido NZXT Kraken Elite 360 RGB White Pantalla LCD 2.36"',
+        brand: 'NZXT',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 18,530.00',
+        img: 'img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg',
+        gallery: ['img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg'],
+        desc: 'Disipador líquido AIO premium en elegante color blanco. Incluye pantalla LCD circular de 2.36 pulgadas personalizable vía NZXT CAM y 3 ventiladores RGB de alto rendimiento.',
+        specs: [
+          'Pantalla LCD circular de 2.36" de resolución 640x640',
+          'Radiador de 360mm con ventiladores RGB de 120mm incluidos',
+          'Bomba Asetek silenciosa de alto caudal',
+          'Soporte universal Intel y AMD con garantía local'
+        ]
+      },
+      {
+        id: 'gm_case_lian_li_o11_dynamic_evo',
+        title: 'Gabinete Gaming ATX Lian Li O11 Dynamic EVO Black Cristal Templado',
+        brand: 'LIAN LI',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 20,640.00',
+        img: 'img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg',
+        gallery: ['img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg'],
+        desc: 'El gabinete gamer modular más reconocido del mundo. Diseño de doble cámara con paneles panorámicos de vidrio templado sin obstrucciones, espacio para radiadores triples y flujo de aire superior.',
+        specs: [
+          'Paneles de vidrio templado frontal y lateral desmontables',
+          'Compatibilidad con tarjetas madre ATX, Micro-ATX y Mini-ITX',
+          'Estructura modular reversible con espacio para GPUs gigantes',
+          'Gestión de cables profesional y soporte para múltiples radiadores'
+        ]
+      },
+      {
+        id: 'gm_case_msi_mag_pano_100r',
+        title: 'Gabinete Gaming ATX MSI MAG Pano 100R White Panorámico 4 Fans ARGB',
+        brand: 'MSI',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 10,400.00',
+        img: 'img/gaming/componentes/case-msi-mag-pano-100r.jpg',
+        gallery: ['img/gaming/componentes/case-msi-mag-pano-100r.jpg'],
+        desc: 'Chasis panorámico de 270 grados en cristal templado sin pilar frontal. Acabado estético blanco con 4 ventiladores ARGB incluidos (3 de aspas invertidas en el lateral y 1 trasero).',
+        specs: [
+          'Vidrio templado panorámico continuo de 270°',
+          '4 ventiladores ARGB preinstalados con hub de control',
+          'Compatible con motherboards ATX, Micro-ATX y Mini-ITX',
+          'Espacio optimizado para disipadores AIO 360mm y GPUs de última generación'
+        ]
+      },
+      {
+        id: 'gm_psu_msi_mag_a1000gs',
+        title: 'Fuente de Poder MSI MAG A1000GS PCIe 5.0 1000W 80 Plus Gold ATX 3.1 Modular',
+        brand: 'MSI',
+        category: 'Componentes Gaming',
+        department: 'equipos',
+        price: 'RD$ 6,120.00',
+        img: 'img/gaming/componentes/psu-msi-mag-a1000gs-pcie5.jpg',
+        gallery: ['img/gaming/componentes/psu-msi-mag-a1000gs-pcie5.jpg'],
+        desc: 'Fuente de alimentación de 1000 vatios reales certificada 80 Plus Gold con soporte nativo ATX 3.1 y PCIe 5.0. Cable 12V-2x6 para alimentar tarjetas gráficas RTX Serie 40 con máxima estabilidad.',
+        specs: [
+          'Potencia real de 1000W con certificación 80 Plus Gold',
+          'Estándar ATX 3.1 y conector nativo PCIe 5.0 (12V-2x6)',
+          'Cableado 100% modular plano para una instalación impecable',
+          'Suite integral de protecciones industriales contra sobrevoltaje'
+        ]
       }
     ],
     cecomsa: [

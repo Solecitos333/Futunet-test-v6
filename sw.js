@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v22';
+const CACHE_NAME = 'futunet-cache-v23';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -80,7 +80,19 @@ const OPTIONAL_ASSETS = [
   './js/support-service.js',
   './js/support-ui.js',
   './js/firebase-config.js',
-  './js/auth.js'
+  './js/auth.js',
+  './img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg',
+  './img/gaming/componentes/case-msi-mag-pano-100r.jpg',
+  './img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg',
+  './img/gaming/componentes/cooler-tryx-panorama-360-argb.jpg',
+  './img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg',
+  './img/gaming/componentes/cpu-amd-ryzen-9-9950x.jpg',
+  './img/gaming/componentes/motherboard-asus-tuf-x870e-plus-wifi7.jpg',
+  './img/gaming/componentes/psu-msi-mag-a1000gs-pcie5.jpg',
+  './img/gaming/componentes/ram-kingston-fury-beast-ddr5-64gb.jpg',
+  './img/gaming/componentes/ssd-crucial-p310-1tb.jpg',
+  './img/gaming/componentes/ssd-crucial-p310-2tb.jpg',
+  './img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg'
 ];
 
 // Install Event — cachear assets críticos

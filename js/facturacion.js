@@ -3240,10 +3240,14 @@ window.ERPBilling = (function () {
           : `Válida hasta ${formatDate(inv.validUntil || inv.dueDate)}.`;
         const shareButton = document.getElementById('view-commercial-share-button');
         const historyButton = document.getElementById('view-commercial-history-button');
-        shareButton.replaceWith(shareButton.cloneNode(true));
-        historyButton.replaceWith(historyButton.cloneNode(true));
-        document.getElementById('view-commercial-share-button').addEventListener('click', () => window.ERPBillingWorkflows.openShareDialog(inv.id));
-        document.getElementById('view-commercial-history-button').addEventListener('click', () => window.ERPBillingWorkflows.openHistoryDialog(inv.id));
+        if (shareButton) {
+          shareButton.replaceWith(shareButton.cloneNode(true));
+          document.getElementById('view-commercial-share-button')?.addEventListener('click', () => window.ERPBillingWorkflows.openShareDialog(inv.id));
+        }
+        if (historyButton) {
+          historyButton.replaceWith(historyButton.cloneNode(true));
+          document.getElementById('view-commercial-history-button')?.addEventListener('click', () => window.ERPBillingWorkflows.openHistoryDialog(inv.id));
+        }
       }
     }
     

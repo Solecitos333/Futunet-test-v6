@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v22 con cobertura ampliada', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v23 con cobertura ampliada', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,9 +69,10 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v22';"), 'sw.js debe estar en la versión futunet-cache-v22');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v23';"), 'sw.js debe estar en la versión futunet-cache-v23');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg'"), 'sw.js debe incluir componentes gaming en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {
@@ -87,6 +88,14 @@ test('Cart & Bundle: custom_office_bundle incluye department oficina y sincroniz
   assert.ok(
     cartJs.includes("document.getElementById('close-checkout-modal')?.addEventListener"),
     'cart.js debe proteger el listener de close-checkout-modal'
+  );
+  assert.ok(
+    cartJs.includes("addItem: function"),
+    'cart.js debe exponer addItem en FutunetCart'
+  );
+  assert.ok(
+    cartJs.includes("supplierInventory.getMergedCatalog"),
+    'cart.js findProduct debe resolver productos desde supplierInventory'
   );
 });
 
@@ -113,7 +122,7 @@ test('Forms & Security: Las 6 páginas de servicios B2B incluyen honeypot y cons
   });
 });
 
-test('DOM Safety: suggestions, chatbot y public-quote manejan elementos null defensivamente', () => {
+test('DOM Safety: suggestions, chatbot, public-quote, facturacion y gaming manejan elementos null defensivamente', () => {
   const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
   assert.ok(sugJs.includes("document.getElementById('sug-title')?.value"), 'suggestions.js debe usar optional chaining');
 
@@ -122,6 +131,13 @@ test('DOM Safety: suggestions, chatbot y public-quote manejan elementos null def
 
   const quoteJs = fs.readFileSync(path.join(projectRoot, 'js', 'public-quote.js'), 'utf8');
   assert.ok(quoteJs.includes("document.getElementById('quote-response-form')?.addEventListener"), 'public-quote.js debe proteger listener del formulario');
+
+  const facturacionJs = fs.readFileSync(path.join(projectRoot, 'js', 'facturacion.js'), 'utf8');
+  assert.ok(facturacionJs.includes("if (shareButton)"), 'facturacion.js debe comprobar que shareButton exista antes de replaceWith');
+  assert.ok(facturacionJs.includes("if (historyButton)"), 'facturacion.js debe comprobar que historyButton exista antes de replaceWith');
+
+  const gamingJs = fs.readFileSync(path.join(projectRoot, 'js', 'gaming.js'), 'utf8');
+  assert.ok(gamingJs.includes("window.FutunetCart.openDrawer()"), 'gaming.js addToCart debe abrir el drawer del carrito');
 });
 
 test('Catalog Image Assets: Todas las imágenes de backup_data.js y supplier_inventory.js existen en disco', () => {

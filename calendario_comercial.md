@@ -34,20 +34,39 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 13 al 19 de Septiembre de 2026)
+## ⚡ Plan de Acción Semanal (Semana Actual: 20 al 26 de Septiembre de 2026 - Sprint Final Cierre Q3)
 
-### 📌 Contexto del Período y Aceleración B2B (Cierre de Trimestre Q3)
-* **Semana Clave**: Nos encontramos en la fase de aceleración de fin de Q3. Directores de TI, Gerentes de Operaciones y Administradores de Santiago y Zonas Francas (Pisano, Víctor Espaillat Mera) disponen de 17 días para comprometer presupuestos antes del 30 de septiembre.
-* **Oferta Comercial Activa**:
-  * **Lead Magnet B2B**: Levantamiento Técnico y Auditoría de Red Presencial 100% Gratuito en Santiago con cupón `INFRA2026` (valorado en $15,000 DOP).
-  * **Beneficio Transaccional**: 15% de descuento en mano de obra y equipamiento de canalización, switches y racks.
-* **Vector de Continuidad Crítica (Pico Ciclónico Septiembre)**:
-  * Septiembre es el mes con mayor actividad meteorológica y de tormentas en República Dominicana.
-  * **Campaña Cruzada de Respaldo**: 10% de descuento directo en UPS Online (1kVA-10kVA) e inversores con el código `RESPALDO2026`.
-* **Implementación Web**:
-  * Barra superior (*Announcement Bar*) dinámica global con cuenta regresiva al 30 de Septiembre.
-  * Slide estelar en Hero Carousel de `index.html` enfocado en Infraestructura y Redes.
-  * Cintillo de auditoría en `redes-datos.html` y cintillo de contingencia energética en `energia-climatizacion.html`.
+### 📌 Evaluación Estratégica: Cuenta Regresiva de Presupuestos TI (10 Días para el 30 de Septiembre)
+* **Momento Clave del Trimestre**: Nos encontramos en el sprint crítico y decisivo de cierre de Q3. Directores de TI, Administradores y Gerentes Financieros en Santiago de los Caballeros y parques industriales (Zona Franca Víctor Espaillat Mera, PISANO, Parque Industrial Tamboril) disponen de exactamente **10 días para comprometer sus partidas presupuestarias remanentes de 2026** antes de que venzan o sean recortadas para el período fiscal siguiente.
+* **Estrategia Comercial Dual (Infraestructura + Continuidad)**:
+  * **Eje Principal (B2B Q3)**:
+    * **Cupón Activo**: `INFRA2026` (15% de descuento en mano de obra e instalación de cableado estructurado Cat 6A, adecuación de racks, enlaces simétricos dedicados y Wi-Fi 6).
+    * **Lead Magnet de Urgencia**: *Auditoría de Red y Levantamiento Técnico Presencial 100% GRATIS en Santiago* (Valor estándar: RD$ 15,000; exento durante el sprint).
+    * **Garantía Operativa**: Emisión formal de Facturas con Comprobante Fiscal (NCF de Crédito Fiscal) para deducción tributaria inmediata.
+  * **Eje de Contingencia Ciclónica**:
+    * **Cupón Activo**: `RESPALDO2026` (10% de descuento en UPS Online de Doble Conversión 1kVA a 10kVA e inversores) ante el pico de tormentas de septiembre.
+  * **Ejes Complementarios (Retail Tech & Gaming)**:
+    * `POS2026` (12% off en terminales táctiles, lectores 2D e impresoras térmicas para modernizar comercios antes de la temporada alta navideña).
+    * `GAMING2026` (10% off en periféricos pro y fibra simétrica para la comunidad gamer y streaming).
+
+### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
+1. **Announcement Bar Dinámica Global (`main.js`)**:
+   * Microcopy optimizado de urgencia: *"Últimos 10 días para comprometer presupuesto TI: Auditoría GRATIS + 15% OFF con INFRA2026"*.
+   * Detección contextual por landing page: muestra automáticamente `GAMING2026` en `/gaming.html`, `POS2026` en `/punto-de-venta.html`, `RESPALDO2026` en `/energia-climatizacion.html` y `INFRA2026` en el resto del portal.
+   * Transición automática programada hacia `SEGURIDAD2026` para el 1 de octubre.
+2. **Landing Pages B2B & B2C**:
+   * `corporativo.html`: Cintillo superior de alta conversión con llamado urgente al cierre de presupuestos Q3, cupón `INFRA2026` y enlace directo a WhatsApp y cotizador.
+   * `punto-de-venta.html`: Banner temático de Retail Tech para erradicar filas lentas y descuadres con cupón `POS2026`.
+   * `gaming.html`: Banner de alto contraste visual para gamers y creadores con cupón `GAMING2026`.
+3. **Panel Administrativo & Copywriting (`admin.html` / `admin-panel.js`)**:
+   * Tarjeta de campaña activa de la semana sincronizada con el Sprint Cierre Q3.
+   * Presets de copywriting multicanal listos para WhatsApp, LinkedIn y Email institucional.
+
+### 📊 Metas y KPIs del Sprint (20 al 30 de Septiembre de 2026)
+* **Leads B2B Calificados**: Generar un mínimo de 12 levantamientos técnicos presenciales en empresas y zonas francas de Santiago.
+* **Tasa de Conversión de Cotizaciones a Cierre**: Lograr al menos un 35% de aprobación de propuestas antes de la medianoche del 30 de septiembre.
+* **Volumen Transaccional POS/Retail**: 8 kits de punto de venta colocados como modernización previa a Q4.
+* **Preparación de Transición a Octubre**: Probar el relevo automatizado a `SEGURIDAD2026` en el sitio web y tener listas las secuencias de contacto de CCTV perimetral y biometría.
 
 ---
 
