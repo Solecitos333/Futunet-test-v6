@@ -709,6 +709,27 @@
         status: 'implemented',
         description: 'Facilitar la reposición de teclados de oficina duraderos para digitación continua con teclado numérico.',
         officialResponse: '¡Implementado! Incorporamos el Teclado Dell KB216 USB formato completo para despachos y áreas administrativas.'
+      },
+      {
+        title: 'Escritorios ejecutivos blancos y mobiliario corporativo para oficina',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Disponibilidad de escritorios ejecutivos con panel frontal, configuraciones en L con credenza y pasacables para oficinas y despachos.',
+        officialResponse: '¡Cumplido! Se actualizó y habilitó la línea completa de escritorios ejecutivos y estaciones gerenciales con fotos reales e instalación.'
+      },
+      {
+        title: 'Laptops corporativas Dell Latitude (Serie 5000 y 7000) táctiles y Core i5/i7',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Disponibilidad de laptops empresariales de alta resistencia Dell Latitude con pantalla táctil, 16 GB de RAM y almacenamiento SSD NVMe.',
+        officialResponse: '¡Disponible! Se integraron las laptops Dell Latitude 7390 Touch, 5330 Core i7 y 5410/7400 con garantía local y soporte corporativo.'
+      },
+      {
+        title: 'Componentes Gaming de alto rendimiento (Refrigeración 360, Gabinetes y Fuentes ATX 3.1)',
+        category: 'catalog_products',
+        status: 'implemented',
+        description: 'Habilitar hardware de grado entusiasta: disipadores AIO 360mm con pantallas LCD/AMOLED (TRYX y Kraken), gabinetes panorámicos y fuentes PCIe 5.0.',
+        officialResponse: '¡Implementado! Disponibles en catálogo y gaming.html los enfriamientos TRYX Panorama 360, Kraken Elite, gabinetes Lian Li/MSI y fuentes ATX 3.1.'
       }
     ];
 

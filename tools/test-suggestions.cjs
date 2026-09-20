@@ -269,5 +269,54 @@ test('Mejora demandada por usuarios: Teclados de oficina Dell USB y periféricos
   assert.ok(fixesJs.includes('prod_9p6f6zzh6'), 'image_fixes.js debe registrar marca DELL y categoría para prod_9p6f6zzh6');
 });
 
+test('Mejora demandada por usuarios: Disponibilidad y visibilidad de escritorios ejecutivos blancos y mobiliario corporativo (SUG-E2835)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E2835'") && seedCjs.includes("status: 'implemented'"), 'SUG-E2835 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Escritorios ejecutivos blancos y mobiliario corporativo'), 'Escritorios ejecutivos debe figurar en el muro de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('mob_oficina_1'), 'backup_data.js debe contener mob_oficina_1');
+  assert.ok(backupJs.includes('Escritorio ejecutivo blanco con panel frontal'), 'mob_oficina_1 debe tener título exacto de escritorio');
+  assert.ok(!backupJs.includes('"title": "Silla Ergonómica Ejecutiva"'), 'mob_oficina_1 no debe tener título erróneo de silla');
+
+  const suppJs = fs.readFileSync(path.join(projectRoot, 'js', 'supplier_inventory.js'), 'utf8');
+  assert.ok(suppJs.includes('mob_oficina_1') && suppJs.includes('improoficinas'), 'supplier_inventory.js debe incluir mob_oficina_1 en improoficinas');
+});
+
+test('Mejora demandada por usuarios: Laptops corporativas Dell Latitude serie 5000 y 7000 (SUG-L7390)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L7390'") && seedCjs.includes("status: 'implemented'"), 'SUG-L7390 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Laptops corporativas Dell Latitude'), 'Laptops corporativas Dell Latitude debe figurar en el muro de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('lap_dell_lat_5330'), 'backup_data.js debe contener lap_dell_lat_5330');
+  assert.ok(backupJs.includes('lap_dell_lat_7390_touch'), 'backup_data.js debe contener lap_dell_lat_7390_touch');
+  assert.ok(backupJs.includes('lap_dell_lat_5410'), 'backup_data.js debe contener lap_dell_lat_5410');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'laptops', '06-dell-latitude-7390-touch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Dell Latitude 7390 Touch debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Componentes Gaming de alto rendimiento y refrigeración 360 (SUG-G9420)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-G9420'") && seedCjs.includes("status: 'implemented'"), 'SUG-G9420 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('Componentes Gaming de alto rendimiento'), 'Componentes Gaming debe figurar en el muro de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('gm_cooler_tryx_panorama_360'), 'backup_data.js debe contener TRYX Panorama 360');
+  assert.ok(backupJs.includes('gm_cooler_nzxt_kraken_elite_360'), 'backup_data.js debe contener NZXT Kraken Elite 360');
+  assert.ok(backupJs.includes('gm_psu_msi_mag_a1000gs'), 'backup_data.js debe contener fuente MSI 1000W');
+
+  const coolerImg = path.join(projectRoot, 'img', 'gaming', 'componentes', 'cooler-tryx-panorama-360-argb.jpg');
+  assert.ok(fs.existsSync(coolerImg), 'La imagen del cooler TRYX Panorama debe existir en disco');
+});
+
+
 
 
