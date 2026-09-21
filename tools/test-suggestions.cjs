@@ -317,6 +317,71 @@ test('Mejora demandada por usuarios: Componentes Gaming de alto rendimiento y re
   assert.ok(fs.existsSync(coolerImg), 'La imagen del cooler TRYX Panorama debe existir en disco');
 });
 
+test('Mejora demandada por usuarios: Computadoras de escritorio Dell OptiPlex SFF Core i5 (SUG-D3050)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D3050'") && seedCjs.includes("status: 'implemented'"), 'SUG-D3050 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D3050') && sugJs.includes('Dell OptiPlex SFF'), 'SUG-D3050 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('pc_dell_optiplex_7050_sff'), 'backup_data.js debe contener pc_dell_optiplex_7050_sff');
+  assert.ok(backupJs.includes('pc_dell_optiplex_5050_sff'), 'backup_data.js debe contener pc_dell_optiplex_5050_sff');
+  assert.ok(backupJs.includes('pc_dell_optiplex_3050_sff'), 'backup_data.js debe contener pc_dell_optiplex_3050_sff');
+
+  const imgDesktop = path.join(projectRoot, 'img', 'productos', 'dell-optiplex-i7.jpg');
+  assert.ok(fs.existsSync(imgDesktop), 'La imagen de la Dell OptiPlex SFF debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Monitores LG y pantallas IPS FHD (SUG-M2480) y filtro de marca LG', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M2480'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2480 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M2480') && /monitores\s+LG/i.test(sugJs), 'SUG-M2480 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('mon_lg_24mp400_b_fhd'), 'backup_data.js debe contener mon_lg_24mp400_b_fhd');
+  assert.ok(backupJs.includes('mon_lg_27mp400_b_fhd'), 'backup_data.js debe contener mon_lg_27mp400_b_fhd');
+  assert.ok(backupJs.includes('mon_dell_se2422h_fhd'), 'backup_data.js debe contener mon_dell_se2422h_fhd');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("lg: 'LG'"), 'catalog.js debe mapear lg a LG en preferredNames');
+  assert.ok(catJs.includes("'LG'"), 'catalog.js debe incluir LG en priorityList');
+});
+
+test('Mejora demandada por usuarios: Cámaras de videovigilancia Hikvision y kits DVR (SUG-H7200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H7200'") && seedCjs.includes("status: 'implemented'"), 'SUG-H7200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H7200') && sugJs.includes('Hikvision ColorVu'), 'SUG-H7200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('sec_hikvision_cam_colorvu_1080p'), 'backup_data.js debe contener sec_hikvision_cam_colorvu_1080p');
+  assert.ok(backupJs.includes('sec_hikvision_kit_dvr_4ch'), 'backup_data.js debe contener sec_hikvision_kit_dvr_4ch');
+
+  const camImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'camara-ip.jpg');
+  assert.ok(fs.existsSync(camImg), 'La imagen de la cámara Hikvision ColorVu debe existir en disco');
+
+  const dvrImg = path.join(projectRoot, 'img', 'productos', 'hikvision-dvr-8ch.webp');
+  assert.ok(fs.existsSync(dvrImg), 'La imagen del DVR Hikvision debe existir en disco');
+});
+
+test('Filtros de categoría del muro comunitario en sugerencias.html, CSS y JS', () => {
+  const sugHtml = fs.readFileSync(path.join(projectRoot, 'sugerencias.html'), 'utf8');
+  assert.ok(sugHtml.includes('id="sug-comm-filters"'), 'sugerencias.html debe contener el contenedor sug-comm-filters');
+  assert.ok(sugHtml.includes('data-cat="catalog_products"'), 'sugerencias.html debe tener el botón para productos');
+
+  const sugCss = fs.readFileSync(path.join(projectRoot, 'css', 'suggestions.css'), 'utf8');
+  assert.ok(sugCss.includes('.sug-comm-filters'), 'suggestions.css debe contener estilos para .sug-comm-filters');
+  assert.ok(sugCss.includes('.sug-comm-filter-btn.is-active'), 'suggestions.css debe contener estilos para botones activos');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('initCommunityFilters'), 'suggestions.js debe contener la función initCommunityFilters');
+  assert.ok(sugJs.includes('filterCommunityByCategory'), 'suggestions.js debe contener la función filterCommunityByCategory');
+});
+
 
 
 

@@ -924,3 +924,51 @@ body.sug-body {
   margin: 0 0 14px;
 }
 
+/* ─── Filtros de Categoría del Muro Comunitario ─── */
+.sug-comm-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 22px 0 26px;
+}
+
+.sug-comm-filter-btn {
+  background: var(--sug-surface);
+  border: 1px solid var(--sug-border);
+  color: var(--sug-text-muted);
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+  box-shadow: var(--sug-shadow-sm);
+}
+
+.sug-comm-filter-btn:hover {
+  border-color: var(--sug-primary);
+  color: var(--sug-primary);
+  transform: translateY(-1px);
+}
+
+.sug-comm-filter-btn.is-active {
+  background: var(--sug-primary);
+  border-color: var(--sug-primary);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.28);
+}
+
+@media (max-width: 640px) {
+  .sug-comm-filters {
+    gap: 6px;
+    margin: 16px 0 20px;
+  }
+  .sug-comm-filter-btn {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+}
+

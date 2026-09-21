@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Suite de Pruebas Automatizadas de Seguridad y Privacidad en Formularios Web
  * Futunet - OWASP Top 10 & Ley 172-13 / RGPD Compliance Verification
  */
@@ -27,7 +27,8 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     { file: 'internet.html', id: 'p-hir-hp-check', name: 'Portal: contratación de plan cliente' },
     { file: 'internet.html', id: 'p-guest-hp-check', name: 'Modal público: contratación express' },
     { file: 'punto-de-venta.html', id: 'pos-hp-check', name: 'Cotizador directo POS' },
-    { file: 'login.html', id: 'reg-hp-check', name: 'Formulario de registro de cuenta' }
+    { file: 'login.html', id: 'reg-hp-check', name: 'Formulario de registro de cuenta' },
+    { file: 'cotizacion.html', id: 'quote-hp-check', name: 'Formulario de cotización pública' }
   ];
 
   for (const item of checks) {
@@ -50,7 +51,8 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
     { file: 'internet.html', id: 'p-hir-privacy-consent', label: 'Contratación portal cliente' },
     { file: 'internet.html', id: 'p-guest-privacy-consent', label: 'Contratación modal express' },
     { file: 'punto-de-venta.html', id: 'pos-privacy-consent', label: 'Cotizador POS' },
-    { file: 'login.html', id: 'register-terms', label: 'Registro de usuario' }
+    { file: 'login.html', id: 'register-terms', label: 'Registro de usuario' },
+    { file: 'cotizacion.html', id: 'quote-accept-terms', label: 'Respuesta de cotización pública' }
   ];
 
   for (const item of privacyChecks) {
@@ -106,6 +108,17 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
     loginHtml.includes('futunet_last_register_ts'),
     'login.html debe implementar futunet_last_register_ts para registro'
   );
+
+  // 5. Cotización Pública
+  const quoteJs = readJs('js/public-quote.js');
+  assert.ok(
+    quoteJs.includes('futunet_last_quote_response_ts'),
+    'js/public-quote.js debe usar futunet_last_quote_response_ts para cooldown'
+  );
+  assert.ok(
+    quoteJs.includes('10000'),
+    'js/public-quote.js debe aplicar una ventana de cooldown de al menos 10 segundos'
+  );
 });
 
 test('Sanitización e Inyecciones: remoción de tags y caracteres de control invisibles', () => {
@@ -134,4 +147,27 @@ test('Sanitización e Inyecciones: remoción de tags y caracteres de control inv
     posHtml.includes('.slice(0, 1000)'),
     'punto-de-venta.html debe acotar el mensaje a 1000 caracteres antes de enviar a WhatsApp'
   );
+
+  const quoteJs = readJs('js/public-quote.js');
+  assert.ok(
+    quoteJs.includes('sanitizeQuoteInput'),
+    'js/public-quote.js debe implementar la función sanitizeQuoteInput'
+  );
+  assert.ok(
+    quoteJs.includes('\\x00-\\x08'),
+    'js/public-quote.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+});
+
+test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noreferrer en HTMLs', () => {
+  const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
+  for (const file of htmlFiles) {
+    const content = fs.readFileSync(path.join(rootDir, file), 'utf8');
+    const matches = content.match(/rel\s*=\s*["']noopener["']/gi);
+    assert.strictEqual(
+      matches,
+      null,
+      `El archivo ${file} no debe contener rel="noopener" solitario sin noreferrer`
+    );
+  }
 });

@@ -145,6 +145,14 @@
       const found = mockDatabase.find(p => p && p.id === productId);
       if (found) return found;
     }
+    if (typeof window !== 'undefined' && Array.isArray(window.mockDatabase)) {
+      const found = window.mockDatabase.find(p => p && p.id === productId);
+      if (found) return found;
+    }
+    if (typeof window !== 'undefined' && Array.isArray(window.backupDatabase)) {
+      const found = window.backupDatabase.find(p => p && p.id === productId);
+      if (found) return found;
+    }
     if (window.FutunetProductDetail && typeof window.FutunetProductDetail.getCatalogData === 'function') {
       const found = window.FutunetProductDetail.getCatalogData().find(p => p && p.id === productId);
       if (found) return found;
@@ -1454,30 +1462,53 @@
       }
 
       showCartToast('Registrando pedido...', 'info');
-      
-      const response = await fetch('https://futunet-backend.onrender.com/api/order', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(orderPayload)
-      });
-      
-      const resData = await response.json();
-      
-      if (!response.ok || !resData.success) {
-        throw new Error(resData.detail || 'El servidor rechazó el pedido.');
+
+      let resData = null;
+      let backendFailed = false;
+
+      // Usar AbortController con timeout de 12 segundos para no bloquear al usuario si el backend está en cold-start
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+      try {
+        const response = await fetch('https://futunet-backend.onrender.com/api/order', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(orderPayload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          resData = await response.json();
+          if (!resData.success) {
+            throw new Error(resData.detail || 'El servidor rechazó el pedido.');
+          }
+        } else {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.detail || `Error en el servidor (${response.status})`);
+        }
+      } catch (fetchErr) {
+        clearTimeout(timeoutId);
+        if (paymentMethod !== 'whatsapp') {
+          // Para transferencia bancaria y financiamiento es mandatoria la persistencia en servidor
+          throw fetchErr;
+        }
+        backendFailed = true;
+        console.warn('Backend order sync no completado en tiempo; procesando pedido por WhatsApp directo:', fetchErr);
       }
-      
+
       if (paymentMethod === 'bank_transfer') {
-        showCartToast(resData.message || 'Pedido por transferencia registrado con éxito.', 'success');
-        
+        showCartToast(resData?.message || 'Pedido por transferencia registrado con éxito.', 'success');
+
         // Vaciar carrito
         cartState.items = {};
         saveCartState();
         updateCartCount();
         closeCheckoutModal();
       } else if (paymentMethod === 'financing') {
-        showCartToast(resData.message || 'Solicitud de financiamiento registrada para evaluación.', 'success');
-        
+        showCartToast(resData?.message || 'Solicitud de financiamiento registrada para evaluación.', 'success');
+
         // Vaciar carrito
         cartState.items = {};
         saveCartState();
@@ -1485,16 +1516,20 @@
         closeCheckoutModal();
       } else {
         // Método WhatsApp
-        showCartToast(resData.message || 'Pedido registrado. Abriendo WhatsApp...', 'success');
-        
+        if (backendFailed) {
+          showCartToast('Abriendo WhatsApp para coordinar tu pedido...', 'success');
+        } else {
+          showCartToast(resData?.message || 'Pedido registrado. Abriendo WhatsApp...', 'success');
+        }
+
         const message = buildCheckoutMessage(items, resData);
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
-        
+
         // Esperar un momento breve para que el usuario pueda ver el Toast de éxito
         setTimeout(() => {
           window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
         }, 1000);
-        
+
         cartState.items = {};
         saveCartState();
         updateCartCount();

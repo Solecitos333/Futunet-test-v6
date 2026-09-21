@@ -71,12 +71,23 @@ function getStemVariants(word) {
  * de forma tolerante con el texto objetivo.
  */
 function fuzzyMatch(normalizedTarget, normalizedQuery) {
-  if (normalizedTarget.includes(normalizedQuery)) return true;
+  if (normalizedQuery.length <= 3) {
+    const targetWords = normalizedTarget.split(/\s+/);
+    if (targetWords.includes(normalizedQuery)) return true;
+  } else if (normalizedTarget.includes(normalizedQuery)) {
+    return true;
+  }
   const queryWords = normalizedQuery.split(/\s+/).filter(w => w.length >= 2);
   if (queryWords.length === 0) return false;
   return queryWords.every(qWord => {
     const variants = getStemVariants(qWord);
-    return variants.some(variant => normalizedTarget.includes(variant));
+    return variants.some(variant => {
+      if (variant.length <= 3) {
+        const words = normalizedTarget.split(/\s+/);
+        return words.includes(variant);
+      }
+      return normalizedTarget.includes(variant);
+    });
   });
 }
 
@@ -93,20 +104,50 @@ function scoreProductMatch(product, normalizedQuery) {
   const combined = `${title} ${brand} ${category} ${desc} ${specs}`.trim();
 
   let score = 0;
-  if (title.includes(normalizedQuery)) score += 100;
-  else if (fuzzyMatch(title, normalizedQuery)) score += 60;
-  if (brand.includes(normalizedQuery)) score += 80;
-  else if (fuzzyMatch(brand, normalizedQuery)) score += 40;
-  if (category.includes(normalizedQuery)) score += 70;
-  else if (fuzzyMatch(category, normalizedQuery)) score += 35;
+  if (normalizedQuery.length <= 3) {
+    const titleWords = title.split(/\s+/);
+    const brandWords = brand.split(/\s+/);
+    const catWords = category.split(/\s+/);
+    if (brandWords.includes(normalizedQuery)) score += 100;
+    if (titleWords.includes(normalizedQuery)) score += 80;
+    if (catWords.includes(normalizedQuery)) score += 70;
+  } else {
+    if (title.includes(normalizedQuery)) score += 100;
+    else if (fuzzyMatch(title, normalizedQuery)) score += 60;
+    if (brand.includes(normalizedQuery)) score += 80;
+    else if (fuzzyMatch(brand, normalizedQuery)) score += 40;
+    if (category.includes(normalizedQuery)) score += 70;
+    else if (fuzzyMatch(category, normalizedQuery)) score += 35;
+  }
   if (fuzzyMatch(desc, normalizedQuery)) score += 20;
-  if (specs && (specs.includes(normalizedQuery) || fuzzyMatch(specs, normalizedQuery))) score += 25;
+  if (specs && fuzzyMatch(specs, normalizedQuery)) score += 25;
 
   // Si los términos de búsqueda están repartidos en varios campos (ej. "laptop dell", "teclado usb")
   if (score === 0 && fuzzyMatch(combined, normalizedQuery)) {
     score += 50;
   } else if (score > 0 && fuzzyMatch(combined, normalizedQuery)) {
     score += 15;
+  }
+
+  // Para consultas largas (3 o más palabras), puntuar según la proporción de términos coincidentes
+  const queryWords = normalizedQuery.split(/\s+/).filter(w => w.length >= 2);
+  if (queryWords.length >= 3) {
+    let matchedWords = 0;
+    queryWords.forEach(qWord => {
+      const variants = getStemVariants(qWord);
+      const matched = variants.some(variant => {
+        if (variant.length <= 3) {
+          return combined.split(/\s+/).includes(variant);
+        }
+        return combined.includes(variant);
+      });
+      if (matched) matchedWords++;
+    });
+
+    const matchRatio = matchedWords / queryWords.length;
+    if (matchedWords >= 3 && matchRatio >= 0.35) {
+      score += Math.round(matchRatio * 90) + (matchedWords * 8);
+    }
   }
 
   return score;
@@ -196,6 +237,7 @@ function populateBrandFilter() {
     lenovo: 'Lenovo',
     epson: 'Epson',
     tgm: 'TGM',
+    lg: 'LG',
     asus: 'ASUS',
     acer: 'Acer',
     apple: 'Apple',
@@ -234,7 +276,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

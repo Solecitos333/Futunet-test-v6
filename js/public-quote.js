@@ -69,21 +69,46 @@
     }
   }
 
+  function sanitizeQuoteInput(val) {
+    return String(val || '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .replace(/<[^>]*>/g, '')
+      .trim();
+  }
+
   async function respond(status) {
+    // 1. Trampa Honeypot contra bots automáticos (OWASP Anti-Automation)
+    const hp = document.getElementById('quote-hp-check') || document.querySelector('#quote-response-form input[name="_hp_security_check"]');
+    if (hp && hp.value) {
+      showResult(status);
+      return;
+    }
+
+    // 2. Cooldown de envío (Rate limiting en cliente 10s contra flooding)
+    const cooldownKey = 'futunet_last_quote_response_ts';
+    const lastSub = sessionStorage.getItem(cooldownKey);
+    const now = Date.now();
+    if (lastSub && (now - Number(lastSub)) < 10000) {
+      const remaining = Math.ceil((10000 - (now - Number(lastSub))) / 1000);
+      alert('Por favor espera ' + remaining + ' segundos antes de enviar otra respuesta.');
+      return;
+    }
+
     const nameEl = document.getElementById('quote-signer-name');
     const termsEl = document.getElementById('quote-accept-terms');
-    const name = (nameEl?.value || '').trim();
+    const name = sanitizeQuoteInput(nameEl?.value);
     const acceptedTerms = !!termsEl?.checked;
     if (name.length < 3) { nameEl?.reportValidity(); return; }
     if (!acceptedTerms) { termsEl?.reportValidity(); return; }
     const buttons = document.querySelectorAll('#quote-response-form button');
     buttons.forEach(button => { button.disabled = true; });
     try {
-      const noteVal = (document.getElementById('quote-response-note')?.value || '').trim();
+      const noteVal = sanitizeQuoteInput(document.getElementById('quote-response-note')?.value);
       await db().collection('public_quote_links').doc(token).update({
         responseStatus: status, signerName: name, responseNote: noteVal,
         acceptedTerms: true, respondedAt: serverTime(), updatedAt: serverTime()
       });
+      sessionStorage.setItem(cooldownKey, String(Date.now()));
       showResult(status);
     } catch (error) {
       buttons.forEach(button => { button.disabled = false; });

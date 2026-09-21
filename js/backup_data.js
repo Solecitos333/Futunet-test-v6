@@ -6109,7 +6109,183 @@ const mockDatabase = [
       "Escritura secuencial hasta 6,000 MB/s",
       "Durabilidad y confiabilidad comprobada Micron"
     ]
+  },
+  {
+    "id": "pc_dell_optiplex_7050_sff",
+    "department": "equipos",
+    "category": "Computadoras de Escritorio",
+    "brand": "DELL",
+    "title": "PC de Escritorio Dell OptiPlex 7050 SFF Intel Core i5-7500 3.4GHz, 16GB RAM, 256GB SSD NVMe",
+    "desc": "Computadora corporativa de escritorio Dell OptiPlex 7050 Small Form Factor (SFF) de alto rendimiento. Diseñada para oficinas ejecutivas, estaciones contables, laboratorios y puestos de atención continua con chasis compacto ultra resistente y bajo consumo energético.",
+    "price": "RD$ 16,500.00",
+    "img": "img/productos/dell-optiplex-i7.jpg",
+    "gallery": [
+      "img/productos/dell-optiplex-i7.jpg"
+    ],
+    "specs": [
+      "Procesador Intel Core i5-7500 (3.40 GHz hasta 3.80 GHz Turbo, 4 núcleos)",
+      "16 GB Memoria RAM DDR4 (ampliable a 64 GB en 4 ranuras DIMM)",
+      "256 GB Almacenamiento SSD M.2 NVMe ultrarrápido",
+      "Gráficos integrados Intel HD Graphics 630",
+      "Conectividad: 2x DisplayPort 1.2, 1x HDMI, 6x USB 3.0, 4x USB 2.0, Gigabit Ethernet RJ-45",
+      "Factor de forma SFF compacto ideal para espacios reducidos",
+      "Sistema operativo Windows 10/11 Pro 64-bit preinstalado con licencia corporativa",
+      "Garantía local de 1 año con respaldo y soporte técnico Futunet"
+    ]
+  },
+  {
+    "id": "pc_dell_optiplex_5050_sff",
+    "department": "equipos",
+    "category": "Computadoras de Escritorio",
+    "brand": "DELL",
+    "title": "PC de Escritorio Dell OptiPlex 5050 SFF Intel Core i5-7500 3.4GHz, 8GB RAM, 256GB SSD",
+    "desc": "Equipo de escritorio Dell OptiPlex 5050 SFF generación 7. Excelente equilibrio entre potencia, fiabilidad corporativa y coste operativo para farmacias, supermercados, call centers y despachos profesionales.",
+    "price": "RD$ 13,800.00",
+    "img": "img/productos/dell-optiplex-i7.jpg",
+    "gallery": [
+      "img/productos/dell-optiplex-i7.jpg"
+    ],
+    "specs": [
+      "Procesador Intel Core i5-7500 3.4 GHz Quad-Core",
+      "8 GB Memoria RAM DDR4",
+      "256 GB SSD de estado sólido de alta velocidad",
+      "Salidas de video duales DisplayPort y HDMI",
+      "Chasis SFF silencioso con ventilación inteligente de flujo directo",
+      "6 puertos USB 3.0 de alta velocidad y salida de audio frontal",
+      "Garantía y despacho inmediato en Santiago y todo el país"
+    ]
+  },
+  {
+    "id": "pc_dell_optiplex_3050_sff",
+    "department": "equipos",
+    "category": "Computadoras de Escritorio",
+    "brand": "DELL",
+    "title": "PC de Escritorio Dell OptiPlex 3050 SFF Intel Core i5 8GB RAM, 500GB HDD + 128GB SSD",
+    "desc": "Solución de computación confiable y económica para puestos de digitación, cajas y oficinas. Configuración híbrida con disco SSD para arranque instantáneo de Windows y disco duro secundario de 500GB para almacenamiento masivo de datos.",
+    "price": "RD$ 11,900.00",
+    "img": "img/productos/dell-optiplex-i7.jpg",
+    "gallery": [
+      "img/productos/dell-optiplex-i7.jpg"
+    ],
+    "specs": [
+      "Procesador Intel Core i5 (7ma Generación) 3.4 GHz",
+      "8 GB Memoria RAM DDR4",
+      "Almacenamiento híbrido: 128 GB SSD (Sistema rápido) + 500 GB HDD (Archivos)",
+      "Conexiones: HDMI, DisplayPort, puertos USB 3.0 y audio frontal",
+      "Formato compacto Small Form Factor (SFF)",
+      "Bajo consumo eléctrico y chasis de fácil mantenimiento sin herramientas"
+    ]
+  },
+  {
+    "id": "mon_lg_24mp400_b_fhd",
+    "department": "equipos",
+    "category": "Monitores y Pantallas",
+    "brand": "LG",
+    "title": "Monitor LG 24MP400-B 24 Pulgadas IPS Full HD (1920x1080) 75Hz HDMI AMD FreeSync",
+    "desc": "Monitor LG de 24 pulgadas con panel IPS Full HD y diseño prácticamente sin bordes en 3 lados. Ofrece una reproducción precisa del color desde cualquier ángulo, tecnología Flicker Safe para evitar fatiga ocular y compatibilidad con AMD FreeSync.",
+    "price": "RD$ 8,950.00",
+    "img": "img/productos/hp-monitor-widescreen.jpg",
+    "gallery": [
+      "img/productos/hp-monitor-widescreen.jpg"
+    ],
+    "specs": [
+      "Pantalla 23.8 pulgadas IPS con resolución Full HD (1920 x 1080)",
+      "Frecuencia de actualización de 75Hz con AMD FreeSync",
+      "Ángulo de visión ultra ancho de 178º horizontal y vertical",
+      "Protección ocular: Flicker Safe y Modo Lectura antirreflejo",
+      "Entradas: 1x HDMI y 1x VGA (D-Sub)",
+      "Montaje en pared VESA 75 x 75 mm compatible",
+      "Control de ajustes en pantalla OnScreen Control de LG"
+    ]
+  },
+  {
+    "id": "mon_lg_27mp400_b_fhd",
+    "department": "equipos",
+    "category": "Monitores y Pantallas",
+    "brand": "LG",
+    "title": "Monitor LG 27MP400-B 27 Pulgadas IPS Full HD (1920x1080) 75Hz HDMI FreeSync",
+    "desc": "Pantalla panorámica LG de 27 pulgadas IPS ideal para entornos ejecutivos, diseño gráfico, edición de documentos en paralelo y programación. Colores vivos y ángulo visual amplio para máxima productividad.",
+    "price": "RD$ 11,800.00",
+    "img": "img/productos/hp-monitor-widescreen.jpg",
+    "gallery": [
+      "img/productos/hp-monitor-widescreen.jpg"
+    ],
+    "specs": [
+      "Pantalla amplia de 27 pulgadas IPS Full HD (1920 x 1080)",
+      "Tasa de refresco 75Hz con tecnología Dynamic Action Sync y Black Stabilizer",
+      "Acabado mate antirreflejos 3H",
+      "Conexión versátil: HDMI y D-Sub VGA",
+      "Certificación de eficiencia energética y bajo consumo",
+      "Soporte para inclinación ergonómica y anclaje VESA"
+    ]
+  },
+  {
+    "id": "mon_dell_se2422h_fhd",
+    "department": "equipos",
+    "category": "Monitores y Pantallas",
+    "brand": "DELL",
+    "title": "Monitor Dell SE2422H 24 Pulgadas Full HD 1080p 75Hz HDMI/VGA Antirreflejo",
+    "desc": "Monitor empresarial Dell de 24 pulgadas diseñado para jornadas laborales prolongadas. Incluye tecnología ComfortView para reducir la emisión de luz azul perjudicial y una base compacta que libera espacio en el escritorio.",
+    "price": "RD$ 9,400.00",
+    "img": "img/productos/hp-monitor-widescreen.jpg",
+    "gallery": [
+      "img/productos/hp-monitor-widescreen.jpg"
+    ],
+    "specs": [
+      "Pantalla 23.8 pulgadas Full HD (1920 x 1080) con tecnología LED",
+      "Frecuencia de 75Hz con compatibilidad AMD FreeSync",
+      "Tratamiento antirreflejo con dureza 3H",
+      "Puertos: 1x HDMI 1.4 y 1x VGA",
+      "Tecnología Dell ComfortView con certificación TÜV Rheinland",
+      "Organizador de cables integrado en la base"
+    ]
+  },
+  {
+    "id": "sec_hikvision_cam_colorvu_1080p",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "HIKVISION",
+    "title": "Cámara Hikvision ColorVu Turbo HD 1080p Domo/Bala Visión Nocturna 24/7 a Color",
+    "desc": "Cámara de videovigilancia profesional Hikvision con revolucionaria tecnología ColorVu. Proporciona imágenes brillantes y en color vivo las 24 horas del día, incluso en completa oscuridad exterior o interior, superando a las cámaras infrarrojas tradicionales.",
+    "price": "RD$ 2,450.00",
+    "img": "img/productos/catalogo/camara-ip.jpg",
+    "gallery": [
+      "img/productos/catalogo/camara-ip.jpg",
+      "img/camaras.jpg"
+    ],
+    "specs": [
+      "Resolución 2 Megapíxeles Full HD 1080p (1920 x 1080)",
+      "Tecnología ColorVu con apertura F1.0 para captar máxima luz ambiental",
+      "Iluminador de luz blanca suave hasta 20 metros para visión nocturna a todo color",
+      "Lente fija de 2.8 mm con gran ángulo de cobertura (106°)",
+      "Protección IP67 resistente al agua, polvo y sol caribeño para exteriores",
+      "Micrófono integrado con transmisión de audio sobre coaxial (Audio over Coax)",
+      "Compatible con todos los DVRs Turbo HD y formatos TVI/AHD/CVI/CVBS"
+    ]
+  },
+  {
+    "id": "sec_hikvision_kit_dvr_4ch",
+    "department": "seguridad",
+    "category": "Sistemas de Seguridad CCTV",
+    "brand": "HIKVISION",
+    "title": "Kit de Videovigilancia Hikvision DVR 4 Canales 1080p + 4 Cámaras con App Móvil",
+    "desc": "Sistema integral de seguridad y monitoreo Hikvision de 4 cámaras Full HD y grabador DVR digital con compresión H.265+. Permite visualizar en vivo y revisar grabaciones desde cualquier parte del mundo a través de la aplicación gratuita Hik-Connect en teléfonos iPhone y Android.",
+    "price": "RD$ 12,900.00",
+    "img": "img/productos/hikvision-dvr-8ch.webp",
+    "gallery": [
+      "img/productos/hikvision-dvr-8ch.webp",
+      "img/camaras.jpg"
+    ],
+    "specs": [
+      "1 Grabador Digital DVR Hikvision de 4 canales 1080p Lite con compresión ultra H.265+",
+      "4 Cámaras de alta resolución 1080p para interior y exterior con visión nocturna infrarroja EXIR",
+      "Visualización remota gratuita P2P con Hik-Connect en iOS y Android sin costo mensual",
+      "Detección de movimiento inteligente con notificaciones instantáneas push al móvil",
+      "Salidas de video simultáneas HDMI Full HD y VGA",
+      "Incluye cables de video y poder de 18 metros por cámara, divisor y fuente de poder certificada",
+      "Asesoría de instalación y configuración de red por técnicos especializados de Futunet"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;
-window.backupDatabase = mockDatabase;
+if (typeof window !== 'undefined') window.backupDatabase = mockDatabase;

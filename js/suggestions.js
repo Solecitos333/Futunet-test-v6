@@ -47,6 +47,7 @@
     initTracking();
     initCopyCode();
     initCommunityWall();
+    initCommunityFilters();
     if (form) {
       form.addEventListener('submit', handleFormSubmit);
     }
@@ -494,6 +495,12 @@
     var code = match ? match[0].toUpperCase() : raw.toUpperCase();
     var db = window.FutunetFirebase ? window.FutunetFirebase.db : (window.firebase ? firebase.firestore() : null);
     if (!db) {
+      var fbOffline = getFallbackSuggestionByCode(code);
+      if (fbOffline) {
+        trackResult.hidden = false;
+        renderTrackResult(fbOffline, fbOffline.refCode);
+        return;
+      }
       trackResult.hidden = false;
       trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">No pudimos conectar con el servidor en este momento. Revisa tu conexión.</p>';
       return;
@@ -525,6 +532,11 @@
       }
 
       if (!foundDoc || !docData) {
+        var fbNotFound = getFallbackSuggestionByCode(code);
+        if (fbNotFound) {
+          renderTrackResult(fbNotFound, fbNotFound.refCode);
+          return;
+        }
         trackResult.innerHTML = '<div style="padding:10px 0;">' +
           '<h4 style="margin:0 0 6px; color:#b91c1c; font-size:1rem; font-weight:700;">Propuesta no encontrada</h4>' +
           '<p style="margin:0; font-size:0.88rem; color:#64748b;">No encontramos ninguna sugerencia con el código <strong>' + escapeHtml(code) + '</strong>. Verifica que esté bien escrito o comunícate con nosotros.</p>' +
@@ -536,6 +548,11 @@
 
     } catch (err) {
       console.error('Error al consultar sugerencia:', err);
+      var fbErr = getFallbackSuggestionByCode(code);
+      if (fbErr) {
+        renderTrackResult(fbErr, fbErr.refCode);
+        return;
+      }
       trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">Error al consultar el estado: ' + escapeHtml(err.message || 'Error de red') + '</p>';
     }
   }
@@ -596,6 +613,147 @@
     }
   }
 
+  var loadedCommunityIdeas = [];
+
+  var canonicalSuggestionsList = [
+    {
+      refCode: 'SUG-W8421',
+      title: 'Buscador y seguimiento de sugerencias por código',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Permitir a los usuarios y clientes ingresar el código SUG-XXXXX para revisar en qué fase está su idea y qué respondió el equipo.',
+      officialResponse: '¡Implementado! Ya puedes consultar tu código directamente desde esta página y en Mi Cuenta.'
+    },
+    {
+      refCode: 'SUG-C9130',
+      title: 'Incorporación de proyectores y pantallas al catálogo de oficinas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Ampliar la oferta tecnológica corporativa incluyendo proyectores Epson multimedia de alta luminosidad para salas de reuniones.',
+      officialResponse: '¡Cumplido! Se añadieron proyectores Epson PowerLite y pantallas retráctiles con garantía en Equipos de Oficina.'
+    },
+    {
+      refCode: 'SUG-M5204',
+      title: 'Filtro rápido por marcas y disponibilidad en smartphones',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Optimizar la barra del catálogo en pantallas móviles para filtrar marcas y disponibilidad de manera inmediata sin desplazarse demasiado.',
+      officialResponse: '¡Implementado! Se añadió la barra táctil de filtros rápidos por marca y disponibilidad sobre la lista de productos para compras ágiles.'
+    },
+    {
+      refCode: 'SUG-F3819',
+      title: 'Descarga directa de comprobantes de pago e internet en PDF',
+      category: 'customer_service',
+      status: 'implemented',
+      description: 'Permitir a los clientes residenciales y corporativos descargar sus comprobantes de mensualidad de internet en formato PDF listo para contabilidad.',
+      officialResponse: '¡Implementado! Hemos integrado el botón de descarga directa de comprobantes fiscales y recibos de pago en el módulo de Facturación.'
+    },
+    {
+      refCode: 'SUG-L4920',
+      title: 'Libreros de madera ejecutivos para oficina en el catálogo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Añadir opciones de libreros y estanterías de madera para archivo de documentos y expedientes corporativos en Mobiliario de Oficina.',
+      officialResponse: '¡Atendido! Ya se encuentra disponible el Librero de madera ejecutivo para oficina en Mobiliario con estantes reforzados y cotización en línea.'
+    },
+    {
+      refCode: 'SUG-T1802',
+      title: 'Aires acondicionados TGM Mini-Split y climatización con filtro rápido',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Facilitar la búsqueda y cotización de equipos de climatización TGM Mini-Split de 12,000 a 24,000 BTU en el catálogo corporativo.',
+      officialResponse: '¡Implementado! Incorporamos los modelos TGM Mini-Split Inverter con filtro directo por marca en el catálogo y paquetes de instalación.'
+    },
+    {
+      refCode: 'SUG-B6410',
+      title: 'Botón de copiar código de seguimiento al enviar una sugerencia',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Facilitar el copiado en un clic del código SUG-XXXXX asignado al enviar una propuesta para no tener que anotarlo manualmente.',
+      officialResponse: '¡Cumplido! Al registrar una propuesta se habilita el botón interactivo de copiado rápido al portapapeles con confirmación visual.'
+    },
+    {
+      refCode: 'SUG-P5512',
+      title: 'Impresoras multifuncionales EcoTank y térmicas POS en el catálogo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Habilitar las impresoras Epson de tinta continua y modelos térmicos para facturación y puntos de venta.',
+      officialResponse: '¡Cumplido! Activamos las multifuncionales Epson EcoTank L3250, Brother, Canon e impresoras térmicas POS de 80mm en stock.'
+    },
+    {
+      refCode: 'SUG-A7291',
+      title: 'Disponibilidad de Apple AirPods y auriculares con garantía local',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Añadir al catálogo Apple AirPods originales y accesorios de audio de alta fidelidad para llamadas y trabajo.',
+      officialResponse: '¡Disponible! Se integraron los Apple AirPods (2.ª gen) originales con estuche de carga y despacho garantizado.'
+    },
+    {
+      refCode: 'SUG-K3844',
+      title: 'Teclados cableados Dell USB y periféricos resistentes de oficina',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Facilitar la reposición de teclados de oficina duraderos para digitación continua con teclado numérico.',
+      officialResponse: '¡Implementado! Incorporamos el Teclado Dell KB216 USB formato completo para despachos y áreas administrativas.'
+    },
+    {
+      refCode: 'SUG-E2835',
+      title: 'Escritorios ejecutivos blancos y mobiliario corporativo para oficina',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Disponibilidad de escritorios ejecutivos con panel frontal, configuraciones en L con credenza y pasacables para oficinas y despachos.',
+      officialResponse: '¡Cumplido! Se actualizó y habilitó la línea completa de escritorios ejecutivos y estaciones gerenciales con fotos reales e instalación.'
+    },
+    {
+      refCode: 'SUG-L7390',
+      title: 'Laptops corporativas Dell Latitude (Serie 5000 y 7000) táctiles y Core i5/i7',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Disponibilidad de laptops empresariales de alta resistencia Dell Latitude con pantalla táctil, 16 GB de RAM y almacenamiento SSD NVMe.',
+      officialResponse: '¡Disponible! Se integraron las laptops Dell Latitude 7390 Touch, 5330 Core i7 y 5410/7400 con garantía local y soporte corporativo.'
+    },
+    {
+      refCode: 'SUG-G9420',
+      title: 'Componentes Gaming de alto rendimiento (Refrigeración 360, Gabinetes y Fuentes ATX 3.1)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Habilitar hardware de grado entusiasta: disipadores AIO 360mm con pantallas LCD/AMOLED (TRYX y Kraken), gabinetes panorámicos y fuentes PCIe 5.0.',
+      officialResponse: '¡Implementado! Disponibles en catálogo y gaming.html los enfriamientos TRYX Panorama 360, Kraken Elite, gabinetes Lian Li/MSI y fuentes ATX 3.1.'
+    },
+    {
+      refCode: 'SUG-D3050',
+      title: 'Disponibilidad de computadoras de escritorio Dell OptiPlex SFF Core i5 para oficinas y comercios',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Disponibilidad de PCs de escritorio de factor de forma compacto Dell OptiPlex SFF con procesadores Core i5 de 7ma generación, 8GB a 16GB de RAM y SSD para puestos de facturación y oficinas.',
+      officialResponse: '¡Implementado! Integradas al catálogo las computadoras Dell OptiPlex SFF (modelos 7050, 5050 y 3050) con discos SSD ultrarrápidos y garantía corporativa.'
+    },
+    {
+      refCode: 'SUG-M2480',
+      title: 'Incorporación de monitores LG y pantallas IPS Full HD de 24 y 27 pulgadas al catálogo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Monitores de oficina Full HD de 24 y 27 pulgadas de marcas líderes como LG y Dell con descanso ocular Flicker Safe y puertos HDMI.',
+      officialResponse: '¡Disponible! Ya incorporamos los monitores LG 24" y 27" IPS Full HD con Flicker Safe y Dell 24" antirreflejo listos para entrega inmediata.'
+    },
+    {
+      refCode: 'SUG-H7200',
+      title: 'Cámaras de seguridad Hikvision 1080p y kits de videovigilancia en el catálogo de seguridad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámaras de videovigilancia Hikvision ColorVu con visión nocturna a color 24/7 y kits grabadores DVR de 4 canales con app móvil Hik-Connect.',
+      officialResponse: '¡Atendido! Habilitadas en el catálogo las cámaras Hikvision ColorVu Turbo HD 1080p y kits DVR de 4 canales con monitoreo remoto en tiempo real.'
+    }
+  ];
+
+  function getFallbackSuggestionByCode(code) {
+    if (!code) return null;
+    var clean = code.trim().toUpperCase();
+    return canonicalSuggestionsList.find(function (s) {
+      return (s.refCode || '').toUpperCase() === clean;
+    }) || null;
+  }
+
   // 12. Muro de Ideas Comunitarias Implementadas / Planificadas
   async function initCommunityWall() {
     if (!communityGrid) return;
@@ -609,7 +767,7 @@
     try {
       var snap = await db.collection('suggestions')
         .where('status', 'in', ['implemented', 'planned'])
-        .limit(6)
+        .limit(30)
         .get();
 
       if (snap.empty) {
@@ -617,25 +775,74 @@
         return;
       }
 
-      var html = '';
+      var items = [];
       snap.forEach(function (doc) {
-        var d = doc.data();
-        html += renderCommunityCard(d);
+        items.push(doc.data());
       });
-      communityGrid.innerHTML = html;
-      if (window.lucide && window.lucide.createIcons) {
-        window.lucide.createIcons();
-      }
+      loadedCommunityIdeas = items;
+      renderCommunityCards(loadedCommunityIdeas);
     } catch (e) {
       renderFallbackCommunityWall();
     }
+  }
+
+  function renderCommunityCards(list) {
+    if (!communityGrid) return;
+    if (!list || list.length === 0) {
+      communityGrid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:32px 16px; color:#64748b;">No hay propuestas bajo esta categoría aún.</div>';
+      return;
+    }
+    var html = '';
+    list.forEach(function (d) {
+      html += renderCommunityCard(d);
+    });
+    communityGrid.innerHTML = html;
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
+  }
+
+  function initCommunityFilters() {
+    var filterContainer = document.getElementById('sug-comm-filters');
+    if (!filterContainer) return;
+
+    filterContainer.addEventListener('click', function (e) {
+      var btn = e.target.closest('.sug-comm-filter-btn');
+      if (!btn) return;
+
+      filterContainer.querySelectorAll('.sug-comm-filter-btn').forEach(function (b) {
+        b.classList.remove('is-active');
+      });
+      btn.classList.add('is-active');
+
+      var cat = btn.getAttribute('data-cat') || 'all';
+      filterCommunityByCategory(cat);
+    });
+  }
+
+  function filterCommunityByCategory(category) {
+    var baseList = (loadedCommunityIdeas && loadedCommunityIdeas.length > 0) ? loadedCommunityIdeas : canonicalSuggestionsList;
+    if (category === 'all') {
+      renderCommunityCards(baseList);
+      return;
+    }
+    var filtered = baseList.filter(function (item) {
+      if (category === 'web_ux') {
+        return item.category === 'web_platform' || item.category === 'web_ux';
+      }
+      if (category === 'customer_service') {
+        return item.category === 'customer_service' || item.category === 'services_support';
+      }
+      return item.category === category;
+    });
+    renderCommunityCards(filtered);
   }
 
   function renderCommunityCard(d) {
     var catName = getCategoryName(d.category);
     var badgeHtml = getStatusBadge(d.status);
     var responseText = d.officialResponse ? escapeHtml(d.officialResponse) : 'Propuesta evaluada positivamente y en camino para nuestros usuarios.';
-    return '<div class="sug-comm-card">' +
+    return '<div class="sug-comm-card" data-cat="' + escapeHtml(d.category || '') + '">' +
       '<div>' +
         '<div class="sug-comm-top">' +
           '<span style="font-size:0.75rem; font-weight:700; color:var(--sug-primary); text-transform:uppercase;">' + escapeHtml(catName) + '</span>' +
@@ -652,92 +859,8 @@
   }
 
   function renderFallbackCommunityWall() {
-    if (!communityGrid) return;
-    var samples = [
-      {
-        title: 'Buscador y seguimiento de sugerencias por código',
-        category: 'web_platform',
-        status: 'implemented',
-        description: 'Permitir a los usuarios y clientes ingresar el código SUG-XXXXX para revisar en qué fase está su idea y qué respondió el equipo.',
-        officialResponse: '¡Implementado! Ya puedes consultar tu código directamente desde esta página y en Mi Cuenta.'
-      },
-      {
-        title: 'Incorporación de proyectores y pantallas al catálogo de oficinas',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Ampliar la oferta tecnológica corporativa incluyendo proyectores Epson multimedia de alta luminosidad para salas de reuniones.',
-        officialResponse: '¡Cumplido! Se añadieron proyectores Epson PowerLite y pantallas retráctiles con garantía en Equipos de Oficina.'
-      },
-      {
-        title: 'Filtro rápido por marcas y disponibilidad en smartphones',
-        category: 'web_platform',
-        status: 'implemented',
-        description: 'Optimizar la barra del catálogo en pantallas móviles para filtrar marcas y disponibilidad de manera inmediata sin desplazarse demasiado.',
-        officialResponse: '¡Implementado! Se añadió la barra táctil de filtros rápidos por marca y disponibilidad sobre la lista de productos para compras ágiles.'
-      },
-      {
-        title: 'Libreros de madera ejecutivos para oficina en el catálogo',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Añadir opciones de libreros y estanterías de madera para archivo de documentos y expedientes corporativos en Mobiliario de Oficina.',
-        officialResponse: '¡Atendido! Ya se encuentra disponible el Librero de madera ejecutivo para oficina en Mobiliario con estantes reforzados y cotización en línea.'
-      },
-      {
-        title: 'Aires acondicionados TGM Mini-Split y climatización con filtro rápido',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Facilitar la búsqueda y cotización de equipos de climatización TGM Mini-Split de 12,000 a 24,000 BTU en el catálogo corporativo.',
-        officialResponse: '¡Implementado! Incorporamos los modelos TGM Mini-Split Inverter con filtro directo por marca en el catálogo y paquetes de instalación.'
-      },
-      {
-        title: 'Impresoras multifuncionales EcoTank y térmicas POS en el catálogo',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Habilitar las impresoras Epson de tinta continua y modelos térmicos para facturación y puntos de venta.',
-        officialResponse: '¡Cumplido! Activamos las multifuncionales Epson EcoTank L3250, Brother, Canon e impresoras térmicas POS de 80mm en stock.'
-      },
-      {
-        title: 'Disponibilidad de Apple AirPods y auriculares con garantía local',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Añadir al catálogo Apple AirPods originales y accesorios de audio de alta fidelidad para llamadas y trabajo.',
-        officialResponse: '¡Disponible! Se integraron los Apple AirPods (2.ª gen) originales con estuche de carga y despacho garantizado.'
-      },
-      {
-        title: 'Teclados cableados Dell USB y periféricos resistentes de oficina',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Facilitar la reposición de teclados de oficina duraderos para digitación continua con teclado numérico.',
-        officialResponse: '¡Implementado! Incorporamos el Teclado Dell KB216 USB formato completo para despachos y áreas administrativas.'
-      },
-      {
-        title: 'Escritorios ejecutivos blancos y mobiliario corporativo para oficina',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Disponibilidad de escritorios ejecutivos con panel frontal, configuraciones en L con credenza y pasacables para oficinas y despachos.',
-        officialResponse: '¡Cumplido! Se actualizó y habilitó la línea completa de escritorios ejecutivos y estaciones gerenciales con fotos reales e instalación.'
-      },
-      {
-        title: 'Laptops corporativas Dell Latitude (Serie 5000 y 7000) táctiles y Core i5/i7',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Disponibilidad de laptops empresariales de alta resistencia Dell Latitude con pantalla táctil, 16 GB de RAM y almacenamiento SSD NVMe.',
-        officialResponse: '¡Disponible! Se integraron las laptops Dell Latitude 7390 Touch, 5330 Core i7 y 5410/7400 con garantía local y soporte corporativo.'
-      },
-      {
-        title: 'Componentes Gaming de alto rendimiento (Refrigeración 360, Gabinetes y Fuentes ATX 3.1)',
-        category: 'catalog_products',
-        status: 'implemented',
-        description: 'Habilitar hardware de grado entusiasta: disipadores AIO 360mm con pantallas LCD/AMOLED (TRYX y Kraken), gabinetes panorámicos y fuentes PCIe 5.0.',
-        officialResponse: '¡Implementado! Disponibles en catálogo y gaming.html los enfriamientos TRYX Panorama 360, Kraken Elite, gabinetes Lian Li/MSI y fuentes ATX 3.1.'
-      }
-    ];
-
-    var html = '';
-    samples.forEach(function (s) {
-      html += renderCommunityCard(s);
-    });
-    communityGrid.innerHTML = html;
+    loadedCommunityIdeas = canonicalSuggestionsList;
+    renderCommunityCards(canonicalSuggestionsList);
   }
 
 })();

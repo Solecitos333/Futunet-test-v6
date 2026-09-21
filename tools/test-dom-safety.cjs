@@ -160,3 +160,35 @@ test('Catalog Image Assets: Todas las imágenes de backup_data.js y supplier_inv
   assert.strictEqual(missing.length, 0, `Imágenes faltantes encontradas: ${JSON.stringify(missing)}`);
 });
 
+test('Catalog Resilience & Offline Fallback: backup_data export y resiliencia de catálogo sin Firebase', () => {
+  // 1. backup_data.js no debe fallar en Node (sin window global) y debe exportar un catálogo completo
+  const backupProducts = require(path.join(projectRoot, 'js', 'backup_data.js'));
+  assert.ok(Array.isArray(backupProducts), 'backup_data.js debe exportar un array');
+  assert.ok(backupProducts.length >= 300, `backup_data debe contener al menos 300 productos (actual: ${backupProducts.length})`);
+
+  // 2. inventory_data.js debe implementar getLocalFallbackList y no vaciar productos en offline fallback
+  const invJs = fs.readFileSync(path.join(projectRoot, 'js', 'inventory_data.js'), 'utf8');
+  assert.ok(invJs.includes('getLocalFallbackList()'), 'inventory_data.js debe implementar getLocalFallbackList()');
+  assert.ok(!invJs.includes("publishProducts([], 'local-fallback')"), 'inventory_data.js no debe vaciar el catálogo con array vacío en local-fallback');
+
+  // 3. catalogo.html y producto.html deben cargar backup_data.js antes de inventory_data.js
+  const catHtml = fs.readFileSync(path.join(projectRoot, 'catalogo.html'), 'utf8');
+  const prodHtml = fs.readFileSync(path.join(projectRoot, 'producto.html'), 'utf8');
+  assert.ok(catHtml.includes('backup_data.js'), 'catalogo.html debe cargar backup_data.js');
+  assert.ok(prodHtml.includes('backup_data.js'), 'producto.html debe cargar backup_data.js');
+  assert.ok(
+    catHtml.indexOf('backup_data.js') < catHtml.indexOf('inventory_data.js'),
+    'catalogo.html debe cargar backup_data.js antes de inventory_data.js'
+  );
+  assert.ok(
+    prodHtml.indexOf('backup_data.js') < prodHtml.indexOf('inventory_data.js'),
+    'producto.html debe cargar backup_data.js antes de inventory_data.js'
+  );
+
+  // 4. cart.js debe consultar window.backupDatabase y proteger checkout con AbortController
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(cartJs.includes('window.backupDatabase'), 'cart.js findProduct debe buscar en window.backupDatabase');
+  assert.ok(cartJs.includes('AbortController'), 'cart.js checkout debe usar AbortController contra demoras de red');
+  assert.ok(cartJs.includes('backendFailed'), 'cart.js checkout debe permitir fallback a WhatsApp directo si backend demora');
+});
+

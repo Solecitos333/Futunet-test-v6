@@ -96,11 +96,28 @@ npm run validate
 
 ---
 
-## 5. Próximos Pasos en el Backlog de Seguridad (Prioridad para Próximas Sesiones)
 
-1. [ ] **CSP Hardening**: Analizar reducción del uso de `'unsafe-inline'` en `script-src` y `style-src` en `firebase.json`.
-2. [x] **Auditoría DOM XSS**: Revisión exhaustiva del uso de `innerHTML` en componentes dinámicos de catálogo, carruseles y detalle de producto.
-3. [x] **Formularios B2B Estáticos**: Honeypots y Ley 172-13 integrados en HTML estático para eliminar CLS y robustecer seguridad previa a JS.
-4. [ ] **Protección de Almacenamiento Local**: Verificar que no se almacenen datos personales o financieros sensibles sin cifrar en `localStorage`.
-5. [ ] **Backend Genkit / LLM Security**: Auditar endpoints de chatbot para evitar prompt injection o evasión de restricciones.
+---
+
+## 6. Registro de Atención Autónoma del Buzón de Sugerencias y Telemetría de Búsqueda (2026-09-21)
+
+### Hallazgos de Telemetría y Propuestas de Usuarios Atendidas
+1. **Computadoras de Escritorio Dell SFF (`SUG-D3050`)**:
+   - Demanda recurrente en búsquedas (`core i5 2.7/3.4 mhz 8gb ram 250/500gb dd usados dell sff`, `optiplex`).
+   - Incorporados los modelos `pc_dell_optiplex_7050_sff`, `pc_dell_optiplex_5050_sff`, `pc_dell_optiplex_3050_sff` con discos NVMe, procesadores Core i5 y garantía de 1 año.
+2. **Monitores IPS Full HD y Filtro de Marca LG (`SUG-M2480`)**:
+   - Requerimiento de pantallas de oficina de 24" y 27" con protección ocular (Flicker Safe).
+   - Incorporados `mon_lg_24mp400_b_fhd`, `mon_lg_27mp400_b_fhd` y `mon_dell_se2422h_fhd`.
+   - Marca **LG** integrada en `preferredNames` y `priorityList` de catálogo.
+3. **Cámaras de Seguridad Hikvision y Grabadores DVR (`SUG-H7200`)**:
+   - Búsquedas de CCTV y videovigilancia con visión nocturna a color.
+   - Incorporados `sec_hikvision_cam_colorvu_1080p` (ColorVu 24/7) y `sec_hikvision_kit_dvr_4ch` (4 canales + app móvil).
+4. **Seguridad y Precisión en el Motor de Búsqueda (`catalog.js`)**:
+   - Aislamiento estricto de tokens de longitud $\le 3$ caracteres (evitando que "lg" matchee falsos positivos en "pulgadas").
+   - Puntuación proporcional multitérmino para consultas extensas ($\ge 3$ palabras).
+5. **Muro Comunitario Interactivo (`sugerencias.html`, `suggestions.css`, `suggestions.js`)**:
+   - Pestañas de filtrado por categoría ("Todas las Ideas", "Catálogo y Productos", "Plataforma Web", "Servicios y Soporte").
+   - Persistencia de respuestas oficiales en Firestore `suggestions` y respaldo offline para los 16 registros canónicos.
+   - Cobertura de pruebas unitarias al 100% (115/115 tests exitosos en `npm test`).
+
 

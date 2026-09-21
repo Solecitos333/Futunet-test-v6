@@ -5,8 +5,31 @@
   window.mockDatabase = products;
   window.inventoryDataLoaded = true;
 
+  function getLocalFallbackList() {
+    if (window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
+      const merged = window.supplierInventory.getMergedCatalog();
+      if (Array.isArray(merged) && merged.length > 0) return merged;
+    }
+    if (Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0) {
+      return window.backupDatabase;
+    }
+    if (products.length > 0) {
+      return products.slice();
+    }
+    return [];
+  }
+
   function publishProducts(list, source) {
-    products.splice(0, products.length, ...list);
+    const finalList = Array.isArray(list) && list.length > 0
+      ? list
+      : (source === 'local-fallback' ? getLocalFallbackList() : list);
+
+    if (Array.isArray(finalList) && (finalList.length > 0 || source === 'firestore')) {
+      products.splice(0, products.length, ...finalList);
+    }
+    if (typeof window.applyImageFixes === 'function') {
+      window.applyImageFixes(products);
+    }
     window.FutunetData.products = products;
     window.FutunetData.source = source;
     window.dispatchEvent(new CustomEvent('futunet:inventory-ready', {
@@ -62,7 +85,7 @@
     const services = await waitForFirebase();
     if (!services) {
       console.warn('Firebase no estuvo disponible; se usará el inventario local de proveedores.');
-      return publishProducts([], 'local-fallback');
+      return publishProducts(getLocalFallbackList(), 'local-fallback');
     }
 
     try {
@@ -80,7 +103,7 @@
       return publishProducts(list, 'firestore');
     } catch (error) {
       console.error('No se pudo cargar el catálogo de Firestore:', error);
-      return publishProducts([], 'local-fallback');
+      return publishProducts(getLocalFallbackList(), 'local-fallback');
     }
   })();
 })();
