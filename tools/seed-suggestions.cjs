@@ -395,6 +395,29 @@ const suggestions = [
     respondedAt: FieldValue.serverTimestamp(),
     reviewedAt: FieldValue.serverTimestamp(),
     updatedAt: FieldValue.serverTimestamp()
+  },
+  {
+    refCode: 'SUG-L5480',
+    title: 'Disponibilidad de Laptop corporativa Dell Latitude 5480 Core i5 para oficina y digitación',
+    category: 'catalog_products',
+    targetAudience: 'client',
+    status: 'implemented',
+    isAnonymous: false,
+    authorName: 'Lic. Marcos Peña',
+    authorEmail: 'marcos.pena@consultoriard.com',
+    authorPhone: '809-555-5480',
+    rating: 5,
+    benefit: 'Facilita a pequeñas empresas y oficinas adquirir laptops empresariales resistentes de 14 pulgadas con procesador Core i5, SSD rápido y teclado ergonómico a un precio asequible.',
+    adminNotes: 'Incorporada en catálogo offline (backup_data.js) y Firestore la laptop corporativa Dell Latitude 5480 Core i5 (lap_dell_lat_5480) con 8 GB RAM, 128 GB SSD, pantalla 14" y garantía local.',
+    officialResponse: '¡Hola Marcos! Tu sugerencia ha sido implementada con éxito. Ya incorporamos al catálogo la Laptop Dell Latitude 5480 Core i5 con 8 GB de RAM, 128 GB de almacenamiento SSD ultrarrápido y pantalla antirreflejo de 14 pulgadas. Incluye teclado ergonómico, chasis reforzado de grado empresarial y garantía local Futunet, lista para entrega inmediata y cotización en línea.',
+    respondedBy: 'Equipo Futunet',
+    reviewedBy: 'Admin Futunet',
+    source: 'web_public',
+    pageUrl: 'https://futunet.com.do/catalogo.html?q=dell+latitude+5480',
+    createdAt: FieldValue.serverTimestamp(),
+    respondedAt: FieldValue.serverTimestamp(),
+    reviewedAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp()
   }
 ];
 

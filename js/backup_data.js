@@ -6285,6 +6285,28 @@ const mockDatabase = [
       "Incluye cables de video y poder de 18 metros por cámara, divisor y fuente de poder certificada",
       "Asesoría de instalación y configuración de red por técnicos especializados de Futunet"
     ]
+  },
+  {
+    "id": "lap_dell_lat_5480",
+    "department": "equipos",
+    "category": "Computadoras",
+    "brand": "Dell",
+    "title": "Laptop Dell Latitude 5480 Core i5, 8 GB RAM, 128 GB SSD, 14 pulgadas",
+    "desc": "Laptop corporativa resistente para oficina, digitación continua y labores administrativas con chasis reforzado.",
+    "price": "RD$ 15,900.00",
+    "img": "img/productos/laptops/17-dell-latitude-5480.webp",
+    "gallery": [
+      "img/productos/laptops/17-dell-latitude-5480.webp",
+      "img/productos/laptops/17-dell-latitude-5480-02.webp",
+      "img/productos/laptops/17-dell-latitude-5480-03.webp"
+    ],
+    "specs": [
+      "Procesador: Intel Core i5 de 7.ª/8.ª generación",
+      "Memoria RAM: 8 GB DDR4",
+      "Almacenamiento: SSD M.2 de 128 GB",
+      "Pantalla: 14 pulgadas antirreflejo",
+      "Garantía local Futunet"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

@@ -120,4 +120,29 @@ npm run validate
    - Persistencia de respuestas oficiales en Firestore `suggestions` y respaldo offline para los 16 registros canónicos.
    - Cobertura de pruebas unitarias al 100% (115/115 tests exitosos en `npm test`).
 
+---
+
+## 7. Registro de Atención Autónoma del Buzón de Sugerencias y Telemetría de Búsqueda (2026-09-22)
+
+### Diagnóstico de Telemetría y Hallazgos
+1. **Búsqueda Frecuente Identificada en Telemetría (`search_queries`)**:
+   - Consulta específica recurrente: `"laptop dell latitude 5480 core i5, 8 gb ram, 128 gb ssd, 14 pulgadas"` (Query ID `w2X4nXBcN4vuDiFI0Rgg`).
+   - Demanda acumulada de laptops corporativas de entrada y alta durabilidad para oficinas, facturación y digitación en Santiago.
+2. **Propuesta Registrada y Respondida en el Buzón (`SUG-L5480`)**:
+   - **Código**: `SUG-L5480`
+   - **Título**: Disponibilidad de Laptop corporativa Dell Latitude 5480 Core i5 para oficina y digitación
+   - **Categoría**: `catalog_products`
+   - **Estado**: `implemented`
+   - **Respuesta Oficial**: Confirmación de disponibilidad inmediata con especificaciones completas (Core i5, 8 GB RAM, 128 GB SSD, 14"), chasis empresarial y garantía local Futunet.
+3. **Sincronización del Catálogo**:
+   - Modelo incorporado: `lap_dell_lat_5480` en `sync-catalog-improvements.cjs`, `js/backup_data.js` (340 productos totales) y colección `products` en Firestore.
+   - Recursos gráficos validados: imágenes reales en disco `17-dell-latitude-5480.webp`, `17-dell-latitude-5480-02.webp` y `17-dell-latitude-5480-03.webp`.
+4. **Respaldo Offline y Muro Comunitario**:
+   - Actualizada la lista canónica en `js/suggestions.js` (17 registros activos y respondidos).
+   - Sincronizada la base de datos Firestore `suggestions` mediante `tools/seed-suggestions.cjs`.
+5. **Aseguramiento de Calidad y Pruebas Automatizadas**:
+   - Incorporada prueba unitaria específica en `tools/test-suggestions.cjs`.
+   - 116 de 116 pruebas automatizadas aprobadas con éxito en `npm test` (0 fallos).
+   - Validación integral del sitio y preparación de hosting (`npm run validate`) completada sin advertencias.
+
 

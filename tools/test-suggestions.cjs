@@ -382,6 +382,20 @@ test('Filtros de categoría del muro comunitario en sugerencias.html, CSS y JS',
   assert.ok(sugJs.includes('filterCommunityByCategory'), 'suggestions.js debe contener la función filterCommunityByCategory');
 });
 
+test('Mejora demandada por usuarios: Laptop Dell Latitude 5480 Core i5 (SUG-L5480)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L5480'") && seedCjs.includes("status: 'implemented'"), 'SUG-L5480 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L5480') && sugJs.includes('Dell Latitude 5480'), 'SUG-L5480 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('lap_dell_lat_5480'), 'backup_data.js debe contener lap_dell_lat_5480');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'laptops', '17-dell-latitude-5480.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Dell Latitude 5480 debe existir en disco');
+});
+
 
 
 

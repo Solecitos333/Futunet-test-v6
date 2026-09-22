@@ -743,6 +743,14 @@
       status: 'implemented',
       description: 'Cámaras de videovigilancia Hikvision ColorVu con visión nocturna a color 24/7 y kits grabadores DVR de 4 canales con app móvil Hik-Connect.',
       officialResponse: '¡Atendido! Habilitadas en el catálogo las cámaras Hikvision ColorVu Turbo HD 1080p y kits DVR de 4 canales con monitoreo remoto en tiempo real.'
+    },
+    {
+      refCode: 'SUG-L5480',
+      title: 'Disponibilidad de Laptop corporativa Dell Latitude 5480 Core i5 para oficina y digitación',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Laptops empresariales Dell Latitude 5480 de 14 pulgadas con procesador Intel Core i5, 8 GB de RAM y SSD de 128 GB para labores de oficina y digitación.',
+      officialResponse: '¡Implementado! Integrada al catálogo la Laptop Dell Latitude 5480 Core i5 con 8 GB de RAM, SSD ultrarrápido y garantía corporativa Futunet.'
     }
   ];
 
