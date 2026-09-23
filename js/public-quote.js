@@ -44,8 +44,9 @@
       body.appendChild(row);
     });
     loading.hidden = true;
-    documentView.hidden = false;
-    const expired = data.validUntil && data.validUntil < new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const expired = data.validUntil && data.validUntil < today;
     if (['accepted', 'rejected'].includes(data.responseStatus)) showResult(data.responseStatus);
     else if (expired) {
       document.getElementById('quote-response-form-wrap').hidden = true;

@@ -10,8 +10,39 @@
    ============================================================= */
 
 /* -------------------------------------------------------------
-   0. UTILIDADES (Sanitización, Debounce)
+   0. UTILIDADES (Sanitización, Debounce, Acceso a Catálogo)
    ------------------------------------------------------------- */
+
+/**
+ * Accesor seguro y resiliente del catálogo:
+ * Consulta proveedores integrados, mockDatabase en memoria, window.backupDatabase o fallback
+ */
+function getCatalogDb() {
+  if (typeof window !== 'undefined') {
+    if (window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
+      const merged = window.supplierInventory.getMergedCatalog();
+      if (Array.isArray(merged) && merged.length > 0) return merged;
+    }
+    if (Array.isArray(window.mockDatabase) && window.mockDatabase.length > 0) {
+      return window.mockDatabase;
+    }
+    if (Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0) {
+      return window.backupDatabase;
+    }
+    if (Array.isArray(window.mockDatabase)) {
+      return window.mockDatabase;
+    }
+  }
+  if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)) {
+    return mockDatabase;
+  }
+  return [];
+}
+
+if (typeof mockDatabase === 'undefined') {
+  var mockDatabase = (typeof window !== 'undefined' && window.mockDatabase) ? window.mockDatabase : [];
+}
+
 
 /**
  * Escapa caracteres HTML especiales para prevenir XSS
@@ -247,7 +278,7 @@ function populateBrandFilter() {
     hikvision: 'Hikvision',
     grandstream: 'Grandstream'
   };
-  const rawBrands = mockDatabase.map((product) => String(product.brand || '').trim()).filter(Boolean);
+  const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
   rawBrands.forEach((b) => {
     const key = b.toLowerCase();
@@ -505,7 +536,7 @@ function renderCompactMobileCatalogView() {
 
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    let results = mockDatabase
+    let results = getCatalogDb()
       .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
@@ -542,7 +573,7 @@ function renderCompactMobileCatalogView() {
     return true;
   }
 
-  let db = mockDatabase;
+  let db = getCatalogDb();
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
   if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
   db = db.filter((product) => {
@@ -1185,7 +1216,7 @@ function renderUI() {
   // 1. Manejo de Búsqueda Directa
   if (state.searchQuery) {
     const q = normalizeSearch(state.searchQuery);
-    let results = mockDatabase
+    let results = getCatalogDb()
       .map(p => ({ product: p, score: scoreProductMatch(p, q) }))
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
@@ -1228,7 +1259,7 @@ function renderUI() {
   }
 
   // 2. Filtrado Base por Departamento
-  let db = mockDatabase;
+  let db = getCatalogDb();
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
   if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
 
@@ -1687,7 +1718,7 @@ function renderProductsGrid(productsList, options = {}) {
 
 
 function handleImageError(imgEl, productId, currentIndex) {
-  const product = mockDatabase.find(p => p.id === productId);
+  const product = getCatalogDb().find(p => p.id === productId);
   if (product && product.gallery && currentIndex + 1 < product.gallery.length) {
     // Try the next image in the gallery
     const nextIndex = currentIndex + 1;
@@ -1748,7 +1779,7 @@ let lastModalTrigger = null;
 function openProductModal(id) {
   const modal = document.getElementById('product-modal');
   if (!modal) return;
-  const product = mockDatabase.find(p => p.id === id);
+  const product = getCatalogDb().find(p => p.id === id);
   if (!product) return;
   const serviceItem = isServiceItem(product);
   const quoteOnlyItem = isQuoteOnlyCatalogItem(product);
@@ -1953,7 +1984,7 @@ function initSmartSearch(inputId, dropdownId) {
     const resultModels = [];
 
     const nq = normalizeSearch(q);
-    mockDatabase.forEach(p => {
+    getCatalogDb().forEach(p => {
       const nCat = normalizeSearch(p.category);
       const nBrand = normalizeSearch(p.brand);
       const nTitle = normalizeSearch(p.title);

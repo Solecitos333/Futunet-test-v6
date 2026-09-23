@@ -119,6 +119,39 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
     quoteJs.includes('10000'),
     'js/public-quote.js debe aplicar una ventana de cooldown de al menos 10 segundos'
   );
+
+  // 6. Checkout de Catálogo (cart.js)
+  const cartJs = readJs('js/cart.js');
+  assert.ok(
+    cartJs.includes('futunet_last_order_ts'),
+    'js/cart.js debe usar futunet_last_order_ts para cooldown de envíos en checkout'
+  );
+  assert.ok(
+    cartJs.includes('10000'),
+    'js/cart.js debe aplicar una ventana de cooldown de al menos 10 segundos'
+  );
+
+  // 7. Contacto Principal (js/form.js)
+  const formJs = readJs('js/form.js');
+  assert.ok(
+    formJs.includes('futunet_last_contact_ts'),
+    'js/form.js debe usar futunet_last_contact_ts para cooldown de envíos'
+  );
+  assert.ok(
+    formJs.includes('10000'),
+    'js/form.js debe aplicar una ventana de cooldown de al menos 10 segundos'
+  );
+
+  // 8. Solicitud de Servicios Corporativos B2B (js/service-page.js)
+  const serviceJs = readJs('js/service-page.js');
+  assert.ok(
+    serviceJs.includes('futunet_last_service_req_ts'),
+    'js/service-page.js debe usar futunet_last_service_req_ts para cooldown de solicitudes'
+  );
+  assert.ok(
+    serviceJs.includes('15000'),
+    'js/service-page.js debe aplicar una ventana de cooldown de al menos 15 segundos'
+  );
 });
 
 test('Sanitización e Inyecciones: remoción de tags y caracteres de control invisibles', () => {
@@ -157,9 +190,29 @@ test('Sanitización e Inyecciones: remoción de tags y caracteres de control inv
     quoteJs.includes('\\x00-\\x08'),
     'js/public-quote.js debe neutralizar caracteres de control ASCII invisibles'
   );
+
+  const formJs = readJs('js/form.js');
+  assert.ok(
+    formJs.includes('sanitizeInputText'),
+    'js/form.js debe implementar sanitizeInputText'
+  );
+  assert.ok(
+    formJs.includes('\\x00-\\x08'),
+    'js/form.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const serviceJs = readJs('js/service-page.js');
+  assert.ok(
+    serviceJs.includes('sanitizeField'),
+    'js/service-page.js debe implementar sanitizeField'
+  );
+  assert.ok(
+    serviceJs.includes('\\x00-\\x08'),
+    'js/service-page.js debe neutralizar caracteres de control ASCII invisibles'
+  );
 });
 
-test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noreferrer en HTMLs', () => {
+test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noreferrer en HTMLs y JS', () => {
   const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
   for (const file of htmlFiles) {
     const content = fs.readFileSync(path.join(rootDir, file), 'utf8');
@@ -169,5 +222,21 @@ test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noref
       null,
       `El archivo ${file} no debe contener rel="noopener" solitario sin noreferrer`
     );
+  }
+
+  // Verificar scripts en js/ y ai/js/
+  const jsDirs = [path.join(rootDir, 'js'), path.join(rootDir, 'ai', 'js')];
+  for (const dir of jsDirs) {
+    if (!fs.existsSync(dir)) continue;
+    const jsFiles = fs.readdirSync(dir).filter(f => f.endsWith('.js'));
+    for (const file of jsFiles) {
+      const content = fs.readFileSync(path.join(dir, file), 'utf8');
+      const matches = content.match(/rel\s*=\s*\\?["']noopener\\?["']/gi);
+      assert.strictEqual(
+        matches,
+        null,
+        `El script ${file} no debe contener rel="noopener" solitario sin noreferrer`
+      );
+    }
   }
 });

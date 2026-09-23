@@ -145,4 +145,23 @@ npm run validate
    - 116 de 116 pruebas automatizadas aprobadas con éxito en `npm test` (0 fallos).
    - Validación integral del sitio y preparación de hosting (`npm run validate`) completada sin advertencias.
 
+---
+
+### Ciclo de Mantenimiento Diario y Endurecimiento de Resiliencia (2026-09-23)
+1. **Resiliencia Offline y Carga Omnipresente del Catálogo de Respaldo (`backup_data.js`)**:
+   - Incorporada carga declarativa de `backup_data.js` previo a `inventory_data.js` en 33 páginas clave: las 27 páginas de marcas (`marca-*.html`), `equipos-oficina.html`, `energia-climatizacion.html`, `redes-datos.html`, `seguridad-electronica.html`, `punto-de-venta.html` y `gaming.html`.
+   - Garantizada disponibilidad inmediata de los 340 productos en el frontend ante desconexiones, bloqueadores o latencia en Firestore, eliminando estados vacíos ("Sin productos en stock") espurios.
+2. **Endurecimiento en Formularios y Protección Anti-Spam / DoS en Cliente**:
+   - Implementado rate-limiting / cooldown de 10 segundos en checkout de [cart.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/cart.js) (`futunet_last_order_ts`) para evitar duplicación involuntaria de pedidos.
+   - Añadido campo Honeypot (`_hp_security_check`) y casilla de consentimiento explícito (Ley 172-13) en [mobiliario-suministros.html](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/mobiliario-suministros.html) y formularios dinámicos B2B de [service-page.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/service-page.js).
+3. **Erradicación Total de Tabnabbing y Fuga de Referrer**:
+   - Reforzados atributos `noopener,noreferrer` en aperturas externas de [ai-app.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/ai/js/ai-app.js), [chatbot.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/chatbot.js), [chatbot-settings.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/chatbot-settings.js), [support-ui.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/support-ui.js) y enlaces de WhatsApp en [gaming.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/gaming.js) y [billing-workflows.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/billing-workflows.js).
+4. **PWA y Caché del Service Worker (v24)**:
+   - Activada versión de caché `futunet-cache-v24` en [sw.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/sw.js).
+   - Inclusión de `backup_data.js` en `OPTIONAL_ASSETS` y servicio desde caché para navegación offline integral.
+5. **Aseguramiento de Calidad y Suite de Pruebas**:
+   - Ampliada cobertura en [test-dom-safety.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/test-dom-safety.cjs) y [test-forms-security.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/test-forms-security.cjs).
+   - 116 de 116 pruebas automatizadas aprobadas con éxito en `npm test` (0 fallos).
+   - 52 páginas HTML y 29 hojas de estilo verificadas sin enlaces rotos en `npm run validate`.
+   - Distribución de hosting compilada en `dist/` con 639 entradas públicas verificadas.
 

@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v23 con cobertura ampliada', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v24 con offline backup_data', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,9 +69,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v23';"), 'sw.js debe estar en la versión futunet-cache-v23');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v24';"), 'sw.js debe estar en la versión futunet-cache-v24');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
+  assert.ok(!swJs.includes("event.request.url.includes('backup_data.js')"), 'sw.js no debe excluir backup_data.js de la respuesta de caché');
   assert.ok(swJs.includes("'./img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg'"), 'sw.js debe incluir componentes gaming en OPTIONAL_ASSETS');
 });
 
@@ -99,14 +101,15 @@ test('Cart & Bundle: custom_office_bundle incluye department oficina y sincroniz
   );
 });
 
-test('Forms & Security: Las 6 páginas de servicios B2B incluyen honeypot y consentimiento de privacidad estático', () => {
+test('Forms & Security: Las 7 páginas de servicios B2B incluyen honeypot y consentimiento de privacidad estático', () => {
   const serviceFiles = [
     'corporativo.html',
     'energia-climatizacion.html',
     'equipos-oficina.html',
     'redes-datos.html',
     'infraestructura-remozamiento.html',
-    'seguridad-electronica.html'
+    'seguridad-electronica.html',
+    'mobiliario-suministros.html'
   ];
 
   serviceFiles.forEach(file => {
@@ -171,11 +174,17 @@ test('Catalog Resilience & Offline Fallback: backup_data export y resiliencia de
   assert.ok(invJs.includes('getLocalFallbackList()'), 'inventory_data.js debe implementar getLocalFallbackList()');
   assert.ok(!invJs.includes("publishProducts([], 'local-fallback')"), 'inventory_data.js no debe vaciar el catálogo con array vacío en local-fallback');
 
-  // 3. catalogo.html y producto.html deben cargar backup_data.js antes de inventory_data.js
+  // 3. index.html, catalogo.html, producto.html y páginas de marcas deben cargar backup_data.js antes de inventory_data.js
+  const idxHtml = fs.readFileSync(path.join(projectRoot, 'index.html'), 'utf8');
   const catHtml = fs.readFileSync(path.join(projectRoot, 'catalogo.html'), 'utf8');
   const prodHtml = fs.readFileSync(path.join(projectRoot, 'producto.html'), 'utf8');
+  assert.ok(idxHtml.includes('backup_data.js'), 'index.html debe cargar backup_data.js');
   assert.ok(catHtml.includes('backup_data.js'), 'catalogo.html debe cargar backup_data.js');
   assert.ok(prodHtml.includes('backup_data.js'), 'producto.html debe cargar backup_data.js');
+  assert.ok(
+    idxHtml.indexOf('backup_data.js') < idxHtml.indexOf('inventory_data.js'),
+    'index.html debe cargar backup_data.js antes de inventory_data.js'
+  );
   assert.ok(
     catHtml.indexOf('backup_data.js') < catHtml.indexOf('inventory_data.js'),
     'catalogo.html debe cargar backup_data.js antes de inventory_data.js'
@@ -184,6 +193,16 @@ test('Catalog Resilience & Offline Fallback: backup_data export y resiliencia de
     prodHtml.indexOf('backup_data.js') < prodHtml.indexOf('inventory_data.js'),
     'producto.html debe cargar backup_data.js antes de inventory_data.js'
   );
+
+  const brandFiles = fs.readdirSync(projectRoot).filter(f => f.startsWith('marca-') && f.endsWith('.html'));
+  for (const bFile of brandFiles) {
+    const bHtml = fs.readFileSync(path.join(projectRoot, bFile), 'utf8');
+    assert.ok(bHtml.includes('backup_data.js'), `${bFile} debe cargar backup_data.js`);
+    assert.ok(
+      bHtml.indexOf('backup_data.js') < bHtml.indexOf('inventory_data.js'),
+      `${bFile} debe cargar backup_data.js antes de inventory_data.js`
+    );
+  }
 
   // 4. cart.js debe consultar window.backupDatabase y proteger checkout con AbortController
   const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');

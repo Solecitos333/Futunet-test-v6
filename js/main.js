@@ -23,13 +23,13 @@
    | 5. Actualización de Bitácora & Memoria de Seguridad |
    +-----------------------------------------------------+
 
-   ESTADO ACTUAL DE DEFENSAS AUDITADAS (ACTUALIZADO 2026-09-21):
-   [OK] Formularios Públicos: Trampas Honeypot activas en 9 formularios clave (incluyendo cotización).
+   ESTADO ACTUAL DE DEFENSAS AUDITADAS (ACTUALIZADO 2026-09-23):
+   [OK] Formularios Públicos: Trampas Honeypot activas en formularios clave (incluyendo las 7 páginas B2B y checkout).
    [OK] Privacidad (Ley 172-13): Consentimiento obligatorio en todos los formularios con PII y enlaces seguros con rel="noopener noreferrer".
-   [OK] Rate Limiting en Cliente: Cooldowns en sugerencias (15s), cotizaciones (10s), soporte, pagos y registro (10s), lockout en login.
+   [OK] Rate Limiting en Cliente: Cooldowns en checkout (10s), sugerencias (15s), cotizaciones (10s), soporte, pagos y registro (10s), lockout en login.
    [OK] Sanitización Contextual: Neutralización de tags HTML y caracteres de control ASCII invisibles en formularios.
    [OK] Autenticación & Redirección: Protección contra Open Redirect con allowlist estricta de origen.
-   [OK] Cabeceras & Enlaces: HSTS, X-Frame-Options DENY, nosniff, COOP, CORP, CSP y cero presencia de rel="noopener" solitario.
+   [OK] Cabeceras & Enlaces: HSTS, X-Frame-Options DENY, nosniff, COOP, CORP, CSP y cero presencia de enlaces con noopener solitario en HTMLs y JS.
    [OK] Reglas de Storage: Restricción estricta de tipos MIME (img/pdf) y tamaños máximos (5MB/8MB).
    [OK] Backend API: Extracción robusta get_safe_client_ip contra spoofing de cabeceras de IP y rate limit activo.
 

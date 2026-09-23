@@ -464,7 +464,7 @@ window.ERPBillingWorkflows = (function () {
         await navigator.clipboard.writeText(link.url);
         notify('Enlace copiado.', 'success');
       } else if (channel === 'whatsapp') {
-        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
       } else if (channel === 'email') {
         window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`${invoice.docType === 'proforma' ? 'Proforma' : 'Cotización'} ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
       } else if (channel === 'pdf') {
@@ -562,7 +562,7 @@ window.ERPBillingWorkflows = (function () {
     const client = clientById(invoice.clientId) || invoice.customerSnapshot || {};
     const balance = Number(invoice.total || 0) - Number(invoice.paidAmount || 0);
     const message = `Hola ${invoice.clientName}, te recordamos que la factura ${invoice.invoiceNumber} presenta un balance de ${money(balance)} con vencimiento ${dateLabel(invoice.dueDate)}. Quedamos atentos para ayudarte.`;
-    if (reminder.channel === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+    if (reminder.channel === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
     if (reminder.channel === 'email') window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`Recordatorio ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
     if (reminder.channel === 'phone') await navigator.clipboard.writeText(message);
     await collection('collection_reminders').doc(id).update({ status: 'prepared', preparedAt: serverTime(), preparedBy: user.uid, updatedAt: serverTime() });

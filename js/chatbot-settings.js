@@ -7,8 +7,8 @@
     root.innerHTML = `<details class="sp-card"><summary>Asistente inteligente · Gemini</summary>
       <p>El asistente público usa Gemini mediante Firebase AI Logic. Conserva el contexto de la conversación y prepara un borrador que el usuario revisa antes de enviar a soporte.</p>
       <p class="sp-muted">La conexión se gestiona en Firebase y está protegida con App Check. No necesitas copiar la clave del asistente privado del panel.</p>
-      <div class="sp-actions"><a class="sp-btn sp-primary" href="soporte.html" target="_blank" rel="noopener">Probar asistente</a>
-      <a class="sp-btn" href="https://console.firebase.google.com/project/futunet-web/ailogic" target="_blank" rel="noopener">Administrar en Firebase ↗</a></div>
+      <div class="sp-actions"><a class="sp-btn sp-primary" href="soporte.html" target="_blank" rel="noopener noreferrer">Probar asistente</a>
+      <a class="sp-btn" href="https://console.firebase.google.com/project/futunet-web/ailogic" target="_blank" rel="noopener noreferrer">Administrar en Firebase ↗</a></div>
       <p class="sp-help">Si Gemini no está disponible o se agota su cuota, los usuarios pueden continuar con un ticket. El modelo y las instrucciones se mantienen en la plantilla futunet-support-v1 de Firebase.</p></details>`;
     function session() {
       const profile = FutunetAuth.getUserData(), current = FutunetAuth.getCurrentUser();

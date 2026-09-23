@@ -77,15 +77,24 @@
 
   function getCatalogData() {
     if (window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
-      return window.supplierInventory.getMergedCatalog();
+      const merged = window.supplierInventory.getMergedCatalog();
+      if (Array.isArray(merged) && merged.length > 0) return merged;
+    }
+
+    if (typeof window.mockDatabase !== 'undefined' && Array.isArray(window.mockDatabase) && window.mockDatabase.length > 0) {
+      return window.mockDatabase;
+    }
+
+    if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase) && mockDatabase.length > 0) {
+      return mockDatabase;
+    }
+
+    if (typeof window.backupDatabase !== 'undefined' && Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0) {
+      return window.backupDatabase;
     }
 
     if (typeof window.mockDatabase !== 'undefined' && Array.isArray(window.mockDatabase)) {
       return window.mockDatabase;
-    }
-
-    if (typeof mockDatabase !== 'undefined' && Array.isArray(mockDatabase)) {
-      return mockDatabase;
     }
 
     return [];

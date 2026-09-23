@@ -113,7 +113,7 @@
     html = html.replace(/^---$/gm, '<hr>');
 
     // Links
-    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
 
     // Line breaks (double newlines → paragraph)
     html = html.split('\n\n').map(p => {

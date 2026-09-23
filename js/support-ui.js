@@ -49,7 +49,7 @@
         </div>
         <p id="sp-form-notice" role="status" aria-live="polite" hidden></p>
       </form>
-      <p id="sp-signin" class="sp-signin" hidden>Para enviar y consultar casos necesitas una cuenta verificada. <a href="login.html?redirect=soporte.html" target="_blank" rel="noopener">Iniciar sesión o registrarte (otra pestaña)</a>. Tu formulario permanecerá aquí.</p>
+      <p id="sp-signin" class="sp-signin" hidden>Para enviar y consultar casos necesitas una cuenta verificada. <a href="login.html?redirect=soporte.html" target="_blank" rel="noopener noreferrer">Iniciar sesión o registrarte (otra pestaña)</a>. Tu formulario permanecerá aquí.</p>
     </section>`;
   }
   function listMarkup() {

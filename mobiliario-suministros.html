@@ -536,41 +536,52 @@
     <div class="request-card">
      <h3>Solicitar cotización</h3>
      <p>Completa los datos para organizar tu lista y recomendar el siguiente paso.</p>
-     <form id="service-request-form">
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-name">Nombre completo</label>
-       <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-       <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-email">Correo electrónico</label>
-       <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
-       <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-profile">Tamaño del requerimiento</label>
-       <select id="req-profile" class="request-form-input">
-        <option value="">Selecciona una opción</option>
-        <option value="pyme">Hasta 10 puestos o piezas</option>
-        <option value="corporativo">Más de 10 puestos o piezas</option>
-       </select>
-      </div>
-      <div class="request-form-group">
-       <label class="request-form-label" for="req-message">Productos, cantidades y contexto</label>
-       <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: 8 estaciones operativas, 8 sillas ajustables y una mesa de reunión para oficina en Santiago."></textarea>
-      </div>
-      <button type="submit" class="request-btn-submit" id="req-submit-btn">
-       <i data-lucide="send" aria-hidden="true"></i>
-       Enviar solicitud
-      </button>
-      <p class="premium-form-note"><i data-lucide="shield-check" aria-hidden="true"></i>Usaremos estos datos para responder a tu solicitud. Consulta nuestra <a href="privacidad.html">política de privacidad</a>.</p>
-     </form>
+      <form id="service-request-form">
+       <input type="hidden" id="req-service-type" value="Mobiliario y Suministros" />
+       <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+        <label for="req-hp-check">No llenar este campo</label>
+        <input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-name">Nombre completo</label>
+        <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
+        <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-email">Correo electrónico</label>
+        <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-company">Empresa <span aria-hidden="true">(opcional)</span></label>
+        <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" />
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-profile">Tamaño del requerimiento</label>
+        <select id="req-profile" class="request-form-input">
+         <option value="">Selecciona una opción</option>
+         <option value="pyme">Hasta 10 puestos o piezas</option>
+         <option value="corporativo">Más de 10 puestos o piezas</option>
+        </select>
+       </div>
+       <div class="request-form-group">
+        <label class="request-form-label" for="req-message">Productos, cantidades y contexto</label>
+        <textarea id="req-message" class="request-form-input" maxlength="1500" required placeholder="Ej.: 8 estaciones operativas, 8 sillas ajustables y una mesa de reunión para oficina en Santiago."></textarea>
+       </div>
+       <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+         <input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+         <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>
+        </label>
+       </div>
+       <button type="submit" class="request-btn-submit" id="req-submit-btn">
+        <i data-lucide="send" aria-hidden="true"></i>
+        Enviar solicitud
+       </button>
+       <p class="premium-form-note"><i data-lucide="shield-check" aria-hidden="true"></i>Usaremos estos datos para responder a tu solicitud. Consulta nuestra <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
+      </form>
     </div>
    </div>
   </section>

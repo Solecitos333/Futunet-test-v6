@@ -407,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   waBtn.addEventListener('click', () => {
-    window.open(waLink('Hola Futunet, quiero hablar con un asesor.'), '_blank', 'noopener');
+    window.open(waLink('Hola Futunet, quiero hablar con un asesor.'), '_blank', 'noopener,noreferrer');
   });
 
   chips.addEventListener('click', (event) => {
@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (kind === 'wa') {
-      window.open(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'), '_blank', 'noopener');
+      window.open(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'), '_blank', 'noopener,noreferrer');
     }
   });
 

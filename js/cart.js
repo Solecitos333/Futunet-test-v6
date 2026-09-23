@@ -908,7 +908,8 @@
           return;
         }
 
-        const today = new Date().toISOString().slice(0, 10);
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         if (today < coupon.validFrom || today > coupon.validUntil) {
           activeCoupon = null;
           couponFeedback.textContent = 'Este cupón todavía no está activo o ya expiró.';
@@ -1301,7 +1302,21 @@
       return;
     }
 
-    // 2. Verificación de Consentimiento de Términos y Privacidad (Ley 172-13 / RGPD)
+    // 2. Cooldown de envío de pedidos (Rate-limiting en cliente 10s contra flooding / doble submit)
+    const orderCooldownKey = 'futunet_last_order_ts';
+    const now = Date.now();
+    const lastOrder = sessionStorage.getItem(orderCooldownKey);
+    if (lastOrder && (now - Number(lastOrder)) < 10000) {
+      const waitSecs = Math.ceil((10000 - (now - Number(lastOrder))) / 1000);
+      showCartToast(`Por favor espera ${waitSecs} segundo(s) antes de confirmar otro pedido.`, 'info');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+
+    // 3. Verificación de Consentimiento de Términos y Privacidad (Ley 172-13 / RGPD)
     const acceptTerms = document.getElementById('chk-accept-terms');
     if (acceptTerms && !acceptTerms.checked) {
       showCartToast('Debes aceptar los Términos y Condiciones y la Política de Privacidad para confirmar tu pedido.', 'error');
@@ -1535,6 +1550,7 @@
         updateCartCount();
         closeCheckoutModal();
       }
+      sessionStorage.setItem('futunet_last_order_ts', String(Date.now()));
       delete form.dataset.requestId;
     } catch (err) {
       console.error('Error during checkout processing:', err);

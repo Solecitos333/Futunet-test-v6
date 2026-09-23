@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v23';
+const CACHE_NAME = 'futunet-cache-v24';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -74,6 +74,7 @@ const OPTIONAL_ASSETS = [
   './css/gaming.css',
   './js/gaming.js',
   './js/suggestions.js',
+  './js/backup_data.js',
   './js/chatbot-firebase.mjs',
   './css/support.css',
   './js/support-core.js',
@@ -170,7 +171,6 @@ self.addEventListener('fetch', event => {
     event.request.url.includes('firestore.googleapis.com') ||
     event.request.url.includes('firebaseinstallations.googleapis.com') ||
     event.request.url.includes('identitytoolkit.googleapis.com') ||
-    event.request.url.includes('backup_data.js') ||
     event.request.url.includes('admin-panel.js') ||
     // Excluir archivos de configuración de Firebase del caché por seguridad
     event.request.url.includes('firebase-config.js') ||
