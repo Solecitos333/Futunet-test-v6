@@ -396,6 +396,34 @@ test('Mejora demandada por usuarios: Laptop Dell Latitude 5480 Core i5 (SUG-L548
   assert.ok(fs.existsSync(imgPath), 'La imagen de la Dell Latitude 5480 debe existir en disco');
 });
 
+test('Mejora demandada por usuarios: Laptop ejecutiva Dell Latitude 5330 Core i7 12.ª Gen (SUG-L5330)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L5330'") && seedCjs.includes("status: 'implemented'"), 'SUG-L5330 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L5330') && sugJs.includes('Dell Latitude 5330'), 'SUG-L5330 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('lap_dell_lat_5330'), 'backup_data.js debe contener lap_dell_lat_5330');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'laptops', '03-dell-latitude-5330.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Dell Latitude 5330 debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Suministros de oficina, papelería corporativa y equipamiento B2B (SUG-S4120)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S4120'") && seedCjs.includes("status: 'implemented'"), 'SUG-S4120 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S4120') && sugJs.includes('suministros de oficina'), 'SUG-S4120 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const mobHtml = fs.readFileSync(path.join(projectRoot, 'mobiliario-suministros.html'), 'utf8');
+  assert.ok(mobHtml.includes('id="service-request-form"'), 'mobiliario-suministros.html debe contener el formulario service-request-form');
+  assert.ok(mobHtml.includes('name="_hp_security_check"'), 'mobiliario-suministros.html debe contener honeypot antispam');
+  assert.ok(mobHtml.includes('id="req-privacy-consent"'), 'mobiliario-suministros.html debe contener consentimiento de privacidad');
+});
+
+
 
 
 

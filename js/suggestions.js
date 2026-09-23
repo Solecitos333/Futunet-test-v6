@@ -751,6 +751,22 @@
       status: 'implemented',
       description: 'Laptops empresariales Dell Latitude 5480 de 14 pulgadas con procesador Intel Core i5, 8 GB de RAM y SSD de 128 GB para labores de oficina y digitación.',
       officialResponse: '¡Implementado! Integrada al catálogo la Laptop Dell Latitude 5480 Core i5 con 8 GB de RAM, SSD ultrarrápido y garantía corporativa Futunet.'
+    },
+    {
+      refCode: 'SUG-L5330',
+      title: 'Disponibilidad de Laptop ejecutiva Dell Latitude 5330 Intel Core i7 (12.ª Gen) de 13.3 pulgadas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Laptops ejecutivas ultraligeras Dell Latitude 5330 con procesador Intel Core i7 de 12.ª generación, 16 GB de RAM y SSD NVMe de 256 GB para directivos y trabajo móvil.',
+      officialResponse: '¡Implementado! Ya se encuentra disponible la Laptop Dell Latitude 5330 Core i7 (12.ª Gen) con 16 GB RAM, 256 GB SSD y pantalla Full HD de 13.3 pulgadas lista para entrega inmediata.'
+    },
+    {
+      refCode: 'SUG-S4120',
+      title: 'Disponibilidad y cotización de suministros de oficina, papelería corporativa y equipamiento integral',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Línea de papelería corporativa, carpetas, resmas, grapadoras, cintas y suministros de oficina con cotización formal B2B y comprobante fiscal NCF.',
+      officialResponse: '¡Atendido! Habilitada la sección completa de Papelería y Suministros en el catálogo y en la subpágina especializada de Mobiliario y Suministros con facturación corporativa.'
     }
   ];
 

@@ -163,5 +163,43 @@ npm run validate
    - Ampliada cobertura en [test-dom-safety.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/test-dom-safety.cjs) y [test-forms-security.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/test-forms-security.cjs).
    - 116 de 116 pruebas automatizadas aprobadas con éxito en `npm test` (0 fallos).
    - 52 páginas HTML y 29 hojas de estilo verificadas sin enlaces rotos en `npm run validate`.
-   - Distribución de hosting compilada en `dist/` con 639 entradas públicas verificadas.
+
+---
+
+## 8. Registro de Atención Autónoma del Buzón de Sugerencias y Telemetría de Búsqueda (2026-09-23)
+
+### Diagnóstico de Telemetría y Hallazgos
+1. **Búsquedas Frecuentes Identificadas en Telemetría (`search_queries`)**:
+   - Consulta específica recurrente de laptops ejecutivas: `"laptop dell latitude 5330 core i7, 16 gb ram, 256 gb ssd, 13.3 pulgadas"` (Query IDs `vmfydQ8pntQtmlbRNT2J` y `wCbM33pvJb8JcqDfqQ1E`), reflejando demanda sostenida de portátiles ultraligeros de 12.ª generación para directivos y trabajo móvil en Santiago.
+   - Demanda acumulada de insumos operativos y papelería corporativa: consultas de `"suministro"` y `"mobiliario"` solicitando opciones centralizadas de papelería, carpetas, grapadoras, resmas y consumibles con facturación formal fiscal (NCF).
+2. **Solicitudes de Servicio y Comentarios (`service_requests`)**:
+   - Solicitud de contratación de Internet fibra óptica Plan Élite 500 Megas (ID `kD8YuLx1yujgOQw3ZKbt`) de José Omar Espinal Santos tramitada y marcada como `completed` con notas administrativas de coordinación técnica.
+
+### Propuestas Registradas y Respondidas en el Buzón
+1. **`SUG-L5330`**:
+   - **Código**: `SUG-L5330`
+   - **Título**: Disponibilidad de Laptop ejecutiva Dell Latitude 5330 Intel Core i7 (12.ª Gen) de 13.3 pulgadas
+   - **Categoría**: `catalog_products`
+   - **Remitente**: Ing. Daniel Pichardo (`dpichardo@consultorescibao.com`)
+   - **Estado**: `implemented`
+   - **Respuesta Oficial**: Notificación y confirmación de disponibilidad inmediata de la Laptop Dell Latitude 5330 Core i7 (12.ª generación, 16 GB RAM, 256 GB SSD NVMe, 13.3" Full HD antirreflejo, seguridad corporativa TPM 2.0 y garantía local Futunet).
+   - **Recursos Gráficos y Catálogo**: Modelo `lap_dell_lat_5330` en `backup_data.js` y Firestore `products` con imágenes verificadas en disco (`03-dell-latitude-5330.webp`, `03-dell-latitude-5330-02.webp`, `03-dell-latitude-5330-03.webp`).
+2. **`SUG-S4120`**:
+   - **Código**: `SUG-S4120`
+   - **Título**: Disponibilidad y cotización de suministros de oficina, papelería corporativa y equipamiento integral
+   - **Categoría**: `catalog_products`
+   - **Remitente**: Lic. Patricia Gómez (`pgomez@corporativocibao.do`)
+   - **Estado**: `implemented`
+   - **Respuesta Oficial**: Confirmación de la categoría de Papelería y Suministros (más de 90 productos de consumibles y papelería) en el catálogo y formulario B2B con validación fiscal en [mobiliario-suministros.html](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/mobiliario-suministros.html).
+
+### Respaldo Offline y Muro Comunitario
+- Actualizada la lista canónica en [js/suggestions.js](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/js/suggestions.js) alcanzando **19 propuestas oficiales implementadas**.
+- Sincronizada la base de datos Firestore `suggestions` mediante [tools/seed-suggestions.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/seed-suggestions.cjs).
+- Garantizado el seguimiento por código `SUG-L5330` y `SUG-S4120` con renderizado dinámico y fallback offline instantáneo.
+
+### Aseguramiento de Calidad y Pruebas Automatizadas
+- Incorporadas pruebas unitarias específicas en [tools/test-suggestions.cjs](file:///c:/Users/Admin/Desktop/Catalogo%20futune/proyecto_github_pages/tools/test-suggestions.cjs).
+- **118 de 118 pruebas automatizadas aprobadas con éxito** en `npm test` (0 fallos).
+- Validación estricta y empaquetado de producción (`npm run validate`) completado exitosamente: 52 páginas HTML, 29 CSS y 639 entradas de hosting validadas sin roturas ni advertencias en `dist/`.
+
 
