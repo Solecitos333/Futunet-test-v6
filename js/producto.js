@@ -468,10 +468,16 @@
     renderProductDetail(detail);
   }
 
-  document.addEventListener('DOMContentLoaded', async () => {
+  async function initProductPageLoader() {
     if (window.FutunetData && window.FutunetData.readyPromise) {
       await window.FutunetData.readyPromise;
     }
     initProductPage();
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProductPageLoader);
+  } else {
+    initProductPageLoader();
+  }
 })();

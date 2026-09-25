@@ -1539,11 +1539,14 @@
 
         const message = buildCheckoutMessage(items, resData);
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
+        const waUrl = `https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`;
 
-        // Esperar un momento breve para que el usuario pueda ver el Toast de éxito
-        setTimeout(() => {
-          window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
-        }, 1000);
+        const waWin = window.open(waUrl, '_blank', 'noopener,noreferrer');
+        if (!waWin || waWin.closed || typeof waWin.closed === 'undefined') {
+          setTimeout(() => {
+            window.location.href = waUrl;
+          }, 300);
+        }
 
         cartState.items = {};
         saveCartState();
@@ -1696,8 +1699,12 @@
     copyText: copyText
   };
 
-  // Inicialización automática
-  document.addEventListener('DOMContentLoaded', bindCartUI);
+  // Inicialización automática resiliente
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindCartUI);
+  } else {
+    bindCartUI();
+  }
 
   // Sincronizar carrito cuando la autenticación esté lista o cambie
   window.addEventListener('futunet-auth-ready', async function(event) {
