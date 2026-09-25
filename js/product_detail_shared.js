@@ -113,6 +113,8 @@
 
   function isQuoteOnlyProduct(product) {
     if (!product || isServiceItem(product)) return false;
+    const priceStr = normalizeCopy(product.price).toLowerCase();
+    if (priceStr.includes('cotiz') || priceStr.includes('consultar')) return true;
     const category = normalizeCopy(product.category).toLowerCase();
     return category === 'computadoras' ||
       category === 'laptops' ||
@@ -134,8 +136,8 @@
 
   function getSafeReturnUrl(candidate) {
     if (!candidate) return 'catalogo.html';
-    const decoded = normalizeCopy(candidate);
-    if (/^catalogo\.html(?:[?#].*)?$/i.test(decoded)) {
+    const decoded = normalizeCopy(candidate).trim();
+    if (/^[a-z0-9_-]+\.html(?:[?#].*)?$/i.test(decoded)) {
       return decoded;
     }
     return 'catalogo.html';

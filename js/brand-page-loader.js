@@ -217,7 +217,24 @@ function enrichBrandHero(brandName) {
   applyMobile(mq);
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+function matchesBrandLocal(productBrand, targetBrand) {
+  if (typeof window !== 'undefined' && typeof window.matchesBrand === 'function') {
+    return window.matchesBrand(productBrand, targetBrand);
+  }
+  if (!targetBrand || targetBrand === 'all') return true;
+  if (!productBrand) return false;
+  const pb = String(productBrand).toLowerCase().trim();
+  const tb = String(targetBrand).toLowerCase().trim();
+  if (pb === tb) return true;
+  const normP = pb.replace(/[^a-z0-9]/g, '');
+  const normT = tb.replace(/[^a-z0-9]/g, '');
+  if (normP === normT) return true;
+  if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
+  if (normP === 'tplink' && normT === 'tplink') return true;
+  return false;
+}
+
+async function initBrandPageLoader() {
   'use strict';
 
   const container = document.getElementById('brand-products-container');
@@ -264,9 +281,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const products = window.mockDatabase || window.FutunetData?.products || [];
   
-  // 2. Filtrar productos de la marca (insensible a mayúsculas/minúsculas)
+  // 2. Filtrar productos de la marca de forma tolerante y resiliente
   const brandProducts = products.filter(p => {
-    return String(p.brand || '').toLowerCase().trim() === brandName.toLowerCase().trim();
+    return matchesBrandLocal(p.brand, brandName);
   });
 
   // Actualizar contador de productos si existe
@@ -326,4 +343,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   }
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initBrandPageLoader);
+} else {
+  initBrandPageLoader();
+}
+

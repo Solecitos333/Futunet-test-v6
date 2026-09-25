@@ -1588,7 +1588,7 @@
   }
 
   const initialProducts = buildSupplierProducts();
-  if (window.FutunetData && window.FutunetData.readyPromise) {
+  if (typeof window !== 'undefined' && window.FutunetData && window.FutunetData.readyPromise) {
     window.FutunetData.readyPromise.then(() => {
       mergeIntoCatalog(initialProducts);
     });
@@ -1596,7 +1596,7 @@
     mergeIntoCatalog(initialProducts);
   }
 
-  window.supplierInventory = {
+  const supplierInventoryObj = {
     policies: SUPPLIER_POLICIES,
     feeds: supplierFeeds,
     register: registerSupplierFeed,
@@ -1607,6 +1607,23 @@
         : initialProducts.slice();
     }
   };
+
+  if (typeof window !== 'undefined') {
+    window.supplierInventory = supplierInventoryObj;
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      supplierInventory: supplierInventoryObj,
+      SUPPLIER_POLICIES,
+      supplierFeeds,
+      registerSupplierFeed,
+      normalizeSupplierProduct,
+      buildSupplierProducts,
+      getMergedCatalog: supplierInventoryObj.getMergedCatalog
+    };
+  }
 })();
+
 
 

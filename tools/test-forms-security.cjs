@@ -18,7 +18,7 @@ function readJs(filename) {
   return fs.readFileSync(path.join(rootDir, filename), 'utf8');
 }
 
-test('Seguridad en Formularios: trampas Honeypot en todos los formularios públicos clave', () => {
+test('Seguridad en Formularios: trampas Honeypot en todos los formularios públicos y de autenticación/cuenta', () => {
   const checks = [
     { file: 'index.html', id: 'f-hp-check', name: 'Formulario de contacto principal' },
     { file: 'sugerencias.html', id: 'sug-hp-check', name: 'Buzón de sugerencias' },
@@ -28,7 +28,11 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     { file: 'internet.html', id: 'p-guest-hp-check', name: 'Modal público: contratación express' },
     { file: 'punto-de-venta.html', id: 'pos-hp-check', name: 'Cotizador directo POS' },
     { file: 'login.html', id: 'reg-hp-check', name: 'Formulario de registro de cuenta' },
-    { file: 'cotizacion.html', id: 'quote-hp-check', name: 'Formulario de cotización pública' }
+    { file: 'login.html', id: 'reset-hp-check', name: 'Formulario de recuperación de contraseña' },
+    { file: 'login.html', id: 'magic-hp-check', name: 'Formulario de acceso sin contraseña' },
+    { file: 'cotizacion.html', id: 'quote-hp-check', name: 'Formulario de cotización pública' },
+    { file: 'mi-cuenta.html', id: 'profile-hp-check', name: 'Formulario de perfil de usuario' },
+    { file: 'mi-cuenta.html', id: 'fin-hp-check', name: 'Formulario de expediente de financiamiento' }
   ];
 
   for (const item of checks) {
@@ -42,6 +46,17 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
       `El campo Honeypot en ${item.file} debe usar el atributo name="_hp_security_check"`
     );
   }
+
+  // Verificación adicional de Honeypot en el modal de checkout (cart.js)
+  const cartJs = readJs('js/cart.js');
+  assert.ok(
+    cartJs.includes('id="chk-hp-check"'),
+    'cart.js debe incluir el campo honeypot chk-hp-check en el modal de checkout'
+  );
+  assert.ok(
+    cartJs.includes('name="_hp_security_check"'),
+    'cart.js debe usar name="_hp_security_check" en el campo honeypot'
+  );
 });
 
 test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado en formularios con PII', () => {
@@ -52,7 +67,9 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
     { file: 'internet.html', id: 'p-guest-privacy-consent', label: 'Contratación modal express' },
     { file: 'punto-de-venta.html', id: 'pos-privacy-consent', label: 'Cotizador POS' },
     { file: 'login.html', id: 'register-terms', label: 'Registro de usuario' },
-    { file: 'cotizacion.html', id: 'quote-accept-terms', label: 'Respuesta de cotización pública' }
+    { file: 'cotizacion.html', id: 'quote-accept-terms', label: 'Respuesta de cotización pública' },
+    { file: 'mi-cuenta.html', id: 'profile-terms', label: 'Consentimiento en perfil de usuario' },
+    { file: 'mi-cuenta.html', id: 'financing-terms', label: 'Consentimiento en financiamiento' }
   ];
 
   for (const item of privacyChecks) {
@@ -70,10 +87,21 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
       `Los enlaces a privacidad o términos en ${item.file} deben usar rel="noopener noreferrer"`
     );
   }
+
+  // Verificación en modal de checkout
+  const cartJs = readJs('js/cart.js');
+  assert.ok(
+    cartJs.includes('id="chk-accept-terms"'),
+    'cart.js debe incluir la casilla de consentimiento chk-accept-terms en el checkout'
+  );
+  assert.ok(
+    cartJs.includes('privacidad.html'),
+    'cart.js debe vincular a privacidad.html en el checkout'
+  );
 });
 
 test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios en cliente', () => {
-  // 1. Sugerencias
+  // 1. Sugerencias (envío y tracking)
   const sugJs = readJs('js/suggestions.js');
   assert.ok(
     sugJs.includes('futunet_last_sug_ts'),
@@ -82,6 +110,14 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
   assert.ok(
     sugJs.includes('15000'),
     'js/suggestions.js debe aplicar una ventana de cooldown de al menos 15 segundos'
+  );
+  assert.ok(
+    sugJs.includes('futunet_last_sug_track_ts'),
+    'js/suggestions.js debe usar futunet_last_sug_track_ts para cooldown de tracking'
+  );
+  assert.ok(
+    sugJs.includes('3000'),
+    'js/suggestions.js debe aplicar una ventana de cooldown de 3 segundos en tracking'
   );
 
   // 2. Portal de Internet: Tickets de soporte y reporte de pagos
@@ -102,11 +138,19 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
     'punto-de-venta.html debe implementar futunet_last_pos_contact_ts para cotizaciones'
   );
 
-  // 4. Registro de Usuario
+  // 4. Registro y recuperación en login.html
   const loginHtml = readHtml('login.html');
   assert.ok(
     loginHtml.includes('futunet_last_register_ts'),
     'login.html debe implementar futunet_last_register_ts para registro'
+  );
+  assert.ok(
+    loginHtml.includes('futunet_reset_cooldown_until'),
+    'login.html debe implementar futunet_reset_cooldown_until para reset de contraseña'
+  );
+  assert.ok(
+    loginHtml.includes('futunet_magic_cooldown_until'),
+    'login.html debe implementar futunet_magic_cooldown_until para magic link'
   );
 
   // 5. Cotización Pública
@@ -151,6 +195,28 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
   assert.ok(
     serviceJs.includes('15000'),
     'js/service-page.js debe aplicar una ventana de cooldown de al menos 15 segundos'
+  );
+
+  // 9. Actualización de perfil de usuario (js/user-panel.js)
+  const userPanelJs = readJs('js/user-panel.js');
+  assert.ok(
+    userPanelJs.includes('futunet_last_profile_update_ts'),
+    'js/user-panel.js debe usar futunet_last_profile_update_ts para cooldown'
+  );
+  assert.ok(
+    userPanelJs.includes('5000'),
+    'js/user-panel.js debe aplicar una ventana de cooldown de 5 segundos'
+  );
+
+  // 10. Expediente de financiamiento (js/financing.js)
+  const finJs = readJs('js/financing.js');
+  assert.ok(
+    finJs.includes('futunet_last_financing_ts'),
+    'js/financing.js debe usar futunet_last_financing_ts para cooldown'
+  );
+  assert.ok(
+    finJs.includes('15000'),
+    'js/financing.js debe aplicar una ventana de cooldown de al menos 15 segundos'
   );
 });
 
@@ -209,6 +275,36 @@ test('Sanitización e Inyecciones: remoción de tags y caracteres de control inv
   assert.ok(
     serviceJs.includes('\\x00-\\x08'),
     'js/service-page.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const loginHtml = readHtml('login.html');
+  assert.ok(
+    loginHtml.includes('sanitizeAuthInput'),
+    'login.html debe implementar la función sanitizeAuthInput'
+  );
+  assert.ok(
+    loginHtml.includes('\\x00-\\x08'),
+    'login.html debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const userPanelJs = readJs('js/user-panel.js');
+  assert.ok(
+    userPanelJs.includes('sanitizeProfileInput'),
+    'js/user-panel.js debe implementar sanitizeProfileInput'
+  );
+  assert.ok(
+    userPanelJs.includes('\\x00-\\x08'),
+    'js/user-panel.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const finJs = readJs('js/financing.js');
+  assert.ok(
+    finJs.includes('sanitizeFinancingInput'),
+    'js/financing.js debe implementar sanitizeFinancingInput'
+  );
+  assert.ok(
+    finJs.includes('\\x00-\\x08'),
+    'js/financing.js debe neutralizar caracteres de control ASCII invisibles'
   );
 });
 

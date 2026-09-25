@@ -423,6 +423,68 @@ test('Mejora demandada por usuarios: Suministros de oficina, papelería corporat
   assert.ok(mobHtml.includes('id="req-privacy-consent"'), 'mobiliario-suministros.html debe contener consentimiento de privacidad');
 });
 
+test('Mejora demandada por usuarios: Proyectores Epson, pantallas retráctiles y climatización TGM (SUG-P9240)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P9240'") && seedCjs.includes("status: 'implemented'"), 'SUG-P9240 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P9240') && sugJs.includes('Epson PowerLite'), 'SUG-P9240 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('cec_proyector_epson_powerlite_e20'), 'backup_data.js debe contener cec_proyector_epson_powerlite_e20');
+  assert.ok(backupJs.includes('prod_pantalla_proyeccion_100'), 'backup_data.js debe contener prod_pantalla_proyeccion_100');
+  assert.ok(backupJs.includes('tgm_mwfot_18000_btu'), 'backup_data.js debe contener tgm_mwfot_18000_btu');
+
+  const epsonImg = path.join(projectRoot, 'img', 'productos', 'epson-co-fh02.jpg');
+  assert.ok(fs.existsSync(epsonImg), 'La imagen del proyector Epson debe existir en disco');
+
+  const tgmImg = path.join(projectRoot, 'img', 'productos', 'tgm', 'tgm-fixed-speed-18000-btu.webp');
+  assert.ok(fs.existsSync(tgmImg), 'La imagen del aire acondicionado TGM debe existir en disco');
+
+  // Validar scoring en catalog.js
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes('queryVariants.some'), 'catalog.js debe utilizar variantes de stem para búsquedas en plural');
+  assert.ok(catJs.includes('titleMatchesDirectly'), 'catalog.js debe evaluar titleMatchesDirectly');
+});
+
+test('Mejora demandada por usuarios: Switches empresariales Cisco y puntos de acceso Ubiquiti UniFi (SUG-R7520)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-R7520'") && seedCjs.includes("status: 'implemented'"), 'SUG-R7520 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-R7520') && sugJs.includes('Cisco Business'), 'SUG-R7520 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('cisco_cbs110_16t'), 'backup_data.js debe contener cisco_cbs110_16t');
+  assert.ok(backupJs.includes('cisco_cbs250_24p'), 'backup_data.js debe contener cisco_cbs250_24p');
+  assert.ok(backupJs.includes('ubiquiti_unifi_u6_plus'), 'backup_data.js debe contener ubiquiti_unifi_u6_plus');
+  assert.ok(backupJs.includes('ubiquiti_unifi_lite_8_poe'), 'backup_data.js debe contener ubiquiti_unifi_lite_8_poe');
+
+  const ciscoImg = path.join(projectRoot, 'img', 'brands-preview', 'cisco.webp');
+  assert.ok(fs.existsSync(ciscoImg), 'La imagen preview de Cisco debe existir en disco');
+
+  const ubiImg = path.join(projectRoot, 'img', 'brands-preview', 'ubiquiti.webp');
+  assert.ok(fs.existsSync(ubiImg), 'La imagen preview de Ubiquiti debe existir en disco');
+
+  // Validar marcas preferidas y chips en catalog.js
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("cisco: 'Cisco'"), 'catalog.js debe incluir Cisco en preferredNames');
+  assert.ok(catJs.includes("ubiquiti: 'Ubiquiti'"), 'catalog.js debe incluir Ubiquiti en preferredNames');
+  assert.ok(catJs.includes("'Cisco'") && catJs.includes("'Ubiquiti'"), 'catalog.js debe incluir Cisco y Ubiquiti en priorityList');
+});
+
+test('Mejora demandada por usuarios: Selección interactiva de horario y fecha para visitas técnicas (SUG-N3210)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N3210'") && seedCjs.includes("status: 'implemented'"), 'SUG-N3210 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N3210') && sugJs.includes('visitas técnicas'), 'SUG-N3210 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const internetHtml = fs.readFileSync(path.join(projectRoot, 'internet.html'), 'utf8');
+  assert.ok(internetHtml.includes('id="hiring-modal"') || internetHtml.includes('hiring-step'), 'internet.html debe contar con flujo de contratación');
+});
+
+
 
 
 

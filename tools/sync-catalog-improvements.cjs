@@ -564,6 +564,106 @@ const cctvItems = [
   }
 ];
 
+const audioItems = [
+  {
+    id: 'prod_ad1d2a977b',
+    department: 'equipos',
+    category: 'Periféricos y Partes',
+    brand: 'Apple',
+    title: 'Air Pod 2da Generacion Original APPLE',
+    desc: 'Auriculares inalámbricos Apple AirPods (2.ª generación) originales con estuche de carga Lightning. Conexión Bluetooth instantánea con chip Apple H1, audio de alta fidelidad, controles táctiles y micrófonos duales beamforming para llamadas nítidas.',
+    price: 'RD$ 5,400.00',
+    img: 'img/productos/catalogo/airpods-2gen.jpg',
+    gallery: ['img/productos/catalogo/airpods-2gen.jpg'],
+    specs: [
+      'Chip Apple H1 para enlace inalámbrico ultraestable y baja latencia',
+      'Estuche de carga Lightning con más de 24 horas de autonomía total',
+      'Acceso por voz «Oye Siri» y controles táctiles de doble toque',
+      'Micrófonos duales beamforming con cancelación de ruido ambiental',
+      'Compatibilidad universal con iOS, Android, Windows y macOS'
+    ]
+  }
+];
+
+const networkingItems = [
+  {
+    id: 'cisco_cbs110_16t',
+    department: 'redes',
+    category: 'Redes y Conectividad',
+    brand: 'Cisco',
+    title: 'Switch Cisco Business CBS110 16 Puertos Gigabit Ethernet (10/100/1000 Mbps)',
+    desc: 'Switch Gigabit Ethernet Cisco Business CBS110 no administrable de 16 puertos para oficinas y empresas. Conectividad plug-and-play de alta velocidad y bajo consumo con chasis metálico para rack o sobremesa.',
+    price: 'RD$ 11,850.00',
+    img: 'img/brands-preview/cisco.webp',
+    gallery: ['img/brands-preview/cisco.webp'],
+    specs: [
+      '16 puertos Gigabit Ethernet RJ-45 (10/100/1000 Mbps)',
+      'Capacidad de conmutación de 32 Gbps sin bloqueo',
+      'Configuración Plug-and-Play instantánea sin mantenimiento',
+      'QoS 802.1p integrado para optimización de videollamadas y voz IP',
+      'Diseño metálico resistente con montaje en rack o escritorio',
+      'Garantía oficial y soporte corporativo Futunet en Santiago'
+    ]
+  },
+  {
+    id: 'cisco_cbs250_24p',
+    department: 'redes',
+    category: 'Redes y Conectividad',
+    brand: 'Cisco',
+    title: 'Switch Administrable Cisco Business CBS250 24 Puertos Gigabit PoE+ con 4 Enlaces SFP',
+    desc: 'Switch inteligente gestionable Cisco Business CBS250 con 24 puertos Gigabit PoE+ (presupuesto 195W) y 4 puertos uplink SFP dedicados para fibra óptica. Diseñado para alimentar cámaras IP, puntos de acceso y telefonía VoIP corporativa.',
+    price: 'RD$ 34,500.00',
+    img: 'img/brands-preview/cisco.webp',
+    gallery: ['img/brands-preview/cisco.webp'],
+    specs: [
+      '24 puertos Gigabit 10/100/1000 Mbps PoE+ (802.3at/af, 195W)',
+      '4 puertos SFP Gigabit para enlaces ascendentes de fibra óptica',
+      'Interfaz web amigable con asistente de configuración intuitivo',
+      'Seguridad avanzada: 802.1X, VLANs, ACLs y defensa contra ataques DoS',
+      'Gestión centralizada mediante Cisco Business Dashboard',
+      'Garantía oficial y servicio de configuración por ingenieros de Futunet'
+    ]
+  },
+  {
+    id: 'ubiquiti_unifi_u6_plus',
+    department: 'redes',
+    category: 'Redes y Conectividad',
+    brand: 'Ubiquiti',
+    title: 'Punto de Acceso Ubiquiti UniFi 6 Plus (U6+) WiFi 6 Doble Banda 3.0 Gbps PoE',
+    desc: 'Punto de acceso compacto WiFi 6 de doble banda Ubiquiti UniFi 6 Plus (U6+). Rendimiento de hasta 3.0 Gbps en 5 GHz y 2.4 GHz, ideal para oficinas, naves comerciales y residencias que demandan roaming fluido y alta densidad de usuarios.',
+    price: 'RD$ 9,950.00',
+    img: 'img/brands-preview/ubiquiti.webp',
+    gallery: ['img/brands-preview/ubiquiti.webp'],
+    specs: [
+      'Tecnología WiFi 6 (802.11ax) de ultra-alta velocidad hasta 2975 Mbps',
+      'Antena MIMO 2x2 de alta ganancia con cobertura extendida',
+      'Alimentación Power over Ethernet (PoE 802.3af)',
+      'Capacidad para más de 300 dispositivos concurrentes sin latencia',
+      'Gestión integral en la nube con UniFi Network Controller o app UniFi',
+      'Montaje estético y discreto para techo o pared con kit incluido'
+    ]
+  },
+  {
+    id: 'ubiquiti_unifi_lite_8_poe',
+    department: 'redes',
+    category: 'Redes y Conectividad',
+    brand: 'Ubiquiti',
+    title: 'Switch Ubiquiti UniFi Lite 8 Puertos Gigabit con 4 Puertos PoE+ (52W)',
+    desc: 'Switch gestionado de capa 2 Ubiquiti UniFi Switch Lite 8 PoE con 8 puertos Gigabit (4 puertos 802.3at PoE+ con presupuesto total de 52W). Perfecto para alimentar puntos de acceso UniFi y cámaras en oficinas pequeñas y medianas.',
+    price: 'RD$ 8,750.00',
+    img: 'img/brands-preview/ubiquiti.webp',
+    gallery: ['img/brands-preview/ubiquiti.webp'],
+    specs: [
+      '8 puertos Gigabit RJ-45 (4 puertos PoE+ 802.3at/af)',
+      'Presupuesto PoE total de 52W (hasta 30W por puerto)',
+      'Diseño compacto de sobremesa sin ventilador (operación silenciosa)',
+      'Totalmente gestionable desde la plataforma UniFi Network',
+      'Montaje en pared o escritorio con accesorios de fijación',
+      'Garantía oficial y entrega inmediata en Santiago'
+    ]
+  }
+];
+
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
   const code = fs.readFileSync(backupPath, 'utf8');
@@ -579,7 +679,9 @@ async function updateBackupData() {
     ...gamingItems,
     ...dellOptiplexDesktops,
     ...monitorItems,
-    ...cctvItems
+    ...cctvItems,
+    ...audioItems,
+    ...networkingItems
   ];
 
   itemsToSync.forEach(item => {
@@ -612,7 +714,9 @@ async function updateFirestore() {
     ...gamingItems,
     ...dellOptiplexDesktops,
     ...monitorItems,
-    ...cctvItems
+    ...cctvItems,
+    ...audioItems,
+    ...networkingItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

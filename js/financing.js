@@ -12,6 +12,15 @@
   var currentProfile = null;
   var signatureDrawn = false;
 
+  // ─── Sanitization Helper (OWASP XSS & Control Chars Mitigation) ───
+  function sanitizeFinancingInput(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+  }
+
   function init(user, data) {
     if (!document.getElementById('financing-profile-status')) return;
     db = window.FutunetFirebase.db;
@@ -143,6 +152,23 @@
     var selfieFile = selfieInput?.files?.[0];
     var accepted = !!document.getElementById('financing-terms')?.checked;
 
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    var hpField = document.getElementById('fin-hp-check');
+    if (hpField && hpField.value.trim() !== '') {
+      console.warn('Bot financing submission blocked via honeypot.');
+      showToast('Expediente enviado correctamente. Te notificaremos cuando sea revisado.', 'success');
+      return;
+    }
+
+    // 2. Cooldown de envío de expediente (Rate-limiting en cliente 15s)
+    var finCooldownKey = 'futunet_last_financing_ts';
+    var nowTs = Date.now();
+    var lastFin = sessionStorage.getItem(finCooldownKey);
+    if (lastFin && (nowTs - Number(lastFin)) < 15000) {
+      var waitSecs = Math.ceil((15000 - (nowTs - Number(lastFin))) / 1000);
+      throw new Error('Por favor espera ' + waitSecs + ' segundo(s) antes de reenviar el expediente.');
+    }
+
     try {
       var docType = document.getElementById('fin-document-type')?.value || '';
       var docNum = document.getElementById('fin-document-number')?.value || '';
@@ -164,9 +190,11 @@
       if (!canvas) throw new Error('No se encontró el lienzo de firma digital.');
       var signatureBlob = await canvasBlob(canvas);
       var signatureUpload = await uploadFile(signatureBlob, basePath + 'signature_' + stamp + '.png', 'image/png');
-      var phone = (document.getElementById('fin-phone')?.value || '').trim();
-      var address = (document.getElementById('fin-address')?.value || '').trim();
-      if (phone.length < 7) throw new Error('Ingresa un teléfono válido.');
+      var rawPhone = document.getElementById('fin-phone')?.value || '';
+      var rawAddress = document.getElementById('fin-address')?.value || '';
+      var phone = sanitizeFinancingInput(rawPhone).slice(0, 25);
+      var address = sanitizeFinancingInput(rawAddress).slice(0, 300);
+      if (phone.length < 7 || !/^\+?[0-9\s-]{7,25}$/.test(phone)) throw new Error('Ingresa un teléfono válido.');
       if (address.length < 8) throw new Error('Ingresa tu dirección residencial completa.');
 
       var now = firebase.firestore.FieldValue.serverTimestamp();
@@ -206,6 +234,7 @@
       });
       await batch.commit();
       await writeAudit('Expediente de financiamiento enviado', 'El cliente envió sus documentos para revisión.');
+      sessionStorage.setItem(finCooldownKey, String(Date.now()));
       currentProfile = { ...profile, rejectionReason: '', createdAt: currentProfile ? currentProfile.createdAt : now };
       renderProfileStatus();
       showToast('Expediente enviado correctamente. Te notificaremos cuando sea revisado.', 'success');

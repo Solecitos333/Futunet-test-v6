@@ -484,12 +484,30 @@
 
   async function handleTrackSuggestion() {
     if (!trackInput || !trackResult) return;
-    var raw = trackInput.value.trim();
+
+    // Cooldown de consulta de seguimiento (Rate-limiting en cliente 3s contra flooding)
+    var trackCooldownKey = 'futunet_last_sug_track_ts';
+    var nowTs = Date.now();
+    var lastTrack = sessionStorage.getItem(trackCooldownKey);
+    if (lastTrack && (nowTs - Number(lastTrack)) < 3000) {
+      var waitSecs = Math.ceil((3000 - (nowTs - Number(lastTrack))) / 1000);
+      trackResult.hidden = false;
+      trackResult.innerHTML = '<p style="color:#64748b; margin:0; font-size:0.9rem;">Por favor espera ' + waitSecs + ' segundo(s) antes de realizar otra consulta.</p>';
+      return;
+    }
+
+    var raw = trackInput.value
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+
     if (!raw) {
       trackResult.hidden = false;
       trackResult.innerHTML = '<p style="color:#b91c1c; margin:0; font-size:0.9rem;">Por favor escribe tu código de referencia (ej: SUG-A1B2C).</p>';
       return;
     }
+
+    sessionStorage.setItem(trackCooldownKey, String(Date.now()));
 
     var match = raw.match(/SUG-[A-Z0-9]{5}/i);
     var code = match ? match[0].toUpperCase() : raw.toUpperCase();
@@ -767,6 +785,30 @@
       status: 'implemented',
       description: 'Línea de papelería corporativa, carpetas, resmas, grapadoras, cintas y suministros de oficina con cotización formal B2B y comprobante fiscal NCF.',
       officialResponse: '¡Atendido! Habilitada la sección completa de Papelería y Suministros en el catálogo y en la subpágina especializada de Mobiliario y Suministros con facturación corporativa.'
+    },
+    {
+      refCode: 'SUG-P9240',
+      title: 'Disponibilidad de proyectores Epson PowerLite 3,400 lúmenes y pantallas retráctiles para salas de juntas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Proyectores multimedia Epson de alta luminosidad (3,400+ lúmenes) con HDMI y pantallas de proyección retráctiles de 100 pulgadas para conferencias y educación con garantía local.',
+      officialResponse: '¡Cumplido! Se incorporaron al catálogo corporativo el proyector Epson PowerLite E20 3LCD de 3,400 lúmenes y la Pantalla de Proyección Retráctil de 100" con trípode y soporte mural para salas de juntas.'
+    },
+    {
+      refCode: 'SUG-R7520',
+      title: 'Disponibilidad de switches empresariales Cisco y puntos de acceso Ubiquiti UniFi para redes y telecomunicaciones',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switches Gigabit Cisco Business (16 y 24 puertos PoE+) y puntos de acceso Ubiquiti UniFi 6 Plus (U6+) para infraestructura de red, cableado y WiFi empresarial.',
+      officialResponse: '¡Implementado! Integrados al catálogo los switches Gigabit Cisco Business CBS110/CBS250 PoE+ y puntos de acceso Ubiquiti UniFi 6 Plus con entrega y soporte oficial en Santiago.'
+    },
+    {
+      refCode: 'SUG-N3210',
+      title: 'Canal interactivo para selección de fecha y franja horaria en solicitudes de instalación y servicio técnico',
+      category: 'services_support',
+      status: 'implemented',
+      description: 'Herramienta en línea para elegir fecha preferida y franja horaria (mañana/tarde) al solicitar instalación de internet fibra óptica o cableado estructurado.',
+      officialResponse: '¡Atendido! Activado el selector de horario y fecha preferida para agendamiento de visitas técnicas en los portales de Internet y Servicios Corporativos con confirmación inmediata por WhatsApp.'
     }
   ];
 

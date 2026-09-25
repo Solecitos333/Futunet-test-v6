@@ -3,7 +3,7 @@ const mockDatabase = [
     "id": "prod_67gy3rahd",
     "department": "equipos",
     "category": "Computadoras",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "Computadora DELL procesador i5/ 8 GB Ram/ Disco duro SSD 256GB",
     "desc": "Equipo de escritorio Dell orientado a trabajo administrativo, facturación, navegación y multitarea ligera. La combinación de procesador Intel Core i5, 8 GB de memoria y unidad SSD de 256 GB ofrece una experiencia más ágil que un equipo con disco duro mecánico tradicional.",
     "price": "RD$ 10,613.90",
@@ -98,15 +98,18 @@ const mockDatabase = [
     "category": "Periféricos y Partes",
     "brand": "Apple",
     "title": "Air Pod 2da Generacion Original APPLE",
-    "desc": "Air Pod 2da Generacion Original APPLE. Artículo de papelería o suministro para el día a día administrativo, escolar u operativo, seleccionado para cubrir necesidades frecuentes de oficina.",
+    "desc": "Auriculares inalámbricos Apple AirPods (2.ª generación) originales con estuche de carga Lightning. Conexión Bluetooth instantánea con chip Apple H1, audio de alta fidelidad, controles táctiles y micrófonos duales beamforming para llamadas nítidas.",
     "price": "RD$ 5,400.00",
     "img": "img/productos/catalogo/airpods-2gen.jpg",
     "gallery": [
       "img/productos/catalogo/airpods-2gen.jpg"
     ],
     "specs": [
-      "Suministro de oficina o uso escolar",
-      "Presentación apta para consumo frecuente"
+      "Chip Apple H1 para enlace inalámbrico ultraestable y baja latencia",
+      "Estuche de carga Lightning con más de 24 horas de autonomía total",
+      "Acceso por voz «Oye Siri» y controles táctiles de doble toque",
+      "Micrófonos duales beamforming con cancelación de ruido ambiental",
+      "Compatibilidad universal con iOS, Android, Windows y macOS"
     ]
   },
   {
@@ -701,7 +704,7 @@ const mockDatabase = [
     "id": "prod_dwjbbd8gy",
     "department": "equipos",
     "category": "Computadoras",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "COMPUTADORA DELL CORE i7 /3.4 MHZ/ 8 GB RAM/250 GB DD USADAS 4TA GEN",
     "desc": "Computadora Dell usada de línea empresarial, adecuada para tareas de oficina, navegación, paquetes de productividad y estaciones administrativas. Su procesador Core i7 de cuarta generación y 8 GB de RAM ofrecen mejor margen de trabajo que un equipo básico de entrada.",
     "price": "RD$ 4,875.00",
@@ -721,7 +724,7 @@ const mockDatabase = [
     "id": "prod_is3v61eky",
     "department": "equipos",
     "category": "Computadoras",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "COMPUTADORA DELL CORE i5/ 4 GB RAM/250 GB DD USADAS 4TA GEN",
     "desc": "Desktop Dell de uso corporativo con procesador Intel Core i5 de cuarta generación. Es una opción práctica para digitación, navegación, sistemas de oficina y puestos de trabajo básicos que no requieren software pesado.",
     "price": "RD$ 3,630.00",
@@ -1333,7 +1336,7 @@ const mockDatabase = [
     "id": "prod_0242510cdb",
     "department": "seguridad",
     "category": "Cámaras de Seguridad",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "Control De Acceso Biometrico HIKVISION",
     "desc": "Control De Acceso Biometrico HIKVISION. Solución de videovigilancia pensada para monitoreo, control y refuerzo de seguridad en hogares, oficinas y negocios.",
     "price": "RD$ 7,700.00",
@@ -1595,8 +1598,8 @@ const mockDatabase = [
     "department": "seguridad",
     "category": "Control de Accesos",
     "brand": "Hikvision",
-    "title": "DVR 16 CH Hikvison",
-    "desc": "Calidad Premium. DVR 16 CH Hikvison. Diseñado para ofrecer máxima seguridad con tecnología de vanguardia. Ideal para instalaciones profesionales, garantizando monitoreo prolongado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
+    "title": "DVR 16 CH Hikvision",
+    "desc": "Calidad Premium. DVR 16 CH Hikvision. Diseñado para ofrecer máxima seguridad con tecnología de vanguardia. Ideal para instalaciones profesionales, garantizando monitoreo prolongado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 5,175.00",
     "img": "img/productos/catalogo/dvr-hikvision.jpg",
     "gallery": [
@@ -1612,7 +1615,7 @@ const mockDatabase = [
     "id": "prod_4xvhvwoam",
     "department": "seguridad",
     "category": "Control de Accesos",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "DVR 8CH HIKVISION 1080 P",
     "desc": "Grabador DVR Hikvision de 8 canales para sistemas Turbo HD y cámaras analógicas compatibles. Es una base sólida para instalaciones de seguridad pequeñas y medianas con grabación centralizada y salida de video para monitoreo local.",
     "price": "RD$ 3,047.50",
@@ -2249,7 +2252,7 @@ const mockDatabase = [
     "id": "prod_ev8mssce4",
     "department": "equipos",
     "category": "Impresoras y Consumibles",
-    "brand": "EPSON",
+    "brand": "Epson",
     "title": "IMPRESORA MULTIFUNCIONAL C/SISTEMA DE TINTA L3250 EPSON",
     "desc": "Impresora multifuncional Epson EcoTank L3250 con funciones de impresión, copiado y escaneo. Está orientada a hogares y oficinas que buscan bajo costo por página, conectividad inalámbrica y un sistema de tinta recargable más conveniente que el cartucho tradicional.",
     "price": "RD$ 20,625.00",
@@ -4549,7 +4552,7 @@ const mockDatabase = [
     "id": "prod_24w6hvt7f",
     "department": "redes",
     "category": "Componentes de red",
-    "brand": "TP LINK",
+    "brand": "TP-Link",
     "title": "Router TP Link 960",
     "desc": "Router inalámbrico TP-Link de escritorio con tres antenas externas, orientado a hogares y oficinas pequeñas que necesitan cobertura básica en 2.4 GHz. El TL-WR940N es una referencia popular para navegación, impresoras en red y equipos de uso diario.",
     "price": "RD$ 1,424.25",
@@ -4589,8 +4592,8 @@ const mockDatabase = [
     "department": "redes",
     "category": "Redes",
     "brand": "Genérico",
-    "title": "SWICHT POE 4 PORT + 2 10/100",
-    "desc": "Calidad Premium. SWICHT POE 4 PORT + 2 10/100. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
+    "title": "Switch PoE 4 Port + 2 10/100",
+    "desc": "Calidad Premium. Switch PoE 4 Port + 2 10/100. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
     "price": "RD$ 1,380.00",
     "img": "img/productos/hikvision-switch-poe-8-2.webp",
     "gallery": [
@@ -4926,7 +4929,7 @@ const mockDatabase = [
     "department": "seguridad",
     "category": "Control de Accesos",
     "brand": "Hikvision",
-    "title": "Swicht Poe 8 Port + 2 Hikvision",
+    "title": "Switch PoE 8 Port + 2 Hikvision",
     "desc": "Switch PoE Hikvision para cámaras IP, teléfonos o dispositivos compatibles que requieran alimentación por red. Su combinación de ocho puertos PoE y dos uplinks facilita la instalación ordenada de sistemas de videovigilancia y redes perimetrales.",
     "price": "RD$ 3,750.00",
     "img": "https://wsrv.nl/?url=www.hikvision.com%2Fcontent%2Fdam%2Fhikvision%2Fproducts%2Fasset%2FM000001164%2Fimages%2Fdarkfighter-X_1.png%3Ff%3Dwebp&w=720&output=webp&q=72",
@@ -4963,7 +4966,7 @@ const mockDatabase = [
     "id": "prod_9p6f6zzh6",
     "department": "equipos",
     "category": "Periféricos y Partes",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "TECLADOS USADOS DELL USB",
     "desc": "Teclado Dell KB216 con conexión USB y formato completo, apto para digitación continua en oficinas, recepción y estaciones administrativas. Es una opción confiable para reemplazo o equipamiento de escritorios corporativos.",
     "price": "RD$ 225.00",
@@ -5202,7 +5205,7 @@ const mockDatabase = [
     "id": "prod_6syre0tmd",
     "department": "equipos",
     "category": "Impresoras y Consumibles",
-    "brand": "EPSON",
+    "brand": "Epson",
     "title": "Tinta Impresora 1litro EPSON",
     "desc": "Presentación de tinta de alto volumen destinada a sistemas de impresión Epson o compatibles, según color y aplicación. Es una solución orientada a usuarios con alto consumo que desean reducir la frecuencia de recarga frente a botellas pequeñas.",
     "price": "RD$ 2,565.00",
@@ -5330,27 +5333,7 @@ const mockDatabase = [
     "id": "prod_bh5vuj6df",
     "department": "energia",
     "category": "Energía y Respaldo",
-    "brand": "HIKVISION",
-    "title": "UPS HIKVISION 1000VA",
-    "desc": "UPS Hikvision de 600 VA para proteger equipos de red, cajas, cámaras, routers y estaciones ligeras frente a apagones y picos de tensión. Es una solución compacta para oficinas pequeñas, puestos individuales o respaldo puntual de seguridad electrónica.",
-    "price": "RD$ 3,350.00",
-    "img": "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000162286%2F2.png&w=720&output=webp&q=72",
-    "gallery": [
-      "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000162286%2F2.png&w=720&output=webp&q=72",
-      "https://wsrv.nl/?url=www.hikvision.com%2Fcontent%2Fdam%2Fhikvision%2Fen%2Fmarketing%2Fimage%2Fproducts%2Ftransmission-and-display-products%2Fcables%2FNetwork-cables-1.jpg&w=720&output=webp&q=72"
-    ],
-    "specs": [
-      "Capacidad nominal: 600 VA",
-      "Batería interna de 12 V / 7 Ah",
-      "Tiempo de transferencia â‰¤ 10 ms",
-      "Protección contra sobrecarga, sobrecarga de batería y picos"
-    ]
-  },
-  {
-    "id": "prod_bh5vuj6df",
-    "department": "energia",
-    "category": "Energía y Respaldo",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "UPS HIKVISION 600 VA",
     "desc": "UPS Hikvision de 600 VA para proteger equipos de red, cajas, cámaras, routers y estaciones ligeras frente a apagones y picos de tensión. Es una solución compacta para oficinas pequeñas, puestos individuales o respaldo puntual de seguridad electrónica.",
     "price": "RD$ 2,220.00",
@@ -5516,7 +5499,7 @@ const mockDatabase = [
     "id": "prod_fxlphqtk3",
     "department": "seguridad",
     "category": "Control de Accesos",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "Terminal biométrica Hikvision DS-K1T201EF-C",
     "desc": "Terminal biométrica Hikvision para control de acceso y asistencia, adecuada para oficinas, negocios y entradas controladas. El modelo DS-K1T201EF-C ofrece autenticación local, integración con puertas y almacenamiento de eventos para operación diaria.",
     "price": "RD$ 7,700.00",
@@ -5556,7 +5539,7 @@ const mockDatabase = [
     "id": "prod_u9fo22vhb",
     "department": "energia",
     "category": "Energía y Respaldo",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "UPS Hikvision DS-UPS1000, 1000 VA / 600 W",
     "desc": "UPS Hikvision de 1000 VA orientado a respaldo eléctrico para DVR, NVR, routers, estaciones de trabajo y periféricos de oficina. Su capacidad de 600 W lo hace adecuado para cargas moderadas que requieren continuidad ante cortes o fluctuaciones.",
     "price": "RD$ 3,350.00",
@@ -6057,7 +6040,7 @@ const mockDatabase = [
     "id": "gm_ssd_samsung_9100_pro_2tb",
     "department": "equipos",
     "category": "Componentes Gaming",
-    "brand": "SAMSUNG",
+    "brand": "Samsung",
     "title": "SSD Samsung 9100 PRO 2TB M.2 NVMe PCIe Gen5 x4 Lectura 14,000 MB/s",
     "desc": "Unidad de estado sólido buque insignia PCIe Gen5 con velocidades de lectura de hasta 14,000 MB/s, ideal para renderizado 3D, edición 8K y cargas instantáneas.",
     "price": "RD$ 21,900.00",
@@ -6114,7 +6097,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_7050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "PC de Escritorio Dell OptiPlex 7050 SFF Intel Core i5-7500 3.4GHz, 16GB RAM, 256GB SSD NVMe",
     "desc": "Computadora corporativa de escritorio Dell OptiPlex 7050 Small Form Factor (SFF) de alto rendimiento. Diseñada para oficinas ejecutivas, estaciones contables, laboratorios y puestos de atención continua con chasis compacto ultra resistente y bajo consumo energético.",
     "price": "RD$ 16,500.00",
@@ -6137,7 +6120,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_5050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "PC de Escritorio Dell OptiPlex 5050 SFF Intel Core i5-7500 3.4GHz, 8GB RAM, 256GB SSD",
     "desc": "Equipo de escritorio Dell OptiPlex 5050 SFF generación 7. Excelente equilibrio entre potencia, fiabilidad corporativa y coste operativo para farmacias, supermercados, call centers y despachos profesionales.",
     "price": "RD$ 13,800.00",
@@ -6159,7 +6142,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_3050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "PC de Escritorio Dell OptiPlex 3050 SFF Intel Core i5 8GB RAM, 500GB HDD + 128GB SSD",
     "desc": "Solución de computación confiable y económica para puestos de digitación, cajas y oficinas. Configuración híbrida con disco SSD para arranque instantáneo de Windows y disco duro secundario de 500GB para almacenamiento masivo de datos.",
     "price": "RD$ 11,900.00",
@@ -6223,7 +6206,7 @@ const mockDatabase = [
     "id": "mon_dell_se2422h_fhd",
     "department": "equipos",
     "category": "Monitores y Pantallas",
-    "brand": "DELL",
+    "brand": "Dell",
     "title": "Monitor Dell SE2422H 24 Pulgadas Full HD 1080p 75Hz HDMI/VGA Antirreflejo",
     "desc": "Monitor empresarial Dell de 24 pulgadas diseñado para jornadas laborales prolongadas. Incluye tecnología ComfortView para reducir la emisión de luz azul perjudicial y una base compacta que libera espacio en el escritorio.",
     "price": "RD$ 9,400.00",
@@ -6244,7 +6227,7 @@ const mockDatabase = [
     "id": "sec_hikvision_cam_colorvu_1080p",
     "department": "seguridad",
     "category": "Cámaras de Seguridad",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "Cámara Hikvision ColorVu Turbo HD 1080p Domo/Bala Visión Nocturna 24/7 a Color",
     "desc": "Cámara de videovigilancia profesional Hikvision con revolucionaria tecnología ColorVu. Proporciona imágenes brillantes y en color vivo las 24 horas del día, incluso en completa oscuridad exterior o interior, superando a las cámaras infrarrojas tradicionales.",
     "price": "RD$ 2,450.00",
@@ -6267,7 +6250,7 @@ const mockDatabase = [
     "id": "sec_hikvision_kit_dvr_4ch",
     "department": "seguridad",
     "category": "Sistemas de Seguridad CCTV",
-    "brand": "HIKVISION",
+    "brand": "Hikvision",
     "title": "Kit de Videovigilancia Hikvision DVR 4 Canales 1080p + 4 Cámaras con App Móvil",
     "desc": "Sistema integral de seguridad y monitoreo Hikvision de 4 cámaras Full HD y grabador DVR digital con compresión H.265+. Permite visualizar en vivo y revisar grabaciones desde cualquier parte del mundo a través de la aplicación gratuita Hik-Connect en teléfonos iPhone y Android.",
     "price": "RD$ 12,900.00",
@@ -6306,6 +6289,203 @@ const mockDatabase = [
       "Almacenamiento: SSD M.2 de 128 GB",
       "Pantalla: 14 pulgadas antirreflejo",
       "Garantía local Futunet"
+    ]
+  },
+  {
+    "id": "cec_proyector_epson_powerlite_e20",
+    "department": "equipos",
+    "category": "Equipos de Oficina",
+    "brand": "Epson",
+    "title": "Proyector Epson PowerLite E20 3LCD 3400 Lúmenes XGA HDMI",
+    "desc": "El proyector Epson PowerLite E20 es ideal para aulas, centros educativos y salas de reuniones de empresas. Ofrece 3.400 lúmenes de brillo en blanco y color con tecnología 3LCD, larga vida útil de lámpara (hasta 12.000 horas en modo Eco) y conectividad HDMI versátil.",
+    "price": "RD$ 38,900.00",
+    "img": "img/productos/epson-co-fh02.jpg",
+    "gallery": [
+      "img/productos/epson-co-fh02.jpg"
+    ],
+    "specs": [
+      "Tecnología: 3LCD de 3 chips de alto contraste",
+      "Luminosidad: 3,400 lúmenes en color y blanco",
+      "Resolución: XGA (1024 x 768) con escalado a Full HD",
+      "Lámpara de larga duración: hasta 12,000 horas en modo Eco",
+      "Altavoz integrado de 5W y puertos HDMI, VGA y USB",
+      "Garantía oficial de 2 años en equipos para empresas en Futunet"
+    ]
+  },
+  {
+    "id": "prod_pantalla_proyeccion_100",
+    "department": "equipos",
+    "category": "Equipos de Oficina",
+    "brand": "Epson",
+    "title": "Pantalla de Proyección Retráctil 100 Pulgadas para Proyector (16:9 / 4:3) con Trípode y Montaje Mural",
+    "desc": "Pantalla de proyección retráctil para proyector en salas de conferencias, aulas y eventos corporativos con trípode metálico y anclaje mural.",
+    "price": "RD$ 7,850.00",
+    "img": "img/productos/epson-co-fh02.jpg",
+    "gallery": [
+      "img/productos/epson-co-fh02.jpg"
+    ],
+    "specs": [
+      "Diagonal: 100 pulgadas formato panorámico 16:9 y estándar 4:3",
+      "Material: Tela blanco mate de alta reflectancia y borde negro para contraste óptimo",
+      "Estructura: Sistema retráctil con resorte de alta durabilidad",
+      "Montaje: Trípode telescópico graduable de acero + argollas para instalación fija en techo o pared",
+      "Fácil transporte y despliegue rápido para presentaciones ejecutivas"
+    ]
+  },
+  {
+    "id": "tgm_mwfot_12000_btu",
+    "department": "energia",
+    "category": "Aires Acondicionados",
+    "brand": "TGM",
+    "title": "Aire acondicionado TGM Mini-Split 12,000 BTU",
+    "desc": "Mini-Split TGM de velocidad fija y alta eficiencia para climatización residencial y oficinas medianas.",
+    "price": "RD$ 26,500.00",
+    "img": "img/productos/tgm/tgm-fixed-speed-12000-btu.webp",
+    "gallery": [
+      "img/productos/tgm/tgm-fixed-speed-12000-btu.webp",
+      "img/productos/tgm/tgm-mwfot-official-specs.webp",
+      "img/productos/tgm/tgm-mwfot-official-features.webp"
+    ],
+    "specs": [
+      "Marca: TGM",
+      "Capacidad: 12,000 BTU/h",
+      "Tipo: Mini-Split de alta eficiencia",
+      "Voltaje: 220-230 V, 60 Hz",
+      "Refrigerante ecológico R410A",
+      "Filtro de alta densidad y bajo nivel de ruido",
+      "Garantía oficial y servicio de instalación disponible"
+    ]
+  },
+  {
+    "id": "tgm_mwfot_18000_btu",
+    "department": "energia",
+    "category": "Aires Acondicionados",
+    "brand": "TGM",
+    "title": "Aire acondicionado TGM Mini-Split 18,000 BTU",
+    "desc": "Mini-Split TGM de 18,000 BTU para climatización residencial amplia y áreas corporativas de alta exigencia.",
+    "price": "RD$ 37,800.00",
+    "img": "img/productos/tgm/tgm-fixed-speed-18000-btu.webp",
+    "gallery": [
+      "img/productos/tgm/tgm-fixed-speed-18000-btu.webp",
+      "img/productos/tgm/tgm-mwfot-official-specs.webp",
+      "img/productos/tgm/tgm-mwfot-official-features.webp"
+    ],
+    "specs": [
+      "Marca: TGM",
+      "Capacidad: 18,000 BTU/h",
+      "Tipo: Mini-Split de climatización continua",
+      "Voltaje: 220-230 V, 60 Hz",
+      "Refrigerante ecológico R410A",
+      "Modo silencioso y detección inteligente",
+      "Garantía oficial y servicio de instalación disponible"
+    ]
+  },
+  {
+    "id": "tgm_mwfot_24000_btu",
+    "department": "energia",
+    "category": "Aires Acondicionados",
+    "brand": "TGM",
+    "title": "Aire acondicionado TGM Mini-Split 24,000 BTU",
+    "desc": "Mini-Split TGM de 24,000 BTU de máxima potencia para áreas abiertas, locales comerciales y oficinas grandes.",
+    "price": "RD$ 49,900.00",
+    "img": "img/productos/tgm/tgm-fixed-speed-24000-btu.webp",
+    "gallery": [
+      "img/productos/tgm/tgm-fixed-speed-24000-btu.webp",
+      "img/productos/tgm/tgm-mwfot-official-specs.webp",
+      "img/productos/tgm/tgm-mwfot-official-features.webp"
+    ],
+    "specs": [
+      "Marca: TGM",
+      "Capacidad: 24,000 BTU/h",
+      "Tipo: Mini-Split de alto rendimiento",
+      "Voltaje: 220-230 V, 60 Hz",
+      "Refrigerante ecológico R410A",
+      "Flujo de aire de amplio alcance y bajo consumo",
+      "Garantía oficial y servicio de instalación disponible"
+    ]
+  },
+  {
+    "id": "cisco_cbs110_16t",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Cisco",
+    "title": "Switch Cisco Business CBS110 16 Puertos Gigabit Ethernet (10/100/1000 Mbps)",
+    "desc": "Switch Gigabit Ethernet Cisco Business CBS110 no administrable de 16 puertos para oficinas y empresas. Conectividad plug-and-play de alta velocidad y bajo consumo con chasis metálico para rack o sobremesa.",
+    "price": "RD$ 11,850.00",
+    "img": "img/brands-preview/cisco.webp",
+    "gallery": [
+      "img/brands-preview/cisco.webp"
+    ],
+    "specs": [
+      "16 puertos Gigabit Ethernet RJ-45 (10/100/1000 Mbps)",
+      "Capacidad de conmutación de 32 Gbps sin bloqueo",
+      "Configuración Plug-and-Play instantánea sin mantenimiento",
+      "QoS 802.1p integrado para optimización de videollamadas y voz IP",
+      "Diseño metálico resistente con montaje en rack o escritorio",
+      "Garantía oficial y soporte corporativo Futunet en Santiago"
+    ]
+  },
+  {
+    "id": "cisco_cbs250_24p",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Cisco",
+    "title": "Switch Administrable Cisco Business CBS250 24 Puertos Gigabit PoE+ con 4 Enlaces SFP",
+    "desc": "Switch inteligente gestionable Cisco Business CBS250 con 24 puertos Gigabit PoE+ (presupuesto 195W) y 4 puertos uplink SFP dedicados para fibra óptica. Diseñado para alimentar cámaras IP, puntos de acceso y telefonía VoIP corporativa.",
+    "price": "RD$ 34,500.00",
+    "img": "img/brands-preview/cisco.webp",
+    "gallery": [
+      "img/brands-preview/cisco.webp"
+    ],
+    "specs": [
+      "24 puertos Gigabit 10/100/1000 Mbps PoE+ (802.3at/af, 195W)",
+      "4 puertos SFP Gigabit para enlaces ascendentes de fibra óptica",
+      "Interfaz web amigable con asistente de configuración intuitivo",
+      "Seguridad avanzada: 802.1X, VLANs, ACLs y defensa contra ataques DoS",
+      "Gestión centralizada mediante Cisco Business Dashboard",
+      "Garantía oficial y servicio de configuración por ingenieros de Futunet"
+    ]
+  },
+  {
+    "id": "ubiquiti_unifi_u6_plus",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Ubiquiti",
+    "title": "Punto de Acceso Ubiquiti UniFi 6 Plus (U6+) WiFi 6 Doble Banda 3.0 Gbps PoE",
+    "desc": "Punto de acceso compacto WiFi 6 de doble banda Ubiquiti UniFi 6 Plus (U6+). Rendimiento de hasta 3.0 Gbps en 5 GHz y 2.4 GHz, ideal para oficinas, naves comerciales y residencias que demandan roaming fluido y alta densidad de usuarios.",
+    "price": "RD$ 9,950.00",
+    "img": "img/brands-preview/ubiquiti.webp",
+    "gallery": [
+      "img/brands-preview/ubiquiti.webp"
+    ],
+    "specs": [
+      "Tecnología WiFi 6 (802.11ax) de ultra-alta velocidad hasta 2975 Mbps",
+      "Antena MIMO 2x2 de alta ganancia con cobertura extendida",
+      "Alimentación Power over Ethernet (PoE 802.3af)",
+      "Capacidad para más de 300 dispositivos concurrentes sin latencia",
+      "Gestión integral en la nube con UniFi Network Controller o app UniFi",
+      "Montaje estético y discreto para techo o pared con kit incluido"
+    ]
+  },
+  {
+    "id": "ubiquiti_unifi_lite_8_poe",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Ubiquiti",
+    "title": "Switch Ubiquiti UniFi Lite 8 Puertos Gigabit con 4 Puertos PoE+ (52W)",
+    "desc": "Switch gestionado de capa 2 Ubiquiti UniFi Switch Lite 8 PoE con 8 puertos Gigabit (4 puertos 802.3at PoE+ con presupuesto total de 52W). Perfecto para alimentar puntos de acceso UniFi y cámaras en oficinas pequeñas y medianas.",
+    "price": "RD$ 8,750.00",
+    "img": "img/brands-preview/ubiquiti.webp",
+    "gallery": [
+      "img/brands-preview/ubiquiti.webp"
+    ],
+    "specs": [
+      "8 puertos Gigabit RJ-45 (4 puertos PoE+ 802.3at/af)",
+      "Presupuesto PoE total de 52W (hasta 30W por puerto)",
+      "Diseño compacto de sobremesa sin ventilador (operación silenciosa)",
+      "Totalmente gestionable desde la plataforma UniFi Network",
+      "Montaje en pared o escritorio con accesorios de fijación",
+      "Garantía oficial y entrega inmediata en Santiago"
     ]
   }
 ];

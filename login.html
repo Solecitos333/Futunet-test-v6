@@ -158,6 +158,11 @@
     <div class="auth-message" id="reset-message"></div>
 
     <form id="reset-form">
+     <!-- Honeypot de seguridad para bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="reset-hp-check">No llenar este campo</label>
+      <input type="text" id="reset-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
      <div class="auth-form-group">
       <label class="auth-label" for="reset-email">Correo electrónico</label>
       <input class="auth-input" type="email" id="reset-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
@@ -181,6 +186,11 @@
     <div class="auth-message" id="magic-message"></div>
 
     <form id="magic-form">
+     <!-- Honeypot de seguridad para bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="magic-hp-check">No llenar este campo</label>
+      <input type="text" id="magic-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
      <div class="auth-form-group">
       <label class="auth-label" for="magic-email">Correo electrónico</label>
       <input class="auth-input" type="email" id="magic-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
@@ -241,6 +251,15 @@
      }
     });
    });
+
+   // Sanitization Helper (DevSecOps / OWASP XSS & Control Chars Mitigation)
+   function sanitizeAuthInput(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+   }
 
    // Message Helpers 
    function showMessage(elementId, text, type) {
@@ -389,8 +408,8 @@
 
     setLoading('login-btn', true);
 
-    var companyCode = document.getElementById('login-company').value.trim().toUpperCase();
-    var email = document.getElementById('login-email').value.trim();
+    var companyCode = sanitizeAuthInput(document.getElementById('login-company').value).toUpperCase().slice(0, 30);
+    var email = sanitizeAuthInput(document.getElementById('login-email').value).slice(0, 150);
     var password = document.getElementById('login-password').value;
     var remember = document.getElementById('login-remember').checked;
 
@@ -482,8 +501,8 @@
 
     setLoading('register-btn', true);
 
-    var name = document.getElementById('register-name').value.trim();
-    var email = document.getElementById('register-email').value.trim();
+    var name = sanitizeAuthInput(document.getElementById('register-name').value).slice(0, 100);
+    var email = sanitizeAuthInput(document.getElementById('register-email').value).slice(0, 150);
     var password = document.getElementById('register-password').value;
     var acceptedTerms = document.getElementById('register-terms').checked;
 
@@ -566,7 +585,22 @@
 
     setLoading('reset-btn', true);
 
-    var email = document.getElementById('reset-email').value.trim();
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    var hpReset = document.getElementById('reset-hp-check');
+    if (hpReset && hpReset.value.trim() !== '') {
+     console.warn('Bot password reset blocked via honeypot.');
+     showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
+     document.getElementById('reset-form').reset();
+     return;
+    }
+
+    var email = sanitizeAuthInput(document.getElementById('reset-email').value).slice(0, 150);
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+     showMessage('reset-message', 'El formato del correo no es válido.', 'error');
+     setLoading('reset-btn', false);
+     return;
+    }
 
     try {
      await FutunetAuth.sendPasswordReset(email);
@@ -597,7 +631,22 @@
 
     setLoading('magic-btn', true);
 
-    var email = document.getElementById('magic-email').value.trim();
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    var hpMagic = document.getElementById('magic-hp-check');
+    if (hpMagic && hpMagic.value.trim() !== '') {
+     console.warn('Bot magic link blocked via honeypot.');
+     showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
+     document.getElementById('magic-form').reset();
+     return;
+    }
+
+    var email = sanitizeAuthInput(document.getElementById('magic-email').value).slice(0, 150);
+    var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+     showMessage('magic-message', 'El formato del correo no es válido.', 'error');
+     setLoading('magic-btn', false);
+     return;
+    }
 
     try {
      if (isCompletingSignInLink) {

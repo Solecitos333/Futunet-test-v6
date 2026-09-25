@@ -28,6 +28,15 @@
     }
   }
 
+  // ─── Sanitization & Security Helpers (OWASP XSS & Control Chars Mitigation) ───
+  function sanitizeProfileInput(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+  }
+
   // ─── Profile Section ───
   function renderProfile() {
     setText('user-name', userData.displayName || 'Sin nombre');
@@ -75,15 +84,46 @@
       var btn = document.getElementById('profile-save-btn');
       if (btn) btn.disabled = true;
 
-      var name = (document.getElementById('profile-name')?.value || '').trim();
-      var phone = (document.getElementById('profile-phone')?.value || '').trim();
-      var address = (document.getElementById('profile-address')?.value || '').trim();
+      // 1. Verificación Honeypot (Trampa antispam para bots)
+      var hpField = document.getElementById('profile-hp-check');
+      if (hpField && hpField.value.trim() !== '') {
+        console.warn('Bot profile update blocked via honeypot.');
+        showToast('Perfil actualizado correctamente', 'success');
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      // 2. Cooldown de actualización de perfil (Rate-limiting en cliente 5s)
+      var profileCooldownKey = 'futunet_last_profile_update_ts';
+      var now = Date.now();
+      var lastUpdate = sessionStorage.getItem(profileCooldownKey);
+      if (lastUpdate && (now - Number(lastUpdate)) < 5000) {
+        var waitSecs = Math.ceil((5000 - (now - Number(lastUpdate))) / 1000);
+        showToast('Por favor espera ' + waitSecs + ' segundo(s) antes de volver a guardar.', 'info');
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      var rawName = document.getElementById('profile-name')?.value || '';
+      var rawPhone = document.getElementById('profile-phone')?.value || '';
+      var rawAddress = document.getElementById('profile-address')?.value || '';
       var documentType = document.getElementById('profile-document-type')?.value || 'cedula';
-      var documentNumber = (document.getElementById('profile-document-number')?.value || '').trim();
+      var rawDocNumber = document.getElementById('profile-document-number')?.value || '';
       var acceptedTerms = !!document.getElementById('profile-terms')?.checked;
 
       if (!acceptedTerms) {
         showToast('Debes aceptar los términos y la política de privacidad.', 'error');
+        if (btn) btn.disabled = false;
+        return;
+      }
+
+      var name = sanitizeProfileInput(rawName).slice(0, 100);
+      var phone = sanitizeProfileInput(rawPhone).slice(0, 25);
+      var address = sanitizeProfileInput(rawAddress).slice(0, 300);
+      var documentNumber = sanitizeProfileInput(rawDocNumber).slice(0, 25);
+
+      if (phone && !/^\+?[0-9\s-]{7,25}$/.test(phone)) {
+        showToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
         if (btn) btn.disabled = false;
         return;
       }
@@ -106,6 +146,7 @@
         await db.collection('users').doc(currentUser.uid).update(updateData);
         await currentUser.updateProfile({ displayName: name });
         Object.assign(userData, updateData);
+        sessionStorage.setItem(profileCooldownKey, String(Date.now()));
         renderProfile();
         showToast('Perfil actualizado correctamente', 'success');
       } catch (err) {

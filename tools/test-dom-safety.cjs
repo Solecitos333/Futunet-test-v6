@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v24 con offline backup_data', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v26 con offline backup_data', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v24';"), 'sw.js debe estar en la versión futunet-cache-v24');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v26';"), 'sw.js debe estar en la versión futunet-cache-v26');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
@@ -210,4 +210,45 @@ test('Catalog Resilience & Offline Fallback: backup_data export y resiliencia de
   assert.ok(cartJs.includes('AbortController'), 'cart.js checkout debe usar AbortController contra demoras de red');
   assert.ok(cartJs.includes('backendFailed'), 'cart.js checkout debe permitir fallback a WhatsApp directo si backend demora');
 });
+
+test('Node.js & Data Integrity: supplier_inventory.js es modular sin window y prod_ad1d2a977b no contiene papelería', () => {
+  // 1. supplier_inventory.js se puede requerir en Node.js de forma limpia
+  const suppModule = require('../js/supplier_inventory.js');
+  assert.ok(suppModule && suppModule.supplierInventory, 'supplier_inventory.js debe exportar supplierInventory');
+  assert.ok(typeof suppModule.supplierInventory.getMergedCatalog === 'function', 'getMergedCatalog debe ser función');
+
+  // 2. prod_ad1d2a977b tiene descripción técnica genuina de Apple AirPods (no papelería)
+  const cat = require('../js/backup_data.js');
+  const airpods = cat.find(p => p.id === 'prod_ad1d2a977b');
+  assert.ok(airpods, 'prod_ad1d2a977b debe existir en el catálogo');
+  assert.ok(airpods.brand === 'Apple', 'La marca debe ser Apple');
+  assert.ok(airpods.desc.includes('AirPods'), 'La descripción debe mencionar AirPods');
+  assert.ok(!airpods.desc.toLowerCase().includes('papelería'), 'No debe contener texto de papelería');
+  assert.ok(!airpods.desc.toLowerCase().includes('escolar'), 'No debe contener texto escolar');
+  assert.ok(Array.isArray(airpods.specs) && airpods.specs.some(s => s.includes('Apple H1')), 'Debe incluir specs de chip Apple H1');
+});
+
+test('Catalog Search Stemming: gamer, gamers, pc gamer y pantalla coinciden con productos relevantes', () => {
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  const fn = new Function(`
+    ${catJs.slice(catJs.indexOf('function normalizeSearch'), catJs.indexOf('const state ='))}
+    return { normalizeSearch, scoreProductMatch };
+  `);
+  const { normalizeSearch, scoreProductMatch } = fn();
+
+  const cat = require('../js/backup_data.js');
+
+  const gamerMatches = cat.filter(p => scoreProductMatch(p, normalizeSearch('gamer')) > 0);
+  assert.ok(gamerMatches.length > 0, 'La búsqueda "gamer" debe arrojar resultados de gaming');
+
+  const gamersMatches = cat.filter(p => scoreProductMatch(p, normalizeSearch('gamers')) > 0);
+  assert.ok(gamersMatches.length > 0, 'La búsqueda "gamers" debe arrojar resultados de gaming');
+
+  const pantallaMatches = cat.filter(p => scoreProductMatch(p, normalizeSearch('pantalla dell')) > 0);
+  assert.ok(pantallaMatches.length > 0, 'La búsqueda "pantalla dell" debe arrojar monitores/laptops Dell');
+
+  const airpodsMatches = cat.filter(p => scoreProductMatch(p, normalizeSearch('audifonos apple')) > 0);
+  assert.ok(airpodsMatches.some(p => p.id === 'prod_ad1d2a977b'), 'La búsqueda "audifonos apple" debe incluir AirPods');
+});
+
 

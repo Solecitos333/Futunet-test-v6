@@ -89,6 +89,25 @@ function normalizeSearch(str) {
  */
 function getStemVariants(word) {
   const variants = [word];
+  if (word === 'gamer' || word === 'gamers') variants.push('gaming');
+  if (word === 'gaming') variants.push('gamer', 'gamers');
+  if (word === 'pc' || word === 'pcs') variants.push('computadora', 'computadoras', 'desktop');
+  if (word === 'laptop' || word === 'laptops') variants.push('portatil', 'notebook');
+  if (word === 'pantalla' || word === 'pantallas') variants.push('monitor', 'monitores');
+  if (word === 'monitor' || word === 'monitores') variants.push('pantalla', 'pantallas');
+  if (word === 'audifono' || word === 'audifonos') variants.push('auricular', 'auriculares', 'headset', 'airpod', 'airpods');
+  if (word === 'auricular' || word === 'auriculares') variants.push('audifono', 'audifonos', 'headset', 'airpod', 'airpods');
+  if (word === 'airpod' || word === 'airpods') variants.push('auricular', 'auriculares', 'audifonos', 'apple');
+  if (word === 'cisco') variants.push('switch', 'switches', 'redes');
+  if (word === 'ubiquiti' || word === 'unifi') variants.push('ubiquiti', 'unifi', 'wifi', 'switch');
+  if (word === 'switch' || word === 'switches') variants.push('swicht', 'swichts', 'cisco', 'ubiquiti', 'conmutador', 'poe');
+  if (word === 'swicht' || word === 'swichts') variants.push('switch', 'switches', 'poe');
+  if (word === 'router' || word === 'routers') variants.push('enrutador', 'wifi', 'red');
+  if (word === 'red' || word === 'redes') variants.push('router', 'switch', 'cisco', 'ubiquiti', 'conectividad');
+  if (word === 'inversor' || word === 'inversores') variants.push('ups', 'respaldo', 'regulador');
+  if (word === 'ups') variants.push('inversor', 'inversores', 'respaldo', 'regulador');
+  if (word === 'proyector' || word === 'proyectores') variants.push('proyeccion');
+  if (word === 'proyeccion') variants.push('proyector', 'proyectores');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -96,6 +115,27 @@ function getStemVariants(word) {
   if (word.endsWith('iones') && word.length > 5) variants.push(word.slice(0, -2));
   return [...new Set(variants)];
 }
+
+/**
+ * Comparación resiliente de marcas:
+ * - Insensible a mayúsculas/minúsculas y caracteres especiales/espacios
+ * - Soporta equivalencias conocidas (UNV <-> Uniview, TP LINK <-> TP-Link)
+ */
+function matchesBrand(productBrand, targetBrand) {
+  if (!targetBrand || targetBrand === 'all') return true;
+  if (!productBrand) return false;
+  const pb = String(productBrand).toLowerCase().trim();
+  const tb = String(targetBrand).toLowerCase().trim();
+  if (pb === tb) return true;
+  const normP = pb.replace(/[^a-z0-9]/g, '');
+  const normT = tb.replace(/[^a-z0-9]/g, '');
+  if (normP === normT) return true;
+  if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
+  if (normP === 'tplink' && normT === 'tplink') return true;
+  return false;
+}
+if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
+
 
 /**
  * Búsqueda fuzzy: devuelve true si el query coincide
@@ -143,11 +183,15 @@ function scoreProductMatch(product, normalizedQuery) {
     if (titleWords.includes(normalizedQuery)) score += 80;
     if (catWords.includes(normalizedQuery)) score += 70;
   } else {
-    if (title.includes(normalizedQuery)) score += 100;
+    const queryVariants = getStemVariants(normalizedQuery);
+    const titleMatchesDirectly = title.includes(normalizedQuery) || queryVariants.some(v => v.length >= 4 && title.includes(v));
+
+    if (titleMatchesDirectly) score += 100;
     else if (fuzzyMatch(title, normalizedQuery)) score += 60;
+    if (title.startsWith(normalizedQuery)) score += 15;
     if (brand.includes(normalizedQuery)) score += 80;
     else if (fuzzyMatch(brand, normalizedQuery)) score += 40;
-    if (category.includes(normalizedQuery)) score += 70;
+    if (category.includes(normalizedQuery) || queryVariants.some(v => v.length >= 4 && category.includes(v))) score += 70;
     else if (fuzzyMatch(category, normalizedQuery)) score += 35;
   }
   if (fuzzyMatch(desc, normalizedQuery)) score += 20;
@@ -158,6 +202,16 @@ function scoreProductMatch(product, normalizedQuery) {
     score += 50;
   } else if (score > 0 && fuzzyMatch(combined, normalizedQuery)) {
     score += 15;
+  }
+
+  // Priorizar máquinas y computadoras principales sobre accesorios (cables, conectores) si la búsqueda es de computadoras
+  if (/computador|laptop|escritorio|desktop|pc/i.test(normalizedQuery)) {
+    if (/computadora|desktop|laptop|optiplex|latitude|thinkcentre|elitebook/i.test(title)) {
+      score += 35;
+    }
+    if (/^cables?\b|^adaptador|^convertidor|^patch\s*cord/i.test(title) || /cables?\s+y\s+adaptadores/i.test(category)) {
+      score -= 30;
+    }
   }
 
   // Para consultas largas (3 o más palabras), puntuar según la proporción de términos coincidentes
@@ -276,14 +330,24 @@ function populateBrandFilter() {
     gigabyte: 'Gigabyte',
     dahua: 'Dahua',
     hikvision: 'Hikvision',
+    cisco: 'Cisco',
+    ubiquiti: 'Ubiquiti',
+    samsung: 'Samsung',
+    'tp link': 'TP-Link',
+    tplink: 'TP-Link',
+    unv: 'Uniview',
+    uniview: 'Uniview',
     grandstream: 'Grandstream'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
   rawBrands.forEach((b) => {
     const key = b.toLowerCase();
-    if (!brandMap.has(key)) {
-      brandMap.set(key, preferredNames[key] || b);
+    const cleanKey = key.replace(/[^a-z0-9]/g, '');
+    const preferred = preferredNames[key] || preferredNames[cleanKey] || b;
+    const prefKey = preferred.toLowerCase();
+    if (!brandMap.has(prefKey)) {
+      brandMap.set(prefKey, preferred);
     }
   });
   const brands = Array.from(brandMap.values()).sort((a, b) => a.localeCompare(b, 'es'));
@@ -307,7 +371,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Hikvision', 'Dahua'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'TP-Link', 'Hikvision', 'Dahua', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
@@ -544,7 +608,7 @@ function renderCompactMobileCatalogView() {
 
     if (state.dept !== 'all') results = results.filter(p => p.department === state.dept);
     if (state.category !== 'all') results = results.filter(p => p.category === state.category);
-    if (state.brand !== 'all') results = results.filter(p => p.brand === state.brand);
+    if (state.brand !== 'all') results = results.filter(p => matchesBrand(p.brand, state.brand));
     results = results.filter((product) => {
       if (isServiceItem(product)) return true;
       const price = parsePrice(product.price);
@@ -575,7 +639,7 @@ function renderCompactMobileCatalogView() {
 
   let db = getCatalogDb();
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
-  if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
+  if (state.brand !== 'all') db = db.filter(p => matchesBrand(p.brand, state.brand));
   db = db.filter((product) => {
     if (isServiceItem(product)) return true;
     const price = parsePrice(product.price);
@@ -1229,7 +1293,7 @@ function renderUI() {
       return price >= state.minPrice && price <= state.maxPrice;
     });
 
-    if (state.brand !== 'all') results = results.filter(p => p.brand === state.brand);
+    if (state.brand !== 'all') results = results.filter(p => matchesBrand(p.brand, state.brand));
     results = sortCatalogProducts(applyAvailabilityFilter(results));
 
     updateCatalogContextBar({
@@ -1261,7 +1325,7 @@ function renderUI() {
   // 2. Filtrado Base por Departamento
   let db = getCatalogDb();
   if (state.dept !== 'all') db = db.filter(p => p.department === state.dept);
-  if (state.brand !== 'all') db = db.filter(p => p.brand === state.brand);
+  if (state.brand !== 'all') db = db.filter(p => matchesBrand(p.brand, state.brand));
 
   // Apply Price Range Filter
   db = db.filter(p => {
@@ -1715,6 +1779,7 @@ function renderProductsGrid(productsList, options = {}) {
     lucide.createIcons({ root: target || document.getElementById('catalog-grid-container') });
   }
 }
+if (typeof window !== 'undefined') window.renderProductsGrid = renderProductsGrid;
 
 
 function handleImageError(imgEl, productId, currentIndex) {
@@ -2224,7 +2289,7 @@ function initPriceFilter() {
    8. BOOTSTRAPPING
    ------------------------------------------------------------- */
 
-document.addEventListener('DOMContentLoaded', async () => {
+async function initCatalogApp() {
   if (window.FutunetData && window.FutunetData.readyPromise) {
     await window.FutunetData.readyPromise;
   }
@@ -2327,4 +2392,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSmartSearch('search-home', 'search-drop-home');
   initSmartSearch('search-navbar', 'search-drop-navbar');
   initSmartSearch('search-catalog-page', 'search-drop-catalog');
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCatalogApp);
+} else {
+  initCatalogApp();
+}
+
