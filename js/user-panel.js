@@ -39,34 +39,35 @@
 
   // ─── Profile Section ───
   function renderProfile() {
-    setText('user-name', userData.displayName || 'Sin nombre');
-    setText('user-email', userData.email || '');
-    setText('user-role-badge', translateRole(userData.role));
+    var uData = userData || {};
+    setText('user-name', uData.displayName || 'Sin nombre');
+    setText('user-email', uData.email || '');
+    setText('user-role-badge', translateRole(uData.role));
 
     var el = document.getElementById('user-role-badge');
-    if (el) el.className = 'up-role-badge up-role-' + (userData.role || 'user');
+    if (el) el.className = 'up-role-badge up-role-' + (uData.role || 'user');
 
     // Fill form fields
-    setVal('profile-name', userData.displayName || '');
-    setVal('profile-phone', userData.phone || '');
-    setVal('profile-address', userData.address || '');
-    setVal('profile-document-type', userData.documentType || 'cedula');
-    setVal('profile-document-number', userData.documentNumber || '');
+    setVal('profile-name', uData.displayName || '');
+    setVal('profile-phone', uData.phone || '');
+    setVal('profile-address', uData.address || '');
+    setVal('profile-document-type', uData.documentType || 'cedula');
+    setVal('profile-document-number', uData.documentNumber || '');
     var documentTypeField = document.getElementById('profile-document-type');
     var documentNumberField = document.getElementById('profile-document-number');
-    var identityLocked = userData.financingProfileStatus === 'approved';
+    var identityLocked = uData.financingProfileStatus === 'approved';
     if (documentTypeField) documentTypeField.disabled = identityLocked;
     if (documentNumberField) documentNumberField.readOnly = identityLocked;
     var terms = document.getElementById('profile-terms');
     if (terms) {
-      terms.checked = userData.termsAccepted === true;
-      terms.disabled = userData.termsAccepted === true;
+      terms.checked = uData.termsAccepted === true;
+      terms.disabled = uData.termsAccepted === true;
     }
 
     // Avatar
     var avatar = document.getElementById('user-avatar');
     if (avatar) {
-      avatar.textContent = (userData.displayName || userData.email || '?').charAt(0).toUpperCase();
+      avatar.textContent = (uData.displayName || uData.email || '?').charAt(0).toUpperCase();
     }
   }
 
@@ -571,7 +572,7 @@
   }
 
   // ─── Init ───
-  document.addEventListener('DOMContentLoaded', function () {
+  function initUserPanel() {
     setupTabs();
     FutunetGuard.requireAuth(function (user, data) {
       init(user, data);
@@ -579,5 +580,13 @@
       var page = document.getElementById('user-panel-page');
       if (page) page.classList.add('is-loaded');
     });
-  });
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initUserPanel);
+    } else {
+      initUserPanel();
+    }
+  }
 })();

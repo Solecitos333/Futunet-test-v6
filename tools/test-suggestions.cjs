@@ -484,6 +484,67 @@ test('Mejora demandada por usuarios: Selección interactiva de horario y fecha p
   assert.ok(internetHtml.includes('id="hiring-modal"') || internetHtml.includes('hiring-step'), 'internet.html debe contar con flujo de contratación');
 });
 
+test('Mejora demandada por usuarios: Sillas ergonómicas ejecutivas y mobiliario de oficina (SUG-S8320)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S8320'") && seedCjs.includes("status: 'implemented'"), 'SUG-S8320 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S8320') && sugJs.includes('Sillas Ergonómicas Ejecutivas'), 'SUG-S8320 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('mob_silla_ergonomica_ejecutiva'), 'backup_data.js debe contener mob_silla_ergonomica_ejecutiva');
+  assert.ok(backupJs.includes('Silla de Oficina Ergonómica de Malla Negra'), 'backup_data.js debe contener Silla de Oficina Ergonómica de Malla Negra corregida');
+  assert.ok(!backupJs.includes('Silla De Mayita Negrsa'), 'backup_data.js no debe contener la falta ortográfica Silla De Mayita Negrsa');
+  assert.ok(backupJs.includes('Sillas de Visitas con Brazos para Oficina'), 'backup_data.js debe contener Sillas de Visitas con Brazos');
+
+  const sillonImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'sillon-ejecutivo.jpg');
+  assert.ok(fs.existsSync(sillonImg), 'La imagen del sillón ejecutivo debe existir en disco');
+
+  const visitaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'silla-visita.jpg');
+  assert.ok(fs.existsSync(visitaImg), 'La imagen de la silla de visita debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Sistemas UPS y protección eléctrica Forza (SUG-U6140)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U6140'") && seedCjs.includes("status: 'implemented'"), 'SUG-U6140 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U6140') && sugJs.includes('Sistemas UPS'), 'SUG-U6140 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('ups_forza_nt1002'), 'backup_data.js debe contener ups_forza_nt1002');
+  assert.ok(backupJs.includes('prod_bh5vuj6df'), 'backup_data.js debe contener prod_bh5vuj6df');
+  assert.ok(backupJs.includes('prod_u9fo22vhb'), 'backup_data.js debe contener prod_u9fo22vhb');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("forza: 'Forza'"), 'catalog.js debe incluir Forza en preferredNames');
+  assert.ok(catJs.includes("'Forza'"), 'catalog.js debe incluir Forza en priorityList');
+
+  const ups600Img = path.join(projectRoot, 'img', 'productos', 'hikvision-ups600.jpg');
+  assert.ok(fs.existsSync(ups600Img), 'La imagen del UPS 600VA debe existir en disco');
+
+  const ups1000Img = path.join(projectRoot, 'img', 'productos', 'hikvision-ups1000.jpg');
+  assert.ok(fs.existsSync(ups1000Img), 'La imagen del UPS 1000VA debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Insignias de conteo y filtros dinámicos en Muro Comunitario (SUG-C2850)', () => {
+  const sugHtml = fs.readFileSync(path.join(projectRoot, 'sugerencias.html'), 'utf8');
+  assert.ok(sugHtml.includes('id="sug-count-all"'), 'sugerencias.html debe contener el badge id="sug-count-all"');
+  assert.ok(sugHtml.includes('id="sug-count-products"'), 'sugerencias.html debe contener el badge id="sug-count-products"');
+  assert.ok(sugHtml.includes('id="sug-count-web"'), 'sugerencias.html debe contener el badge id="sug-count-web"');
+  assert.ok(sugHtml.includes('id="sug-count-services"'), 'sugerencias.html debe contener el badge id="sug-count-services"');
+
+  const sugCss = fs.readFileSync(path.join(projectRoot, 'css', 'suggestions.css'), 'utf8');
+  assert.ok(sugCss.includes('.sug-comm-count-badge'), 'suggestions.css debe definir estilos para .sug-comm-count-badge');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('updateCommunityFilterCounts'), 'suggestions.js debe contener la función updateCommunityFilterCounts');
+  assert.ok(sugJs.includes('SUG-C2850'), 'suggestions.js debe incluir SUG-C2850 en la lista canónica');
+
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C2850'") && seedCjs.includes("status: 'implemented'"), 'SUG-C2850 debe figurar como implemented en seed-suggestions.cjs');
+});
+
 
 
 

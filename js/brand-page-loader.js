@@ -231,6 +231,7 @@ function matchesBrandLocal(productBrand, targetBrand) {
   if (normP === normT) return true;
   if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
   if (normP === 'tplink' && normT === 'tplink') return true;
+  if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   return false;
 }
 

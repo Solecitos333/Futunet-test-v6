@@ -961,6 +961,27 @@ body.sug-body {
   box-shadow: 0 4px 12px rgba(0, 102, 204, 0.28);
 }
 
+.sug-comm-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--sug-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.sug-comm-filter-btn.is-active .sug-comm-count-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
 @media (max-width: 640px) {
   .sug-comm-filters {
     gap: 6px;

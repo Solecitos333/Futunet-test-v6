@@ -21,8 +21,8 @@
   let authRefreshPromise = null;
   let authRefreshUid = '';
 
-  function getAuth() { return window.FutunetFirebase.auth; }
-  function getDB() { return window.FutunetFirebase.db; }
+  function getAuth() { return window.FutunetFirebase ? window.FutunetFirebase.auth : null; }
+  function getDB() { return window.FutunetFirebase ? window.FutunetFirebase.db : null; }
 
   function refreshAuthenticatedSession(user) {
     if (!user) return Promise.resolve(null);

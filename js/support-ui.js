@@ -311,5 +311,11 @@
     window.addEventListener('pageshow', event => { if (event.persisted) watchList(); });
   }
   window.FutunetSupportUI = { init };
-  document.addEventListener('DOMContentLoaded', init);
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
 })();

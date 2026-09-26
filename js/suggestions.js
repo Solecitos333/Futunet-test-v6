@@ -16,28 +16,35 @@
     5: '5 estrellas — ¡Excelente!'
   };
 
-  // Referencias a elementos DOM
-  var form = document.getElementById('sug-form');
-  var categoryCards = document.querySelectorAll('.sug-category-card');
-  var audienceBtns = document.querySelectorAll('.sug-audience-btn');
-  var starBtns = document.querySelectorAll('.sug-star-btn');
-  var ratingText = document.getElementById('sug-rating-text');
-  var anonCheckbox = document.getElementById('sug-anon-checkbox');
-  var contactFields = document.getElementById('sug-contact-fields');
-  var submitBtn = document.getElementById('sug-submit-btn');
-  var alertBox = document.getElementById('sug-alert');
-  var formCard = document.getElementById('sug-form-card');
-  var successCard = document.getElementById('sug-success-card');
-  var refCodeDisplay = document.getElementById('sug-ref-code');
-  var copyCodeBtn = document.getElementById('sug-copy-code-btn');
-  var btnAnother = document.getElementById('sug-btn-another');
-  var trackInput = document.getElementById('sug-track-input');
-  var trackBtn = document.getElementById('sug-track-btn');
-  var trackResult = document.getElementById('sug-track-result');
-  var communityGrid = document.getElementById('sug-community-grid');
+  // Referencias a elementos DOM (se vinculan defensivamente en bindDOMElements)
+  var form, categoryCards, audienceBtns, starBtns, ratingText, anonCheckbox,
+      contactFields, submitBtn, alertBox, formCard, successCard, refCodeDisplay,
+      copyCodeBtn, btnAnother, trackInput, trackBtn, trackResult, communityGrid;
 
-  // Inicialización cuando el DOM esté listo
-  document.addEventListener('DOMContentLoaded', function () {
+  function bindDOMElements() {
+    if (typeof document === 'undefined') return;
+    form = document.getElementById('sug-form');
+    categoryCards = document.querySelectorAll('.sug-category-card');
+    audienceBtns = document.querySelectorAll('.sug-audience-btn');
+    starBtns = document.querySelectorAll('.sug-star-btn');
+    ratingText = document.getElementById('sug-rating-text');
+    anonCheckbox = document.getElementById('sug-anon-checkbox');
+    contactFields = document.getElementById('sug-contact-fields');
+    submitBtn = document.getElementById('sug-submit-btn');
+    alertBox = document.getElementById('sug-alert');
+    formCard = document.getElementById('sug-form-card');
+    successCard = document.getElementById('sug-success-card');
+    refCodeDisplay = document.getElementById('sug-ref-code');
+    copyCodeBtn = document.getElementById('sug-copy-code-btn');
+    btnAnother = document.getElementById('sug-btn-another');
+    trackInput = document.getElementById('sug-track-input');
+    trackBtn = document.getElementById('sug-track-btn');
+    trackResult = document.getElementById('sug-track-result');
+    communityGrid = document.getElementById('sug-community-grid');
+  }
+
+  function initSuggestionsApp() {
+    bindDOMElements();
     initCategorySelector();
     initAudienceSelector();
     initRatingStars();
@@ -54,7 +61,16 @@
     if (btnAnother) {
       btnAnother.addEventListener('click', resetFormView);
     }
-  });
+  }
+
+  // Inicialización cuando el DOM esté listo (resiliente a carga diferida o async)
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSuggestionsApp);
+    } else {
+      initSuggestionsApp();
+    }
+  }
 
   // 1. Selector de Categorías
   function initCategorySelector() {
@@ -809,6 +825,30 @@
       status: 'implemented',
       description: 'Herramienta en línea para elegir fecha preferida y franja horaria (mañana/tarde) al solicitar instalación de internet fibra óptica o cableado estructurado.',
       officialResponse: '¡Atendido! Activado el selector de horario y fecha preferida para agendamiento de visitas técnicas en los portales de Internet y Servicios Corporativos con confirmación inmediata por WhatsApp.'
+    },
+    {
+      refCode: 'SUG-S8320',
+      title: 'Disponibilidad de Sillas Ergonómicas Ejecutivas de Oficina con soporte lumbar y brazos ajustables',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sillas ergonómicas de oficina de gama ejecutiva con malla transpirable, soporte lumbar ajustable y pistón de gas para jornadas laborales continuas.',
+      officialResponse: '¡Implementado! Incorporamos al catálogo de Mobiliario la Silla Ergonómica Ejecutiva Futunet con soporte lumbar regulable y la Silla de Malla Operativa listas para entrega corporativa en Santiago.'
+    },
+    {
+      refCode: 'SUG-U6140',
+      title: 'Disponibilidad de Sistemas UPS y No-Break Forza para protección de computadoras y servidores',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistemas UPS interactivos y No-Break de marcas líderes como Forza y Hikvision para proteger equipos de cómputo y servidores ante apagones y variaciones de voltaje.',
+      officialResponse: '¡Cumplido! Se integraron al catálogo el UPS Interactivo Forza NT-1002 de 1000VA / 500W con regulación AVR y los sistemas UPS Hikvision con garantía oficial de Futunet.'
+    },
+    {
+      refCode: 'SUG-C2850',
+      title: 'Buscador interactivo y contador de ideas implementadas en el Muro Comunitario del Buzón',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Indicadores visuales de conteo por categoría y filtros dinámicos en el Muro Comunitario para consultar fácilmente cuántas propuestas han sido resueltas.',
+      officialResponse: '¡Implementado! Ya se encuentran activas las insignias dinámicas de conteo en cada botón de categoría del muro comunitario con el total de propuestas atendidas.'
     }
   ];
 
@@ -833,7 +873,7 @@
     try {
       var snap = await db.collection('suggestions')
         .where('status', 'in', ['implemented', 'planned'])
-        .limit(30)
+        .limit(50)
         .get();
 
       if (snap.empty) {
@@ -846,10 +886,29 @@
         items.push(doc.data());
       });
       loadedCommunityIdeas = items;
+      updateCommunityFilterCounts(loadedCommunityIdeas);
       renderCommunityCards(loadedCommunityIdeas);
     } catch (e) {
       renderFallbackCommunityWall();
     }
+  }
+
+  function updateCommunityFilterCounts(list) {
+    if (!list) return;
+    var countAll = document.getElementById('sug-count-all');
+    var countProducts = document.getElementById('sug-count-products');
+    var countWeb = document.getElementById('sug-count-web');
+    var countServices = document.getElementById('sug-count-services');
+
+    var total = list.length;
+    var products = list.filter(function (item) { return item.category === 'catalog_products'; }).length;
+    var web = list.filter(function (item) { return item.category === 'web_platform' || item.category === 'web_ux'; }).length;
+    var services = list.filter(function (item) { return item.category === 'customer_service' || item.category === 'services_support'; }).length;
+
+    if (countAll) countAll.textContent = total;
+    if (countProducts) countProducts.textContent = products;
+    if (countWeb) countWeb.textContent = web;
+    if (countServices) countServices.textContent = services;
   }
 
   function renderCommunityCards(list) {
@@ -926,7 +985,14 @@
 
   function renderFallbackCommunityWall() {
     loadedCommunityIdeas = canonicalSuggestionsList;
+    updateCommunityFilterCounts(canonicalSuggestionsList);
     renderCommunityCards(canonicalSuggestionsList);
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      canonicalSuggestionsList: canonicalSuggestionsList
+    };
   }
 
 })();

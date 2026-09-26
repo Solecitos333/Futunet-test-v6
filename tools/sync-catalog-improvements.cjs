@@ -664,6 +664,132 @@ const networkingItems = [
   }
 ];
 
+const sillasItems = [
+  {
+    id: 'mob_silla_ergonomica_ejecutiva',
+    department: 'oficina',
+    category: 'Mobiliario',
+    brand: 'Futunet Mobiliario',
+    title: 'Silla Ergonómica Ejecutiva de Malla Transpirable con Soporte Lumbar',
+    desc: 'Silla ergonómica de gama ejecutiva con espaldar de malla antitranspirante, soporte lumbar anatómico regulable, apoyabrazos ergonómicos, cabecero y mecanismo basculante con control de tensión. Especialmente diseñada para jornadas de trabajo intensivo en oficinas y despachos de Santiago.',
+    price: 'RD$ 6,850.00',
+    img: 'img/productos/catalogo/sillon-ejecutivo.jpg',
+    gallery: [
+      'img/productos/catalogo/sillon-ejecutivo.jpg'
+    ],
+    specs: [
+      'Diseño ergonómico certificado para jornadas intensivas de 8+ horas',
+      'Respaldo de malla transpirable de alta resistencia con soporte lumbar regulable',
+      'Reposabrazos ergonómicos y mecanismo basculante con bloqueo de inclinación',
+      'Pistón neumático de gas clase 3 con ajuste de altura suave',
+      'Base estrella cromada reforzada de 5 radios con ruedas silenciosas de poliuretano',
+      'Garantía corporativa de 1 año y factura fiscal formal en Santiago'
+    ]
+  },
+  {
+    id: 'prod_rlch8e9bx',
+    department: 'oficina',
+    category: 'Mobiliario',
+    brand: 'Futunet Mobiliario',
+    title: 'Silla de Oficina Ergonómica de Malla Negra',
+    desc: 'Silla ejecutiva de malla ergonómica en color negro, con diseño transpirable, soporte lumbar y ajuste de altura por pistón de gas. Ideal para oficinas, recepciones y puestos operativos. Respaldo y garantía oficial Futunet.',
+    price: 'RD$ 5,197.50',
+    img: 'img/productos/catalogo/sillon-ejecutivo.jpg',
+    gallery: [
+      'img/productos/catalogo/sillon-ejecutivo.jpg'
+    ],
+    specs: [
+      'Malla transpirable en espaldar con estructura de alta durabilidad',
+      'Asiento acolchado de espuma de alta densidad con tapizado antitranspirante',
+      'Mecanismo de elevación a gas regulable',
+      'Base giratoria de 5 ruedas para movilidad fluida',
+      'Garantía corporativa de 1 año y entrega en Santiago'
+    ]
+  },
+  {
+    id: 'prod_3s7mmtjdr',
+    department: 'oficina',
+    category: 'Mobiliario',
+    brand: 'Genérico',
+    title: 'Sillas de Visitas con Brazos para Oficina',
+    desc: 'Silla fija para visitantes y salas de espera con estructura metálica tubular reforzada, asiento y espaldar acolchados con descansabrazos integrados.',
+    price: 'RD$ 4,002.75',
+    img: 'img/productos/catalogo/silla-visita.jpg',
+    gallery: [
+      'img/productos/catalogo/silla-visita.jpg'
+    ],
+    specs: [
+      'Estructura metálica tubular de alta resistencia',
+      'Asiento y respaldo acolchados en tela de uso rudo',
+      'Brazos ergonómicos integrados',
+      'Topes antideslizantes para protección del suelo',
+      'Garantía directa Futunet'
+    ]
+  }
+];
+
+const powerItems = [
+  {
+    id: 'prod_bh5vuj6df',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Hikvision',
+    title: 'UPS HIKVISION 600 VA',
+    desc: 'UPS Hikvision de 600 VA para proteger equipos de red, cajas, cámaras, routers y estaciones ligeras frente a apagones y picos de tensión. Es una solución compacta para oficinas pequeñas, puestos individuales o respaldo puntual de seguridad electrónica.',
+    price: 'RD$ 2,220.00',
+    img: 'img/productos/hikvision-ups600.jpg',
+    gallery: [
+      'img/productos/hikvision-ups600.jpg'
+    ],
+    specs: [
+      'Capacidad nominal: 600 VA / 360 W',
+      'Batería interna sellada de 12 V / 7 Ah',
+      'Tiempo de transferencia ≤ 10 ms',
+      'Protección contra sobrecarga, descarga profunda y picos de voltaje'
+    ]
+  },
+  {
+    id: 'prod_u9fo22vhb',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Hikvision',
+    title: 'UPS Hikvision DS-UPS1000, 1000 VA / 600 W',
+    desc: 'UPS Hikvision de 1000 VA orientado a respaldo eléctrico para DVR, NVR, routers, estaciones de trabajo y periféricos de oficina. Su capacidad de 600 W lo hace adecuado para cargas moderadas que requieren continuidad ante cortes o fluctuaciones.',
+    price: 'RD$ 3,350.00',
+    img: 'img/productos/hikvision-ups1000.jpg',
+    gallery: [
+      'img/productos/hikvision-ups1000.jpg'
+    ],
+    specs: [
+      'Capacidad: 1000 VA / 600 W',
+      'Batería interna de 12 V / 9 Ah',
+      'Tiempo de transferencia ≤ 10 ms',
+      'Protección contra sobrecarga, descarga y sobrevoltaje'
+    ]
+  },
+  {
+    id: 'ups_forza_nt1002',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Forza',
+    title: 'UPS Interactivo Forza NT-1002 1000VA / 500W con Regulación AVR',
+    desc: 'Sistema UPS Interactivo Forza NT-1002 de 1000VA / 500W diseñado para brindar respaldo confiable de energía y regulación automática de voltaje (AVR) para computadoras de escritorio, servidores de red, equipos de telecomunicaciones y puntos de venta. Protege contra apagones, caídas de tensión y sobrevoltajes en oficinas y comercios de Santiago.',
+    price: 'RD$ 3,850.00',
+    img: 'img/productos/hikvision-ups1000.jpg',
+    gallery: [
+      'img/productos/hikvision-ups1000.jpg'
+    ],
+    specs: [
+      'Capacidad: 1000 VA / 500 W con sistema interactivo y regulación AVR',
+      '6 salidas tipo NEMA 5-15R (4 con respaldo y regulación + 2 contra sobretensión)',
+      'Protección integral contra apagones, sobrevoltaje, subtensión y picos de red',
+      'Protección de red telefónica / datos RJ-11 y RJ-45',
+      'Arranque en frío (Cold-Start) con batería y alarma sonora inteligente',
+      'Garantía oficial de 2 años y comprobante fiscal formal en República Dominicana'
+    ]
+  }
+];
+
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
   const code = fs.readFileSync(backupPath, 'utf8');
@@ -675,6 +801,8 @@ async function updateBackupData() {
 
   const itemsToSync = [
     ...mobItems,
+    ...sillasItems,
+    ...powerItems,
     ...dellLaptops,
     ...gamingItems,
     ...dellOptiplexDesktops,
@@ -710,6 +838,8 @@ async function updateFirestore() {
   const db = getFirestore();
   const allProducts = [
     ...mobItems,
+    ...sillasItems,
+    ...powerItems,
     ...dellLaptops,
     ...gamingItems,
     ...dellOptiplexDesktops,

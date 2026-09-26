@@ -37,7 +37,12 @@ const testQueries = [
   'suministros',
   'hikvision',
   'cisco',
-  'ubiquiti'
+  'ubiquiti',
+  'ups',
+  'silla',
+  'sillas',
+  'silla ergonomica',
+  'forza'
 ];
 
 console.log('Testing REAL catalog scoring for queries:');

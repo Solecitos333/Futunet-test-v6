@@ -41,7 +41,7 @@ var FUTUNET_LAYOUT = {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', async function () {
+  async function initLayoutManager() {
     // Hide static dividers first
     var staticDividers = document.querySelectorAll('.section-divider');
     staticDividers.forEach(function (div) {
@@ -67,7 +67,15 @@ var FUTUNET_LAYOUT = {
       applyLayout();
       setupPreviewMode();
     }
-  });
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initLayoutManager);
+    } else {
+      initLayoutManager();
+    }
+  }
 
   function sanitizeHtml(htmlString) {
     if (!htmlString) return '';

@@ -4801,18 +4801,20 @@ const mockDatabase = [
     "id": "prod_rlch8e9bx",
     "department": "oficina",
     "category": "Mobiliario",
-    "brand": "Genérico",
-    "title": "Silla De Mayita Negrsa",
-    "desc": "Calidad Premium. Silla De Mayita Negrsa. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
+    "brand": "Futunet Mobiliario",
+    "title": "Silla de Oficina Ergonómica de Malla Negra",
+    "desc": "Silla ejecutiva de malla ergonómica en color negro, con diseño transpirable, soporte lumbar y ajuste de altura por pistón de gas. Ideal para oficinas, recepciones y puestos operativos. Respaldo y garantía oficial Futunet.",
     "price": "RD$ 5,197.50",
     "img": "img/productos/catalogo/sillon-ejecutivo.jpg",
     "gallery": [
       "img/productos/catalogo/sillon-ejecutivo.jpg"
     ],
     "specs": [
-      "Garantía premium directa: Genérico",
-      "Soporte técnico preferencial Futunet",
-      "Calidad y manufactura comprobada"
+      "Malla transpirable en espaldar con estructura de alta durabilidad",
+      "Asiento acolchado de espuma de alta densidad con tapizado antitranspirante",
+      "Mecanismo de elevación a gas regulable",
+      "Base giratoria de 5 ruedas para movilidad fluida",
+      "Garantía corporativa de 1 año y entrega en Santiago"
     ]
   },
   {
@@ -4820,17 +4822,19 @@ const mockDatabase = [
     "department": "oficina",
     "category": "Mobiliario",
     "brand": "Genérico",
-    "title": "Sillas de visitas con brazo",
-    "desc": "Calidad Premium. Sillas de visitas con brazo. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
+    "title": "Sillas de Visitas con Brazos para Oficina",
+    "desc": "Silla fija para visitantes y salas de espera con estructura metálica tubular reforzada, asiento y espaldar acolchados con descansabrazos integrados.",
     "price": "RD$ 4,002.75",
-    "img": "img/productos/catalogo/sillon-ejecutivo.jpg",
+    "img": "img/productos/catalogo/silla-visita.jpg",
     "gallery": [
-      "img/productos/catalogo/sillon-ejecutivo.jpg"
+      "img/productos/catalogo/silla-visita.jpg"
     ],
     "specs": [
-      "Garantía premium directa: Genérico",
-      "Soporte técnico preferencial Futunet",
-      "Calidad y manufactura comprobada"
+      "Estructura metálica tubular de alta resistencia",
+      "Asiento y respaldo acolchados en tela de uso rudo",
+      "Brazos ergonómicos integrados",
+      "Topes antideslizantes para protección del suelo",
+      "Garantía directa Futunet"
     ]
   },
   {
@@ -5337,16 +5341,15 @@ const mockDatabase = [
     "title": "UPS HIKVISION 600 VA",
     "desc": "UPS Hikvision de 600 VA para proteger equipos de red, cajas, cámaras, routers y estaciones ligeras frente a apagones y picos de tensión. Es una solución compacta para oficinas pequeñas, puestos individuales o respaldo puntual de seguridad electrónica.",
     "price": "RD$ 2,220.00",
-    "img": "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000162286%2F2.png&w=720&output=webp&q=72",
+    "img": "img/productos/hikvision-ups600.jpg",
     "gallery": [
-      "https://wsrv.nl/?url=assets.hikvision.com%2Fprd%2Fnormal%2Fall%2Fimage%2Fm000162286%2F2.png&w=720&output=webp&q=72",
-      "https://wsrv.nl/?url=www.hikvision.com%2Fcontent%2Fdam%2Fhikvision%2Fen%2Fmarketing%2Fimage%2Fproducts%2Ftransmission-and-display-products%2Fcables%2FNetwork-cables-1.jpg&w=720&output=webp&q=72"
+      "img/productos/hikvision-ups600.jpg"
     ],
     "specs": [
-      "Capacidad nominal: 600 VA",
-      "Batería interna de 12 V / 7 Ah",
-      "Tiempo de transferencia â‰¤ 10 ms",
-      "Protección contra sobrecarga, sobrecarga de batería y picos"
+      "Capacidad nominal: 600 VA / 360 W",
+      "Batería interna sellada de 12 V / 7 Ah",
+      "Tiempo de transferencia ≤ 10 ms",
+      "Protección contra sobrecarga, descarga profunda y picos de voltaje"
     ]
   },
   {
@@ -5545,13 +5548,12 @@ const mockDatabase = [
     "price": "RD$ 3,350.00",
     "img": "img/productos/hikvision-ups1000.jpg",
     "gallery": [
-      "img/productos/hikvision-ups1000.jpg",
-      "img/productos/conceptos/electrico-generico.jpg"
+      "img/productos/hikvision-ups1000.jpg"
     ],
     "specs": [
       "Capacidad: 1000 VA / 600 W",
       "Batería interna de 12 V / 9 Ah",
-      "Tiempo de transferencia â‰¤ 10 ms",
+      "Tiempo de transferencia ≤ 10 ms",
       "Protección contra sobrecarga, descarga y sobrevoltaje"
     ]
   },
@@ -6040,7 +6042,7 @@ const mockDatabase = [
     "id": "gm_ssd_samsung_9100_pro_2tb",
     "department": "equipos",
     "category": "Componentes Gaming",
-    "brand": "Samsung",
+    "brand": "SAMSUNG",
     "title": "SSD Samsung 9100 PRO 2TB M.2 NVMe PCIe Gen5 x4 Lectura 14,000 MB/s",
     "desc": "Unidad de estado sólido buque insignia PCIe Gen5 con velocidades de lectura de hasta 14,000 MB/s, ideal para renderizado 3D, edición 8K y cargas instantáneas.",
     "price": "RD$ 21,900.00",
@@ -6097,7 +6099,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_7050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "Dell",
+    "brand": "DELL",
     "title": "PC de Escritorio Dell OptiPlex 7050 SFF Intel Core i5-7500 3.4GHz, 16GB RAM, 256GB SSD NVMe",
     "desc": "Computadora corporativa de escritorio Dell OptiPlex 7050 Small Form Factor (SFF) de alto rendimiento. Diseñada para oficinas ejecutivas, estaciones contables, laboratorios y puestos de atención continua con chasis compacto ultra resistente y bajo consumo energético.",
     "price": "RD$ 16,500.00",
@@ -6120,7 +6122,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_5050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "Dell",
+    "brand": "DELL",
     "title": "PC de Escritorio Dell OptiPlex 5050 SFF Intel Core i5-7500 3.4GHz, 8GB RAM, 256GB SSD",
     "desc": "Equipo de escritorio Dell OptiPlex 5050 SFF generación 7. Excelente equilibrio entre potencia, fiabilidad corporativa y coste operativo para farmacias, supermercados, call centers y despachos profesionales.",
     "price": "RD$ 13,800.00",
@@ -6142,7 +6144,7 @@ const mockDatabase = [
     "id": "pc_dell_optiplex_3050_sff",
     "department": "equipos",
     "category": "Computadoras de Escritorio",
-    "brand": "Dell",
+    "brand": "DELL",
     "title": "PC de Escritorio Dell OptiPlex 3050 SFF Intel Core i5 8GB RAM, 500GB HDD + 128GB SSD",
     "desc": "Solución de computación confiable y económica para puestos de digitación, cajas y oficinas. Configuración híbrida con disco SSD para arranque instantáneo de Windows y disco duro secundario de 500GB para almacenamiento masivo de datos.",
     "price": "RD$ 11,900.00",
@@ -6206,7 +6208,7 @@ const mockDatabase = [
     "id": "mon_dell_se2422h_fhd",
     "department": "equipos",
     "category": "Monitores y Pantallas",
-    "brand": "Dell",
+    "brand": "DELL",
     "title": "Monitor Dell SE2422H 24 Pulgadas Full HD 1080p 75Hz HDMI/VGA Antirreflejo",
     "desc": "Monitor empresarial Dell de 24 pulgadas diseñado para jornadas laborales prolongadas. Incluye tecnología ComfortView para reducir la emisión de luz azul perjudicial y una base compacta que libera espacio en el escritorio.",
     "price": "RD$ 9,400.00",
@@ -6227,7 +6229,7 @@ const mockDatabase = [
     "id": "sec_hikvision_cam_colorvu_1080p",
     "department": "seguridad",
     "category": "Cámaras de Seguridad",
-    "brand": "Hikvision",
+    "brand": "HIKVISION",
     "title": "Cámara Hikvision ColorVu Turbo HD 1080p Domo/Bala Visión Nocturna 24/7 a Color",
     "desc": "Cámara de videovigilancia profesional Hikvision con revolucionaria tecnología ColorVu. Proporciona imágenes brillantes y en color vivo las 24 horas del día, incluso en completa oscuridad exterior o interior, superando a las cámaras infrarrojas tradicionales.",
     "price": "RD$ 2,450.00",
@@ -6250,7 +6252,7 @@ const mockDatabase = [
     "id": "sec_hikvision_kit_dvr_4ch",
     "department": "seguridad",
     "category": "Sistemas de Seguridad CCTV",
-    "brand": "Hikvision",
+    "brand": "HIKVISION",
     "title": "Kit de Videovigilancia Hikvision DVR 4 Canales 1080p + 4 Cámaras con App Móvil",
     "desc": "Sistema integral de seguridad y monitoreo Hikvision de 4 cámaras Full HD y grabador DVR digital con compresión H.265+. Permite visualizar en vivo y revisar grabaciones desde cualquier parte del mundo a través de la aplicación gratuita Hik-Connect en teléfonos iPhone y Android.",
     "price": "RD$ 12,900.00",
@@ -6486,6 +6488,48 @@ const mockDatabase = [
       "Totalmente gestionable desde la plataforma UniFi Network",
       "Montaje en pared o escritorio con accesorios de fijación",
       "Garantía oficial y entrega inmediata en Santiago"
+    ]
+  },
+  {
+    "id": "mob_silla_ergonomica_ejecutiva",
+    "department": "oficina",
+    "category": "Mobiliario",
+    "brand": "Futunet Mobiliario",
+    "title": "Silla Ergonómica Ejecutiva de Malla Transpirable con Soporte Lumbar",
+    "desc": "Silla ergonómica de gama ejecutiva con espaldar de malla antitranspirante, soporte lumbar anatómico regulable, apoyabrazos ergonómicos, cabecero y mecanismo basculante con control de tensión. Especialmente diseñada para jornadas de trabajo intensivo en oficinas y despachos de Santiago.",
+    "price": "RD$ 6,850.00",
+    "img": "img/productos/catalogo/sillon-ejecutivo.jpg",
+    "gallery": [
+      "img/productos/catalogo/sillon-ejecutivo.jpg"
+    ],
+    "specs": [
+      "Diseño ergonómico certificado para jornadas intensivas de 8+ horas",
+      "Respaldo de malla transpirable de alta resistencia con soporte lumbar regulable",
+      "Reposabrazos ergonómicos y mecanismo basculante con bloqueo de inclinación",
+      "Pistón neumático de gas clase 3 con ajuste de altura suave",
+      "Base estrella cromada reforzada de 5 radios con ruedas silenciosas de poliuretano",
+      "Garantía corporativa de 1 año y factura fiscal formal en Santiago"
+    ]
+  },
+  {
+    "id": "ups_forza_nt1002",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Forza",
+    "title": "UPS Interactivo Forza NT-1002 1000VA / 500W con Regulación AVR",
+    "desc": "Sistema UPS Interactivo Forza NT-1002 de 1000VA / 500W diseñado para brindar respaldo confiable de energía y regulación automática de voltaje (AVR) para computadoras de escritorio, servidores de red, equipos de telecomunicaciones y puntos de venta. Protege contra apagones, caídas de tensión y sobrevoltajes en oficinas y comercios de Santiago.",
+    "price": "RD$ 3,850.00",
+    "img": "img/productos/hikvision-ups1000.jpg",
+    "gallery": [
+      "img/productos/hikvision-ups1000.jpg"
+    ],
+    "specs": [
+      "Capacidad: 1000 VA / 500 W con sistema interactivo y regulación AVR",
+      "6 salidas tipo NEMA 5-15R (4 con respaldo y regulación + 2 contra sobretensión)",
+      "Protección integral contra apagones, sobrevoltaje, subtensión y picos de red",
+      "Protección de red telefónica / datos RJ-11 y RJ-45",
+      "Arranque en frío (Cold-Start) con batería y alarma sonora inteligente",
+      "Garantía oficial de 2 años y comprobante fiscal formal en República Dominicana"
     ]
   }
 ];

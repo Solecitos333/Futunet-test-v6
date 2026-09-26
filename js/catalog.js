@@ -104,8 +104,22 @@ function getStemVariants(word) {
   if (word === 'swicht' || word === 'swichts') variants.push('switch', 'switches', 'poe');
   if (word === 'router' || word === 'routers') variants.push('enrutador', 'wifi', 'red');
   if (word === 'red' || word === 'redes') variants.push('router', 'switch', 'cisco', 'ubiquiti', 'conectividad');
-  if (word === 'inversor' || word === 'inversores') variants.push('ups', 'respaldo', 'regulador');
-  if (word === 'ups') variants.push('inversor', 'inversores', 'respaldo', 'regulador');
+  if (word === 'inversor' || word === 'inversores') variants.push('ups', 'bateria', 'regulador');
+  if (word === 'ups') variants.push('nobreak', 'bateria', 'inversor', 'regulador', 'forza');
+  if (word === 'nobreak') variants.push('ups', 'regulador', 'bateria');
+  if (word === 'forza') variants.push('ups', 'regulador');
+  if (word === 'silla' || word === 'sillas') variants.push('sillon', 'sillones', 'asiento', 'ergonomica', 'ergonomico');
+  if (word === 'sillon' || word === 'sillones') variants.push('silla', 'sillas', 'asiento');
+  if (word === 'ergonomica' || word === 'ergonomicas' || word === 'ergonomico' || word === 'ergonomicos') variants.push('ergonomia', 'silla', 'sillas');
+  if (word === 'mouse' || word === 'mouses') variants.push('raton', 'ratones');
+  if (word === 'raton' || word === 'ratones') variants.push('mouse', 'mouses');
+  if (word === 'teclado' || word === 'teclados') variants.push('keyboard');
+  if (word === 'keyboard' || word === 'keyboards') variants.push('teclado', 'teclados');
+  if (word === 'camara' || word === 'camaras') variants.push('cctv', 'videovigilancia');
+  if (word === 'cctv') variants.push('camara', 'camaras', 'videovigilancia', 'dvr');
+  if (word === 'disco' || word === 'discos') variants.push('ssd', 'hdd');
+  if (word === 'ssd') variants.push('disco', 'solido');
+  if (word === 'tapo') variants.push('tplink', 'tp-link');
   if (word === 'proyector' || word === 'proyectores') variants.push('proyeccion');
   if (word === 'proyeccion') variants.push('proyector', 'proyectores');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
@@ -132,6 +146,7 @@ function matchesBrand(productBrand, targetBrand) {
   if (normP === normT) return true;
   if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
   if (normP === 'tplink' && normT === 'tplink') return true;
+  if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -202,6 +217,23 @@ function scoreProductMatch(product, normalizedQuery) {
     score += 50;
   } else if (score > 0 && fuzzyMatch(combined, normalizedQuery)) {
     score += 15;
+  }
+
+  // Priorizar productos de energía reales al buscar "ups" o "no break"
+  if (/\b(ups|nobreak)\b/i.test(normalizedQuery)) {
+    if (/\bups\b/i.test(title) || category.includes('energia') || brand.includes('forza')) {
+      score += 65;
+    }
+  }
+
+  // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
+  if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
+    if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
+      score += 50;
+    }
+    if (/masilla/i.test(title)) {
+      score -= 60;
+    }
   }
 
   // Priorizar máquinas y computadoras principales sobre accesorios (cables, conectores) si la búsqueda es de computadoras
@@ -332,6 +364,7 @@ function populateBrandFilter() {
     hikvision: 'Hikvision',
     cisco: 'Cisco',
     ubiquiti: 'Ubiquiti',
+    forza: 'Forza',
     samsung: 'Samsung',
     'tp link': 'TP-Link',
     tplink: 'TP-Link',
@@ -371,7 +404,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'TP-Link', 'Hikvision', 'Dahua', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

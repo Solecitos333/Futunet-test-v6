@@ -42,7 +42,7 @@ var FUTUNET_CONFIG = {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', async function () {
+  async function initConfig() {
     try {
       var firebaseReady = await waitFirebase();
       if (firebaseReady) {
@@ -68,7 +68,15 @@ var FUTUNET_CONFIG = {
       updateDOMDetails();
       resolveConfig();
     }
-  });
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initConfig);
+    } else {
+      initConfig();
+    }
+  }
 
   function handleMaintenance() {
     var path = window.location.pathname.toLowerCase();
