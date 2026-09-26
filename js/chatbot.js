@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initFutunetChatbot() {
+  if (typeof document === 'undefined') return;
   if (document.getElementById('cb-window')) return;
   const INFO = {
     whatsapp: '18297411041',
@@ -473,4 +474,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (path.includes(win) || path.includes(fab) || win.contains(event.target) || fab.contains(event.target)) return;
     closeChat();
   });
-});
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFutunetChatbot);
+  } else {
+    initFutunetChatbot();
+  }
+}
