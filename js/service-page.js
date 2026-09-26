@@ -763,6 +763,12 @@
     }
   });
 
-  // Auto-inicializar cuando el DOM esté listo
-  window.addEventListener('DOMContentLoaded', init);
+  // Auto-inicializar cuando el DOM esté listo (resiliente)
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
 })();
