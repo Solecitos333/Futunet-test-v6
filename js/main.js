@@ -851,9 +851,9 @@ function initEstimatorAccessibility() {
 }
 
 // =============================================================
-// BOOTSTRAPPING CENTRALIZADO - UNICO LISTENER DOMContentLoaded
+// BOOTSTRAPPING CENTRALIZADO - LISTENER RESILIENTE
 // =============================================================
-document.addEventListener('DOMContentLoaded', () => {
+function bootstrapFutunetMain() {
   // Inicialización de logo, navbar, anuncio y vistas adaptables
   normalizeSiteNavigation();
   initAnnouncementBar();
@@ -880,7 +880,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initFooterYear();
   initTopMenuHighlight();
   initEstimatorAccessibility();
-});
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapFutunetMain);
+  } else {
+    bootstrapFutunetMain();
+  }
+}
 
 /* -------------------------------------------------------------
    8. PORTAL RAPIDO — Interacciones del portal de inicio

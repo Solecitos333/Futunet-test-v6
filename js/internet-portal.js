@@ -1540,5 +1540,12 @@
   // El test de velocidad real de Ookla Speedtest se ejecuta de forma nativa en el iframe de internet.html.
 
   // Auto-inicializar cuando el DOM esté listo
-  window.addEventListener('DOMContentLoaded', init);
+  // Auto-inicializar cuando el DOM esté listo (resiliente)
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
 })();

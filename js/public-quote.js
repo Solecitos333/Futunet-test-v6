@@ -133,8 +133,18 @@
     } catch (error) { fail('No pudimos verificar la cotización. Revisa tu conexión o solicita un enlace nuevo.'); }
   }
 
-  document.getElementById('quote-response-form')?.addEventListener('submit', event => { event.preventDefault(); respond('accepted'); });
-  document.getElementById('quote-reject-button')?.addEventListener('click', () => respond('rejected'));
-  document.getElementById('quote-print-button')?.addEventListener('click', () => window.print());
-  window.addEventListener('load', init);
+  function bindQuoteUI() {
+    document.getElementById('quote-response-form')?.addEventListener('submit', event => { event.preventDefault(); respond('accepted'); });
+    document.getElementById('quote-reject-button')?.addEventListener('click', () => respond('rejected'));
+    document.getElementById('quote-print-button')?.addEventListener('click', () => window.print());
+    init();
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindQuoteUI);
+    } else {
+      bindQuoteUI();
+    }
+  }
 })();
