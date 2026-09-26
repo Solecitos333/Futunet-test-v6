@@ -456,20 +456,48 @@
   }
 
   // ─── Initialize auth state listener ───
-  getAuth().onAuthStateChanged(async function (user) {
-    if (user) {
-      user = await refreshAuthenticatedSession(user);
-      currentUserData = user.emailVerified
-        ? await fetchUserData(user.uid)
-        : minimalUnverifiedProfile(user);
+  var authListenerInitialized = false;
+  function initAuthListener() {
+    if (authListenerInitialized) return;
+    var authInstance = getAuth();
+    if (authInstance && typeof authInstance.onAuthStateChanged === 'function') {
+      authListenerInitialized = true;
+      authInstance.onAuthStateChanged(async function (user) {
+        if (user) {
+          user = await refreshAuthenticatedSession(user);
+          currentUserData = user.emailVerified
+            ? await fetchUserData(user.uid)
+            : minimalUnverifiedProfile(user);
+        } else {
+          currentUserData = null;
+        }
+        authReadyResolve();
+        window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
+          detail: { user: user ? user : null, userData: currentUserData }
+        }));
+      });
     } else {
       currentUserData = null;
+      authReadyResolve();
+      window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
+        detail: { user: null, userData: null }
+      }));
     }
-    authReadyResolve();
-    window.dispatchEvent(new CustomEvent('futunet-auth-ready', {
-      detail: { user: user ? user : null, userData: currentUserData }
-    }));
-  });
+  }
+
+  if (window.FutunetFirebase && window.FutunetFirebase.auth) {
+    initAuthListener();
+  } else {
+    window.addEventListener('futunet:firebase-ready', function () {
+      initAuthListener();
+    }, { once: true });
+    window.addEventListener('futunet:firebase-error', function () {
+      initAuthListener();
+    }, { once: true });
+    setTimeout(function () {
+      if (!authListenerInitialized) initAuthListener();
+    }, 2000);
+  }
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -567,7 +595,7 @@
     onAuthChanged: onAuthChanged,
     getUserRole: getUserRole,
     getUserData: function () { return currentUserData; },
-    getCurrentUser: function () { return getAuth().currentUser; },
+    getCurrentUser: function () { var a = getAuth(); return a ? a.currentUser : null; },
     hasRole: hasRole,
     isSuperAdmin: isSuperAdmin,
     isAdmin: isAdmin,
