@@ -100,6 +100,15 @@
     return currentUserData.role === role || roles.includes(role);
   }
 
+  function sanitizeAdminUserInput(val, maxLen) {
+    var max = maxLen || 100;
+    return String(val || '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim()
+      .slice(0, max);
+  }
+
   function init() {
     db = window.FutunetFirebase.db;
     storage = window.FutunetFirebase.storage;
@@ -1507,7 +1516,7 @@
     var role = getVal('user-role-select');
     var statusCheck = document.getElementById('user-status-check');
     var status = (statusCheck && statusCheck.checked) ? 'active' : 'disabled';
-    var displayName = getVal('user-name-input');
+    var displayName = sanitizeAdminUserInput(getVal('user-name-input'), 100);
 
     var rolesInput = getVal('user-roles-list-input');
     var roles = rolesInput.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
@@ -3311,12 +3320,35 @@
     if (createUserForm) {
       createUserForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        var name = document.getElementById('create-user-name').value.trim();
+
+        // 1. Trampa Honeypot anti-bots
+        var hp = document.getElementById('create-user-hp-check');
+        if (hp && hp.value) {
+          console.warn('[DevSecOps] Intento de bot bloqueado por honeypot.');
+          return;
+        }
+
+        // 2. Cooldown de seguridad en cliente (5 segundos)
+        var now = Date.now();
+        var lastCreateTs = parseInt(sessionStorage.getItem('futunet_last_user_create_ts') || '0', 10);
+        if (now - lastCreateTs < 5000) {
+          showToast('Por favor espera unos segundos antes de crear otro usuario.', 'warning');
+          return;
+        }
+
+        var rawName = document.getElementById('create-user-name').value;
+        var name = sanitizeAdminUserInput(rawName, 100);
+        if (!name) {
+          showToast('El nombre de usuario contiene caracteres inválidos o está vacío.', 'error');
+          return;
+        }
+
         var email = document.getElementById('create-user-email').value.trim();
         var password = document.getElementById('create-user-password').value;
         var role = document.getElementById('create-user-role').value;
         var documentType = document.getElementById('create-user-document-type').value;
-        var documentNumber = document.getElementById('create-user-document-number').value.trim();
+        var rawDocNum = document.getElementById('create-user-document-number').value;
+        var documentNumber = sanitizeAdminUserInput(rawDocNum, 20);
 
         try {
           FutunetAuth.normalizeIdentityDocument(documentType, documentNumber);
@@ -3342,6 +3374,7 @@
             documentType: documentType,
             documentNumber: documentNumber
           });
+          sessionStorage.setItem('futunet_last_user_create_ts', String(Date.now()));
           showToast('Usuario creado con éxito', 'success');
           createUserForm.reset();
           closeModal('create-user-modal');
@@ -5479,9 +5512,9 @@
       email: "Asunto: Soluciones de Cómputo e Impresión con Futunet\n\nEstimados clientes,\n\nFaciliten el aprendizaje y trabajo diario con herramientas tecnológicas confiables: impresoras multifuncionales de bajo costo por copia y laptops de gran durabilidad. Cotiza en línea hoy."
     },
     sprint_q3: {
-      whatsapp: "¡Hola! Cuenta regresiva de fin de trimestre: restan solo 10 días para el cierre de Q3 (30 de Septiembre). En Futunet apoyamos a tu empresa a comprometer sus presupuestos de TI con un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado Cat 6A y switches. ¿Coordinamos la visita de un ingeniero esta semana?",
-      social: "⏱️ ¡Sprint Final de Cierre Q3! ¿Tu empresa necesita comprometer el presupuesto tecnológico de este trimestre antes del 30 de septiembre? En Futunet realizamos levantamientos técnicos y auditorías de infraestructura sin costo en Santiago. Optimiza tu red con cableado Cat 6A, enlaces dedicados y racks peinados con 15% de descuento usando el código INFRA2026. #CierreQ3 #InfraestructuraTI #SantiagoRD #FutunetB2B #PresupuestoTI",
-      email: "Asunto: [Urgente Cierre Q3] Ejecución de Presupuesto TI y Auditoría de Red Gratuita - Código INFRA2026\n\nEstimados directores de TI, Operaciones y Finanzas:\n\nA solo 10 días de finalizar el tercer trimestre (30 de septiembre), muchas organizaciones en Santiago y parques industriales buscan comprometer sus partidas presupuestarias remanentes de TI en activos de alto impacto y deducción fiscal formal (NCF).\n\nEn Futunet ponemos a su disposición a nuestro equipo de ingenieros para ejecutar:\n1. Auditoría física y lógica de racks y cableado estructurado Cat 6A (100% GRATIS).\n2. Certificación de enlaces troncales y cobertura Wi-Fi 6 de alta densidad.\n3. 15% de descuento en mano de obra e instalación con el código INFRA2026.\n4. Facturación con Comprobante Fiscal (NCF) y entrega de informe técnico de cierre.\n\nContáctenos hoy respondiendo a este correo o vía WhatsApp directo al 829-741-1041 para agendar antes del 30 de septiembre."
+      whatsapp: "¡Hola! Cuenta regresiva de fin de trimestre: restan menos de 72 horas para el cierre de Q3 (30 de Septiembre). En Futunet apoyamos a tu empresa a comprometer sus presupuestos de TI con un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado Cat 6A y switches. ¿Coordinamos la visita de un ingeniero antes del 30?",
+      social: "⏱️ ¡Sprint Final de Cierre Q3: Últimas 72 Horas! ¿Tu empresa necesita comprometer el presupuesto tecnológico de este trimestre antes del 30 de septiembre? En Futunet realizamos levantamientos técnicos y auditorías de infraestructura sin costo en Santiago. Optimiza tu red con cableado Cat 6A, enlaces dedicados y racks peinados con 15% de descuento usando el código INFRA2026. #CierreQ3 #InfraestructuraTI #SantiagoRD #FutunetB2B #PresupuestoTI",
+      email: "Asunto: [Urgente 72h Cierre Q3] Ejecución de Presupuesto TI y Auditoría de Red Gratuita - Código INFRA2026\n\nEstimados directores de TI, Operaciones y Finanzas:\n\nA solo 72 horas de finalizar el tercer trimestre (30 de septiembre), muchas organizaciones en Santiago y parques industriales buscan comprometer sus partidas presupuestarias remanentes de TI en activos de alto impacto y deducción fiscal formal (NCF).\n\nEn Futunet ponemos a su disposición a nuestro equipo de ingenieros para ejecutar:\n1. Auditoría física y lógica de racks y cableado estructurado Cat 6A (100% GRATIS).\n2. Certificación de enlaces troncales y cobertura Wi-Fi 6 de alta densidad.\n3. 15% de descuento en mano de obra e instalación con el código INFRA2026.\n4. Facturación con Comprobante Fiscal (NCF) y entrega de informe técnico de cierre.\n\nContáctenos hoy respondiendo a este correo o vía WhatsApp directo al 829-741-1041 para agendar antes del 30 de septiembre."
     },
     septiembre: {
       whatsapp: "¡Hola! En Futunet sabemos que una red lenta o inestable paraliza tus operaciones. Este mes de septiembre solicita un LEVANTAMIENTO TÉCNICO Y AUDITORÍA DE RED 100% GRATIS en Santiago con el código INFRA2026. Además, obtén 15% de descuento en cableado estructurado Cat 6A y peinado de racks. ¿Te gustaría coordinar una visita técnica esta semana?",
@@ -5563,7 +5596,7 @@
     openNewBanner();
     if (presetName === 'Sprint Cierre Q3' || presetName === 'Cierre Q3' || presetName === 'Presupuestos TI') {
       setVal('banner-title', '⚡ Sprint Cierre Q3: <strong>Presupuestos TI 2026</strong>');
-      setVal('banner-subtitle', 'Últimos 10 días para comprometer tu presupuesto. Auditoría presencial 100% GRATIS en Santiago + 15% OFF con cupón INFRA2026.');
+      setVal('banner-subtitle', '¡Últimas 72 horas para comprometer tu presupuesto! Auditoría presencial 100% GRATIS en Santiago + 15% OFF con cupón INFRA2026.');
       setVal('banner-link', 'corporativo.html');
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-09-20');
@@ -5899,10 +5932,33 @@
   }
 
   async function submitInternalSuggestion() {
-    var title = (document.getElementById('internal-sug-title').value || '').trim();
-    var cat = (document.getElementById('internal-sug-cat').value || 'web_platform');
-    var desc = (document.getElementById('internal-sug-desc').value || '').trim();
-    var benefit = (document.getElementById('internal-sug-benefit').value || '').trim();
+    // 1. Verificación Honeypot anti-bots
+    var hpHit = document.getElementById('internal-sug-hp-check');
+    if (hpHit && hpHit.value) {
+      console.warn('Bot detectado vía trampa honeypot interna.');
+      return;
+    }
+
+    // 2. Cooldown anti-flooding / rate-limiting en cliente (5 segundos)
+    var now = Date.now();
+    var lastTs = parseInt(sessionStorage.getItem('futunet_last_internal_sug_ts') || '0', 10);
+    if (now - lastTs < 5000) {
+      alert('Por favor espera unos segundos antes de enviar otra propuesta.');
+      return;
+    }
+
+    // 3. Sanitización de inyecciones HTML y caracteres de control ASCII
+    function sanitizeAdminSuggestionInput(val) {
+      return String(val || '')
+        .replace(/<[^>]*>/g, '')
+        .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        .trim();
+    }
+
+    var title = sanitizeAdminSuggestionInput(document.getElementById('internal-sug-title')?.value);
+    var cat = (document.getElementById('internal-sug-cat')?.value || 'web_platform');
+    var desc = sanitizeAdminSuggestionInput(document.getElementById('internal-sug-desc')?.value);
+    var benefit = sanitizeAdminSuggestionInput(document.getElementById('internal-sug-benefit')?.value);
 
     if (title.length < 3) {
       alert('Por favor escribe un título claro de al menos 3 caracteres.');
@@ -5917,6 +5973,7 @@
     if (btn) btn.disabled = true;
 
     try {
+      sessionStorage.setItem('futunet_last_internal_sug_ts', String(Date.now()));
       var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
       var userData = window.FutunetAuth ? window.FutunetAuth.getUserData() : null;
 

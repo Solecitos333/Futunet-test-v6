@@ -545,6 +545,64 @@ test('Mejora demandada por usuarios: Insignias de conteo y filtros dinámicos en
   assert.ok(seedCjs.includes("refCode: 'SUG-C2850'") && seedCjs.includes("status: 'implemented'"), 'SUG-C2850 debe figurar como implemented en seed-suggestions.cjs');
 });
 
+test('Mejora demandada por usuarios: Lectores de Códigos de Barra 1D/2D y Gavetas de Dinero POS (SUG-P8210)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P8210'") && seedCjs.includes("status: 'implemented'"), 'SUG-P8210 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P8210') && sugJs.includes('Códigos de Barra 1D/2D'), 'SUG-P8210 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('pos_lector_codigo_barra_2d'), 'backup_data.js debe contener pos_lector_codigo_barra_2d');
+  assert.ok(backupJs.includes('pos_gaveta_dinero_metalica'), 'backup_data.js debe contener pos_gaveta_dinero_metalica');
+
+  const barcodeImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'pos-lector-barcode.webp');
+  assert.ok(fs.existsSync(barcodeImg), 'La imagen del lector de código de barras debe existir en disco');
+
+  const drawerImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'pos-gaveta-dinero.webp');
+  assert.ok(fs.existsSync(drawerImg), 'La imagen de la gaveta de dinero debe existir en disco');
+});
+
+test('Mejora demandada por usuarios: Cámaras Dahua 1080p y DVR XVR Cooper (SUG-D4910)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D4910'") && seedCjs.includes("status: 'implemented'"), 'SUG-D4910 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D4910') && sugJs.includes('Dahua HDCVI 1080p'), 'SUG-D4910 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('cctv_dahua_camara_domo_1080p'), 'backup_data.js debe contener cctv_dahua_camara_domo_1080p');
+  assert.ok(backupJs.includes('cctv_dahua_camara_bala_1080p'), 'backup_data.js debe contener cctv_dahua_camara_bala_1080p');
+  assert.ok(backupJs.includes('cctv_dahua_xvr_cooper_4ch'), 'backup_data.js debe contener cctv_dahua_xvr_cooper_4ch');
+
+  const domoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-camara-domo.webp');
+  assert.ok(fs.existsSync(domoImg), 'La imagen de la cámara domo Dahua debe existir en disco');
+
+  const balaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-camara-bala.jpg');
+  assert.ok(fs.existsSync(balaImg), 'La imagen de la cámara bala Dahua debe existir en disco');
+
+  const dvrImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-xvr-cooper.jpg');
+  assert.ok(fs.existsSync(dvrImg), 'La imagen del XVR Dahua debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("dahua: 'Dahua'"), 'catalog.js debe incluir Dahua en preferredNames');
+  assert.ok(catJs.includes("'Dahua'"), 'catalog.js debe incluir Dahua en priorityList');
+});
+
+test('Mejora demandada por usuarios: Optimización de búsqueda por sinónimos (scanner, cajón, bobinas) (SUG-K9530)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-K9530'") && seedCjs.includes("status: 'implemented'"), 'SUG-K9530 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-K9530') && sugJs.includes('Optimización del buscador'), 'SUG-K9530 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'scanner'"), 'catalog.js debe incluir scanner en stem variants');
+  assert.ok(catJs.includes("'cajon'"), 'catalog.js debe incluir cajon en stem variants');
+  assert.ok(catJs.includes("'bobina'"), 'catalog.js debe incluir bobina en stem variants');
+});
+
+
 
 
 

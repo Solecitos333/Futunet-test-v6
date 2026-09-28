@@ -62,7 +62,10 @@ const BRAND_SERVICE_MAPPING = {
   'lg': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-desktop', text: 'LG equipa salas de conferencias y oficinas con pantallas y monitores premium.' },
   'samsung': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-hdd', text: 'Samsung destaca en almacenamiento SSD ultra-rápido y monitores de oficina.' },
   'siemens': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-network-wired', text: 'Siemens es ideal para control industrial e infraestructura automatizada de oficinas.' },
-  'panasonic': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-phone-alt', text: 'Panasonic es nuestro proveedor para telefonía IP y centrales analógicas híbridas.' }
+  'panasonic': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-phone-alt', text: 'Panasonic es nuestro proveedor para telefonía IP y centrales analógicas híbridas.' },
+  'forza': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-solar-panel', text: 'Forza Power Technologies es el estándar de protección eléctrica y sistemas UPS interactivos.' },
+  'tgm': { name: 'Energía y Climatización', url: 'energia-climatizacion.html', icon: 'fa-wind', text: 'TGM provee sistemas de aire acondicionado Mini-Split de alta eficiencia y bajo consumo energético.' },
+  'apple': { name: 'Equipos de Oficina', url: 'equipos-oficina.html', icon: 'fa-headphones', text: 'Apple ofrece dispositivos de audio de alta fidelidad y ecosistemas de alta productividad.' }
 };
 
 // Mapa de logos de marcas por nombre (clave en minúsculas)

@@ -32,7 +32,9 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     { file: 'login.html', id: 'magic-hp-check', name: 'Formulario de acceso sin contraseña' },
     { file: 'cotizacion.html', id: 'quote-hp-check', name: 'Formulario de cotización pública' },
     { file: 'mi-cuenta.html', id: 'profile-hp-check', name: 'Formulario de perfil de usuario' },
-    { file: 'mi-cuenta.html', id: 'fin-hp-check', name: 'Formulario de expediente de financiamiento' }
+    { file: 'mi-cuenta.html', id: 'fin-hp-check', name: 'Formulario de expediente de financiamiento' },
+    { file: 'admin.html', id: 'internal-sug-hp-check', name: 'Formulario de propuesta interna de personal' },
+    { file: 'admin.html', id: 'create-user-hp-check', name: 'Formulario de creación de usuario en administración' }
   ];
 
   for (const item of checks) {
@@ -56,6 +58,32 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
   assert.ok(
     cartJs.includes('name="_hp_security_check"'),
     'cart.js debe usar name="_hp_security_check" en el campo honeypot'
+  );
+
+  // Verificación de Honeypot en el widget de Chatbot (chatbot.js)
+  const chatJs = readJs('js/chatbot.js');
+  assert.ok(
+    chatJs.includes('id="cb-hp-check"'),
+    'chatbot.js debe incluir el campo honeypot cb-hp-check en la interfaz de chat'
+  );
+  assert.ok(
+    chatJs.includes('name="_hp_security_check"'),
+    'chatbot.js debe usar name="_hp_security_check" en el campo honeypot'
+  );
+
+  // Verificación de Honeypot en formularios de soporte y respuestas (support-ui.js)
+  const supportUiJs = readJs('js/support-ui.js');
+  assert.ok(
+    supportUiJs.includes('id="sp-hp-check"'),
+    'support-ui.js debe incluir el campo honeypot sp-hp-check en el formulario de creación de ticket'
+  );
+  assert.ok(
+    supportUiJs.includes('id="sp-reply-hp-check"'),
+    'support-ui.js debe incluir el campo honeypot sp-reply-hp-check en el formulario de respuestas'
+  );
+  assert.ok(
+    supportUiJs.includes('name="_hp_security_check"'),
+    'support-ui.js debe usar name="_hp_security_check" en los campos honeypot'
   );
 });
 
@@ -97,6 +125,21 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
   assert.ok(
     cartJs.includes('privacidad.html'),
     'cart.js debe vincular a privacidad.html en el checkout'
+  );
+
+  // Verificación en centro de soporte (support-ui.js)
+  const supportUiJs = readJs('js/support-ui.js');
+  assert.ok(
+    supportUiJs.includes('id="sp-privacy-consent"'),
+    'support-ui.js debe incluir la casilla de consentimiento sp-privacy-consent en creación de tickets'
+  );
+  assert.ok(
+    supportUiJs.includes('privacidad.html'),
+    'support-ui.js debe vincular a privacidad.html en la creación de tickets'
+  );
+  assert.ok(
+    supportUiJs.includes('rel="noopener noreferrer"'),
+    'support-ui.js debe vincular a privacidad.html con rel="noopener noreferrer"'
   );
 });
 
@@ -218,6 +261,49 @@ test('Rate Limiting & Cooldown: protección contra flooding / DoS de formularios
     finJs.includes('15000'),
     'js/financing.js debe aplicar una ventana de cooldown de al menos 15 segundos'
   );
+
+  // 11. Chatbot (js/chatbot.js)
+  const chatJs = readJs('js/chatbot.js');
+  assert.ok(
+    chatJs.includes('futunet_last_chat_msg_ts'),
+    'js/chatbot.js debe implementar futunet_last_chat_msg_ts para cooldown de consultas'
+  );
+
+  // 12. Tickets y Respuestas de Soporte (js/support-ui.js)
+  const supportUiJs = readJs('js/support-ui.js');
+  assert.ok(
+    supportUiJs.includes('futunet_last_support_create_ts'),
+    'js/support-ui.js debe implementar futunet_last_support_create_ts para creación de tickets'
+  );
+  assert.ok(
+    supportUiJs.includes('15000'),
+    'js/support-ui.js debe aplicar una ventana de cooldown de 15 segundos en tickets'
+  );
+  assert.ok(
+    supportUiJs.includes('futunet_last_support_reply_ts'),
+    'js/support-ui.js debe implementar futunet_last_support_reply_ts para respuestas'
+  );
+  assert.ok(
+    supportUiJs.includes('5000'),
+    'js/support-ui.js debe aplicar una ventana de cooldown de 5 segundos en respuestas'
+  );
+
+  // 13. Propuesta interna admin (js/admin-panel.js)
+  const adminPanelJs = readJs('js/admin-panel.js');
+  assert.ok(
+    adminPanelJs.includes('futunet_last_internal_sug_ts'),
+    'js/admin-panel.js debe implementar futunet_last_internal_sug_ts para cooldown'
+  );
+  assert.ok(
+    adminPanelJs.includes('5000'),
+    'js/admin-panel.js debe aplicar una ventana de cooldown de 5 segundos en propuesta interna'
+  );
+
+  // 14. Creación de usuario en admin (js/admin-panel.js)
+  assert.ok(
+    adminPanelJs.includes('futunet_last_user_create_ts'),
+    'js/admin-panel.js debe implementar futunet_last_user_create_ts para cooldown de creación de usuarios'
+  );
 });
 
 test('Sanitización e Inyecciones: remoción de tags y caracteres de control invisibles', () => {
@@ -306,6 +392,36 @@ test('Sanitización e Inyecciones: remoción de tags y caracteres de control inv
     finJs.includes('\\x00-\\x08'),
     'js/financing.js debe neutralizar caracteres de control ASCII invisibles'
   );
+
+  const chatJs = readJs('js/chatbot.js');
+  assert.ok(
+    chatJs.includes('sanitizeChatInput'),
+    'js/chatbot.js debe implementar sanitizeChatInput'
+  );
+  assert.ok(
+    chatJs.includes('\\x00-\\x08'),
+    'js/chatbot.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const supportCoreJs = readJs('js/support-core.js');
+  assert.ok(
+    supportCoreJs.includes('\\x00-\\x08'),
+    'js/support-core.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const adminPanelJs = readJs('js/admin-panel.js');
+  assert.ok(
+    adminPanelJs.includes('sanitizeAdminSuggestionInput'),
+    'js/admin-panel.js debe implementar sanitizeAdminSuggestionInput'
+  );
+  assert.ok(
+    adminPanelJs.includes('sanitizeAdminUserInput'),
+    'js/admin-panel.js debe implementar sanitizeAdminUserInput para creación y edición de usuarios'
+  );
+  assert.ok(
+    adminPanelJs.includes('\\x00-\\x08'),
+    'js/admin-panel.js debe neutralizar caracteres de control ASCII invisibles'
+  );
 });
 
 test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noreferrer en HTMLs y JS', () => {
@@ -335,4 +451,20 @@ test('Seguridad de Enlaces: cero presencia de rel="noopener" solitario sin noref
       );
     }
   }
+});
+
+test('Seguridad de Autenticación & Redirecciones: allowlist estricta de rutas locales en login.html', () => {
+  const loginHtml = readHtml('login.html');
+  assert.ok(
+    loginHtml.includes('cotizacion.html'),
+    'login.html debe incluir cotizacion.html en allowedRedirects'
+  );
+  assert.ok(
+    loginHtml.includes('redirectTarget.origin === window.location.origin'),
+    'login.html debe verificar estrictamente la coincidencia de origen en redirecciones'
+  );
+  assert.ok(
+    loginHtml.includes('adminRedirects') && loginHtml.includes('isStaff'),
+    'login.html debe restringir redirecciones a paneles de administración exclusivamente a usuarios con roles de staff'
+  );
 });

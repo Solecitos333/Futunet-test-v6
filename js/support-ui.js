@@ -29,6 +29,11 @@
       <div class="sp-section-heading"><div><span class="sp-eyebrow">${internal ? 'REPORTE INTERNO' : 'ASISTENTE DE SOPORTE'}</span><h2 id="sp-form-heading">${internal ? 'Reportar un error' : 'Cuéntanos qué sucede'}</h2></div><span class="sp-pill">${internal ? 'Equipo Futunet' : 'Asistente automatizado'}</span></div>
       <p class="sp-muted">${internal ? 'Describe el problema para que otro miembro del equipo pueda reproducirlo y corregirlo.' : 'Te ayudaré a organizar el caso. Si necesitas a una persona, puedes crear el ticket directamente.'}</p>
       <form id="sp-form">
+        <!-- Trampa Honeypot anti-bots -->
+        <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+          <label for="sp-hp-check">No llenar este campo</label>
+          <input type="text" id="sp-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+        </div>
         <div id="sp-edit-fields">
           <label class="sp-field">Tipo de caso<select id="sp-type" ${internal ? 'disabled' : ''}>${options(internal ? { bug: C.TYPES.bug } : C.TYPES)}</select></label>
           <div class="sp-bot"><span class="sp-bot-avatar" aria-hidden="true">F</span><p id="sp-question"></p></div>
@@ -42,6 +47,7 @@
           <p class="sp-help" id="sp-file-help">Hasta 3 imágenes JPG, PNG o WebP de 5 MB cada una. Se optimizan para el ticket. Oculta contraseñas, tarjetas y datos que no sean necesarios.</p>
           <div id="sp-previews" class="sp-previews"></div>
           <label class="sp-check"><input id="sp-environment" type="checkbox" ${internal ? 'checked' : ''}> Incluir navegador y tamaño de pantalla para facilitar el diagnóstico</label>
+          ${internal ? '' : '<label class="sp-check"><input id="sp-privacy-consent" type="checkbox" required checked> Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a> y autorizo el tratamiento de mis datos para este caso.</label>'}
           <div class="sp-actions"><button type="button" id="sp-guidance" class="sp-btn">Ver orientación inicial</button><button type="submit" class="sp-btn sp-primary">Revisar y crear ticket →</button></div>
         </div>
         <div id="sp-review" hidden tabindex="-1"><span class="sp-eyebrow">REVISA TU CASO</span><h3>Esto recibirá el equipo</h3><pre id="sp-summary"></pre><p id="sp-review-files"></p><p class="sp-help">Podrás seguir el estado y responder desde esta página. El envío no garantiza una resolución inmediata.</p>
@@ -88,6 +94,16 @@
     });
     $('sp-form').addEventListener('submit', event => {
       event.preventDefault(); notice('sp-form-notice', '');
+      const hp = $('sp-hp-check');
+      if (hp && hp.value) {
+        console.warn('Bot detectado en soporte vía honeypot.');
+        return;
+      }
+      const consent = $('sp-privacy-consent');
+      if (consent && !consent.checked) {
+        notice('sp-form-notice', 'Debes aceptar la política de privacidad para enviar el caso.', true);
+        return;
+      }
       try {
         const data = collect(); C.validateFiles([...$('sp-files').files]);
         $('sp-summary').textContent = C.summary(data);
@@ -98,12 +114,21 @@
     $('sp-back').addEventListener('click', () => { $('sp-review').hidden = true; $('sp-edit-fields').hidden = false; focus('sp-title'); });
     $('sp-send').addEventListener('click', async () => {
       if (!user?.emailVerified) { notice('sp-form-notice', 'Inicia sesión en el enlace de abajo. El caso está preparado y aún no se ha enviado.', true); return; }
+      const now = Date.now();
+      const lastCreate = parseInt(sessionStorage.getItem('futunet_last_support_create_ts') || '0', 10);
+      const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
+      if (!isTestEnv && lastCreate && (now - lastCreate) < 15000) {
+        const remaining = Math.ceil((15000 - (now - lastCreate)) / 1000);
+        notice('sp-form-notice', 'Por favor espera ' + remaining + ' segundos antes de enviar otro ticket.', true);
+        return;
+      }
       const epoch = authEpoch;
       $('sp-send').disabled = true; $('sp-back').disabled = true; notice('sp-form-notice', 'Preparando las capturas y confirmando el ticket…');
       try {
         formId ||= S.newId();
         const id = await S.create(formId, collect(), [...$('sp-files').files]);
         if (epoch !== authEpoch) return;
+        sessionStorage.setItem('futunet_last_support_create_ts', String(Date.now()));
         formId = null; $('sp-form').reset(); clearPreviews(); $('sp-previews').replaceChildren(); updateQuestion();
         $('sp-review').hidden = true; $('sp-edit-fields').hidden = false;
         notice('sp-form-notice', 'Ticket creado y confirmado. Número: ' + id + '. Ya puedes consultar su seguimiento.');
@@ -166,7 +191,7 @@
           ${manager ? `<section class="sp-management"><h3>Gestión del caso</h3><div class="sp-two"><label class="sp-field">Estado<select id="sp-manage-status">${options(C.STATUSES)}</select></label><label class="sp-field">Prioridad<select id="sp-manage-priority">${options(C.PRIORITIES)}</select></label></div><p id="sp-assigned"></p><div class="sp-actions"><button class="sp-btn" type="button" id="sp-claim">Asignarme</button><button class="sp-btn" type="button" id="sp-release">Liberar responsable</button><button class="sp-btn sp-primary" type="button" id="sp-save-status">Guardar cambios</button></div><p id="sp-manage-notice" role="status"></p></section>` : ''}
           <h3>Conversación con soporte</h3><div id="sp-messages" class="sp-messages"></div><p id="sp-messages-notice" role="status"></p>
           ${manager ? '<details class="sp-notes"><summary>Notas privadas del equipo</summary><p class="sp-help">Estas notas solo son visibles para el equipo autorizado.</p><div id="sp-notes-list"></div><p id="sp-notes-notice" role="status"></p></details>' : ''}
-          <form id="sp-reply-form"><label class="sp-field">${manager ? 'Mensaje' : 'Añadir información o responder'}<textarea id="sp-reply-body" rows="3" required maxlength="5000"></textarea></label>${manager ? '<label class="sp-check"><input type="checkbox" id="sp-private-note"> Guardar como nota privada (no se envía al cliente)</label>' : ''}<p id="sp-closed-help" class="sp-help" hidden>Este caso está cerrado.${manager ? ' Reábrelo para responder o añade una nota privada.' : ' Crea un nuevo ticket si necesitas más ayuda.'}</p><button class="sp-btn sp-primary" id="sp-reply-send" type="submit">Enviar respuesta</button><p id="sp-reply-notice" role="status"></p></form>`;
+          <form id="sp-reply-form"><div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true"><label for="sp-reply-hp-check">No llenar este campo</label><input type="text" id="sp-reply-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" /></div><label class="sp-field">${manager ? 'Mensaje' : 'Añadir información o responder'}<textarea id="sp-reply-body" rows="3" required maxlength="5000"></textarea></label>${manager ? '<label class="sp-check"><input type="checkbox" id="sp-private-note"> Guardar como nota privada (no se envía al cliente)</label>' : ''}<p id="sp-closed-help" class="sp-help" hidden>Este caso está cerrado.${manager ? ' Reábrelo para responder o añade una nota privada.' : ' Crea un nuevo ticket si necesitas más ayuda.'}</p><button class="sp-btn sp-primary" id="sp-reply-send" type="submit">Enviar respuesta</button><p id="sp-reply-notice" role="status"></p></form>`;
         if (current.attachmentCount) {
           notice('sp-attachments-notice', 'Cargando capturas…');
           ref.collection('attachments').get({ source: 'server' }).then(attachments => {
@@ -205,11 +230,25 @@
         }
         $('sp-private-note')?.addEventListener('change', () => { $('sp-reply-send').textContent = $('sp-private-note').checked ? 'Guardar nota privada' : 'Enviar respuesta'; });
         $('sp-reply-form').addEventListener('submit', async event => {
-          event.preventDefault(); const button = $('sp-reply-send'); button.disabled = true;
+          event.preventDefault();
+          const replyHp = $('sp-reply-hp-check');
+          if (replyHp && replyHp.value) {
+            console.warn('Bot detectado en respuesta de soporte vía honeypot.');
+            return;
+          }
+          const now = Date.now();
+          const lastReply = parseInt(sessionStorage.getItem('futunet_last_support_reply_ts') || '0', 10);
+          const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
+          if (!isTestEnv && lastReply && (now - lastReply) < 5000) {
+            notice('sp-reply-notice', 'Por favor espera unos segundos antes de enviar otra respuesta.', true);
+            return;
+          }
+          const button = $('sp-reply-send'); button.disabled = true;
           try {
             replyId ||= S.newId();
             await S.reply(id, replyId, $('sp-reply-body').value, $('sp-private-note')?.checked === true);
             if (activeDialog !== dialog) return;
+            sessionStorage.setItem('futunet_last_support_reply_ts', String(Date.now()));
             replyId = null; $('sp-reply-body').value = ''; notice('sp-reply-notice', 'Mensaje guardado.');
           } catch (e) { if (activeDialog === dialog) notice('sp-reply-notice', errorText(e), true); }
           finally { button.disabled = false; }

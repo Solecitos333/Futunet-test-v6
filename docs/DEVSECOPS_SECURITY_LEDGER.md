@@ -223,6 +223,38 @@ python -m unittest test_main.py test_chatbot_api.py
   - 30 tests pasando en backend (`python -m unittest test_main.py test_chatbot_api.py`).
   - Validación de hosting (`npm run validate`): 52 páginas HTML y 639 recursos en `dist/` sin enlaces rotos ni inconsistencias CSP.
 
+---
+
+## 9. Registro de Atención Autónoma del Buzón de Sugerencias, Equipamiento POS y Seguridad Dahua (2026-09-28)
+
+- **Telemetría y Diagnóstico de Búsquedas**:
+  - Detección de demanda activa y consultas sobre terminales de punto de venta (`pos`, `lector de codigo de barra`, `scanner`, `gaveta de dinero`, `cajon`) y videovigilancia Dahua (`dahua`, `cctv`, `xvr`, `hdcvi`).
+  - Resolución de búsquedas sin resultados o de baja relevancia mediante expansión del diccionario de lematización en `js/catalog.js`.
+- **Propuestas Comunitarias y Clientes Atendidas (28 sugerencias oficiales en total)**:
+  - **`SUG-P8210`** (Lic. Fernando Quezada, Comercial & Retail Cibao):
+    - *Título*: Disponibilidad de Lectores de Códigos de Barra 1D/2D y Gavetas de Dinero Metálicas para Puntos de Venta (POS).
+    - *Estado*: `implemented`.
+    - *Respuesta Oficial*: Incorporados al catálogo y sección de Punto de Venta el Lector de Códigos de Barra 1D/2D USB omnidireccional con sensor de auto-inducción y base ajustable (`pos_lector_codigo_barra_2d`), y la Gaveta de Dinero Metálica con conector RJ11 para apertura automática con impresoras de tickets (`pos_gaveta_dinero_metalica`), con fotos WebP y garantía formal NCF.
+  - **`SUG-D4910`** (Ing. Javier Batista, Seguridad Integral Norte):
+    - *Título*: Cámaras de seguridad Dahua HDCVI 1080p y grabadores DVR XVR Cooper en el catálogo de seguridad.
+    - *Estado*: `implemented`.
+    - *Respuesta Oficial*: Habilitadas en el catálogo de Seguridad Electrónica las cámaras Dahua Domo 1080p Smart IR para interiores (`cctv_dahua_camara_domo_1080p`), cámaras Dahua Bala 1080p metálicas IP67 para exteriores (`cctv_dahua_camara_bala_1080p`), y el Grabador DVR Dahua XVR Cooper pentahíbrido de 4 canales (`cctv_dahua_xvr_cooper_4ch`) con compresión H.265+ y monitoreo móvil DMSS.
+  - **`SUG-K9530`** (Ing. Carlos Henríquez, Cibao Tech Solutions):
+    - *Título*: Optimización del buscador del catálogo con soporte a términos como escáner, cajón de dinero y bobinas de red.
+    - *Estado*: `implemented`.
+    - *Respuesta Oficial*: Enriquecido el motor de búsqueda con equivalencias automáticas y lematización cruzada: `scanner`/`escaner` redirigen a lectores de códigos, `cajon`/`monedero` redirigen a gavetas de dinero, y `bobina` redirige a cableado de red UTP estructurado.
+- **Mejoras en el Motor de Catálogo (`js/catalog.js`)**:
+  - Incorporadas variantes morfológicas en `getStemVariants` para hardware comercial y de videovigilancia (`scanner`, `escaner`, `barcode`, `lector`, `cajon`, `gaveta`, `monedero`, `bobina`, `dahua`, `dvr`, `xvr`).
+  - Bonificación heurística en `scoreProductMatch` (+35) a lectores y cajones de punto de venta ante consultas de cobro y comercio.
+  - Marca `Dahua` registrada en `preferredNames` y en la lista prioritaria `priorityList` de filtros rápidos por chips (`catalog-quick-chips`).
+- **Resiliencia PWA & Service Worker**:
+  - Versión de caché `futunet-cache-v29` con soporte offline integrado de los nuevos productos en `js/backup_data.js`.
+- **Aseguramiento de Calidad & Pruebas Automatizadas**:
+  - 131 tests pasando al 100% en frontend (`npm test`), incluyendo 33 tests dedicados al buzón y mejoras comunitarias (`tools/test-suggestions.cjs`).
+  - 35 tests pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+  - Hosting validado (`npm run validate`): 52 páginas HTML y 644 recursos públicos en `dist/` sin enlaces rotos ni alertas de seguridad.
+
+
 
 
 

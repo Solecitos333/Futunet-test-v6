@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v27 con offline backup_data', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v30 con offline backup_data', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v27';"), 'sw.js debe estar en la versión futunet-cache-v27');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v30';"), 'sw.js debe estar en la versión futunet-cache-v30');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
@@ -249,6 +249,62 @@ test('Catalog Search Stemming: gamer, gamers, pc gamer y pantalla coinciden con 
 
   const airpodsMatches = cat.filter(p => scoreProductMatch(p, normalizeSearch('audifonos apple')) > 0);
   assert.ok(airpodsMatches.some(p => p.id === 'prod_ad1d2a977b'), 'La búsqueda "audifonos apple" debe incluir AirPods');
+});
+
+test('Catalog POS, Dahua & Energy Search Precision: scanner, gaveta, dahua e inversor', () => {
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  const fn = new Function(`
+    ${catJs.slice(catJs.indexOf('function normalizeSearch'), catJs.indexOf('const state ='))}
+    return { normalizeSearch, scoreProductMatch };
+  `);
+  const { normalizeSearch, scoreProductMatch } = fn();
+
+  const cat = require('../js/backup_data.js');
+
+  // 1. Escáner de código de barras
+  const scannerMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('scanner')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(scannerMatches.length > 0, 'La búsqueda "scanner" debe arrojar resultados');
+  assert.ok(
+    scannerMatches[0].p.id === 'pos_lector_codigo_barra_2d',
+    'El primer resultado para "scanner" debe ser el lector de códigos de barra POS'
+  );
+
+  // 2. Gaveta de dinero
+  const gavetaMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('gaveta de dinero')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(gavetaMatches.length > 0, 'La búsqueda "gaveta de dinero" debe arrojar resultados');
+  assert.ok(
+    gavetaMatches[0].p.id === 'pos_gaveta_dinero_metalica',
+    'El primer resultado para "gaveta de dinero" debe ser la gaveta metálica RJ11'
+  );
+
+  // 3. Dahua CCTV
+  const dahuaMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('dahua')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(dahuaMatches.length >= 3, 'La búsqueda "dahua" debe encontrar al menos 3 productos Dahua');
+  assert.ok(dahuaMatches[0].p.brand === 'Dahua', 'El primer resultado para "dahua" debe ser de marca Dahua');
+
+  // 4. Inversor y energía
+  const inversorMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('inversor')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(inversorMatches.length > 0, 'La búsqueda "inversor" debe arrojar resultados');
+  assert.ok(
+    !inversorMatches[0].p.title.toLowerCase().includes('aspiradora'),
+    'El primer resultado para "inversor" no debe ser una aspiradora'
+  );
+  assert.ok(
+    inversorMatches[0].p.title.includes('UPS') || inversorMatches[0].p.department === 'energia',
+    'El primer resultado para "inversor" debe ser un equipo de respaldo/UPS'
+  );
 });
 
 

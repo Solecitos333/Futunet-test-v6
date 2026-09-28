@@ -2169,6 +2169,11 @@
    </div>
    <div class="admin-modal-body">
     <form id="create-user-form">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="create-user-hp-check">No llenar este campo</label>
+      <input type="text" id="create-user-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
      <div class="auth-form-group">
       <label class="auth-label" for="create-user-name">Nombre completo</label>
       <input class="auth-input" type="text" id="create-user-name" placeholder="Ej. Juan Pérez" required />
@@ -2705,6 +2710,12 @@
    </div>
    <div class="admin-modal-body" style="padding:24px;">
     <form id="form-internal-suggestion" onsubmit="event.preventDefault(); AdminPanel.submitInternalSuggestion();">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="internal-sug-hp-check">No llenar este campo</label>
+      <input type="text" id="internal-sug-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
+
      <div class="auth-form-group">
       <label class="auth-label" for="internal-sug-title">Título / Resumen de la idea <span style="color:#e74c3c;">*</span></label>
       <input type="text" id="internal-sug-title" class="auth-input" placeholder="Ej.: Automatizar alertas de stock bajo por correo" maxlength="150" required />

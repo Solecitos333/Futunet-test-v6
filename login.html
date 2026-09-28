@@ -328,12 +328,23 @@
        'gaming.html', 'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
        'energia-climatizacion.html', 'equipos-oficina.html',
        'mobiliario-suministros.html', 'infraestructura-remozamiento.html',
+       'cotizacion.html',
        'soporte.html', 'sugerencias.html', 'punto-de-venta.html', 'nosotros.html', 'privacidad.html', 'terminos.html'
       ];
 
-      if (redirectTarget.origin === window.location.origin && allowedRedirects.includes(redirectFile)) {
-       window.location.assign(redirectTarget.href);
-       return;
+      var staffRoles = ['superadmin', 'admin', 'editor', 'billing_clerk', 'support_agent'];
+      var isStaff = staffRoles.includes(userData.role) || (Array.isArray(userData.roles) && userData.roles.some(function (r) { return staffRoles.includes(r); }));
+      var adminRedirects = ['admin.html', 'facturacion.html'];
+
+      if (redirectTarget.origin === window.location.origin) {
+       if (allowedRedirects.includes(redirectFile)) {
+        window.location.assign(redirectTarget.href);
+        return;
+       }
+       if (isStaff && adminRedirects.includes(redirectFile)) {
+        window.location.assign(redirectTarget.href);
+        return;
+       }
       }
      } catch (redirectError) {
       console.warn('Redirección ignorada por formato inválido.');

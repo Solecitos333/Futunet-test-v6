@@ -235,7 +235,12 @@
 
   // ─── Save current cart ───
   window.saveCurrentCart = async function () {
-    var storedCart = JSON.parse(localStorage.getItem('futunetCatalogCart') || '{}');
+    var storedCart = {};
+    try {
+      storedCart = JSON.parse(localStorage.getItem('futunetCatalogCart') || '{}') || {};
+    } catch (e) {
+      storedCart = {};
+    }
     var cartItems = storedCart && storedCart.items && typeof storedCart.items === 'object'
       ? storedCart.items
       : storedCart;

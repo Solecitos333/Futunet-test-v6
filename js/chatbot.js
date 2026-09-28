@@ -40,6 +40,11 @@ function initFutunetChatbot() {
         
         <!-- Entrada de texto libre -->
         <div class="chatbot-input-container">
+          <!-- Trampa Honeypot anti-bots -->
+          <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+            <label for="cb-hp-check">No llenar este campo</label>
+            <input type="text" id="cb-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+          </div>
           <input type="text" id="cb-input-text" maxlength="1500" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Escribe tu mensaje" />
           <button type="button" id="cb-send-btn" aria-label="Enviar" class="chatbot-send-btn">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -153,6 +158,10 @@ function initFutunetChatbot() {
 
         if (action.kind === 'link') {
           node.href = action.href;
+          if (node.tagName === 'A' && (/^https?:\/\//i.test(action.href) || action.href.startsWith('//'))) {
+            node.target = '_blank';
+            node.rel = 'noopener noreferrer';
+          }
         } else {
           node.type = 'button';
           node.dataset.kind = action.kind;
@@ -257,9 +266,35 @@ function initFutunetChatbot() {
     if (statusEl) statusEl.textContent = busy ? 'Preparando respuesta…' : 'Asistente virtual · Gemini';
   }
 
+  function sanitizeChatInput(val) {
+    return String(val || '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+  }
+
   async function sendMessage(value) {
-    const text = value.trim().slice(0, 1500);
+    // 1. Verificación Honeypot anti-bots
+    const hp = document.getElementById('cb-hp-check');
+    if (hp && hp.value) {
+      console.warn('Bot detectado en chatbot vía honeypot.');
+      return;
+    }
+
+    // 2. Cooldown anti-flooding / rate-limiting en cliente (1.5 segundos)
+    const now = Date.now();
+    const cooldownKey = 'futunet_last_chat_msg_ts';
+    const lastChat = sessionStorage.getItem(cooldownKey);
+    const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
+    if (!isTestEnv && lastChat && (now - Number(lastChat)) < 1500) {
+      return;
+    }
+
+    // 3. Sanitización de entrada contra inyecciones y caracteres de control
+    const text = sanitizeChatInput(value).slice(0, 1500);
     if (!text || pending) return;
+
+    sessionStorage.setItem(cooldownKey, String(now));
     cbInputText.value = '';
     addUserMessage(text);
     userMessages.push(text);

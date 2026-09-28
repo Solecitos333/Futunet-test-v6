@@ -849,6 +849,30 @@
       status: 'implemented',
       description: 'Indicadores visuales de conteo por categoría y filtros dinámicos en el Muro Comunitario para consultar fácilmente cuántas propuestas han sido resueltas.',
       officialResponse: '¡Implementado! Ya se encuentran activas las insignias dinámicas de conteo en cada botón de categoría del muro comunitario con el total de propuestas atendidas.'
+    },
+    {
+      refCode: 'SUG-P8210',
+      title: 'Disponibilidad de Lectores de Códigos de Barra 1D/2D y Gavetas de Dinero para Puntos de Venta (POS)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Equipamiento de punto de venta (POS): lector omnidireccional USB manos libres con lectura en pantallas y gaveta monedero metálica con solenoide RJ11.',
+      officialResponse: '¡Implementado! Incorporamos el Lector de Códigos de Barra 1D/2D con soporte automático y la Gaveta de Dinero Metálica RJ11 con garantía oficial.'
+    },
+    {
+      refCode: 'SUG-D4910',
+      title: 'Cámaras de seguridad Dahua HDCVI 1080p y grabadores DVR XVR Cooper en el catálogo de seguridad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámaras de videovigilancia Dahua bala IP67 exterior y domo interior con visión nocturna Smart IR, y grabadores XVR Cooper 1080N con app móvil DMSS.',
+      officialResponse: '¡Atendido! Se integraron al catálogo las cámaras Dahua Domo y Bala 1080p y el grabador XVR Cooper de 4 canales con monitoreo remoto en la app DMSS.'
+    },
+    {
+      refCode: 'SUG-K9530',
+      title: 'Optimización del buscador del catálogo con soporte a términos como escáner, cajón de dinero y bobinas de red',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Stemming semántico en el motor de búsqueda para sinónimos frecuentes: scanner y escaner (lectores), cajon y monedero (gavetas), y bobinas (cableado UTP).',
+      officialResponse: '¡Implementado! El motor de búsqueda en catalog.js ahora reconoce sinónimos como scanner, cajón de dinero y bobina garantizando resultados certeros.'
     }
   ];
 

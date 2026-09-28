@@ -104,10 +104,20 @@ function getStemVariants(word) {
   if (word === 'swicht' || word === 'swichts') variants.push('switch', 'switches', 'poe');
   if (word === 'router' || word === 'routers') variants.push('enrutador', 'wifi', 'red');
   if (word === 'red' || word === 'redes') variants.push('router', 'switch', 'cisco', 'ubiquiti', 'conectividad');
-  if (word === 'inversor' || word === 'inversores') variants.push('ups', 'bateria', 'regulador');
+  if (word === 'inversor' || word === 'inversores') variants.push('ups', 'regulador', 'forza', 'nobreak');
   if (word === 'ups') variants.push('nobreak', 'bateria', 'inversor', 'regulador', 'forza');
-  if (word === 'nobreak') variants.push('ups', 'regulador', 'bateria');
-  if (word === 'forza') variants.push('ups', 'regulador');
+  if (word === 'nobreak') variants.push('ups', 'regulador', 'bateria', 'inversor');
+  if (word === 'forza') variants.push('ups', 'regulador', 'inversor');
+  if (word === 'scanner' || word === 'scanners' || word === 'escaner' || word === 'escaneres') variants.push('lector', 'barcode', 'codigo', 'codigos');
+  if (word === 'lector' || word === 'lectores') variants.push('scanner', 'escaner', 'barcode');
+  if (word === 'barcode') variants.push('lector', 'scanner', 'escaner', 'codigo');
+  if (word === 'cajon' || word === 'cajones' || word === 'gaveta' || word === 'gavetas') variants.push('monedero', 'dinero', 'pos');
+  if (word === 'monedero' || word === 'monederos') variants.push('gaveta', 'cajon', 'pos');
+  if (word === 'bobina' || word === 'bobinas') variants.push('cable', 'utp', 'cca', 'cat5e', 'cat6');
+  if (word === 'gabinete' || word === 'gabinetes') variants.push('rack', 'chasis', 'servidor', 'enclosure');
+  if (word === 'rack' || word === 'racks') variants.push('gabinete', 'bastidor', 'servidor', 'patch');
+  if (word === 'dahua') variants.push('cctv', 'camara', 'xvr', 'dvr', 'hdcvi');
+  if (word === 'dvr' || word === 'xvr') variants.push('grabador', 'cctv', 'seguridad', 'camara');
   if (word === 'silla' || word === 'sillas') variants.push('sillon', 'sillones', 'asiento', 'ergonomica', 'ergonomico');
   if (word === 'sillon' || word === 'sillones') variants.push('silla', 'sillas', 'asiento');
   if (word === 'ergonomica' || word === 'ergonomicas' || word === 'ergonomico' || word === 'ergonomicos') variants.push('ergonomia', 'silla', 'sillas');
@@ -219,9 +229,26 @@ function scoreProductMatch(product, normalizedQuery) {
     score += 15;
   }
 
-  // Priorizar productos de energía reales al buscar "ups" o "no break"
-  if (/\b(ups|nobreak)\b/i.test(normalizedQuery)) {
-    if (/\bups\b/i.test(title) || category.includes('energia') || brand.includes('forza')) {
+  // Priorizar productos de energía reales al buscar "ups", "no break" o "inversor"
+  if (/\b(ups|nobreak|inversor|inversores)\b/i.test(normalizedQuery)) {
+    if (/\bups\b|regulaci|avr|forza|no-break|nobreak|inversor/i.test(title) || category.includes('energia') || brand.includes('forza')) {
+      score += 75;
+    }
+    if (/aspiradora|sopladora|herramienta|taladro/i.test(title)) {
+      score -= 100;
+    }
+  }
+
+  // Priorizar lectores y gavetas al buscar términos de POS o códigos de barra
+  if (/\b(pos|scanner|escaner|barcode|lector|cajon|gaveta)\b/i.test(normalizedQuery)) {
+    if (/pos|lector|barcode|gaveta|cajon|termic/i.test(title) || category.includes('perifericos')) {
+      score += 35;
+    }
+  }
+
+  // Priorizar gabinetes de red y racks de comunicaciones sobre PCs
+  if (/\b(rack|gabinete)\b/i.test(normalizedQuery) && /\b(red|redes|telecom|comunicaciones|servidor)\b/i.test(normalizedQuery)) {
+    if (/gabinete.*(9u|12u|42u|red)|rack/i.test(title) || category.includes('redes')) {
       score += 65;
     }
   }

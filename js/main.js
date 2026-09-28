@@ -1218,12 +1218,26 @@ function initAnnouncementBar() {
   const currentMonth = now.getMonth(); // 8 = Sep, 9 = Oct
   const currentPath = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname.toLowerCase() : '';
 
+  const q3End = new Date('2026-09-30T23:59:59');
+  const msToQ3 = q3End.getTime() - now.getTime();
+  const hoursToQ3 = Math.max(0, Math.floor(msToQ3 / (1000 * 60 * 60)));
+  const daysToQ3 = Math.ceil(msToQ3 / (1000 * 60 * 60 * 24));
+
+  let q3Message = 'Auditoría de Red GRATIS + 15% OFF en Infraestructura con';
+  if (msToQ3 > 0) {
+    if (hoursToQ3 <= 72) {
+      q3Message = `¡Últimas ${hoursToQ3} horas para Cierre Q3! Auditoría GRATIS + 15% OFF con`;
+    } else {
+      q3Message = `Últimos ${daysToQ3} días para comprometer presupuesto TI: Auditoría GRATIS + 15% OFF con`;
+    }
+  }
+
   // Campaña activa dinámica según vertical o calendario comercial 2026
   let campaign = {
     badge: '⚡ SPRINT FINAL CIERRE Q3',
-    message: 'Últimos 10 días para comprometer presupuesto TI: Auditoría GRATIS + 15% OFF con',
+    message: q3Message,
     coupon: 'INFRA2026',
-    endDate: new Date('2026-09-30T23:59:59'),
+    endDate: q3End,
     ctaText: 'Aprovechar Cierre Q3',
     waMsg: 'Hola Futunet, quiero aprovechar el sprint de cierre Q3 y solicitar mi levantamiento técnico gratuito con el código INFRA2026.'
   };
@@ -1256,8 +1270,17 @@ function initAnnouncementBar() {
       ctaText: 'Proteger Servidores',
       waMsg: 'Hola Futunet, quiero cotizar UPS de respaldo con el código RESPALDO2026.'
     };
-  } else if (currentMonth === 9 || now > new Date('2026-09-30T23:59:59')) {
-    // Octubre: Campaña de Seguridad Corporativa
+  } else if (currentPath.includes('seguridad-electronica.html')) {
+    campaign = {
+      badge: '🛡️ PROTECCIÓN CORPORATIVA',
+      message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
+      coupon: 'SEGURIDAD2026',
+      endDate: new Date('2026-10-31T23:59:59'),
+      ctaText: 'Cotizar Seguridad',
+      waMsg: 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.'
+    };
+  } else if (currentMonth === 9 || now > q3End) {
+    // Octubre: Campaña de Seguridad Corporativa Global
     campaign = {
       badge: '🛡️ OCTUBRE: SEGURIDAD CORPORATIVA',
       message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',

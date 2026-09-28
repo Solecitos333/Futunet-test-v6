@@ -59,7 +59,7 @@
       code: 'SEGURIDAD2026',
       discount: 0.15,
       departments: ['seguridad', 'redes', 'equipos'],
-      validFrom: '2026-10-01',
+      validFrom: '2026-09-27',
       validUntil: '2026-10-31',
       description: '15% de descuento en Seguridad Electrónica, CCTV y Control de Acceso (Octubre 2026)'
     },

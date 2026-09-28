@@ -22,27 +22,35 @@ findJs(projectRoot);
 
 console.log('Testing syntax of', jsFiles.length, 'JavaScript files...');
 const syntaxErrors = [];
+const cp = require('child_process');
 for (const file of jsFiles) {
   try {
     const code = fs.readFileSync(file, 'utf8');
     // If it's an ES module or contains import/export, wrap or check accordingly
     if (file.endsWith('.mjs') || code.includes('import ') || code.includes('export ')) {
-      // standard VM Script might fail on import/export if not module
-      new vm.SourceTextModule(code, { initializeImportMeta() {} });
+      if (typeof vm.SourceTextModule === 'function') {
+        new vm.SourceTextModule(code, { initializeImportMeta() {} });
+      } else {
+        const res = cp.spawnSync(process.execPath, ['--check', file], { encoding: 'utf8' });
+        if (res.status !== 0) {
+          syntaxErrors.push({ file: path.relative(projectRoot, file), error: (res.stderr || res.stdout || 'Syntax error').trim() });
+        }
+      }
     } else {
       new vm.Script(code);
     }
   } catch (err) {
-    // If SourceTextModule is experimental or fails due to module type
-    if (err.message && err.message.includes('Cannot use import statement') || err.message.includes('Unexpected token \'export\'')) {
+    if (typeof vm.SourceTextModule === 'function') {
       try {
-        // Try module parsing
         new vm.SourceTextModule(fs.readFileSync(file, 'utf8'), { initializeImportMeta() {} });
       } catch (err2) {
         syntaxErrors.push({ file: path.relative(projectRoot, file), error: err2.message });
       }
     } else {
-      syntaxErrors.push({ file: path.relative(projectRoot, file), error: err.message });
+      const res = cp.spawnSync(process.execPath, ['--check', file], { encoding: 'utf8' });
+      if (res.status !== 0) {
+        syntaxErrors.push({ file: path.relative(projectRoot, file), error: (res.stderr || res.stdout || err.message).trim() });
+      }
     }
   }
 }

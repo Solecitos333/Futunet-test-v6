@@ -15,7 +15,7 @@
   function isSupport(profile) { return isStaff(profile) && roles(profile).some(r => ['admin', 'superadmin', 'support_agent'].includes(r)); }
   function canManage(profile, ticket) { return isSupport(profile) || (ticket.source === 'internal' && isStaff(profile)); }
   function clean(value, max, label, min = 0) {
-    const text = String(value || '').trim();
+    const text = String(value || '').replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
     if (text.length < min || text.length > max) throw new Error(label + ': usa entre ' + min + ' y ' + max + ' caracteres.');
     return text;
   }

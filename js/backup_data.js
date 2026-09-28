@@ -6531,7 +6531,113 @@ const mockDatabase = [
       "Arranque en frío (Cold-Start) con batería y alarma sonora inteligente",
       "Garantía oficial de 2 años y comprobante fiscal formal en República Dominicana"
     ]
+  },
+  {
+    "id": "pos_lector_codigo_barra_2d",
+    "department": "equipos",
+    "category": "Periféricos y Partes",
+    "brand": "Genérico",
+    "title": "Lector de Códigos de Barra 1D/2D USB con Soporte Manos Libres para POS",
+    "desc": "Lector omnidireccional de códigos de barras 1D y 2D (códigos QR, DataMatrix, PDF417, UPC, EAN) con conexión USB Plug & Play y base con soporte manos libres articulado con auto-inducción. Diseñado para optimizar el cobro rápido en puntos de venta, farmacias, supermercados y almacenes en Santiago.",
+    "price": "RD$ 2,450.00",
+    "img": "img/productos/catalogo/pos-lector-barcode.webp",
+    "gallery": [
+      "img/productos/catalogo/pos-lector-barcode.webp"
+    ],
+    "specs": [
+      "Lectura de códigos 1D (UPC, EAN, Code 128) y 2D (QR Code, Data Matrix, PDF417)",
+      "Conexión USB Plug & Play compatible con Windows, Linux, macOS y Android POS",
+      "Base soporte manos libres ajustable con sensor de detección automática de objetos",
+      "Capacidad de lectura nítida en pantallas de teléfonos móviles y etiquetas dañadas",
+      "Garantía local Futunet de 1 año y factura formal con NCF"
+    ]
+  },
+  {
+    "id": "pos_gaveta_dinero_metalica",
+    "department": "equipos",
+    "category": "Periféricos y Partes",
+    "brand": "Genérico",
+    "title": "Gaveta de Dinero Metálica con Apertura Automática RJ11 para POS",
+    "desc": "Cajón monedero metálico de alta durabilidad para terminales y sistemas de punto de venta. Construcción en acero laminado con 5 divisiones para billetes equipadas con pisadores metálicos y 8 bandejas para monedas. Incluye conector estándar RJ11 para apertura automática con impresoras térmicas de tickets y cerradura de seguridad de 3 posiciones.",
+    "price": "RD$ 3,650.00",
+    "img": "img/productos/catalogo/pos-gaveta-dinero.webp",
+    "gallery": [
+      "img/productos/catalogo/pos-gaveta-dinero.webp"
+    ],
+    "specs": [
+      "Chasis metálico reforzado en acero laminado en frío para tráfico pesado comercial",
+      "5 ranuras para billetes con pisadores de alambre metálico y 8 compartimentos para monedas",
+      "Apertura automática con solenoide de impulsos estándar RJ11/RJ12 (12V / 24V)",
+      "Cerradura de 3 posiciones con 2 llaves: apertura manual, apertura automática electrónica y bloqueo",
+      "Ranura frontal exterior para inserción rápida de cheques o billetes grandes sin abrir",
+      "Garantía directa Futunet de 1 año y despacho inmediato en República Dominicana"
+    ]
+  },
+  {
+    "id": "cctv_dahua_camara_domo_1080p",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Dahua",
+    "title": "Cámara Domo Dahua HDCVI 1080p 2MP con Visión Nocturna Smart IR",
+    "desc": "Cámara de videovigilancia Dahua formato Domo con resolución Full HD 1080p (2 Megapíxeles) y lente gran angular de 2.8mm (campo de visión de 103°). Cuenta con iluminación infrarroja Smart IR de hasta 20 metros para visión nocturna clara en total oscuridad sin sobreexponer rostros. Ideal para interiores de oficinas, tiendas, pasillos, consultorios y hogares.",
+    "price": "RD$ 1,450.00",
+    "img": "img/productos/catalogo/dahua-camara-domo.webp",
+    "gallery": [
+      "img/productos/catalogo/dahua-camara-domo.webp"
+    ],
+    "specs": [
+      "Resolución Full HD 1080p (1920x1080) a 30 cuadros por segundo",
+      "Lente fijo de 2.8 mm con ángulo de visión gran angular de 103 grados",
+      "Visión nocturna Smart IR inteligente de hasta 20 metros",
+      "Salida de video 4 en 1 conmutable (HDCVI / TVI / AHD / CVBS)",
+      "Chasis compacto para montaje en techo o pared con ajuste multidireccional",
+      "Garantía oficial Dahua de 2 años y soporte de instalación profesional"
+    ]
+  },
+  {
+    "id": "cctv_dahua_camara_bala_1080p",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Dahua",
+    "title": "Cámara Bala Dahua HDCVI 1080p 2MP Exterior IP67 Smart IR",
+    "desc": "Cámara de seguridad Dahua formato Bala metálica para intemperie con certificación IP67 contra lluvia torrencial, polvo y calor. Resolución Full HD 1080p de 2 Megapíxeles, lente de 3.6mm y visión nocturna Smart IR de 20 metros. Especialmente diseñada para fachadas, entradas, estacionamientos, almacenes y áreas perimetrales en Santiago y todo el Cibao.",
+    "price": "RD$ 1,550.00",
+    "img": "img/productos/catalogo/dahua-camara-bala.jpg",
+    "gallery": [
+      "img/productos/catalogo/dahua-camara-bala.jpg"
+    ],
+    "specs": [
+      "Resolución Full HD 1080p (1920x1080) de alta fidelidad cromática",
+      "Certificación IP67 resistente al agua, intemperie y ambientes industriales",
+      "Visión nocturna por infrarrojos Smart IR con alcance de 20 metros",
+      "Soporte articulado de 3 ejes para orientación precisa en paredes o techos",
+      "Garantía oficial Dahua de 2 años y facturación con comprobante fiscal"
+    ]
+  },
+  {
+    "id": "cctv_dahua_xvr_cooper_4ch",
+    "department": "seguridad",
+    "category": "Sistemas de Seguridad CCTV",
+    "brand": "Dahua",
+    "title": "Grabador DVR Dahua XVR Cooper 4 Canales 1080N con App Móvil DMSS",
+    "desc": "Grabador de video digital pentahíbrido Dahua XVR Cooper de 4 canales analógicos HD más 1 canal IP adicional (4+1). Incorpora codificación inteligente H.265+ que reduce el consumo de ancho de banda y multiplica por 3 el tiempo de grabación en disco duro. Permite monitoreo remoto en vivo y reproducción de grabaciones desde smartphones y computadoras a través de la aplicación oficial DMSS.",
+    "price": "RD$ 3,850.00",
+    "img": "img/productos/catalogo/dahua-xvr-cooper.jpg",
+    "gallery": [
+      "img/productos/catalogo/dahua-xvr-cooper.jpg"
+    ],
+    "specs": [
+      "4 Canales BNC HDCVI / AHD / TVI / CVBS hasta 1080N + 1 Canal IP hasta 2MP",
+      "Compresión de video de doble flujo H.265+ / H.265 / H.264",
+      "Salidas simultáneas HDMI y VGA en alta definición Full HD",
+      "Monitoreo remoto 24/7 mediante aplicación móvil Dahua DMSS (iOS / Android)",
+      "Bahía para 1 disco duro SATA interno de hasta 6 TB",
+      "Garantía oficial Dahua de 2 años y asesoría técnica de configuración"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;
-if (typeof window !== 'undefined') window.backupDatabase = mockDatabase;
+if (typeof window !== 'undefined') {
+  window.mockDatabase = mockDatabase;
+  window.backupDatabase = mockDatabase;
+}
