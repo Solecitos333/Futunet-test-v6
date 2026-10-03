@@ -12,10 +12,19 @@
     const [year, month, day] = value.split('-');
     return `${day}/${month}/${year}`;
   }
-  function setText(id, value) { const element = document.getElementById(id); if (element) element.textContent = value == null ? '' : String(value); }
-  function fail(message) { loading.hidden = true; errorState.hidden = false; setText('quote-error-message', message); }
+  function fail(message) {
+    const loadEl = document.getElementById('quote-loading');
+    const errEl = document.getElementById('quote-error');
+    if (loadEl) loadEl.hidden = true;
+    if (errEl) errEl.hidden = false;
+    setText('quote-error-message', message);
+  }
   function db() { return window.FutunetFirebase && window.FutunetFirebase.db; }
-  function serverTime() { return firebase.firestore.FieldValue.serverTimestamp(); }
+  function serverTime() {
+    return (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+      ? firebase.firestore.FieldValue.serverTimestamp()
+      : new Date();
+  }
 
   function render(data) {
     quote = data;
@@ -104,8 +113,10 @@
     const buttons = document.querySelectorAll('#quote-response-form button');
     buttons.forEach(button => { button.disabled = true; });
     try {
+      const database = db();
+      if (!database) throw new Error('Base de datos no disponible');
       const noteVal = sanitizeQuoteInput(document.getElementById('quote-response-note')?.value);
-      await db().collection('public_quote_links').doc(token).update({
+      await database.collection('public_quote_links').doc(token).update({
         responseStatus: status, signerName: name, responseNote: noteVal,
         acceptedTerms: true, respondedAt: serverTime(), updatedAt: serverTime()
       });
@@ -120,7 +131,12 @@
   async function init() {
     if (!/^[a-f0-9]{48}$/.test(token)) { fail('El enlace no contiene un token válido.'); return; }
     try {
-      const doc = await db().collection('public_quote_links').doc(token).get();
+      const database = db();
+      if (!database) {
+        fail('No pudimos conectar con el servicio. Revisa tu conexión a internet.');
+        return;
+      }
+      const doc = await database.collection('public_quote_links').doc(token).get();
       if (!doc.exists) { fail('La cotización no existe o el enlace fue retirado.'); return; }
       render(doc.data());
       if (doc.data().responseStatus === 'pending') {

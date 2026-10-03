@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v30';
+const CACHE_NAME = 'futunet-cache-v32';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [

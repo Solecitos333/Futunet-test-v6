@@ -372,6 +372,11 @@
         </p>
 
         <form id="sug-track-form" class="sug-track-form" onsubmit="event.preventDefault();">
+          <!-- Honeypot de seguridad para bots -->
+          <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+            <label for="sug-track-hp-check">No llenar este campo</label>
+            <input type="text" id="sug-track-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+          </div>
           <input type="text" id="sug-track-input" class="sug-track-input" placeholder="Ej: SUG-A1B2C o ID del ticket" maxlength="40" autocomplete="off" required aria-label="Código de referencia de la sugerencia" />
           <button type="button" id="sug-track-btn" class="sug-track-btn">
             <span class="sug-track-btn-text">Consultar estado</span>

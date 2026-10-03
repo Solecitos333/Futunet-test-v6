@@ -230,16 +230,20 @@
     goToHiringStep(1);
 
     // Verificar si hay un plan de contratación pendiente en sessionStorage
-    var pendingPlanName = sessionStorage.getItem('pending_hiring_plan_name');
-    var pendingPlanId = sessionStorage.getItem('pending_hiring_plan_id');
-    var pendingPlanPrice = sessionStorage.getItem('pending_hiring_plan_price');
-    if (pendingPlanName && pendingPlanId && pendingPlanPrice) {
-      sessionStorage.removeItem('pending_hiring_plan_name');
-      sessionStorage.removeItem('pending_hiring_plan_id');
-      sessionStorage.removeItem('pending_hiring_plan_price');
-      setTimeout(function () {
-        window.selectHiringPlan(pendingPlanName, pendingPlanId, parseFloat(pendingPlanPrice));
-      }, 100);
+    try {
+      var pendingPlanName = sessionStorage.getItem('pending_hiring_plan_name');
+      var pendingPlanId = sessionStorage.getItem('pending_hiring_plan_id');
+      var pendingPlanPrice = sessionStorage.getItem('pending_hiring_plan_price');
+      if (pendingPlanName && pendingPlanId && pendingPlanPrice) {
+        sessionStorage.removeItem('pending_hiring_plan_name');
+        sessionStorage.removeItem('pending_hiring_plan_id');
+        sessionStorage.removeItem('pending_hiring_plan_price');
+        setTimeout(function () {
+          window.selectHiringPlan(pendingPlanName, pendingPlanId, parseFloat(pendingPlanPrice));
+        }, 100);
+      }
+    } catch (e) {
+      console.warn('No se pudo recuperar plan pendiente de sessionStorage:', e);
     }
 
   }
@@ -560,8 +564,17 @@
           return;
         }
 
+        // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
+        var consentBox = document.getElementById('pay-privacy-consent');
+        if (consentBox && !consentBox.checked) {
+          if (window.showToast) window.showToast('Debes autorizar el tratamiento del comprobante conforme a la política de privacidad.', 'error');
+          if (btn) btn.disabled = false;
+          consentBox.focus();
+          return;
+        }
+
         var amount = document.getElementById('pay-amount').value;
-        var bank = document.getElementById('pay-bank').value;
+        var bank = sanitizePortalInput(document.getElementById('pay-bank').value).slice(0, 50);
 
         // Validar base de datos y almacenamiento
         if (!db || !storage) {
@@ -657,6 +670,15 @@
           var remainingSecs = Math.ceil((15000 - (now - Number(lastSupport))) / 1000);
           if (window.showToast) window.showToast('Por favor espera ' + remainingSecs + ' segundos antes de enviar otra solicitud.', 'error');
           if (btn) btn.disabled = false;
+          return;
+        }
+
+        // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
+        var consentBox = document.getElementById('support-privacy-consent');
+        if (consentBox && !consentBox.checked) {
+          if (window.showToast) window.showToast('Debes aceptar la política de privacidad para enviar tu solicitud de soporte.', 'error');
+          if (btn) btn.disabled = false;
+          consentBox.focus();
           return;
         }
 
@@ -1514,10 +1536,13 @@
     if (!currentUser) {
       if (window.openHiringChannelsModal) {
         window.openHiringChannelsModal(fullName, planId, price);
-      } else {
-        sessionStorage.setItem('pending_hiring_plan_name', fullName);
-        sessionStorage.setItem('pending_hiring_plan_id', planId);
-        sessionStorage.setItem('pending_hiring_plan_price', price);
+        try {
+          sessionStorage.setItem('pending_hiring_plan_name', fullName);
+          sessionStorage.setItem('pending_hiring_plan_id', planId);
+          sessionStorage.setItem('pending_hiring_plan_price', price);
+        } catch (e) {
+          console.warn('Storage no disponible para plan pendiente:', e);
+        }
 
         if (window.showToast) window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
         setTimeout(function () {

@@ -1098,19 +1098,22 @@ const mockDatabase = [
   {
     "id": "prod_8ymxsbgt5",
     "department": "seguridad",
-    "category": "Control de Accesos",
-    "brand": "Genérico",
-    "title": "Cerradura magnetica completa",
-    "desc": "Calidad Premium. Cerradura magnetica completa. Diseñado para ofrecer máxima seguridad con tecnología de vanguardia. Ideal para instalaciones profesionales, garantizando monitoreo prolongado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
-    "price": "RD$ 11,512.50",
+    "category": "Control de Acceso y Asistencia",
+    "brand": "ZKTeco",
+    "title": "Cerradura Electromagnética (Electroimán) 600 lbs (280 kg) con Sensor LED y Soporte ZL para Control de Acceso",
+    "desc": "Cerradura electromagnética de alta retención de 600 lbs (280 kg) de fuerza para puertas de madera, vidrio, metal y cortafuegos. Incluye sensor de estado con indicador LED bicolor, protección contra corriente residual (MOV) y juego completo de soporte en L y Z (Soporte ZL) para instalación universal. Compatible al 100% con terminales biométricas ZKTeco MB20, teclados de acceso y botones liberadores de salida. Con garantía oficial y soporte técnico de Futunet en Santiago y la región Norte.",
+    "price": "RD$ 6,850.00",
     "img": "img/productos/catalogo/cerradura-magnetica.jpg",
     "gallery": [
       "img/productos/catalogo/cerradura-magnetica.jpg"
     ],
     "specs": [
-      "Garantía premium directa: Genérico",
-      "Soporte técnico preferencial Futunet",
-      "Calidad y manufactura comprobada"
+      "Fuerza de sujeción: 600 lbs (280 kg / 2800N) para alta seguridad",
+      "Voltaje de operación: 12V DC / 24V DC seleccionable",
+      "Sensor de estado de puerta: Relé con contactos NO/NC/COM y LED indicador",
+      "Incluye kit de herrajes: Soporte ZL regulable y placa de armadura",
+      "Aplicación: Puertas batientes de madera, metal, vidrio con marco y cortafuegos",
+      "Garantía oficial ZKTeco de 1 año con comprobante fiscal formal NCF"
     ]
   },
   {
@@ -1481,21 +1484,21 @@ const mockDatabase = [
   },
   {
     "id": "prod_i1wfrc7vh",
-    "department": "equipos",
-    "category": "Periféricos y Partes",
-    "brand": "Genérico",
-    "title": "DISCO DURO 2 TB WD PURPURA",
-    "desc": "Calidad Premium. DISCO DURO 2 TB WD PURPURA. Construcción de primera categoría. Eleva el nivel en tu oficina con una herramienta pensada para durar en entornos exigentes. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
-    "price": "RD$ 4,628.75",
-    "img": "img/laptops.jpg",
+    "department": "seguridad",
+    "category": "Almacenamiento CCTV",
+    "brand": "Western Digital",
+    "title": "Disco Duro Western Digital WD Purple 2TB 3.5\" SATA III Especializado para Videovigilancia 24/7",
+    "desc": "Disco duro interno Western Digital Purple de 2 Terabytes especialmente diseñado para sistemas de seguridad y videovigilancia de alta definición en funcionamiento ininterrumpido 24 horas al día, 7 días a la semana. Equipado con la tecnología exclusiva AllFrame que reduce la pérdida de cuadros de video y optimiza la reproducción en grabadores DVR y NVR de hasta 64 cámaras de seguridad en simultáneo.",
+    "price": "RD$ 4,250.00",
+    "img": "img/productos/catalogo/wd-purple-2tb.webp",
     "gallery": [
-      "img/laptops.jpg",
-      "img/productos/hp-monitor-widescreen.jpg"
+      "img/productos/catalogo/wd-purple-2tb.webp"
     ],
     "specs": [
-      "Garantía premium directa: Genérico",
-      "Soporte técnico preferencial Futunet",
-      "Calidad y manufactura comprobada"
+      "Capacidad real de 2 TB (2,000 GB) optimizada para grabación continua de alta definición",
+      "Tecnología AllFrame exclusiva de WD para cero pérdidas de fotogramas",
+      "Factor de forma estándar 3.5 pulgadas con interfaz SATA III a 6.0 Gb/s",
+      "Garantía oficial Western Digital de 3 años y comprobante fiscal formal NCF"
     ]
   },
   {
@@ -2070,19 +2073,20 @@ const mockDatabase = [
   {
     "id": "prod_fy2c5keb5",
     "department": "redes",
-    "category": "Redes",
-    "brand": "Genérico",
-    "title": "GABINETE DE 9U 600X600MM",
-    "desc": "Calidad Premium. GABINETE DE 9U 600X600MM. Un artículo de excelentes materiales fabricado para durar y cubrir a plenitud los estándares estéticos y funcionales de uso pesado. Cuenta con la garantía directa y respaldo oficial en República Dominicana de Futunet.",
-    "price": "RD$ 9,950.00",
+    "category": "Racks y Gabinetes de Red",
+    "brand": "Futunet Redes",
+    "title": "Gabinete Rack de Pared 9U 600x450mm con Puerta de Vidrio Templado y Cerradura con Llave",
+    "desc": "Gabinete metálico de pared (Wall Mount) formato estándar 19 pulgadas de 9 Unidades de rack (9U) con profundidad de 450 mm. Construido en acero laminado en frío con puerta frontal de vidrio templado, cerradura de seguridad y ranuras de ventilación para switches y DVRs.",
+    "price": "RD$ 6,850.00",
     "img": "img/productos/catalogo/gabinete-9u.jpg",
     "gallery": [
       "img/productos/catalogo/gabinete-9u.jpg"
     ],
     "specs": [
-      "Garantía premium directa: Genérico",
-      "Soporte técnico preferencial Futunet",
-      "Calidad y manufactura comprobada"
+      "Capacidad de 9 Unidades de Rack (9U) estándar 19 pulgadas",
+      "Puerta frontal de cristal templado reversible con cerradura y llaves",
+      "Paneles laterales desmontables y ranuras para ventilación",
+      "Garantía oficial Futunet de 2 años e incluye tornillería enjaulada"
     ]
   },
   {
@@ -6453,7 +6457,7 @@ const mockDatabase = [
     "department": "redes",
     "category": "Redes y Conectividad",
     "brand": "Ubiquiti",
-    "title": "Punto de Acceso Ubiquiti UniFi 6 Plus (U6+) WiFi 6 Doble Banda 3.0 Gbps PoE",
+    "title": "Punto de Acceso Ubiquiti UniFi 6 Plus (U6+) Access Point WiFi 6 Doble Banda 3.0 Gbps PoE",
     "desc": "Punto de acceso compacto WiFi 6 de doble banda Ubiquiti UniFi 6 Plus (U6+). Rendimiento de hasta 3.0 Gbps en 5 GHz y 2.4 GHz, ideal para oficinas, naves comerciales y residencias que demandan roaming fluido y alta densidad de usuarios.",
     "price": "RD$ 9,950.00",
     "img": "img/brands-preview/ubiquiti.webp",
@@ -6633,6 +6637,199 @@ const mockDatabase = [
       "Monitoreo remoto 24/7 mediante aplicación móvil Dahua DMSS (iOS / Android)",
       "Bahía para 1 disco duro SATA interno de hasta 6 TB",
       "Garantía oficial Dahua de 2 años y asesoría técnica de configuración"
+    ]
+  },
+  {
+    "id": "zkteco_mb20_terminal_biometrica",
+    "department": "seguridad",
+    "category": "Control de Acceso y Asistencia",
+    "brand": "ZKTeco",
+    "title": "Terminal Biométrica ZKTeco MB20 Facial, Huella Digital y RFID para Asistencia y Control de Acceso (Reloj Ponchador)",
+    "desc": "Terminal biométrica multiespectral ZKTeco MB20 con reconocimiento facial por luz visible, lector de huella digital de alta precisión y lector de tarjetas RFID para control de asistencia de personal y control de acceso de puertas. Integra relevador para cerradura magnética, botón de salida y sensor de puerta. Conectividad TCP/IP de red y puerto USB para descarga de reportes de ponches en Excel sin necesidad de software complejo. Compatible con software ZKTime.Net y BioTime para gestión automatizada de horarios, turnos y nóminas en República Dominicana.",
+    "price": "RD$ 8,450.00",
+    "img": "img/productos/catalogo/zkteco-mb20-biometrico.webp",
+    "gallery": [
+      "img/productos/catalogo/zkteco-mb20-biometrico.webp"
+    ],
+    "specs": [
+      "Capacidad: 200 rostros, 500 huellas digitales, 1,000 tarjetas RFID y 50,000 registros",
+      "Reconocimiento facial rápido en menos de 0.5 segundos con cámara infrarroja antisuplantación",
+      "Función Reloj Ponchador: exportación directa de reportes y ponches a memoria USB en Excel",
+      "Conectividad: Puerto de red Ethernet TCP/IP y puerto USB Host para descarga inmediata",
+      "Control de acceso integrado: Relevador directo para cerradura magnética, electroimán y botón de salida",
+      "Pantalla TFT a color de 2.8 pulgadas con interfaz gráfica intuitiva en español",
+      "Garantía oficial ZKTeco de 1 año con soporte técnico y asesoría de configuración en Santiago"
+    ]
+  },
+  {
+    "id": "cctv_wd_purple_2tb_hdd",
+    "department": "seguridad",
+    "category": "Almacenamiento CCTV",
+    "brand": "Western Digital",
+    "title": "Disco Duro Western Digital WD Purple 2TB 3.5\" SATA III Especializado para Videovigilancia 24/7",
+    "desc": "Disco duro interno Western Digital Purple de 2 Terabytes especialmente diseñado para sistemas de seguridad y videovigilancia de alta definición en funcionamiento ininterrumpido 24 horas al día, 7 días a la semana. Equipado con la tecnología exclusiva AllFrame que reduce la pérdida de cuadros de video y optimiza la reproducción en grabadores DVR y NVR de hasta 64 cámaras de seguridad en simultáneo. Resiste fluctuaciones térmicas extremas y vibraciones en entornos comerciales e industriales de Santiago.",
+    "price": "RD$ 4,250.00",
+    "img": "img/productos/catalogo/wd-purple-2tb.webp",
+    "gallery": [
+      "img/productos/catalogo/wd-purple-2tb.webp"
+    ],
+    "specs": [
+      "Capacidad real de 2 TB (2,000 GB) optimizada para grabación continua de alta definición",
+      "Tecnología AllFrame exclusiva de WD para cero pérdidas de fotogramas y compresión H.265+",
+      "Factor de forma estándar 3.5 pulgadas con interfaz SATA III a 6.0 Gb/s y 64 MB de caché",
+      "Diseñado para soportar hasta 64 cámaras de video HD en DVRs Dahua, Hikvision y NVRs IP",
+      "Carga de trabajo de hasta 180 TB/año, triplicando la resistencia de un disco duro convencional de PC",
+      "Garantía oficial Western Digital de 3 años y comprobante fiscal formal NCF"
+    ]
+  },
+  {
+    "id": "redes_gabinete_rack_9u",
+    "department": "redes",
+    "category": "Racks y Gabinetes de Red",
+    "brand": "Futunet Redes",
+    "title": "Gabinete Rack de Pared 9U 600x450mm con Puerta de Vidrio Templado y Cerradura con Llave",
+    "desc": "Gabinete metálico de pared (Wall Mount) formato estándar 19 pulgadas de 9 Unidades de rack (9U) con profundidad de 450 mm. Construido en acero laminado en frío de alta resistencia con acabado en pintura electrostática negra anticorrosión. Cuenta con puerta frontal de vidrio templado con cerradura de seguridad y dos llaves, paneles laterales desmontables para fácil acceso al cableado, ranuras de ventilación superior e inferior para flujo de aire y orificios troquelados pasacables. Diseñado para alojar ordenadamente switches Cisco/Ubiquiti, patch panels, bandejas de fibra óptica y DVRs de videovigilancia en oficinas, cuartos de telecomunicaciones y comercios.",
+    "price": "RD$ 6,850.00",
+    "img": "img/productos/catalogo/gabinete-9u.jpg",
+    "gallery": [
+      "img/productos/catalogo/gabinete-9u.jpg"
+    ],
+    "specs": [
+      "Capacidad de 9 Unidades de Rack (9U) estándar internacional EIA-310 de 19 pulgadas",
+      "Dimensiones compactas: 600 mm de ancho x 450 mm de profundidad x 500 mm de altura",
+      "Puerta frontal de cristal templado reversible con marco metálico y cerradura con llave",
+      "Paneles laterales desmontables con pestillo rápido para inspección y mantenimiento de cables",
+      "Fabricación en acero SPCC de alta resistencia con capacidad de carga estática de hasta 60 kg",
+      "Ranuras para instalación de ventiladores extractores de 120mm y perforaciones pasacables",
+      "Garantía oficial de 2 años e incluye tornillería tuercas enjauladas para montaje inmediato"
+    ]
+  },
+  {
+    "id": "sec_boton_salida_no_touch",
+    "department": "seguridad",
+    "category": "Control de Acceso y Asistencia",
+    "brand": "ZKTeco",
+    "title": "Botón Pulsador de Salida Infrarrojo No Touch de Acero Inoxidable para Control de Acceso",
+    "desc": "Pulsador de salida con sensor óptico infrarrojo No Touch (sin contacto) diseñado para apertura higiénica y rápida de cerraduras electromagnéticas y cerraduras de perno. Fabricado en placa frontal de acero inoxidable 304 de alta durabilidad, detección de proximidad ajustable de 4 a 10 cm, indicador LED bicolor (Azul en reposo / Verde en apertura) y relevador con contactos NO/NC/COM apto para alto tráfico comercial, corporativo y hospitalario en Santiago.",
+    "price": "RD$ 1,850.00",
+    "img": "img/productos/catalogo/boton-salida-notouch.webp",
+    "gallery": [
+      "img/productos/catalogo/boton-salida-notouch.webp"
+    ],
+    "specs": [
+      "Tecnología: Sensor óptico infrarrojo No Touch (sin contacto físico)",
+      "Rango de detección: 4 a 10 cm ajustable",
+      "Material: Placa frontal de acero inoxidable SUS 304 resistente a la corrosión",
+      "Indicador luminoso: LED Azul (reposo) / Verde (activado)",
+      "Salida de contacto: NO / NC / COM conmutado (3A a 36V DC)",
+      "Vida útil: Más de 500,000 ciclos continuos de apertura"
+    ]
+  },
+  {
+    "id": "redes_cable_utp_cat6_cobre_305m",
+    "department": "redes",
+    "category": "Cableado Estructurado",
+    "brand": "Futunet Redes",
+    "title": "Bobina de Cable de Red UTP Cat 6 (305 Metros / 1000 ft) 100% Cobre Puro 23 AWG para Redes y Cámaras",
+    "desc": "Bobina de cable de red de 4 pares trenzados UTP Categoría 6 sin blindar en caja dispensadora Easy Pull de 305 metros (1000 pies). Conductores sólidos de 100% cobre electrolítico de calibre 23 AWG con cruceta separadora central que reduce la diafonía (NEXT). Certificado para transmisiones Gigabit Ethernet (1000BASE-T) hasta 250 MHz y soporte total de alimentación remota PoE / PoE+ (IEEE 802.3af/at) para cámaras IP de seguridad, telefonía VoIP y puntos de acceso Wi-Fi 6. Chaqueta de PVC retardante a la llama con metraje marcado secuencialmente para tendidos en oficinas, locales comerciales e industrias de Santiago.",
+    "price": "RD$ 8,950.00",
+    "img": "img/productos/catalogo/bobina-utp-cat6.webp",
+    "gallery": [
+      "img/productos/catalogo/bobina-utp-cat6.webp"
+    ],
+    "specs": [
+      "Categoría: UTP Cat 6 (250 MHz) estándar ANSI/TIA-568-C.2 e ISO/IEC 11801",
+      "Conductor: 100% Cobre sólido recocido de 23 AWG (cero aleaciones CCA)",
+      "Longitud: Caja dispensadora auto-desenrollable de 305 metros (1000 pies)",
+      "Estructura interna: Cruceta plástica spline central anti-diafonía (NEXT)",
+      "Alimentación PoE: Apto para PoE y PoE+ (IEEE 802.3af/at) sin sobrecalentamiento",
+      "Marcaje de metraje: Impresión métrica secuencial decreciente en la chaqueta",
+      "Garantía oficial y entrega inmediata en Santiago"
+    ]
+  },
+  {
+    "id": "redes_tplink_deco_x20_mesh",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "TP-Link",
+    "title": "Sistema Wi-Fi 6 Mesh TP-Link Deco X20 AX1800 (Pack de 2 Unidades) Cobertura Integral",
+    "desc": "Sistema Wi-Fi 6 en malla (Mesh) de doble banda TP-Link Deco X20 con velocidades de hasta 1800 Mbps (1201 Mbps en 5 GHz + 574 Mbps en 2.4 GHz). Proporciona cobertura fluida sin cortes de hasta 4,000 pies cuadrados (370 m²) en residencias de varios niveles, villas y oficinas corporativas en Santiago. Equipado con roaming continuo con un solo nombre de red (SSID), 2 puertos Gigabit Ethernet por unidad para backhaul cableado o computadoras, capacidad para más de 150 dispositivos conectados con OFDMA y MU-MIMO, y seguridad avanzada TP-Link HomeShield con control parental.",
+    "price": "RD$ 9,850.00",
+    "img": "img/productos/catalogo/tplink-deco-x20.webp",
+    "gallery": [
+      "img/productos/catalogo/tplink-deco-x20.webp"
+    ],
+    "specs": [
+      "Estándar inalámbrico: Wi-Fi 6 IEEE 802.11ax/ac/n/a (5 GHz) y 802.11ax/n/b/g (2.4 GHz)",
+      "Velocidad combinada: Hasta 1800 Mbps (AX1800)",
+      "Puertos cableados: 2 puertos Gigabit LAN/WAN con detección automática por unidad Deco",
+      "Cobertura estimada: Hasta 370 m² (4,000 ft²) con el paquete de 2 unidades",
+      "Capacidad multi-dispositivo: Conexión simultánea fluida para más de 150 equipos",
+      "Tecnología Mesh: Roaming fluido inteligente 802.11k/v/r y selección automática de ruta",
+      "Garantía oficial TP-Link de 2 años y comprobante fiscal NCF"
+    ]
+  },
+  {
+    "id": "redes_patch_panel_24p_cat6",
+    "department": "redes",
+    "category": "Cableado Estructurado",
+    "brand": "Futunet Redes",
+    "title": "Patch Panel Cat 6 de 24 Puertos 1U para Rack de 19\" con Barra de Gestión Trasera",
+    "desc": "Patch panel de 24 puertos RJ45 Categoría 6 estándar de 19 pulgadas (1U) para montaje en racks y gabinetes de telecomunicaciones. Fabricado en acero laminado en frío de alta resistencia con acabado electrostático negro, contactos chapados en oro de 50 micras y bloques de terminación tipo 110/Krone codificados por color según normas T568A y T568B. Incluye barra posterior desmontable para soporte y amarre ordenado de cables UTP, numeración serigrafiada clara y conectores a tierra para instalaciones corporativas e industriales en Santiago.",
+    "price": "RD$ 2,950.00",
+    "img": "img/productos/catalogo/patch-panel-24p.webp",
+    "gallery": [
+      "img/productos/catalogo/patch-panel-24p.webp"
+    ],
+    "specs": [
+      "Capacidad: 24 puertos RJ45 Cat 6 sin blindar (1000BASE-T)",
+      "Formato de montaje: 1U estándar 19 pulgadas para rack o gabinete de pared",
+      "Terminación: Bloques IDC duales tipo 110 y Krone (cable 22 a 26 AWG)",
+      "Diagrama de cableado: Normas universales T568A y T568B serigrafiadas",
+      "Barra organizadora: Soporte metálico trasero desmontable para alivio de tensión",
+      "Chasis: Acero laminado de alta durabilidad con recubrimiento en polvo anticorrosivo"
+    ]
+  },
+  {
+    "id": "redes_patch_cord_cat6_2m",
+    "department": "redes",
+    "category": "Cableado Estructurado",
+    "brand": "Futunet Redes",
+    "title": "Patch Cord UTP Cat 6 de 2 Metros 100% Cobre con Conectores RJ45 Moldeados",
+    "desc": "Cable de parcheo (Patch Cord) de red UTP Categoría 6 de 2 metros (6.6 pies) fabricado con conductores multifilares 100% cobre puro de 24 AWG para máxima flexibilidad y durabilidad en gabinetes y estaciones de trabajo. Conectores RJ45 macho con terminales dorados y bota moldeada con protector de pestaña (snagless) que evita atascos y roturas durante el conexionado en switches y paneles de parcheo en racks de telecomunicaciones.",
+    "price": "RD$ 250.00",
+    "img": "img/productos/catalogo/patch-cord-cat6.webp",
+    "gallery": [
+      "img/productos/catalogo/patch-cord-cat6.webp"
+    ],
+    "specs": [
+      "Longitud: 2 metros (6.6 pies)",
+      "Categoría: UTP Cat 6 para enlaces Gigabit Ethernet hasta 250 MHz",
+      "Conductor: 100% Cobre multifilar 24 AWG de alta flexibilidad",
+      "Conectores: RJ45 8P8C con pines dorados de 50 micras",
+      "Diseño: Bota moldeada snagless anti-enganche y alivio de tensión",
+      "Color: Azul corporativo para rápida identificación en armarios de red"
+    ]
+  },
+  {
+    "id": "redes_conectores_rj45_cat6_pack",
+    "department": "redes",
+    "category": "Cableado Estructurado",
+    "brand": "Futunet Redes",
+    "title": "Pack de 100 Conectores RJ45 Cat 6 con Botas Protectoras para Cable UTP",
+    "desc": "Paquete de 100 conectores modulares RJ45 macho Categoría 6 de alta precisión con 100 botas o capuchones protectores de goma flexible. Diseñados con pines de tres puntas bañados en oro de 50 micras compatibles con conductores sólidos de 23 AWG y multifilares de 24 AWG. Proporcionan inserción fluida, excelente conductividad eléctrica, cero atenuación y protección integral de la lengüeta de fijación para tendidos de red y conexiones de videovigilancia CCTV.",
+    "price": "RD$ 1,450.00",
+    "img": "img/productos/catalogo/conectores-rj45-cat6.webp",
+    "gallery": [
+      "img/productos/catalogo/conectores-rj45-cat6.webp"
+    ],
+    "specs": [
+      "Cantidad: 100 conectores RJ45 Cat 6 + 100 botas protectoras",
+      "Compatibilidad: Cables UTP Cat 6 (conductores 23 y 24 AWG)",
+      "Contactos: Cobre fosforado con baño de oro de 50 micras y 3 puntas",
+      "Carcasa: Policarbonato transparente de alto impacto y retardante a la llama",
+      "Botas: Goma de alivio de tensión flexible que previene fatiga del cable",
+      "Uso: Redes Gigabit Ethernet, cámaras IP PoE y telefonía IP"
     ]
   }
 ];

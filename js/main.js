@@ -926,9 +926,13 @@ function switchPortalTab(tabName) {
 window.switchPortalTab = switchPortalTab;
 
 function selectHomePlan(planName, planId, price) {
-  sessionStorage.setItem('pending_hiring_plan_name', planName);
-  sessionStorage.setItem('pending_hiring_plan_id', planId);
-  sessionStorage.setItem('pending_hiring_plan_price', price);
+  try {
+    sessionStorage.setItem('pending_hiring_plan_name', planName);
+    sessionStorage.setItem('pending_hiring_plan_id', planId);
+    sessionStorage.setItem('pending_hiring_plan_price', price);
+  } catch (err) {
+    console.warn('Storage no disponible para pending_hiring_plan:', err);
+  }
   
   if (window.showToast) {
     window.showToast('Redirigiendo al portal para completar tu solicitud...', 'info');
@@ -1234,12 +1238,12 @@ function initAnnouncementBar() {
 
   // Campaña activa dinámica según vertical o calendario comercial 2026
   let campaign = {
-    badge: '⚡ SPRINT FINAL CIERRE Q3',
-    message: q3Message,
-    coupon: 'INFRA2026',
-    endDate: q3End,
-    ctaText: 'Aprovechar Cierre Q3',
-    waMsg: 'Hola Futunet, quiero aprovechar el sprint de cierre Q3 y solicitar mi levantamiento técnico gratuito con el código INFRA2026.'
+    badge: '🛡️ OCTUBRE: SEGURIDAD & TECNOLOGÍA',
+    message: '10% de Descuento en Equipamiento y Soluciones Tecnológicas con',
+    coupon: 'OCTUBRE2026',
+    endDate: new Date('2026-10-31T23:59:59'),
+    ctaText: 'Aprovechar Ofertas Q4',
+    waMsg: 'Hola Futunet, quiero cotizar equipamiento tecnológico corporativo con el código OCTUBRE2026.'
   };
 
   // Contextualización inteligente por página
@@ -1263,12 +1267,12 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('energia-climatizacion.html')) {
     campaign = {
-      badge: '⚡ RESPALDO CICLÓNICO',
-      message: '10% de Descuento en UPS Online de Doble Conversión e Inversores con',
-      coupon: 'RESPALDO2026',
-      endDate: new Date('2026-09-30T23:59:59'),
+      badge: '⚡ RESPALDO Y ENERGÍA Q4',
+      message: '10% de Descuento en UPS Online, Baterías e Inversores con',
+      coupon: 'OCTUBRE2026',
+      endDate: new Date('2026-10-31T23:59:59'),
       ctaText: 'Proteger Servidores',
-      waMsg: 'Hola Futunet, quiero cotizar UPS de respaldo con el código RESPALDO2026.'
+      waMsg: 'Hola Futunet, quiero cotizar UPS de respaldo con el código OCTUBRE2026.'
     };
   } else if (currentPath.includes('seguridad-electronica.html')) {
     campaign = {

@@ -284,7 +284,10 @@ function initFutunetChatbot() {
     // 2. Cooldown anti-flooding / rate-limiting en cliente (1.5 segundos)
     const now = Date.now();
     const cooldownKey = 'futunet_last_chat_msg_ts';
-    const lastChat = sessionStorage.getItem(cooldownKey);
+    let lastChat = null;
+    try {
+      lastChat = sessionStorage.getItem(cooldownKey);
+    } catch (_) {}
     const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
     if (!isTestEnv && lastChat && (now - Number(lastChat)) < 1500) {
       return;
@@ -294,7 +297,9 @@ function initFutunetChatbot() {
     const text = sanitizeChatInput(value).slice(0, 1500);
     if (!text || pending) return;
 
-    sessionStorage.setItem(cooldownKey, String(now));
+    try {
+      sessionStorage.setItem(cooldownKey, String(now));
+    } catch (_) {}
     cbInputText.value = '';
     addUserMessage(text);
     userMessages.push(text);

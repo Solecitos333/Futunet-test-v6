@@ -27,12 +27,14 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     { file: 'internet.html', id: 'p-hir-hp-check', name: 'Portal: contratación de plan cliente' },
     { file: 'internet.html', id: 'p-guest-hp-check', name: 'Modal público: contratación express' },
     { file: 'punto-de-venta.html', id: 'pos-hp-check', name: 'Cotizador directo POS' },
+    { file: 'login.html', id: 'login-hp-check', name: 'Formulario de inicio de sesión' },
     { file: 'login.html', id: 'reg-hp-check', name: 'Formulario de registro de cuenta' },
     { file: 'login.html', id: 'reset-hp-check', name: 'Formulario de recuperación de contraseña' },
     { file: 'login.html', id: 'magic-hp-check', name: 'Formulario de acceso sin contraseña' },
     { file: 'cotizacion.html', id: 'quote-hp-check', name: 'Formulario de cotización pública' },
     { file: 'mi-cuenta.html', id: 'profile-hp-check', name: 'Formulario de perfil de usuario' },
     { file: 'mi-cuenta.html', id: 'fin-hp-check', name: 'Formulario de expediente de financiamiento' },
+    { file: 'sugerencias.html', id: 'sug-track-hp-check', name: 'Consulta y tracking de sugerencia' },
     { file: 'admin.html', id: 'internal-sug-hp-check', name: 'Formulario de propuesta interna de personal' },
     { file: 'admin.html', id: 'create-user-hp-check', name: 'Formulario de creación de usuario en administración' }
   ];
@@ -93,6 +95,8 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
     { file: 'sugerencias.html', id: 'sug-privacy-consent', label: 'Buzón de sugerencias' },
     { file: 'internet.html', id: 'p-hir-privacy-consent', label: 'Contratación portal cliente' },
     { file: 'internet.html', id: 'p-guest-privacy-consent', label: 'Contratación modal express' },
+    { file: 'internet.html', id: 'pay-privacy-consent', label: 'Reporte de transferencias bancarias' },
+    { file: 'internet.html', id: 'support-privacy-consent', label: 'Solicitud de soporte técnico portal' },
     { file: 'punto-de-venta.html', id: 'pos-privacy-consent', label: 'Cotizador POS' },
     { file: 'login.html', id: 'register-terms', label: 'Registro de usuario' },
     { file: 'cotizacion.html', id: 'quote-accept-terms', label: 'Respuesta de cotización pública' },
@@ -419,8 +423,34 @@ test('Sanitización e Inyecciones: remoción de tags y caracteres de control inv
     'js/admin-panel.js debe implementar sanitizeAdminUserInput para creación y edición de usuarios'
   );
   assert.ok(
+    adminPanelJs.includes("title: sanitizeAdminUserInput(getVal('product-title')"),
+    'js/admin-panel.js debe sanitizar el título del producto en productForm'
+  );
+  assert.ok(
+    adminPanelJs.includes("var name = sanitizeAdminUserInput(getVal('category-name')"),
+    'js/admin-panel.js debe sanitizar el nombre de categoría en saveCategory'
+  );
+  assert.ok(
+    adminPanelJs.includes("var name = sanitizeAdminUserInput(getVal('brand-name')"),
+    'js/admin-panel.js debe sanitizar el nombre de marca en saveBrand'
+  );
+  assert.ok(
     adminPanelJs.includes('\\x00-\\x08'),
     'js/admin-panel.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+
+  const erpJs = readJs('js/facturacion.js');
+  assert.ok(
+    erpJs.includes('sanitizeErpInput'),
+    'js/facturacion.js debe implementar la función sanitizeErpInput'
+  );
+  assert.ok(
+    erpJs.includes('\\x00-\\x08'),
+    'js/facturacion.js debe neutralizar caracteres de control ASCII invisibles'
+  );
+  assert.ok(
+    erpJs.includes('escapeAttr'),
+    'js/facturacion.js debe contar con la función escapeAttr para atributos HTML'
   );
 });
 

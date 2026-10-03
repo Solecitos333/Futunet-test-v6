@@ -78,6 +78,14 @@
       validFrom: '2026-09-01',
       validUntil: '2026-12-31',
       description: '12% de descuento en Sistemas de Punto de Venta (POS) y Facturación Comercial'
+    },
+    OCTUBRE2026: {
+      code: 'OCTUBRE2026',
+      discount: 0.10,
+      departments: ['equipos', 'redes', 'oficina', 'energia', 'seguridad', 'gaming', 'infra'],
+      validFrom: '2026-10-01',
+      validUntil: '2026-10-31',
+      description: '10% de descuento en Soluciones Tecnológicas y Equipamiento (Octubre 2026)'
     }
   };
 
@@ -205,9 +213,12 @@
       const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
       if (user && window.FutunetFirebase && window.FutunetFirebase.db) {
         const db = window.FutunetFirebase.db;
+        const nowTs = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+          ? firebase.firestore.FieldValue.serverTimestamp()
+          : new Date();
         db.collection('carts').doc(user.uid).set({
           items: cartState.items,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          updatedAt: nowTs
         }).catch(function(err) {
           console.warn('Error al guardar carrito en Firestore:', err);
         });
@@ -241,9 +252,12 @@
         }
       }
       
+      const nowTs = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+        ? firebase.firestore.FieldValue.serverTimestamp()
+        : new Date();
       await docRef.set({
         items: cartState.items,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        updatedAt: nowTs
       });
     } catch (e) {
       console.warn('Error al sincronizar el carrito con Firestore:', e);
@@ -443,7 +457,7 @@
         const qty = cartState.items[product.id]?.qty || 0;
         const unitPrice = parsePriceToNumber(product.price);
         const isLease = String(product.price).includes('/ mes');
-        if (!isLease && activeCoupon.departments.includes(product.department)) {
+        if (!isLease && Array.isArray(activeCoupon.departments) && activeCoupon.departments.includes(product.department)) {
           discountAmount += (unitPrice * qty) * activeCoupon.discount;
         }
       });
@@ -598,7 +612,7 @@
         const qty = cartState.items[product.id]?.qty || 0;
         const unitPrice = parsePriceToNumber(product.price);
         const isLease = String(product.price).includes('/ mes');
-        if (!isLease && activeCoupon.departments.includes(product.department)) {
+        if (!isLease && Array.isArray(activeCoupon.departments) && activeCoupon.departments.includes(product.department)) {
           discountAmount += (unitPrice * qty) * activeCoupon.discount;
         }
       });
@@ -759,7 +773,7 @@
               <div class="checkout-form-group full-width" style="margin-top: 8px;">
                 <label for="chk-coupon">Código de Descuento (Opcional)</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="chk-coupon" placeholder="Ej. INFRA2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
                   <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
                 </div>
                 <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>
@@ -1305,7 +1319,10 @@
     // 2. Cooldown de envío de pedidos (Rate-limiting en cliente 10s contra flooding / doble submit)
     const orderCooldownKey = 'futunet_last_order_ts';
     const now = Date.now();
-    const lastOrder = sessionStorage.getItem(orderCooldownKey);
+    let lastOrder = null;
+    try {
+      lastOrder = sessionStorage.getItem(orderCooldownKey);
+    } catch (_) {}
     if (lastOrder && (now - Number(lastOrder)) < 10000) {
       const waitSecs = Math.ceil((10000 - (now - Number(lastOrder))) / 1000);
       showCartToast(`Por favor espera ${waitSecs} segundo(s) antes de confirmar otro pedido.`, 'info');
@@ -1553,7 +1570,10 @@
         updateCartCount();
         closeCheckoutModal();
       }
-      sessionStorage.setItem('futunet_last_order_ts', String(Date.now()));
+
+      try {
+        sessionStorage.setItem('futunet_last_order_ts', String(Date.now()));
+      } catch (_) {}
       delete form.dataset.requestId;
     } catch (err) {
       console.error('Error during checkout processing:', err);

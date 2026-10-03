@@ -1,4 +1,4 @@
-﻿const path = require('node:path');
+const path = require('node:path');
 const admin = require('firebase-admin');
 const { getFirestore } = require('firebase-admin/firestore');
 

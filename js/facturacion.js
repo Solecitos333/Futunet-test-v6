@@ -134,6 +134,16 @@ window.ERPBilling = (function () {
       .replace(/'/g, '&#39;');
   }
 
+  // Saneamiento de entradas ERP: remueve tags HTML y caracteres de control invisibles
+  function sanitizeErpInput(val, maxLen) {
+    if (val === undefined || val === null) return '';
+    const clean = String(val)
+      .replace(/<[^>]*>/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      .trim();
+    return typeof maxLen === 'number' && maxLen > 0 ? clean.slice(0, maxLen) : clean;
+  }
+
   // Toast notification system
   function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
@@ -1718,16 +1728,16 @@ window.ERPBilling = (function () {
 
       let actionsHtml = `
         <div class="table-actions">
-          <button class="table-btn table-btn-primary" title="Ver Detalle" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">
+          <button class="table-btn table-btn-primary" title="Ver Detalle" data-erp-click="ERPBilling.viewInvoice('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
-          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" data-erp-click="ERPBilling.printInvoiceDirectly('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Imprimir / PDF" data-erp-click="ERPBilling.printInvoiceDirectly('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
           </button>
-          <button class="table-btn table-btn-secondary" title="Duplicar documento" data-erp-click="ERPBilling.duplicateDocument('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Duplicar documento" data-erp-click="ERPBilling.duplicateDocument('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
           </button>
-          <button class="table-btn table-btn-secondary" title="Historial del documento" data-erp-click="ERPBillingWorkflows.openHistoryDialog('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Historial del documento" data-erp-click="ERPBillingWorkflows.openHistoryDialog('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></svg>
           </button>
       `;
@@ -1736,33 +1746,33 @@ window.ERPBilling = (function () {
         const canEdit = ((inv.docType === 'quote' || inv.docType === 'proforma') && !['accepted', 'converted'].includes(inv.workflowStatus)) ||
           (inv.docType === 'invoice' && !inv.ncf && Number(inv.paidAmount || 0) === 0);
         if (canEdit) actionsHtml += `
-          <button class="table-btn table-btn-secondary" title="Editar" data-erp-click="ERPBilling.editQuote('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Editar" data-erp-click="ERPBilling.editQuote('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4Z"/></svg>
           </button>
         `;
 
         if (inv.docType === 'quote' || inv.docType === 'proforma') {
           actionsHtml += `
-            <button class="table-btn table-btn-secondary" title="Compartir y solicitar aceptación" data-erp-click="ERPBillingWorkflows.openShareDialog('${inv.id}')">
+            <button class="table-btn table-btn-secondary" title="Compartir y solicitar aceptación" data-erp-click="ERPBillingWorkflows.openShareDialog('${escapeAttr(inv.id)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>
             </button>
-            <button class="table-btn table-btn-success" title="Convertir a Factura" data-erp-click="ERPBilling.convertQuoteFromList('${inv.id}')">
+            <button class="table-btn table-btn-success" title="Convertir a Factura" data-erp-click="ERPBilling.convertQuoteFromList('${escapeAttr(inv.id)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             </button>
           `;
         } else if (inv.docType === 'invoice' && balance > 0) {
           actionsHtml += `
-            <button class="table-btn table-btn-success" title="Registrar Cobro" data-erp-click="ERPBilling.openRegisterPaymentFromList('${inv.id}')">
+            <button class="table-btn table-btn-success" title="Registrar Cobro" data-erp-click="ERPBilling.openRegisterPaymentFromList('${escapeAttr(inv.id)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/><path d="M6 14h.01M10 14h.01"/></svg>
             </button>
           `;
         }
 
         if (isUserAdmin && inv.docType === 'invoice') actionsHtml += `
-          <button class="table-btn table-btn-secondary" title="Crear nota de crédito o débito" data-erp-click="ERPBilling.openFiscalAdjustment('${inv.id}')">
+          <button class="table-btn table-btn-secondary" title="Crear nota de crédito o débito" data-erp-click="ERPBilling.openFiscalAdjustment('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg>
           </button>
-          <button class="table-btn table-btn-danger" title="Anular Factura" data-erp-click="ERPBilling.cancelInvoice('${inv.id}')">
+          <button class="table-btn table-btn-danger" title="Anular Factura" data-erp-click="ERPBilling.cancelInvoice('${escapeAttr(inv.id)}')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
           </button>
         `;
@@ -2267,11 +2277,11 @@ window.ERPBilling = (function () {
 
     const docType = document.getElementById('form-invoice-doc-type').value;
     let clientId = document.getElementById('form-invoice-client-id').value;
-    const clientName = document.getElementById('form-invoice-client-name').value.trim();
-    const clientRnc = document.getElementById('form-invoice-client-rnc').value.trim();
-    const clientPhone = document.getElementById('form-invoice-client-phone') ? document.getElementById('form-invoice-client-phone').value.trim() : '';
-    const clientEmail = document.getElementById('form-invoice-client-email') ? document.getElementById('form-invoice-client-email').value.trim() : '';
-    const clientAddress = document.getElementById('form-invoice-client-address') ? document.getElementById('form-invoice-client-address').value.trim() : '';
+    const clientName = sanitizeErpInput(document.getElementById('form-invoice-client-name').value, 150);
+    const clientRnc = sanitizeErpInput(document.getElementById('form-invoice-client-rnc').value, 30);
+    const clientPhone = document.getElementById('form-invoice-client-phone') ? sanitizeErpInput(document.getElementById('form-invoice-client-phone').value, 50) : '';
+    const clientEmail = document.getElementById('form-invoice-client-email') ? sanitizeErpInput(document.getElementById('form-invoice-client-email').value, 120) : '';
+    const clientAddress = document.getElementById('form-invoice-client-address') ? sanitizeErpInput(document.getElementById('form-invoice-client-address').value, 300) : '';
     
     if (!clientName) {
       showToast('Por favor, introduce el nombre del cliente.', 'warning');
@@ -2323,7 +2333,7 @@ window.ERPBilling = (function () {
     for (let tr of rows) {
       const searchInput = tr.querySelector('.row-product-search');
       const productIdInput = tr.querySelector('.row-product-id');
-      const description = searchInput ? searchInput.value.trim() : '';
+      const description = searchInput ? sanitizeErpInput(searchInput.value, 250) : '';
       const price = Number(tr.querySelector('.row-price').value);
       const qty = Number(tr.querySelector('.row-qty').value);
       const lineTax = Number(tr.querySelector('.row-tax').value);
@@ -2442,10 +2452,10 @@ window.ERPBilling = (function () {
 
     // Document Data
     const paymentTermsEl = document.getElementById('form-invoice-payment-terms');
-    const paymentTerms = paymentTermsEl ? paymentTermsEl.value : 'Contado';
+    const paymentTerms = paymentTermsEl ? sanitizeErpInput(paymentTermsEl.value, 50) : 'Contado';
 
     const invoiceNotesEl = document.getElementById('form-invoice-notes');
-    const invoiceNotes = invoiceNotesEl ? invoiceNotesEl.value.trim() : '';
+    const invoiceNotes = invoiceNotesEl ? sanitizeErpInput(invoiceNotesEl.value, 1000) : '';
 
     const userUid = (currentUser && (currentUser.uid || currentUser.id)) ? (currentUser.uid || currentUser.id) : 'admin';
     const invoiceData = {
@@ -2844,7 +2854,7 @@ window.ERPBilling = (function () {
     const type = document.getElementById('fiscal-adjustment-type').value;
     const date = document.getElementById('fiscal-adjustment-date').value;
     const amount = BillingCore.roundMoney(document.getElementById('fiscal-adjustment-amount').value);
-    const reason = document.getElementById('fiscal-adjustment-reason').value.trim();
+    const reason = sanitizeErpInput(document.getElementById('fiscal-adjustment-reason').value, 500);
     const resolution = type === 'credit_note'
       ? document.getElementById('fiscal-adjustment-resolution').value
       : 'additional_charge';
@@ -3298,7 +3308,7 @@ window.ERPBilling = (function () {
     const invoiceId = document.getElementById('form-payment-invoice-id').value;
     const amount = Number(document.getElementById('form-payment-amount').value);
     const method = document.getElementById('form-payment-method').value;
-    const notes = document.getElementById('form-payment-notes').value.trim();
+    const notes = sanitizeErpInput(document.getElementById('form-payment-notes').value, 500);
 
     if (!Number.isFinite(amount) || amount <= 0) {
       showToast('El monto debe ser superior a cero.', 'warning');
@@ -3419,13 +3429,13 @@ window.ERPBilling = (function () {
         <td>${c.address ? escapeHTML(c.address) : '—'}</td>
         <td>
           <div class="table-actions">
-            <button class="table-btn table-btn-secondary" title="Ver Perfil" data-erp-click="ERPBilling.viewClientProfile('${c.id}')" style="color: var(--primary);">
+            <button class="table-btn table-btn-secondary" title="Ver Perfil" data-erp-click="ERPBilling.viewClientProfile('${escapeAttr(c.id)}')" style="color: var(--primary);">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             </button>
-            <button class="table-btn table-btn-primary" title="Editar" data-erp-click="ERPBilling.openEditClientForm('${c.id}')">
+            <button class="table-btn table-btn-primary" title="Editar" data-erp-click="ERPBilling.openEditClientForm('${escapeAttr(c.id)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
             </button>
-            <button class="table-btn table-btn-danger" title="Eliminar" data-erp-click="ERPBilling.deleteClient('${c.id}')">
+            <button class="table-btn table-btn-danger" title="Eliminar" data-erp-click="ERPBilling.deleteClient('${escapeAttr(c.id)}')">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
@@ -3524,7 +3534,7 @@ window.ERPBilling = (function () {
           <td style="color:${balance > 0 ? '#ef4444' : 'inherit'}; font-weight:600;">${escapeHTML(formatMoney(balance))}</td>
           <td><span class="admin-badge ${statusClass}">${statusText}</span></td>
           <td>
-            <button class="table-btn table-btn-secondary" title="Ver Factura" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">
+            <button class="table-btn table-btn-secondary" title="Ver Factura" data-erp-click="ERPBilling.viewInvoice('${escapeAttr(inv.id)}')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
             </button>
           </td>
@@ -3562,7 +3572,7 @@ window.ERPBilling = (function () {
               <td>${escapeHTML(formatMoney(item.price))}</td>
               <td>${escapeHTML(formatMoney(item.total || (item.price * item.qty)))}</td>
               <td>${escapeHTML(formatDate(inv.date))}</td>
-              <td><span style="cursor:pointer; color:var(--primary); text-decoration:underline;" data-erp-click="ERPBilling.viewInvoice('${inv.id}')">${escapeHTML(inv.invoiceNumber)}</span></td>
+              <td><span style="cursor:pointer; color:var(--primary); text-decoration:underline;" data-erp-click="ERPBilling.viewInvoice('${escapeAttr(inv.id)}')">${escapeHTML(inv.invoiceNumber)}</span></td>
             `;
             creditBody.appendChild(tr);
           });
@@ -3619,9 +3629,9 @@ window.ERPBilling = (function () {
     e.preventDefault();
 
     const id = document.getElementById('form-client-id').value;
-    const name = document.getElementById('form-client-name').value.trim();
-    const rnc = document.getElementById('form-client-rnc').value.trim();
-    const email = document.getElementById('form-client-email').value.trim();
+    const name = sanitizeErpInput(document.getElementById('form-client-name').value, 150);
+    const rnc = sanitizeErpInput(document.getElementById('form-client-rnc').value, 30);
+    const email = sanitizeErpInput(document.getElementById('form-client-email').value, 120);
     const cleanRnc = rnc.replace(/\D/g, '');
     if (!name || name.length > 150) {
       showToast('El nombre del cliente es obligatorio y debe ser válido.', 'danger');
@@ -3642,9 +3652,9 @@ window.ERPBilling = (function () {
     const clientData = {
       name: name,
       rnc: rnc,
-      phone: document.getElementById('form-client-phone').value.trim(),
+      phone: sanitizeErpInput(document.getElementById('form-client-phone').value, 50),
       email: email,
-      address: document.getElementById('form-client-address').value.trim(),
+      address: sanitizeErpInput(document.getElementById('form-client-address').value, 300),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -3910,9 +3920,9 @@ window.ERPBilling = (function () {
     const source = document.getElementById('form-product-source').value;
     const isCreaticos = source === 'creaticos';
 
-    const skuVal = document.getElementById('form-product-sku').value.trim();
-    const referenceVal = document.getElementById('form-product-reference').value.trim();
-    const barcodeVal = document.getElementById('form-product-barcode').value.trim();
+    const skuVal = sanitizeErpInput(document.getElementById('form-product-sku').value, 50);
+    const referenceVal = sanitizeErpInput(document.getElementById('form-product-reference').value, 100);
+    const barcodeVal = sanitizeErpInput(document.getElementById('form-product-barcode').value, 50);
     const costVal = Number(document.getElementById('form-product-cost').value || 0);
     if (!Number.isFinite(costVal) || costVal < 0) {
       showToast('El costo unitario debe ser un número válido.', 'danger');
@@ -3927,8 +3937,8 @@ window.ERPBilling = (function () {
           throw new Error('El precio o el ITBIS del producto no es válido.');
         }
         const prodData = {
-          name: document.getElementById('form-product-name').value.trim(),
-          description: document.getElementById('form-product-description').value.trim(),
+          name: sanitizeErpInput(document.getElementById('form-product-name').value, 150),
+          description: sanitizeErpInput(document.getElementById('form-product-description').value, 1000),
           price: priceValue,
           cost: costVal,
           tax: taxValue,
@@ -3943,8 +3953,8 @@ window.ERPBilling = (function () {
           await getDB().collection('creaticos_products').add(prodData);
         }
       } else {
-        const nameVal = document.getElementById('form-product-name').value.trim();
-        const descVal = document.getElementById('form-product-description').value.trim();
+        const nameVal = sanitizeErpInput(document.getElementById('form-product-name').value, 150);
+        const descVal = sanitizeErpInput(document.getElementById('form-product-description').value, 1000);
         const priceVal = Number(document.getElementById('form-product-price').value);
         const stockVal = Number(document.getElementById('form-product-stock').value);
         const reorderPointVal = Number(document.getElementById('form-product-reorder-point').value || 0);
@@ -4154,36 +4164,36 @@ window.ERPBilling = (function () {
       }
     }
     const updated = {
-      name: document.getElementById('set-company-name').value.trim(),
-      rnc: document.getElementById('set-company-rnc').value.trim(),
-      phone: document.getElementById('set-company-phone').value.trim(),
-      email: document.getElementById('set-company-email').value.trim(),
-      address: document.getElementById('set-company-address').value.trim(),
+      name: sanitizeErpInput(document.getElementById('set-company-name').value, 150),
+      rnc: sanitizeErpInput(document.getElementById('set-company-rnc').value, 30),
+      phone: sanitizeErpInput(document.getElementById('set-company-phone').value, 50),
+      email: sanitizeErpInput(document.getElementById('set-company-email').value, 120),
+      address: sanitizeErpInput(document.getElementById('set-company-address').value, 300),
       
-      ncfB01Prefix: document.getElementById('set-ncf-b01-prefix').value.trim(),
+      ncfB01Prefix: sanitizeErpInput(document.getElementById('set-ncf-b01-prefix').value, 10),
       ncfB01Seq: Number(document.getElementById('set-ncf-b01-seq').value) || 1,
-      ncfB02Prefix: document.getElementById('set-ncf-b02-prefix').value.trim(),
+      ncfB02Prefix: sanitizeErpInput(document.getElementById('set-ncf-b02-prefix').value, 10),
       ncfB02Seq: Number(document.getElementById('set-ncf-b02-seq').value) || 1,
-      ncfB03Prefix: document.getElementById('set-ncf-b03-prefix').value.trim(),
+      ncfB03Prefix: sanitizeErpInput(document.getElementById('set-ncf-b03-prefix').value, 10),
       ncfB03Seq: Number(document.getElementById('set-ncf-b03-seq').value) || 1,
-      ncfB04Prefix: document.getElementById('set-ncf-b04-prefix').value.trim(),
+      ncfB04Prefix: sanitizeErpInput(document.getElementById('set-ncf-b04-prefix').value, 10),
       ncfB04Seq: Number(document.getElementById('set-ncf-b04-seq').value) || 1,
       
-      ncfB14Prefix: document.getElementById('set-ncf-b14-prefix').value.trim(),
+      ncfB14Prefix: sanitizeErpInput(document.getElementById('set-ncf-b14-prefix').value, 10),
       ncfB14Seq: Number(document.getElementById('set-ncf-b14-seq').value) || 1,
-      ncfB15Prefix: document.getElementById('set-ncf-b15-prefix').value.trim(),
+      ncfB15Prefix: sanitizeErpInput(document.getElementById('set-ncf-b15-prefix').value, 10),
       ncfB15Seq: Number(document.getElementById('set-ncf-b15-seq').value) || 1,
-      ncfB12Prefix: document.getElementById('set-ncf-b12-prefix').value.trim(),
+      ncfB12Prefix: sanitizeErpInput(document.getElementById('set-ncf-b12-prefix').value, 10),
       ncfB12Seq: Number(document.getElementById('set-ncf-b12-seq').value) || 1,
 
-      invoicePrefix: document.getElementById('set-invoice-prefix').value.trim(),
+      invoicePrefix: sanitizeErpInput(document.getElementById('set-invoice-prefix').value, 15),
       nextInvoiceNum: Number(document.getElementById('set-invoice-seq').value) || 1001,
       defaultTax: rawDefaultTax,
       
-      quotePrefix: document.getElementById('set-quote-prefix').value.trim(),
+      quotePrefix: sanitizeErpInput(document.getElementById('set-quote-prefix').value, 15),
       nextQuoteNum: Number(document.getElementById('set-quote-seq').value) || 1001,
       
-      proformaPrefix: document.getElementById('set-proforma-prefix').value.trim(),
+      proformaPrefix: sanitizeErpInput(document.getElementById('set-proforma-prefix').value, 15),
       nextProformaNum: Number(document.getElementById('set-proforma-seq').value) || 1001,
 
       quoteValidityDays: Number(document.getElementById('set-quote-validity-days').value) || 15,
@@ -4193,9 +4203,9 @@ window.ERPBilling = (function () {
       collectionReminderDays: Number(document.getElementById('set-collection-reminder-days').value) || 3,
       commercialApprovalEnabled: document.getElementById('set-commercial-approval-enabled').checked,
 
-      ticketSlogan: document.getElementById('set-ticket-slogan').value.trim(),
-      ticketInstagram: document.getElementById('set-ticket-instagram').value.trim(),
-      ticketFooter: document.getElementById('set-ticket-footer').value.trim(),
+      ticketSlogan: sanitizeErpInput(document.getElementById('set-ticket-slogan').value, 200),
+      ticketInstagram: sanitizeErpInput(document.getElementById('set-ticket-instagram').value, 100),
+      ticketFooter: sanitizeErpInput(document.getElementById('set-ticket-footer').value, 200),
       ncfLowStockWarning: Number(document.getElementById('set-ncf-low-warning').value) || 25,
       ...(isPanitas ? { restaurantTables } : {})
     };
@@ -4803,20 +4813,19 @@ window.ERPBilling = (function () {
     try {
       const tableInput = document.getElementById('pos-restaurant-table');
       const table = BillingCore.normalizeTableName(tableInput.value);
-      tableInput.value = table;
-      const clientName = document.getElementById('pos-restaurant-client-name').value.trim().slice(0, 150) || 'Consumidor Final';
-      const notes = document.getElementById('pos-restaurant-order-notes').value.trim().slice(0, 500);
+      const clientName = sanitizeErpInput(document.getElementById('pos-restaurant-client-name').value, 150) || 'Consumidor Final';
+      const notes = sanitizeErpInput(document.getElementById('pos-restaurant-order-notes').value, 500);
       const priority = document.getElementById('pos-restaurant-priority').value;
       if (!['normal', 'high', 'urgent'].includes(priority)) throw new Error('Prioridad de orden no válida.');
 
       const items = posCart.map(item => ({
         productId: String(item.productId || '').slice(0, 150),
-        name: String(item.name || '').trim().slice(0, 150),
+        name: sanitizeErpInput(item.name, 150),
         price: BillingCore.roundMoney(item.price),
         qty: Number(item.qty),
         tax: Number(item.tax || 0),
-        notes: String(item.notes || '').trim().slice(0, 300),
-        modifiers: Array.isArray(item.modifiers) ? item.modifiers.map(String).slice(0, 10) : [],
+        notes: sanitizeErpInput(item.notes, 300),
+        modifiers: Array.isArray(item.modifiers) ? item.modifiers.map(m => sanitizeErpInput(m, 100)).slice(0, 10) : [],
         allergyWarning: Boolean(item.allergyWarning)
       }));
       if (items.some(item => !item.name || !Number.isFinite(item.price) || item.price < 0 || !Number.isInteger(item.qty) || item.qty < 1 || !Number.isFinite(item.tax) || item.tax < 0 || item.tax > 100)) {
@@ -5237,7 +5246,7 @@ window.ERPBilling = (function () {
     const clientId = document.getElementById('form-abono-client-id').value;
     const amountVal = Number(document.getElementById('form-abono-amount').value) || 0;
     const method = document.getElementById('form-abono-method').value;
-    const notes = document.getElementById('form-abono-notes').value.trim();
+    const notes = sanitizeErpInput(document.getElementById('form-abono-notes').value, 500);
 
     if (!clientId || !Number.isFinite(amountVal) || amountVal <= 0) {
       showToast('Por favor, ingrese un monto válido.', 'warning');
@@ -5637,7 +5646,7 @@ window.ERPBilling = (function () {
     const realInput = document.getElementById('form-cash-close-real');
     const notesInput = document.getElementById('form-cash-close-notes');
     const realVal = Number(realInput ? realInput.value : NaN);
-    const notes = notesInput ? notesInput.value.trim() : '';
+    const notes = sanitizeErpInput(notesInput ? notesInput.value : '', 500);
 
     if (!Number.isFinite(realVal) || realVal < 0) {
       showToast('El efectivo contado debe ser un monto válido mayor o igual a cero.', 'danger');
@@ -6021,8 +6030,8 @@ window.ERPBilling = (function () {
       companyCode: activeCompanyCode,
       type: docType,
       clientId: posClient.id || 'anonymous',
-      clientName: posClient.name,
-      clientRnc: posClient.rnc,
+      clientName: sanitizeErpInput(posClient.name, 150),
+      clientRnc: sanitizeErpInput(posClient.rnc, 30),
       customerSnapshot: invoiceCustomerSnapshot(posClient.id, { name: posClient.name, rnc: posClient.rnc }),
       issuerSnapshot: invoiceIssuerSnapshot('general'),
       fiscalSchemaVersion: 2,

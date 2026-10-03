@@ -113,9 +113,28 @@ function getStemVariants(word) {
   if (word === 'barcode') variants.push('lector', 'scanner', 'escaner', 'codigo');
   if (word === 'cajon' || word === 'cajones' || word === 'gaveta' || word === 'gavetas') variants.push('monedero', 'dinero', 'pos');
   if (word === 'monedero' || word === 'monederos') variants.push('gaveta', 'cajon', 'pos');
-  if (word === 'bobina' || word === 'bobinas') variants.push('cable', 'utp', 'cca', 'cat5e', 'cat6');
+  if (word === 'bobina' || word === 'bobinas') variants.push('cable', 'utp', 'cca', 'cobre', 'cat5e', 'cat6', 'rollo');
+  if (word === 'rollo' || word === 'rollos') variants.push('bobina', 'cable', 'utp');
+  if (word === 'cobre') variants.push('utp', 'cable', 'cat6', 'bobina');
+  if (word === 'electroiman' || word === 'electroimanes') variants.push('cerradura', 'magnetica', 'chapa', 'bloqueo');
+  if (word === 'chapa' || word === 'chapas') variants.push('cerradura', 'magnetica', 'electroiman');
+  if (word === 'cerradura' || word === 'cerraduras') variants.push('magnetica', 'electroiman', 'chapa', 'acceso');
+  if (word === 'pulsador' || word === 'pulsadores' || word === 'boton' || word === 'botones') variants.push('liberador', 'salida', 'touch', 'sensor');
+  if (word === 'liberador' || word === 'liberadores') variants.push('pulsador', 'boton', 'salida', 'cerradura');
+  if (word === 'notouch' || word === 'touch') variants.push('infrarrojo', 'sensor', 'pulsador', 'boton', 'salida');
+  if (word === 'deco') variants.push('mesh', 'tplink', 'tp-link', 'wifi');
+  if (word === 'mesh') variants.push('deco', 'malla', 'wifi', 'tplink');
+  if (word === 'tplink' || word === 'tp-link') variants.push('deco', 'router', 'wifi', 'mesh');
   if (word === 'gabinete' || word === 'gabinetes') variants.push('rack', 'chasis', 'servidor', 'enclosure');
   if (word === 'rack' || word === 'racks') variants.push('gabinete', 'bastidor', 'servidor', 'patch');
+  if (word === 'access' || word === 'point') variants.push('access', 'point', 'ap', 'punto', 'acceso', 'unifi', 'omada');
+  if (word === 'ap') variants.push('access', 'point', 'punto', 'acceso', 'unifi', 'omada', 'wifi');
+  if (word === 'patch') variants.push('panel', 'cord', 'patchcord', 'parcheo', 'latiguillo');
+  if (word === 'patchcord') variants.push('patch', 'cord', 'latiguillo', 'cable');
+  if (word === 'latiguillo' || word === 'latiguillos') variants.push('patch', 'cord', 'patchcord', 'cable');
+  if (word === 'conector' || word === 'conectores') variants.push('plug', 'plugs', 'rj45', 'terminal', 'terminales', 'bota');
+  if (word === 'plug' || word === 'plugs') variants.push('conector', 'conectores', 'rj45', 'terminal');
+  if (word === 'servidor' || word === 'servidores') variants.push('server', 'servers', 'rack', 'workstation');
   if (word === 'dahua') variants.push('cctv', 'camara', 'xvr', 'dvr', 'hdcvi');
   if (word === 'dvr' || word === 'xvr') variants.push('grabador', 'cctv', 'seguridad', 'camara');
   if (word === 'silla' || word === 'sillas') variants.push('sillon', 'sillones', 'asiento', 'ergonomica', 'ergonomico');
@@ -125,9 +144,15 @@ function getStemVariants(word) {
   if (word === 'raton' || word === 'ratones') variants.push('mouse', 'mouses');
   if (word === 'teclado' || word === 'teclados') variants.push('keyboard');
   if (word === 'keyboard' || word === 'keyboards') variants.push('teclado', 'teclados');
+  if (word === 'zkteco' || word === 'zk') variants.push('biometrico', 'acceso', 'asistencia', 'ponchador', 'facial', 'reloj', 'electroiman', 'cerradura');
+  if (word === 'biometrico' || word === 'biometricos' || word === 'biometrica' || word === 'biometricas') variants.push('zkteco', 'huella', 'facial', 'asistencia', 'ponchador', 'acceso', 'cerradura');
+  if (word === 'ponchador' || word === 'ponchadores' || word === 'ponche' || word === 'ponches') variants.push('asistencia', 'reloj', 'biometrico', 'zkteco', 'horario');
+  if (word === 'asistencia') variants.push('ponchador', 'reloj', 'biometrico', 'zkteco');
+  if (word === 'purple' || word === 'purpura') variants.push('western', 'wd', 'disco', 'cctv', 'surveillance');
+  if (word === 'western' || word === 'wd') variants.push('purple', 'purpura', 'disco', 'almacenamiento');
   if (word === 'camara' || word === 'camaras') variants.push('cctv', 'videovigilancia');
   if (word === 'cctv') variants.push('camara', 'camaras', 'videovigilancia', 'dvr');
-  if (word === 'disco' || word === 'discos') variants.push('ssd', 'hdd');
+  if (word === 'disco' || word === 'discos') variants.push('ssd', 'hdd', 'purple', 'purpura');
   if (word === 'ssd') variants.push('disco', 'solido');
   if (word === 'tapo') variants.push('tplink', 'tp-link');
   if (word === 'proyector' || word === 'proyectores') variants.push('proyeccion');
@@ -157,6 +182,8 @@ function matchesBrand(productBrand, targetBrand) {
   if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
   if (normP === 'tplink' && normT === 'tplink') return true;
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
+  if ((normP === 'zkteco' && normT === 'zk') || (normP === 'zk' && normT === 'zkteco')) return true;
+  if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -246,12 +273,107 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar terminales biométricas y reloj ponchador al buscar zkteco o asistencia
+  if (/\b(zkteco|biometrico|biometrica|ponchador|ponche|reloj|asistencia)\b/i.test(normalizedQuery)) {
+    if (/zkteco|biometric|ponchador|asistencia|facial|huella/i.test(title) || brand.includes('zkteco') || category.includes('acceso')) {
+      score += 70;
+    }
+  }
+
+  // Priorizar discos duros de videovigilancia al buscar purple o almacenamiento cctv
+  if (/\b(purple|purpura|cctv|surveillance)\b/i.test(normalizedQuery) || (/\b(disco|hdd)\b/i.test(normalizedQuery) && /\b(camara|camaras|cctv|dvr|xvr|seguridad)\b/i.test(normalizedQuery))) {
+    if (/purple|purpura|surveillance|disco duro.*(cctv|videovigilancia)/i.test(title) || brand.includes('western')) {
+      score += 70;
+    }
+  }
+
   // Priorizar gabinetes de red y racks de comunicaciones sobre PCs
-  if (/\b(rack|gabinete)\b/i.test(normalizedQuery) && /\b(red|redes|telecom|comunicaciones|servidor)\b/i.test(normalizedQuery)) {
-    if (/gabinete.*(9u|12u|42u|red)|rack/i.test(title) || category.includes('redes')) {
+  if (/\b(rack|gabinete)\b/i.test(normalizedQuery)) {
+    if (/gabinete.*(9u|12u|42u|red|pared)|rack/i.test(title) || category.includes('redes') || category.includes('racks')) {
       score += 65;
     }
   }
+
+  // Priorizar cerraduras magnéticas y electroimanes al buscar cerradura o electroimán
+  if (/\b(electroiman|electroimanes|chapa|chapas)\b/i.test(normalizedQuery)) {
+    if (/cerradura.*electromagnetica|electroiman|chapa\s*magnetica/i.test(title)) {
+      score += 150;
+    } else if (category.includes('acceso')) {
+      score += 30;
+    }
+  } else if (/\b(cerradura|cerraduras)\b/i.test(normalizedQuery)) {
+    if (/cerradura.*electromagnetica|electroiman|chapa\s*magnetica/i.test(title)) {
+      score += 135;
+    } else if (/\bcerradura\b/i.test(title)) {
+      score += 90;
+    } else if (category.includes('acceso')) {
+      score += 30;
+    }
+  }
+
+  // Priorizar pulsadores de salida No Touch al buscar pulsador o liberador
+  if (/\b(pulsador|liberador|no touch|notouch|boton.*salida)\b/i.test(normalizedQuery)) {
+    if (/pulsador.*salida|no touch|boton.*salida|liberador/i.test(title)) {
+      score += 125;
+    } else if (category.includes('acceso')) {
+      score += 30;
+    }
+  }
+
+
+  // Priorizar bobinas físicas de cable de red UTP Cat 6 (100% cobre) sobre CCA y servicios de reinstalación
+  if (/\b(bobina|cable utp|rollo)\b/i.test(normalizedQuery) || (/\b(cable)\b/i.test(normalizedQuery) && /\b(cat6|cat 6|cobre|red|utp)\b/i.test(normalizedQuery))) {
+    if (/bobina.*cable|cable.*utp.*cat\s*6.*cobre|cobre.*puro/i.test(title)) {
+      score += 115;
+    } else if (/bobina|cobre/i.test(title)) {
+      score += 90;
+    }
+    if (/reinstalacion|servicio\s+de/i.test(title)) {
+      score -= 80;
+    }
+  }
+
+  // Priorizar sistemas Mesh TP-Link Deco al buscar deco, mesh o tplink
+  if (/\b(deco|mesh|tplink|tp-link)\b/i.test(normalizedQuery)) {
+    if (/deco.*x20|mesh.*tp-link|sistema.*mesh/i.test(title) || brand.includes('tp-link')) {
+      score += 85;
+    }
+  }
+
+  // Priorizar Patch Panels al buscar patch panel o panel de parcheo
+  if (/(patch.*panel|panel.*parcheo)/i.test(normalizedQuery)) {
+    if (/patch.*panel|panel.*parcheo/i.test(title)) {
+      score += 120;
+    } else if (category.includes('cableado') || category.includes('redes')) {
+      score += 30;
+    }
+  }
+
+  // Priorizar Patch Cords al buscar patch cord o latiguillo
+  if (/(patch.*cord|patchcord|latiguillo)/i.test(normalizedQuery)) {
+    if (/patch.*cord|patchcord|latiguillo/i.test(title)) {
+      score += 120;
+    } else if (category.includes('cableado') || category.includes('redes')) {
+      score += 30;
+    }
+  }
+
+  // Priorizar Puntos de Acceso / Access Points al buscar access point, ap o punto de acceso
+  if (/(access.*point|\bap\b|punto.*acceso|unifi.*u6)/i.test(normalizedQuery)) {
+    if (/punto.*acceso|access.*point|unifi.*u6/i.test(title) || /punto.*acceso/i.test(desc)) {
+      score += 120;
+    }
+  }
+
+  // Priorizar Conectores RJ45 al buscar conector rj45, plug rj45 o conectores
+  if (/(conector|plug|terminales).*rj45|\b(conector|conectores|plugs?)\b/i.test(normalizedQuery)) {
+    if (/pack.*100.*conector|conectores.*rj45.*cat/i.test(title)) {
+      score += 180;
+    } else if (/conector|rj45.*terminales/i.test(title) && !/patch\s*cord/i.test(title)) {
+      score += 100;
+    }
+  }
+
 
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
@@ -397,7 +519,11 @@ function populateBrandFilter() {
     tplink: 'TP-Link',
     unv: 'Uniview',
     uniview: 'Uniview',
-    grandstream: 'Grandstream'
+    grandstream: 'Grandstream',
+    zkteco: 'ZKTeco',
+    zk: 'ZKTeco',
+    westerndigital: 'Western Digital',
+    wd: 'Western Digital'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -431,7 +557,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
@@ -2452,6 +2578,14 @@ async function initCatalogApp() {
   initSmartSearch('search-home', 'search-drop-home');
   initSmartSearch('search-navbar', 'search-drop-navbar');
   initSmartSearch('search-catalog-page', 'search-drop-catalog');
+
+  // Sincronización reactiva cuando el inventario esté listo o se actualice
+  window.addEventListener('futunet:inventory-ready', () => {
+    if (document.getElementById('catalog-grid-container')) {
+      syncQuickFilterChips();
+      renderUI();
+    }
+  });
 }
 
 if (document.readyState === 'loading') {

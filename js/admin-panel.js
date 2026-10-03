@@ -2586,8 +2586,8 @@
   async function saveCategory(e) {
     if (e) e.preventDefault();
     var id = getVal('category-id');
-    var name = getVal('category-name').trim();
-    var icon = getVal('category-icon').trim();
+    var name = sanitizeAdminUserInput(getVal('category-name'), 80);
+    var icon = sanitizeAdminUserInput(getVal('category-icon'), 80);
     if (!name) return;
     
     try {
@@ -2696,7 +2696,7 @@
   async function saveBrand(e) {
     if (e) e.preventDefault();
     var id = getVal('brand-id');
-    var name = getVal('brand-name').trim();
+    var name = sanitizeAdminUserInput(getVal('brand-name'), 80);
     if (!name) return;
     
     var btn = document.getElementById('btn-save-brand');
@@ -3073,7 +3073,7 @@
 
         try {
           var specsRaw = getVal('product-specs');
-          var specsArr = specsRaw ? specsRaw.split('\n').filter(function(s){return s.trim()!==''}) : [];
+          var specsArr = specsRaw ? specsRaw.split('\n').map(function(s){ return sanitizeAdminUserInput(s, 200); }).filter(function(s){return s.trim()!==''}) : [];
           var activeCb = document.getElementById('product-active');
 
           var finalGallery = [...existingGallery];
@@ -3088,25 +3088,25 @@
             finalGallery.push(url);
           }
 
-          var selectedCategory = getVal('product-category');
+          var selectedCategory = sanitizeAdminUserInput(getVal('product-category'), 80);
 
           var data = {
-            title: getVal('product-title'),
-            desc: getVal('product-desc'),
+            title: sanitizeAdminUserInput(getVal('product-title'), 160),
+            desc: sanitizeAdminUserInput(getVal('product-desc'), 2500),
             price: parseFloat(getVal('product-price')) || 0,
             category: selectedCategory,
             department: selectedCategory ? selectedCategory.toLowerCase() : 'otros',
-            brand: getVal('product-brand'),
-            serviceSubcategory: getVal('product-service-sub') || '',
+            brand: sanitizeAdminUserInput(getVal('product-brand'), 80),
+            serviceSubcategory: sanitizeAdminUserInput(getVal('product-service-sub'), 80) || '',
             stock: parseInt(getVal('product-stock')) || 0,
-            condition: getVal('product-condition'),
+            condition: sanitizeAdminUserInput(getVal('product-condition'), 40) || 'Nuevo',
             isActive: activeCb ? activeCb.checked : true,
             specs: specsArr,
             gallery: finalGallery,
             img: finalGallery.length > 0 ? finalGallery[0] : '',
-            sku: getVal('product-sku') || '',
-            reference: getVal('product-reference') || '',
-            barcode: getVal('product-barcode') || ''
+            sku: sanitizeAdminUserInput(getVal('product-sku'), 50) || '',
+            reference: sanitizeAdminUserInput(getVal('product-reference'), 50) || '',
+            barcode: sanitizeAdminUserInput(getVal('product-barcode'), 50) || ''
           };
 
           var id = getVal('product-id');
@@ -3330,7 +3330,10 @@
 
         // 2. Cooldown de seguridad en cliente (5 segundos)
         var now = Date.now();
-        var lastCreateTs = parseInt(sessionStorage.getItem('futunet_last_user_create_ts') || '0', 10);
+        var lastCreateTs = 0;
+        try {
+          lastCreateTs = parseInt(sessionStorage.getItem('futunet_last_user_create_ts') || '0', 10);
+        } catch (_) {}
         if (now - lastCreateTs < 5000) {
           showToast('Por favor espera unos segundos antes de crear otro usuario.', 'warning');
           return;
@@ -3374,7 +3377,9 @@
             documentType: documentType,
             documentNumber: documentNumber
           });
-          sessionStorage.setItem('futunet_last_user_create_ts', String(Date.now()));
+          try {
+            sessionStorage.setItem('futunet_last_user_create_ts', String(Date.now()));
+          } catch (_) {}
           showToast('Usuario creado con éxito', 'success');
           createUserForm.reset();
           closeModal('create-user-modal');
@@ -5941,7 +5946,10 @@
 
     // 2. Cooldown anti-flooding / rate-limiting en cliente (5 segundos)
     var now = Date.now();
-    var lastTs = parseInt(sessionStorage.getItem('futunet_last_internal_sug_ts') || '0', 10);
+    var lastTs = 0;
+    try {
+      lastTs = parseInt(sessionStorage.getItem('futunet_last_internal_sug_ts') || '0', 10);
+    } catch (_) {}
     if (now - lastTs < 5000) {
       alert('Por favor espera unos segundos antes de enviar otra propuesta.');
       return;

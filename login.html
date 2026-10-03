@@ -42,6 +42,11 @@
     <div class="auth-message" id="login-message"></div>
 
     <form id="login-form" autocomplete="on">
+     <!-- Honeypot de seguridad para bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="login-hp-check">No llenar este campo</label>
+      <input type="text" id="login-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+     </div>
      <div class="auth-form-group">
       <label class="auth-label" for="login-company">Código de empresa <span style="font-weight:500; color:#64748b;">(opcional)</span></label>
       <input class="auth-input" type="text" id="login-company" name="company" placeholder="Solo para accesos corporativos o ERP" autocomplete="organization" style="text-transform: uppercase;" />
@@ -337,7 +342,7 @@
       var adminRedirects = ['admin.html', 'facturacion.html'];
 
       if (redirectTarget.origin === window.location.origin) {
-       if (allowedRedirects.includes(redirectFile)) {
+       if (allowedRedirects.includes(redirectFile) || (redirectFile.startsWith('marca-') && redirectFile.endsWith('.html'))) {
         window.location.assign(redirectTarget.href);
         return;
        }
@@ -367,8 +372,10 @@
     }
     if (FutunetAuth.isSignInWithEmailLink(window.location.href)) {
      isCompletingSignInLink = true;
-     signInLink = window.location.href;
-     var email = window.localStorage.getItem('emailForSignIn') || '';
+     var email = '';
+     try {
+       email = window.localStorage.getItem('emailForSignIn') || '';
+     } catch (storageErr) {}
 
      if (email) {
       showPanel('panel-magic');
@@ -406,11 +413,21 @@
     e.preventDefault();
     clearMessage('login-message');
 
+    // Verificación Honeypot anti-bots (OWASP OAT-007)
+    var hpCheck = document.getElementById('login-hp-check');
+    if (hpCheck && hpCheck.value) {
+      showMessage('login-message', 'Solicitud no válida.', 'error');
+      return;
+    }
+
     // Control de intentos fallidos y throttling contra fuerza bruta
     var failedAttemptsKey = 'futunet_failed_logins';
     var lockoutKey = 'futunet_login_lockout_until';
     var now = Date.now();
-    var lockoutUntil = Number(sessionStorage.getItem(lockoutKey) || 0);
+    var lockoutUntil = 0;
+    try {
+      lockoutUntil = Number(sessionStorage.getItem(lockoutKey) || 0);
+    } catch (e) {}
     if (lockoutUntil && now < lockoutUntil) {
       var waitSecs = Math.ceil((lockoutUntil - now) / 1000);
       showMessage('login-message', 'Demasiados intentos fallidos. Por seguridad, espera ' + waitSecs + ' segundos antes de volver a intentar.', 'error');
@@ -503,7 +520,10 @@
     // 2. Cooldown de registro (Rate-limiting en cliente 10s)
     var regCooldownKey = 'futunet_last_register_ts';
     var now = Date.now();
-    var lastReg = sessionStorage.getItem(regCooldownKey);
+    var lastReg = null;
+    try {
+      lastReg = sessionStorage.getItem(regCooldownKey);
+    } catch (e) {}
     if (lastReg && (now - Number(lastReg)) < 10000) {
      var waitSecs = Math.ceil((10000 - (now - Number(lastReg))) / 1000);
      showMessage('register-message', 'Por favor, espera ' + waitSecs + ' segundos antes de intentar crear otra cuenta.', 'error');
@@ -541,7 +561,9 @@
      await FutunetAuth.signUp(email, password, name, {
       termsAccepted: acceptedTerms
      });
-     sessionStorage.setItem(regCooldownKey, String(Date.now()));
+     try {
+       sessionStorage.setItem(regCooldownKey, String(Date.now()));
+     } catch (storageErr) {}
      showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
      document.getElementById('register-form').reset();
      setLoading('register-btn', false);
@@ -587,7 +609,10 @@
 
     var resetCooldownKey = 'futunet_reset_cooldown_until';
     var now = Date.now();
-    var cooldownUntil = Number(sessionStorage.getItem(resetCooldownKey) || 0);
+    var cooldownUntil = 0;
+    try {
+      cooldownUntil = Number(sessionStorage.getItem(resetCooldownKey) || 0);
+    } catch (storageErr) {}
     if (cooldownUntil && now < cooldownUntil) {
       var waitSecs = Math.ceil((cooldownUntil - now) / 1000);
       showMessage('reset-message', 'Por favor, espera ' + waitSecs + ' segundos antes de solicitar otro enlace.', 'error');
@@ -615,7 +640,9 @@
 
     try {
      await FutunetAuth.sendPasswordReset(email);
-     sessionStorage.setItem(resetCooldownKey, String(Date.now() + 30000));
+     try {
+       sessionStorage.setItem(resetCooldownKey, String(Date.now() + 30000));
+     } catch (storageErr) {}
      showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
     } catch (err) {
      console.error('Reset error:', err);
@@ -632,7 +659,10 @@
     if (!isCompletingSignInLink) {
       var magicCooldownKey = 'futunet_magic_cooldown_until';
       var now = Date.now();
-      var cooldownUntil = Number(sessionStorage.getItem(magicCooldownKey) || 0);
+      var cooldownUntil = 0;
+      try {
+        cooldownUntil = Number(sessionStorage.getItem(magicCooldownKey) || 0);
+      } catch (storageErr) {}
       if (cooldownUntil && now < cooldownUntil) {
         var waitSecs = Math.ceil((cooldownUntil - now) / 1000);
         showMessage('magic-message', 'Por favor, espera ' + waitSecs + ' segundos antes de solicitar otro enlace.', 'error');
@@ -667,7 +697,9 @@
       setTimeout(function () { redirectByRole(userData); }, 1000);
      } else {
       await FutunetAuth.sendSignInLink(email);
-      sessionStorage.setItem(magicCooldownKey, String(Date.now() + 30000));
+      try {
+        sessionStorage.setItem(magicCooldownKey, String(Date.now() + 30000));
+      } catch (storageErr) {}
       showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
       document.getElementById('magic-email').value = '';
      }

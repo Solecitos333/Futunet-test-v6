@@ -602,6 +602,182 @@ test('Mejora demandada por usuarios: Optimización de búsqueda por sinónimos (
   assert.ok(catJs.includes("'bobina'"), 'catalog.js debe incluir bobina en stem variants');
 });
 
+test('Mejora demandada por usuarios: Terminal Biométrica ZKTeco y Reloj Ponchador (SUG-Z5180)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-Z5180'") && seedCjs.includes("status: 'implemented'"), 'SUG-Z5180 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-Z5180') && sugJs.includes('terminales biométricas ZKTeco'), 'SUG-Z5180 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('zkteco_mb20_terminal_biometrica'), 'backup_data.js debe contener zkteco_mb20_terminal_biometrica');
+
+  const zkImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'zkteco-mb20-biometrico.webp');
+  assert.ok(fs.existsSync(zkImg), 'La imagen del biométrico ZKTeco debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("zkteco: 'ZKTeco'"), 'catalog.js debe incluir ZKTeco en preferredNames');
+  assert.ok(catJs.includes("'ZKTeco'"), 'catalog.js debe incluir ZKTeco en priorityList');
+  assert.ok(catJs.includes("'ponchador'"), 'catalog.js debe incluir ponchador en stem variants');
+});
+
+test('Mejora demandada por usuarios: Discos Duros WD Purple para Videovigilancia (SUG-W3250)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-W3250'") && seedCjs.includes("status: 'implemented'"), 'SUG-W3250 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-W3250') && sugJs.includes('WD Purple'), 'SUG-W3250 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('cctv_wd_purple_2tb_hdd'), 'backup_data.js debe contener cctv_wd_purple_2tb_hdd');
+
+  const purpleImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'wd-purple-2tb.webp');
+  assert.ok(fs.existsSync(purpleImg), 'La imagen del disco duro WD Purple debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'Western Digital'"), 'catalog.js debe incluir Western Digital en priorityList');
+  assert.ok(catJs.includes("'purple'"), 'catalog.js debe incluir purple en stem variants');
+});
+
+test('Mejora demandada por usuarios: Gabinetes de Pared y Racks de 9U con cerradura (SUG-R6090)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-R6090'") && seedCjs.includes("status: 'implemented'"), 'SUG-R6090 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-R6090') && sugJs.includes('Gabinetes de pared'), 'SUG-R6090 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_gabinete_rack_9u'), 'backup_data.js debe contener redes_gabinete_rack_9u');
+
+  const rackImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'gabinete-9u.jpg');
+  assert.ok(fs.existsSync(rackImg), 'La imagen del gabinete de pared 9U debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("/gabinete.*(9u|12u|42u|red|pared)|rack/i.test(title)"), 'catalog.js debe priorizar gabinetes y racks');
+});
+
+test('Mejora demandada por usuarios: Cerraduras Electromagnéticas 600 lbs y Pulsador No Touch Infrarrojo (SUG-C600M)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C600M'") && seedCjs.includes("status: 'implemented'"), 'SUG-C600M debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C600M') && sugJs.includes('Cerradura Electromagnética'), 'SUG-C600M debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('sec_boton_salida_no_touch'), 'backup_data.js debe contener sec_boton_salida_no_touch');
+  assert.ok(backupJs.includes('prod_8ymxsbgt5'), 'backup_data.js debe contener cerradura prod_8ymxsbgt5');
+
+  const btnImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'boton-salida-notouch.webp');
+  assert.ok(fs.existsSync(btnImg), 'La imagen del botón No Touch debe existir en disco');
+
+  const lockImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cerradura-magnetica.jpg');
+  assert.ok(fs.existsSync(lockImg), 'La imagen de la cerradura electromagnética debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'electroiman'"), 'catalog.js debe incluir electroiman en stem variants');
+  assert.ok(catJs.includes("'chapa'"), 'catalog.js debe incluir chapa en stem variants');
+  assert.ok(catJs.includes("'cerradura'"), 'catalog.js debe incluir cerradura en stem variants');
+  assert.ok(catJs.includes("'notouch'"), 'catalog.js debe incluir notouch en stem variants');
+});
+
+test('Mejora demandada por usuarios: Bobinas de Cable UTP Cat 6 100% Cobre Puro 305m (SUG-B305C)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-B305C'") && seedCjs.includes("status: 'implemented'"), 'SUG-B305C debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-B305C') && sugJs.includes('Bobina de Cable UTP Cat 6'), 'SUG-B305C debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cable_utp_cat6_cobre_305m'), 'backup_data.js debe contener redes_cable_utp_cat6_cobre_305m');
+
+  const utpImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'bobina-utp-cat6.webp');
+  assert.ok(fs.existsSync(utpImg), 'La imagen de la bobina de cable UTP Cat 6 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cobre'"), 'catalog.js debe incluir cobre en stem variants');
+  assert.ok(catJs.includes("'rollo'"), 'catalog.js debe incluir rollo en stem variants');
+});
+
+test('Mejora demandada por usuarios: Red Mesh Wi-Fi 6 TP-Link Deco X20 AX1800 (SUG-T8260)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T8260'") && seedCjs.includes("status: 'implemented'"), 'SUG-T8260 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T8260') && sugJs.includes('TP-Link Deco X20'), 'SUG-T8260 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_tplink_deco_x20_mesh'), 'backup_data.js debe contener redes_tplink_deco_x20_mesh');
+
+  const decoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-deco-x20.webp');
+  assert.ok(fs.existsSync(decoImg), 'La imagen del sistema Mesh Deco X20 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'deco'"), 'catalog.js debe incluir deco en stem variants');
+  assert.ok(catJs.includes("'mesh'"), 'catalog.js debe incluir mesh en stem variants');
+});
+
+test('Mejora demandada por usuarios: Patch Panels de 24 Puertos Cat 6 y Patch Cords Gigabit (SUG-P2400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P2400'") && seedCjs.includes("status: 'implemented'"), 'SUG-P2400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P2400') && sugJs.includes('Patch Panels de 24 Puertos'), 'SUG-P2400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_patch_panel_24p_cat6'), 'backup_data.js debe contener redes_patch_panel_24p_cat6');
+  assert.ok(backupJs.includes('redes_patch_cord_cat6_2m'), 'backup_data.js debe contener redes_patch_cord_cat6_2m');
+
+  const panelImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'patch-panel-24p.webp');
+  assert.ok(fs.existsSync(panelImg), 'La imagen del patch panel de 24 puertos debe existir en disco');
+
+  const cordImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'patch-cord-cat6.webp');
+  assert.ok(fs.existsSync(cordImg), 'La imagen del patch cord Cat 6 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'patch'"), 'catalog.js debe incluir patch en stem variants');
+  assert.ok(catJs.includes("'latiguillo'"), 'catalog.js debe incluir latiguillo en stem variants');
+  assert.ok(catJs.includes("/(patch.*panel|panel.*parcheo)/i.test(normalizedQuery)"), 'catalog.js debe priorizar patch panels');
+  assert.ok(catJs.includes("/(patch.*cord|patchcord|latiguillo)/i.test(normalizedQuery)"), 'catalog.js debe priorizar patch cords');
+});
+
+test('Mejora demandada por usuarios: Access Points Wi-Fi 6 y Búsqueda de Puntos de Acceso (SUG-A1200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A1200'") && seedCjs.includes("status: 'implemented'"), 'SUG-A1200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A1200') && sugJs.includes('Puntos de Acceso Wi-Fi'), 'SUG-A1200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('ubiquiti_unifi_u6_plus'), 'backup_data.js debe contener ubiquiti_unifi_u6_plus');
+  assert.ok(backupJs.includes('Access Point WiFi 6'), 'ubiquiti_unifi_u6_plus debe incluir Access Point en el título');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'access'"), 'catalog.js debe incluir access en stem variants');
+  assert.ok(catJs.includes("'point'"), 'catalog.js debe incluir point en stem variants');
+  assert.ok(catJs.includes("'ap'"), 'catalog.js debe incluir ap en stem variants');
+  assert.ok(catJs.includes("/(access.*point|\\bap\\b|punto.*acceso|unifi.*u6)/i.test(normalizedQuery)"), 'catalog.js debe priorizar access points');
+});
+
+test('Mejora demandada por usuarios: Conectores RJ45 Cat 6 con Botas Protectoras (SUG-C4500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C4500'") && seedCjs.includes("status: 'implemented'"), 'SUG-C4500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C4500') && sugJs.includes('Conectores RJ45 Cat 6'), 'SUG-C4500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_conectores_rj45_cat6_pack'), 'backup_data.js debe contener redes_conectores_rj45_cat6_pack');
+
+  const connImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'conectores-rj45-cat6.webp');
+  assert.ok(fs.existsSync(connImg), 'La imagen de los conectores RJ45 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'conector'"), 'catalog.js debe incluir conector en stem variants');
+  assert.ok(catJs.includes("'plug'"), 'catalog.js debe incluir plug en stem variants');
+  assert.ok(catJs.includes("/(conector|plug|terminales).*rj45|\\b(conector|conectores|plugs?)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar conectores RJ45');
+});
+
+
 
 
 

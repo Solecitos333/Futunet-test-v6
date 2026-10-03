@@ -97,7 +97,10 @@
       // 2. Cooldown de actualización de perfil (Rate-limiting en cliente 5s)
       var profileCooldownKey = 'futunet_last_profile_update_ts';
       var now = Date.now();
-      var lastUpdate = sessionStorage.getItem(profileCooldownKey);
+      var lastUpdate = null;
+      try {
+        lastUpdate = sessionStorage.getItem(profileCooldownKey);
+      } catch (_) {}
       if (lastUpdate && (now - Number(lastUpdate)) < 5000) {
         var waitSecs = Math.ceil((5000 - (now - Number(lastUpdate))) / 1000);
         showToast('Por favor espera ' + waitSecs + ' segundo(s) antes de volver a guardar.', 'info');
@@ -146,8 +149,9 @@
         }
         await db.collection('users').doc(currentUser.uid).update(updateData);
         await currentUser.updateProfile({ displayName: name });
-        Object.assign(userData, updateData);
-        sessionStorage.setItem(profileCooldownKey, String(Date.now()));
+        try {
+          sessionStorage.setItem(profileCooldownKey, String(Date.now()));
+        } catch (_) {}
         renderProfile();
         showToast('Perfil actualizado correctamente', 'success');
       } catch (err) {
@@ -252,12 +256,20 @@
     var name = prompt('Nombre para este carrito:');
     if (!name || !name.trim()) return;
 
+    var sanitizedCartName = sanitizeProfileInput(name.trim()).slice(0, 60);
+    if (!sanitizedCartName) {
+      showToast('Por favor introduce un nombre válido para el carrito', 'error');
+      return;
+    }
+
     try {
       await db.collection('carts').add({
         userId: currentUser.uid,
-        name: name.trim(),
+        name: sanitizedCartName,
         items: cartItems,
-        savedAt: firebase.firestore.FieldValue.serverTimestamp()
+        savedAt: (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+          ? firebase.firestore.FieldValue.serverTimestamp()
+          : new Date()
       });
       showToast('Carrito guardado exitosamente', 'success');
       loadSavedCarts();

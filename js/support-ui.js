@@ -19,7 +19,7 @@
     el.textContent = text; el.classList.toggle('sp-error', error); el.hidden = !text;
   }
   function focus(id) { const el = $(id); if (el) el.focus(); }
-  function clearPreviews() { previews.forEach(URL.revokeObjectURL); previews = []; }
+  function clearPreviews() { previews.forEach(url => URL.revokeObjectURL(url)); previews = []; }
   function closeDetail() {
     detailStops.forEach(stop => stop()); detailStops = [];
     if (activeDialog) { const dialog = activeDialog; activeDialog = null; dialog.close(); dialog.remove(); }
@@ -115,7 +115,10 @@
     $('sp-send').addEventListener('click', async () => {
       if (!user?.emailVerified) { notice('sp-form-notice', 'Inicia sesión en el enlace de abajo. El caso está preparado y aún no se ha enviado.', true); return; }
       const now = Date.now();
-      const lastCreate = parseInt(sessionStorage.getItem('futunet_last_support_create_ts') || '0', 10);
+      let lastCreate = 0;
+      try {
+        lastCreate = parseInt(sessionStorage.getItem('futunet_last_support_create_ts') || '0', 10);
+      } catch (_) {}
       const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
       if (!isTestEnv && lastCreate && (now - lastCreate) < 15000) {
         const remaining = Math.ceil((15000 - (now - lastCreate)) / 1000);
@@ -128,7 +131,9 @@
         formId ||= S.newId();
         const id = await S.create(formId, collect(), [...$('sp-files').files]);
         if (epoch !== authEpoch) return;
-        sessionStorage.setItem('futunet_last_support_create_ts', String(Date.now()));
+        try {
+          sessionStorage.setItem('futunet_last_support_create_ts', String(Date.now()));
+        } catch (_) {}
         formId = null; $('sp-form').reset(); clearPreviews(); $('sp-previews').replaceChildren(); updateQuestion();
         $('sp-review').hidden = true; $('sp-edit-fields').hidden = false;
         notice('sp-form-notice', 'Ticket creado y confirmado. Número: ' + id + '. Ya puedes consultar su seguimiento.');
@@ -237,7 +242,10 @@
             return;
           }
           const now = Date.now();
-          const lastReply = parseInt(sessionStorage.getItem('futunet_last_support_reply_ts') || '0', 10);
+          let lastReply = 0;
+          try {
+            lastReply = parseInt(sessionStorage.getItem('futunet_last_support_reply_ts') || '0', 10);
+          } catch (_) {}
           const isTestEnv = typeof location !== 'undefined' && location.hostname === 'example.test';
           if (!isTestEnv && lastReply && (now - lastReply) < 5000) {
             notice('sp-reply-notice', 'Por favor espera unos segundos antes de enviar otra respuesta.', true);
@@ -248,7 +256,9 @@
             replyId ||= S.newId();
             await S.reply(id, replyId, $('sp-reply-body').value, $('sp-private-note')?.checked === true);
             if (activeDialog !== dialog) return;
-            sessionStorage.setItem('futunet_last_support_reply_ts', String(Date.now()));
+            try {
+              sessionStorage.setItem('futunet_last_support_reply_ts', String(Date.now()));
+            } catch (_) {}
             replyId = null; $('sp-reply-body').value = ''; notice('sp-reply-notice', 'Mensaje guardado.');
           } catch (e) { if (activeDialog === dialog) notice('sp-reply-notice', errorText(e), true); }
           finally { button.disabled = false; }

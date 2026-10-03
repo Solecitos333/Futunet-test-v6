@@ -240,7 +240,7 @@
         <div class="mega-menu-col">
          <h5><i class="fas fa-tools" style="margin-right:6px; color:#0A70A2;"></i>Hazlo tú mismo</h5>
          <ul>
-          <li><a href="https://wa.me/18297411041"><i class="fas fa-wifi"></i>Gestionar mi Wi-Fi</a></li>
+          <li><a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer"><i class="fas fa-wifi"></i>Gestionar mi Wi-Fi</a></li>
           <li><a href="internet.html#faqs"><i class="fas fa-key"></i>Cambiar clave del módem</a></li>
           <li><a href="internet.html#planes"><i class="fas fa-tachometer-alt"></i>Mide tu velocidad</a></li>
          </ul>
@@ -320,7 +320,7 @@
    <details class="mobile-details">
     <summary class="mobile-summary">Soporte <i class="fas fa-chevron-down"></i></summary>
     <div class="mobile-details-content">
-     <a href="https://wa.me/18297411041" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
+     <a href="https://wa.me/18297411041" target="_blank" rel="noopener noreferrer" data-close-mobile-menu>Gestionar mi Wi-Fi</a>
      <a href="internet.html#faqs" data-close-mobile-menu>Cambiar clave del módem</a>
      <a href="internet.html#planes" data-close-mobile-menu>Mide tu velocidad (Speedtest)</a>
      <a href="login.html?redirect=internet.html" data-close-mobile-menu>Reportar avería</a>
@@ -1443,6 +1443,13 @@
        <input type="text" id="pay-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
       </div>
 
+      <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #a0b0c4;">
+       <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+        <input type="checkbox" id="pay-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+        <span>Autorizo el tratamiento de mis datos de comprobante bancario conforme a la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y la Ley 172-13.</span>
+       </label>
+      </div>
+
      <button type="submit" class="btn-portal-action btn-action-primary" id="pay-submit-btn" style="margin-top:16px;">
       Enviar Reporte
      </button>
@@ -1482,6 +1489,13 @@
      <div class="request-form-group">
       <label class="request-form-label" style="color:#a0b0c4;" for="support-details" id="support-details-label">Detalles del reporte o avería</label>
       <textarea id="support-details" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="4" required placeholder="Describe tu problema con detalle..."></textarea>
+     </div>
+
+     <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #a0b0c4;">
+      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+       <input type="checkbox" id="support-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
+       <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#0B7EB5;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para este ticket de soporte.</span>
+      </label>
      </div>
 
      <button type="submit" class="btn-portal-action btn-action-primary" id="support-submit-btn" style="margin-top:16px;">

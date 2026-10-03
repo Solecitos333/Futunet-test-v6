@@ -244,7 +244,10 @@
     // 2. Cooldown de envío (Rate-limiting en cliente 15s)
     var cooldownKey = 'futunet_last_sug_ts';
     var now = Date.now();
-    var lastSub = sessionStorage.getItem(cooldownKey);
+    var lastSub = null;
+    try {
+      lastSub = sessionStorage.getItem(cooldownKey);
+    } catch (e) {}
     if (lastSub && (now - Number(lastSub)) < 15000) {
       var remaining = Math.ceil((15000 - (now - Number(lastSub))) / 1000);
       showAlert('Por favor espera ' + remaining + ' segundos antes de enviar otra sugerencia.');
@@ -325,7 +328,9 @@
       var docRef = await db.collection('suggestions').add(suggestionData);
 
       // Registrar timestamp de cooldown exitoso
-      sessionStorage.setItem(cooldownKey, String(Date.now()));
+      try {
+        sessionStorage.setItem(cooldownKey, String(Date.now()));
+      } catch (e) {}
 
       // Mostrar confirmación
       if (refCodeDisplay) {
@@ -501,10 +506,22 @@
   async function handleTrackSuggestion() {
     if (!trackInput || !trackResult) return;
 
+    // 1. Verificación Honeypot (Trampa antispam para bots)
+    var trackHp = document.getElementById('sug-track-hp-check');
+    if (trackHp && trackHp.value.trim() !== '') {
+      console.warn('Bot tracking query blocked via honeypot.');
+      trackResult.hidden = false;
+      trackResult.innerHTML = '<p style="color:#ef4444; margin:0; font-size:0.9rem;">Consulta no válida.</p>';
+      return;
+    }
+
     // Cooldown de consulta de seguimiento (Rate-limiting en cliente 3s contra flooding)
     var trackCooldownKey = 'futunet_last_sug_track_ts';
     var nowTs = Date.now();
-    var lastTrack = sessionStorage.getItem(trackCooldownKey);
+    var lastTrack = null;
+    try {
+      lastTrack = sessionStorage.getItem(trackCooldownKey);
+    } catch (e) {}
     if (lastTrack && (nowTs - Number(lastTrack)) < 3000) {
       var waitSecs = Math.ceil((3000 - (nowTs - Number(lastTrack))) / 1000);
       trackResult.hidden = false;
@@ -523,7 +540,9 @@
       return;
     }
 
-    sessionStorage.setItem(trackCooldownKey, String(Date.now()));
+    try {
+      sessionStorage.setItem(trackCooldownKey, String(Date.now()));
+    } catch (e) {}
 
     var match = raw.match(/SUG-[A-Z0-9]{5}/i);
     var code = match ? match[0].toUpperCase() : raw.toUpperCase();
@@ -873,6 +892,78 @@
       status: 'implemented',
       description: 'Stemming semántico en el motor de búsqueda para sinónimos frecuentes: scanner y escaner (lectores), cajon y monedero (gavetas), y bobinas (cableado UTP).',
       officialResponse: '¡Implementado! El motor de búsqueda en catalog.js ahora reconoce sinónimos como scanner, cajón de dinero y bobina garantizando resultados certeros.'
+    },
+    {
+      refCode: 'SUG-Z5180',
+      title: 'Disponibilidad de terminales biométricas ZKTeco para control de asistencia y acceso con reloj ponchador',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Terminales ZKTeco MB20 de huella digital, reconocimiento facial y tarjeta RFID para control de asistencia con exportación a Excel y apertura de puertas.',
+      officialResponse: '¡Cumplido! Se integró la Terminal Biométrica ZKTeco MB20 con función de Reloj Ponchador a USB en Excel, relevador para cerradura magnética y garantía local.'
+    },
+    {
+      refCode: 'SUG-W3250',
+      title: 'Disponibilidad de discos duros Western Digital Purple (WD Purple) para videovigilancia y grabadores DVR/NVR',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Discos duros de 2TB WD Purple SATA III con tecnología AllFrame para trabajo continuo 24/7 en grabadores de seguridad CCTV Dahua y Hikvision.',
+      officialResponse: '¡Implementado! Disponibles en catálogo y seguridad electrónica los discos Western Digital WD Purple 2TB con tecnología AllFrame y 3 años de garantía oficial.'
+    },
+    {
+      refCode: 'SUG-R6090',
+      title: 'Gabinetes de pared (Wall Mount) y racks de 9U con cerradura para protección de switches y equipos de red',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Gabinetes metálicos de pared estándar 19" de 9U con puerta de cristal templado, cerradura con llave y ventilación para proteger switches y DVRs.',
+      officialResponse: '¡Atendido! Se integró el Gabinete Rack de Pared 9U 600x450mm con cerradura y paneles desmontables, y se optimizó la búsqueda para rack y gabinetes de red.'
+    },
+    {
+      refCode: 'SUG-C600M',
+      title: 'Disponibilidad de cerraduras electromagnéticas (electroimán 600 lbs) con soporte ZL y botón liberador No Touch para control de accesos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cerraduras magnéticas de 600 lbs con kit de soporte ZL y pulsadores de salida infrarrojos sin contacto para control de puertas.',
+      officialResponse: '¡Implementado! Disponibles en catálogo la Cerradura Electromagnética 600 lbs ZKTeco con soporte ZL y el Botón Pulsador No Touch de acero inoxidable.'
+    },
+    {
+      refCode: 'SUG-B305C',
+      title: 'Disponibilidad de bobinas de cable de red UTP Cat 6 (305 metros / 1000 ft) 100% cobre para cableado estructurado y CCTV',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Bobinas de cable de red UTP Categoría 6 de 305 metros 100% cobre puro de 23 AWG para enlaces de datos Gigabit y cámaras IP PoE.',
+      officialResponse: '¡Atendido! Incorporada al catálogo la Bobina de Cable UTP Cat 6 (305m / 1000 ft) 100% Cobre Puro con certificación PoE+ y entrega inmediata.'
+    },
+    {
+      refCode: 'SUG-T8260',
+      title: 'Disponibilidad de Sistemas Wi-Fi 6 Mesh TP-Link Deco y Enlaces Omada para cobertura total en hogares y oficinas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistemas Wi-Fi 6 en malla (Mesh) TP-Link Deco X20 para eliminar puntos ciegos de señal en residencias y oficinas con roaming fluido.',
+      officialResponse: '¡Cumplido! Ya se encuentra disponible el Sistema TP-Link Deco X20 Wi-Fi 6 Mesh AX1800 (Pack de 2) con filtro rápido de marca TP-Link en catálogo.'
+    },
+    {
+      refCode: 'SUG-P2400',
+      title: 'Disponibilidad de Patch Panels de 24 Puertos Cat 6 para Racks de 19" y Patch Cords Certificados Gigabit',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Patch panels de 24 puertos Cat 6 estándar 1U para montaje en rack y patch cords UTP de 2 metros 100% cobre para interconectar switches y cableado estructurado.',
+      officialResponse: '¡Atendido! Incorporados al catálogo el Patch Panel Cat 6 24 Puertos 1U para Rack 19" y los Patch Cords UTP Cat 6 de 2m con entrega inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-A1200',
+      title: 'Optimización de búsqueda para Puntos de Acceso Wi-Fi y disponibilidad de Access Points Ubiquiti UniFi y TP-Link Omada',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Soporte de búsqueda y stemming bilingüe para access point, ap, punto de acceso y soluciones inalámbricas corporativas UniFi 6.',
+      officialResponse: '¡Implementado! El motor de búsqueda ahora reconoce access point, ap y punto de acceso destacando el Ubiquiti UniFi 6 Plus con fichas técnicas completas.'
+    },
+    {
+      refCode: 'SUG-C4500',
+      title: 'Disponibilidad de Conectores RJ45 Cat 6 con Botas Protectoras y Conectores Modulares para Redes y CCTV',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Packs de 100 conectores RJ45 Cat 6 con pines chapados en oro y botas protectoras de goma para terminación de bobinas de cable de red.',
+      officialResponse: '¡Cumplido! Ya está disponible en el catálogo el Pack de 100 Conectores RJ45 Cat 6 con botas protectoras y búsqueda optimizada por plug y terminales.'
     }
   ];
 

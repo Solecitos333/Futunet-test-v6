@@ -30,12 +30,14 @@
     authRefreshUid = user.uid;
     authRefreshPromise = user.reload()
       .then(function () {
-        var refreshedUser = getAuth().currentUser || user;
+        var authInstance = getAuth();
+        var refreshedUser = (authInstance && authInstance.currentUser) || user;
         return refreshedUser.getIdToken(true).then(function () { return refreshedUser; });
       })
       .catch(function (error) {
         console.warn('No se pudo actualizar la sesión autenticada.', error);
-        return getAuth().currentUser || user;
+        var authInstance = getAuth();
+        return (authInstance && authInstance.currentUser) || user;
       });
     return authRefreshPromise;
   }
@@ -82,8 +84,16 @@
   // Los administradores se aprovisionan exclusivamente desde un entorno confiable.
   async function ensureUserDoc(uid, data) {
     try {
-      var userRef = getDB().collection('users').doc(uid);
+      var db = getDB();
+      if (!db) {
+        console.warn('getDB no disponible en ensureUserDoc');
+        return ROLES.USER;
+      }
+      var userRef = db.collection('users').doc(uid);
       var role = ROLES.USER;
+      var nowTimestamp = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+        ? firebase.firestore.FieldValue.serverTimestamp()
+        : new Date();
 
       await userRef.set({
         displayName: data.displayName || '',
@@ -94,14 +104,14 @@
         documentNumber: data.documentNumber || '',
         identityProfileComplete: !!(data.documentType && data.documentNumber),
         termsAccepted: data.termsAccepted === true,
-        termsAcceptedAt: data.termsAccepted === true ? firebase.firestore.FieldValue.serverTimestamp() : null,
+        termsAcceptedAt: data.termsAccepted === true ? nowTimestamp : null,
         termsVersion: data.termsAccepted === true ? '2026-08-01' : '',
         role: role,
         roles: [ROLES.USER],
         status: data.status || 'active',
         favorites: [],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+        createdAt: nowTimestamp,
+        lastLogin: nowTimestamp
       });
 
       console.log('%c✅ User doc created with role: ' + role, 'color: #27ae60');
@@ -158,17 +168,23 @@
 
   // ─── Sign In with Email ───
   async function signIn(email, password, remember = true, companyCode = '') {
-    var persistence = remember 
-      ? firebase.auth.Auth.Persistence.LOCAL 
-      : firebase.auth.Auth.Persistence.SESSION;
-    await getAuth().setPersistence(persistence);
-    var cred = await getAuth().signInWithEmailAndPassword(email, password);
+    var auth = getAuth();
+    if (!auth) throw new Error('Servicio de autenticación no disponible en este momento.');
+    var persistence = (typeof firebase !== 'undefined' && firebase.auth && firebase.auth.Auth)
+      ? (remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION)
+      : 'local';
+    try {
+      await auth.setPersistence(persistence);
+    } catch (persistErr) {
+      console.warn('No se pudo fijar la persistencia de autenticación:', persistErr);
+    }
+    var cred = await auth.signInWithEmailAndPassword(email, password);
     
     currentUserData = await fetchUserData(cred.user.uid);
 
     // Firestore exige correo verificado para cualquier operación privada.
     if (!cred.user.emailVerified) {
-      await getAuth().signOut();
+      await auth.signOut();
       currentUserData = null;
       var err = new Error('Por favor verifica tu correo electrónico antes de iniciar sesión.');
       err.code = 'auth/email-not-verified';
@@ -186,7 +202,7 @@
       const isPlatformSuperAdmin = roles.includes('superadmin') && currentUserData && !currentUserData.companyCode;
 
       if (!supportedCompanies.includes(codeUpper)) {
-        await getAuth().signOut();
+        await auth.signOut();
         currentUserData = null;
         var unsupportedErr = new Error('El código de empresa no corresponde a una empresa habilitada.');
         unsupportedErr.code = 'auth/unsupported-company-code';
@@ -194,33 +210,43 @@
       }
 
       if ((!currentUserData || !currentUserData.companyCode) && !isPlatformSuperAdmin) {
-        await getAuth().signOut();
+        await auth.signOut();
         currentUserData = null;
         var unassignedErr = new Error('Esta cuenta todavía no ha sido asignada a una empresa. Solicita acceso a un administrador.');
         unassignedErr.code = 'auth/company-not-assigned';
         throw unassignedErr;
       } else if (currentUserData.companyCode &&
                  (currentUserData.companyCode.toUpperCase() === 'FUTUNET' ? 'FUTUNETSRL' : currentUserData.companyCode.toUpperCase()) !== codeUpper) {
-        await getAuth().signOut();
+        await auth.signOut();
         currentUserData = null;
         var err = new Error('El código de empresa es incorrecto para este usuario.');
         err.code = 'auth/invalid-company-code';
         throw err;
       } else if (isPlatformSuperAdmin) {
-        sessionStorage.setItem('active_company_code', codeUpper);
-        localStorage.setItem('active_company_code', codeUpper);
+        try {
+          sessionStorage.setItem('active_company_code', codeUpper);
+          localStorage.setItem('active_company_code', codeUpper);
+        } catch (storageErr) {
+          console.warn('Storage no disponible para active_company_code:', storageErr);
+        }
       }
     }
 
     // Update last login (best effort) and activate status if verified
+    var nowTimestamp = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+      ? firebase.firestore.FieldValue.serverTimestamp()
+      : new Date();
     var updateFields = {
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      lastLogin: nowTimestamp
     };
     if (currentUserData && currentUserData.status === 'pending_verification') {
       updateFields.status = 'active';
       currentUserData.status = 'active';
     }
-    getDB().collection('users').doc(cred.user.uid).update(updateFields).catch(function () { });
+    var db = getDB();
+    if (db) {
+      db.collection('users').doc(cred.user.uid).update(updateFields).catch(function () { });
+    }
 
     // Write audit log
     getDB().collection('audit_logs').add({
@@ -295,12 +321,15 @@
 
   // ─── Password Reset ───
   async function sendPasswordReset(email) {
-    return getAuth().sendPasswordResetEmail(email);
+    var auth = getAuth();
+    if (!auth) throw new Error('Servicio de autenticación no disponible.');
+    return auth.sendPasswordResetEmail(email);
   }
 
   // ─── Passwordless Sign In (Email Link) ───
   async function sendSignInLink(email) {
     var auth = getAuth();
+    if (!auth) throw new Error('Servicio de autenticación no disponible.');
     // Use the current URL path as the redirect URL (without query/hashes)
     var redirectUrl = window.location.origin + window.location.pathname;
 
@@ -310,28 +339,43 @@
     };
 
     await auth.sendSignInLinkToEmail(email, actionCodeSettings);
-    window.localStorage.setItem('emailForSignIn', email);
+    try {
+      window.localStorage.setItem('emailForSignIn', email);
+    } catch (storageErr) {
+      console.warn('LocalStorage no disponible para emailForSignIn:', storageErr);
+    }
     console.log('%c✉️ Sign-in link sent to ' + email, 'color: #2980b9');
   }
 
   function isSignInWithEmailLink(link) {
-    return getAuth().isSignInWithEmailLink(link || window.location.href);
+    var auth = getAuth();
+    return auth && typeof auth.isSignInWithEmailLink === 'function'
+      ? auth.isSignInWithEmailLink(link || window.location.href)
+      : false;
   }
 
   async function signInWithEmailLink(email, link) {
     var auth = getAuth();
+    if (!auth) throw new Error('Servicio de autenticación no disponible.');
     var cred = await auth.signInWithEmailLink(email, link || window.location.href);
 
     // Clean up email from localStorage
-    window.localStorage.removeItem('emailForSignIn');
+    try {
+      window.localStorage.removeItem('emailForSignIn');
+    } catch (e) {}
 
     // Check if Firestore user document exists, create if not
     var userDoc;
+    var db = getDB();
     try {
-      userDoc = await getDB().collection('users').doc(cred.user.uid).get();
+      userDoc = db ? await db.collection('users').doc(cred.user.uid).get() : { exists: false };
     } catch (e) {
       userDoc = { exists: false };
     }
+
+    var nowTimestamp = (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue)
+      ? firebase.firestore.FieldValue.serverTimestamp()
+      : new Date();
 
     if (!userDoc.exists) {
       await ensureUserDoc(cred.user.uid, {
@@ -343,20 +387,22 @@
         termsAccepted: true,
         status: 'active'
       });
-    } else {
-      getDB().collection('users').doc(cred.user.uid).update({
-        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    } else if (db) {
+      db.collection('users').doc(cred.user.uid).update({
+        lastLogin: nowTimestamp
       }).catch(function () { });
     }
 
     // Write audit log
-    getDB().collection('audit_logs').add({
-      action: 'Inicio de sesión',
-      details: 'Inicio de sesión con enlace de correo',
-      userEmail: cred.user.email || email,
-      userId: cred.user.uid,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).catch(function () {});
+    if (db) {
+      db.collection('audit_logs').add({
+        action: 'Inicio de sesión',
+        details: 'Inicio de sesión con enlace de correo',
+        userEmail: cred.user.email || email,
+        userId: cred.user.uid,
+        timestamp: nowTimestamp
+      }).catch(function () {});
+    }
 
     currentUserData = await fetchUserData(cred.user.uid);
     return cred.user;
@@ -368,21 +414,26 @@
     currentUserData = null;
     authRefreshPromise = null;
     authRefreshUid = '';
-    return getAuth().signOut();
+    var auth = getAuth();
+    return auth ? auth.signOut() : Promise.resolve();
   }
 
   // ─── Fetch user data from Firestore ───
   async function fetchUserData(uid) {
-    try {
-      var doc = await getDB().collection('users').doc(uid).get();
-      if (doc.exists) {
-        return { uid: uid, ...doc.data() };
+    var db = getDB();
+    if (db) {
+      try {
+        var doc = await db.collection('users').doc(uid).get();
+        if (doc.exists) {
+          return { uid: uid, ...doc.data() };
+        }
+      } catch (e) {
+        console.warn('Could not fetch user data:', e);
       }
-    } catch (e) {
-      console.warn('Could not fetch user data:', e);
     }
     // Return minimal data from Auth if Firestore unavailable
-    var authUser = getAuth().currentUser;
+    var auth = getAuth();
+    var authUser = auth ? auth.currentUser : null;
     if (authUser) {
       return {
         uid: authUser.uid,
@@ -430,13 +481,40 @@
   function isAdmin() { return hasRole(ROLES.ADMIN); }
   function isEditor() { return hasRole(ROLES.EDITOR); }
   function isLoggedIn() {
-    var user = getAuth().currentUser;
+    var auth = getAuth();
+    var user = auth ? auth.currentUser : null;
     return !!user;
   }
 
   // ─── Auth State Listener ───
   function onAuthChanged(callback) {
-    getAuth().onAuthStateChanged(async function (user) {
+    var auth = getAuth();
+    if (!auth || typeof auth.onAuthStateChanged !== 'function') {
+      window.addEventListener('futunet:firebase-ready', function () {
+        var lateAuth = getAuth();
+        if (lateAuth && typeof lateAuth.onAuthStateChanged === 'function') {
+          lateAuth.onAuthStateChanged(async function (user) {
+            if (user) {
+              user = await refreshAuthenticatedSession(user);
+              currentUserData = user.emailVerified
+                ? await fetchUserData(user.uid)
+                : minimalUnverifiedProfile(user);
+              if (currentUserData && currentUserData.status === 'disabled') {
+                await signOut();
+                callback(null, null);
+                return;
+              }
+              callback(user, currentUserData);
+            } else {
+              currentUserData = null;
+              callback(null, null);
+            }
+          });
+        }
+      }, { once: true });
+      return;
+    }
+    auth.onAuthStateChanged(async function (user) {
       if (user) {
         user = await refreshAuthenticatedSession(user);
         currentUserData = user.emailVerified
@@ -514,7 +592,8 @@
     var containers = document.querySelectorAll('.navbar-auth-container');
     if (containers.length === 0) return;
 
-    var user = getAuth().currentUser;
+    var auth = getAuth();
+    var user = auth ? auth.currentUser : null;
     var initials = '?';
     var name = 'Invitado';
     var isAdminUser = false;

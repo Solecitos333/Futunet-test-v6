@@ -469,8 +469,12 @@
   }
 
   async function initProductPageLoader() {
-    if (window.FutunetData && window.FutunetData.readyPromise) {
-      await window.FutunetData.readyPromise;
+    try {
+      if (window.FutunetData && window.FutunetData.readyPromise) {
+        await window.FutunetData.readyPromise;
+      }
+    } catch (err) {
+      console.warn('initProductPageLoader: Fallo al esperar readyPromise, continuando con inventario local.', err);
     }
     initProductPage();
   }

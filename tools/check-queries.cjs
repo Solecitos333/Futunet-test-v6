@@ -30,8 +30,41 @@ const queries = [
   'gabinete de red',
   'dahua',
   'inversor',
-  'bateria'
+  'bateria',
+  'zkteco',
+  'biometrico',
+  'ponchador',
+  'reloj ponchador',
+  'control de acceso',
+  'control de asistencia',
+  'disco duro purple',
+  'wd purple',
+  'gabinete de pared',
+  'rack de pared',
+  'cerradura magnetica',
+  'electroiman',
+  'chapa magnetica',
+  'cerradura',
+  'bobina utp',
+  'cable utp cat 6',
+  'bobina de cable',
+  'boton no touch',
+  'pulsador de salida',
+  'tplink',
+  'deco',
+  'mesh',
+  'wifi mesh',
+  'patch panel',
+  'patch cord',
+  'latiguillo',
+  'access point',
+  'ap',
+  'punto de acceso',
+  'conector rj45',
+  'plug rj45',
+  'conectores'
 ];
+
 
 for (const q of queries) {
   const normQ = normalizeSearch(q);

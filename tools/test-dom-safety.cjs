@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v30 con offline backup_data', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v32 con offline backup_data', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v30';"), 'sw.js debe estar en la versión futunet-cache-v30');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v32';"), 'sw.js debe estar en la versión futunet-cache-v32');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
@@ -304,6 +304,56 @@ test('Catalog POS, Dahua & Energy Search Precision: scanner, gaveta, dahua e inv
   assert.ok(
     inversorMatches[0].p.title.includes('UPS') || inversorMatches[0].p.department === 'energia',
     'El primer resultado para "inversor" debe ser un equipo de respaldo/UPS'
+  );
+});
+
+test('Estabilidad y Resiliencia: auth defensivo, cupones Q4, carga de producto y redirección a marcas', () => {
+  // 1. auth.js protege contra getAuth() null y FieldValue sin error
+  const authJs = fs.readFileSync(path.join(projectRoot, 'js', 'auth.js'), 'utf8');
+  assert.ok(
+    authJs.includes('var auth = getAuth();') && authJs.includes('var user = auth ? auth.currentUser : null;'),
+    'auth.js isLoggedIn debe verificar auth antes de acceder a currentUser'
+  );
+  assert.ok(
+    authJs.includes('var authInstance = getAuth();') && authJs.includes('(authInstance && authInstance.currentUser) || user'),
+    'auth.js refreshAuthenticatedSession debe usar comprobación segura en currentUser'
+  );
+
+  // 2. producto.js implementa try/catch defensivo en initProductPageLoader
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(
+    prodJs.includes('initProductPageLoader: Fallo al esperar readyPromise'),
+    'producto.js debe manejar rechazos de readyPromise con try/catch defensivo'
+  );
+
+  // 3. cart.js incluye cupón OCTUBRE2026 y comprobación de array de departamentos
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(cartJs.includes('OCTUBRE2026'), 'cart.js debe incluir el cupón OCTUBRE2026 para octubre 2026');
+  assert.ok(
+    cartJs.includes('Array.isArray(activeCoupon.departments) && activeCoupon.departments.includes(product.department)'),
+    'cart.js debe verificar que activeCoupon.departments sea un array'
+  );
+
+  // 4. login.html permite redirecciones a páginas de marcas
+  const loginHtml = fs.readFileSync(path.join(projectRoot, 'login.html'), 'utf8');
+  assert.ok(
+    loginHtml.includes("redirectFile.startsWith('marca-') && redirectFile.endsWith('.html')"),
+    'login.html debe permitir redirecciones locales a marca-*.html'
+  );
+
+  // 5. public-quote.js verifica elementos DOM de loading y error
+  const quoteJs = fs.readFileSync(path.join(projectRoot, 'js', 'public-quote.js'), 'utf8');
+  assert.ok(
+    quoteJs.includes("const loadEl = document.getElementById('quote-loading');") &&
+    quoteJs.includes('if (loadEl) loadEl.hidden = true;'),
+    'public-quote.js fail() debe comprobar existencia de elementos DOM'
+  );
+
+  // 6. user-panel.js sanitiza el nombre de carritos guardados
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    userPanelJs.includes('sanitizeProfileInput(name.trim()).slice(0, 60)'),
+    'user-panel.js debe sanitizar y delimitar la longitud del nombre del carrito'
   );
 });
 
