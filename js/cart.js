@@ -680,19 +680,19 @@
     const submitBtn = document.getElementById('btn-submit-checkout');
 
     if (paymentMethod === 'bank_transfer') {
-      bankSection.style.display = 'block';
-      whatsappSection.style.display = 'none';
-      financingSection.style.display = 'none';
+      if (bankSection) bankSection.style.display = 'block';
+      if (whatsappSection) whatsappSection.style.display = 'none';
+      if (financingSection) financingSection.style.display = 'none';
       if (submitBtn) submitBtn.disabled = !selectedCheckoutFile;
     } else if (paymentMethod === 'financing') {
-      bankSection.style.display = 'none';
-      whatsappSection.style.display = 'none';
-      financingSection.style.display = 'block';
+      if (bankSection) bankSection.style.display = 'none';
+      if (whatsappSection) whatsappSection.style.display = 'none';
+      if (financingSection) financingSection.style.display = 'block';
       if (submitBtn) submitBtn.disabled = !checkoutFinancingApproved;
     } else {
-      bankSection.style.display = 'none';
-      whatsappSection.style.display = 'block';
-      financingSection.style.display = 'none';
+      if (bankSection) bankSection.style.display = 'none';
+      if (whatsappSection) whatsappSection.style.display = 'block';
+      if (financingSection) financingSection.style.display = 'none';
       if (submitBtn) submitBtn.disabled = false;
     }
   }
@@ -906,6 +906,12 @@
     const couponFeedback = document.getElementById('coupon-feedback');
 
     if (btnApplyCoupon && couponInput && couponFeedback) {
+      couponInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          btnApplyCoupon.click();
+        }
+      });
       btnApplyCoupon.addEventListener('click', () => {
         const code = couponInput.value.trim().toUpperCase();
         if (!code) {

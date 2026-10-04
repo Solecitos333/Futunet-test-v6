@@ -17,5 +17,11 @@
     }
     FutunetAuth.authReady.then(session); window.addEventListener('futunet-auth-ready', session);
   }
-  document.addEventListener('DOMContentLoaded', init);
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
 })();

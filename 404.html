@@ -126,9 +126,14 @@
   </div>
  </main>
  <script>
-  document.addEventListener('DOMContentLoaded', () =>{
+  function init404Page() {
    if (typeof lucide !== 'undefined') lucide.createIcons();
-  });
+  }
+  if (document.readyState === 'loading') {
+   document.addEventListener('DOMContentLoaded', init404Page);
+  } else {
+   init404Page();
+  }
  </script>
 </body>
 </html>

@@ -62,7 +62,15 @@ const queries = [
   'punto de acceso',
   'conector rj45',
   'plug rj45',
-  'conectores'
+  'conectores',
+  'crimpadora',
+  'crimpadora rj45',
+  'tester de red',
+  'tester',
+  'ezviz',
+  'camara wifi',
+  'c6n',
+  'h3c'
 ];
 
 

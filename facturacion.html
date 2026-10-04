@@ -2135,7 +2135,7 @@
  <script defer src="js/billing-events.js?v=20260802"></script>
 
  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  function initFacturacionLayout() {
    if (window.lucide) lucide.createIcons();
 
    // Protect route - Only allow authorized ERP operators and admins
@@ -2298,7 +2298,13 @@
    if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
    if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
    if (overlay) overlay.addEventListener('click', closeSidebar);
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFacturacionLayout);
+  } else {
+    initFacturacionLayout();
+  }
  </script>
 </body>
 </html>

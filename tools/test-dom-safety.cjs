@@ -357,4 +357,100 @@ test('Estabilidad y Resiliencia: auth defensivo, cupones Q4, carga de producto y
   );
 });
 
+test('Resiliencia de Ciclo de Vida: Inicialización universal con document.readyState y control de carga diferida', () => {
+  const filesToCheck = [
+    { path: 'login.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'punto-de-venta.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'sugerencias.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'mi-cuenta.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'facturacion.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'admin.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'index.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'energia-climatizacion.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'equipos-oficina.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'redes-datos.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'seguridad-electronica.html', pattern: "if (document.readyState === 'loading')" },
+    { path: '404.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'catalogo.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'producto.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'corporativo.html', pattern: "if (document.readyState === 'loading')" },
+    { path: 'js/form.js', pattern: "if (document.readyState === 'loading')" },
+    { path: 'js/admin-financing.js', pattern: "if (document.readyState === 'loading')" },
+    { path: 'js/chatbot-settings.js', pattern: "if (document.readyState === 'loading')" },
+    { path: 'js/internet-plans.js', pattern: "if (document.readyState === 'loading')" }
+  ];
+
+  filesToCheck.forEach(({ path: filePath, pattern }) => {
+    const content = fs.readFileSync(path.join(projectRoot, filePath), 'utf8');
+    assert.ok(
+      content.includes(pattern),
+      `${filePath} debe implementar inicialización resiliente verificando document.readyState`
+    );
+  });
+});
+
+test('Precisión de Búsqueda Biométrica y Sincronización de Perfil: ZKTeco, cupones y checkout', () => {
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  const fn = new Function(`
+    ${catJs.slice(catJs.indexOf('function normalizeSearch'), catJs.indexOf('const state ='))}
+    return { normalizeSearch, scoreProductMatch };
+  `);
+  const { normalizeSearch, scoreProductMatch } = fn();
+  const cat = require('../js/backup_data.js');
+
+  // 1. "biometrico" prioriza terminal biométrica sobre cerraduras o accesorios
+  const bioMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('biometrico')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(bioMatches.length > 0, 'La búsqueda "biometrico" debe arrojar resultados');
+  assert.ok(
+    bioMatches[0].p.id === 'zkteco_mb20_terminal_biometrica',
+    'El resultado prioritario para "biometrico" debe ser la terminal biométrica ZKTeco'
+  );
+  assert.ok(
+    !bioMatches[0].p.title.toLowerCase().includes('cerradura'),
+    'El primer resultado para "biometrico" no debe ser una cerradura'
+  );
+
+  // 2. "zkteco" prioriza equipos biométricos principales
+  const zkMatches = cat
+    .map(p => ({ p, score: scoreProductMatch(p, normalizeSearch('zkteco')) }))
+    .filter(x => x.score > 0)
+    .sort((a, b) => b.score - a.score);
+  assert.ok(zkMatches.length > 0, 'La búsqueda "zkteco" debe arrojar resultados');
+  assert.ok(
+    zkMatches[0].p.id === 'zkteco_mb20_terminal_biometrica',
+    'El resultado prioritario para "zkteco" debe ser la terminal biométrica ZKTeco MB20'
+  );
+
+  // 3. cart.js maneja Enter en cupón y verifica defensivamente secciones del step 3
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(
+    cartJs.includes("couponInput.addEventListener('keydown'"),
+    'cart.js debe manejar el evento keydown en couponInput para aplicar cupones con Enter'
+  );
+  assert.ok(
+    cartJs.includes('if (bankSection) bankSection.style.display') &&
+    cartJs.includes('if (whatsappSection) whatsappSection.style.display') &&
+    cartJs.includes('if (financingSection) financingSection.style.display'),
+    'cart.js debe verificar la existencia de secciones bancaria, whatsapp y financiamiento de forma defensiva'
+  );
+
+  // 4. user-panel.js sincroniza userData en memoria
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    userPanelJs.includes('Object.assign(userData, updateData);'),
+    'user-panel.js debe actualizar userData en memoria con updateData antes de renderProfile()'
+  );
+
+  // 5. producto.js implementa fallbackCopy sin ventanas emergentes redundantes
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(
+    prodJs.includes('function fallbackCopy(text)'),
+    'producto.js debe definir fallbackCopy para copiado en portapapeles sin popup inesperado'
+  );
+});
+
+
 

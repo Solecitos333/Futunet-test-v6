@@ -808,7 +808,7 @@
  <script defer src="js/user-panel.js?v=20260712"></script>
  <script defer src="js/financing.js?v=20260801"></script>
  <script>
-  window.addEventListener('DOMContentLoaded', function () {
+  function initMiCuentaPage() {
    if (window.lucide) lucide.createIcons();
 
    // Profile email (read-only, set from auth)
@@ -829,7 +829,13 @@
      });
     });
    }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initMiCuentaPage);
+  } else {
+    initMiCuentaPage();
+  }
  </script>
 </body>
 </html>

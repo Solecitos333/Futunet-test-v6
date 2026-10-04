@@ -145,7 +145,7 @@ function getStemVariants(word) {
   if (word === 'teclado' || word === 'teclados') variants.push('keyboard');
   if (word === 'keyboard' || word === 'keyboards') variants.push('teclado', 'teclados');
   if (word === 'zkteco' || word === 'zk') variants.push('biometrico', 'acceso', 'asistencia', 'ponchador', 'facial', 'reloj', 'electroiman', 'cerradura');
-  if (word === 'biometrico' || word === 'biometricos' || word === 'biometrica' || word === 'biometricas') variants.push('zkteco', 'huella', 'facial', 'asistencia', 'ponchador', 'acceso', 'cerradura');
+  if (word === 'biometrico' || word === 'biometricos' || word === 'biometrica' || word === 'biometricas') variants.push('zkteco', 'huella', 'facial', 'asistencia', 'ponchador', 'terminal', 'reloj');
   if (word === 'ponchador' || word === 'ponchadores' || word === 'ponche' || word === 'ponches') variants.push('asistencia', 'reloj', 'biometrico', 'zkteco', 'horario');
   if (word === 'asistencia') variants.push('ponchador', 'reloj', 'biometrico', 'zkteco');
   if (word === 'purple' || word === 'purpura') variants.push('western', 'wd', 'disco', 'cctv', 'surveillance');
@@ -157,6 +157,12 @@ function getStemVariants(word) {
   if (word === 'tapo') variants.push('tplink', 'tp-link');
   if (word === 'proyector' || word === 'proyectores') variants.push('proyeccion');
   if (word === 'proyeccion') variants.push('proyector', 'proyectores');
+  if (word === 'crimpadora' || word === 'crimpadoras' || word === 'crimpar' || word === 'crimpador') variants.push('ponchadora', 'herramienta', 'pelacable', 'pelacables', 'rj45', 'conector', 'red', 'tester');
+  if (word === 'tester' || word === 'testers' || word === 'probador' || word === 'probadores') variants.push('red', 'rj45', 'utp', 'continuidad', 'led', 'cable', 'crimpadora');
+  if (word === 'pelacable' || word === 'pelacables') variants.push('crimpadora', 'corte', 'herramienta', 'cable');
+  if (word === 'ezviz') variants.push('cctv', 'camara', 'wifi', 'c6n', 'h3c', 'seguridad', 'inalambrica');
+  if (word === 'c6n') variants.push('ezviz', 'camara', 'wifi', 'pan', 'tilt', '360');
+  if (word === 'h3c') variants.push('ezviz', 'camara', 'wifi', 'exterior', 'ip67');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -273,9 +279,19 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
-  // Priorizar terminales biométricas y reloj ponchador al buscar zkteco o asistencia
-  if (/\b(zkteco|biometrico|biometrica|ponchador|ponche|reloj|asistencia)\b/i.test(normalizedQuery)) {
-    if (/zkteco|biometric|ponchador|asistencia|facial|huella/i.test(title) || brand.includes('zkteco') || category.includes('acceso')) {
+  // Priorizar terminales biométricas y reloj ponchador al buscar biometrico, ponchador, reloj o asistencia
+  if (/\b(biometrico|biometrica|biometricos|biometricas|ponchador|ponche|reloj|asistencia|facial|huella)\b/i.test(normalizedQuery)) {
+    if (/terminal\s+biometrica|reloj\s+ponchador|facial|huella/i.test(title)) {
+      score += 150;
+    } else if (/biometric|asistencia/i.test(title)) {
+      score += 90;
+    } else if (brand.includes('zkteco') || category.includes('acceso')) {
+      score += 30;
+    }
+  } else if (/\b(zkteco|zk)\b/i.test(normalizedQuery)) {
+    if (/terminal\s+biometrica|reloj\s+ponchador|facial|huella/i.test(title)) {
+      score += 90;
+    } else if (brand.includes('zkteco')) {
       score += 70;
     }
   }
@@ -374,6 +390,21 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Kit de herramientas de red (crimpadora y tester) al buscar crimpadora, tester o herramienta de red
+  if (/\b(crimpadora|crimpador|crimpar|tester|probador|pelacable|pelacables)\b/i.test(normalizedQuery) || (/\b(herramienta|kit)\b/i.test(normalizedQuery) && /\b(red|redes|rj45|cable)\b/i.test(normalizedQuery))) {
+    if (/crimpadora|tester.*cable|kit.*herramientas.*red/i.test(title)) {
+      score += 160;
+    } else if (/herramienta|rj45.*tester/i.test(title)) {
+      score += 80;
+    }
+  }
+
+  // Priorizar cámaras Ezviz y cámaras Wi-Fi inteligentes al buscar ezviz, c6n, h3c o camara wifi
+  if (/\b(ezviz|c6n|h3c)\b/i.test(normalizedQuery) || (/\b(camara|camaras)\b/i.test(normalizedQuery) && /\b(wifi|inalambrica|360)\b/i.test(normalizedQuery))) {
+    if (/ezviz.*c6n|ezviz.*h3c|camara.*wi-?fi/i.test(title) || brand.toLowerCase().includes('ezviz')) {
+      score += 150;
+    }
+  }
 
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
@@ -523,7 +554,8 @@ function populateBrandFilter() {
     zkteco: 'ZKTeco',
     zk: 'ZKTeco',
     westerndigital: 'Western Digital',
-    wd: 'Western Digital'
+    wd: 'Western Digital',
+    ezviz: 'Ezviz'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -557,7 +589,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

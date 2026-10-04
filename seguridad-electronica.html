@@ -1259,7 +1259,7 @@
    document.dispatchEvent(event);
   };
 
-  document.addEventListener('DOMContentLoaded', () =>{
+  function initSeguridadPage() {
    // Activar clics en botones pills de filtrado
    document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn =>{
     btn.addEventListener('click', () =>{
@@ -1520,7 +1520,13 @@ Me gustaría recibir una asesoría y confirmar mi presupuesto.`;
      }
     });
    });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSeguridadPage);
+  } else {
+    initSeguridadPage();
+  }
  </script>
 </body>
 </html>

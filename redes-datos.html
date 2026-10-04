@@ -1308,7 +1308,7 @@
    document.dispatchEvent(event);
   };
 
-  document.addEventListener('DOMContentLoaded', () =>{
+  function initRedesDatosPage() {
    // Activar clics en botones pills de filtrado
    document.querySelectorAll('.subcategory-filters .filter-btn').forEach(btn =>{
     btn.addEventListener('click', () =>{
@@ -1577,7 +1577,13 @@ Me gustaría recibir una asesoría y agendar una visita técnica.`;
      }
     });
    });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRedesDatosPage);
+  } else {
+    initRedesDatosPage();
+  }
  </script>
 </body>
 </html>

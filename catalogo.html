@@ -592,9 +592,14 @@
  <script defer src="js/image_fixes.js?v=v9"></script>
  <script defer src="js/catalog.js?v=20260712"></script>
  <script>
-  window.addEventListener('DOMContentLoaded', () =>{
+  function initCatalogoIcons() {
    if (window.lucide) lucide.createIcons();
-  });
+  }
+  if (document.readyState === 'loading') {
+   window.addEventListener('DOMContentLoaded', initCatalogoIcons);
+  } else {
+   initCatalogoIcons();
+  }
  </script>
  <!-- Firebase Compat SDK -->
  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

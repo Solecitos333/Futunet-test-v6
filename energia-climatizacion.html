@@ -1234,7 +1234,7 @@
    document.dispatchEvent(event);
   };
 
-  document.addEventListener('DOMContentLoaded', () =>{
+  function initEnergiaPage() {
    if (typeof lucide !== 'undefined') lucide.createIcons();
 
    // Activar clics en botones de filtrado de subcategoría
@@ -1533,7 +1533,13 @@ Me interesa programar una visita para realizar el levantamiento oficial.`;
      }
     });
    });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEnergiaPage);
+  } else {
+    initEnergiaPage();
+  }
  </script>
 </body>
 </html>

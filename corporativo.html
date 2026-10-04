@@ -1015,11 +1015,16 @@
   }
 
   // Inicializar iconos de Lucide al cargar el DOM
-  window.addEventListener('DOMContentLoaded', function() {
+  function initCorporativoIcons() {
    if (typeof lucide !== 'undefined') {
     lucide.createIcons();
    }
-  });
+  }
+  if (document.readyState === 'loading') {
+   window.addEventListener('DOMContentLoaded', initCorporativoIcons);
+  } else {
+   initCorporativoIcons();
+  }
  </script>
 </body>
 </html>

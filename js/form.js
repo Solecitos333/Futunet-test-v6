@@ -131,9 +131,17 @@ function sendForm(event) {
   );
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initContactForm() {
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', sendForm);
   }
-});
+}
+
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactForm);
+  } else {
+    initContactForm();
+  }
+}

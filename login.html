@@ -222,7 +222,7 @@
  <script defer src="js/auth.js?v=20260628"></script>
 
  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  function initLogin() {
    'use strict';
 
    // Email Link State Variables 
@@ -709,7 +709,13 @@
     }
     setLoading('magic-btn', false);
    });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLogin);
+  } else {
+    initLogin();
+  }
  </script>
 </body>
 </html>

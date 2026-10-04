@@ -777,6 +777,60 @@ test('Mejora demandada por usuarios: Conectores RJ45 Cat 6 con Botas Protectoras
   assert.ok(catJs.includes("/(conector|plug|terminales).*rj45|\\b(conector|conectores|plugs?)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar conectores RJ45');
 });
 
+test('Mejora demandada por usuarios: Kit de Herramientas de Red: Crimpadora RJ45 y Tester de Cable (SUG-T3040)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T3040'") && seedCjs.includes("status: 'implemented'"), 'SUG-T3040 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T3040') && sugJs.includes('Crimpadora RJ45 Multifunción'), 'SUG-T3040 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_crimpadora_rj45_tester_kit'), 'backup_data.js debe contener redes_crimpadora_rj45_tester_kit');
+
+  const toolImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'crimpadora-tester-kit.webp');
+  assert.ok(fs.existsSync(toolImg), 'La imagen del kit de crimpadora y tester debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'crimpadora'"), 'catalog.js debe incluir crimpadora en stem variants');
+  assert.ok(catJs.includes("'tester'"), 'catalog.js debe incluir tester en stem variants');
+  assert.ok(catJs.includes("/\\b(crimpadora|crimpador|crimpar|tester|probador|pelacable|pelacables)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar kit de herramientas de red');
+});
+
+test('Mejora demandada por usuarios: Cámaras Wi-Fi Ezviz C6N y H3c en Catálogo y Marca (SUG-E3600)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E3600'") && seedCjs.includes("status: 'implemented'"), 'SUG-E3600 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E3600') && sugJs.includes('Cámaras Wi-Fi de Seguridad Ezviz'), 'SUG-E3600 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('cctv_ezviz_c6n_camara_wifi_360'), 'backup_data.js debe contener cctv_ezviz_c6n_camara_wifi_360');
+  assert.ok(backupJs.includes('cctv_ezviz_h3c_camara_wifi_exterior'), 'backup_data.js debe contener cctv_ezviz_h3c_camara_wifi_exterior');
+
+  const c6nImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-c6n.webp');
+  assert.ok(fs.existsSync(c6nImg), 'La imagen de la cámara Ezviz C6N debe existir en disco');
+  const h3cImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-h3c.webp');
+  assert.ok(fs.existsSync(h3cImg), 'La imagen de la cámara Ezviz H3c debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ezviz'"), 'catalog.js debe incluir ezviz en stem variants');
+  assert.ok(catJs.includes("'Ezviz'"), 'catalog.js debe incluir Ezviz en priorityList');
+  assert.ok(catJs.includes("/\\b(ezviz|c6n|h3c)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar cámaras Ezviz y Wi-Fi');
+});
+
+test('Mejora demandada por usuarios: Optimización y Priorización de Terminales Biométricas (SUG-B9100)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-B9100'") && seedCjs.includes("status: 'implemented'"), 'SUG-B9100 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-B9100') && sugJs.includes('Terminales Biométricas'), 'SUG-B9100 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("biometrico") && catJs.includes("biometrica"), 'catalog.js debe contemplar variantes biométricas');
+  assert.ok(catJs.includes("terminal\\s+biometrica|reloj\\s+ponchador|facial|huella"), 'catalog.js debe priorizar terminales biométricas sobre cerraduras mecánicas');
+});
+
+
 
 
 

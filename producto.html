@@ -504,9 +504,14 @@
  <script defer src="js/product_detail_shared.js?v=20260705-laptops"></script>
  <script defer src="js/producto.js?v=20260705-computadoras"></script>
  <script>
-  window.addEventListener('DOMContentLoaded', () =>{
+  function initProductoIcons() {
    if (window.lucide) lucide.createIcons();
-  });
+  }
+  if (document.readyState === 'loading') {
+   window.addEventListener('DOMContentLoaded', initProductoIcons);
+  } else {
+   initProductoIcons();
+  }
  </script>
  <!-- Firebase Compat SDK -->
  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

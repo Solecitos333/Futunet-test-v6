@@ -92,6 +92,35 @@
     ].join('\n');
   }
 
+  function fallbackCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (success) return Promise.resolve();
+    } catch (e) {}
+    try {
+      window.prompt('Copia este enlace:', text);
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  }
+
+  function copyTextToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+    }
+    return fallbackCopy(text);
+  }
+
   function updateShareActions(detail) {
     const shareBtn = document.getElementById('product-share-btn');
     const copyBtn = document.getElementById('product-copy-link-btn');
@@ -115,32 +144,28 @@
         }
 
         try {
-          await navigator.clipboard.writeText(shareUrl);
+          await copyTextToClipboard(shareUrl);
           shareBtn.innerHTML = '<i data-lucide="check"></i> Enlace copiado';
           refreshIcons();
           window.setTimeout(() => {
             shareBtn.innerHTML = '<i data-lucide="share-2"></i> Compartir';
             refreshIcons();
           }, 1800);
-        } catch (error) {
-          window.open(shareUrl, '_blank', 'noopener,noreferrer');
-        }
+        } catch (error) {}
       };
     }
 
     if (copyBtn) {
       copyBtn.onclick = async () => {
         try {
-          await navigator.clipboard.writeText(shareUrl);
+          await copyTextToClipboard(shareUrl);
           copyBtn.innerHTML = '<i data-lucide="check"></i> Enlace copiado';
           refreshIcons();
           window.setTimeout(() => {
             copyBtn.innerHTML = '<i data-lucide="link-2"></i> Copiar enlace';
             refreshIcons();
           }, 1800);
-        } catch (error) {
-          window.open(shareUrl, '_blank', 'noopener,noreferrer');
-        }
+        } catch (error) {}
       };
     }
 

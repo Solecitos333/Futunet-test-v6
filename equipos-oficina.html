@@ -1222,7 +1222,7 @@
    document.dispatchEvent(event);
   };
 
-  document.addEventListener('DOMContentLoaded', () =>{
+  function initEquiposOficinaPage() {
    if (typeof lucide !== 'undefined') lucide.createIcons();
 
    // Variables de estado del Estimador y Leasing
@@ -1893,7 +1893,13 @@ Me gustaría recibir una propuesta formal y coordinar facturación con NCF corpo
      console.error('El módulo del carrito (FutunetCart) no está listo.');
     }
    };
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEquiposOficinaPage);
+  } else {
+    initEquiposOficinaPage();
+  }
  </script>
 </body>
 </html>

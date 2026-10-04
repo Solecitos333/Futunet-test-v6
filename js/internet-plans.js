@@ -225,9 +225,20 @@
   };
   root.checkHeroCoverage = checkHeroCoverage;
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function initInternetPlans() {
+    if (typeof document === 'undefined' || typeof document.getElementById !== 'function') return;
     renderPlans();
     setupInteractions();
     selectAudience('hogar');
-  });
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initInternetPlans);
+    } else if (typeof document.getElementById === 'function') {
+      initInternetPlans();
+    } else if (typeof document.addEventListener === 'function') {
+      document.addEventListener('DOMContentLoaded', initInternetPlans);
+    }
+  }
 })(window);

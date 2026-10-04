@@ -149,6 +149,9 @@
         }
         await db.collection('users').doc(currentUser.uid).update(updateData);
         await currentUser.updateProfile({ displayName: name });
+        if (userData && typeof userData === 'object') {
+          Object.assign(userData, updateData);
+        }
         try {
           sessionStorage.setItem(profileCooldownKey, String(Date.now()));
         } catch (_) {}

@@ -1616,7 +1616,7 @@
 
   <!-- Lógica del Estimador Interactivo, Sectores y FAQs -->
   <script>
-   document.addEventListener('DOMContentLoaded', function () {
+   function initPosPage() {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
     // 0. Selector de Industrias / Sectores
@@ -1823,7 +1823,13 @@
       });
      }
     }, { passive: true });
-   });
+   }
+
+   if (document.readyState === 'loading') {
+     document.addEventListener('DOMContentLoaded', initPosPage);
+   } else {
+     initPosPage();
+   }
   </script>
 
  <!-- Firebase Compat SDK -->

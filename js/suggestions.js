@@ -964,6 +964,30 @@
       status: 'implemented',
       description: 'Packs de 100 conectores RJ45 Cat 6 con pines chapados en oro y botas protectoras de goma para terminación de bobinas de cable de red.',
       officialResponse: '¡Cumplido! Ya está disponible en el catálogo el Pack de 100 Conectores RJ45 Cat 6 con botas protectoras y búsqueda optimizada por plug y terminales.'
+    },
+    {
+      refCode: 'SUG-T3040',
+      title: 'Disponibilidad de Kit de Herramientas de Red: Crimpadora RJ45 Multifunción con Pelacables y Tester de Cable de Red RJ45/RJ11',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Kit profesional de herramientas de red con tenaza crimpadora 3 en 1 para RJ45/RJ11 y tester de red maestro y remoto con LED secuencial.',
+      officialResponse: '¡Atendido! Se integró el Kit de Crimpadora RJ45/RJ11 y Tester de Red maestro/remoto con LEDs numerados y pelacables para entrega inmediata.'
+    },
+    {
+      refCode: 'SUG-E3600',
+      title: 'Disponibilidad de Cámaras Wi-Fi de Seguridad Ezviz (C6N 1080p 360° Pan & Tilt y H3c Exterior) con Almacenamiento en MicroSD y App Móvil',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámaras de seguridad inalámbricas Ezviz C6N 360° motorizada para interior y Ezviz H3c IP67 para exterior con detección IA y control móvil.',
+      officialResponse: '¡Cumplido! Ya se encuentran disponibles en catálogo y en marca-ezviz.html las cámaras Wi-Fi Ezviz C6N y H3c con MicroSD y gestión en app.'
+    },
+    {
+      refCode: 'SUG-B9100',
+      title: 'Optimización de Búsqueda para Terminales Biométricas y Desacoplamiento de Cerraduras Electromagnéticas',
+      category: 'web_platform',
+      status: 'implemented',
+      description: 'Priorización destacada de la Terminal Biométrica ZKTeco MB20 (reloj ponchador con lectura facial y huella) sobre accesorios de herraje en búsquedas biométricas.',
+      officialResponse: '¡Implementado! El motor de búsqueda clasifica la Terminal Biométrica ZKTeco MB20 y terminales Hikvision en el puesto #1 indiscutible al buscar biométrico.'
     }
   ];
 

@@ -1798,7 +1798,7 @@
  <script defer src="js/brands-preview.js"></script>
  <script defer src="js/form.js"></script>
  <script>
-  document.addEventListener('DOMContentLoaded', () =>{
+  function initIndexPage() {
    if (typeof lucide !== 'undefined') lucide.createIcons();
 
    // Carrusel de planes para index (Hogar y Empresas) 
@@ -1888,7 +1888,13 @@
      mapFrame.setAttribute('src', mapFrame.dataset.src);
     }
    }
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initIndexPage);
+  } else {
+    initIndexPage();
+  }
  </script>
  <!-- Firebase Compat SDK -->
  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

@@ -505,11 +505,16 @@
   <script defer src="js/chatbot.js?v=20260914firebase2"></script>
   <script src="js/main.js?v=20260913support"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    function initSugerenciasPage() {
       if (typeof lucide !== 'undefined') lucide.createIcons();
       var yearSpan = document.getElementById('footer-year');
       if (yearSpan) yearSpan.textContent = new Date().getFullYear() + ' ';
-    });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSugerenciasPage);
+    } else {
+      initSugerenciasPage();
+    }
   </script>
 </body>
 </html>

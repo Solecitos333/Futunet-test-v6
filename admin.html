@@ -2772,7 +2772,7 @@
  <script defer src="js/ai-server.js?v=3.0"></script>
 
  <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  function initAdminLayout() {
    if (window.lucide) lucide.createIcons();
 
    // Protect route 
@@ -3007,7 +3007,13 @@
      navSearch.focus();
     }
    });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdminLayout);
+  } else {
+    initAdminLayout();
+  }
  </script>
 </body>
 </html>

@@ -6831,6 +6831,74 @@ const mockDatabase = [
       "Botas: Goma de alivio de tensión flexible que previene fatiga del cable",
       "Uso: Redes Gigabit Ethernet, cámaras IP PoE y telefonía IP"
     ]
+  },
+  {
+    "id": "cctv_ezviz_c6n_camara_wifi_360",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Ezviz",
+    "title": "Cámara Wi-Fi Ezviz C6N 1080p Full HD Pan & Tilt 360° con Visión Nocturna Inteligente y Audio Bidireccional",
+    "desc": "Cámara de seguridad inteligente inalámbrica Ezviz C6N con resolución Full HD 1080p y movimiento robotizado Pan & Tilt que ofrece una cobertura panorámica de 360 grados sin puntos ciegos. Cuenta con seguimiento inteligente de movimiento (Smart Tracking), visión nocturna por infrarrojos Smart IR de hasta 10 metros que ajusta automáticamente la intensidad para evitar sobreexposiciones, audio bidireccional en tiempo real con micrófono y altavoz para comunicación remota, modo de privacidad con obturador motorizado y ranura para tarjeta MicroSD de hasta 256 GB. Configuración sencilla en minutos mediante la aplicación Ezviz para teléfonos móviles y compatible con Alexa y Google Assistant.",
+    "price": "RD$ 2,350.00",
+    "img": "img/productos/catalogo/ezviz-c6n.webp",
+    "gallery": [
+      "img/productos/catalogo/ezviz-c6n.webp"
+    ],
+    "specs": [
+      "Resolución Full HD 1080p (1920 x 1080) a 15/30 fps con compresión eficiente H.264",
+      "Rotación Pan & Tilt motorizada: 340° horizontal y 55° vertical para cobertura 360° total",
+      "Seguimiento inteligente (Smart Tracking): sigue automáticamente a personas u objetos en movimiento",
+      "Visión nocturna Smart IR de hasta 10 metros (33 pies) con ajuste dinámico de iluminación",
+      "Audio bidireccional claro con micrófono con cancelación de ruido y altavoz integrado",
+      "Almacenamiento flexible: Ranura para tarjeta MicroSD hasta 256 GB y opción a nube Ezviz CloudPlay",
+      "Conectividad Wi-Fi 2.4 GHz y puerto Ethernet RJ45 para conexión por cable de red",
+      "Garantía oficial Ezviz de 1 año con soporte local y despacho en Santiago"
+    ]
+  },
+  {
+    "id": "cctv_ezviz_h3c_camara_wifi_exterior",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Ezviz",
+    "title": "Cámara Wi-Fi Ezviz H3c 1080p para Exterior con Protección IP67 y Detección de Personas con IA",
+    "desc": "Cámara de videovigilancia Wi-Fi para intemperie Ezviz H3c con resolución Full HD 1080p, chasis de alta durabilidad con certificación de protección IP67 contra lluvia, polvo y calor extremo de Santiago. Equipada con algoritmo de inteligencia artificial integrado que distingue con precisión siluetas de personas frente a mascotas u hojas en movimiento reduciendo falsas alarmas, visión nocturna por infrarrojos nítida de hasta 30 metros, antena Wi-Fi dual de largo alcance que atraviesa paredes, micrófono con captación nítida de audio hasta 5 metros y ranura MicroSD hasta 512 GB.",
+    "price": "RD$ 2,850.00",
+    "img": "img/productos/catalogo/ezviz-h3c.webp",
+    "gallery": [
+      "img/productos/catalogo/ezviz-h3c.webp"
+    ],
+    "specs": [
+      "Resolución Full HD 1080p (1920 x 1080) con tecnología de imagen de alta fidelidad",
+      "Certificación IP67 a prueba de intemperie: resistente a fuertes lluvias, sol y tormentas",
+      "Detección inteligente de personas basada en IA para alertas precisas al teléfono",
+      "Visión nocturna por infrarrojos de largo alcance de hasta 30 metros (98 pies)",
+      "Micrófono con cancelación de ruido ambiental con alcance de captación de hasta 5 metros",
+      "Antena Wi-Fi dual de alta ganancia con transmisión estable a través de muros",
+      "Ranura para tarjeta MicroSD de hasta 512 GB y compresión H.265 para maximizar espacio",
+      "Garantía oficial Ezviz de 1 año con factura con comprobante fiscal NCF"
+    ]
+  },
+  {
+    "id": "redes_crimpadora_rj45_tester_kit",
+    "department": "redes",
+    "category": "Cableado Estructurado",
+    "brand": "Futunet Redes",
+    "title": "Kit de Herramientas de Red: Crimpadora RJ45/RJ11 Multifunción con Pelacables y Tester de Cable de Red",
+    "desc": "Kit profesional de herramientas de red indispensable para instaladores, técnicos de cableado estructurado y CCTV. Incluye tenaza crimpadora multifunción de alta resistencia para conectores modulares RJ45 (8P8C) y RJ11/RJ12 (6P6C/6P4C/6P2C) con cuchilla de corte y pelador integrado de cable UTP/STP, más probador (tester) de cable de red maestro y remoto desmontable con indicador LED secuencial del 1 al 8 y masa (G) para verificación inmediata de continuidad, cortocircuitos, pares cruzados y circuito abierto.",
+    "price": "RD$ 1,850.00",
+    "img": "img/productos/catalogo/crimpadora-tester-kit.webp",
+    "gallery": [
+      "img/productos/catalogo/crimpadora-tester-kit.webp"
+    ],
+    "specs": [
+      "Crimpadora 3 en 1 para conectores RJ45 (8P8C), RJ11 (6P4C) y RJ12 (6P6C)",
+      "Cuchillas de acero templado para corte limpio y pelado rápido de cables UTP/STP Cat 5e / Cat 6",
+      "Tester de red maestro y remoto desmontable para pruebas de cables en pared o racks distantes",
+      "Diagnóstico instantáneo: continuidad de hilos, cables cruzados, circuitos abiertos y cortocircuitos",
+      "Indicadores LED luminosos numerados del 1 al 8 y tierra (G) para escaneo automático",
+      "Incluye herramienta pelacables mini de impacto y estuche compacto",
+      "Garantía oficial Futunet de 1 año con soporte técnico y facturación formal NCF"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

@@ -329,6 +329,12 @@
     setTimeout(function () { node.remove(); }, 4200);
   }
 
-  document.addEventListener('DOMContentLoaded', setup);
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setup);
+    } else {
+      setup();
+    }
+  }
   window.AdminFinancing = { load: load, review: review, openPayment: openPayment, openDocument: openDocument };
 })();
