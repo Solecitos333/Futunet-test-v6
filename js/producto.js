@@ -504,6 +504,13 @@
     initProductPage();
   }
 
+  // Sincronización reactiva si el catálogo en la nube se rehidrata posteriormente
+  window.addEventListener('futunet:inventory-ready', () => {
+    if (!currentDetail) {
+      initProductPage();
+    }
+  });
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initProductPageLoader);
   } else {

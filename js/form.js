@@ -124,11 +124,11 @@ function sendForm(event) {
 
   // Abrir WhatsApp con el mensaje construido de forma segura sin exponer window.opener
   const targetNumber = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
-  window.open(
-    `https://wa.me/${encodeURIComponent(targetNumber)}?text=${encodeURIComponent(text)}`,
-    '_blank',
-    'noopener,noreferrer'
-  );
+  const waUrl = `https://wa.me/${encodeURIComponent(targetNumber)}?text=${encodeURIComponent(text)}`;
+  const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    window.location.href = waUrl;
+  }
 }
 
 function initContactForm() {

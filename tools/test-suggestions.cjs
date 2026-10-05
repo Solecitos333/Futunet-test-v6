@@ -830,6 +830,63 @@ test('Mejora demandada por usuarios: Optimización y Priorización de Terminales
   assert.ok(catJs.includes("terminal\\s+biometrica|reloj\\s+ponchador|facial|huella"), 'catalog.js debe priorizar terminales biométricas sobre cerraduras mecánicas');
 });
 
+test('Mejora demandada por usuarios: Routers MikroTik hEX y Balanceo Multi-WAN (SUG-M750G)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M750G'") && seedCjs.includes("status: 'implemented'"), 'SUG-M750G debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M750G') && sugJs.includes('Routers MikroTik hEX'), 'SUG-M750G debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_hex_rb750gr3'), 'backup_data.js debe contener redes_mikrotik_hex_rb750gr3');
+
+  const mikrotikImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-hex-rb750gr3.webp');
+  assert.ok(fs.existsSync(mikrotikImg), 'La imagen del Router MikroTik hEX debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'mikrotik'"), 'catalog.js debe incluir mikrotik en stem variants');
+  assert.ok(catJs.includes("'MikroTik'"), 'catalog.js debe incluir MikroTik en priorityList');
+  assert.ok(catJs.includes("/\\b(mikrotik|routerboard|hex|rb750|rb750gr3|balanceador|balanceadores|multiwan)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar routers MikroTik y balanceadores');
+});
+
+test('Mejora demandada por usuarios: Combo Inalámbrico Logitech MK270 (SUG-L2700)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L2700'") && seedCjs.includes("status: 'implemented'"), 'SUG-L2700 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L2700') && sugJs.includes('Combo Teclado y Mouse Inalámbrico Logitech MK270'), 'SUG-L2700 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_logitech_mk270_combo_inalambrico'), 'backup_data.js debe contener oficina_logitech_mk270_combo_inalambrico');
+
+  const mk270Img = path.join(projectRoot, 'img', 'productos', 'catalogo', 'logitech-mk270.webp');
+  assert.ok(fs.existsSync(mk270Img), 'La imagen del combo Logitech MK270 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'logitech'"), 'catalog.js debe incluir logitech en stem variants');
+  assert.ok(catJs.includes("'Logitech'"), 'catalog.js debe incluir Logitech en priorityList');
+  assert.ok(catJs.includes("/\\b(teclado.*inalambrico|mouse.*inalambrico|combo.*teclado|combo.*inalambrico)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar combo inalámbrico');
+});
+
+test('Mejora demandada por usuarios: Cámara Web Logitech C920 HD Pro (SUG-W9200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-W9200'") && seedCjs.includes("status: 'implemented'"), 'SUG-W9200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-W9200') && sugJs.includes('Cámara Web Logitech C920 HD Pro'), 'SUG-W9200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_logitech_c920_webcam_hd_pro'), 'backup_data.js debe contener oficina_logitech_c920_webcam_hd_pro');
+
+  const c920Img = path.join(projectRoot, 'img', 'productos', 'catalogo', 'logitech-c920.webp');
+  assert.ok(fs.existsSync(c920Img), 'La imagen de la webcam Logitech C920 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'webcam'"), 'catalog.js debe incluir webcam en stem variants');
+  assert.ok(catJs.includes("'c920'"), 'catalog.js debe incluir c920 en stem variants');
+  assert.ok(catJs.includes("/\\b(logitech|mk270|c920|webcam|camara\\s+web)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Logitech y webcam C920');
+});
+
 
 
 

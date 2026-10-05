@@ -12,11 +12,18 @@
     const [year, month, day] = value.split('-');
     return `${day}/${month}/${year}`;
   }
+  function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text !== undefined && text !== null ? text : '';
+  }
+
   function fail(message) {
     const loadEl = document.getElementById('quote-loading');
     const errEl = document.getElementById('quote-error');
+    const docEl = document.getElementById('quote-document');
     if (loadEl) loadEl.hidden = true;
     if (errEl) errEl.hidden = false;
+    if (docEl) docEl.hidden = true;
     setText('quote-error-message', message);
   }
   function db() { return window.FutunetFirebase && window.FutunetFirebase.db; }
@@ -52,7 +59,8 @@
       });
       body.appendChild(row);
     });
-    loading.hidden = true;
+    if (loading) loading.hidden = true;
+    if (documentView) documentView.hidden = false;
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const expired = data.validUntil && data.validUntil < today;

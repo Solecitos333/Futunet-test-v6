@@ -85,13 +85,18 @@
     setupDropzone();
     setupForms();
 
-    // Cerrar modales al hacer clic fuera (en el background de la clase .portal-modal)
+    // Cerrar modales al hacer clic fuera o al presionar Escape
     document.querySelectorAll('.portal-modal').forEach(function (modal) {
       modal.addEventListener('click', function (e) {
         if (e.target === modal) {
           window.closePortalModals();
         }
       });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        window.closePortalModals();
+      }
     });
 
     // Auto-inicializar estado de la calculadora si existe el slider

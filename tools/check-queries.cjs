@@ -70,7 +70,16 @@ const queries = [
   'ezviz',
   'camara wifi',
   'c6n',
-  'h3c'
+  'h3c',
+  'mikrotik',
+  'routerboard',
+  'hex',
+  'balanceador',
+  'logitech',
+  'teclado inalambrico',
+  'mouse inalambrico',
+  'webcam',
+  'c920'
 ];
 
 

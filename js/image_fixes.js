@@ -3,7 +3,6 @@
  * Imágenes locales en img/productos/catalogo/ (~6-34KB c/u).
  */
 (function() {
-  if (typeof mockDatabase === 'undefined') return;
   var b = 'img/productos/catalogo/';
 
   var fixes = {

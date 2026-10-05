@@ -430,7 +430,7 @@
       trackBtn.addEventListener('click', handleTrackSuggestion);
     }
     if (trackInput) {
-      trackInput.addEventListener('keypress', function (e) {
+      trackInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
           e.preventDefault();
           handleTrackSuggestion();
@@ -988,6 +988,30 @@
       status: 'implemented',
       description: 'Priorización destacada de la Terminal Biométrica ZKTeco MB20 (reloj ponchador con lectura facial y huella) sobre accesorios de herraje en búsquedas biométricas.',
       officialResponse: '¡Implementado! El motor de búsqueda clasifica la Terminal Biométrica ZKTeco MB20 y terminales Hikvision en el puesto #1 indiscutible al buscar biométrico.'
+    },
+    {
+      refCode: 'SUG-M750G',
+      title: 'Disponibilidad de Routers MikroTik hEX RB750Gr3 Gigabit para balanceo de carga Multi-WAN y gestión de redes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Routers balanceadores MikroTik hEX (RB750Gr3) de 5 puertos Gigabit con RouterOS L4 para redundancia de fibra óptica, balanceo PCC y VPN.',
+      officialResponse: '¡Atendido! Se integró al catálogo y a marca-mikrotik.html el Router MikroTik hEX RB750Gr3 con 5 puertos Gigabit y RouterOS L4 con garantía y NCF.'
+    },
+    {
+      refCode: 'SUG-L2700',
+      title: 'Disponibilidad de Combo Teclado y Mouse Inalámbrico Logitech MK270 para oficinas y puestos de trabajo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Combo inalámbrico Logitech MK270 con teclado en español y mouse óptico con un solo receptor USB Nano para puestos corporativos y de oficina.',
+      officialResponse: '¡Cumplido! Ya está disponible en catálogo y en marca-logitech.html el Combo Inalámbrico Logitech MK270 con hasta 36 meses de batería y factura fiscal.'
+    },
+    {
+      refCode: 'SUG-W9200',
+      title: 'Disponibilidad de Cámara Web Logitech C920 HD Pro 1080p con micrófono estéreo para videoconferencias y teletrabajo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámara web profesional Logitech C920 Full HD 1080p con lentes de cristal, enfoque automático y micrófonos estéreo duales para videollamadas corporativas.',
+      officialResponse: '¡Implementado! Incorporada al catálogo y a marca-logitech.html la Cámara Web Logitech C920 HD Pro con RightLight 2 y 1 año de garantía oficial Futunet.'
     }
   ];
 

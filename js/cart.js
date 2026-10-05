@@ -169,6 +169,10 @@
       const found = window.supplierInventory.getMergedCatalog().find(p => p && p.id === productId);
       if (found) return found;
     }
+    if (typeof window !== 'undefined' && window.FutunetData && Array.isArray(window.FutunetData.products)) {
+      const found = window.FutunetData.products.find(p => p && p.id === productId);
+      if (found) return found;
+    }
     return null;
   }
 
@@ -643,7 +647,7 @@
       
       <hr style="border:none; border-top:1px solid #e2e8f0; margin:12px 0;">
       
-      ${total > 0 ? `
+      ${total > 0 && discountAmount > 0 ? `
         <div class="summary-field">
           <strong>Subtotal Compra:</strong>
           <span>${formatCurrency(total)}</span>

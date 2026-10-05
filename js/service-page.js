@@ -478,7 +478,11 @@
             waMessage += 'Detalles: ' + message;
             
             var waText = encodeURIComponent(waMessage);
-            window.open('https://wa.me/18297411041?text=' + waText, '_blank', 'noopener,noreferrer');
+            var waUrl = 'https://wa.me/18297411041?text=' + waText;
+            var win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+              window.location.href = waUrl;
+            }
             showToast('Enviando solicitud por WhatsApp...', 'success');
           } else {
             showToast('Solicitud cancelada.', 'info');

@@ -795,6 +795,81 @@ const networkingItems = [
   }
 ];
 
+const mikrotikItems = [
+  {
+    id: 'redes_mikrotik_hex_rb750gr3',
+    department: 'redes',
+    category: 'Enrutadores y Balanceadores',
+    brand: 'MikroTik',
+    title: 'Router MikroTik hEX RB750Gr3 Gigabit Ethernet 5 Puertos con RouterOS L4 (Balanceador Multi-WAN)',
+    desc: 'Router Gigabit Ethernet compacto de alta potencia MikroTik hEX (RB750Gr3) equipado con procesador Dual-Core de 880 MHz (4 hilos), 256 MB de memoria RAM, 5 puertos Gigabit Ethernet 10/100/1000 Mbps, ranura para memoria MicroSD y puerto USB de tamaño completo. Incluye licencia oficial RouterOS Nivel 4 con capacidades avanzadas para balanceo de carga multi-WAN (PCC), failover automático para múltiples líneas de fibra óptica (Claro / Altice), servidor y cliente VPN (WireGuard, OpenVPN, IPsec con aceleración por hardware), firewall de filtrado de paquetes y limitación de ancho de banda por IP o departamento. Ideal para pequeñas y medianas empresas, proveedores WISP y administradores de red en Santiago.',
+    price: 'RD$ 4,850.00',
+    img: 'img/productos/catalogo/mikrotik-hex-rb750gr3.webp',
+    gallery: [
+      'img/productos/catalogo/mikrotik-hex-rb750gr3.webp'
+    ],
+    specs: [
+      '5 puertos Gigabit Ethernet 10/100/1000 Mbps con soporte Auto-MDI/X',
+      'Procesador MediaTek Dual-Core MT7621A a 880 MHz (4 hilos) con aceleración de cifrado IPsec por hardware (~470 Mbps)',
+      'Memoria RAM de 256 MB y almacenamiento flash de 16 MB con ranura MicroSD para logs y caché',
+      'Sistema operativo RouterOS v7 con licencia Nivel 4 completa y soporte de actualizaciones continuas',
+      'Capacidad Multi-WAN: Balanceo de carga PCC (Per Connection Classifier), bonding y failover automático',
+      'Puerto USB 2.0 tipo A para conexión de módem 4G/LTE de respaldo o almacenamiento externo',
+      'Alimentación versátil: Jack DC (8-30V) o entrada PoE Pasivo en puerto 1 (adaptador 24V incluido)',
+      'Garantía oficial MikroTik de 1 año con soporte técnico local y factura con NCF en Santiago'
+    ]
+  }
+];
+
+const logitechItems = [
+  {
+    id: 'oficina_logitech_mk270_combo_inalambrico',
+    department: 'oficina',
+    category: 'Periféricos y Accesorios',
+    brand: 'Logitech',
+    title: 'Combo Teclado y Mouse Inalámbrico Logitech MK270 con Receptor USB 2.4 GHz para Oficina',
+    desc: 'Combo inalámbrico confiable y duradero Logitech MK270 que combina un teclado de tamaño normal y un mouse óptico compacto y ergonómico. Conexión inalámbrica avanzada de 2.4 GHz sin retrasos ni interferencias con alcance de hasta 10 metros mediante un único nano-receptor USB "conectar y olvidar". El teclado incorpora distribución en español con teclado numérico completo, 8 teclas de acceso rápido multimedia, diseño resistente a salpicaduras y patas inclinables ajustables. El mouse ambidiestro ofrece seguimiento óptico fluido y suave. Eficiencia energética de clase mundial con hasta 36 meses de duración de batería en el teclado y 12 meses en el mouse con interruptor de encendido/apagado.',
+    price: 'RD$ 1,950.00',
+    img: 'img/productos/catalogo/logitech-mk270.webp',
+    gallery: [
+      'img/productos/catalogo/logitech-mk270.webp'
+    ],
+    specs: [
+      'Conexión inalámbrica fiable de 2.4 GHz de largo alcance (hasta 10 metros) sin retardos ni pérdidas de señal',
+      'Receptor USB Nano único "Plug and Play" que vincula simultáneamente el teclado y el mouse',
+      'Teclado de tamaño completo con teclado numérico integrado y 8 teclas de acceso rápido para control multimedia y volumen',
+      'Diseño resistente a derrames accidentales de líquidos con canales de drenaje y patas inclinables ajustables',
+      'Mouse inalámbrico contorneado de diseño ambidiestro con sensor óptico de 1000 DPI de alta precisión',
+      'Extraordinaria autonomía: hasta 36 meses en el teclado (2 baterías AAA) y hasta 12 meses en el mouse (1 batería AA)',
+      'Compatible con Windows 10/11, macOS, ChromeOS y Linux sin necesidad de controladores adicionales',
+      'Garantía oficial Logitech de 1 año con comprobante fiscal formal NCF'
+    ]
+  },
+  {
+    id: 'oficina_logitech_c920_webcam_hd_pro',
+    department: 'oficina',
+    category: 'Equipos de Oficina',
+    brand: 'Logitech',
+    title: 'Cámara Web Logitech C920 HD Pro 1080p con Micrófono Estéreo Dual y Corrección de Luz para Videoconferencias',
+    desc: 'Cámara web profesional Logitech C920 HD Pro con resolución Full HD 1080p a 30 fps para videollamadas nítidas y fluidas en plataformas corporativas como Zoom, Microsoft Teams, Google Meet y Skype. Cuenta con lente de cristal de cinco elementos Full HD con enfoque automático de alta precisión, campo visual diagonal de 78 grados ideal para encuadrar a una o dos personas, corrección automática de iluminación RightLight 2 que ajusta los niveles de brillo y contraste en salas poco iluminadas, y dos micrófonos omnidireccionales integrados a cada lado para capturar audio estéreo natural con reducción de ruido de fondo. Incluye clip universal con rosca para trípode estándar.',
+    price: 'RD$ 5,400.00',
+    img: 'img/productos/catalogo/logitech-c920.webp',
+    gallery: [
+      'img/productos/catalogo/logitech-c920.webp'
+    ],
+    specs: [
+      'Resolución de video Full HD 1080p (1920 x 1080) a 30 fps y HD 720p a 60/30 fps',
+      'Lente de cristal Full HD de 5 elementos con enfoque automático suave y preciso (Autofocus)',
+      'Campo visual diagonal (dFOV) de 78° que ofrece un encuadre amplio y profesional para salas y oficinas',
+      'Tecnología RightLight 2 para ajuste automático de luz en condiciones de iluminación deficiente o contraluz',
+      'Dos micrófonos estéreo omnidireccionales con reducción de ruido ambiental para transmisión de voz transparente',
+      'Clip de montaje universal adaptable a pantallas de laptops, monitores LCD y trípodes estándar (rosca 1/4 pulgada)',
+      'Conexión directa USB-A Plug and Play con cable de 1.5 metros compatible con Windows, macOS y ChromeOS',
+      'Garantía oficial Logitech de 1 año con respaldo técnico y comprobante fiscal NCF'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -1244,7 +1319,9 @@ async function updateBackupData() {
     ...monitorItems,
     ...cctvItems,
     ...audioItems,
-    ...networkingItems
+    ...networkingItems,
+    ...mikrotikItems,
+    ...logitechItems
   ];
 
   itemsToSync.forEach(item => {
@@ -1284,7 +1361,9 @@ async function updateFirestore() {
     ...monitorItems,
     ...cctvItems,
     ...audioItems,
-    ...networkingItems
+    ...networkingItems,
+    ...mikrotikItems,
+    ...logitechItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

@@ -242,8 +242,10 @@
       console.error('Financing profile submit error:', error);
       showToast(error.message || 'No se pudo enviar el expediente.', 'error');
     } finally {
-      button.disabled = false;
-      button.textContent = 'Enviar expediente para revisión';
+      if (button) {
+        button.disabled = false;
+        button.textContent = 'Enviar expediente para revisión';
+      }
     }
   }
 

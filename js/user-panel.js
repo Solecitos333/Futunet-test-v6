@@ -427,6 +427,12 @@
     if (modal) modal.style.display = 'none';
   };
 
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      window.closeUserOrderModal();
+    }
+  });
+
   // ─── Suggestions Section ───
   async function loadUserSuggestions(user) {
     var container = document.getElementById('user-suggestions-list');

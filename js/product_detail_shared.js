@@ -93,6 +93,10 @@
       return window.backupDatabase;
     }
 
+    if (typeof window !== 'undefined' && window.FutunetData && Array.isArray(window.FutunetData.products) && window.FutunetData.products.length > 0) {
+      return window.FutunetData.products;
+    }
+
     if (typeof window.mockDatabase !== 'undefined' && Array.isArray(window.mockDatabase)) {
       return window.mockDatabase;
     }

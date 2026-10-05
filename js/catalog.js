@@ -163,6 +163,13 @@ function getStemVariants(word) {
   if (word === 'ezviz') variants.push('cctv', 'camara', 'wifi', 'c6n', 'h3c', 'seguridad', 'inalambrica');
   if (word === 'c6n') variants.push('ezviz', 'camara', 'wifi', 'pan', 'tilt', '360');
   if (word === 'h3c') variants.push('ezviz', 'camara', 'wifi', 'exterior', 'ip67');
+  if (word === 'mikrotik' || word === 'routerboard') variants.push('router', 'hex', 'rb750', 'balanceador', 'red', 'enrutador');
+  if (word === 'hex' || word === 'rb750' || word === 'rb750gr3') variants.push('mikrotik', 'routerboard', 'router', 'balanceador');
+  if (word === 'balanceador' || word === 'balanceadores') variants.push('mikrotik', 'router', 'multiwan', 'pcc', 'red');
+  if (word === 'logitech') variants.push('teclado', 'mouse', 'combo', 'webcam', 'c920', 'mk270');
+  if (word === 'webcam' || word === 'webcams') variants.push('camara', 'logitech', 'c920', 'video', 'reunion', 'conferencia');
+  if (word === 'c920') variants.push('webcam', 'logitech', 'camara', 'hd', '1080p');
+  if (word === 'mk270') variants.push('logitech', 'combo', 'teclado', 'mouse', 'inalambrico');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -406,6 +413,33 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar MikroTik, RouterBOARD y balanceadores al buscar mikrotik, routerboard, hex o balanceador (SUG-M750G)
+  if (/\b(mikrotik|routerboard|hex|rb750|rb750gr3|balanceador|balanceadores|multiwan)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'mikrotik') {
+      score += 180;
+    } else if (/mikrotik|rb750/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar periféricos Logitech (combo MK270 y webcam C920) al buscar logitech, combo inalámbrico, webcam o c920 (SUG-L2700, SUG-W9200)
+  if (/\b(logitech|mk270|c920|webcam|camara\s+web)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'logitech') {
+      score += 150;
+    }
+    if (/c920|webcam/i.test(normalizedQuery) && /c920|webcam/i.test(title)) {
+      score += 100;
+    }
+    if (/mk270|combo/i.test(normalizedQuery) && /mk270|combo/i.test(title)) {
+      score += 100;
+    }
+  }
+  if (/\b(teclado.*inalambrico|mouse.*inalambrico|combo.*teclado|combo.*inalambrico)\b/i.test(normalizedQuery)) {
+    if (/logitech.*mk270/i.test(title)) {
+      score += 140;
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -555,7 +589,9 @@ function populateBrandFilter() {
     zk: 'ZKTeco',
     westerndigital: 'Western Digital',
     wd: 'Western Digital',
-    ezviz: 'Ezviz'
+    ezviz: 'Ezviz',
+    mikrotik: 'MikroTik',
+    logitech: 'Logitech'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -589,7 +625,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Logitech', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
@@ -2346,11 +2382,14 @@ function initSmartSearch(inputId, dropdownId) {
     handleSearch(e.target.value.toLowerCase().trim());
   });
 
-  // Ejecutar con Enter
+  // Ejecutar con Enter o cerrar con Escape
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       const q = e.target.value.trim();
+      drop.classList.remove('active');
       if (q) executeSearch(q);
+    } else if (e.key === 'Escape') {
+      drop.classList.remove('active');
     }
   });
 
