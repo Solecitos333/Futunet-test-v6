@@ -452,5 +452,89 @@ test('Precisión de Búsqueda Biométrica y Sincronización de Perfil: ZKTeco, c
   );
 });
 
+test('Robustez & Mantenimiento Continuo: public-quote setText, image_fixes global export, fallbacks y accesibilidad', () => {
+  // 1. public-quote.js define setText y gestiona visibilidad de documentView
+  const quoteJs = fs.readFileSync(path.join(projectRoot, 'js', 'public-quote.js'), 'utf8');
+  assert.ok(
+    quoteJs.includes('function setText(id, text)'),
+    'public-quote.js debe definir la función setText para evitar ReferenceError en render y fail'
+  );
+  assert.ok(
+    quoteJs.includes('if (documentView) documentView.hidden = false;'),
+    'public-quote.js debe mostrar documentView al renderizar cotización'
+  );
+  assert.ok(
+    quoteJs.includes('if (docEl) docEl.hidden = true;'),
+    'public-quote.js debe ocultar el documento al fallar la carga'
+  );
+
+  // 2. image_fixes.js exporta applyImageFixes sin return prematuro
+  const imgFixesJs = fs.readFileSync(path.join(projectRoot, 'js', 'image_fixes.js'), 'utf8');
+  assert.ok(
+    !imgFixesJs.includes("if (typeof mockDatabase === 'undefined') return;"),
+    'image_fixes.js no debe abortar prematuramente si mockDatabase aún no se ha declarado'
+  );
+  assert.ok(
+    imgFixesJs.includes('window.applyImageFixes = applyFixes;'),
+    'image_fixes.js debe exportar applyImageFixes globalmente para sincronización de Firestore'
+  );
+
+  // 3. product_detail_shared.js y cart.js contemplan FutunetData.products
+  const prodSharedJs = fs.readFileSync(path.join(projectRoot, 'js', 'product_detail_shared.js'), 'utf8');
+  assert.ok(
+    prodSharedJs.includes('window.FutunetData.products'),
+    'product_detail_shared.js debe consultar window.FutunetData.products en getCatalogData'
+  );
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(
+    cartJs.includes('window.FutunetData.products'),
+    'cart.js debe consultar window.FutunetData.products en findProduct'
+  );
+
+  // 4. financing.js valida la existencia de button en el bloque finally
+  const finJs = fs.readFileSync(path.join(projectRoot, 'js', 'financing.js'), 'utf8');
+  assert.ok(
+    /if\s*\(\s*button\s*\)\s*\{\s*button\.disabled\s*=\s*false;/.test(finJs),
+    'financing.js debe verificar la existencia de button en el bloque finally de forma defensiva'
+  );
+
+  // 5. Soporte de tecla Escape en internet-portal, catalog y user-panel
+  const portalJs = fs.readFileSync(path.join(projectRoot, 'js', 'internet-portal.js'), 'utf8');
+  assert.ok(
+    /e\.key\s*===\s*'Escape'\s*\)\s*\{\s*window\.closePortalModals\(\);/.test(portalJs),
+    'internet-portal.js debe permitir cerrar modales con la tecla Escape'
+  );
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    /e\.key\s*===\s*'Escape'\s*\)\s*\{\s*window\.closeUserOrderModal\(\);/.test(userPanelJs),
+    'user-panel.js debe permitir cerrar el modal de detalle de pedido con Escape'
+  );
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(
+    catJs.includes("drop.classList.remove('active');") && catJs.includes("else if (e.key === 'Escape')"),
+    'catalog.js debe cerrar el menú desplegable de búsqueda con Escape y al ejecutar búsqueda'
+  );
+
+  // 6. Resiliencia contra bloqueadores de popups en WhatsApp
+  const formJs = fs.readFileSync(path.join(projectRoot, 'js', 'form.js'), 'utf8');
+  assert.ok(
+    /if\s*\(!win\s*\|\|\s*win\.closed/.test(formJs) && formJs.includes('window.location.href = waUrl;'),
+    'form.js debe incorporar fallback de redirección para bloqueadores de ventanas emergentes'
+  );
+  const srvJs = fs.readFileSync(path.join(projectRoot, 'js', 'service-page.js'), 'utf8');
+  assert.ok(
+    /if\s*\(!win\s*\|\|\s*win\.closed/.test(srvJs) && srvJs.includes('window.location.href = waUrl;'),
+    'service-page.js debe incorporar fallback de redirección para bloqueadores de ventanas emergentes'
+  );
+
+  // 7. login.html alterna icono de visibilidad de contraseña
+  const loginHtml = fs.readFileSync(path.join(projectRoot, 'login.html'), 'utf8');
+  assert.ok(
+    loginHtml.includes('M17.94 17.94A10.07 10.07'),
+    'login.html debe alternar visualmente al icono de ojo tachado al mostrar contraseña'
+  );
+});
+
+
 
 

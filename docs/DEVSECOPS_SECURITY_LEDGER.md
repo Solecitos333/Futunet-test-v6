@@ -570,6 +570,39 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 658 recursos públicos validados en `dist/` con cumplimiento estricto CSP.
     - 62/62 consultas en `tools/check-queries.cjs` verificadas con 100% de pertinencia y 0 búsquedas sin resultado.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-05 Ciclo Corrección de Errores en Cotizaciones, Exportación Global de Fixes, Fallbacks de Popups & Accesibilidad Teclado)**:
+  - **Corrección de Bug Crítico en Módulo de Cotizaciones Públicas (`js/public-quote.js` y `cotizacion.html`)**:
+    - *Diagnóstico*: La función auxiliar `setText(id, text)` era invocada 21 veces en `render()` y `fail()` para popular campos dinámicos (número de factura, fechas, montos, desglose de ITBIS y mensajes de error), pero nunca había sido declarada en el archivo ni en el contexto global, desencadenando un `ReferenceError: setText is not defined` fatal que bloqueaba completamente la carga de cotizaciones por token. Asimismo, el contenedor principal `<article class="quote-document" id="quote-document" hidden>` permanecía con el atributo `hidden` tras finalizar la carga, impidiendo que el cliente viese su cotización aun si los datos se procesaban correctamente.
+    - *Mitigación*: Declaración e implementación de `function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text !== undefined && text !== null ? text : ''; }`, desocultamiento explícito `if (documentView) documentView.hidden = false;` en `render()` y ocultamiento defensivo `if (docEl) docEl.hidden = true;` en caso de fallo.
+  - **Desacoplamiento y Disponibilidad Global de Parches de Catálogo (`js/image_fixes.js`)**:
+    - *Diagnóstico*: El módulo `image_fixes.js` contenía una condición de salida temprana `if (typeof mockDatabase === 'undefined') return;` al inicio de su función autoejecutable. En flujos donde `image_fixes.js` se cargaba antes de la inicialización de `mockDatabase` o durante la carga asíncrona de Firestore, la ejecución se cancelaba sin exportar `window.applyImageFixes`, provocando que `inventory_data.js` no pudiese aplicar correcciones de imágenes ni normalizaciones de categorías sobre los productos remotos.
+    - *Mitigación*: Remoción de la salida temprana para garantizar que `window.applyImageFixes` se exponga siempre globalmente y se ejecute reactivamente sobre el catálogo tan pronto como los datos estén disponibles.
+  - **Resiliencia en Búsqueda y Rehidratación Asíncrona de Productos (`js/product_detail_shared.js`, `js/cart.js` y `js/producto.js`)**:
+    - *Diagnóstico*: Las funciones de resolución de catálogo `getCatalogData()` y `findProduct()` no consultaban la fuente de datos en memoria `window.FutunetData.products`. Además, si la ficha de producto (`producto.html`) se abría antes de que Firestore finalizara la rehidratación, la página mostraba un estado vacío definitivo sin recuperarse.
+    - *Mitigación*: Incorporación de `window.FutunetData.products` en la cadena de búsqueda de productos y enlace del listener `window.addEventListener('futunet:inventory-ready', ...)` en `producto.js` para recargar el producto automáticamente si los datos llegan de forma asíncrona.
+  - **Blindaje Defensivo en Formulario de Financiamiento (`js/financing.js`)**:
+    - *Diagnóstico*: En la función `submitProfile`, el bloque `finally` accedía directamente a las propiedades `button.disabled = false; button.textContent = '...';` sin validar la existencia de `button`, susceptible a un `TypeError` no capturado ante cambios estructurales en el DOM.
+    - *Mitigación*: Validación defensiva `if (button) { ... }` en el bloque `finally`.
+  - **Accesibilidad y Navegación por Teclado en Modales y Buscadores (`js/internet-portal.js`, `js/user-panel.js`, `js/catalog.js` y `js/suggestions.js`)**:
+    - *Diagnóstico*: Los modales de contratación y reportes en el portal de internet (`.portal-modal`), el modal de detalle de pedidos en Mi Cuenta (`#user-order-detail-modal`) y el desplegable de búsqueda predictiva en el catálogo carecían de cierre intuitivo con la tecla `Escape`. Adicionalmente, el campo de consulta de sugerencias utilizaba el evento deprecado `keypress` que genera incompatibilidad en teclados móviles virtuales.
+    - *Mitigación*: Implementación de listeners universales para la tecla `Escape` en modales y buscador predictivo, cierre automático del menú al presionar Enter en búsquedas, y migración a `keydown` en el campo de seguimiento de propuestas.
+  - **Resiliencia en Redirección a WhatsApp frente a Bloqueadores de Ventanas Emergentes (`js/form.js` y `js/service-page.js`)**:
+    - *Diagnóstico*: En navegadores móviles (iOS Safari / Android Chrome) con bloqueo estricto de ventanas emergentes, las llamadas directas a `window.open` para abrir chats de WhatsApp podían ser bloqueadas silenciosamente sin feedback para el usuario.
+    - *Mitigación*: Implementación del patrón de fallback `if (!win || win.closed || typeof win.closed === 'undefined') { window.location.href = waUrl; }`.
+  - **Alternancia Visual de Icono en Visibilidad de Contraseñas (`login.html`)**:
+    - *Diagnóstico*: Al presionar el botón para mostrar la contraseña, el tipo de entrada cambiaba a texto pero el icono SVG se mantenía como ojo abierto, causando confusión visual.
+    - *Mitigación*: Alternancia dinámica entre icono de ojo abierto y ojo tachado según el estado de visibilidad.
+  - **Claridad de Totales en Resumen de Checkout (`js/cart.js`)**:
+    - *Diagnóstico*: En el paso 3 de checkout, si no se aplicaba un cupón de descuento, la interfaz mostraba simultáneamente "Subtotal Compra: $X" y "Total Compra: $X" con valores idénticos.
+    - *Mitigación*: Condicionamiento de la fila de Subtotal para que únicamente se despliegue cuando existe un descuento activo (`discountAmount > 0`), manteniendo coherencia con el mensaje formateado de WhatsApp.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 150 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo nuevas suites en `tools/test-dom-safety.cjs`.
+    - 41 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 73 scripts de JavaScript y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 658 recursos públicos validados en `dist/` con cumplimiento estricto CSP.
+    - 62/62 consultas en `tools/check-queries.cjs` verificadas con 100% de pertinencia y 0 búsquedas sin resultado.
+
 
 
 
