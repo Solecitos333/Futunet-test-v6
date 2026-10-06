@@ -887,6 +887,66 @@ test('Mejora demandada por usuarios: Cámara Web Logitech C920 HD Pro (SUG-W9200
   assert.ok(catJs.includes("/\\b(logitech|mk270|c920|webcam|camara\\s+web)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Logitech y webcam C920');
 });
 
+test('Mejora demandada por usuarios: Laptop Corporativa Lenovo ThinkPad L14 (SUG-T1400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T1400'") && seedCjs.includes("status: 'implemented'"), 'SUG-T1400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T1400') && sugJs.includes('Lenovo ThinkPad L14'), 'SUG-T1400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_laptop_lenovo_thinkpad_l14'), 'backup_data.js debe contener oficina_laptop_lenovo_thinkpad_l14');
+
+  const lenovoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-thinkpad-l14.webp');
+  assert.ok(fs.existsSync(lenovoImg), 'La imagen de la laptop Lenovo ThinkPad debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'lenovo'"), 'catalog.js debe incluir lenovo en stem variants');
+  assert.ok(catJs.includes("'thinkpad'"), 'catalog.js debe incluir thinkpad en stem variants');
+  assert.ok(catJs.includes("'Lenovo'"), 'catalog.js debe incluir Lenovo en priorityList');
+  assert.ok(catJs.includes("/\\b(lenovo|thinkpad|ideapad|l14)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo y ThinkPad');
+});
+
+test('Mejora demandada por usuarios: Switch Gigabit Netgear GS308 (SUG-N308G)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N308G'") && seedCjs.includes("status: 'implemented'"), 'SUG-N308G debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N308G') && sugJs.includes('Netgear GS308'), 'SUG-N308G debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_switch_netgear_gs308_8p'), 'backup_data.js debe contener redes_switch_netgear_gs308_8p');
+
+  const netgearImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-gs308.webp');
+  assert.ok(fs.existsSync(netgearImg), 'La imagen del switch Netgear GS308 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'netgear'"), 'catalog.js debe incluir netgear en stem variants');
+  assert.ok(catJs.includes("'gs308'"), 'catalog.js debe incluir gs308 en stem variants');
+  assert.ok(catJs.includes("'Netgear'"), 'catalog.js debe incluir Netgear en priorityList');
+  assert.ok(catJs.includes("/\\b(netgear|gs308)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Netgear GS308');
+});
+
+test('Mejora demandada por usuarios: Sistema UPS APC Schneider Electric BV1000 (SUG-S1000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S1000'") && seedCjs.includes("status: 'implemented'"), 'SUG-S1000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S1000') && sugJs.includes('APC Easy UPS BV1000I-MS'), 'SUG-S1000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_ups_apc_schneider_bv1000'), 'backup_data.js debe contener energia_ups_apc_schneider_bv1000');
+
+  const apcImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-schneider-bv1000.webp');
+  assert.ok(fs.existsSync(apcImg), 'La imagen del UPS APC Schneider Electric debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'schneider'"), 'catalog.js debe incluir schneider en stem variants');
+  assert.ok(catJs.includes("'apc'"), 'catalog.js debe incluir apc en stem variants');
+  assert.ok(catJs.includes("'Schneider Electric'"), 'catalog.js debe incluir Schneider Electric en priorityList');
+  assert.ok(catJs.includes("/\\b(schneider|apc|bv1000|easy\\s*ups)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Schneider Electric y APC');
+});
+
 
 
 

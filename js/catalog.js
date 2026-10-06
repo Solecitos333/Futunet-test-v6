@@ -170,6 +170,14 @@ function getStemVariants(word) {
   if (word === 'webcam' || word === 'webcams') variants.push('camara', 'logitech', 'c920', 'video', 'reunion', 'conferencia');
   if (word === 'c920') variants.push('webcam', 'logitech', 'camara', 'hd', '1080p');
   if (word === 'mk270') variants.push('logitech', 'combo', 'teclado', 'mouse', 'inalambrico');
+  if (word === 'lenovo') variants.push('thinkpad', 'ideapad', 'laptop', 'computadora', 'portatil');
+  if (word === 'thinkpad') variants.push('lenovo', 'laptop', 'l14', 'portatil');
+  if (word === 'ideapad') variants.push('lenovo', 'laptop', 'portatil');
+  if (word === 'netgear') variants.push('switch', 'gs308', 'gigabit', 'red', 'conmutador');
+  if (word === 'gs308') variants.push('netgear', 'switch', 'gigabit');
+  if (word === 'schneider') variants.push('apc', 'ups', 'energia', 'respaldo', 'bv1000', 'surge');
+  if (word === 'apc') variants.push('schneider', 'ups', 'bateria', 'respaldo', 'bv1000');
+  if (word === 'bv1000') variants.push('apc', 'schneider', 'ups', 'easy');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -197,6 +205,7 @@ function matchesBrand(productBrand, targetBrand) {
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   if ((normP === 'zkteco' && normT === 'zk') || (normP === 'zk' && normT === 'zkteco')) return true;
   if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;
+  if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -440,6 +449,33 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Lenovo y laptops ThinkPad al buscar lenovo, thinkpad, l14 (SUG-T1400)
+  if (/\b(lenovo|thinkpad|ideapad|l14)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'lenovo') {
+      score += 170;
+    } else if (/lenovo|thinkpad/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Netgear y switches Gigabit al buscar netgear, gs308 (SUG-N308G)
+  if (/\b(netgear|gs308)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'netgear') {
+      score += 170;
+    } else if (/netgear|gs308/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Schneider Electric / APC al buscar schneider, apc, bv1000, easy ups (SUG-S1000)
+  if (/\b(schneider|apc|bv1000|easy\s*ups)\b/i.test(normalizedQuery)) {
+    if (product.brand && (product.brand.toLowerCase().includes('schneider') || product.brand.toLowerCase().includes('apc'))) {
+      score += 170;
+    } else if (/schneider|apc|bv1000/i.test(title)) {
+      score += 150;
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -591,7 +627,13 @@ function populateBrandFilter() {
     wd: 'Western Digital',
     ezviz: 'Ezviz',
     mikrotik: 'MikroTik',
-    logitech: 'Logitech'
+    logitech: 'Logitech',
+    lenovo: 'Lenovo',
+    netgear: 'Netgear',
+    'schneider electric': 'Schneider Electric',
+    schneiderelectric: 'Schneider Electric',
+    schneider: 'Schneider Electric',
+    apc: 'Schneider Electric'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -625,7 +667,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Logitech', 'Forza', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

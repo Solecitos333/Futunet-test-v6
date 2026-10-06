@@ -1012,6 +1012,30 @@
       status: 'implemented',
       description: 'Cámara web profesional Logitech C920 Full HD 1080p con lentes de cristal, enfoque automático y micrófonos estéreo duales para videollamadas corporativas.',
       officialResponse: '¡Implementado! Incorporada al catálogo y a marca-logitech.html la Cámara Web Logitech C920 HD Pro con RightLight 2 y 1 año de garantía oficial Futunet.'
+    },
+    {
+      refCode: 'SUG-T1400',
+      title: 'Disponibilidad de Laptops Corporativas Lenovo ThinkPad L14 Core i5 con 16 GB RAM y SSD NVMe para Oficinas y Empresas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Laptops empresariales de alta durabilidad Lenovo ThinkPad con chasis militar MIL-STD-810H, Intel Core i5, 16 GB RAM, SSD NVMe y teclado ergonómico resistente a salpicaduras con TrackPoint.',
+      officialResponse: '¡Cumplido! Ya se encuentra disponible en catálogo y en marca-lenovo.html la Laptop Corporativa Lenovo ThinkPad L14 (14" FHD IPS, Core i5, 16GB RAM, 256GB SSD) con garantía y comprobante fiscal NCF.'
+    },
+    {
+      refCode: 'SUG-N308G',
+      title: 'Disponibilidad de Switches Gigabit Netgear GS308 de 8 Puertos Metálicos No Administrables para Redes y Pymes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switches Gigabit Ethernet Netgear GS308 de 8 puertos metálicos no administrables con diseño Fanless silencioso y Plug & Play para oficinas y comercios.',
+      officialResponse: '¡Implementado! Se incorporó al catálogo de Redes y a marca-netgear.html el Switch Netgear GS308 Gigabit de 8 puertos con carcasa de acero y arquitectura sin bloqueo de 16 Gbps.'
+    },
+    {
+      refCode: 'SUG-S1000',
+      title: 'Disponibilidad de Sistemas UPS APC Easy UPS BV1000I-MS 1000VA / 600W (Schneider Electric) con Regulación Automática AVR',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistemas de alimentación ininterrumpida UPS APC by Schneider Electric de 1000VA / 600W con regulación automática AVR y 4 tomas universales protegidas contra apagones y sobretensiones.',
+      officialResponse: '¡Atendido! Incorporamos al catálogo de Energía y a marca-schneiderelectric.html el Sistema UPS APC Easy UPS BV1000I-MS 1000VA / 600W (Schneider Electric) con regulación AVR y 2 años de garantía oficial.'
     }
   ];
 

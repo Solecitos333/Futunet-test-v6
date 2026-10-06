@@ -79,7 +79,16 @@ const queries = [
   'teclado inalambrico',
   'mouse inalambrico',
   'webcam',
-  'c920'
+  'c920',
+  'lenovo',
+  'thinkpad',
+  'l14',
+  'netgear',
+  'gs308',
+  'schneider',
+  'apc',
+  'bv1000',
+  'easy ups'
 ];
 
 

@@ -870,6 +870,82 @@ const logitechItems = [
   }
 ];
 
+const lenovoItems = [
+  {
+    id: 'oficina_laptop_lenovo_thinkpad_l14',
+    department: 'oficina',
+    category: 'Laptops y Portátiles',
+    brand: 'Lenovo',
+    title: 'Laptop Lenovo ThinkPad L14 14" Full HD Core i5 16GB RAM 256GB SSD NVMe Corporativa',
+    desc: 'Laptop empresarial de máxima durabilidad Lenovo ThinkPad L14 diseñada para resistir las exigencias del entorno de trabajo corporativo y móvil. Equipada con procesador Intel Core i5 de alta velocidad, 16 GB de memoria RAM DDR4 para multitarea fluida, unidad de almacenamiento de estado sólido de 256 GB SSD NVMe de respuesta inmediata y pantalla antirreflejo de 14 pulgadas Full HD IPS (1920x1080). Incorpora el legendario teclado ergonómico ThinkPad resistente a salpicaduras con botón de navegación TrackPoint, lector de huellas dactilares para inicio de sesión seguro, cámara web HD con obturador de privacidad ThinkShutter y certificación de grado militar MIL-STD-810H contra golpes, caídas y temperaturas extremas. Sistema operativo Windows 11 Pro en español con garantía oficial y comprobante fiscal NCF.',
+    price: 'RD$ 26,850.00',
+    img: 'img/productos/catalogo/lenovo-thinkpad-l14.webp',
+    gallery: [
+      'img/productos/catalogo/lenovo-thinkpad-l14.webp'
+    ],
+    specs: [
+      'Procesador: Intel Core i5 Quad-Core con tecnología Intel Turbo Boost',
+      'Memoria RAM: 16 GB DDR4 a 3200 MHz para multitarea intensiva y software contable',
+      'Almacenamiento: Unidad de estado sólido de 256 GB SSD M.2 NVMe PCIe',
+      'Pantalla: 14.0 pulgadas Full HD IPS (1920x1080) antirreflejo de amplio ángulo de visión',
+      'Teclado ThinkPad ergonómico con TrackPoint central resistente a derrames accidentales',
+      'Seguridad y privacidad: Lector de huellas dactilares y obturador ThinkShutter en webcam',
+      'Conectividad completa: Puertos USB-C con Power Delivery, USB 3.2, HDMI, RJ45 Ethernet y Wi-Fi 6',
+      'Garantía corporativa Futunet de 1 año y comprobante fiscal formal NCF'
+    ]
+  }
+];
+
+const netgearItems = [
+  {
+    id: 'redes_switch_netgear_gs308_8p',
+    department: 'redes',
+    category: 'Switches y Enrutadores',
+    brand: 'Netgear',
+    title: 'Switch Netgear GS308 Gigabit Ethernet 8 Puertos Metálico Plug & Play Fanless',
+    desc: 'Switch de red no administrable Netgear GS308 Gigabit Ethernet de 8 puertos 10/100/1000 Mbps en chasis metálico compacto de escritorio o montaje en pared. Ofrece conectividad de red Gigabit de alta velocidad para conectar computadoras, impresoras de red, cámaras IP, consolas y dispositivos de almacenamiento NAS en oficinas y pymes de Santiago. Arquitectura de conmutación sin bloqueo con rendimiento de hasta 16 Gbps que transfiere y filtra paquetes a la máxima velocidad del cable. Funcionamiento 100% silencioso sin ventilador (diseño Fanless), auto-negociación en todos los puertos, soporte Auto-MDI/MDIX (sin necesidad de cables cruzados) y tecnología ecológica IEEE 802.3az que reduce el consumo de energía eléctrica.',
+    price: 'RD$ 2,250.00',
+    img: 'img/productos/catalogo/netgear-gs308.webp',
+    gallery: [
+      'img/productos/catalogo/netgear-gs308.webp'
+    ],
+    specs: [
+      '8 puertos Gigabit Ethernet RJ-45 de detección automática 10/100/1000 Mbps',
+      'Chasis robusto en acero metálico resistente con soporte para escritorio o anclaje mural',
+      'Configuración Plug and Play inmediata: sin software, configuración ni instalación previa',
+      'Diseño Fanless silencioso: cero ruido de funcionamiento, ideal para escritorios y salas de reuniones',
+      'Arquitectura sin bloqueo: ancho de banda de reenvío de 16 Gbps',
+      'Eficiencia energética IEEE 802.3az para bajo consumo eléctrico',
+      'Garantía oficial Netgear de 2 años y comprobante fiscal formal NCF'
+    ]
+  }
+];
+
+const schneiderItems = [
+  {
+    id: 'energia_ups_apc_schneider_bv1000',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Schneider Electric',
+    title: 'Sistema UPS APC Easy UPS BV1000I-MS 1000VA / 600W con Regulación AVR Schneider Electric',
+    desc: 'Sistema de alimentación ininterrumpida (UPS) interactivo APC Easy UPS BV1000I-MS de 1000VA / 600W de Schneider Electric diseñado para brindar protección eléctrica de alta confiabilidad en hogares, oficinas y puestos de trabajo en Santiago. Proporciona respaldo de batería y regulación automática de voltaje (AVR con corrección de caídas de tensión Boost and Trim) protegiendo computadoras, servidores, sistemas POS, routers de fibra óptica y equipos electrónicos sensibles contra apagones, sobretensiones y fluctuaciones bruscas de energía de la red. Cuenta con 4 tomas de salida universales tipo Schuko/NEMA protegidas con respaldo de batería y supresión de picos, arranque en frío (Cold-Start) para encender cargas con batería sin suministro eléctrico y orificios para montaje mural.',
+    price: 'RD$ 5,950.00',
+    img: 'img/productos/catalogo/apc-schneider-bv1000.webp',
+    gallery: [
+      'img/productos/catalogo/apc-schneider-bv1000.webp'
+    ],
+    specs: [
+      'Capacidad de potencia: 1000 VA / 600 Watts de respaldo continuo',
+      'Regulación automática de voltaje (AVR): corrige caídas y subidas de tensión sin agotar la batería',
+      '4 tomas de salida universales protegidas con batería y supresión de sobretensiones',
+      'Protección contra picos eléctricos, rayos y ruido electromagnético de red',
+      'Función Cold-Start: encendido del UPS y dispositivos conectados usando solo batería',
+      'Diseño estilizado con orificios posteriores para montaje seguro en pared',
+      'Garantía oficial de 2 años de Schneider Electric / APC con soporte local Futunet'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -1321,7 +1397,10 @@ async function updateBackupData() {
     ...audioItems,
     ...networkingItems,
     ...mikrotikItems,
-    ...logitechItems
+    ...logitechItems,
+    ...lenovoItems,
+    ...netgearItems,
+    ...schneiderItems
   ];
 
   itemsToSync.forEach(item => {
@@ -1363,7 +1442,10 @@ async function updateFirestore() {
     ...audioItems,
     ...networkingItems,
     ...mikrotikItems,
-    ...logitechItems
+    ...logitechItems,
+    ...lenovoItems,
+    ...netgearItems,
+    ...schneiderItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

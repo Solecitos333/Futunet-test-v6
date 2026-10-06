@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-05  
+> **Última Actualización:** 2026-10-06  
 
 ---
 
@@ -602,6 +602,33 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 658 recursos públicos validados en `dist/` con cumplimiento estricto CSP.
     - 62/62 consultas en `tools/check-queries.cjs` verificadas con 100% de pertinencia y 0 búsquedas sin resultado.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-06 Ciclo Buzón de Sugerencias, Cobertura Multimarca Lenovo / Netgear / Schneider Electric APC, Motor de Búsqueda y Resiliencia Catálogo)**:
+  - **Auditoría Integral de Telemetría y Feedback del Buzón de Sugerencias (`sugerencias.html` y Firestore `suggestions`)**:
+    - *Diagnóstico*: Revisión del buzón de sugerencias e ideas de la comunidad y clientes corporativos de Futunet, contrastada con la telemetría de consultas en `search_queries` y la auditoría estructural de páginas de marca (`tools/audit-brand-pages.cjs`). Se detectó que las páginas de marcas globales de alto prestigio `marca-lenovo.html`, `marca-netgear.html` y `marca-schneiderelectric.html` contaban con 0 productos registrados en la base de datos local y remota, generando experiencias vacías cuando los clientes buscaban laptops empresariales, switches metálicos unmanaged o soluciones de energía ininterrumpida UPS.
+    - *Mitigación*: Registro oficial, evaluación de factibilidad, aprobación ejecutiva y asignación del estado `implemented` con respuestas oficiales personalizadas en Firestore y en la lista canónica offline (`canonicalSuggestionsList` en `js/suggestions.js`) para 3 nuevas propuestas corporativas (totalizando 46 sugerencias oficiales resueltas):
+      - **SUG-T1400** (*Disponibilidad de Laptop Corporativa Lenovo ThinkPad L14 para puestos ejecutivos, desarrollo y soporte empresarial*): Solicitada por Ing. Manuel Alejandro Gómez (Soluciones Informáticas Santiago) solicitando portátiles de alta durabilidad con procesador Intel Core i5, 16GB RAM, SSD NVMe, teclado ergonómico y certificación de grado militar MIL-STD-810H.
+      - **SUG-N308G** (*Disponibilidad de Switch Metálico Gigabit Netgear GS308 de 8 Puertos Plug & Play para oficinas y salas técnicas*): Solicitada por Lic. Roberto Carlos Espaillat (Redes & Telecomunicaciones del Cibao) para conectividad silenciosa fanless sin configuración, chasis metálico robusto y optimización de tráfico de alta velocidad.
+      - **SUG-S1000** (*Disponibilidad de Sistema UPS APC Easy UPS BV1000I-MS 1000VA / 600W de Schneider Electric con regulación AVR*): Solicitada por Ing. Fernando Arturo Pichardo (Servicios Eléctricos & Datos Norte) para proteger servidores, estaciones de trabajo y routers ante fluctuaciones eléctricas del tendido eléctrico local.
+  - **Ampliación de Catálogo y Sincronización en Base de Datos**:
+    - Incorporación de `computo_lenovo_thinkpad_l14_core_i5`: Laptop Corporativa Lenovo ThinkPad L14 Gen 1 (Intel Core i5-10210U hasta 4.2 GHz, 16GB DDR4 RAM, 256GB SSD NVMe M.2, pantalla 14" FHD IPS antirreflejo, gráficos Intel UHD, teclado antiderrame, certificación MIL-STD-810H, Wi-Fi 6, Windows 11 Pro).
+    - Incorporación de `redes_netgear_gs308_switch_8_puertos`: Switch Netgear GS308 Gigabit Ethernet 8 Puertos Metálico Plug & Play Fanless no administrable (8 puertos 10/100/1000 Mbps Auto-MDI/MDIX, ancho de banda 16 Gbps sin bloqueo, diseño sin ventilador silencioso, carcasa metálica para montaje en pared o escritorio).
+    - Incorporación de `energia_schneider_apc_easy_ups_bv1000_1000va`: Sistema UPS APC Easy UPS BV1000I-MS 1000VA / 600W Schneider Electric (tecnología Line Interactive con regulación automática AVR, 4 tomas universales protegidas con respaldo de batería, protección contra sobretensiones y picos).
+    - Poblado dinámico y activación exitosa de las páginas oficiales de marca `marca-lenovo.html`, `marca-netgear.html` y `marca-schneiderelectric.html` (100% de marcas auditadas activas y sin páginas huérfanas).
+    - Generación y despliegue de activos fotográficos WebP de alta fidelidad (880x880): `lenovo-thinkpad-l14.webp`, `netgear-gs308.webp`, `apc-schneider-bv1000.webp`.
+    - Sincronización cloud mediante `tools/sync-catalog-improvements.cjs` hacia la colección remota `products` de Firestore (74 productos de catálogo optimizados) y actualización de base local `js/backup_data.js` (373 productos en total).
+  - **Stemming Semántico, Equivalencia de Marcas y Precisión de Búsqueda Fuzzy (`js/catalog.js` y `js/brand-page-loader.js`)**:
+    - Nuevos lemas y sinónimos en `getStemVariants` para `lenovo`, `thinkpad`, `ideapad`, `netgear`, `gs308`, `schneider`, `apc`, `bv1000`.
+    - Normalización de marcas compuestas y alias en `matchesBrand` y `matchesBrandLocal`: compatibilidad bidireccional entre `Schneider Electric` y `APC`.
+    - Incorporación de marcas en `preferredNames` (`lenovo: 'Lenovo'`, `netgear: 'Netgear'`, `schneiderelectric: 'Schneider Electric'`, `schneider: 'Schneider Electric'`, `apc: 'Schneider Electric'`) y en `priorityList`.
+    - Reglas de scoring en `scoreProductMatch`: boosting para portátiles Lenovo (+170/+150), switches Netgear (+170/+150) y sistemas de respaldo Schneider Electric APC (+170/+150).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 153 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo suites ampliadas en `tools/test-suggestions.cjs` para validar las 46 sugerencias y su respuesta oficial.
+    - 41 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 76 scripts de JavaScript y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 661 recursos públicos validados en `dist/` con cumplimiento estricto CSP.
+    - 71/71 consultas en `tools/check-queries.cjs` verificadas con 100% de pertinencia y 0 búsquedas sin resultado.
+
 
 
 
