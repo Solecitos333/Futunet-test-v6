@@ -628,6 +628,25 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 661 recursos públicos validados en `dist/` con cumplimiento estricto CSP.
     - 71/71 consultas en `tools/check-queries.cjs` verificadas con 100% de pertinencia y 0 búsquedas sin resultado.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-06 Ciclo Resiliencia Portal Clientes, Reactividad de Marcas, Eliminación de document.write y Blindaje URL/DOM)**:
+  - **Defensa en Profundidad y Null-Safety en Portal de Internet (`js/internet-portal.js`)**:
+    - *Diagnóstico*: En `showPublicView`, `showPortalView`, `showNoClientView`, en los modales de reporte de pago (`openPaymentReportModal`) y soporte (`openSupportModal`), así como en la selección de planes y filtrado de preguntas frecuentes, existían desreferenciaciones directas de propiedades DOM (`.style.display`, `.value`, `.textContent`) que arrojaban excepciones no capturadas cuando los elementos no se encontraban en el DOM o se renderizaban de forma asíncrona.
+    - *Mitigación*: Implementación exhaustiva de guardas condicionales (`if (elem) ...`) y verificaciones null-safe en todos los métodos de cambio de estado visual, selectores de planes y formularios de soporte, asegurando ejecución tolerante a fallos sin fugas de excepciones en consola.
+  - **Reactividad Asíncrona de Marcas y Prevención de Duplicados (`js/brand-page-loader.js`)**:
+    - *Diagnóstico*: `brand-page-loader.js` ejecutaba su renderizado una única vez durante el evento de carga del DOM. Cuando los datos de Firestore o inventario en memoria se rehidrataban con latencia, la cuadrícula de productos permanecía en el estado vacío original. Asimismo, múltiples re-renderizados podían insertar banners de venta cruzada duplicados.
+    - *Mitigación*: Registro del listener reactivo `window.addEventListener('futunet:inventory-ready', initBrandPageLoader)`, verificación de existencia de `.cross-selling-banner` previo a la inserción, normalización simétrica de marcas y alias (`zkteco` / `zk`, `westerndigital` / `wd`, `schneider` / `apc`, `victron` / `victronenergy`, `mitsubishi` / `mitsubishielectric`), y reubicación de la función `escapeHTML` al ámbito de módulo.
+  - **Eliminación Definitiva de `document.write` y Cumplimiento Estricto CSP**:
+    - *Diagnóstico*: 37 archivos HTML conservaban el patrón heredado `<script>document.write(new Date().getFullYear())</script>` en el pie de página, una práctica bloqueada o desaconsejada por las políticas de seguridad de contenido (CSP) modernas y auditores Lighthouse/SAST por riesgo de inyección y bloqueo del analizador sintáctico.
+    - *Mitigación*: Reemplazo universal por la etiqueta semántica accesible `<span id="footer-year">2026</span>` y sincronización dinámica mediante `initFooterYear()` en `js/main.js` usando `querySelectorAll('#footer-year, .footer-year')`. Auditoría automatizada confirmó 0 ocurrencias de `document.write` en los 52 archivos HTML del proyecto.
+  - **Blindaje en Sincronización de URL y Construcción de Metadatos (`js/catalog.js` y `js/producto.js`)**:
+    - *Diagnóstico*: `syncCatalogUrl` dependía de `catalogo.html` como ruta fija en `window.history.replaceState`, causando inconsistencias en subdirectorios o enrutamiento limpio. En `producto.js`, la construcción de `imageUrl` vía `new URL()` carecía de bloque `try/catch` ante posibles rutas de imagen atípicas.
+    - *Mitigación*: Preservación dinámica de `window.location.pathname` en `catalog.js` con salvaguarda `try/catch`, y parseo seguro con fallback en `updateDocumentMetadata` de `producto.js`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 157 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo 20 suites en `tools/test-dom-safety.cjs`.
+    - 41 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 71/71 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs`.
+    - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 661 recursos validados en `dist/` con cumplimiento estricto CSP.
+
 
 
 

@@ -164,8 +164,10 @@
   function showPublicView() {
     setInternetMode('public');
     hidePortalLoading();
-    document.getElementById('internet-public-view').style.display = 'block';
-    document.getElementById('internet-portal-view').style.display = 'none';
+    var pubView = document.getElementById('internet-public-view');
+    if (pubView) pubView.style.display = 'block';
+    var portView = document.getElementById('internet-portal-view');
+    if (portView) portView.style.display = 'none';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.remove('wide');
     var subnav = document.querySelector('.service-subnav');
@@ -176,10 +178,14 @@
   function showPortalView() {
     setInternetMode('client');
     hidePortalLoading();
-    document.getElementById('internet-public-view').style.display = 'none';
-    document.getElementById('internet-portal-view').style.display = 'block';
-    document.getElementById('portal-app-card').style.display = 'block';
-    document.getElementById('portal-no-client').style.display = 'none';
+    var pubView = document.getElementById('internet-public-view');
+    if (pubView) pubView.style.display = 'none';
+    var portView = document.getElementById('internet-portal-view');
+    if (portView) portView.style.display = 'block';
+    var card = document.getElementById('portal-app-card');
+    if (card) card.style.display = 'block';
+    var noClient = document.getElementById('portal-no-client');
+    if (noClient) noClient.style.display = 'none';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.remove('wide');
     var subnav = document.querySelector('.service-subnav');
@@ -219,10 +225,14 @@
   function showNoClientView() {
     setInternetMode('prospect');
     hidePortalLoading();
-    document.getElementById('internet-public-view').style.display = 'none';
-    document.getElementById('internet-portal-view').style.display = 'block';
-    document.getElementById('portal-app-card').style.display = 'none';
-    document.getElementById('portal-no-client').style.display = 'block';
+    var pubView = document.getElementById('internet-public-view');
+    if (pubView) pubView.style.display = 'none';
+    var portView = document.getElementById('internet-portal-view');
+    if (portView) portView.style.display = 'block';
+    var card = document.getElementById('portal-app-card');
+    if (card) card.style.display = 'none';
+    var noClient = document.getElementById('portal-no-client');
+    if (noClient) noClient.style.display = 'block';
     var container = document.querySelector('.portal-container');
     if (container) container.classList.add('wide');
     var subnav = document.querySelector('.service-subnav');
@@ -410,31 +420,38 @@
 
   window.openPaymentReportModal = function () {
     var modal = document.getElementById('payment-report-modal');
+    if (!modal) return;
     modal.classList.add('is-active');
     activePortalFocusTrap(modal);
   };
 
   window.openSupportModal = function (type) {
     var modal = document.getElementById('support-modal');
+    if (!modal) return;
     var title = document.getElementById('support-modal-title');
     var detailsLabel = document.getElementById('support-details-label');
     var detailsInput = document.getElementById('support-details');
     var speedDiv = document.getElementById('support-speed-selection');
+    var supportType = document.getElementById('support-type');
     
-    document.getElementById('support-type').value = type;
+    if (supportType) supportType.value = type;
 
     if (type === 'change_plan') {
-      title.textContent = 'Solicitar Cambio de Plan';
-      detailsLabel.textContent = 'Comentarios adicionales (Opcional)';
-      detailsInput.placeholder = 'Indícanos si tienes alguna duda o requerimiento especial con tu velocidad...';
-      detailsInput.required = false;
-      speedDiv.style.display = 'block';
+      if (title) title.textContent = 'Solicitar Cambio de Plan';
+      if (detailsLabel) detailsLabel.textContent = 'Comentarios adicionales (Opcional)';
+      if (detailsInput) {
+        detailsInput.placeholder = 'Indícanos si tienes alguna duda o requerimiento especial con tu velocidad...';
+        detailsInput.required = false;
+      }
+      if (speedDiv) speedDiv.style.display = 'block';
     } else {
-      title.textContent = 'Reportar Avería Técnica';
-      detailsLabel.textContent = 'Detalles del problema o avería';
-      detailsInput.placeholder = 'Describe qué ocurre (ej: luz roja en router, lentitud, caída total)...';
-      detailsInput.required = true;
-      speedDiv.style.display = 'none';
+      if (title) title.textContent = 'Reportar Avería Técnica';
+      if (detailsLabel) detailsLabel.textContent = 'Detalles del problema o avería';
+      if (detailsInput) {
+        detailsInput.placeholder = 'Describe qué ocurre (ej: luz roja en router, lentitud, caída total)...';
+        detailsInput.required = true;
+      }
+      if (speedDiv) speedDiv.style.display = 'none';
     }
 
     modal.classList.add('is-active');
@@ -513,9 +530,12 @@
     }
     
     selectedFile = file;
-    document.getElementById('voucher-filename').textContent = file.name;
-    document.getElementById('voucher-preview-box').style.display = 'flex';
-    document.getElementById('voucher-dropzone').style.display = 'none';
+    var vName = document.getElementById('voucher-filename');
+    if (vName) vName.textContent = file.name;
+    var vBox = document.getElementById('voucher-preview-box');
+    if (vBox) vBox.style.display = 'flex';
+    var vDrop = document.getElementById('voucher-dropzone');
+    if (vDrop) vDrop.style.display = 'none';
   }
 
   window.removeVoucherFile = function () {
@@ -578,8 +598,10 @@
           return;
         }
 
-        var amount = document.getElementById('pay-amount').value;
-        var bank = sanitizePortalInput(document.getElementById('pay-bank').value).slice(0, 50);
+        var amtEl = document.getElementById('pay-amount');
+        var amount = amtEl ? amtEl.value : '';
+        var bankEl = document.getElementById('pay-bank');
+        var bank = sanitizePortalInput(bankEl ? bankEl.value : '').slice(0, 50);
 
         // Validar base de datos y almacenamiento
         if (!db || !storage) {
@@ -687,9 +709,12 @@
           return;
         }
 
-        var type = sanitizePortalInput(document.getElementById('support-type').value);
-        var details = sanitizePortalInput(document.getElementById('support-details').value);
-        var newSpeed = sanitizePortalInput(document.getElementById('support-new-speed').value);
+        var typeEl = document.getElementById('support-type');
+        var detailsEl = document.getElementById('support-details');
+        var speedEl = document.getElementById('support-new-speed');
+        var type = sanitizePortalInput(typeEl ? typeEl.value : '');
+        var details = sanitizePortalInput(detailsEl ? detailsEl.value : '');
+        var newSpeed = sanitizePortalInput(speedEl ? speedEl.value : '');
 
         if (details.length > 1500) {
           if (window.showToast) window.showToast('El detalle de la solicitud no debe superar los 1500 caracteres.', 'error');
@@ -801,12 +826,18 @@
           return;
         }
 
-        var date = document.getElementById('p-hir-date').value;
-        var schedule = document.getElementById('p-hir-schedule').value;
-        var address = sanitizePortalInput(document.getElementById('p-hir-address').value);
-        var notes = sanitizePortalInput(document.getElementById('p-hir-notes').value);
-        var planName = document.getElementById('p-hir-plan-name').value;
-        var planId = document.getElementById('p-hir-plan-id').value;
+        var dateEl = document.getElementById('p-hir-date');
+        var scheduleEl = document.getElementById('p-hir-schedule');
+        var addressEl = document.getElementById('p-hir-address');
+        var notesEl = document.getElementById('p-hir-notes');
+        var planNameEl = document.getElementById('p-hir-plan-name');
+        var planIdEl = document.getElementById('p-hir-plan-id');
+        var date = dateEl ? dateEl.value : '';
+        var schedule = scheduleEl ? scheduleEl.value : '';
+        var address = sanitizePortalInput(addressEl ? addressEl.value : '');
+        var notes = sanitizePortalInput(notesEl ? notesEl.value : '');
+        var planName = planNameEl ? planNameEl.value : '';
+        var planId = planIdEl ? planIdEl.value : '';
         var selectedPlan = getActiveCatalogPlan(planId);
         if (!selectedPlan) {
           if (window.showToast) window.showToast('El plan seleccionado ya no está disponible. Elige otro plan.', 'error');
@@ -976,11 +1007,16 @@
           return;
         }
 
-        var date = document.getElementById('p-guest-date').value;
-        var schedule = document.getElementById('p-guest-schedule').value;
-        var address = document.getElementById('p-guest-address').value.trim();
-        var planName = document.getElementById('p-guest-plan-name').value;
-        var planId = document.getElementById('p-guest-plan-id').value;
+        var dateEl = document.getElementById('p-guest-date');
+        var scheduleEl = document.getElementById('p-guest-schedule');
+        var addressEl = document.getElementById('p-guest-address');
+        var planNameEl = document.getElementById('p-guest-plan-name');
+        var planIdEl = document.getElementById('p-guest-plan-id');
+        var date = dateEl ? dateEl.value : '';
+        var schedule = scheduleEl ? scheduleEl.value : '';
+        var address = addressEl ? addressEl.value.trim() : '';
+        var planName = planNameEl ? planNameEl.value : '';
+        var planId = planIdEl ? planIdEl.value : '';
         var selectedPlan = getActiveCatalogPlan(planId);
         if (!selectedPlan) {
           if (window.showToast) window.showToast('El plan seleccionado ya no está disponible. Elige otro plan.', 'error');
@@ -1113,9 +1149,12 @@
 
   // Stepper para contratación
   window.selectHiringPlan = function (planName, planId, price) {
-    document.getElementById('p-hir-plan-name').value = planName;
-    document.getElementById('p-hir-plan-id').value = planId;
-    document.getElementById('p-hir-selected-label').textContent = planName + ' (RD$ ' + price.toLocaleString() + '/mes)';
+    var pName = document.getElementById('p-hir-plan-name');
+    if (pName) pName.value = planName;
+    var pId = document.getElementById('p-hir-plan-id');
+    if (pId) pId.value = planId;
+    var pLabel = document.getElementById('p-hir-selected-label');
+    if (pLabel) pLabel.textContent = planName + ' (RD$ ' + price.toLocaleString() + '/mes)';
     
     // Rellenar datos del usuario si están disponibles
     if (currentUser && userData) {
@@ -1238,12 +1277,15 @@
   };
 
   function applyFaqFilters() {
-    var query = document.getElementById('faq-search-input').value.toLowerCase().trim();
+    var faqInput = document.getElementById('faq-search-input');
+    var query = faqInput ? faqInput.value.toLowerCase().trim() : '';
     
     document.querySelectorAll('.faq-item').forEach(function (item) {
       var itemCategory = item.getAttribute('data-category');
-      var qText = item.querySelector('.faq-trigger span').textContent.toLowerCase();
-      var aText = item.querySelector('.faq-answer p').textContent.toLowerCase();
+      var qSpan = item.querySelector('.faq-trigger span');
+      var aP = item.querySelector('.faq-answer p');
+      var qText = qSpan ? qSpan.textContent.toLowerCase() : '';
+      var aText = aP ? aP.textContent.toLowerCase() : '';
       
       var matchesCategory = (currentFaqCategory === 'todos' || itemCategory === currentFaqCategory);
       var matchesSearch = (query === '' || qText.includes(query) || aText.includes(query));

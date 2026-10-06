@@ -26,7 +26,10 @@
   function updateDocumentMetadata(detail) {
     const canonicalUrl = `https://futunet.com.do/producto.html?id=${encodeURIComponent(detail.id)}`;
     const description = (detail.summary || detail.description || `Consulta ${detail.title} en Futunet`).slice(0, 160);
-    const imageUrl = new URL(detail.img || 'img/logo.webp', 'https://futunet.com.do/').href;
+    let imageUrl = 'https://futunet.com.do/img/logo.webp';
+    try {
+      imageUrl = new URL(detail.img || 'img/logo.webp', 'https://futunet.com.do/').href;
+    } catch (e) {}
     const canonical = document.querySelector('link[rel="canonical"]');
     const robots = document.querySelector('meta[name="robots"]');
 

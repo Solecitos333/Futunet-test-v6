@@ -535,6 +535,102 @@ test('Robustez & Mantenimiento Continuo: public-quote setText, image_fixes globa
   );
 });
 
+test('DOM Safety & Resiliencia: internet-portal.js maneja vistas, modales y formularios de forma 100% null-safe', () => {
+  const portalJs = fs.readFileSync(path.join(projectRoot, 'js', 'internet-portal.js'), 'utf8');
+
+  // Vistas públicas y del cliente
+  assert.ok(portalJs.includes('if (pubView) pubView.style.display'), 'showPublicView/showPortalView debe verificar pubView');
+  assert.ok(portalJs.includes('if (portView) portView.style.display'), 'showPublicView/showPortalView debe verificar portView');
+  assert.ok(portalJs.includes('if (card) card.style.display'), 'showPortalView/showNoClientView debe verificar card');
+  assert.ok(portalJs.includes('if (noClient) noClient.style.display'), 'showPortalView/showNoClientView debe verificar noClient');
+
+  // Modales
+  assert.ok(portalJs.includes('window.openPaymentReportModal = function () {\n    var modal = document.getElementById(\'payment-report-modal\');\n    if (!modal) return;'), 'openPaymentReportModal debe verificar existencia del modal');
+  assert.ok(portalJs.includes('window.openSupportModal = function (type) {\n    var modal = document.getElementById(\'support-modal\');\n    if (!modal) return;'), 'openSupportModal debe verificar existencia del modal');
+
+  // Formulario y Stepper
+  assert.ok(portalJs.includes('if (pName) pName.value = planName;'), 'selectHiringPlan debe verificar pName antes de asignar valor');
+  assert.ok(portalJs.includes('if (pId) pId.value = planId;'), 'selectHiringPlan debe verificar pId antes de asignar valor');
+  assert.ok(portalJs.includes('if (pLabel) pLabel.textContent = planName'), 'selectHiringPlan debe verificar pLabel antes de asignar textContent');
+
+  // Buscador de FAQ
+  assert.ok(portalJs.includes('var qText = qSpan ? qSpan.textContent.toLowerCase() : \'\';'), 'applyFaqFilters debe verificar qSpan');
+  assert.ok(portalJs.includes('var aText = aP ? aP.textContent.toLowerCase() : \'\';'), 'applyFaqFilters debe verificar aP');
+});
+
+test('Brand Page Loader: reactividad a futunet:inventory-ready, aliases de marcas y banner único', () => {
+  const loaderJs = fs.readFileSync(path.join(projectRoot, 'js', 'brand-page-loader.js'), 'utf8');
+
+  // Reactividad
+  assert.ok(loaderJs.includes("window.addEventListener('futunet:inventory-ready'"), 'brand-page-loader.js debe escuchar el evento futunet:inventory-ready');
+
+  // Aliases de marcas
+  assert.ok(loaderJs.includes("normP === 'zkteco' && normT === 'zk'"), 'matchesBrandLocal debe soportar equivalencia ZKTeco / ZK');
+  assert.ok(loaderJs.includes("normP === 'westerndigital' && normT === 'wd'"), 'matchesBrandLocal debe soportar equivalencia Western Digital / WD');
+  assert.ok(loaderJs.includes("normP.includes('schneider') || normP.includes('apc')"), 'matchesBrandLocal debe soportar equivalencia Schneider / APC');
+
+  // Prevención de duplicados en banner
+  assert.ok(loaderJs.includes("!document.querySelector('.cross-selling-banner')"), 'brand-page-loader.js debe evitar insertar banners de venta cruzada duplicados');
+});
+
+test('Estándares Web & CSP: Cero presencia de document.write en los 52 archivos HTML del sitio', () => {
+  const htmlFiles = fs.readdirSync(projectRoot).filter(f => f.endsWith('.html'));
+  assert.ok(htmlFiles.length >= 50, `Deben existir al menos 50 archivos HTML (encontrados: ${htmlFiles.length})`);
+
+  const filesWithDocWrite = [];
+  htmlFiles.forEach(file => {
+    const content = fs.readFileSync(path.join(projectRoot, file), 'utf8');
+    if (content.includes('document.write')) {
+      filesWithDocWrite.push(file);
+    }
+  });
+
+  assert.strictEqual(
+    filesWithDocWrite.length,
+    0,
+    `Archivos con document.write detectados: ${filesWithDocWrite.join(', ')}`
+  );
+});
+
+test('Resiliencia URL & DOM: syncCatalogUrl, initFooterYear y escapeHTML global en marcas', () => {
+  // 1. main.js usa querySelectorAll para actualizar todos los footer-year
+  const mainJs = fs.readFileSync(path.join(projectRoot, 'js', 'main.js'), 'utf8');
+  assert.ok(
+    mainJs.includes("querySelectorAll('#footer-year, .footer-year')"),
+    'main.js initFooterYear debe usar querySelectorAll para abarcar todos los elementos de año'
+  );
+
+  // 2. catalog.js syncCatalogUrl es resiliente a subrutas y pathname
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(
+    catJs.includes("window.location.pathname.toLowerCase().includes('catalogo')"),
+    'catalog.js syncCatalogUrl debe admitir rutas con y sin extensión .html'
+  );
+  assert.ok(
+    catJs.includes('${window.location.pathname}${query ? `?${query}` : \'\'}'),
+    'catalog.js syncCatalogUrl debe preservar window.location.pathname en replaceState'
+  );
+
+  // 3. producto.js protege la construcción de imageUrl
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(
+    prodJs.includes("imageUrl = new URL(detail.img || 'img/logo.webp', 'https://futunet.com.do/').href;"),
+    'producto.js debe construir imageUrl usando base canónica con try/catch'
+  );
+
+  // 4. brand-page-loader.js normaliza aliases de Victron y Mitsubishi
+  const loaderJs = fs.readFileSync(path.join(projectRoot, 'js', 'brand-page-loader.js'), 'utf8');
+  assert.ok(
+    loaderJs.includes("normP === 'victron' && normT === 'victronenergy'"),
+    'brand-page-loader.js debe normalizar equivalencia Victron / Victron Energy'
+  );
+  assert.ok(
+    loaderJs.includes("normP === 'mitsubishi' && normT === 'mitsubishielectric'"),
+    'brand-page-loader.js debe normalizar equivalencia Mitsubishi / Mitsubishi Electric'
+  );
+});
+
+
 
 
 

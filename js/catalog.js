@@ -582,7 +582,7 @@ function applyAvailabilityFilter(products) {
 }
 
 function syncCatalogUrl() {
-  if (!window.location.pathname.toLowerCase().includes('catalogo.html')) return;
+  if (!window.location.pathname.toLowerCase().includes('catalogo')) return;
   const params = new URLSearchParams();
   if (state.searchQuery) params.set('q', state.searchQuery);
   if (state.dept !== 'all') params.set('cat', state.dept);
@@ -593,7 +593,9 @@ function syncCatalogUrl() {
   if (state.minPrice > 0) params.set('min', String(state.minPrice));
   if (state.maxPrice < 9999999) params.set('max', String(state.maxPrice));
   const query = params.toString();
-  window.history.replaceState({}, '', `catalogo.html${query ? `?${query}` : ''}`);
+  try {
+    window.history.replaceState({}, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
+  } catch (e) {}
 }
 
 function populateBrandFilter() {

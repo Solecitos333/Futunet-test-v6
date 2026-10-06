@@ -220,6 +220,16 @@ function enrichBrandHero(brandName) {
   applyMobile(mq);
 }
 
+function escapeHTML(str) {
+  if (str === undefined || str === null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function matchesBrandLocal(productBrand, targetBrand) {
   if (typeof window !== 'undefined' && typeof window.matchesBrand === 'function') {
     return window.matchesBrand(productBrand, targetBrand);
@@ -235,7 +245,11 @@ function matchesBrandLocal(productBrand, targetBrand) {
   if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
   if (normP === 'tplink' && normT === 'tplink') return true;
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
+  if ((normP === 'zkteco' && normT === 'zk') || (normP === 'zk' && normT === 'zkteco')) return true;
+  if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;
   if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
+  if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
+  if ((normP === 'mitsubishi' && normT === 'mitsubishielectric') || (normP === 'mitsubishielectric' && normT === 'mitsubishi')) return true;
   return false;
 }
 
@@ -254,9 +268,9 @@ async function initBrandPageLoader() {
   // Enriquecer el hero con imagen del producto
   enrichBrandHero(brandName);
 
-  // Insertar banner de venta cruzada si la marca tiene un servicio sugerido
+  // Insertar banner de venta cruzada si la marca tiene un servicio sugerido (evitar duplicados)
   const serviceInfo = BRAND_SERVICE_MAPPING[(brandName || '').toLowerCase().trim()];
-  if (serviceInfo) {
+  if (serviceInfo && !document.querySelector('.cross-selling-banner')) {
     const bannerDiv = document.createElement('div');
     bannerDiv.className = 'cross-selling-banner reveal';
     bannerDiv.style.cssText = 'max-width: 1200px; margin: 0 auto 30px; padding: 0 20px;';
@@ -335,19 +349,23 @@ async function initBrandPageLoader() {
   }
 
   // Inicializar los iconos de Lucide cargados dinámicamente
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons({ root: container });
+  function refreshIcons() {
+    if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+      try {
+        lucide.createIcons({ root: container });
+      } catch (e) {
+        lucide.createIcons();
+      }
+    }
   }
+  refreshIcons();
+  window.addEventListener('load', refreshIcons, { once: true });
+}
 
-  function escapeHTML(str) {
-    if (str === undefined || str === null) return '';
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
+if (typeof window !== 'undefined') {
+  window.addEventListener('futunet:inventory-ready', function () {
+    initBrandPageLoader();
+  });
 }
 
 if (document.readyState === 'loading') {

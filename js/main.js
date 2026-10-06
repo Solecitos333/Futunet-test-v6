@@ -755,10 +755,11 @@ function handleLocalBusinessSchema() {
 
 // Inyección dinámica del año actual en el footer
 function initFooterYear() {
-  const footerYear = document.getElementById('footer-year');
-  if (footerYear) {
-    footerYear.textContent = new Date().getFullYear();
-  }
+  const currentYear = new Date().getFullYear();
+  const footerYears = document.querySelectorAll('#footer-year, .footer-year');
+  footerYears.forEach(function(el) {
+    el.textContent = currentYear;
+  });
 }
 
 // Función de notificación Toast compartida globalmente
