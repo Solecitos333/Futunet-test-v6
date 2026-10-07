@@ -178,6 +178,16 @@ function getStemVariants(word) {
   if (word === 'schneider') variants.push('apc', 'ups', 'energia', 'respaldo', 'bv1000', 'surge');
   if (word === 'apc') variants.push('schneider', 'ups', 'bateria', 'respaldo', 'bv1000');
   if (word === 'bv1000') variants.push('apc', 'schneider', 'ups', 'easy');
+  if (word === 'linksys') variants.push('router', 'wifi', 'mesh', 'hydra', 'velop', 'red');
+  if (word === 'hydra') variants.push('linksys', 'router', 'wifi', 'ax5400');
+  if (word === 'velop') variants.push('linksys', 'mesh', 'wifi');
+  if (word === 'victron') variants.push('inversor', 'multiplus', 'mppt', 'solar', 'energia', 'cargador');
+  if (word === 'multiplus') variants.push('victron', 'inversor', 'ups', 'senoidal', 'cargador');
+  if (word === 'mppt') variants.push('victron', 'solar', 'controlador', 'carga');
+  if (word === 'paradox') variants.push('alarma', 'spectra', 'sp4000', 'seguridad', 'sensor', 'pir');
+  if (word === 'spectra' || word === 'sp4000') variants.push('paradox', 'alarma', 'seguridad');
+  if (word === 'alarma' || word === 'alarmas') variants.push('paradox', 'spectra', 'intrusor', 'sirena', 'pir', 'seguridad');
+  if (word === 'pir') variants.push('sensor', 'movimiento', 'paradox', 'nv5', 'alarma');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -206,6 +216,7 @@ function matchesBrand(productBrand, targetBrand) {
   if ((normP === 'zkteco' && normT === 'zk') || (normP === 'zk' && normT === 'zkteco')) return true;
   if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;
   if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
+  if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -476,6 +487,33 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Linksys y routers Hydra Pro 6 al buscar linksys, hydra, velop (SUG-L8400)
+  if (/\b(linksys|hydra|velop|ax5400)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'linksys') {
+      score += 170;
+    } else if (/linksys|hydra/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Victron Energy e inversores solares MultiPlus al buscar victron, multiplus, mppt (SUG-V2400)
+  if (/\b(victron|multiplus|mppt|senoidal)\b/i.test(normalizedQuery) || (/\b(inversor|inversores)\b/i.test(normalizedQuery) && /\b(solar|solares|puro|onda)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('victron') || product.brand.toLowerCase().includes('energy'))) {
+      score += 170;
+    } else if (/victron|multiplus/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Paradox y sistemas de alarma Spectra al buscar paradox, spectra, sp4000, alarma, sensor pir (SUG-P5800)
+  if (/\b(paradox|spectra|sp4000)\b/i.test(normalizedQuery) || (/\b(alarma|alarmas)\b/i.test(normalizedQuery) && !/\b(reloj)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'paradox') {
+      score += 170;
+    } else if (/paradox|spectra.*sp4000/i.test(title)) {
+      score += 150;
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -635,7 +673,12 @@ function populateBrandFilter() {
     'schneider electric': 'Schneider Electric',
     schneiderelectric: 'Schneider Electric',
     schneider: 'Schneider Electric',
-    apc: 'Schneider Electric'
+    apc: 'Schneider Electric',
+    linksys: 'Linksys',
+    'victron energy': 'Victron Energy',
+    victronenergy: 'Victron Energy',
+    victron: 'Victron Energy',
+    paradox: 'Paradox'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -669,7 +712,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'Linksys', 'Victron Energy', 'Paradox', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());
@@ -2074,7 +2117,12 @@ function renderProductsGrid(productsList, options = {}) {
     appendCatalogContent(fragment);
   }
   if (typeof lucide !== 'undefined') {
-    lucide.createIcons({ root: target || document.getElementById('catalog-grid-container') });
+    const rootEl = target || document.getElementById('catalog-grid-container');
+    if (rootEl) {
+      lucide.createIcons({ root: rootEl });
+    } else {
+      lucide.createIcons();
+    }
   }
 }
 if (typeof window !== 'undefined') window.renderProductsGrid = renderProductsGrid;
@@ -2299,7 +2347,11 @@ function requestQuote(product, brand, price, serviceItem = false, quoteOnlyItem 
   const phone = typeof FUTUNET_CONFIG !== 'undefined' && FUTUNET_CONFIG.WHATSAPP_NUMBER
     ? FUTUNET_CONFIG.WHATSAPP_NUMBER
     : '18297411041';
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
+  const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    window.location.href = waUrl;
+  }
 }
 
 

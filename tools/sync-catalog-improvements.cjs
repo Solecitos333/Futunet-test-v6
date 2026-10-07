@@ -946,6 +946,81 @@ const schneiderItems = [
   }
 ];
 
+const linksysItems = [
+  {
+    id: 'redes_linksys_hydra_pro_6',
+    department: 'redes',
+    category: 'Enrutadores y Balanceadores',
+    brand: 'Linksys',
+    title: 'Router Wi-Fi 6 Linksys Hydra Pro 6 AX5400 Doble Banda con Malla Intelligent Mesh',
+    desc: 'Router Wi-Fi 6 de ultra alto rendimiento Linksys Hydra Pro 6 con velocidades combinadas de hasta 5.4 Gbps (AX5400) y canales ultra anchos de 160 MHz. Proporciona cobertura inalámbrica de hasta 2,700 pies cuadrados (250 m²) para más de 30 dispositivos concurrentes sin latencia en streaming 4K/8K, videoconferencias corporativas y transferencias de gran volumen. Equipado con procesador Qualcomm Dual-Core de 1 GHz, 4 puertos Gigabit Ethernet LAN más 1 puerto Gigabit WAN para conexiones de fibra óptica de alta velocidad, puerto USB 3.0 para almacenamiento en red compartida y tecnología Intelligent Mesh que permite expandir la red con cualquier nodo Linksys compatible. Configuración fácil y segura desde la aplicación Linksys App con control parental y cifrado WPA3.',
+    price: 'RD$ 8,950.00',
+    img: 'img/productos/catalogo/linksys-hydra-pro6.webp',
+    gallery: [
+      'img/productos/catalogo/linksys-hydra-pro6.webp'
+    ],
+    specs: [
+      'Estándar Wi-Fi 6: 802.11ax con canales de 160 MHz para máxima velocidad de enlace',
+      'Velocidad total AX5400: hasta 4804 Mbps en 5 GHz + 574 Mbps en 2.4 GHz',
+      'Cobertura estimada: hasta 250 m² (2,700 sq ft) para más de 30 equipos simultáneos',
+      'Puertos: 1 Gigabit WAN + 4 Gigabit LAN con negociación automática 10/100/1000 Mbps',
+      'Puerto USB 3.0 para compartir discos duros e impresoras en red local',
+      'Tecnología Intelligent Mesh escalable y administración remota desde app móvil',
+      'Garantía oficial Linksys de 2 años con comprobante fiscal formal NCF'
+    ]
+  }
+];
+
+const victronItems = [
+  {
+    id: 'energia_victron_multiplus_24_3000_70',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Victron Energy',
+    title: 'Inversor/Cargador Victron Energy MultiPlus 24/3000/70 Senoidal Puro 24V 3000VA con Función UPS',
+    desc: 'Inversor y cargador de grado industrial Victron Energy MultiPlus 24/3000/70 con salida de onda senoidal pura de 3000 VA (2400 W continuo, pico de 6000 W) y cargador adaptativo de 4 etapas de 70A para bancos de baterías de 24V (LiFePO4, Gel, AGM y plomo-ácido). Integra conmutador de transferencia ultrarrápido de menos de 20 milisegundos con función UPS ininterrumpida para servidores, telecomunicaciones y sistemas críticos. Cuenta con tecnología exclusiva PowerAssist que previene la sobrecarga de generadores o inversores limitados añadiendo potencia instantánea de la batería, doble salida de CA para cargas críticas y no críticas, y puerto de comunicación VE.Bus para monitoreo local o remoto mediante Cerbo GX y portal VRM. Diseñado para instalaciones solares, comerciales y residenciales de alta exigencia en República Dominicana.',
+    price: 'RD$ 68,500.00',
+    img: 'img/productos/catalogo/victron-multiplus-24v.webp',
+    gallery: [
+      'img/productos/catalogo/victron-multiplus-24v.webp'
+    ],
+    specs: [
+      'Potencia nominal continua: 3000 VA / 2400 Watts a 25°C (pico máximo de 6000 W)',
+      'Voltaje de banco de baterías: 24V DC con cargador inteligente adaptativo de 70A',
+      'Función UPS ultrarrápida: transferencia de red a batería en menos de 20 ms sin reinicios',
+      'Tecnología PowerAssist: previene sobrecargas eléctricas suplementando potencia desde baterías',
+      'Onda senoidal pura certificada apta para motores, aires acondicionados, servidores y audio',
+      'Puerto de comunicación VE.Bus para integración con Cerbo GX, pantallas y portal VRM',
+      'Garantía oficial Victron Energy de 5 años con respaldo técnico en Santiago'
+    ]
+  }
+];
+
+const paradoxItems = [
+  {
+    id: 'seguridad_paradox_spectra_sp4000_kit',
+    department: 'seguridad',
+    category: 'Sistemas de Seguridad CCTV',
+    brand: 'Paradox',
+    title: 'Kit de Alarma Contra Intrusión Paradox Spectra SP4000 con Teclado LCD K32+ y Sensor PIR Antimascota',
+    desc: 'Sistema integral de seguridad electrónica y alarma contra intrusiones Paradox Spectra SP4000 de 4 a 32 zonas cableadas e inalámbricas. El kit incluye central de alarma Paradox SP4000 en gabinete metálico reforzado con cerradura, transformador de 16.5V AC, teclado de supervisión LCD Paradox K32+ en español con retroiluminación azul y visualización en tiempo real de zonas abiertas, detector de movimiento infrarrojo digital antimascota Paradox NV5 de alta inmunidad a falsas alarmas, batería sellada de respaldo de 12V 7Ah para autonomía ante cortes eléctricos y potente sirena de 30 Watts con doble tono disuasivo. Diseñado para protección perimetral e interior de comercios, almacenes, industrias y residencias en Santiago.',
+    price: 'RD$ 11,850.00',
+    img: 'img/productos/catalogo/paradox-spectra-sp4000.webp',
+    gallery: [
+      'img/productos/catalogo/paradox-spectra-sp4000.webp'
+    ],
+    specs: [
+      'Central de alarma Paradox Spectra SP4000 de 4 zonas en placa (expandible hasta 32 zonas)',
+      'Teclado LCD de 32 zonas Paradox K32+ con menú en español y teclas de pánico directo',
+      'Sensor de movimiento digital Paradox NV5 con lente híbrido cilíndrico-esférico e inmunidad pet',
+      'Batería de respaldo recargable de 12V / 7Ah para operación ininterrumpida ante apagones',
+      'Sirena exterior/interior de 30W y 118 dB con gabinete de protección y tamper antisabotaje',
+      'Comunicación hacia central de monitoreo o llamada telefónica de alerta inmediata',
+      'Garantía oficial Paradox de 1 año con asesoría técnica de instalación en Santiago'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -1400,7 +1475,10 @@ async function updateBackupData() {
     ...logitechItems,
     ...lenovoItems,
     ...netgearItems,
-    ...schneiderItems
+    ...schneiderItems,
+    ...linksysItems,
+    ...victronItems,
+    ...paradoxItems
   ];
 
   itemsToSync.forEach(item => {
@@ -1445,7 +1523,10 @@ async function updateFirestore() {
     ...logitechItems,
     ...lenovoItems,
     ...netgearItems,
-    ...schneiderItems
+    ...schneiderItems,
+    ...linksysItems,
+    ...victronItems,
+    ...paradoxItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

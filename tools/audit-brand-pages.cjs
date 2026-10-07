@@ -16,6 +16,7 @@ function matchesBrandLocal(productBrand, targetBrand) {
   if (normP === 'tplink' && normT === 'tplink') return true;
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
+  if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
   return false;
 }
 

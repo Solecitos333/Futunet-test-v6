@@ -205,19 +205,19 @@ window.ERPExtensions = (function () {
       if ((itbisWithheld > 0 || incomeTaxWithheld > 0) && !paymentDate) {
         throw new Error('Las retenciones requieren indicar la fecha de pago.');
       }
-      const modifiedNcf = document.getElementById('purchase-modified-ncf').value.trim().toUpperCase();
+      const modifiedNcf = (document.getElementById('purchase-modified-ncf')?.value || '').trim().toUpperCase();
       if (modifiedNcf && !/^(B\d{10}|E\d{12})$/.test(modifiedNcf)) throw new Error('El NCF modificado no tiene un formato válido.');
       const purchaseData = {
         companyCode,
         supplierRnc,
-        supplierName: document.getElementById('purchase-supplier-name').value.trim(),
+        supplierName: (document.getElementById('purchase-supplier-name')?.value || '').trim(),
         ncf,
         modifiedNcf,
         date,
         dueDate,
         paymentDate,
-        retentionDate: document.getElementById('purchase-retention-date').value || '',
-        expenseType: document.getElementById('purchase-expense-type').value,
+        retentionDate: document.getElementById('purchase-retention-date')?.value || '',
+        expenseType: document.getElementById('purchase-expense-type')?.value || '02',
         goodsAmount,
         servicesAmount,
         subtotal,
@@ -227,7 +227,7 @@ window.ERPExtensions = (function () {
         itbisCost,
         itbisAdvance,
         itbisPerceived: numericInput('purchase-itbis-perceived'),
-        incomeWithholdingType: document.getElementById('purchase-income-withholding-type').value.trim(),
+        incomeWithholdingType: (document.getElementById('purchase-income-withholding-type')?.value || '').trim(),
         incomeTaxWithheld,
         incomeTaxPerceived: numericInput('purchase-income-tax-perceived'),
         selectiveTax,
@@ -235,7 +235,7 @@ window.ERPExtensions = (function () {
         legalTip,
         total: Math.round((subtotal + itbis + selectiveTax + otherTaxes + legalTip) * 100) / 100,
         paymentMethod,
-        concept: document.getElementById('purchase-concept').value.trim(),
+        concept: (document.getElementById('purchase-concept')?.value || '').trim(),
         status: isPaid ? 'paid' : 'pending',
         paidAt: isPaid ? serverTime() : null,
         createdBy: user.uid,
@@ -362,16 +362,16 @@ window.ERPExtensions = (function () {
     const submit = event.currentTarget.querySelector('[type="submit"]');
     submit.disabled = true;
     try {
-      const amount = Number(document.getElementById('bank-amount').value);
+      const amount = Number(document.getElementById('bank-amount')?.value || 0);
       if (!Number.isFinite(amount) || amount <= 0) throw new Error('El monto debe ser mayor que cero.');
       await db().collection(`${prefix}_bank_movements`).add({
         companyCode,
-        date: document.getElementById('bank-date').value,
-        account: document.getElementById('bank-account').value.trim(),
-        type: document.getElementById('bank-type').value,
-        reference: document.getElementById('bank-reference').value.trim(),
+        date: document.getElementById('bank-date')?.value || localDate(),
+        account: (document.getElementById('bank-account')?.value || '').trim(),
+        type: document.getElementById('bank-type')?.value || 'income',
+        reference: (document.getElementById('bank-reference')?.value || '').trim(),
         amount,
-        description: document.getElementById('bank-description').value.trim(),
+        description: (document.getElementById('bank-description')?.value || '').trim(),
         status: 'pending',
         createdBy: user.uid,
         createdAt: serverTime(),

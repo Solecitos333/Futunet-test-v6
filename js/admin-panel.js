@@ -1309,7 +1309,7 @@
     var source = sourceFilter ? sourceFilter.value : 'futunet';
     adjustProductModalFields(source);
 
-    document.getElementById('product-form').reset();
+    document.getElementById('product-form')?.reset();
     setVal('product-id', '');
     setVal('product-sku', '');
     setVal('product-reference', '');
@@ -1704,7 +1704,8 @@
   }
 
   async function saveDiscount() {
-    var code = getVal('discount-code').trim().toUpperCase();
+    var rawCode = getVal('discount-code');
+    var code = sanitizeAdminUserInput(rawCode, 50).toUpperCase().replace(/[^A-Z0-9_-]/g, '');
     var type = getVal('discount-type');
     var value = parseFloat(getVal('discount-value')) || 0;
     var minPurchase = parseFloat(getVal('discount-min')) || 0;
@@ -2372,7 +2373,7 @@
   }
 
   function openNewBanner() {
-    document.getElementById('banner-form').reset();
+    document.getElementById('banner-form')?.reset();
     setVal('banner-id', '');
     setVal('banner-start-date', '');
     setVal('banner-end-date', '');
@@ -2569,7 +2570,7 @@
   }
 
   function openNewCategory() {
-    document.getElementById('category-form').reset();
+    document.getElementById('category-form')?.reset();
     setVal('category-id', '');
     openModal('category-modal');
   }
@@ -2676,7 +2677,7 @@
   }
 
   function openNewBrand() {
-    document.getElementById('brand-form').reset();
+    document.getElementById('brand-form')?.reset();
     setVal('brand-id', '');
     brandUploadFile = null;
     renderBrandPreview();
@@ -3788,10 +3789,10 @@
       if (!doc.exists) return;
       var req = doc.data();
 
-      document.getElementById('sr-client-name').textContent = req.name || 'Cliente';
-      document.getElementById('sr-client-email').textContent = req.email || 'correo@domain.com';
-      document.getElementById('sr-client-phone').textContent = 'Teléfono: ' + (req.phone || '—');
-      document.getElementById('sr-client-company').textContent = req.company ? 'Empresa: ' + req.company : 'Empresa: No especificada';
+      setText('sr-client-name', req.name || 'Cliente');
+      setText('sr-client-email', req.email || 'correo@domain.com');
+      setText('sr-client-phone', 'Teléfono: ' + (req.phone || '—'));
+      setText('sr-client-company', req.company ? 'Empresa: ' + req.company : 'Empresa: No especificada');
       
       var profileLabel = 'Perfil: No especificado';
       if (req.profile === 'pyme') {
@@ -3807,9 +3808,9 @@
         profileEl.style.display = req.profile ? 'block' : 'none';
       }
 
-      document.getElementById('sr-client-message').textContent = req.message || 'Sin mensaje.';
-      document.getElementById('sr-service-name').textContent = req.serviceTitle || 'General';
-      document.getElementById('sr-created-date').textContent = req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleString('es-DO') : '—';
+      setText('sr-client-message', req.message || 'Sin mensaje.');
+      setText('sr-service-name', req.serviceTitle || 'General');
+      setText('sr-created-date', req.createdAt ? new Date(req.createdAt.seconds * 1000).toLocaleString('es-DO') : '—');
 
       var btnComplete = document.getElementById('btn-complete-request');
       if (req.status === 'completed') {
@@ -3954,9 +3955,9 @@
       select.innerHTML = html;
       
       // Limpiar campos
-      document.getElementById('ic-client-code').value = '';
-      document.getElementById('ic-plan-select').value = '50mb';
-      document.getElementById('ic-status-select').value = 'active';
+      setVal('ic-client-code', '');
+      setVal('ic-plan-select', '50mb');
+      setVal('ic-status-select', 'active');
     } catch (err) {
       select.innerHTML = '<option value="">Error al cargar usuarios</option>';
     }
@@ -3965,10 +3966,10 @@
   // Guardar datos de cliente de internet en el documento de usuario
   async function saveInternetClient(e) {
     e.preventDefault();
-    var userId = document.getElementById('ic-user-select').value;
-    var clientCode = document.getElementById('ic-client-code').value.trim();
-    var internetPlan = document.getElementById('ic-plan-select').value;
-    var internetStatus = document.getElementById('ic-status-select').value;
+    var userId = getVal('ic-user-select');
+    var clientCode = getVal('ic-client-code').trim();
+    var internetPlan = getVal('ic-plan-select') || '50mb';
+    var internetStatus = getVal('ic-status-select') || 'active';
 
     if (!userId) {
       showToast('Selecciona un usuario', 'error');
@@ -4000,10 +4001,10 @@
       if (!doc.exists) return;
       var client = doc.data();
 
-      document.getElementById('ic-user-select').value = userId;
-      document.getElementById('ic-client-code').value = client.clientCode || '';
-      document.getElementById('ic-plan-select').value = client.internetPlan || '50mb';
-      document.getElementById('ic-status-select').value = client.internetStatus || 'active';
+      setVal('ic-user-select', userId);
+      setVal('ic-client-code', client.clientCode || '');
+      setVal('ic-plan-select', client.internetPlan || '50mb');
+      setVal('ic-status-select', client.internetStatus || 'active');
     } catch (err) {
       showToast('Error al editar cliente', 'error');
     }
@@ -4075,10 +4076,10 @@
       if (!doc.exists) return;
       currentSelectedPaymentData = doc.data();
 
-      document.getElementById('iv-client-name').textContent = currentSelectedPaymentData.userName || 'Cliente';
-      document.getElementById('iv-client-email').textContent = currentSelectedPaymentData.userEmail || '';
-      document.getElementById('iv-amount').textContent = 'RD$ ' + currentSelectedPaymentData.amount.toLocaleString('es-DO', { minimumFractionDigits: 2 });
-      document.getElementById('iv-bank').textContent = 'Vía ' + currentSelectedPaymentData.bank;
+      setText('iv-client-name', currentSelectedPaymentData.userName || 'Cliente');
+      setText('iv-client-email', currentSelectedPaymentData.userEmail || '');
+      setText('iv-amount', 'RD$ ' + Number(currentSelectedPaymentData.amount || 0).toLocaleString('es-DO', { minimumFractionDigits: 2 }));
+      setText('iv-bank', 'Vía ' + (currentSelectedPaymentData.bank || 'Transferencia'));
 
       var imgEl = document.getElementById('iv-voucher-img');
       var pdfEl = document.getElementById('iv-voucher-pdf');
@@ -4089,25 +4090,29 @@
                       !safeVoucherUrl.toLowerCase().startsWith('data:') &&
                       !safeVoucherUrl.toLowerCase().startsWith('vbscript:');
 
+      if (downloadLink) {
+        downloadLink.href = isSafeUrl ? safeVoucherUrl : '#';
+        downloadLink.style.display = isSafeUrl ? 'inline-flex' : 'none';
+      }
+
       if (isSafeUrl) {
-        downloadLink.href = safeVoucherUrl;
-        downloadLink.style.display = 'inline-flex';
-        
         // Detectar si es PDF
         if (safeVoucherUrl.indexOf('.pdf') > -1) {
-          imgEl.style.display = 'none';
-          pdfEl.style.display = 'block';
-          pdfEl.src = safeVoucherUrl;
+          if (imgEl) imgEl.style.display = 'none';
+          if (pdfEl) {
+            pdfEl.style.display = 'block';
+            pdfEl.src = safeVoucherUrl;
+          }
         } else {
-          pdfEl.style.display = 'none';
-          imgEl.style.display = 'block';
-          imgEl.src = safeVoucherUrl;
+          if (pdfEl) pdfEl.style.display = 'none';
+          if (imgEl) {
+            imgEl.style.display = 'block';
+            imgEl.src = safeVoucherUrl;
+          }
         }
       } else {
-        downloadLink.href = '#';
-        downloadLink.style.display = 'none';
-        pdfEl.style.display = 'none';
-        imgEl.style.display = 'none';
+        if (pdfEl) pdfEl.style.display = 'none';
+        if (imgEl) imgEl.style.display = 'none';
         showToast('Enlace de comprobante no seguro bloqueado.', 'error');
       }
 
@@ -4153,9 +4158,9 @@
       // 3. Registrar log de auditoría
       await db.collection('audit_logs').add({
         action: 'Aprobación de pago',
-        details: 'Aprobado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
-        userId: currentUserData.uid || currentUserData.id || '',
-        userEmail: currentUserData.email,
+        details: 'Aprobado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + (currentSelectedPaymentData.userEmail || ''),
+        userId: (currentUserData && (currentUserData.uid || currentUserData.id)) || '',
+        userEmail: (currentUserData && currentUserData.email) || 'Admin',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
@@ -4185,7 +4190,7 @@
         transaction.update(paymentRef, {
           status: 'approved',
           approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          approvedBy: currentUserData.uid
+          approvedBy: (currentUserData && currentUserData.uid) || ''
         });
         if (clientRef && clientSnapshot && clientSnapshot.exists && clientSnapshot.data().internetStatus === 'suspended') {
           transaction.update(clientRef, { internetStatus: 'active' });
@@ -4193,8 +4198,8 @@
         transaction.set(auditRef, {
           action: 'Aprobación de pago',
           details: 'Aprobado pago de RD$ ' + Number(paymentData.amount || 0).toFixed(2) + ' para ' + (paymentData.userEmail || ''),
-          userId: currentUserData.uid,
-          userEmail: currentUserData.email,
+          userId: (currentUserData && (currentUserData.uid || currentUserData.id)) || '',
+          userEmail: (currentUserData && currentUserData.email) || 'Admin',
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
       });
@@ -4219,9 +4224,9 @@
       // Registrar log de auditoría
       await db.collection('audit_logs').add({
         action: 'Rechazo de pago',
-        details: 'Rechazado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + currentSelectedPaymentData.userEmail,
-        userId: currentUserData.uid || currentUserData.id || '',
-        userEmail: currentUserData.email,
+        details: 'Rechazado pago de RD$ ' + currentSelectedPaymentData.amount + ' para ' + (currentSelectedPaymentData.userEmail || ''),
+        userId: (currentUserData && (currentUserData.uid || currentUserData.id)) || '',
+        userEmail: (currentUserData && currentUserData.email) || 'Admin',
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
 
@@ -4248,13 +4253,13 @@
         transaction.update(paymentRef, {
           status: 'rejected',
           rejectedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          rejectedBy: currentUserData.uid
+          rejectedBy: (currentUserData && currentUserData.uid) || ''
         });
         transaction.set(auditRef, {
           action: 'Rechazo de pago',
           details: 'Rechazado pago de RD$ ' + Number(paymentData.amount || 0).toFixed(2) + ' para ' + (paymentData.userEmail || ''),
-          userId: currentUserData.uid,
-          userEmail: currentUserData.email,
+          userId: (currentUserData && (currentUserData.uid || currentUserData.id)) || '',
+          userEmail: (currentUserData && currentUserData.email) || 'Admin',
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
       });

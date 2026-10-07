@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-06  
+> **Última Actualización:** 2026-10-07  
 
 ---
 
@@ -646,6 +646,32 @@ python -m unittest test_main.py test_chatbot_api.py
     - 41 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
     - 71/71 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs`.
     - Validación de hosting de producción (`npm run validate`): 52 páginas HTML y 661 recursos validados en `dist/` con cumplimiento estricto CSP.
+- **Gestión del Buzón de Sugerencias & Mejoras de Catálogo (2026-10-07 Ciclo Networking, Respaldo Solar & Seguridad Integral - SUG-L8400, SUG-V2400, SUG-P5800)**:
+  - **Revisión Integral del Buzón de Sugerencias y Telemetría de Búsqueda**:
+    - Auditoría exhaustiva de propuestas comunitarias en la colección `suggestions` de Firestore (49 sugerencias procesadas en total, 0 pendientes) y sincronización bidireccional en la lista canónica (`canonicalSuggestionsList` en `js/suggestions.js`).
+    - Detección de demanda prioritaria y consultas no cubiertas en páginas de marca que contaban con 0 productos (`marca-linksys.html`, `marca-victronenergy.html`, `marca-paradox.html`).
+    - Resolución formal, respuesta ejecutiva y estado `implemented` en Firestore y frontend para 3 propuestas de alto impacto en el Cibao:
+      - **SUG-L8400** (*Routers Wi-Fi 6 Linksys Hydra Pro 6 AX5400 con Malla Intelligent Mesh y Canales de 160 MHz*): Solicitada por Ing. David Peralta para eliminar cuellos de botella inalámbricos en enlaces residenciales y corporativos de fibra óptica.
+      - **SUG-V2400** (*Inversores/Cargadores Solares Victron Energy MultiPlus 24/3000/70 Senoidal Puro y Controladores MPPT*): Solicitada por Ing. Arnaldo Guzmán para continuidad operativa ininterrumpida ante apagones prolongados y proyectos fotovoltaicos con función UPS ultrarrápida (< 20 ms).
+      - **SUG-P5800** (*Kits de Alarma Contra Intrusión Paradox Spectra SP4000 con Teclado LCD K32+ y Detector PIR Antimascota NV5*): Solicitada por Lic. Francisco Javier Polanco para protección perimetral e interior de comercios y residencias con disuasión acústica de 30W.
+  - **Ampliación de Catálogo y Sincronización en Base de Datos**:
+    - Incorporación de `redes_linksys_hydra_pro_6`: Router Wi-Fi 6 Linksys Hydra Pro 6 AX5400 doble banda con Intelligent Mesh, 1 puerto Gigabit WAN, 4 puertos Gigabit LAN y USB 3.0.
+    - Incorporación de `energia_victron_multiplus_24_3000_70`: Inversor/Cargador Victron Energy MultiPlus 24/3000/70 con onda senoidal pura, cargador adaptativo de 70A, tecnología PowerAssist y puerto VE.Bus.
+    - Incorporación de `seguridad_paradox_spectra_sp4000_kit`: Kit de Alarma Paradox Spectra SP4000 con teclado LCD K32+, sensor infrarrojo digital antimascota Paradox NV5, sirena de 30W y batería de 12V 7Ah.
+    - Generación y despliegue de activos fotográficos WebP de alta fidelidad: `linksys-hydra-pro6.webp`, `victron-multiplus-24v.webp`, `paradox-spectra-sp4000.webp`.
+    - Sincronización cloud mediante `tools/sync-catalog-improvements.cjs` hacia la colección remota `products` de Firestore (77 productos verificados) y actualización de base local `js/backup_data.js` (376 productos en total).
+    - Habilitación de marcas en `marca-linksys.html` (1 producto), `marca-victronenergy.html` (1 producto) y `marca-paradox.html` (1 producto) verificado con `tools/audit-brand-pages.cjs`.
+  - **Stemming Semántico y Precisión de Búsqueda Fuzzy (`js/catalog.js`)**:
+    - Nuevas variantes y sinónimos en `getStemVariants` para `linksys`, `hydra`, `velop`, `victron`, `multiplus`, `mppt`, `paradox`, `spectra`, `sp4000`, `alarma`, `pir`.
+    - Lógica de boost y priorización en `scoreProductMatch`: scoring ponderado (+150 a +170) para Linksys, Victron Energy y Paradox ante consultas de conectividad, respaldo solar y alarmas.
+    - Registro de marcas en `preferredNames` y `priorityList` de filtros rápidos por chips (`catalog-quick-chips`).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 160 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo 65 tests dedicados en `tools/test-suggestions.cjs`.
+    - 44 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 82/82 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs`.
+    - 0 errores sintácticos en 80 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - Validación completa de hosting (`npm run validate`): 52 páginas HTML y 664 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
 
 
 

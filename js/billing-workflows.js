@@ -177,7 +177,8 @@ window.ERPBillingWorkflows = (function () {
   function restoreLatestDraft() {
     if (!latestDraft || !meaningfulDraft(latestDraft.data)) return;
     window.ERPBilling.populateInvoiceForm(latestDraft.data, { title: 'Borrador recuperado' });
-    document.getElementById('billing-draft-banner').hidden = true;
+    const draftBanner = document.getElementById('billing-draft-banner');
+    if (draftBanner) draftBanner.hidden = true;
     setDraftStatus('Borrador restaurado; revisa antes de guardar', 'warning');
     notify('Borrador restaurado como documento editable.', 'success');
   }
@@ -464,7 +465,11 @@ window.ERPBillingWorkflows = (function () {
         await navigator.clipboard.writeText(link.url);
         notify('Enlace copiado.', 'success');
       } else if (channel === 'whatsapp') {
-        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
       } else if (channel === 'email') {
         window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`${invoice.docType === 'proforma' ? 'Proforma' : 'Cotización'} ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
       } else if (channel === 'pdf') {
@@ -480,17 +485,20 @@ window.ERPBillingWorkflows = (function () {
     const card = document.getElementById('commercial-approvals-card');
     if (card) card.hidden = !isAdmin;
     if (!isAdmin) return;
+    const body = document.getElementById('commercial-approvals-body');
+    if (!body) return;
     try {
       const snapshot = await collection('approval_requests').limit(250).get();
       approvals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (asDate(b.requestedAt)?.getTime() || 0) - (asDate(a.requestedAt)?.getTime() || 0));
-      const body = document.getElementById('commercial-approvals-body');
       if (!approvals.length) { body.innerHTML = '<tr><td colspan="7" class="erp-empty-state">No hay excepciones pendientes.</td></tr>'; return; }
       body.innerHTML = approvals.map(item => `<tr><td>${escapeHTML(timeLabel(item.requestedAt))}</td><td>${escapeHTML(item.requestedByEmail)}</td><td>${escapeHTML(item.clientName)}</td>
         <td>${escapeHTML((item.reasons || []).join(' · '))}</td><td>${escapeHTML(money(item.total))}</td>
         <td><span class="admin-badge commercial-status is-${item.status === 'approved' ? 'green' : (item.status === 'rejected' ? 'red' : 'orange')}">${escapeHTML(item.status === 'approved' ? 'Aprobada' : (item.status === 'rejected' ? 'Rechazada' : 'Pendiente'))}</span></td>
         <td>${item.status === 'pending' ? `<div class="table-actions"><button type="button" class="table-btn table-btn-success" data-erp-click="ERPBillingWorkflows.reviewApproval('${escapeAttr(item.id)}','approved')">Aprobar</button><button type="button" class="table-btn table-btn-danger" data-erp-click="ERPBillingWorkflows.reviewApproval('${escapeAttr(item.id)}','rejected')">Rechazar</button></div>` : escapeHTML(item.reviewReason || '—')}</td></tr>`).join('');
     } catch (error) {
-      document.getElementById('commercial-approvals-body').innerHTML = `<tr><td colspan="7" class="erp-empty-state is-error">${escapeHTML(error.message)}</td></tr>`;
+      if (body) {
+        body.innerHTML = `<tr><td colspan="7" class="erp-empty-state is-error">${escapeHTML(error.message)}</td></tr>`;
+      }
     }
   }
 
@@ -562,7 +570,13 @@ window.ERPBillingWorkflows = (function () {
     const client = clientById(invoice.clientId) || invoice.customerSnapshot || {};
     const balance = Number(invoice.total || 0) - Number(invoice.paidAmount || 0);
     const message = `Hola ${invoice.clientName}, te recordamos que la factura ${invoice.invoiceNumber} presenta un balance de ${money(balance)} con vencimiento ${dateLabel(invoice.dueDate)}. Quedamos atentos para ayudarte.`;
-    if (reminder.channel === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    if (reminder.channel === 'whatsapp') {
+      const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = waUrl;
+      }
+    }
     if (reminder.channel === 'email') window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`Recordatorio ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
     if (reminder.channel === 'phone') await navigator.clipboard.writeText(message);
     await collection('collection_reminders').doc(id).update({ status: 'prepared', preparedAt: serverTime(), preparedBy: user.uid, updatedAt: serverTime() });
@@ -709,10 +723,14 @@ window.ERPBillingWorkflows = (function () {
     }).filter(value => value !== null);
     const pending = sales.reduce((sum, item) => sum + Math.max(0, Number(item.total || 0) - Number(item.paidAmount || 0)), 0);
     const overdue = sales.filter(item => Core.isOverdue(item.dueDate, Number(item.total || 0) - Number(item.paidAmount || 0))).reduce((sum, item) => sum + Math.max(0, Number(item.total || 0) - Number(item.paidAmount || 0)), 0);
-    document.getElementById('commercial-kpi-conversion').textContent = quotes.length ? `${((converted / quotes.length) * 100).toFixed(1)}%` : 'Sin cotizaciones';
-    document.getElementById('commercial-kpi-margin').textContent = costCoveredSales > 0 ? `${(((costCoveredSales - cost) / costCoveredSales) * 100).toFixed(1)}%` : 'Sin costos';
-    document.getElementById('commercial-kpi-collection-days').textContent = paidDays.length ? `${(paidDays.reduce((sum, value) => sum + value, 0) / paidDays.length).toFixed(1)} días` : 'Sin datos';
-    document.getElementById('commercial-kpi-overdue').textContent = pending > 0 ? `${((overdue / pending) * 100).toFixed(1)}%` : '0%';
+    const kpiConv = document.getElementById('commercial-kpi-conversion');
+    if (kpiConv) kpiConv.textContent = quotes.length ? `${((converted / quotes.length) * 100).toFixed(1)}%` : 'Sin cotizaciones';
+    const kpiMargin = document.getElementById('commercial-kpi-margin');
+    if (kpiMargin) kpiMargin.textContent = costCoveredSales > 0 ? `${(((costCoveredSales - cost) / costCoveredSales) * 100).toFixed(1)}%` : 'Sin costos';
+    const kpiDays = document.getElementById('commercial-kpi-collection-days');
+    if (kpiDays) kpiDays.textContent = paidDays.length ? `${(paidDays.reduce((sum, value) => sum + value, 0) / paidDays.length).toFixed(1)} días` : 'Sin datos';
+    const kpiOverdue = document.getElementById('commercial-kpi-overdue');
+    if (kpiOverdue) kpiOverdue.textContent = pending > 0 ? `${((overdue / pending) * 100).toFixed(1)}%` : '0%';
     const scope = document.getElementById('commercial-data-scope');
     if (scope) scope.textContent = billing().history.hasMoreInvoices ? `Indicadores sobre los ${invoices.length} documentos más recientes. Puedes cargar historial anterior en Facturas.` : `Indicadores sobre ${invoices.length} documentos cargados.`;
   }

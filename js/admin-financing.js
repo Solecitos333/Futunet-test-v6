@@ -91,7 +91,11 @@
     if (preview) preview.opener = null;
     try {
       var url = await window.FutunetFirebase.storage.ref().child(path).getDownloadURL();
-      if (preview) preview.location.replace(url);
+      if (preview) {
+        preview.location.replace(url);
+      } else {
+        window.location.href = url;
+      }
     } catch (error) {
       if (preview) preview.close();
       toast('No se pudo abrir el documento protegido: ' + error.message, 'error');

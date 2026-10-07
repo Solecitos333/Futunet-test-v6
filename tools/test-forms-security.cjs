@@ -36,7 +36,14 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     { file: 'mi-cuenta.html', id: 'fin-hp-check', name: 'Formulario de expediente de financiamiento' },
     { file: 'sugerencias.html', id: 'sug-track-hp-check', name: 'Consulta y tracking de sugerencia' },
     { file: 'admin.html', id: 'internal-sug-hp-check', name: 'Formulario de propuesta interna de personal' },
-    { file: 'admin.html', id: 'create-user-hp-check', name: 'Formulario de creación de usuario en administración' }
+    { file: 'admin.html', id: 'create-user-hp-check', name: 'Formulario de creación de usuario en administración' },
+    { file: 'corporativo.html', id: 'req-hp-check', name: 'Formulario B2B Corporativo' },
+    { file: 'energia-climatizacion.html', id: 'req-hp-check', name: 'Formulario B2B Energía y Climatización' },
+    { file: 'equipos-oficina.html', id: 'req-hp-check', name: 'Formulario B2B Equipos de Oficina' },
+    { file: 'infraestructura-remozamiento.html', id: 'req-hp-check', name: 'Formulario B2B Infraestructura y Remozamiento' },
+    { file: 'mobiliario-suministros.html', id: 'req-hp-check', name: 'Formulario B2B Mobiliario y Suministros' },
+    { file: 'redes-datos.html', id: 'req-hp-check', name: 'Formulario B2B Redes y Datos' },
+    { file: 'seguridad-electronica.html', id: 'req-hp-check', name: 'Formulario B2B Seguridad Electrónica' }
   ];
 
   for (const item of checks) {
@@ -101,7 +108,14 @@ test('Privacidad y Ley 172-13: casillas de consentimiento explícito e informado
     { file: 'login.html', id: 'register-terms', label: 'Registro de usuario' },
     { file: 'cotizacion.html', id: 'quote-accept-terms', label: 'Respuesta de cotización pública' },
     { file: 'mi-cuenta.html', id: 'profile-terms', label: 'Consentimiento en perfil de usuario' },
-    { file: 'mi-cuenta.html', id: 'financing-terms', label: 'Consentimiento en financiamiento' }
+    { file: 'mi-cuenta.html', id: 'financing-terms', label: 'Consentimiento en financiamiento' },
+    { file: 'corporativo.html', id: 'req-privacy-consent', label: 'Formulario B2B Corporativo' },
+    { file: 'energia-climatizacion.html', id: 'req-privacy-consent', label: 'Formulario B2B Energía y Climatización' },
+    { file: 'equipos-oficina.html', id: 'req-privacy-consent', label: 'Formulario B2B Equipos de Oficina' },
+    { file: 'infraestructura-remozamiento.html', id: 'req-privacy-consent', label: 'Formulario B2B Infraestructura y Remozamiento' },
+    { file: 'mobiliario-suministros.html', id: 'req-privacy-consent', label: 'Formulario B2B Mobiliario y Suministros' },
+    { file: 'redes-datos.html', id: 'req-privacy-consent', label: 'Formulario B2B Redes y Datos' },
+    { file: 'seguridad-electronica.html', id: 'req-privacy-consent', label: 'Formulario B2B Seguridad Electrónica' }
   ];
 
   for (const item of privacyChecks) {

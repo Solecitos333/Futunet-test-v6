@@ -1788,7 +1788,11 @@
        '• Tipo de Negocio: ' + biz + '\n' +
        (msg ? '• Detalles: ' + msg : '');
 
-      window.open('https://wa.me/18297411041?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer');
+      var waUrl = 'https://wa.me/18297411041?text=' + encodeURIComponent(text);
+      var win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = waUrl;
+      }
      });
     }
 

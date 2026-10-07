@@ -447,8 +447,15 @@ function initFutunetChatbot() {
     closeChat();
   });
 
+  function openWaLink(url) {
+    const win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!win || win.closed || typeof win.closed === 'undefined') {
+      window.location.href = url;
+    }
+  }
+
   waBtn.addEventListener('click', () => {
-    window.open(waLink('Hola Futunet, quiero hablar con un asesor.'), '_blank', 'noopener,noreferrer');
+    openWaLink(waLink('Hola Futunet, quiero hablar con un asesor.'));
   });
 
   chips.addEventListener('click', (event) => {
@@ -475,7 +482,7 @@ function initFutunetChatbot() {
     }
 
     if (kind === 'wa') {
-      window.open(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'), '_blank', 'noopener,noreferrer');
+      openWaLink(waLink(button.dataset.message || 'Hola Futunet, quisiera ayuda con una consulta.'));
     }
   });
 

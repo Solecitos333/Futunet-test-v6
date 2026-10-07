@@ -1036,6 +1036,30 @@
       status: 'implemented',
       description: 'Sistemas de alimentación ininterrumpida UPS APC by Schneider Electric de 1000VA / 600W con regulación automática AVR y 4 tomas universales protegidas contra apagones y sobretensiones.',
       officialResponse: '¡Atendido! Incorporamos al catálogo de Energía y a marca-schneiderelectric.html el Sistema UPS APC Easy UPS BV1000I-MS 1000VA / 600W (Schneider Electric) con regulación AVR y 2 años de garantía oficial.'
+    },
+    {
+      refCode: 'SUG-L8400',
+      title: 'Disponibilidad de Routers Wi-Fi 6 Linksys Hydra Pro 6 (AX5400) y Soluciones de Red Mesh para Residencias y Empresas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En casas de gran metraje, oficinas de arquitectura y comercios en Santiago requerimos routers Wi-Fi 6 Linksys Hydra Pro 6 (AX5400) con canales de 160 MHz, tecnología Mesh Intelligent y puertos Gigabit para aprovechar al máximo las conexiones de fibra óptica de alta velocidad de Futunet.',
+      officialResponse: '¡Implementado! Ya incorporamos al catálogo de Redes y a marca-linksys.html el Router Wi-Fi 6 Linksys Hydra Pro 6 AX5400 con canales de 160 MHz, Intelligent Mesh y 2 años de garantía oficial.'
+    },
+    {
+      refCode: 'SUG-V2400',
+      title: 'Disponibilidad de Inversores/Cargadores Solares Victron Energy MultiPlus y Controladores MPPT para Sistemas de Energía y Respaldo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Inversores/cargadores de onda senoidal pura Victron Energy MultiPlus (24V / 3000VA / 70A) con conmutación ultrarrápida UPS de menos de 20 ms y controladores de carga solar SmartSolar MPPT para respaldo crítico y energía solar.',
+      officialResponse: '¡Atendido! Incorporamos al catálogo de Energía y a marca-victronenergy.html el Inversor/Cargador Victron Energy MultiPlus 24/3000/70 senoidal puro con función UPS y controladores MPPT con 5 años de garantía.'
+    },
+    {
+      refCode: 'SUG-P5800',
+      title: 'Disponibilidad de Kits de Alarma Contra Intrusión Paradox Spectra con Sensores de Movimiento Infrarrojos PIR y Teclado LCD',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistemas de alarma perimetral cableada e inalámbrica Paradox Spectra SP4000 con teclado LCD Paradox K32+, sensores de movimiento infrarrojos digitales antimascota Paradox NV5 y sirena de alta potencia de 30W para comercios y residencias.',
+      officialResponse: '¡Cumplido! Se integró al catálogo de Seguridad y a marca-paradox.html el Kit de Alarma Paradox Spectra SP4000 con teclado LCD K32+, sensor PIR antimascota NV5, batería de respaldo y sirena de 30W.'
     }
   ];
 

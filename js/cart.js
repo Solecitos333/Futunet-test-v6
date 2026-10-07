@@ -1398,7 +1398,7 @@
     const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
     let docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
     if (docType === 'cedula') docNum = docNum.replace(/\D/g, '');
-    else docNum = docNum.toUpperCase();
+    else docNum = sanitizeText(docNum).toUpperCase().slice(0, 30);
 
     const user = window.FutunetAuth && typeof window.FutunetAuth.getCurrentUser === 'function' ? window.FutunetAuth.getCurrentUser() : null;
     const db = window.FutunetFirebase && window.FutunetFirebase.db ? window.FutunetFirebase.db : null;

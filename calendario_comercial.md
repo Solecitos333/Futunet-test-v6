@@ -34,45 +34,50 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 27 de Septiembre al 3 de Octubre de 2026 - Transición Cierre Q3 & Lanzamiento Octubre)
+## ⚡ Plan de Acción Semanal (Semana Actual: 5 al 11 de Octubre de 2026 - Semana 2 de Octubre: Despliegue de Seguridad Corporativa & Preventa Retail POS)
 
-### 📌 Evaluación Estratégica: Semana Bisagra Q3 / Q4
-* **Momento Clave del Trimestre**: Nos encontramos en la semana más estratégica y de mayor impacto comercial del segundo semestre. Esta semana se divide en dos fases críticas de conversión:
-  * **Fase 1 (27 al 30 de Septiembre - Horas 0 a 72)**: *Cuenta regresiva final de presupuestos TI 2026*. Los directores financieros y de tecnología en Santiago (Zonas Francas, clínicas, distribuidoras y colegios) deben ejecutar sus fondos restantes del año fiscal para evitar recortes en 2027.
-  * **Fase 2 (1 al 3 de Octubre y resto del mes)**: *Lanzamiento oficial de la campaña de Octubre 2026: Protección Corporativa & Seguridad Inteligente*.
-* **Estrategia Comercial Dual**:
-  * **Eje Cierre Q3 (27-30 Sep)**:
-    * **Cupón Activo**: `INFRA2026` (15% de descuento en mano de obra e instalación de cableado Cat 6A, adecuación de racks y enlaces dedicados).
-    * **Lead Magnet de Urgencia**: *Auditoría de Red y Levantamiento Técnico Presencial 100% GRATIS en Santiago* (Valor: RD$ 15,000; exento hasta el 30 de septiembre).
-    * **Garantía Operativa**: Emisión formal de Facturas con Comprobante Fiscal (NCF de Crédito Fiscal) para deducción tributaria inmediata de Q3.
-  * **Eje Preventa y Lanzamiento Octubre (27 Sep en adelante)**:
-    * **Cupón Activo**: `SEGURIDAD2026` (15% de descuento en kits de videovigilancia IP 4K ColorVu, biométricos faciales ZKTeco y control de acceso).
-    * **Lead Magnet**: *Inspección perimetral de vulnerabilidades y plano de cobertura de cámaras 100% GRATIS en Santiago*.
-  * **Ejes Complementarios Permanentes**:
-    * `POS2026` (12% off en terminales táctiles e impresoras térmicas para que los comercios preparen sus cajas antes del aluvión navideño).
-    * `GAMING2026` (10% off en fibra óptica simétrica gamer y periféricos pro).
-    * `RESPALDO2026` (10% off en UPS Online de Doble Conversión ante el cierre de temporada de tormentas).
+### 📌 Evaluación Estratégica: Semana 2 de Octubre de 2026
+* **Diagnóstico del Ciclo Comercial**:
+  * **Retrospectiva Cierre Q3**: Finalizado con éxito el 30 de septiembre. El cupón `INFRA2026` completó su ciclo de captura de presupuestos fiscales, permitiendo cerrar auditorías de cableado estructurado y emisión de facturas fiscales NCF.
+  * **Estado Actual (Semana 2)**: Nos encontramos en pleno despliegue de la campaña insigne del mes: **"Protección Corporativa y Seguridad Inteligente"**, mientras se activa en paralelo la **preventa estratégica de Retail Tech / POS** para abastecer a los comercios del Cibao antes del pico de demanda de Black Friday (Noviembre) y Navidad.
+* **Estrategia Comercial Semanal Activa**:
+  * **Eje Principal B2B — Seguridad Electrónica & Blindaje**:
+    * **Cupón Activo**: `SEGURIDAD2026` (15% de descuento en kits de videovigilancia CCTV IP 4K ColorVu, biometría facial ZKTeco y controles de acceso).
+    * **Lead Magnet de Conversión**: *Evaluación Perimetral de Vulnerabilidades y Plano de Cobertura CCTV 100% GRATIS en Santiago* (Valor referencial: RD$ 12,000; totalmente exonerado).
+    * **Target Prioritario**: Zonas Francas (Víctor Espaillat Mera, Tamboril, Gurabo), almacenes logísticos, colegios privados y centros médicos de Santiago.
+  * **Eje Preventa Retail Tech (Preparación para Black Friday)**:
+    * **Cupón Activo**: `POS2026` (12% off en terminales táctiles Todo-en-Uno, impresoras térmicas de 80mm y lectores 2D).
+    * **Propuesta de Urgencia**: *"Moderniza y blinda tus cajas antes de noviembre para evitar colapsos y pérdida de ventas durante el Black Friday"*.
+  * **Eje Cómputo, Energía y Conectividad General**:
+    * **Cupón Activo**: `OCTUBRE2026` (10% off en equipamiento de redes, UPS Online y cómputo corporativo).
+    * `GAMING2026` (10% off permanente en conectividad simétrica gamer y periféricos pro).
 
 ### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
-1. **Announcement Bar Dinámica Global (`main.js`)**:
-   * Temporizador y microcopy adaptativo en tiempo real:
-     * Si restan ≤ 72 horas para el 30 de septiembre: *"¡Últimas {X} horas para Cierre Q3! Auditoría GRATIS + 15% OFF con INFRA2026"*.
-     * Transición automática a partir del 1 de octubre a: *"🛡️ OCTUBRE: SEGURIDAD CORPORATIVA — 15% de Descuento en Seguridad CCTV IP y Biometría Facial con SEGURIDAD2026"*.
-   * Contextualización inteligente por página: muestra automáticamente `SEGURIDAD2026` en `/seguridad-electronica.html`, `GAMING2026` en `/gaming.html`, `POS2026` en `/punto-de-venta.html` y `RESPALDO2026` en `/energia-climatizacion.html`.
-2. **Motor de Cupones en Checkout (`cart.js`)**:
-   * Habilitada redención temprana y preventa de `SEGURIDAD2026` desde el 27 de septiembre para evitar cualquier fricción en cotizaciones anticipadas de seguridad corporativa.
-3. **Landing Pages B2B & B2C**:
-   * `corporativo.html`: Cintillo de alta conversión con llamado urgente al cierre de presupuestos Q3 y enlace directo a WhatsApp y cotizador.
-   * `seguridad-electronica.html`: Banner de blindaje corporativo con evaluación perimetral gratuita y cupón `SEGURIDAD2026`.
-   * `punto-de-venta.html` & `gaming.html`: Banners especializados por vertical.
-4. **Panel Administrativo & Copywriting (`admin.html` / `admin-panel.js`)**:
-   * Plantillas listas de 1 clic para secuencias de WhatsApp de 72 horas, posts de LinkedIn con NCF y campañas de email institucionales.
+1. **Hero Carousel en Home (`index.html`)**:
+   * **Reordenamiento Estratégico**: El slide de *Protección Corporativa & Seguridad Inteligente* ha sido promovido a **Slide 1** (inmediatamente después del Hero de bienvenida), garantizando un impacto visual inmediato a los visitantes corporativos y residenciales.
+   * **Optimización de Copy & CTA**: Mensaje enfocado en *"Blindaje Inteligente para tu Empresa y Negocio"* con botón directo al levantamiento gratuito vía WhatsApp y enlace al cotizador interactivo.
+2. **Landing Page B2B (`corporativo.html`)**:
+   * Banner promocional completamente actualizado: sustituido el banner cerrado de Q3 por el cintillo oficial de **"🛡️ OCTUBRE: BLINDAJE CORPORATIVO & CONECTIVIDAD"** con cupón `SEGURIDAD2026` y enlace directo al levantamiento perimetral.
+3. **Barra de Anuncios Dinámica Global (`main.js`)**:
+   * Sincronización automática de cuenta regresiva en vivo hacia el 31 de octubre.
+   * Enrutamiento inteligente con microcopy contextualizado para `corporativo.html`, `seguridad-electronica.html`, `punto-de-venta.html` y `gaming.html`.
+4. **Panel Administrativo & Copywriting (`admin.html`)**:
+   * Pestaña y selector por defecto orientados a la campaña de **Octubre (Seguridad Corporativa)**, permitiendo a los ejecutivos de cuenta copiar en 1 clic los mensajes listos para WhatsApp Business, LinkedIn y Email Marketing.
 
-### 📊 Metas y KPIs del Sprint Semanal (27 de Septiembre al 3 de Octubre de 2026)
-* **Leads B2B Calificados (Cierre Q3)**: Captar un mínimo de 15 solicitudes de levantamiento técnico urgente antes del 30 de septiembre.
-* **Tasa de Aprobación de Presupuestos**: Cerrar el 40% de las propuestas de cableado/racks presentadas durante las últimas 72 horas.
-* **Pipeline de Seguridad (Octubre)**: Generar los primeros 10 levantamientos perimetrales de CCTV y biometría para la primera semana de octubre.
-* **Adopción de POS**: Colocar 6 kits de punto de venta en comercios de Santiago que renuevan cajas para el último trimestre.
+### 📊 Metas y KPIs del Sprint Semanal (5 al 11 de Octubre de 2026)
+* **Leads B2B Calificados (Seguridad)**: Captar un mínimo de **20 solicitudes de evaluación técnica perimetral** en Santiago.
+* **Tasa de Cierre de Cotizaciones CCTV/Biometría**: Convertir el **35% de los levantamientos presenciales** en órdenes de compra formales con NCF.
+* **Pipeline Preventa POS**: Agendar **8 demostraciones presenciales** de sistemas de facturación en comercios locales.
+* **CTR de Banners Hero (Slide 1)**: Mantener un CTR superior al **4.8%** en la sección de seguridad electrónica.
+* **Tasa de Canje de Cupones en Checkout**: Alcanzar más del **9.5% de redención** en cotizaciones generadas.
+
+---
+
+### 🗺️ Cronograma de las Próximas Semanas de Octubre (Ruta hacia Black Friday 2026)
+* **Semana 2 (5 al 11 de Octubre - Actual)**: Máximo empuje en Seguridad Física Corporativa, CCTV 4K y preventa de POS.
+* **Semana 3 (12 al 18 de Octubre)**: Semana de la Ciberseguridad & Continuidad Operativa (Firewalls, switches administrables, UPS Online de doble conversión y enlaces de respaldo).
+* **Semana 4 (19 al 25 de Octubre)**: Activación de Teasers de Black Month y registro previo de empresas para "Early Bird Black Friday TI" (aseguramiento de inventario de laptops y equipamiento).
+* **Semana 5 (26 al 31 de Octubre)**: Cierre de la campaña de Seguridad e inauguración formal de la campaña masiva de Black Friday 2026.
 
 ---
 

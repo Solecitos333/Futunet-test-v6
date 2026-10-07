@@ -947,6 +947,63 @@ test('Mejora demandada por usuarios: Sistema UPS APC Schneider Electric BV1000 (
   assert.ok(catJs.includes("/\\b(schneider|apc|bv1000|easy\\s*ups)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Schneider Electric y APC');
 });
 
+test('Mejora demandada por usuarios: Router Wi-Fi 6 Linksys Hydra Pro 6 y Red Mesh (SUG-L8400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L8400'") && seedCjs.includes("status: 'implemented'"), 'SUG-L8400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L8400') && sugJs.includes('Linksys Hydra Pro 6'), 'SUG-L8400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_hydra_pro_6'), 'backup_data.js debe contener redes_linksys_hydra_pro_6');
+
+  const linksysImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-hydra-pro6.webp');
+  assert.ok(fs.existsSync(linksysImg), 'La imagen del router Linksys Hydra Pro 6 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'linksys'"), 'catalog.js debe incluir linksys en stem variants');
+  assert.ok(catJs.includes("'Linksys'"), 'catalog.js debe incluir Linksys en priorityList');
+  assert.ok(catJs.includes("/\\b(linksys|hydra|velop|ax5400)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Linksys Hydra Pro 6');
+});
+
+test('Mejora demandada por usuarios: Inversor/Cargador Victron Energy MultiPlus y Solar MPPT (SUG-V2400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V2400'") && seedCjs.includes("status: 'implemented'"), 'SUG-V2400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V2400') && sugJs.includes('Victron Energy MultiPlus'), 'SUG-V2400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_multiplus_24_3000_70'), 'backup_data.js debe contener energia_victron_multiplus_24_3000_70');
+
+  const victronImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-multiplus-24v.webp');
+  assert.ok(fs.existsSync(victronImg), 'La imagen del inversor Victron MultiPlus debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'victron'"), 'catalog.js debe incluir victron en stem variants');
+  assert.ok(catJs.includes("'Victron Energy'"), 'catalog.js debe incluir Victron Energy en priorityList');
+  assert.ok(catJs.includes("/\\b(victron|multiplus|mppt|senoidal)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron Energy MultiPlus');
+});
+
+test('Mejora demandada por usuarios: Kit de Alarma Contra Intrusión Paradox Spectra SP4000 (SUG-P5800)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P5800'") && seedCjs.includes("status: 'implemented'"), 'SUG-P5800 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P5800') && sugJs.includes('Paradox Spectra'), 'SUG-P5800 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_spectra_sp4000_kit'), 'backup_data.js debe contener seguridad_paradox_spectra_sp4000_kit');
+
+  const paradoxImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-spectra-sp4000.webp');
+  assert.ok(fs.existsSync(paradoxImg), 'La imagen del kit Paradox Spectra debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'paradox'"), 'catalog.js debe incluir paradox en stem variants');
+  assert.ok(catJs.includes("'Paradox'"), 'catalog.js debe incluir Paradox en priorityList');
+  assert.ok(catJs.includes("/\\b(paradox|spectra|sp4000)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Paradox Spectra');
+});
+
 
 
 

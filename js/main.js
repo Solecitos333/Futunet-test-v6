@@ -1284,6 +1284,15 @@ function initAnnouncementBar() {
       ctaText: 'Cotizar Seguridad',
       waMsg: 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.'
     };
+  } else if (currentPath.includes('corporativo.html')) {
+    campaign = {
+      badge: '🏢 Q4: BLINDAJE & REDES B2B',
+      message: '15% de Descuento en Seguridad Corporativa y Enlaces con',
+      coupon: 'SEGURIDAD2026',
+      endDate: new Date('2026-10-31T23:59:59'),
+      ctaText: 'Solicitar Auditoría B2B',
+      waMsg: 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.'
+    };
   } else if (currentMonth === 9 || now > q3End) {
     // Octubre: Campaña de Seguridad Corporativa Global
     campaign = {

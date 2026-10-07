@@ -88,7 +88,17 @@ const queries = [
   'schneider',
   'apc',
   'bv1000',
-  'easy ups'
+  'easy ups',
+  'linksys',
+  'hydra',
+  'velop',
+  'victron',
+  'multiplus',
+  'inversor solar',
+  'mppt',
+  'paradox',
+  'spectra',
+  'alarma'
 ];
 
 

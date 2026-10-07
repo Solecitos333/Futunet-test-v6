@@ -474,7 +474,11 @@
       
       if (item) {
         var msg = 'Hola Futunet, me interesa solicitar financiamiento en cuotas para el equipo: ' + item.title + ' (' + item.price + ').';
-        window.open('https://wa.me/18297411041?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+        var waUrl = 'https://wa.me/18297411041?text=' + encodeURIComponent(msg);
+        var win = window.open(waUrl, '_blank', 'noopener,noreferrer');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
       }
     },
     resetFilters: function () {
