@@ -1084,6 +1084,22 @@
       status: 'implemented',
       description: 'En proyectos de zonas francas, banca, instituciones educativas y data centers en Santiago requerimos switches de grado carrier Juniper Networks EX2300-24P de 24 puertos Gigabit Ethernet PoE+ con presupuesto de 370W, 4 puertos uplink SFP+ de 10 GbE y sistema operativo Junos OS con tecnología Virtual Chassis.',
       officialResponse: '¡Atendido! Incorporamos al catálogo de Redes y a marca-juniper.html el Switch Empresarial Juniper Networks EX2300-24P Gigabit PoE+ (24 puertos PoE+ 370W y 4 uplinks 10GbE SFP+) con Junos OS, Virtual Chassis y garantía con soporte técnico en Santiago.'
+    },
+    {
+      refCode: 'SUG-S3100',
+      title: 'Disponibilidad de Interruptores Termomagnéticos Industriales Siemens Sentron 3P 100A para Protección de Tableros Eléctricos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En instalaciones eléctricas industriales, naves comerciales de zonas francas y data centers en Santiago requerimos interruptores termomagnéticos en caja moldeada Siemens Sentron de 3 polos y 100 Amperios con capacidad de interrupción de cortocircuito de hasta 25 kA para protección de acometidas y tableros principales.',
+      officialResponse: '¡Cumplido! Se incorporó al catálogo de Energía y a marca-siemens.html el Interruptor Termomagnético Industrial Siemens Sentron Tripolar 100A (3P, 25 kA a 415V/480V) con mecanismo térmico-magnético calibrado y 2 años de garantía oficial Siemens.'
+    },
+    {
+      refCode: 'SUG-T1350',
+      title: 'Disponibilidad de Sistemas de Almacenamiento Energético y Baterías de Respaldo Solar Tesla Powerwall 2 (13.5 kWh)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para proyectos solares fotovoltaicos, residencias de alto nivel y oficinas corporativas en Santiago requerimos sistemas de respaldo y almacenamiento de energía Tesla Powerwall 2 de 13.5 kWh con inversor acoplado y Backup Gateway 2 para suministro ininterrumpido ante apagones.',
+      officialResponse: '¡Implementado! Ya se encuentra en el catálogo de Energía y en marca-tesla.html el Sistema de Batería de Respaldo Tesla Powerwall 2 (13.5 kWh utilizables, 5 kW continuos) con Tesla Backup Gateway 2 para conmutación instantánea y 10 años de garantía oficial.'
     }
   ];
 

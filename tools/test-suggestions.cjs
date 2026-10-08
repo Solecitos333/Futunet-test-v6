@@ -1061,6 +1061,44 @@ test('Mejora demandada por usuarios: Switch Empresarial Juniper Networks EX2300 
   assert.ok(catJs.includes("/\\b(juniper|ex2300|junos)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Juniper Networks EX2300');
 });
 
+test('Mejora demandada por usuarios: Interruptor Termomagnético Industrial Siemens Sentron (SUG-S3100)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S3100'") && seedCjs.includes("status: 'implemented'"), 'SUG-S3100 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S3100') && sugJs.includes('Siemens Sentron 3P 100A'), 'SUG-S3100 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_breaker_industrial_sentron_3p'), 'backup_data.js debe contener energia_siemens_breaker_industrial_sentron_3p');
+
+  const siemensImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-breaker-sentron.webp');
+  assert.ok(fs.existsSync(siemensImg), 'La imagen del interruptor Siemens debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'siemens'"), 'catalog.js debe incluir siemens en stem variants');
+  assert.ok(catJs.includes("'Siemens'"), 'catalog.js debe incluir Siemens en priorityList');
+  assert.ok(catJs.includes("/\\b(siemens|sentron|disyuntor)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Siemens Sentron');
+});
+
+test('Mejora demandada por usuarios: Batería Solar Tesla Powerwall 2 (SUG-T1350)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T1350'") && seedCjs.includes("status: 'implemented'"), 'SUG-T1350 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T1350') && sugJs.includes('Tesla Powerwall 2'), 'SUG-T1350 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_powerwall_2_bateria_solar'), 'backup_data.js debe contener energia_tesla_powerwall_2_bateria_solar');
+
+  const teslaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-powerwall-2.webp');
+  assert.ok(fs.existsSync(teslaImg), 'La imagen de Tesla Powerwall debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tesla'"), 'catalog.js debe incluir tesla en stem variants');
+  assert.ok(catJs.includes("'Tesla'"), 'catalog.js debe incluir Tesla en priorityList');
+  assert.ok(catJs.includes("/\\b(tesla|powerwall)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Powerwall');
+});
+
 
 
 

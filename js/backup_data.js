@@ -7167,6 +7167,50 @@ const mockDatabase = [
       "Enrutamiento estático y dinámico Layer 2 y Layer 3 con soporte IPv4/IPv6, ACLs y 802.1X",
       "Garantía de por vida limitada (Enhanced Limited Lifetime Warranty) y comprobante fiscal NCF en Santiago"
     ]
+  },
+  {
+    "id": "energia_siemens_breaker_industrial_sentron_3p",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Siemens",
+    "title": "Interruptor Termomagnético Industrial Siemens Sentron 3 Polos 100A Protección Eléctrica de Tableros",
+    "desc": "Interruptor automático en caja moldeada / riel DIN industrial Siemens Sentron de 3 polos (3P) y capacidad nominal de 100 Amperios para protección eléctrica de acometidas comerciales, salas de servidores, bancos de condensadores y tableros de distribución en Santiago. Diseñado para soportar capacidades de interrupción de cortocircuito de hasta 25 kA a 415V/480V con mecanismo de disparo térmico-magnético de alta precisión (calibración fija contra sobrecargas y disparo instantáneo magnético). Cumple con las exigencias de las normas internacionales IEC/EN 60947-2 y UL 489, garantizando máxima continuidad de servicio y seguridad operativa ante fallas eléctricas severas.",
+    "price": "RD$ 12,900.00",
+    "img": "img/productos/catalogo/siemens-breaker-sentron.webp",
+    "gallery": [
+      "img/productos/catalogo/siemens-breaker-sentron.webp"
+    ],
+    "specs": [
+      "Configuración: Tripolar (3 Polos / 3P) para sistemas trifásicos industriales",
+      "Corriente nominal: 100 Amperios (In) continua para tableros de potencia",
+      "Capacidad de corte en cortocircuito: Hasta 25 kA a 415V/480V AC según IEC 60947-2",
+      "Disparo térmico y magnético calibrado para respuesta ultrarrápida ante fallas",
+      "Montaje estándar en riel DIN / placa de montaje en gabinete metálico de distribución",
+      "Contactos de aleación de plata resistentes al arco eléctrico con larga vida útil",
+      "Garantía oficial Siemens de 2 años con soporte técnico especializado y factura con NCF"
+    ]
+  },
+  {
+    "id": "energia_tesla_powerwall_2_bateria_solar",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Tesla",
+    "title": "Sistema de Batería de Respaldo Residencial y Comercial Tesla Powerwall 2 (13.5 kWh) con Backup Gateway",
+    "desc": "Sistema avanzado de almacenamiento y respaldo energético residencial y comercial Tesla Powerwall 2 con capacidad útil de 13.5 kWh de iones de litio y Backup Gateway 2 para conmutación automática ante cortes del tendido eléctrico sin parpadeo. Entrega potencia continua de 5 kW (hasta 7 kW de potencia pico) e integra inversor bidireccional AC acoplado, compatible con cualquier instalación solar existente o recarga directa de la red comercial. Monitoreo inteligente en tiempo real de consumo, generación y reserva de energía a través de la aplicación móvil Tesla. Diseñado con refrigeración líquida térmica y chasis con certificación IP67 para instalación en interiores o exteriores protegidos.",
+    "price": "Cotizar",
+    "img": "img/productos/catalogo/tesla-powerwall-2.webp",
+    "gallery": [
+      "img/productos/catalogo/tesla-powerwall-2.webp"
+    ],
+    "specs": [
+      "Capacidad de almacenamiento utilizable: 13.5 kWh con profundidad de descarga (DoD) del 100%",
+      "Potencia de salida continua: 5.0 kW (pico de 7.0 kW durante 10 segundos)",
+      "Inversor integrado AC acoplado con eficiencia de ciclo completo (Round-Trip) del 90%",
+      "Tesla Backup Gateway 2: Detección instantánea de corte y transición a respaldo en milisegundos",
+      "Monitoreo inteligente en tiempo real vía app Tesla con modos de autoconsumo y respaldo",
+      "Construcción resistente al clima con refrigeración líquida interna y protección IP67",
+      "Garantía de fábrica de 10 años con soporte técnico e instalación certificada en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

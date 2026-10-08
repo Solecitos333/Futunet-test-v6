@@ -108,7 +108,13 @@ const queries = [
   'aire acondicionado mitsubishi',
   'juniper',
   'ex2300',
-  'junos'
+  'junos',
+  'siemens',
+  'sentron',
+  'breaker',
+  'disyuntor',
+  'tesla',
+  'powerwall'
 ];
 
 

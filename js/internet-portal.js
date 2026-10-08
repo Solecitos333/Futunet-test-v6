@@ -569,7 +569,7 @@
         if (btn) btn.disabled = true;
 
         // 1. Verificación Honeypot (Trampa antispam para bots)
-        var hpVal = document.getElementById('pay-hp-check') ? document.getElementById('pay-hp-check').value : '';
+        var hpVal = (document.getElementById('pay-hp-check')?.value || '').trim();
         if (hpVal) {
           console.warn('Bot submission blocked via honeypot.');
           if (window.showToast) window.showToast('Pago reportado exitosamente. Lo verificaremos a la brevedad.', 'success');
@@ -680,7 +680,7 @@
         if (btn) btn.disabled = true;
 
         // 1. Verificación Honeypot (Trampa antispam para bots)
-        var hpVal = document.getElementById('support-hp-check') ? document.getElementById('support-hp-check').value : '';
+        var hpVal = (document.getElementById('support-hp-check')?.value || '').trim();
         if (hpVal) {
           console.warn('Bot submission blocked via honeypot.');
           if (window.showToast) window.showToast('Solicitud enviada correctamente.', 'success');
@@ -765,7 +765,7 @@
         if (btn) btn.disabled = true;
 
         // 1. Verificación Honeypot (Trampa antispam para bots)
-        var hpVal = document.getElementById('p-hir-hp-check') ? document.getElementById('p-hir-hp-check').value : '';
+        var hpVal = (document.getElementById('p-hir-hp-check')?.value || '').trim();
         if (hpVal) {
           console.warn('Bot submission blocked via honeypot.');
           if (window.showToast) window.showToast('¡Solicitud enviada con éxito! Nos contactaremos a la brevedad.', 'success');
@@ -802,9 +802,9 @@
             .trim();
         }
 
-        var rawName = document.getElementById('p-hir-name') ? document.getElementById('p-hir-name').value : '';
-        var rawEmail = document.getElementById('p-hir-email') ? document.getElementById('p-hir-email').value : '';
-        var rawPhone = document.getElementById('p-hir-phone') ? document.getElementById('p-hir-phone').value : '';
+        var rawName = document.getElementById('p-hir-name')?.value || '';
+        var rawEmail = document.getElementById('p-hir-email')?.value || '';
+        var rawPhone = document.getElementById('p-hir-phone')?.value || '';
 
         var name = sanitizePortalInput(rawName);
         var email = sanitizePortalInput(rawEmail);
@@ -946,7 +946,7 @@
         if (btn) btn.disabled = true;
 
         // 1. Verificación Honeypot (Trampa para bots automáticos)
-        var hpVal = document.getElementById('p-guest-hp-check') ? document.getElementById('p-guest-hp-check').value : '';
+        var hpVal = (document.getElementById('p-guest-hp-check')?.value || '').trim();
         if (hpVal) {
           console.warn('Bot submission blocked via honeypot.');
           if (window.showToast) window.showToast('¡Solicitud enviada con éxito! Nos contactaremos a la brevedad.', 'success');
@@ -983,9 +983,9 @@
             .trim();
         }
 
-        var rawName = document.getElementById('p-guest-name') ? document.getElementById('p-guest-name').value : '';
-        var rawEmail = document.getElementById('p-guest-email') ? document.getElementById('p-guest-email').value : '';
-        var rawPhone = document.getElementById('p-guest-phone') ? document.getElementById('p-guest-phone').value : '';
+        var rawName = document.getElementById('p-guest-name')?.value || '';
+        var rawEmail = document.getElementById('p-guest-email')?.value || '';
+        var rawPhone = document.getElementById('p-guest-phone')?.value || '';
 
         var name = sanitizeGuestInput(rawName);
         var email = sanitizeGuestInput(rawEmail);

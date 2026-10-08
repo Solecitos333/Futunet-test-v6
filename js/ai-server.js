@@ -1026,7 +1026,7 @@
             }).join('\n\n') +
             '\n\n✨ *En la tienda el cliente ve tarjetas interactivas con foto, precio en DOP y enlace de WhatsApp.*';
         } else {
-          var selectedModelName = document.getElementById('ai-client-model-select') ? document.getElementById('ai-client-model-select').value : 'gemini-2.5-flash';
+          var selectedModelName = document.getElementById('ai-client-model-select')?.value || 'gemini-2.5-flash';
           simulatedText = 'Consulta recibida: "' + query + '"\n\n' +
             'El asistente procesará esta consulta con el motor **' + selectedModelName + '** entregando asesoría personalizada, información de stock y soporte técnico guiado.';
         }

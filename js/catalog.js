@@ -196,6 +196,12 @@ function getStemVariants(word) {
   if (word === 'juniper') variants.push('switch', 'ex2300', 'junos', 'redes', 'enrutador');
   if (word === 'ex2300') variants.push('juniper', 'switch', 'poe', 'junos');
   if (word === 'junos') variants.push('juniper', 'switch', 'routing');
+  if (word === 'siemens') variants.push('breaker', 'sentron', 'industrial', 'termomagnetico', 'energia', 'tablero');
+  if (word === 'sentron') variants.push('siemens', 'breaker', 'termomagnetico', '3p', 'industrial');
+  if (word === 'breaker' || word === 'breakers') variants.push('siemens', 'sentron', 'termomagnetico', 'interruptor', 'disyuntor', 'cuchilla');
+  if (word === 'disyuntor' || word === 'disyuntores') variants.push('breaker', 'termomagnetico', 'siemens', 'interruptor');
+  if (word === 'tesla') variants.push('powerwall', 'bateria', 'solar', 'energia', 'acumulador');
+  if (word === 'powerwall') variants.push('tesla', 'bateria', 'solar', 'almacenamiento', 'litio');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -227,6 +233,8 @@ function matchesBrand(productBrand, targetBrand) {
   if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
   if ((normP === 'mitsubishi' && normT === 'mitsubishielectric') || (normP === 'mitsubishielectric' && normT === 'mitsubishi')) return true;
   if ((normP === 'juniper' && normT === 'junipernetworks') || (normP === 'junipernetworks' && normT === 'juniper')) return true;
+  if ((normP === 'siemens' && normT === 'siemens') || (normP.includes('siemens') && normT.includes('siemens'))) return true;
+  if ((normP === 'tesla' && normT === 'tesla') || (normP.includes('tesla') && normT.includes('tesla'))) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -551,6 +559,24 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Siemens y breakers Sentron al buscar siemens, sentron, breaker, disyuntor (SUG-S3100)
+  if (/\b(siemens|sentron|disyuntor)\b/i.test(normalizedQuery) || (/\b(breaker|breakers)\b/i.test(normalizedQuery) && /\b(siemens|industrial|sentron)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'siemens') {
+      score += 170;
+    } else if (/siemens|sentron/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Tesla y sistemas Powerwall al buscar tesla, powerwall, bateria solar (SUG-T1350)
+  if (/\b(tesla|powerwall)\b/i.test(normalizedQuery) || (/\b(bateria|baterias)\b/i.test(normalizedQuery) && /\b(tesla|solar|powerwall)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'tesla') {
+      score += 170;
+    } else if (/tesla|powerwall/i.test(title)) {
+      score += 150;
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -722,7 +748,9 @@ function populateBrandFilter() {
     mitsubishielectric: 'Mitsubishi',
     juniper: 'Juniper',
     'juniper networks': 'Juniper',
-    junipernetworks: 'Juniper'
+    junipernetworks: 'Juniper',
+    siemens: 'Siemens',
+    tesla: 'Tesla'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -756,7 +784,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'Linksys', 'Victron Energy', 'Paradox', 'Panasonic', 'Mitsubishi', 'Juniper', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'Linksys', 'Victron Energy', 'Siemens', 'Tesla', 'Paradox', 'Panasonic', 'Mitsubishi', 'Juniper', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

@@ -630,6 +630,56 @@ test('Resiliencia URL & DOM: syncCatalogUrl, initFooterYear y escapeHTML global 
   );
 });
 
+test('Cobertura de marcas: las 26 páginas de marca cuentan con productos en catálogo y sin páginas huérfanas', () => {
+  const brandFiles = fs.readdirSync(projectRoot).filter(f => f.startsWith('marca-') && f.endsWith('.html') && f !== 'marca-template.html');
+  assert.equal(brandFiles.length, 26, 'Deben existir 26 páginas de marca en la plataforma');
+
+  const products = require('../js/backup_data.js');
+  const catJsContent = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+
+  const vm = require('vm');
+  const sandbox = { window: {}, console };
+  vm.createContext(sandbox);
+  const start = catJsContent.indexOf('function matchesBrand');
+  const end = catJsContent.indexOf('function fuzzyMatch');
+  vm.runInContext(catJsContent.substring(start, end), sandbox);
+  const matchesBrand = sandbox.matchesBrand;
+
+  const emptyBrands = [];
+  brandFiles.forEach(f => {
+    const html = fs.readFileSync(path.join(projectRoot, f), 'utf8');
+    const m = html.match(/data-brand-name="([^"]+)"/);
+    assert.ok(m, `${f} debe incluir data-brand-name en document.body`);
+    const brandName = m[1];
+    const brandProducts = products.filter(p => matchesBrand(p.brand, brandName));
+    if (brandProducts.length === 0) {
+      emptyBrands.push({ file: f, brand: brandName });
+    }
+  });
+
+  assert.equal(emptyBrands.length, 0, `Ninguna página de marca debe estar vacía. Encontradas vacías: ${JSON.stringify(emptyBrands)}`);
+});
+
+test('DOM Safety: admin-panel.js, erp-extensions.js y ai-server.js libres de accesos no protegidos getElementById', () => {
+  const filesToCheck = ['admin-panel.js', 'erp-extensions.js', 'ai-server.js', 'cart.js', 'form.js', 'internet-portal.js'];
+  const unsafePattern = /getElementById\([^)]+\)\.(value|innerText|innerHTML|addEventListener|focus|click)/;
+
+  filesToCheck.forEach(filename => {
+    const code = fs.readFileSync(path.join(projectRoot, 'js', filename), 'utf8');
+    const lines = code.split('\n');
+    const violations = [];
+    lines.forEach((line, index) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('//') || trimmed.startsWith('*')) return;
+      if (unsafePattern.test(line)) {
+        violations.push({ line: index + 1, content: trimmed });
+      }
+    });
+    assert.equal(violations.length, 0, `Archivo js/${filename} contiene accesos DOM no protegidos: ${JSON.stringify(violations)}`);
+  });
+});
+
+
 
 
 

@@ -698,6 +698,33 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 errores sintácticos en 80 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
     - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 671 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Gestión del Buzón de Sugerencias & Cobertura Total de Marcas (2026-10-08 Ciclo Protección Industrial Siemens & Almacenamiento Solar Tesla - SUG-S3100, SUG-T1350 + Blindaje DOM Safety en Panel Admin, ERP y AI Server)**:
+  - **Auditoría Estructural de Marcas y Cobertura 100% de la Plataforma**:
+    - Auditoría automatizada con `tools/audit-brand-pages.cjs`: verificación de que las 26 páginas de marca en `marca-*.html` (excluyendo la plantilla `marca-template.html`) cuentan con productos en catálogo (0 páginas huérfanas en toda la plataforma).
+    - Resolución formal en Firestore y catálogo de 2 sugerencias clave de alta demanda corporativa y energética:
+      - **SUG-S3100** (*Interruptores Termomagnéticos Industriales Siemens Sentron 3P 100A para Protección de Tableros Eléctricos*): Solicitada por Ing. Carlos Matos (Ingeniería Eléctrica & Mantenimiento) para protección de acometidas y tableros trifásicos en naves industriales y data centers con 25 kA de capacidad de corte.
+      - **SUG-T1350** (*Sistemas de Almacenamiento Energético y Baterías de Respaldo Solar Tesla Powerwall 2 de 13.5 kWh*): Solicitada por Ing. Laura Henríquez (Energía Solar & Proyectos Sostenibles) para respaldo continuo ante cortes eléctricos comerciales e integración fotovoltaica.
+  - **Ampliación de Catálogo y Sincronización Cloud**:
+    - Incorporación de `energia_siemens_breaker_industrial_sentron_3p`: Interruptor termomagnético en caja moldeada Siemens Sentron tripolar de 100A con 25 kA de capacidad de ruptura a 415V/480V, disparo térmico-magnético calibrado y normas IEC 60947-2 / UL 489.
+    - Incorporación de `energia_tesla_powerwall_2_bateria_solar`: Batería de iones de litio Tesla Powerwall 2 de 13.5 kWh utilizables, potencia continua de 5 kW (7 kW pico), inversor bidireccional acoplado en AC, Backup Gateway 2 y monitoreo inteligente vía app.
+    - Generación y optimización de activos fotográficos WebP de alta fidelidad: `siemens-breaker-sentron.webp` y `tesla-powerwall-2.webp`.
+    - Sincronización cloud mediante `tools/sync-catalog-improvements.cjs` hacia la colección remota `products` de Firestore (82 productos verificados) y actualización de base local `js/backup_data.js` (381 productos en total).
+  - **Blindaje DOM Safety & Null-Safety Defensivo**:
+    - Eliminación de accesos no protegidos a través de `tools/audit-dom-listeners.cjs`:
+      - `admin-panel.js`: Reemplazo de 78 accesos directos por helpers utilitarios seguros (`getVal`, `setVal`, `setText`) y encadenamiento opcional `?.`.
+      - `erp-extensions.js`: 6 accesos saneados a 0.
+      - `ai-server.js`: Saneado selector de modelos a 0 con optional chaining defensivo.
+      - `cart.js`, `form.js`, `internet-portal.js`: Mantienen 0 violaciones.
+  - **Stemming Semántico y Precisión de Búsqueda Fuzzy (`js/catalog.js` y `brand-page-loader.js`)**:
+    - Nuevas variantes y sinónimos en `getStemVariants` para `siemens`, `sentron`, `breaker`, `disyuntor`, `tesla`, `powerwall`.
+    - Reglas de scoring en `scoreProductMatch`: boosting ponderado (+150 a +170) para Siemens y Tesla.
+    - Registro de marcas en `preferredNames` y `priorityList` de filtros rápidos por chips (`catalog-quick-chips`).
+    - Actualización de equivalencias de marcas en `matchesBrandLocal` de `brand-page-loader.js`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 167 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo nuevas suites en `tools/test-suggestions.cjs` y `tools/test-dom-safety.cjs`.
+    - 44 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 100 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs` sin búsquedas vacías.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 671 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 
 
 
