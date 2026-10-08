@@ -179,10 +179,10 @@ window.ERPExtensions = (function () {
     if (submit.disabled) return;
     submit.disabled = true;
     try {
-      const supplierRnc = document.getElementById('purchase-supplier-rnc').value.replace(/\D/g, '');
-      const ncf = document.getElementById('purchase-ncf').value.trim().toUpperCase();
-      const date = document.getElementById('purchase-date').value;
-      const dueDate = document.getElementById('purchase-due-date').value;
+      const supplierRnc = (document.getElementById('purchase-supplier-rnc')?.value || '').replace(/\D/g, '');
+      const ncf = (document.getElementById('purchase-ncf')?.value || '').trim().toUpperCase();
+      const date = document.getElementById('purchase-date')?.value || '';
+      const dueDate = document.getElementById('purchase-due-date')?.value || '';
       const goodsAmount = numericInput('purchase-goods-amount');
       const servicesAmount = numericInput('purchase-services-amount');
       const subtotal = Math.round((goodsAmount + servicesAmount) * 100) / 100;
@@ -194,13 +194,13 @@ window.ERPExtensions = (function () {
       const itbisCost = numericInput('purchase-itbis-cost');
       const itbisAdvance = Math.max(0, Math.round((itbis - itbisCost) * 100) / 100);
       const incomeTaxWithheld = numericInput('purchase-income-tax-withheld');
-      const paymentMethod = document.getElementById('purchase-payment-method').value;
+      const paymentMethod = document.getElementById('purchase-payment-method')?.value || '04';
       if (![9, 11].includes(supplierRnc.length)) throw new Error('El RNC o cédula debe tener 9 u 11 dígitos.');
       if (!/^(B\d{10}|E\d{12})$/.test(ncf)) throw new Error('El NCF debe tener un formato fiscal válido.');
       if (!date || !dueDate || dueDate < date) throw new Error('Revisa las fechas de compra y vencimiento.');
       if (goodsAmount < 0 || servicesAmount < 0 || itbis < 0 || subtotal + itbis <= 0) throw new Error('Los montos de la compra no son válidos.');
       const isPaid = paymentMethod !== '04';
-      const paymentDateInput = document.getElementById('purchase-payment-date').value;
+      const paymentDateInput = document.getElementById('purchase-payment-date')?.value || '';
       const paymentDate = isPaid ? (paymentDateInput || date) : '';
       if ((itbisWithheld > 0 || incomeTaxWithheld > 0) && !paymentDate) {
         throw new Error('Las retenciones requieren indicar la fecha de pago.');
@@ -359,8 +359,8 @@ window.ERPExtensions = (function () {
 
   async function saveBankMovement(event) {
     event.preventDefault();
-    const submit = event.currentTarget.querySelector('[type="submit"]');
-    submit.disabled = true;
+    const submit = event.currentTarget ? event.currentTarget.querySelector('[type="submit"]') : null;
+    if (submit) submit.disabled = true;
     try {
       const amount = Number(document.getElementById('bank-amount')?.value || 0);
       if (!Number.isFinite(amount) || amount <= 0) throw new Error('El monto debe ser mayor que cero.');

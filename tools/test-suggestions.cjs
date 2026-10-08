@@ -1004,6 +1004,63 @@ test('Mejora demandada por usuarios: Kit de Alarma Contra Intrusión Paradox Spe
   assert.ok(catJs.includes("/\\b(paradox|spectra|sp4000)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Paradox Spectra');
 });
 
+test('Mejora demandada por usuarios: Teléfono IP Panasonic KX-HDV130B (SUG-P1300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P1300'") && seedCjs.includes("status: 'implemented'"), 'SUG-P1300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P1300') && sugJs.includes('Panasonic KX-HDV130B'), 'SUG-P1300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kx_hdv130_telefono_ip'), 'backup_data.js debe contener oficina_panasonic_kx_hdv130_telefono_ip');
+
+  const panasonicImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kx-hdv130.webp');
+  assert.ok(fs.existsSync(panasonicImg), 'La imagen del teléfono IP Panasonic debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'panasonic'"), 'catalog.js debe incluir panasonic en stem variants');
+  assert.ok(catJs.includes("'Panasonic'"), 'catalog.js debe incluir Panasonic en priorityList');
+  assert.ok(catJs.includes("/\\b(panasonic|hdv130|kxhdv130|pbx)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Panasonic KX-HDV130B');
+});
+
+test('Mejora demandada por usuarios: Aire Acondicionado Inverter Mitsubishi Electric (SUG-M1800)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M1800'") && seedCjs.includes("status: 'implemented'"), 'SUG-M1800 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M1800') && sugJs.includes('Mitsubishi Electric MSZ-GL'), 'SUG-M1800 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_msz_gl18_aire_inverter'), 'backup_data.js debe contener energia_mitsubishi_msz_gl18_aire_inverter');
+
+  const mitsubishiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-msz-gl18.webp');
+  assert.ok(fs.existsSync(mitsubishiImg), 'La imagen del aire acondicionado Mitsubishi debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'mitsubishi'"), 'catalog.js debe incluir mitsubishi en stem variants');
+  assert.ok(catJs.includes("'Mitsubishi'"), 'catalog.js debe incluir Mitsubishi en priorityList');
+  assert.ok(catJs.includes("/\\b(mitsubishi|msz|mszgl18)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Mitsubishi Electric');
+});
+
+test('Mejora demandada por usuarios: Switch Empresarial Juniper Networks EX2300 (SUG-J2300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J2300'") && seedCjs.includes("status: 'implemented'"), 'SUG-J2300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-J2300') && sugJs.includes('Juniper Networks EX2300'), 'SUG-J2300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_ex2300_24p_switch'), 'backup_data.js debe contener redes_juniper_ex2300_24p_switch');
+
+  const juniperImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-ex2300-24p.webp');
+  assert.ok(fs.existsSync(juniperImg), 'La imagen del switch Juniper debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'juniper'"), 'catalog.js debe incluir juniper en stem variants');
+  assert.ok(catJs.includes("'Juniper'"), 'catalog.js debe incluir Juniper en priorityList');
+  assert.ok(catJs.includes("/\\b(juniper|ex2300|junos)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Juniper Networks EX2300');
+});
+
 
 
 

@@ -7101,6 +7101,72 @@ const mockDatabase = [
       "Comunicación hacia central de monitoreo o llamada telefónica de alerta inmediata",
       "Garantía oficial Paradox de 1 año con asesoría técnica de instalación en Santiago"
     ]
+  },
+  {
+    "id": "oficina_panasonic_kx_hdv130_telefono_ip",
+    "department": "oficina",
+    "category": "Equipos de Oficina",
+    "brand": "Panasonic",
+    "title": "Teléfono IP Panasonic KX-HDV130B de 2 Líneas SIP con Audio HD y Pantalla LCD Retroiluminada PoE",
+    "desc": "Teléfono de escritorio IP estándar Panasonic KX-HDV130B diseñado para entornos empresariales, recepciones, consultorios médicos y despachos en Santiago. Cuenta con soporte para 2 cuentas SIP, audio de banda ancha HD Sonic (G.722) para máxima claridad de voz, pantalla gráfica LCD de 2.3 pulgadas retroiluminada de 132x64 píxeles, 2 puertos Fast Ethernet 10/100 con alimentación PoE integrada (IEEE 802.3af), altavoz manos libres full dúplex, directorio local para 500 contactos e indicador LED de mensaje en espera / llamada entrante. Compatible con servidores de telefonía IP Asterisk, FreePBX, conmutadores Panasonic KX-NS500 y centrales PBX virtuales.",
+    "price": "RD$ 4,950.00",
+    "img": "img/productos/catalogo/panasonic-kx-hdv130.webp",
+    "gallery": [
+      "img/productos/catalogo/panasonic-kx-hdv130.webp"
+    ],
+    "specs": [
+      "Soporte de telefonía IP: 2 líneas SIP y 2 puertos Fast Ethernet 10/100 Mbps",
+      "Audio HD de alta definición: Códec de banda ancha G.722 y altavoz manos libres full dúplex",
+      "Alimentación: PoE integrado (Power over Ethernet) o adaptador de corriente CA opcional",
+      "Pantalla: LCD monocromática retroiluminada de 2.3 pulgadas con contraste regulable",
+      "Funciones PBX: Transferencia de llamada, conferencia a 3 vías, retención, desvío y llamada en espera",
+      "Directorio telefónico: Capacidad de hasta 500 registros y registro de últimas 30 llamadas",
+      "Garantía oficial Panasonic de 1 año con soporte técnico y factura formal con NCF"
+    ]
+  },
+  {
+    "id": "energia_mitsubishi_msz_gl18_aire_inverter",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Mitsubishi",
+    "title": "Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 18,000 BTU Ultra Silencioso 24.6 SEER",
+    "desc": "Sistema de aire acondicionado Mini-Split de ultra alta eficiencia Mitsubishi Electric MSZ-GL18NA de 18,000 BTU (1.5 Toneladas) con tecnología Inverter PAM de compresor de velocidad variable y certificación hasta 24.6 SEER. Diseñado para climatización continua y exigente de cuartos de servidores (data centers), oficinas gerenciales y residencias en Santiago, asegurando un ahorro de hasta el 40% en consumo eléctrico comercial. Cuenta con funcionamiento ultra silencioso Whisper Quiet de solo 19 dB, filtro purificador Nano Platinum con enzimas antibacteriales y desodorizantes, control de flujo Smart Set y compatibilidad con monitoreo Wi-Fi Kumo Cloud. Utiliza refrigerante ecológico R410A.",
+    "price": "RD$ 54,900.00",
+    "img": "img/productos/catalogo/mitsubishi-msz-gl18.webp",
+    "gallery": [
+      "img/productos/catalogo/mitsubishi-msz-gl18.webp"
+    ],
+    "specs": [
+      "Capacidad de enfriamiento: 18,000 BTU/h (1.5 Toneladas de refrigeración)",
+      "Eficiencia energética superior: Calificación hasta 24.6 SEER y certificación Energy Star",
+      "Tecnología Inverter PAM: Ajuste continuo de velocidad del compresor para mínimo consumo de energía",
+      "Operación ultra silenciosa: Nivel sonoro Whisper Quiet desde 19 dB(A) para máxima concentración",
+      "Filtro purificador avanzado: Filtro Nano Platinum lavable que absorbe polvos, bacterias y alérgenos",
+      "Refrigerante ecológico R410A precargado de fábrica con protección anticorrosiva Blue Fin",
+      "Garantía de 5 años en compresor y 1 año en piezas con instalación técnica certificada en Santiago"
+    ]
+  },
+  {
+    "id": "redes_juniper_ex2300_24p_switch",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Juniper",
+    "title": "Switch Empresarial Juniper Networks EX2300-24P Gigabit Ethernet 24 Puertos PoE+ con 4 Uplinks 10GbE SFP+",
+    "desc": "Switch administrable de acceso y distribución empresarial de grado carrier Juniper Networks EX2300-24P. Cuenta con 24 puertos Gigabit Ethernet 10/100/1000Base-T con soporte PoE+ (Power over Ethernet IEEE 802.3at) y presupuesto de potencia total de 370 Watts para alimentar teléfonos IP, cámaras CCTV 4K y puntos de acceso Wi-Fi 6 de alta densidad. Incorpora 4 puertos de enlace ascendente (uplink) fijos SFP+ de 10 GbE para interconexión a troncales de fibra óptica o data centers a 10 Gbps. Impulsado por el sistema operativo Junos OS, tecnología Virtual Chassis que permite gestionar hasta 4 switches como un solo dispositivo lógico, enrutamiento L2/L3 avanzado (RIP, OSPF) y conmutación de paquetes sin bloqueo con ancho de banda de 128 Gbps.",
+    "price": "RD$ 48,500.00",
+    "img": "img/productos/catalogo/juniper-ex2300-24p.webp",
+    "gallery": [
+      "img/productos/catalogo/juniper-ex2300-24p.webp"
+    ],
+    "specs": [
+      "24 puertos Gigabit 10/100/1000Base-T PoE+ con presupuesto de potencia total de 370W",
+      "4 puertos uplink SFP/SFP+ fijos de 10 Gbps para enlaces de fibra óptica de alta velocidad",
+      "Capacidad de conmutación: 128 Gbps sin bloqueo y tasa de reenvío de 95 Mpps",
+      "Sistema operativo Junos OS: Misma base de código y consistencia de enrutamiento que routers carrier-grade",
+      "Tecnología Virtual Chassis: Gestión centralizada de hasta 4 switches interconectados en un solo plano lógico",
+      "Enrutamiento estático y dinámico Layer 2 y Layer 3 con soporte IPv4/IPv6, ACLs y 802.1X",
+      "Garantía de por vida limitada (Enhanced Limited Lifetime Warranty) y comprobante fiscal NCF en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

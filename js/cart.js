@@ -622,8 +622,8 @@
       });
     }
 
-    const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
-    const docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+    const docType = document.getElementById('chk-document-type')?.value || 'cedula';
+    const docNum = (document.getElementById('chk-document-number')?.value || '').trim();
     const docLabel = docType === 'passport' ? 'Pasaporte' : 'Cédula';
 
     summaryCard.innerHTML = `
@@ -986,8 +986,8 @@
         });
         if (!isValid) return;
 
-        const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
-        const docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+        const docType = document.getElementById('chk-document-type')?.value || 'cedula';
+        const docNum = (document.getElementById('chk-document-number')?.value || '').trim();
 
         if (docType === 'cedula') {
           const cleanCedula = docNum.replace(/\D/g, '');
@@ -1318,7 +1318,7 @@
     const originalBtnText = submitBtn ? submitBtn.innerHTML : "Confirmar y Enviar Pedido";
 
     // 1. Verificación Honeypot (Trampa antispam para bots)
-    const hpVal = document.getElementById('chk-hp-check') ? document.getElementById('chk-hp-check').value : '';
+    const hpVal = (document.getElementById('chk-hp-check')?.value || '').trim();
     if (hpVal) {
       console.warn('Bot detected via honeypot in checkout.');
       showCartToast('Pedido registrado con éxito.', 'success');
@@ -1395,8 +1395,8 @@
       return;
     }
     
-    const docType = document.getElementById('chk-document-type') ? document.getElementById('chk-document-type').value : 'cedula';
-    let docNum = document.getElementById('chk-document-number') ? document.getElementById('chk-document-number').value.trim() : '';
+    const docType = document.getElementById('chk-document-type')?.value || 'cedula';
+    let docNum = (document.getElementById('chk-document-number')?.value || '').trim();
     if (docType === 'cedula') docNum = docNum.replace(/\D/g, '');
     else docNum = sanitizeText(docNum).toUpperCase().slice(0, 30);
 

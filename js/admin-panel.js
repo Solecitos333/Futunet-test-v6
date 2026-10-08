@@ -916,7 +916,7 @@
       var isCreaticos = sourceFilter && sourceFilter.value === 'creaticos';
 
       if (isCreaticos) {
-        var taxVal = parseFloat(document.getElementById('product-tax').value) || 0;
+        var taxVal = parseFloat(getVal('product-tax')) || 0;
         var creaticosData = {
           name: data.title,
           description: data.desc,
@@ -3340,18 +3340,18 @@
           return;
         }
 
-        var rawName = document.getElementById('create-user-name').value;
+        var rawName = getVal('create-user-name');
         var name = sanitizeAdminUserInput(rawName, 100);
         if (!name) {
           showToast('El nombre de usuario contiene caracteres inválidos o está vacío.', 'error');
           return;
         }
 
-        var email = document.getElementById('create-user-email').value.trim();
-        var password = document.getElementById('create-user-password').value;
-        var role = document.getElementById('create-user-role').value;
-        var documentType = document.getElementById('create-user-document-type').value;
-        var rawDocNum = document.getElementById('create-user-document-number').value;
+        var email = getVal('create-user-email').trim();
+        var password = getVal('create-user-password');
+        var role = getVal('create-user-role');
+        var documentType = getVal('create-user-document-type');
+        var rawDocNum = getVal('create-user-document-number');
         var documentNumber = sanitizeAdminUserInput(rawDocNum, 20);
 
         try {
@@ -3713,7 +3713,7 @@
     if (!tbody) return;
 
     try {
-      var filterStatus = document.getElementById('requests-status-filter').value;
+      var filterStatus = getVal('requests-status-filter') || 'all';
       var query = db.collection('service_requests');
       
       if (filterStatus !== 'all') {
@@ -3767,7 +3767,7 @@
 
   // Filtrar solicitudes
   function filterRequestsTable() {
-    var query = document.getElementById('requests-search').value.toLowerCase().trim();
+    var query = getVal('requests-search').toLowerCase().trim();
     var rows = document.querySelectorAll('#requests-table-body tr');
     
     rows.forEach(function (row) {
@@ -4519,7 +4519,7 @@
   }
 
   function onMapClick(e) {
-    var userId = document.getElementById('map-client-select').value;
+    var userId = getVal('map-client-select');
     if (!userId) {
       showToast('Por favor, selecciona un cliente en el formulario antes de marcar su ubicación.', 'info');
       return;
@@ -4528,10 +4528,11 @@
     var lat = e.latlng.lat;
     var lng = e.latlng.lng;
     
-    document.getElementById('map-lat').textContent = lat.toFixed(6);
-    document.getElementById('map-lng').textContent = lng.toFixed(6);
-    document.getElementById('map-accuracy').textContent = 'Click Mapa';
-    document.getElementById('map-save-btn').disabled = false;
+    setText('map-lat', lat.toFixed(6));
+    setText('map-lng', lng.toFixed(6));
+    setText('map-accuracy', 'Click Mapa');
+    var saveBtn = document.getElementById('map-save-btn');
+    if (saveBtn) saveBtn.disabled = false;
     
     if (tempMarker) {
       tempMarker.setLatLng(e.latlng);
@@ -4551,20 +4552,21 @@
       tempMarker.on('dragend', function(event) {
         var marker = event.target;
         var pos = marker.getLatLng();
-        document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
-        document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
-        document.getElementById('map-accuracy').textContent = 'Arrastre';
+        setText('map-lat', pos.lat.toFixed(6));
+        setText('map-lng', pos.lng.toFixed(6));
+        setText('map-accuracy', 'Arrastre');
       });
     }
   }
 
   async function loadMapClientCoordinates(userId) {
     if (!userId) {
-      document.getElementById('map-lat').textContent = '-';
-      document.getElementById('map-lng').textContent = '-';
-      document.getElementById('map-accuracy').textContent = '-';
-      document.getElementById('map-install-notes').value = '';
-      document.getElementById('map-save-btn').disabled = true;
+      setText('map-lat', '-');
+      setText('map-lng', '-');
+      setText('map-accuracy', '-');
+      setVal('map-install-notes', '');
+      var saveBtn = document.getElementById('map-save-btn');
+      if (saveBtn) saveBtn.disabled = true;
       if (tempMarker && techMap) {
         techMap.removeLayer(tempMarker);
         tempMarker = null;
@@ -4577,16 +4579,17 @@
       if (!doc.exists) return;
       var client = doc.data();
       
-      document.getElementById('map-install-notes').value = client.locationNotes || '';
+      setVal('map-install-notes', client.locationNotes || '');
       
       if (client.latitude && client.longitude) {
         var lat = parseFloat(client.latitude);
         var lng = parseFloat(client.longitude);
         
-        document.getElementById('map-lat').textContent = lat.toFixed(6);
-        document.getElementById('map-lng').textContent = lng.toFixed(6);
-        document.getElementById('map-accuracy').textContent = client.locationAccuracy || 'Guardada';
-        document.getElementById('map-save-btn').disabled = false;
+        setText('map-lat', lat.toFixed(6));
+        setText('map-lng', lng.toFixed(6));
+        setText('map-accuracy', client.locationAccuracy || 'Guardada');
+        var saveBtn = document.getElementById('map-save-btn');
+        if (saveBtn) saveBtn.disabled = false;
         
         var latlng = [lat, lng];
         if (techMap) {
@@ -4610,17 +4613,18 @@
             tempMarker.on('dragend', function(event) {
               var marker = event.target;
               var pos = marker.getLatLng();
-              document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
-              document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
-              document.getElementById('map-accuracy').textContent = 'Arrastre';
+              setText('map-lat', pos.lat.toFixed(6));
+              setText('map-lng', pos.lng.toFixed(6));
+              setText('map-accuracy', 'Arrastre');
             });
           }
         }
       } else {
-        document.getElementById('map-lat').textContent = '-';
-        document.getElementById('map-lng').textContent = '-';
-        document.getElementById('map-accuracy').textContent = '-';
-        document.getElementById('map-save-btn').disabled = true;
+        setText('map-lat', '-');
+        setText('map-lng', '-');
+        setText('map-accuracy', '-');
+        var saveBtn = document.getElementById('map-save-btn');
+        if (saveBtn) saveBtn.disabled = true;
         if (tempMarker && techMap) {
           techMap.removeLayer(tempMarker);
           tempMarker = null;
@@ -4640,7 +4644,7 @@
   }
 
   function locateTechnician() {
-    var selectedClientId = document.getElementById('map-client-select').value;
+    var selectedClientId = getVal('map-client-select');
     if (!selectedClientId) {
       showToast('Por favor, selecciona un cliente primero.', 'error');
       return;
@@ -4662,11 +4666,12 @@
         var formattedLat = lat.toFixed(6);
         var formattedLng = lng.toFixed(6);
         
-        document.getElementById('map-lat').textContent = formattedLat;
-        document.getElementById('map-lng').textContent = formattedLng;
-        document.getElementById('map-accuracy').textContent = Math.round(accuracy);
+        setText('map-lat', formattedLat);
+        setText('map-lng', formattedLng);
+        setText('map-accuracy', Math.round(accuracy));
         
-        document.getElementById('map-save-btn').disabled = false;
+        var saveBtn = document.getElementById('map-save-btn');
+        if (saveBtn) saveBtn.disabled = false;
         
         var latlng = [lat, lng];
         
@@ -4711,9 +4716,9 @@
             tempMarker.on('dragend', function(event) {
               var marker = event.target;
               var pos = marker.getLatLng();
-              document.getElementById('map-lat').textContent = pos.lat.toFixed(6);
-              document.getElementById('map-lng').textContent = pos.lng.toFixed(6);
-              document.getElementById('map-accuracy').textContent = 'Arrastre';
+              setText('map-lat', pos.lat.toFixed(6));
+              setText('map-lng', pos.lng.toFixed(6));
+              setText('map-accuracy', 'Arrastre');
             });
           }
         }
@@ -4746,11 +4751,11 @@
   }
 
   async function saveClientLocation() {
-    var userId = document.getElementById('map-client-select').value;
-    var latText = document.getElementById('map-lat').textContent;
-    var lngText = document.getElementById('map-lng').textContent;
-    var accuracyText = document.getElementById('map-accuracy').textContent;
-    var notes = document.getElementById('map-install-notes').value.trim();
+    var userId = getVal('map-client-select');
+    var latText = document.getElementById('map-lat')?.textContent || '-';
+    var lngText = document.getElementById('map-lng')?.textContent || '-';
+    var accuracyText = document.getElementById('map-accuracy')?.textContent || '-';
+    var notes = getVal('map-install-notes').trim();
     
     if (!userId || latText === '-' || lngText === '-') {
       showToast('Por favor, selecciona un cliente y captura o marca una ubicación en el mapa.', 'error');
@@ -4785,7 +4790,7 @@
   }
 
   async function clearClientLocation() {
-    var userId = document.getElementById('map-client-select').value;
+    var userId = getVal('map-client-select');
     if (!userId) {
       showToast('Por favor, selecciona un cliente primero.', 'error');
       return;
@@ -5118,8 +5123,8 @@
     var form = document.getElementById('competitor-form');
     if (!form) return;
     form.reset();
-    document.getElementById('competitor-id').value = '';
-    document.getElementById('competitor-modal-title').textContent = 'Agregar Competidor';
+    setVal('competitor-id', '');
+    setText('competitor-modal-title', 'Agregar Competidor');
     openModal('competitor-modal');
   }
 
@@ -5132,21 +5137,21 @@
       }
       var c = doc.data();
 
-      document.getElementById('competitor-id').value = id;
-      document.getElementById('competitor-name').value = c.name || '';
-      document.getElementById('competitor-rank').value = c.rank || '1';
-      document.getElementById('competitor-relevance').value = c.relevance || 'Media';
-      document.getElementById('competitor-market-share').value = c.marketShare || 0;
-      document.getElementById('competitor-price-idx').value = c.priceIndex || 50;
-      document.getElementById('competitor-tech-idx').value = c.techIndex || 50;
-      document.getElementById('competitor-service-idx').value = c.serviceIndex || 50;
-      document.getElementById('competitor-differentiator').value = c.differentiator || '';
-      document.getElementById('competitor-strengths').value = c.strengths || '';
-      document.getElementById('competitor-weaknesses').value = c.weaknesses || '';
-      document.getElementById('competitor-improvements').value = c.improvements || '';
-      document.getElementById('competitor-logo').value = c.logo || '';
+      setVal('competitor-id', id);
+      setVal('competitor-name', c.name || '');
+      setVal('competitor-rank', c.rank || '1');
+      setVal('competitor-relevance', c.relevance || 'Media');
+      setVal('competitor-market-share', c.marketShare || 0);
+      setVal('competitor-price-idx', c.priceIndex || 50);
+      setVal('competitor-tech-idx', c.techIndex || 50);
+      setVal('competitor-service-idx', c.serviceIndex || 50);
+      setVal('competitor-differentiator', c.differentiator || '');
+      setVal('competitor-strengths', c.strengths || '');
+      setVal('competitor-weaknesses', c.weaknesses || '');
+      setVal('competitor-improvements', c.improvements || '');
+      setVal('competitor-logo', c.logo || '');
 
-      document.getElementById('competitor-modal-title').textContent = 'Editar Competidor';
+      setText('competitor-modal-title', 'Editar Competidor');
       openModal('competitor-modal');
     } catch (err) {
       showToast('Error al cargar competidor: ' + err.message, 'error');
@@ -5154,19 +5159,19 @@
   }
 
   async function saveCompetitor() {
-    var id = document.getElementById('competitor-id').value;
-    var name = document.getElementById('competitor-name').value;
-    var rank = parseInt(document.getElementById('competitor-rank').value) || 1;
-    var relevance = document.getElementById('competitor-relevance').value;
-    var marketShare = parseInt(document.getElementById('competitor-market-share').value) || 0;
-    var priceIndex = parseInt(document.getElementById('competitor-price-idx').value) || 50;
-    var techIndex = parseInt(document.getElementById('competitor-tech-idx').value) || 50;
-    var serviceIndex = parseInt(document.getElementById('competitor-service-idx').value) || 50;
-    var differentiator = document.getElementById('competitor-differentiator').value;
-    var strengths = document.getElementById('competitor-strengths').value;
-    var weaknesses = document.getElementById('competitor-weaknesses').value;
-    var improvements = document.getElementById('competitor-improvements').value;
-    var logo = document.getElementById('competitor-logo').value;
+    var id = getVal('competitor-id');
+    var name = getVal('competitor-name');
+    var rank = parseInt(getVal('competitor-rank')) || 1;
+    var relevance = getVal('competitor-relevance');
+    var marketShare = parseInt(getVal('competitor-market-share')) || 0;
+    var priceIndex = parseInt(getVal('competitor-price-idx')) || 50;
+    var techIndex = parseInt(getVal('competitor-tech-idx')) || 50;
+    var serviceIndex = parseInt(getVal('competitor-service-idx')) || 50;
+    var differentiator = getVal('competitor-differentiator');
+    var strengths = getVal('competitor-strengths');
+    var weaknesses = getVal('competitor-weaknesses');
+    var improvements = getVal('competitor-improvements');
+    var logo = getVal('competitor-logo');
 
     var data = {
       name: name,
@@ -5690,9 +5695,9 @@
     if (!tbody) return;
 
     try {
-      var catFilter = document.getElementById('suggestions-category-filter') ? document.getElementById('suggestions-category-filter').value : 'all';
-      var statusFilter = document.getElementById('suggestions-status-filter') ? document.getElementById('suggestions-status-filter').value : 'all';
-      var audienceFilter = document.getElementById('suggestions-audience-filter') ? document.getElementById('suggestions-audience-filter').value : 'all';
+      var catFilter = getVal('suggestions-category-filter') || 'all';
+      var statusFilter = getVal('suggestions-status-filter') || 'all';
+      var audienceFilter = getVal('suggestions-audience-filter') || 'all';
 
       var query = db.collection('suggestions');
       if (statusFilter !== 'all') {
@@ -5886,9 +5891,9 @@
     if (btn) btn.disabled = true;
 
     try {
-      var newStatus = document.getElementById('sug-modal-status-select').value;
-      var newOfficialResponse = (document.getElementById('sug-modal-official-response').value || '').trim();
-      var newNotes = document.getElementById('sug-modal-admin-notes').value.trim();
+      var newStatus = getVal('sug-modal-status-select');
+      var newOfficialResponse = getVal('sug-modal-official-response').trim();
+      var newNotes = getVal('sug-modal-admin-notes').trim();
 
       var currentUser = window.FutunetAuth ? window.FutunetAuth.getCurrentUser() : null;
       var reviewer = currentUser ? (currentUser.displayName || currentUser.email || 'Admin Futunet') : 'Admin Futunet';

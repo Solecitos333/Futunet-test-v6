@@ -188,6 +188,14 @@ function getStemVariants(word) {
   if (word === 'spectra' || word === 'sp4000') variants.push('paradox', 'alarma', 'seguridad');
   if (word === 'alarma' || word === 'alarmas') variants.push('paradox', 'spectra', 'intrusor', 'sirena', 'pir', 'seguridad');
   if (word === 'pir') variants.push('sensor', 'movimiento', 'paradox', 'nv5', 'alarma');
+  if (word === 'panasonic') variants.push('telefono', 'hdv130', 'pbx', 'conmutador', 'central');
+  if (word === 'hdv130' || word === 'kxhdv130') variants.push('panasonic', 'telefono', 'sip', 'kxhdv130b');
+  if (word === 'pbx' || word === 'conmutador') variants.push('panasonic', 'telefono', 'central');
+  if (word === 'mitsubishi') variants.push('aire', 'climatizacion', 'inverter', 'msz', 'seer');
+  if (word === 'msz' || word === 'mszgl18') variants.push('mitsubishi', 'aire', 'inverter');
+  if (word === 'juniper') variants.push('switch', 'ex2300', 'junos', 'redes', 'enrutador');
+  if (word === 'ex2300') variants.push('juniper', 'switch', 'poe', 'junos');
+  if (word === 'junos') variants.push('juniper', 'switch', 'routing');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -217,6 +225,8 @@ function matchesBrand(productBrand, targetBrand) {
   if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;
   if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
   if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
+  if ((normP === 'mitsubishi' && normT === 'mitsubishielectric') || (normP === 'mitsubishielectric' && normT === 'mitsubishi')) return true;
+  if ((normP === 'juniper' && normT === 'junipernetworks') || (normP === 'junipernetworks' && normT === 'juniper')) return true;
   return false;
 }
 if (typeof window !== 'undefined') window.matchesBrand = matchesBrand;
@@ -514,6 +524,33 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Panasonic y teléfonos IP al buscar panasonic, hdv130, kx-hdv130, telefono ip, pbx (SUG-P1300)
+  if (/\b(panasonic|hdv130|kxhdv130|pbx)\b/i.test(normalizedQuery) || (/\b(telefono|telefonos)\b/i.test(normalizedQuery) && /\b(ip|sip)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'panasonic') {
+      score += 170;
+    } else if (/panasonic|hdv130/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Mitsubishi Electric y aires Inverter al buscar mitsubishi, msz, aire acondicionado, seer (SUG-M1800)
+  if (/\b(mitsubishi|msz|mszgl18)\b/i.test(normalizedQuery) || (/\b(aire|aires)\b/i.test(normalizedQuery) && /\b(mitsubishi|inverter)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('mitsubishi')) {
+      score += 170;
+    } else if (/mitsubishi|msz-gl/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Juniper Networks y switches EX2300 al buscar juniper, ex2300, junos (SUG-J2300)
+  if (/\b(juniper|ex2300|junos)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'juniper') {
+      score += 170;
+    } else if (/juniper|ex2300/i.test(title)) {
+      score += 150;
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -678,7 +715,14 @@ function populateBrandFilter() {
     'victron energy': 'Victron Energy',
     victronenergy: 'Victron Energy',
     victron: 'Victron Energy',
-    paradox: 'Paradox'
+    paradox: 'Paradox',
+    panasonic: 'Panasonic',
+    mitsubishi: 'Mitsubishi',
+    'mitsubishi electric': 'Mitsubishi',
+    mitsubishielectric: 'Mitsubishi',
+    juniper: 'Juniper',
+    'juniper networks': 'Juniper',
+    junipernetworks: 'Juniper'
   };
   const rawBrands = getCatalogDb().map((product) => String(product.brand || '').trim()).filter(Boolean);
   const brandMap = new Map();
@@ -712,7 +756,7 @@ function renderQuickFilterChips(brands) {
   const currentBrand = (state.brand || 'all').toLowerCase();
   const isAvail = state.availability === 'available';
 
-  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'Linksys', 'Victron Energy', 'Paradox', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
+  const priorityList = ['Dell', 'HP', 'Lenovo', 'Apple', 'LG', 'Epson', 'TGM', 'Cisco', 'Ubiquiti', 'MikroTik', 'Netgear', 'Logitech', 'Forza', 'Schneider Electric', 'Linksys', 'Victron Energy', 'Paradox', 'Panasonic', 'Mitsubishi', 'Juniper', 'TP-Link', 'Hikvision', 'Dahua', 'ZKTeco', 'Western Digital', 'Ezviz', 'Samsung', 'Uniview'];
   const orderedBrands = [...brands].sort((a, b) => {
     const idxA = priorityList.findIndex((p) => p.toLowerCase() === a.toLowerCase());
     const idxB = priorityList.findIndex((p) => p.toLowerCase() === b.toLowerCase());

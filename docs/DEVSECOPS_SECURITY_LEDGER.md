@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-07  
+> **Última Actualización:** 2026-10-08  
 
 ---
 
@@ -671,6 +671,34 @@ python -m unittest test_main.py test_chatbot_api.py
     - 82/82 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs`.
     - 0 errores sintácticos en 80 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
     - Validación completa de hosting (`npm run validate`): 52 páginas HTML y 664 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Gestión del Buzón de Sugerencias & Expansión Multimarca (2026-10-08 Ciclo Telefonía IP Panasonic, Climatización Inverter Mitsubishi & Conmutación Juniper - SUG-P1300, SUG-M1800, SUG-J2300)**:
+  - **Revisión Integral del Buzón de Sugerencias y Telemetría de Búsqueda**:
+    - Auditoría exhaustiva de propuestas comunitarias en la colección `suggestions` de Firestore (52 sugerencias procesadas en total, 0 pendientes) y sincronización bidireccional en la lista canónica (`canonicalSuggestionsList` en `js/suggestions.js`).
+    - Auditoría estructural de páginas de marcas (`tools/audit-brand-pages.cjs`) detectando páginas huérfanas con 0 productos para marcas de prestigio internacional: `marca-panasonic.html`, `marca-mitsubishi.html` y `marca-juniper.html`.
+    - Resolución formal, respuesta ejecutiva y estado `implemented` en Firestore y frontend para 3 propuestas institucionales clave para el sector corporativo y comercial del Cibao:
+      - **SUG-P1300** (*Teléfonos IP Panasonic KX-HDV130B y Centrales PBX para Comunicación y Telefonía Corporativa*): Solicitada por Lic. José Luis Peralta (Telecomunicaciones & Gestión Corporativa Santiago) para equipamiento telefónico de recepciones y despachos con audio HD Sonic, 2 líneas SIP y alimentación PoE.
+      - **SUG-M1800** (*Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL de 18,000 BTU de Ultra Alta Eficiencia para Servidores y Oficinas*): Solicitada por Arq. Nelson Tavárez (Climatización & Diseño Arquitectónico Cibao) para climatización continua de salas de servidores (Data Centers) y despachos con hasta 24.6 SEER y modo Whisper Quiet de 19 dB.
+      - **SUG-J2300** (*Switches Empresariales Juniper Networks EX2300-24P Gigabit PoE+ para Redes Corporativas y Telecomunicaciones*): Solicitada por Ing. Rafael Ernesto Vargas (Infraestructura de Datos & Redes Cibao) para conectividad de grado carrier con 24 puertos PoE+ (370W), 4 uplinks fijos SFP+ de 10 GbE, sistema Junos OS y tecnología Virtual Chassis.
+  - **Ampliación de Catálogo y Sincronización en Base de Datos**:
+    - Incorporación de `oficina_panasonic_kx_hdv130_telefono_ip`: Teléfono IP Panasonic KX-HDV130B con 2 líneas SIP, pantalla LCD gráfica retroiluminada de 2.3", audio HD G.722, 2 puertos Fast Ethernet con PoE y agenda de 500 contactos.
+    - Incorporación de `energia_mitsubishi_msz_gl18_aire_inverter`: Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL18NA de 18,000 BTU (1.5 Toneladas) con compresor Inverter PAM, 24.6 SEER, modo silencioso de 19 dB y filtro Nano Platinum.
+    - Incorporación de `redes_juniper_ex2300_24p_switch`: Switch Empresarial Juniper Networks EX2300-24P Gigabit PoE+ con 24 puertos 10/100/1000Base-T PoE+ (370W), 4 puertos uplink SFP+ de 10 Gbps, Junos OS y Virtual Chassis.
+    - Generación y optimización de activos fotográficos WebP de alta fidelidad (880x880): `panasonic-kx-hdv130.webp`, `mitsubishi-msz-gl18.webp`, `juniper-ex2300-24p.webp`.
+    - Sincronización cloud mediante `tools/sync-catalog-improvements.cjs` hacia la colección remota `products` de Firestore (80 productos verificados) y actualización de base local `js/backup_data.js` (379 productos en total).
+    - Habilitación de marcas en `marca-panasonic.html` (1 producto), `marca-mitsubishi.html` (1 producto) y `marca-juniper.html` (1 producto) verificado al 100% con `tools/audit-brand-pages.cjs`.
+  - **Stemming Semántico y Precisión de Búsqueda Fuzzy (`js/catalog.js`)**:
+    - Nuevas variantes y sinónimos en `getStemVariants` para `panasonic`, `hdv130`, `kxhdv130`, `pbx`, `mitsubishi`, `msz`, `mszgl18`, `juniper`, `ex2300`, `junos`.
+    - Reglas de equivalencia de marcas en `matchesBrand`: soporte bidireccional para `mitsubishi` / `mitsubishielectric` y `juniper` / `junipernetworks`.
+    - Registro de marcas en `preferredNames` y `priorityList` de filtros rápidos por chips (`catalog-quick-chips`).
+    - Reglas de scoring en `scoreProductMatch`: boosting ponderado (+150 a +170) para Panasonic, Mitsubishi Electric y Juniper Networks ante consultas de telefonía, climatización y switching carrier-grade.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 163 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo 68 suites en `tools/test-suggestions.cjs`.
+    - 44 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 94/94 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs` sin búsquedas vacías.
+    - 0 errores sintácticos en 80 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 671 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
 
 
 

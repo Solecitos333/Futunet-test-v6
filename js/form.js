@@ -65,10 +65,10 @@ function sendForm(event) {
   }
 
   // Obtener y sanitizar valores del formulario
-  const rawNombre   = document.getElementById('f-nombre') ? document.getElementById('f-nombre').value : '';
-  const rawTel      = document.getElementById('f-tel') ? document.getElementById('f-tel').value : '';
-  const rawServicio = document.getElementById('f-servicio') ? document.getElementById('f-servicio').value : '';
-  const rawMsg      = document.getElementById('f-msg') ? document.getElementById('f-msg').value : '';
+  const rawNombre   = document.getElementById('f-nombre')?.value || '';
+  const rawTel      = document.getElementById('f-tel')?.value || '';
+  const rawServicio = document.getElementById('f-servicio')?.value || '';
+  const rawMsg      = document.getElementById('f-msg')?.value || '';
 
   const nombre   = sanitizeInputText(rawNombre);
   const tel      = sanitizeInputText(rawTel);

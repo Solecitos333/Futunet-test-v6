@@ -98,7 +98,17 @@ const queries = [
   'mppt',
   'paradox',
   'spectra',
-  'alarma'
+  'alarma',
+  'panasonic',
+  'hdv130',
+  'telefono ip',
+  'pbx',
+  'mitsubishi',
+  'msz',
+  'aire acondicionado mitsubishi',
+  'juniper',
+  'ex2300',
+  'junos'
 ];
 
 

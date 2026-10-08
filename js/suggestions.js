@@ -1060,6 +1060,30 @@
       status: 'implemented',
       description: 'Sistemas de alarma perimetral cableada e inalámbrica Paradox Spectra SP4000 con teclado LCD Paradox K32+, sensores de movimiento infrarrojos digitales antimascota Paradox NV5 y sirena de alta potencia de 30W para comercios y residencias.',
       officialResponse: '¡Cumplido! Se integró al catálogo de Seguridad y a marca-paradox.html el Kit de Alarma Paradox Spectra SP4000 con teclado LCD K32+, sensor PIR antimascota NV5, batería de respaldo y sirena de 30W.'
+    },
+    {
+      refCode: 'SUG-P1300',
+      title: 'Disponibilidad de Teléfonos IP Panasonic KX-HDV130B y Centrales PBX para Comunicación y Telefonía Corporativa',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En consultorios médicos, bufetes de abogados y empresas en Santiago requerimos teléfonos IP Panasonic KX-HDV130B de 2 líneas SIP con audio HD de banda ancha, pantalla LCD gráfica retroiluminada de 2.3", doble puerto Ethernet con PoE y altavoz manos libres full dúplex para recepciones y puestos de trabajo.',
+      officialResponse: '¡Implementado! Ya incorporamos al catálogo de Equipos de Oficina y a marca-panasonic.html el Teléfono IP Panasonic KX-HDV130B de 2 líneas SIP con audio HD, pantalla LCD de 2.3", soporte PoE y 1 año de garantía oficial Futunet con NCF.'
+    },
+    {
+      refCode: 'SUG-M1800',
+      title: 'Disponibilidad de Aires Acondicionados Mini-Split Inverter Mitsubishi Electric de 18,000 BTU de Ultra Alta Eficiencia para Servidores y Oficinas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para salas de servidores (Data Centers), cuartos de telecomunicaciones, despachos gerenciales y residencias premium en Santiago requerimos unidades de aire acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL de 18,000 BTU con eficiencia de hasta 24.6 SEER, compresor Inverter PAM y operación ultra silenciosa Whisper Quiet de 19 dB.',
+      officialResponse: '¡Cumplido! Se integró al catálogo de Energía y Climatización y a marca-mitsubishi.html el Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 18,000 BTU con hasta 24.6 SEER, modo silencioso Whisper Quiet de 19 dB y 5 años de garantía en compresor.'
+    },
+    {
+      refCode: 'SUG-J2300',
+      title: 'Disponibilidad de Switches Empresariales Juniper Networks EX2300-24P Gigabit PoE+ para Redes Corporativas y Telecomunicaciones',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En proyectos de zonas francas, banca, instituciones educativas y data centers en Santiago requerimos switches de grado carrier Juniper Networks EX2300-24P de 24 puertos Gigabit Ethernet PoE+ con presupuesto de 370W, 4 puertos uplink SFP+ de 10 GbE y sistema operativo Junos OS con tecnología Virtual Chassis.',
+      officialResponse: '¡Atendido! Incorporamos al catálogo de Redes y a marca-juniper.html el Switch Empresarial Juniper Networks EX2300-24P Gigabit PoE+ (24 puertos PoE+ 370W y 4 uplinks 10GbE SFP+) con Junos OS, Virtual Chassis y garantía con soporte técnico en Santiago.'
     }
   ];
 
