@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-08  
+> **Última Actualización:** 2026-10-09  
 
 ---
 
@@ -725,6 +725,85 @@ python -m unittest test_main.py test_chatbot_api.py
     - 44 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
     - 100 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs` sin búsquedas vacías.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 671 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Gestión del Buzón de Sugerencias & Expansión de Servidores, Enlaces Ópticos FTTH y Seguridad Solar (2026-10-09 Ciclo Dell PowerEdge, GPON Wi-Fi 6 & Cámaras Solares 4G - SUG-D1500, SUG-O6100, SUG-C4000 + Blindaje de Sanitización Backend)**:
+  - **Auditoría Integral de Telemetría y Feedback del Buzón de Sugerencias (`sugerencias.html` y Firestore `suggestions`)**:
+    - *Diagnóstico*: Auditoría del buzón de sugerencias e ideas de la comunidad y clientes corporativos de Futunet, contrastada con la telemetría de consultas en `search_queries` y auditoría de catálogo. Se detectó demanda prioritaria en tres sectores clave de República Dominicana:
+      1. Servidores en torre para pequeñas y medianas empresas (`servidor dell`, `poweredge`) con 0 resultados en catálogo para bases de datos SQL y ERPs.
+      2. Terminales ópticas GPON Wi-Fi 6 (`onu`, `ont`, `gpon`) para proyectos de fibra óptica FTTH residenciales y comerciales de Futunet.
+      3. Cámaras de videovigilancia autónomas solares 4G (`camara solar`, `camara 4g`) para fincas, obras de construcción y zonas suburbanas de Santiago sin tendido eléctrico.
+    - *Resolución Oficial*: Registro oficial, evaluación técnica de viabilidad, aprobación y estado `implemented` en Firestore y en la lista canónica offline (`canonicalSuggestionsList` en `js/suggestions.js`) para 3 nuevas propuestas oficiales (totalizando 57 sugerencias oficiales implementadas):
+      - **SUG-D1500** (*Disponibilidad de Servidores en Torre Dell PowerEdge T150 con Intel Xeon y Arreglos RAID para Pymes y Centros de Cómputo*): Solicitada por Ing. Alberto Morales (Soluciones de Servidores & Virtualización Cibao) para soporte continuo 24/7 con memoria RAM ECC, controladora RAID PERC H355 y administración remota iDRAC9 Basic.
+      - **SUG-O6100** (*Disponibilidad de Terminales Ópticas ONT / ONU GPON Wi-Fi 6 de Doble Banda para Conexiones de Fibra Óptica FTTH y Redes GPON*): Solicitada por Ing. Miguel Ángel Taveras (Telecomunicaciones & Enlaces Ópticos Santiago) para conectividad Wi-Fi 6 AX1800, 4 puertos Gigabit LAN, puerto óptico SC/APC y puerto telefónico VoIP FXS.
+      - **SUG-C4000** (*Disponibilidad de Cámaras de Seguridad Autónomas con Panel Solar y Conectividad Móvil 4G LTE para Fincas, Obras y Almacenes*): Solicitada por Lic. José Manuel Fernández (Seguridad Perimetral & Proyectos Rurales) con panel solar integrado, batería de litio recargable, ranura SIM 4G, sensor PIR antimascota, visión nocturna a color y certificación IP66.
+  - **Ampliación de Catálogo y Sincronización en Base de Datos**:
+    - Incorporación de `computo_dell_poweredge_t150_servidor`: Servidor en Torre Dell PowerEdge T150 (Intel Xeon E-2314 Quad-Core hasta 4.5 GHz, 32GB RAM DDR4 ECC UDIMM, 2x discos 2TB SATA 7.2K RAID 1 espejo, controladora PERC H355, administración iDRAC9 Basic, fuente 300W 80 PLUS Bronze).
+    - Incorporación de `redes_ont_gpon_wifi6_terminal_optica`: Terminal Óptica ONT GPON Wi-Fi 6 AX1800 (1201 Mbps en 5 GHz + 574 Mbps en 2.4 GHz, 4 puertos Gigabit Ethernet LAN, 1 puerto SC/APC clase B+, 1 puerto RJ11 FXS VoIP, WPA3).
+    - Incorporación de `seguridad_camara_solar_4g_autonoma`: Cámara de Seguridad Solar 4G LTE 1080p con Panel Solar 5W Integrado y Batería de Litio Recargable (módem 4G LTE Micro SIM, sensor PIR inteligente 12m, reflectores LED luz blanca, audio bidireccional, MicroSD 256GB, IP66).
+    - Generación y despliegue de activos fotográficos WebP de alta fidelidad: `dell-poweredge-t150.webp`, `tplink-ont-gpon-wifi6.webp`, `hikvision-camara-solar-4g.webp`.
+    - Sincronización cloud mediante `tools/sync-catalog-improvements.cjs` hacia la colección remota `products` de Firestore (85 productos verificados) y actualización de base local `js/backup_data.js` (384 productos en total).
+  - **Stemming Semántico y Precisión de Búsqueda Fuzzy (`js/catalog.js`)**:
+    - Nuevas variantes y sinónimos en `getStemVariants` para `poweredge`, `t150`, `servidor`, `xeon`, `onu`, `ont`, `gpon`, `ftth`, `scapc`, `estabilizador`, `regulador`, `solar`.
+    - Reglas de scoring en `scoreProductMatch`: boosting ponderado (+150 a +170) para servidores Dell PowerEdge, terminales ONT GPON Wi-Fi 6, cámaras solares 4G y reguladores/estabilizadores de voltaje.
+  - **Blindaje de Backend (`futunet-backend/main.py`, `chatbot_api.py`)**:
+    - Sanitización profunda de tags HTML y caracteres de control ASCII en `QuoteRequest`, `OrderRequest` y generación de PDFs con `clean_pdf_text`.
+    - Saneamiento y validación estricta de `ChatInput` y `Turn` en endpoints de LLM/Gemini para chatbot inteligente.
+    - 44 tests unitarios de backend ejecutados y aprobados al 100% (`test_main.py` y `test_chatbot_api.py`).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 171 tests automatizados pasando al 100% en frontend (`npm test`), incluyendo 62 suites en `tools/test-suggestions.cjs`.
+    - 108 consultas verificadas con 100% de pertinencia en `tools/check-queries.cjs` sin búsquedas vacías.
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts faltantes, 0 hojas de estilo rotas y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 26/26 páginas de marcas con productos activos verificado al 100% (`tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 674 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-09 Ciclo Blindaje Integral DOM Null-Safety en Facturación ERP & Hardening de Reverse Tabnabbing en Admin Financing)**:
+  - **Hardening de Reverse Tabnabbing & Ventanas Emergentes (OWASP A03 / A05)**:
+    - *Vulnerabilidad Detectada*: En `js/admin-financing.js` (`openDocument`), la función invocaba `window.open('', '_blank')` sin el parámetro `noopener,noreferrer` en las características de la ventana antes de redirigir a Firebase Storage para visualizar documentos confidenciales de financiamiento (cédulas y pasaportes). Aunque incluía `preview.opener = null`, navegadores con modelos de renderizado multiproceso o extensiones podían retener temporalmente el contexto de `window.opener` o filtrar cabeceras `Referer`.
+    - *Mitigación Aplicada*: Hardening de la llamada a `window.open('', '_blank', 'noopener,noreferrer')` junto con `preview.opener = null`.
+    - *Verificación*: 0 instancias de `window.open` sin parámetros seguros en todos los archivos `.js` del proyecto, validado con `node tools/audit-security-deep.cjs`.
+  - **Blindaje DOM Safety & Null-Safety Defensivo en ERP Facturación (`js/facturacion.js`)**:
+    - *Diagnóstico*: Auditoría de escuchadores y accesos DOM mediante `tools/audit-dom-listeners.cjs` identificó 287 accesos directos desprotegidos (`.value`, `.textContent`, `.innerHTML`, `.setAttribute`, `.style`) en `js/facturacion.js` sobre elementos dinámicos o condicionales (formularios de facturación, POS, clientes, notas de crédito, cierres de caja).
+    - *Mitigación Aplicada*:
+      - Creación e incorporación de helpers utilitarios reactivos con salvaguardas null-safe:
+        - `getEl(id)`: Retorna la referencia o null.
+        - `getVal(id)`: Retorna el valor saneado o string vacío si el elemento no existe en el DOM.
+        - `setVal(id, val)`: Asigna valor únicamente si el nodo existe en el DOM, protegiendo contra `TypeError`.
+        - `getText(id)`: Retorna `textContent` o string vacío si el elemento es nulo.
+        - `setText(id, text)`: Asigna texto seguro solo si el elemento existe.
+        - `setHTML(id, html)`: Inyecta HTML saneado de forma controlada si el contenedor existe.
+      - Refactorización de los 287 accesos en `js/facturacion.js`, reemplazando llamadas frágiles por los helpers null-safe y encadenamiento opcional `?.`.
+      - Reducción de accesos no verificados de 287 a **0** en toda la plataforma (`node tools/audit-dom-listeners.cjs` reporta `{}`).
+  - **Nueva Herramienta de Auditoría Profunda (`tools/audit-security-deep.cjs`)**:
+    - Script de auditoría continua DevSecOps que escanea en tiempo real:
+      1. Hipervínculos con `target="_blank"` asegurando `rel="noopener noreferrer"`.
+      2. Escuchadores `postMessage` verificando validación de `event.origin`.
+      3. Invocaciones a `window.open` verificando atributos de aislamiento `noopener,noreferrer`.
+      4. Asignaciones a `innerHTML` e interpolaciones dinámicas para prevenir DOM-XSS.
+      5. Claves y almacenamiento sensible en `localStorage` / `sessionStorage`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 171 tests automatizados pasando al 100% en frontend (`npm test`), incorporando test de regresión en `tools/test-dom-safety.cjs`.
+    - 45 tests unitarios pasando al 100% en backend (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+- **Ciclo de Mantenimiento Continuo & Robustez de Plataforma (2026-10-09 Sesión Vespertina - Cobertura de Contexto IA en 26 Marcas/Páginas B2B, Blindaje NCF con getVal y PWA Cache v33)**:
+  - **Contextualización de Asistente Virtual Gemini (`futunet-backend/chatbot_api.py`)**:
+    - *Optimización de Experiencia de Usuario*: Se amplió la validación de páginas permitidas `is_allowed_page` para admitir todas las páginas públicas del sitio (`gaming.html`, `sugerencias.html`, `mi-cuenta.html`, `corporativo.html`, `mobiliario-suministros.html`, `infraestructura-remozamiento.html`, `punto-de-venta.html`, `terminos.html`, `privacidad.html`) y las 26 páginas de marca (`marca-*.html`).
+    - Antes de esta mejora, consultas en páginas de marca o verticales especializadas caían a `index.html`, impidiendo que el asistente reconociera de qué producto o sección provenía el usuario.
+    - Blindaje de seguridad preservado: páginas administrativas (`admin.html`, `facturacion.html`) o rutas con secuencias no autorizadas continúan cayendo de forma segura al fallback `index.html`.
+    - Suite de pruebas de backend ampliada con `test_public_page_and_brand_context_allowlist` en `test_chatbot_api.py`.
+  - **Saneamiento Defensivo NCF en Facturación ERP (`js/facturacion.js`)**:
+    - Reemplazo de las últimas lecturas directas en campos dinámicos con template literals (`set-ncf-${slug}-start`, `set-ncf-${slug}-end`, `set-ncf-${slug}-expiry`) por el helper `getVal()`.
+    - Integración formal de `facturacion.js` en la lista auditada `filesToCheck` de `tools/test-dom-safety.cjs`.
+  - **Evolución del Service Worker & Capacidad Offline PWA (`sw.js`)**:
+    - Actualización de versión de caché a `futunet-cache-v33`.
+    - Inclusión de `mi-cuenta.html`, `js/user-panel.js`, `css/user-panel.css`, `cotizacion.html` y `js/public-quote.js` en `OPTIONAL_ASSETS` para navegación offline garantizada de clientes y cotizaciones guardadas.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 171 tests automatizados pasando al 100% en frontend (`npm test`).
+    - 45 tests unitarios de backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 674 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+
 
 
 

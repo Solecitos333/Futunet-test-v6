@@ -61,7 +61,7 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
   );
 });
 
-test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v32 con offline backup_data', () => {
+test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js está en v33 con offline backup_data', () => {
   const soporteHtml = fs.readFileSync(path.join(projectRoot, 'soporte.html'), 'utf8');
   assert.ok(
     soporteHtml.includes('id="sp-cases"'),
@@ -69,9 +69,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v32';"), 'sw.js debe estar en la versión futunet-cache-v32');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v33';"), 'sw.js debe estar en la versión futunet-cache-v33');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./js/user-panel.js'"), 'sw.js debe incluir user-panel.js en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
   assert.ok(!swJs.includes("event.request.url.includes('backup_data.js')"), 'sw.js no debe excluir backup_data.js de la respuesta de caché');
   assert.ok(swJs.includes("'./img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg'"), 'sw.js debe incluir componentes gaming en OPTIONAL_ASSETS');
@@ -660,8 +662,8 @@ test('Cobertura de marcas: las 26 páginas de marca cuentan con productos en cat
   assert.equal(emptyBrands.length, 0, `Ninguna página de marca debe estar vacía. Encontradas vacías: ${JSON.stringify(emptyBrands)}`);
 });
 
-test('DOM Safety: admin-panel.js, erp-extensions.js y ai-server.js libres de accesos no protegidos getElementById', () => {
-  const filesToCheck = ['admin-panel.js', 'erp-extensions.js', 'ai-server.js', 'cart.js', 'form.js', 'internet-portal.js'];
+test('DOM Safety: admin-panel.js, erp-extensions.js, facturacion.js y ai-server.js libres de accesos no protegidos getElementById', () => {
+  const filesToCheck = ['admin-panel.js', 'erp-extensions.js', 'ai-server.js', 'cart.js', 'form.js', 'internet-portal.js', 'facturacion.js'];
   const unsafePattern = /getElementById\([^)]+\)\.(value|innerText|innerHTML|addEventListener|focus|click)/;
 
   filesToCheck.forEach(filename => {
@@ -678,6 +680,25 @@ test('DOM Safety: admin-panel.js, erp-extensions.js y ai-server.js libres de acc
     assert.equal(violations.length, 0, `Archivo js/${filename} contiene accesos DOM no protegidos: ${JSON.stringify(violations)}`);
   });
 });
+
+test('Seguridad & DOM Safety: admin-financing.js abre documentos con noopener,noreferrer y facturacion.js implementa helpers null-safe', () => {
+  const finJs = fs.readFileSync(path.join(projectRoot, 'js', 'admin-financing.js'), 'utf8');
+  assert.ok(
+    finJs.includes("window.open('', '_blank', 'noopener,noreferrer')"),
+    'admin-financing.js debe abrir documentos protegidos con noopener,noreferrer'
+  );
+
+  const factJs = fs.readFileSync(path.join(projectRoot, 'js', 'facturacion.js'), 'utf8');
+  assert.ok(
+    factJs.includes('function getVal(id)') &&
+    factJs.includes('function setVal(id, val)') &&
+    factJs.includes('function getText(id)') &&
+    factJs.includes('function setText(id, text)') &&
+    factJs.includes('function setHTML(id, html)'),
+    'facturacion.js debe definir los helpers utilitarios getVal, setVal, getText, setText y setHTML'
+  );
+});
+
 
 
 

@@ -114,7 +114,15 @@ const queries = [
   'breaker',
   'disyuntor',
   'tesla',
-  'powerwall'
+  'powerwall',
+  'servidor',
+  'poweredge',
+  't150',
+  'ont',
+  'onu',
+  'gpon',
+  'camara solar',
+  'estabilizador'
 ];
 
 

@@ -202,6 +202,13 @@ function getStemVariants(word) {
   if (word === 'disyuntor' || word === 'disyuntores') variants.push('breaker', 'termomagnetico', 'siemens', 'interruptor');
   if (word === 'tesla') variants.push('powerwall', 'bateria', 'solar', 'energia', 'acumulador');
   if (word === 'powerwall') variants.push('tesla', 'bateria', 'solar', 'almacenamiento', 'litio');
+  if (word === 'poweredge' || word === 't150') variants.push('servidor', 'dell', 'xeon', 'rack', 'server');
+  if (word === 'servidor' || word === 'servidores' || word === 'server' || word === 'servers') variants.push('poweredge', 't150', 'xeon', 'rack', 'workstation', 'dell');
+  if (word === 'onu' || word === 'ont') variants.push('gpon', 'ftth', 'fibra', 'optica', 'terminal', 'wifi6', 'scapc');
+  if (word === 'gpon' || word === 'ftth') variants.push('ont', 'onu', 'fibra', 'optica', 'terminal');
+  if (word === 'estabilizador' || word === 'estabilizadores') variants.push('regulador', 'voltaje', 'protector', 'ups', 'forza');
+  if (word === 'regulador' || word === 'reguladores') variants.push('estabilizador', 'voltaje', 'protector', 'ups');
+  if (word === 'solar' || word === 'solares') variants.push('panel', 'bateria', 'autonoma', 'tesla', 'camara', 'fotovoltaico');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -574,6 +581,40 @@ function scoreProductMatch(product, normalizedQuery) {
       score += 170;
     } else if (/tesla|powerwall/i.test(title)) {
       score += 150;
+    }
+  }
+
+  // Priorizar Servidores Dell PowerEdge al buscar servidor, poweredge, t150, xeon (SUG-D1500)
+  if (/\b(servidor|servidores|poweredge|t150|xeon)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'dell' && /poweredge|t150|servidor/i.test(title)) {
+      score += 170;
+    } else if (/poweredge|t150|servidor/i.test(title)) {
+      score += 150;
+    }
+  }
+
+  // Priorizar Terminales Ópticas ONT / ONU GPON al buscar onu, ont, gpon, terminal optica (SUG-O6100)
+  if (/\b(onu|ont|gpon|ftth|scapc|terminal\s*optica)\b/i.test(normalizedQuery)) {
+    if (/ont.*gpon|terminal.*optica/i.test(title)) {
+      score += 170;
+    } else if (/gpon|fibra/i.test(title)) {
+      score += 140;
+    }
+  }
+
+  // Priorizar Cámaras Solares 4G Autónomas al buscar camara solar, solar 4g, camara 4g (SUG-C4000)
+  if (/\b(camara\s*solar|solar\s*4g|camara\s*4g)\b/i.test(normalizedQuery) || (/\b(camara|camaras)\b/i.test(normalizedQuery) && /\b(solar|4g|autonoma)\b/i.test(normalizedQuery))) {
+    if (/camara.*solar.*4g/i.test(title)) {
+      score += 170;
+    } else if (/solar.*4g|camara.*solar/i.test(title)) {
+      score += 140;
+    }
+  }
+
+  // Priorizar Reguladores y Estabilizadores de voltaje al buscar estabilizador o regulador
+  if (/\b(estabilizador|estabilizadores|regulador\s*de\s*voltaje)\b/i.test(normalizedQuery)) {
+    if (/regulador.*voltaje|estabilizador/i.test(title)) {
+      score += 160;
     }
   }
 

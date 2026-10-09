@@ -1099,6 +1099,60 @@ test('Mejora demandada por usuarios: Batería Solar Tesla Powerwall 2 (SUG-T1350
   assert.ok(catJs.includes("/\\b(tesla|powerwall)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Powerwall');
 });
 
+test('Mejora demandada por usuarios: Servidor en Torre Dell PowerEdge T150 con Intel Xeon y RAID (SUG-D1500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D1500'") && seedCjs.includes("status: 'implemented'"), 'SUG-D1500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D1500') && sugJs.includes('Dell PowerEdge T150'), 'SUG-D1500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('computo_dell_poweredge_t150_servidor'), 'backup_data.js debe contener computo_dell_poweredge_t150_servidor');
+
+  const serverImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dell-poweredge-t150.webp');
+  assert.ok(fs.existsSync(serverImg), 'La imagen del servidor Dell PowerEdge debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'poweredge'"), 'catalog.js debe incluir poweredge en stem variants');
+  assert.ok(catJs.includes("/\\b(servidor|servidores|poweredge|t150|xeon)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar servidores PowerEdge');
+});
+
+test('Mejora demandada por usuarios: Terminal Óptica ONT GPON Wi-Fi 6 AX1800 (SUG-O6100)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-O6100'") && seedCjs.includes("status: 'implemented'"), 'SUG-O6100 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-O6100') && sugJs.includes('ONT GPON Wi-Fi 6'), 'SUG-O6100 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ont_gpon_wifi6_terminal_optica'), 'backup_data.js debe contener redes_ont_gpon_wifi6_terminal_optica');
+
+  const ontImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-ont-gpon-wifi6.webp');
+  assert.ok(fs.existsSync(ontImg), 'La imagen de la terminal ONT GPON debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'onu'"), 'catalog.js debe incluir onu en stem variants');
+  assert.ok(catJs.includes("/\\b(onu|ont|gpon|ftth|scapc|terminal\\s*optica)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar terminales ópticas GPON');
+});
+
+test('Mejora demandada por usuarios: Cámara de Seguridad Solar 4G LTE Autónoma (SUG-C4000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C4000'") && seedCjs.includes("status: 'implemented'"), 'SUG-C4000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C4000') && sugJs.includes('Cámara de Seguridad Solar 4G LTE'), 'SUG-C4000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_camara_solar_4g_autonoma'), 'backup_data.js debe contener seguridad_camara_solar_4g_autonoma');
+
+  const camImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hikvision-camara-solar-4g.webp');
+  assert.ok(fs.existsSync(camImg), 'La imagen de la cámara solar 4G debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'solar'"), 'catalog.js debe incluir solar en stem variants');
+  assert.ok(catJs.includes("/\\b(camara\\s*solar|solar\\s*4g|camara\\s*4g)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar cámaras solares 4G');
+});
+
 
 
 

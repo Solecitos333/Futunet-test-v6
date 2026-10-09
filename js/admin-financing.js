@@ -87,7 +87,7 @@
 
   async function openDocument(path) {
     if (!allowed() || !String(path).startsWith('financing-documents/')) return;
-    var preview = window.open('', '_blank');
+    var preview = window.open('', '_blank', 'noopener,noreferrer');
     if (preview) preview.opener = null;
     try {
       var url = await window.FutunetFirebase.storage.ref().child(path).getDownloadURL();

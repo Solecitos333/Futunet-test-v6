@@ -7211,6 +7211,72 @@ const mockDatabase = [
       "Construcción resistente al clima con refrigeración líquida interna y protección IP67",
       "Garantía de fábrica de 10 años con soporte técnico e instalación certificada en Santiago"
     ]
+  },
+  {
+    "id": "computo_dell_poweredge_t150_servidor",
+    "department": "equipos",
+    "category": "Equipos de Oficina y Cómputo",
+    "brand": "DELL",
+    "title": "Servidor en Torre Dell PowerEdge T150 Intel Xeon E-2314 32GB RAM ECC 2x2TB RAID 1 iDRAC9",
+    "desc": "Servidor en torre empresarial Dell PowerEdge T150 diseñado para centros de datos empresariales, consultorios clínicos, cooperativas, industrias en zonas francas y firmas corporativas en Santiago. Equipado con procesador Intel Xeon E-2314 Quad-Core de 2.80 GHz (hasta 4.50 GHz Turbo, 8 MB Cache), 32 GB de memoria RAM DDR4 a 3200 MT/s ECC UDIMM con corrección de errores para máxima estabilidad operativa continua 24/7 sin caídas de sistema. Incluye arreglo de almacenamiento redundante con 2 discos duros mecánicos empresariales de 2 TB SATA de 7.2K RPM configurados en RAID 1 (espejo con tolerancia a fallos de disco), controladora RAID PERC H355 de hardware, tarjeta de gestión remota fuera de banda iDRAC9 Basic para monitoreo de salud del servidor y reinicio remoto, y fuente de alimentación cableada de 300W con certificación 80 PLUS Bronze. Compatible con Windows Server 2022/2025, VMware ESXi, Proxmox VE, Ubuntu Server y plataformas ERP de facturación y bases de datos SQL.",
+    "price": "RD$ 89,500.00",
+    "img": "img/productos/catalogo/dell-poweredge-t150.webp",
+    "gallery": [
+      "img/productos/catalogo/dell-poweredge-t150.webp"
+    ],
+    "specs": [
+      "Procesador de servidor: Intel Xeon E-2314 Quad-Core 4 hilos a 2.8 GHz (Turbo 4.5 GHz, 8 MB Caché)",
+      "Memoria del sistema: 32 GB DDR4 3200 MT/s ECC UDIMM con protección contra corrupción de datos",
+      "Almacenamiento redundante: 2 discos duros empresariales de 2 TB SATA 3.5\" (4 TB brutos, 2 TB útiles en RAID 1)",
+      "Controladora RAID: PERC H355 por hardware con soporte de RAID 0, 1 y 10 para máxima velocidad y seguridad",
+      "Administración remota: iDRAC9 Basic con interfaz web HTML5 para encendido, apagado y telemetría remota",
+      "Conectividad de red: 2 puertos Gigabit Ethernet 10/100/1000 Mbps integrados con soporte LACP y balanceo",
+      "Garantía corporativa Dell ProSupport de 3 años en sitio e incluye comprobante fiscal formal con NCF"
+    ]
+  },
+  {
+    "id": "redes_ont_gpon_wifi6_terminal_optica",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "TP-Link",
+    "title": "Terminal Óptica ONT GPON Wi-Fi 6 AX1800 Doble Banda con 4 Puertos Gigabit SC/APC y Puerto FXS VoIP",
+    "desc": "Terminal de red óptica (ONT/ONU) de nueva generación TP-Link GPON Wi-Fi 6 AX1800 diseñada para enlaces residenciales y corporativos de fibra óptica FTTH de alta velocidad de Futunet en Santiago. Incorpora estándar Wi-Fi 6 (802.11ax) de doble banda simultánea con velocidades de hasta 1201 Mbps en la banda de 5 GHz y 574 Mbps en 2.4 GHz, tecnología OFDMA y MU-MIMO 2x2 para conectar más de 64 dispositivos sin saturación. Cuenta con 1 puerto óptico GPON SC/APC clase B+ (recepción 1490nm / transmisión 1310nm) con velocidad downstream de hasta 2.488 Gbps, 4 puertos Gigabit Ethernet LAN 10/100/1000 Mbps para computadoras y consolas, 1 puerto telefónico RJ11 FXS para llamadas de telefonía IP VoIP y antenas omnidireccionales de alta ganancia de 5 dBi con Beamforming. Compatible con OLTs estándar ITU-T G.984.",
+    "price": "RD$ 4,850.00",
+    "img": "img/productos/catalogo/tplink-ont-gpon-wifi6.webp",
+    "gallery": [
+      "img/productos/catalogo/tplink-ont-gpon-wifi6.webp"
+    ],
+    "specs": [
+      "Puerto óptico GPON: 1 puerto SC/APC estándar ITU-T G.984.1/.2/.3/.4 con alcance de hasta 20 km",
+      "Conectividad Wi-Fi 6 ultrarrápida: Doble banda AX1800 (1201 Mbps en 5 GHz + 574 Mbps en 2.4 GHz)",
+      "Puertos cableados: 4 puertos Gigabit Ethernet LAN 10/100/1000 Mbps para conexión directa sin latencia",
+      "Telefonía sobre IP: 1 puerto telefónico RJ11 FXS con soporte de protocolos SIP y códecs G.711/G.729",
+      "Tecnología de señal avanzada: 4 antenas de 5 dBi con Beamforming, EasyMesh y cifrado de seguridad WPA3",
+      "Gestión y aprovisionamiento: OMCI remoto, TR-069 y consola web intuitiva en español",
+      "Garantía oficial de 2 años con reemplazo local inmediato y soporte técnico de fibra óptica en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_camara_solar_4g_autonoma",
+    "department": "seguridad",
+    "category": "Seguridad y Vigilancia",
+    "brand": "Hikvision",
+    "title": "Cámara de Seguridad Solar 4G LTE Autónoma con Batería de Litio y Sensor PIR Exterior IP66",
+    "desc": "Cámara de videovigilancia 100% inalámbrica y autónoma Hikvision con panel solar fotovoltaico integrado de alta eficiencia y batería recargable de litio de gran capacidad. Diseñada especialmente para fincas agrícolas, obras de construcción, casas de campo, naves industriales y terrenos en Santiago y la región del Cibao donde no existe suministro eléctrico ni conexión a internet cableada. Integra módem celular 4G LTE compatible con tarjetas SIM de Claro, Altice y Viva para transmisión en vivo a través de la app móvil Hik-Connect. Equipada con sensor de imagen Full HD 1080p, sensor infrarrojo pasivo PIR para detección precisa de personas sin falsas alarmas, visión nocturna inteligente a color con reflectores LED blancos y alcance infrarrojo de 30 metros, audio bidireccional con micrófono y altavoz para disuasión, ranura para tarjeta MicroSD de hasta 256 GB y chasis con certificación IP66 resistente a lluvias torrenciales y calor caribeño.",
+    "price": "RD$ 8,650.00",
+    "img": "img/productos/catalogo/hikvision-camara-solar-4g.webp",
+    "gallery": [
+      "img/productos/catalogo/hikvision-camara-solar-4g.webp"
+    ],
+    "specs": [
+      "Alimentación 100% solar: Panel solar de 5W integrado y batería de litio de alta densidad de ciclo profundo",
+      "Conectividad móvil 4G LTE: Ranura Micro SIM para datos móviles de Claro/Altice sin requerir internet fijo",
+      "Resolución de video: Sensor CMOS 1080p (1920x1080) a 30 fps con compresión eficiente H.265+",
+      "Detección inteligente PIR: Detección térmica humana de hasta 12 metros que reduce falsas alarmas por viento u hojas",
+      "Iluminación dual: Infrarrojo nocturno de 30 metros y luz blanca para captura a todo color en la oscuridad",
+      "Audio bidireccional: Micrófono y altavoz de alta potencia para comunicación remota y sirena disuasoria",
+      "Protección ambiental: Carcasa reforzada IP66 para intemperie extrema y 1 año de garantía oficial Futunet con NCF"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

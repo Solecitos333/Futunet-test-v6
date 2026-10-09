@@ -1100,6 +1100,30 @@
       status: 'implemented',
       description: 'Para proyectos solares fotovoltaicos, residencias de alto nivel y oficinas corporativas en Santiago requerimos sistemas de respaldo y almacenamiento de energía Tesla Powerwall 2 de 13.5 kWh con inversor acoplado y Backup Gateway 2 para suministro ininterrumpido ante apagones.',
       officialResponse: '¡Implementado! Ya se encuentra en el catálogo de Energía y en marca-tesla.html el Sistema de Batería de Respaldo Tesla Powerwall 2 (13.5 kWh utilizables, 5 kW continuos) con Tesla Backup Gateway 2 para conmutación instantánea y 10 años de garantía oficial.'
+    },
+    {
+      refCode: 'SUG-D1500',
+      title: 'Disponibilidad de Servidores en Torre Dell PowerEdge T150 con Intel Xeon y Arreglos RAID para Pymes y Centros de Cómputo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En consultorios clínicos, cooperativas, empresas de manufactura en zonas francas y firmas corporativas en Santiago requerimos servidores empresariales en torre Dell PowerEdge T150 con procesador Intel Xeon E-2300, 32 GB de memoria RAM ECC, controladora RAID PERC y discos empresariales redundantes para bases de datos SQL y ERP.',
+      officialResponse: '¡Hola Ing. Alberto! Ya incorporamos al catálogo corporativo de Equipos de Oficina y a marca-dell.html el Servidor en Torre Dell PowerEdge T150 (Xeon E-2314 Quad-Core, 32 GB RAM DDR4 ECC, 2x 2 TB RAID 1, PERC H355 e iDRAC9 Basic) con 3 años de garantía ProSupport.'
+    },
+    {
+      refCode: 'SUG-O6100',
+      title: 'Disponibilidad de Terminales Ópticas ONT / ONU GPON Wi-Fi 6 de Doble Banda para Conexiones de Fibra Óptica FTTH y Redes GPON',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para proyectos de condominios, residenciales con infraestructura GPON y clientes de internet fibra óptica de alta velocidad de Futunet, requerimos terminales ópticas ONU/ONT GPON Wi-Fi 6 AX1800 de doble banda (2.4 GHz y 5 GHz) con 4 puertos Gigabit LAN, SC/APC y FXS VoIP.',
+      officialResponse: '¡Saludos Ing. Miguel Ángel! Incorporamos al catálogo de Redes y Telecomunicaciones y a marca-tp-link.html la Terminal Óptica ONT GPON Wi-Fi 6 AX1800 (puerto SC/APC, 4x GbE LAN, Wi-Fi 6 doble banda y FXS VoIP) compatible con las redes FTTH de Futunet.'
+    },
+    {
+      refCode: 'SUG-C4000',
+      title: 'Disponibilidad de Cámaras de Seguridad Autónomas con Panel Solar y Conectividad Móvil 4G LTE para Fincas, Obras y Almacenes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En proyectos de construcción de naves, fincas agrícolas y quintas en las afueras de Santiago donde no llega tendido eléctrico ni internet por cable, requerimos cámaras de seguridad inalámbricas con panel solar integrado, batería de litio recargable, módem 4G LTE y sensor PIR.',
+      officialResponse: '¡Hola Lic. José Manuel! Ya incorporamos al catálogo de Seguridad y a marca-hikvision.html la Cámara de Seguridad Solar 4G LTE 1080p con Panel Solar Integrado, Batería de Litio Recargable, sensor PIR inteligente, visión nocturna a color y protección IP66 con garantía oficial.'
     }
   ];
 
