@@ -51,14 +51,16 @@
     setText('quote-tax', money(data.itbis));
     setText('quote-total', money(data.total));
     const body = document.getElementById('quote-items');
-    body.innerHTML = '';
-    (Array.isArray(data.items) ? data.items : []).forEach(item => {
-      const row = document.createElement('tr');
-      [item.description || '', Number(item.qty || 0), money(item.price), money(item.tax), money(item.total)].forEach(value => {
-        const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell);
+    if (body) {
+      body.innerHTML = '';
+      (Array.isArray(data.items) ? data.items : []).forEach(item => {
+        const row = document.createElement('tr');
+        [item.description || '', Number(item.qty || 0), money(item.price), money(item.tax), money(item.total)].forEach(value => {
+          const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell);
+        });
+        body.appendChild(row);
       });
-      body.appendChild(row);
-    });
+    }
     if (loading) loading.hidden = true;
     if (documentView) documentView.hidden = false;
     const now = new Date();
@@ -66,15 +68,17 @@
     const expired = data.validUntil && data.validUntil < today;
     if (['accepted', 'rejected'].includes(data.responseStatus)) showResult(data.responseStatus);
     else if (expired) {
-      document.getElementById('quote-response-form-wrap').hidden = true;
+      const wrapEl = document.getElementById('quote-response-form-wrap');
+      if (wrapEl) wrapEl.hidden = true;
       showResult('expired');
     }
   }
 
   function showResult(status) {
-    document.getElementById('quote-response-form-wrap').hidden = true;
+    const wrapEl = document.getElementById('quote-response-form-wrap');
+    if (wrapEl) wrapEl.hidden = true;
     const result = document.getElementById('quote-response-result');
-    result.hidden = false;
+    if (result) result.hidden = false;
     if (status === 'accepted') {
       setText('quote-response-icon', '✓'); setText('quote-response-title', 'Cotización aceptada');
       setText('quote-response-message', 'Tu respuesta quedó registrada. La empresa podrá continuar con el proceso comercial.');

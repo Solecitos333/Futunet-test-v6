@@ -7277,6 +7277,72 @@ const mockDatabase = [
       "Audio bidireccional: Micrófono y altavoz de alta potencia para comunicación remota y sirena disuasoria",
       "Protección ambiental: Carcasa reforzada IP66 para intemperie extrema y 1 año de garantía oficial Futunet con NCF"
     ]
+  },
+  {
+    "id": "oficina_samsung_pantalla_55_crystal_uhd",
+    "department": "equipos",
+    "category": "Equipos de Oficina y Cómputo",
+    "brand": "Samsung",
+    "title": "Pantalla Comercial Samsung Crystal UHD 55\" 4K Serie Business BE55T para Salas de Juntas y Cartelería Digital",
+    "desc": "Pantalla profesional de 55 pulgadas Samsung Business Display (BE55T) con resolución 4K Ultra HD (3840 x 2160 píxeles), procesador Crystal 4K y tecnología HDR10+ diseñada para entornos corporativos, salas de conferencias, clínicas, recepciones y comercios en Santiago. Certificada para operación comercial continua de 16 horas diarias, 7 días a la semana (16/7), con panel antirreflejo y brillo uniforme de 250 nits para visualización perfecta en salones iluminados. Integra 3 puertos HDMI para computadoras y proyectores auxiliares, puerto USB, conexión Wi-Fi y Bluetooth, altavoces estéreo de 20W integrados, temporizador programable de encendido/apagado, y montaje estándar VESA 200x200 para soporte de pared o pedestal móvil.",
+    "price": "RD$ 34,950.00",
+    "img": "img/productos/catalogo/samsung-pantalla-55-crystal-uhd.webp",
+    "gallery": [
+      "img/productos/catalogo/samsung-pantalla-55-crystal-uhd.webp"
+    ],
+    "specs": [
+      "Tamaño y resolución: Pantalla comercial de 55 pulgadas 4K UHD (3840 x 2160) con procesador Crystal 4K",
+      "Régimen de funcionamiento: Grado profesional 16/7 continuo (16 horas/día, 7 días a la semana)",
+      "Tecnología de imagen: HDR10+, contraste Mega Contrast y panel antirreflejo para salas iluminadas",
+      "Conectividad múltiple: 3x HDMI, 1x USB, puerto RJ-45 LAN, Wi-Fi 5 y Bluetooth bidireccional",
+      "Audio y multimedia: Altavoces estéreo integrados de 20W (10W+10W) y sintonizador digital ATSC/QAM",
+      "Montaje y estructura: Compatibilidad con soporte de pared estándar VESA 200 x 200 mm",
+      "Garantía comercial Samsung de 3 años con soporte técnico oficial y comprobante fiscal NCF"
+    ]
+  },
+  {
+    "id": "redes_ubiquiti_unifi_cloud_gateway_ultra",
+    "department": "redes",
+    "category": "Redes y Telecomunicaciones",
+    "brand": "Ubiquiti",
+    "title": "Gateway de Red Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) Multi-WAN Gigabit con Pantalla LCM",
+    "desc": "Consola de red y gateway todo en uno Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) compacta y de ultra alto rendimiento. Equipada con capacidad de enrutamiento de 1 Gbps con firewall de inspección profunda de paquetes (IDS/IPS) activo, puerto WAN 2.5 GbE con soporte Multi-WAN para balanceo de carga y tolerancia a fallos (Failover), 4 puertos Gigabit Ethernet LAN (10/100/1000 Mbps) reconfigurables, pantalla LCM frontal de 0.96 pulgadas para telemetría en tiempo real y servidor UniFi Network Application integrado para gestionar switches, puntos de acceso AP UniFi 6 y clientes sin requerir Cloud Key externo ni cuotas de suscripción.",
+    "price": "RD$ 9,850.00",
+    "img": "img/productos/catalogo/ubiquiti-cloud-gateway-ultra.webp",
+    "gallery": [
+      "img/productos/catalogo/ubiquiti-cloud-gateway-ultra.webp"
+    ],
+    "specs": [
+      "Rendimiento de enrutamiento: 1 Gbps de ruteo completo con detección y prevención de intrusiones (IDS/IPS)",
+      "Conectividad Multi-WAN: 1x puerto WAN 2.5 GbE (RJ-45) y 1x WAN secundario reconfigurable con failover",
+      "Puertos de red LAN: 4 puertos Gigabit Ethernet RJ-45 (10/100/1000 Mbps) con detección automática",
+      "Gestión UniFi completa: Aloja la aplicación UniFi Network completa para gestionar más de 30 dispositivos y 300 clientes",
+      "Pantalla frontal: Pantalla de estado LCM monocromática de 0.96\" para monitoreo de tráfico, IP y alertas",
+      "Alimentación eficiente: Conector USB-C (5V DC / 3A) de bajo consumo con adaptador original incluido",
+      "Garantía oficial Ubiquiti de 1 año con soporte técnico y entrega inmediata en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_uniview_nvr_8ch_poe_4k",
+    "department": "seguridad",
+    "category": "Seguridad y Vigilancia",
+    "brand": "Uniview",
+    "title": "Grabador NVR Uniview 4K Ultra HD de 8 Canales con Switch PoE de 8 Puertos Integrados (NVR301-08S3-P8)",
+    "desc": "Grabador de video en red (NVR) profesional Uniview NVR301-08S3-P8 de 8 canales IP con switch PoE de 8 puertos independientes integrados con tecnología Plug & Play. Admite cámaras de seguridad IP de resolución hasta 8 Megapíxeles (4K Ultra HD) con un ancho de banda entrante de 64 Mbps. Incorpora compresión de video avanzada Ultra 265 / H.265 / H.264 que reduce hasta un 75% el uso de almacenamiento y ancho de banda en red. Cuenta con salida de video independiente HDMI 4K (3840x2160) y VGA simultánea, soporte para 1 disco duro SATA de hasta 6 TB, audio bidireccional, y visualización remota en tiempo real en iOS y Android a través de la aplicación oficial EZView.",
+    "price": "RD$ 13,950.00",
+    "img": "img/productos/catalogo/uniview-nvr-8ch-poe-4k.webp",
+    "gallery": [
+      "img/productos/catalogo/uniview-nvr-8ch-poe-4k.webp"
+    ],
+    "specs": [
+      "Capacidad de canales: 8 Canales IP con soporte para cámaras de hasta 8 MP (4K Ultra HD)",
+      "Switch PoE integrado: 8 puertos independientes RJ-45 10/100 Mbps con estándar IEEE 802.3af/at (Plug & Play)",
+      "Compresión de video: Ultra 265 / H.265 / H.264 para máximo ahorro de disco y transmisión fluida",
+      "Salidas de video: 1x HDMI 4K (3840 x 2160 a 30Hz) y 1x VGA (1920 x 1080) simultáneas",
+      "Almacenamiento SATA: 1 interfaz SATA interna para discos duros de hasta 6 TB (soporta WD Purple)",
+      "Acceso móvil y red: Protocolo P2P con app móvil EZView (código QR instantáneo) y software EZStation para PC",
+      "Garantía oficial Uniview de 2 años con soporte técnico e instalación en Santiago y el Cibao"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

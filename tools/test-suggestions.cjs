@@ -1153,6 +1153,61 @@ test('Mejora demandada por usuarios: Cámara de Seguridad Solar 4G LTE Autónoma
   assert.ok(catJs.includes("/\\b(camara\\s*solar|solar\\s*4g|camara\\s*4g)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar cámaras solares 4G');
 });
 
+test('Mejora demandada por usuarios: Pantalla Comercial Samsung Crystal UHD 55" 4K (SUG-S5500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S5500'") && seedCjs.includes("status: 'implemented'"), 'SUG-S5500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S5500') && sugJs.includes('Samsung Crystal UHD 55" 4K'), 'SUG-S5500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_samsung_pantalla_55_crystal_uhd'), 'backup_data.js debe contener oficina_samsung_pantalla_55_crystal_uhd');
+
+  const samsungImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'samsung-pantalla-55-crystal-uhd.webp');
+  assert.ok(fs.existsSync(samsungImg), 'La imagen de la pantalla Samsung debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'samsung'"), 'catalog.js debe incluir samsung en stem variants');
+  assert.ok(catJs.includes("/\\b(samsung|crystal|be55t|signage)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar pantallas Samsung');
+});
+
+test('Mejora demandada por usuarios: Gateway Ubiquiti UniFi Cloud Gateway Ultra (SUG-U1000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U1000'") && seedCjs.includes("status: 'implemented'"), 'SUG-U1000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U1000') && sugJs.includes('Ubiquiti UniFi Cloud Gateway Ultra'), 'SUG-U1000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_unifi_cloud_gateway_ultra'), 'backup_data.js debe contener redes_ubiquiti_unifi_cloud_gateway_ultra');
+
+  const ucgImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-cloud-gateway-ultra.webp');
+  assert.ok(fs.existsSync(ucgImg), 'La imagen del gateway Ubiquiti debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ubiquiti'"), 'catalog.js debe incluir ubiquiti en stem variants');
+  assert.ok(catJs.includes("/\\b(ubiquiti|unifi|ucg|cloud\\s*gateway)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Ubiquiti Cloud Gateway');
+});
+
+test('Mejora demandada por usuarios: Grabador NVR Uniview 4K 8 Canales PoE (SUG-N3010)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N3010'") && seedCjs.includes("status: 'implemented'"), 'SUG-N3010 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N3010') && sugJs.includes('NVR Uniview Ultra HD 4K de 8 Canales'), 'SUG-N3010 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_uniview_nvr_8ch_poe_4k'), 'backup_data.js debe contener seguridad_uniview_nvr_8ch_poe_4k');
+
+  const nvrImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'uniview-nvr-8ch-poe-4k.webp');
+  assert.ok(fs.existsSync(nvrImg), 'La imagen del grabador NVR Uniview debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'uniview'"), 'catalog.js debe incluir uniview en stem variants');
+  assert.ok(catJs.includes("/\\b(uniview|unv|nvr301)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar grabadores NVR Uniview');
+});
+
+
 
 
 

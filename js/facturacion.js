@@ -2077,7 +2077,7 @@ window.ERPBilling = (function () {
         if (costInput) costInput.value = p.cost != null && Number.isFinite(Number(p.cost)) ? Number(p.cost).toFixed(2) : '';
         if (taxInput) {
           const productTaxPercent = (p.tax !== undefined) ? Number(p.tax) : 18;
-          const qty = Number(tr.querySelector('.row-qty').value) || 1;
+          const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
           taxInput.value = (pPrice * qty * (productTaxPercent / 100)).toFixed(2);
           taxInput.dataset.override = 'false';
           taxInput.dataset.percent = String(productTaxPercent);
@@ -2139,9 +2139,9 @@ window.ERPBilling = (function () {
 
     const rawItems = [];
     rows.forEach(tr => {
-      const price = Number(tr.querySelector('.row-price').value) || 0;
-      const qty = Number(tr.querySelector('.row-qty').value) || 1;
-      const lineItbis = Number(tr.querySelector('.row-tax').value) || 0;
+      const price = Number(tr.querySelector('.row-price')?.value) || 0;
+      const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
+      const lineItbis = Number(tr.querySelector('.row-tax')?.value) || 0;
       const taxInput = tr.querySelector('.row-tax');
       const discountInput = tr.querySelector('.row-discount');
       const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
@@ -2149,7 +2149,7 @@ window.ERPBilling = (function () {
         price,
         qty,
         discount: discountPct,
-        unitCost: tr.querySelector('.row-cost') ? tr.querySelector('.row-cost').value : '',
+        unitCost: tr.querySelector('.row-cost')?.value || '',
         tax: lineItbis,
         taxMode: taxInput && taxInput.dataset.override === 'true' ? 'amount' : 'rate',
         taxRate: taxInput ? Number(taxInput.dataset.percent) || 0 : 0
@@ -2201,7 +2201,7 @@ window.ERPBilling = (function () {
       dgiiItem.className = 'autocomplete-item';
       dgiiItem.style.fontWeight = 'bold';
       dgiiItem.style.color = 'var(--primary)';
-      dgiiItem.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> 🔍 Consultar RNC "${cleanVal}" en DGII</span>`;
+      dgiiItem.innerHTML = `<span style="display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> 🔍 Consultar RNC "${escapeHTML(cleanVal)}" en DGII</span>`;
       dgiiItem.addEventListener('click', function() {
         dropdown.style.display = 'none';
         searchClientByRnc(cleanVal, 'invoice-form');
@@ -2343,9 +2343,9 @@ window.ERPBilling = (function () {
       const searchInput = tr.querySelector('.row-product-search');
       const productIdInput = tr.querySelector('.row-product-id');
       const description = searchInput ? sanitizeErpInput(searchInput.value, 250) : '';
-      const price = Number(tr.querySelector('.row-price').value);
-      const qty = Number(tr.querySelector('.row-qty').value);
-      const lineTax = Number(tr.querySelector('.row-tax').value);
+      const price = Number(tr.querySelector('.row-price')?.value) || 0;
+      const qty = Number(tr.querySelector('.row-qty')?.value) || 0;
+      const lineTax = Number(tr.querySelector('.row-tax')?.value) || 0;
       const unitCostInput = tr.querySelector('.row-cost');
       const unitCost = unitCostInput && unitCostInput.value !== '' ? Number(unitCostInput.value) : null;
       
@@ -2373,8 +2373,8 @@ window.ERPBilling = (function () {
         price: price,
         qty: qty,
         tax: lineTax,
-        taxMode: tr.querySelector('.row-tax').dataset.override === 'true' ? 'amount' : 'rate',
-        taxRate: Number(tr.querySelector('.row-tax').dataset.percent) || 0,
+        taxMode: tr.querySelector('.row-tax')?.dataset?.override === 'true' ? 'amount' : 'rate',
+        taxRate: Number(tr.querySelector('.row-tax')?.dataset?.percent) || 0,
         discount: discountPct,
         unitCost,
         total: lineSub - lineDiscount + lineTax
@@ -6953,9 +6953,10 @@ window.ERPBilling = (function () {
 
   // ─── HELPER FUNCTIONS FOR ROW TAX & ITBIS ───
   function handleRowPriceQtyChange(el) {
-    const tr = el.closest('tr');
-    const price = Number(tr.querySelector('.row-price').value) || 0;
-    const qty = Number(tr.querySelector('.row-qty').value) || 1;
+    const tr = el?.closest('tr');
+    if (!tr) return;
+    const price = Number(tr.querySelector('.row-price')?.value) || 0;
+    const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
     const taxInput = tr.querySelector('.row-tax');
     const discountInput = tr.querySelector('.row-discount');
     

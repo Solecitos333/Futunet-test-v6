@@ -209,6 +209,13 @@ function getStemVariants(word) {
   if (word === 'estabilizador' || word === 'estabilizadores') variants.push('regulador', 'voltaje', 'protector', 'ups', 'forza');
   if (word === 'regulador' || word === 'reguladores') variants.push('estabilizador', 'voltaje', 'protector', 'ups');
   if (word === 'solar' || word === 'solares') variants.push('panel', 'bateria', 'autonoma', 'tesla', 'camara', 'fotovoltaico');
+  if (word === 'samsung') variants.push('pantalla', 'crystal', 'uhd', 'signage', 'be55t', 'tv');
+  if (word === 'crystal') variants.push('samsung', 'pantalla', 'uhd', '4k');
+  if (word === 'signage') variants.push('samsung', 'pantalla', 'comercial', 'carteleria');
+  if (word === 'ubiquiti' || word === 'unifi') variants.push('gateway', 'ucg', 'cloud', 'ultra', 'ap', 'ap6', 'antena');
+  if (word === 'ucg' || word === 'ultra') variants.push('ubiquiti', 'unifi', 'gateway', 'cloud');
+  if (word === 'uniview' || word === 'unv') variants.push('nvr', 'camara', 'poe', 'ezview', 'ultra265', 'nvr301');
+  if (word === 'nvr' || word === 'nvrs') variants.push('uniview', 'grabador', 'poe', 'ip', 'dvr', 'canales', 'hikvision', 'dahua', 'nvr301');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -608,6 +615,31 @@ function scoreProductMatch(product, normalizedQuery) {
       score += 170;
     } else if (/solar.*4g|camara.*solar/i.test(title)) {
       score += 140;
+    }
+  }
+
+  // Priorizar Pantallas Comerciales Samsung Crystal UHD al buscar samsung, crystal, be55t, signage o pantalla 55 (SUG-S5500)
+  if (/\b(samsung|crystal|be55t|signage)\b/i.test(normalizedQuery) || (/\b(pantalla|pantallas)\b/i.test(normalizedQuery) && /\b(samsung|55|comercial)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'samsung') {
+      score += 170;
+    }
+  }
+
+  // Priorizar Ubiquiti UniFi Cloud Gateway Ultra al buscar ubiquiti, unifi, ucg, cloud gateway o ultra (SUG-U1000)
+  if (/\b(ubiquiti|unifi|ucg|cloud\s*gateway)\b/i.test(normalizedQuery)) {
+    if (product.brand && product.brand.toLowerCase() === 'ubiquiti') {
+      if (/ucg|cloud\s*gateway|ultra/i.test(title)) {
+        score += 220;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Grabadores NVR Uniview al buscar uniview, unv, nvr, nvr301, poe 8ch o grabador ip (SUG-N3010)
+  if (/\b(uniview|unv|nvr301)\b/i.test(normalizedQuery) || (/\b(nvr|grabador\s*ip)\b/i.test(normalizedQuery) && /\b(uniview|poe|8\s*canales)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('uniview') || product.brand.toLowerCase().includes('unv'))) {
+      score += 170;
     }
   }
 

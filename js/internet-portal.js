@@ -348,7 +348,7 @@
   // ─── PWA Y NOTIFICACIONES DE INSTALACIÓN ───
   function setupPwaInstructions() {
     var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    var isStandalone = (typeof window.matchMedia === 'function' && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone;
     
     // Si es móvil y no está en pantalla de inicio, sugerir instalación
     if (isMobile && !isStandalone) {
@@ -358,10 +358,12 @@
         var instrText = document.getElementById('pwa-instructions');
         var isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
         
-        if (isiOS) {
-          instrText.innerHTML = 'Pulsa el botón de <strong>Compartir</strong> en Safari y luego selecciona <strong>"Añadir a pantalla de inicio"</strong>.';
-        } else {
-          instrText.innerHTML = 'Pulsa los <strong>tres puntos</strong> en Chrome y selecciona <strong>"Instalar aplicación"</strong>.';
+        if (instrText) {
+          if (isiOS) {
+            instrText.innerHTML = 'Pulsa el botón de <strong>Compartir</strong> en Safari y luego selecciona <strong>"Añadir a pantalla de inicio"</strong>.';
+          } else {
+            instrText.innerHTML = 'Pulsa los <strong>tres puntos</strong> en Chrome y selecciona <strong>"Instalar aplicación"</strong>.';
+          }
         }
       }
     }

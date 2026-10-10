@@ -10,7 +10,7 @@
   var userData = null;
 
   function init(user, data) {
-    db = window.FutunetFirebase.db;
+    db = window.FutunetFirebase ? window.FutunetFirebase.db : null;
     currentUser = user;
     userData = data;
 
@@ -168,7 +168,7 @@
   // ─── Saved Carts ───
   async function loadSavedCarts() {
     var container = document.getElementById('saved-carts-list');
-    if (!container) return;
+    if (!container || !db || !currentUser) return;
 
     try {
       var snapshot = await db.collection('carts')
@@ -300,7 +300,7 @@
 
   async function loadUserOrders() {
     var tbody = document.getElementById('user-orders-list-body');
-    if (!tbody) return;
+    if (!tbody || !db || !currentUser) return;
 
     try {
       var snapshot = await db.collection('orders')

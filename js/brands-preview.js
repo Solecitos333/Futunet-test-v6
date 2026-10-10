@@ -67,7 +67,7 @@
   const brandItems = brandsSection.querySelectorAll('.brand-item');
   if (!brandItems.length) return;
 
-  const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
+  const isTouchDevice = () => (typeof window.matchMedia === 'function' ? window.matchMedia('(hover: none)').matches : ('ontouchstart' in window));
 
   let activePopup = null;
   let activeItem = null;
@@ -151,7 +151,7 @@
       
       if (!isExpanded) {
         // Expandir
-        const displayStyle = window.matchMedia('(max-width: 767px)').matches ? 'grid' : 'flex';
+        const displayStyle = (typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 767px)').matches) ? 'grid' : 'flex';
         extendedGrid.style.display = displayStyle;
         // Forzar reflow
         void extendedGrid.offsetWidth;

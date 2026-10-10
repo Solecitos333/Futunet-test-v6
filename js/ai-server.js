@@ -459,8 +459,11 @@
         else thinkingRow.remove();
       } else {
         console.error('[AI Admin] Error:', err);
-        thinkingRow.querySelector('.ai-msg-bubble').innerHTML =
-          '<span style="color:#ef4444;">⚠️ Error: ' + escapeHtml(err.message) + '</span>';
+        const bubble = thinkingRow?.querySelector('.ai-msg-bubble');
+        if (bubble) {
+          bubble.innerHTML =
+            '<span style="color:#ef4444;">⚠️ Error: ' + escapeHtml(err.message) + '</span>';
+        }
       }
       saveChatHistory();
     } finally {

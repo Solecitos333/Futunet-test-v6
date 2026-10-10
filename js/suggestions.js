@@ -1124,6 +1124,30 @@
       status: 'implemented',
       description: 'En proyectos de construcción de naves, fincas agrícolas y quintas en las afueras de Santiago donde no llega tendido eléctrico ni internet por cable, requerimos cámaras de seguridad inalámbricas con panel solar integrado, batería de litio recargable, módem 4G LTE y sensor PIR.',
       officialResponse: '¡Hola Lic. José Manuel! Ya incorporamos al catálogo de Seguridad y a marca-hikvision.html la Cámara de Seguridad Solar 4G LTE 1080p con Panel Solar Integrado, Batería de Litio Recargable, sensor PIR inteligente, visión nocturna a color y protección IP66 con garantía oficial.'
+    },
+    {
+      refCode: 'SUG-S5500',
+      title: 'Disponibilidad de Pantallas Comerciales Samsung Crystal UHD 55" 4K para Salas de Juntas, Presentaciones y Cartelería Digital',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En salas de juntas corporativas, centros médicos, firmas de abogados y naves en zonas francas de Santiago requerimos pantallas comerciales Samsung de 55 pulgadas con resolución 4K UHD, procesador Crystal 4K, operación empresarial 16/7 continua, panel antirreflejo, audio estéreo integrado y puertos HDMI para presentaciones y cartelería digital con garantía y comprobante fiscal NCF.',
+      officialResponse: '¡Hola Lic. Alejandro! Tu propuesta ha sido implementada exitosamente. Incorporamos al catálogo de Equipos de Oficina y a marca-samsung.html la Pantalla Comercial Samsung Crystal UHD 55" 4K Serie Business (BE55T) con procesador Crystal 4K, HDR10+, operación comercial continua 16/7, 3 puertos HDMI, Wi-Fi integrado, sintonizador digital y montaje estándar VESA, con 3 años de garantía oficial y comprobante fiscal NCF.'
+    },
+    {
+      refCode: 'SUG-U1000',
+      title: 'Disponibilidad de Gateways de Red Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) Multi-WAN Gigabit para Gestión Centralizada UniFi',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para proyectos de cableado estructurado, residencias de alto nivel y oficinas en Santiago requerimos el gateway de red Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra) con capacidad de enrutamiento de 1 Gbps con IDS/IPS activo, puerto WAN 2.5 GbE con balanceo y failover Multi-WAN, 4 puertos Gigabit LAN, pantalla LCM frontal y consola UniFi Network integrada sin licencias ni costes mensuales.',
+      officialResponse: '¡Saludos Ing. Franklin! Nos complace informarte que tu sugerencia ha sido implementada. Ya se encuentra disponible en el catálogo de Redes y Telecomunicaciones y en marca-ubiquiti.html el Gateway de Red Ubiquiti UniFi Cloud Gateway Ultra (UCG-Ultra), con puerto WAN 2.5 GbE, Multi-WAN con balanceo/failover, 4 puertos Gigabit LAN, inspección profunda IDS/IPS de 1 Gbps, pantalla LCM de 0.96" y gestión en la nube UniFi Network sin cuotas de suscripción.'
+    },
+    {
+      refCode: 'SUG-N3010',
+      title: 'Disponibilidad de Grabadores NVR Uniview Ultra HD 4K de 8 Canales con 8 Puertos PoE Integrados para Videovigilancia IP',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En instalaciones de videovigilancia IP para naves industriales, plazas comerciales y residenciales en Santiago requerimos grabadores NVR Uniview NVR301-08S3-P8 de 8 canales con switch PoE de 8 puertos independientes integrados Plug & Play, soporte para cámaras IP hasta 8 MP (4K), salida HDMI 4K, compresión Ultra 265 para optimización de ancho de banda y almacenamiento, y monitoreo móvil en la app EZView.',
+      officialResponse: '¡Hola Ing. Wilfredo! Tu sugerencia ha sido atendida e implementada. Hemos integrado al catálogo de Seguridad Electrónica y a marca-uniview.html el Grabador NVR Uniview 4K Ultra HD de 8 Canales con Switch PoE de 8 Puertos Integrados (NVR301-08S3-P8), compatible con cámaras IP de hasta 8 MP (4K), compresión Ultra 265, salida HDMI 4K, bahía SATA para disco duro hasta 6 TB y visualización en tiempo real desde la app EZView con garantía oficial.'
     }
   ];
 

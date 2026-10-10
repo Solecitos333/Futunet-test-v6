@@ -134,6 +134,8 @@ function initHomeHeroLogoSync() {
     }
   };
 
+  if (!('IntersectionObserver' in window)) return;
+
   const observer = new IntersectionObserver(
     (entries) => {
       const [entry] = entries;
@@ -484,6 +486,11 @@ function initScrollReveal() {
   initTrustBarDetails();
   initHomeHeroLogoSync();
   const revealEls = document.querySelectorAll('.reveal');
+  if (!revealEls.length) return;
+  if (!('IntersectionObserver' in window)) {
+    revealEls.forEach((el) => el.classList.add('in'));
+    return;
+  }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -564,6 +571,12 @@ function initTypingAnimation() {
   let delay = 2000;
   let isIntersecting = true;
   let frameId = null;
+
+  if (!('IntersectionObserver' in window)) {
+    lastTime = performance.now();
+    frameId = requestAnimationFrame(tick);
+    return;
+  }
 
   const observer = new IntersectionObserver((entries) => {
     const entry = entries[0];

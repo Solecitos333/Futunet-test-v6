@@ -122,7 +122,15 @@ const queries = [
   'onu',
   'gpon',
   'camara solar',
-  'estabilizador'
+  'estabilizador',
+  'samsung',
+  'crystal uhd',
+  'pantalla comercial',
+  'ubiquiti',
+  'ucg',
+  'cloud gateway',
+  'uniview',
+  'nvr 8 canales'
 ];
 
 

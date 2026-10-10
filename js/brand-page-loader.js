@@ -208,16 +208,22 @@ function enrichBrandHero(brandName) {
   heroSection.appendChild(innerWrapper);
 
   // Media query JS para ocultar la imagen en móvil
-  const mq = window.matchMedia('(max-width: 768px)');
-  const applyMobile = (e) => {
-    if (e.matches) {
-      imgWrapper.style.display = 'none';
-    } else {
-      imgWrapper.style.display = 'flex';
+  if (typeof window.matchMedia === 'function') {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const applyMobile = (e) => {
+      if (e.matches) {
+        imgWrapper.style.display = 'none';
+      } else {
+        imgWrapper.style.display = 'flex';
+      }
+    };
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', applyMobile);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(applyMobile);
     }
-  };
-  mq.addEventListener('change', applyMobile);
-  applyMobile(mq);
+    applyMobile(mq);
+  }
 }
 
 function escapeHTML(str) {

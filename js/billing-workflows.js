@@ -50,17 +50,19 @@ window.ERPBillingWorkflows = (function () {
   function openDialog(title, content, className = '') {
     const overlay = document.createElement('div');
     overlay.className = 'erp-action-dialog is-open';
-    overlay.innerHTML = `<section class="erp-action-dialog-card commercial-document-dialog ${className}" role="dialog" aria-modal="true">
+    overlay.innerHTML = `<section class="erp-action-dialog-card commercial-document-dialog ${escapeHTML(className)}" role="dialog" aria-modal="true">
       <div class="commercial-card-header" style="padding:0 0 16px;margin-bottom:16px;">
         <h2 style="margin:0;font-size:1.12rem;"></h2>
         <button type="button" class="table-btn table-btn-secondary" data-close-dialog aria-label="Cerrar">×</button>
       </div>
       <div data-dialog-content></div>
     </section>`;
-    overlay.querySelector('h2').textContent = title;
-    overlay.querySelector('[data-dialog-content]').append(content);
+    const h2El = overlay.querySelector('h2');
+    if (h2El) h2El.textContent = title;
+    const dialogContent = overlay.querySelector('[data-dialog-content]');
+    if (dialogContent) dialogContent.append(content);
     const close = () => overlay.remove();
-    overlay.querySelector('[data-close-dialog]').addEventListener('click', close);
+    overlay.querySelector('[data-close-dialog]')?.addEventListener('click', close);
     overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
     document.body.appendChild(overlay);
     setTimeout(() => overlay.querySelector('input,select,button')?.focus(), 0);
@@ -533,19 +535,31 @@ window.ERPBillingWorkflows = (function () {
       <div class="erp-form-actions is-wide"><button type="submit" class="admin-btn admin-btn-primary">Programar recordatorio</button></div>
     </form>`);
     const dialog = openDialog('Programar recordatorio de cobro', content);
-    content.querySelector('form').addEventListener('submit', async event => {
+    content.querySelector('form')?.addEventListener('submit', async event => {
       event.preventDefault();
-      const invoice = invoiceById(content.querySelector('#commercial-reminder-invoice').value);
-      if (!invoice) return;
-      await collection('collection_reminders').add({
-        companyCode, invoiceId: invoice.id, invoiceNumber: invoice.invoiceNumber || '', clientId: invoice.clientId || '', clientName: invoice.clientName || '',
-        scheduledFor: content.querySelector('#commercial-reminder-date').value, channel: content.querySelector('#commercial-reminder-channel').value,
-        note: content.querySelector('#commercial-reminder-note').value.trim(), status: 'scheduled', createdBy: user.uid, createdAt: serverTime(), updatedAt: serverTime()
-      });
-      await recordEvent(invoice.id, 'collection_reminder_scheduled', 'Recordatorio de cobro programado.');
-      dialog.close();
-      await loadReminders();
-      notify('Recordatorio programado.', 'success');
+      try {
+        const invId = content.querySelector('#commercial-reminder-invoice')?.value;
+        const invoice = invId ? invoiceById(invId) : null;
+        if (!invoice) {
+          notify('Selecciona una factura válida.', 'warning');
+          return;
+        }
+        const scheduledFor = content.querySelector('#commercial-reminder-date')?.value || localDate();
+        const channel = content.querySelector('#commercial-reminder-channel')?.value || 'whatsapp';
+        const note = (content.querySelector('#commercial-reminder-note')?.value || '').trim();
+        await collection('collection_reminders').add({
+          companyCode, invoiceId: invoice.id, invoiceNumber: invoice.invoiceNumber || '', clientId: invoice.clientId || '', clientName: invoice.clientName || '',
+          scheduledFor, channel,
+          note, status: 'scheduled', createdBy: user.uid, createdAt: serverTime(), updatedAt: serverTime()
+        });
+        await recordEvent(invoice.id, 'collection_reminder_scheduled', 'Recordatorio de cobro programado.');
+        dialog.close();
+        await loadReminders();
+        notify('Recordatorio programado.', 'success');
+      } catch (err) {
+        console.error('Error scheduling reminder:', err);
+        notify('No se pudo programar el recordatorio: ' + (err.message || 'Error de red'), 'error');
+      }
     });
   }
 
@@ -599,10 +613,17 @@ window.ERPBillingWorkflows = (function () {
     const options = clients.sort((a, b) => String(a.name).localeCompare(String(b.name))).map(client => `<option value="${escapeAttr(client.id)}">${escapeHTML(client.name)} · ${escapeHTML(client.rnc || 'Sin identificación')}</option>`).join('');
     const content = formNode(`<form class="commercial-dialog-grid"><div class="form-group is-wide"><label for="statement-client">Cliente</label><select id="statement-client" class="form-input" required>${options}</select></div><div class="erp-form-actions is-wide"><button type="submit" class="admin-btn admin-btn-primary">Descargar estado de cuenta PDF</button></div></form>`);
     const dialog = openDialog('Generar estado de cuenta', content);
-    content.querySelector('form').addEventListener('submit', async event => {
+    content.querySelector('form')?.addEventListener('submit', async event => {
       event.preventDefault();
-      await downloadStatement(content.querySelector('#statement-client').value);
-      dialog.close();
+      try {
+        const clientSelect = content.querySelector('#statement-client');
+        if (!clientSelect?.value) return;
+        await downloadStatement(clientSelect.value);
+        dialog.close();
+      } catch (err) {
+        console.error('Error generating statement:', err);
+        notify('No se pudo generar el estado de cuenta: ' + (err.message || 'Error de procesamiento'), 'error');
+      }
     });
   }
 
@@ -640,18 +661,31 @@ window.ERPBillingWorkflows = (function () {
       <div class="erp-form-actions is-wide"><button type="submit" class="admin-btn admin-btn-primary">Guardar plantilla</button></div>
     </form>`);
     const dialog = openDialog('Guardar plantilla comercial', content);
-    content.querySelector('form').addEventListener('submit', async event => {
+    content.querySelector('form')?.addEventListener('submit', async event => {
       event.preventDefault();
-      const frequency = content.querySelector('#template-frequency').value;
-      await collection('billing_templates').add({
-        companyCode, name: content.querySelector('#template-name').value.trim(), frequency,
-        nextRunDate: frequency === 'none' ? '' : content.querySelector('#template-next-date').value,
-        active: content.querySelector('#template-active').checked, snapshot, createdBy: user.uid, createdByEmail: user.email || '', createdAt: serverTime(), updatedAt: serverTime()
-      });
-      await recordEvent('', 'template_created', `Plantilla ${content.querySelector('#template-name').value.trim()} creada.`);
-      dialog.close();
-      await loadTemplates();
-      notify('Plantilla guardada.', 'success');
+      try {
+        const nameInput = content.querySelector('#template-name');
+        const tmplName = (nameInput?.value || '').trim();
+        if (!tmplName) {
+          notify('Introduce un nombre para la plantilla.', 'warning');
+          return;
+        }
+        const frequency = content.querySelector('#template-frequency')?.value || 'none';
+        const nextRunDate = frequency === 'none' ? '' : (content.querySelector('#template-next-date')?.value || '');
+        const active = !!content.querySelector('#template-active')?.checked;
+        await collection('billing_templates').add({
+          companyCode, name: tmplName, frequency,
+          nextRunDate,
+          active, snapshot, createdBy: user.uid, createdByEmail: user.email || '', createdAt: serverTime(), updatedAt: serverTime()
+        });
+        await recordEvent('', 'template_created', `Plantilla ${tmplName} creada.`);
+        dialog.close();
+        await loadTemplates();
+        notify('Plantilla guardada.', 'success');
+      } catch (err) {
+        console.error('Error saving template:', err);
+        notify('No se pudo guardar la plantilla: ' + (err.message || 'Error de red'), 'error');
+      }
     });
   }
 
