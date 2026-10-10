@@ -1960,8 +1960,10 @@ window.openCompareModal = function() {
   return '<td><a href="https://wa.me/18297411041?text=' + msg + '" target="_blank" rel="noopener noreferrer" class="cmp-solicitar-btn">Solicitar</a></td>';
  }).join('') + '</tr>';
 
- document.getElementById('compare-thead').innerHTML = thead;
- document.getElementById('compare-tbody').innerHTML = tbody;
+ var theadEl = document.getElementById('compare-thead');
+ if (theadEl) theadEl.innerHTML = thead;
+ var tbodyEl = document.getElementById('compare-tbody');
+ if (tbodyEl) tbodyEl.innerHTML = tbody;
  showInternetModal(document.getElementById('compare-modal'));
 };
 
@@ -2004,19 +2006,29 @@ window.quizAnswer = function(step, key, value) {
  document.querySelectorAll('.quiz-step').forEach(function(s) { s.classList.remove('active'); });
  if (next <= 3) {
   quizCurrentStep = next;
-  document.getElementById('quiz-step-' + next).classList.add('active');
-  document.getElementById('quiz-step-label').textContent = 'Pregunta ' + next + ' de 3';
-  document.getElementById('quiz-progress-fill').style.width = ((next - 1) / 3 * 100) + '%';
+  var stepEl = document.getElementById('quiz-step-' + next);
+  if (stepEl) stepEl.classList.add('active');
+  var labelEl = document.getElementById('quiz-step-label');
+  if (labelEl) labelEl.textContent = 'Pregunta ' + next + ' de 3';
+  var fillEl = document.getElementById('quiz-progress-fill');
+  if (fillEl) fillEl.style.width = ((next - 1) / 3 * 100) + '%';
  } else {
   // Mostrar resultado
-  var plan = recommendPlan(quizAnswers);
-  document.getElementById('quiz-result-plan-name').textContent = plan.name;
-  document.getElementById('quiz-result-reason').textContent = plan.reason;
-  document.getElementById('quiz-result-price').textContent = 'RD$ ' + plan.price.toLocaleString('es-DO') + ' / mes';
-  document.getElementById('quiz-result-cta').href = 'https://wa.me/18297411041?text=' + encodeURIComponent('Hola Futunet, el recomendador me sugirió el ' + plan.name + '. Me gustaría contratarlo.');
-  document.getElementById('quiz-result').classList.add('active');
-  document.getElementById('quiz-step-label').textContent = '¡Tu plan ideal!';
-  document.getElementById('quiz-progress-fill').style.width = '100%';
+  var plan = recommendPlan(quizAnswers) || { name: 'Plan Fibra', speed: 100, price: 1900, reason: 'Ideal para tu perfil de uso.' };
+  var pName = document.getElementById('quiz-result-plan-name');
+  if (pName) pName.textContent = plan.name;
+  var pReason = document.getElementById('quiz-result-reason');
+  if (pReason) pReason.textContent = plan.reason;
+  var pPrice = document.getElementById('quiz-result-price');
+  if (pPrice) pPrice.textContent = 'RD$ ' + (plan.price || 0).toLocaleString('es-DO') + ' / mes';
+  var pCta = document.getElementById('quiz-result-cta');
+  if (pCta) pCta.href = 'https://wa.me/18297411041?text=' + encodeURIComponent('Hola Futunet, el recomendador me sugirió el ' + plan.name + '. Me gustaría contratarlo.');
+  var pBox = document.getElementById('quiz-result');
+  if (pBox) pBox.classList.add('active');
+  var labelEl2 = document.getElementById('quiz-step-label');
+  if (labelEl2) labelEl2.textContent = '¡Tu plan ideal!';
+  var fillEl2 = document.getElementById('quiz-progress-fill');
+  if (fillEl2) fillEl2.style.width = '100%';
  }
 };
 
@@ -2024,9 +2036,12 @@ window.resetQuiz = function() {
  quizAnswers = {};
  quizCurrentStep = 1;
  document.querySelectorAll('.quiz-step').forEach(function(s) { s.classList.remove('active'); });
- document.getElementById('quiz-step-1').classList.add('active');
- document.getElementById('quiz-step-label').textContent = 'Pregunta 1 de 3';
- document.getElementById('quiz-progress-fill').style.width = '33%';
+ var step1 = document.getElementById('quiz-step-1');
+ if (step1) step1.classList.add('active');
+ var labelEl = document.getElementById('quiz-step-label');
+ if (labelEl) labelEl.textContent = 'Pregunta 1 de 3';
+ var fillEl = document.getElementById('quiz-progress-fill');
+ if (fillEl) fillEl.style.width = '33%';
 };
 
 // [2] VERIFICADOR DE COBERTURA 

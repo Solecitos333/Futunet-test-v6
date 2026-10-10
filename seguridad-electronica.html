@@ -1372,23 +1372,23 @@
     }
 
     if (currentStep === 1) {
-     prevBtn.style.display = 'none';
-     nextBtn.style.display = 'inline-block';
-     waBtn.style.display = 'none';
+     if (prevBtn) prevBtn.style.display = 'none';
+     if (nextBtn) nextBtn.style.display = 'inline-block';
+     if (waBtn) waBtn.style.display = 'none';
     } else if (currentStep === totalSteps) {
-     prevBtn.style.display = 'inline-block';
-     nextBtn.style.display = 'none';
-     waBtn.style.display = 'inline-flex';
+     if (prevBtn) prevBtn.style.display = 'inline-block';
+     if (nextBtn) nextBtn.style.display = 'none';
+     if (waBtn) waBtn.style.display = 'inline-flex';
      calculateSummary();
     } else {
-     prevBtn.style.display = 'inline-block';
-     nextBtn.style.display = 'inline-block';
-     waBtn.style.display = 'none';
+     if (prevBtn) prevBtn.style.display = 'inline-block';
+     if (nextBtn) nextBtn.style.display = 'inline-block';
+     if (waBtn) waBtn.style.display = 'none';
     }
    }
 
    function updateQualitySimulator() {
-    const qualityType = document.querySelector('input[name="est-quality"]:checked').value;
+    const qualityType = document.querySelector('input[name="est-quality"]:checked')?.value || 'standard';
     const simImg = document.getElementById('simulator-image');
     const osdSpecs = document.getElementById('osd-specs');
     const simDesc = document.getElementById('simulator-desc');
@@ -1435,28 +1435,33 @@
    });
 
    function calculateSummary() {
-    const numCameras = document.querySelector('input[name="est-cameras"]:checked').value;
-    const envType = document.querySelector('input[name="est-env"]:checked').value;
-    const qualityType = document.querySelector('input[name="est-quality"]:checked').value;
+    const numCameras = document.querySelector('input[name="est-cameras"]:checked')?.value || '4';
+    const envType = document.querySelector('input[name="est-env"]:checked')?.value || 'indoor';
+    const qualityType = document.querySelector('input[name="est-quality"]:checked')?.value || 'standard';
 
-    document.getElementById('sum-cameras').textContent = numCameras;
+    const sumCameras = document.getElementById('sum-cameras');
+    if (sumCameras) sumCameras.textContent = numCameras;
 
     let envText = 'Interior';
     if (envType === 'outdoor') envText = 'Exterior (IP67 Clima)';
     else if (envType === 'mixed') envText = 'Mixto (Interior/Exterior)';
-    document.getElementById('sum-env').textContent = envText;
+    const sumEnv = document.getElementById('sum-env');
+    if (sumEnv) sumEnv.textContent = envText;
 
     let qualityText = '1080p Estándar';
     if (qualityType === 'colorvu') qualityText = '2K ColorVu (Color 24/7)';
     else if (qualityType === '4k') qualityText = 'Ultra HD 4K (Máximo Detalle)';
-    document.getElementById('sum-quality').textContent = qualityText;
+    const sumQual = document.getElementById('sum-quality');
+    if (sumQual) sumQual.textContent = qualityText;
 
-    const baseCam = basePrices.cameras[numCameras];
-    const multQual = basePrices.quality[qualityType];
-    const extraEnv = basePrices.env[envType] * (numCameras / 2);
+    const baseCam = (basePrices.cameras && basePrices.cameras[numCameras]) || 0;
+    const multQual = (basePrices.quality && basePrices.quality[qualityType]) || 1;
+    const envRate = (basePrices.env && basePrices.env[envType]) || 0;
+    const extraEnv = envRate * (Number(numCameras) / 2);
 
     const finalPrice = Math.round((baseCam * multQual) + extraEnv);
-    document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+    const sumPrice = document.getElementById('sum-price');
+    if (sumPrice) sumPrice.textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
 
     const waText = `Hola Futunet, usé el Cotizador Rápido de CCTV y me interesa este sistema:
 - Cantidad: ${numCameras} cámaras
@@ -1465,17 +1470,17 @@
 - Estimación aproximada: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos + Instalación)
 Me gustaría recibir una asesoría y confirmar mi presupuesto.`;
 
-    waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+    if (waBtn) waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
    }
 
-   nextBtn.addEventListener('click', () =>{
+   nextBtn?.addEventListener('click', () =>{
     if (currentStep < totalSteps) {
      currentStep++;
      updateStep();
     }
    });
 
-   prevBtn.addEventListener('click', () =>{
+   prevBtn?.addEventListener('click', () =>{
     if (currentStep>1) {
      currentStep--;
      updateStep();
@@ -1500,15 +1505,18 @@ Me gustaría recibir una asesoría y confirmar mi presupuesto.`;
    faqItems.forEach(item =>{
     const trigger = item.querySelector('.faq-trigger');
     const answer = item.querySelector('.faq-answer');
+    if (!trigger || !answer) return;
 
     trigger.addEventListener('click', () =>{
      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
      faqItems.forEach(i =>{
-      i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+      i.querySelector('.faq-trigger')?.setAttribute('aria-expanded', 'false');
       const ans = i.querySelector('.faq-answer');
-      ans.style.maxHeight = null;
-      ans.setAttribute('aria-hidden', 'true');
+      if (ans) {
+       ans.style.maxHeight = null;
+       ans.setAttribute('aria-hidden', 'true');
+      }
       i.classList.remove('open');
      });
 

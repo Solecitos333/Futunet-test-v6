@@ -1382,7 +1382,7 @@
 
    // Lógica de simulación OSD HUD
    function updateEnergySimulator() {
-    const simMode = document.querySelector('input[name="sim-mode"]:checked').value;
+    const simMode = document.querySelector('input[name="sim-mode"]:checked')?.value || 'normal';
     const simImg = document.getElementById('simulator-image');
     const osdModeLabel = document.getElementById('osd-mode-label');
     const osdSpecs = document.getElementById('osd-specs');
@@ -1435,36 +1435,40 @@
 
    // Cálculo del presupuesto definitivo
    function calculateSummary() {
-    const solarVal = document.querySelector('input[name="est-solar"]:checked').value;
-    const backupVal = document.querySelector('input[name="est-backup"]:checked').value;
-    const climaVal = document.querySelector('input[name="est-clima"]:checked').value;
+    const solarVal = document.querySelector('input[name="est-solar"]:checked')?.value || 'no';
+    const backupVal = document.querySelector('input[name="est-backup"]:checked')?.value || 'no';
+    const climaVal = document.querySelector('input[name="est-clima"]:checked')?.value || 'no';
 
     // Mapear Textos
     let solarText = 'Sin Paneles Solares';
     if (solarVal === '2kw') solarText = 'Sistema Solar 2 kW (Aprox. 4 paneles)';
     else if (solarVal === '4kw') solarText = 'Sistema Solar 4 kW (Aprox. 8 paneles)';
     else if (solarVal === '8kw') solarText = 'Sistema Solar 8 kW (Aprox. 16 paneles)';
-    document.getElementById('sum-solar').textContent = solarText;
+    const sumSolar = document.getElementById('sum-solar');
+    if (sumSolar) sumSolar.textContent = solarText;
 
     let backupText = 'Sin Respaldo Eléctrico';
     if (backupVal === 'basico') backupText = 'Inversor 1.5 kW + 2 Baterías Gel (AGM)';
     else if (backupVal === 'litio') backupText = 'Inversor Híbrido 3 kW + Batería Litio 4.8 kWh';
     else if (backupVal === 'litio_pro') backupText = 'Inversor Híbrido 5 kW + 2 Baterías Litio (9.6 kWh)';
-    document.getElementById('sum-backup').textContent = backupText;
+    const sumBackup = document.getElementById('sum-backup');
+    if (sumBackup) sumBackup.textContent = backupText;
 
     let climaText = 'Sin Aires Inverter';
     if (climaVal === '1unit') climaText = '1 Split Inverter 12,000 BTU';
     else if (climaVal === '2units') climaText = '2 Splits Inverter 12,000 BTU';
     else if (climaVal === 'comercial') climaText = 'Aire Split Comercial / Central Alta Capacidad';
-    document.getElementById('sum-clima').textContent = climaText;
+    const sumClima = document.getElementById('sum-clima');
+    if (sumClima) sumClima.textContent = climaText;
 
     // Calcular sumas
-    const solarPrice = pricing.solar[solarVal];
-    const backupPrice = pricing.backup[backupVal];
-    const climaPrice = pricing.clima[climaVal];
+    const solarPrice = (pricing.solar && pricing.solar[solarVal]) || 0;
+    const backupPrice = (pricing.backup && pricing.backup[backupVal]) || 0;
+    const climaPrice = (pricing.clima && pricing.clima[climaVal]) || 0;
 
     const finalPrice = solarPrice + backupPrice + climaPrice;
-    document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+    const sumPrice = document.getElementById('sum-price');
+    if (sumPrice) sumPrice.textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
 
     // Construir mensaje de WhatsApp
     const waText = `Hola Futunet, utilicé la Calculadora de Energía y Clima y deseo cotizar:
@@ -1474,18 +1478,18 @@
 - Presupuesto estimado: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos e instalación básica)
 Me interesa programar una visita para realizar el levantamiento oficial.`;
 
-    waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+    if (waBtn) waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
    }
 
    // Control de clicks de botones de wizard
-   nextBtn.addEventListener('click', () =>{
+   nextBtn?.addEventListener('click', () =>{
     if (currentStep < totalSteps) {
      currentStep++;
      updateStep();
     }
    });
 
-   prevBtn.addEventListener('click', () =>{
+   prevBtn?.addEventListener('click', () =>{
     if (currentStep>1) {
      currentStep--;
      updateStep();
@@ -1511,16 +1515,19 @@ Me interesa programar una visita para realizar el levantamiento oficial.`;
    faqItems.forEach(item =>{
     const trigger = item.querySelector('.faq-trigger');
     const answer = item.querySelector('.faq-answer');
+    if (!trigger || !answer) return;
 
     trigger.addEventListener('click', () =>{
      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
      // Cerrar todos los demás acordeones
      faqItems.forEach(i =>{
-      i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+      i.querySelector('.faq-trigger')?.setAttribute('aria-expanded', 'false');
       const ans = i.querySelector('.faq-answer');
-      ans.style.maxHeight = null;
-      ans.setAttribute('aria-hidden', 'true');
+      if (ans) {
+       ans.style.maxHeight = null;
+       ans.setAttribute('aria-hidden', 'true');
+      }
       i.classList.remove('open');
      });
 

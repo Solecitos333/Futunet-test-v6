@@ -1775,10 +1775,10 @@
       }
 
       // 4. Sanitización y límites de entrada
-      var name = sanitizePosInput(document.getElementById('pos-name').value).slice(0, 120);
-      var phone = sanitizePosInput(document.getElementById('pos-phone').value).slice(0, 50);
-      var biz = sanitizePosInput(document.getElementById('pos-biz-select').value).slice(0, 100);
-      var msg = sanitizePosInput(document.getElementById('pos-msg').value).slice(0, 1000);
+      var name = sanitizePosInput(document.getElementById('pos-name')?.value).slice(0, 120);
+      var phone = sanitizePosInput(document.getElementById('pos-phone')?.value).slice(0, 50);
+      var biz = sanitizePosInput(document.getElementById('pos-biz-select')?.value).slice(0, 100);
+      var msg = sanitizePosInput(document.getElementById('pos-msg')?.value).slice(0, 1000);
 
       sessionStorage.setItem(lastPosKey, String(Date.now()));
 

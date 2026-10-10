@@ -1416,23 +1416,23 @@
     }
 
     if (currentStep === 1) {
-     prevBtn.style.display = 'none';
-     nextBtn.style.display = 'inline-block';
-     waBtn.style.display = 'none';
+     if (prevBtn) prevBtn.style.display = 'none';
+     if (nextBtn) nextBtn.style.display = 'inline-block';
+     if (waBtn) waBtn.style.display = 'none';
     } else if (currentStep === totalSteps) {
-     prevBtn.style.display = 'inline-block';
-     nextBtn.style.display = 'none';
-     waBtn.style.display = 'inline-flex';
+     if (prevBtn) prevBtn.style.display = 'inline-block';
+     if (nextBtn) nextBtn.style.display = 'none';
+     if (waBtn) waBtn.style.display = 'inline-flex';
      calculateSummary();
     } else {
-     prevBtn.style.display = 'inline-block';
-     nextBtn.style.display = 'inline-block';
-     waBtn.style.display = 'none';
+     if (prevBtn) prevBtn.style.display = 'inline-block';
+     if (nextBtn) nextBtn.style.display = 'inline-block';
+     if (waBtn) waBtn.style.display = 'none';
     }
    }
 
    function updateNetworkSimulator() {
-    const wifiType = document.querySelector('input[name="est-net-wifi"]:checked').value;
+    const wifiType = document.querySelector('input[name="est-net-wifi"]:checked')?.value || 'basica';
     const simImg = document.getElementById('simulator-image');
     const osdSpecs = document.getElementById('osd-specs');
     const simDesc = document.getElementById('simulator-desc');
@@ -1476,43 +1476,48 @@
    });
 
    function calculateSummary() {
-    const envVal = document.querySelector('input[name="est-net-env"]:checked').value;
-    const dropsVal = document.querySelector('input[name="est-net-drops"]:checked').value;
-    const rackVal = document.querySelector('input[name="est-net-rack"]:checked').value;
-    const wifiVal = document.querySelector('input[name="est-net-wifi"]:checked').value;
+    const envVal = document.querySelector('input[name="est-net-env"]:checked')?.value || 'hogar';
+    const dropsVal = document.querySelector('input[name="est-net-drops"]:checked')?.value || '10';
+    const rackVal = document.querySelector('input[name="est-net-rack"]:checked')?.value || 'desk';
+    const wifiVal = document.querySelector('input[name="est-net-wifi"]:checked')?.value || 'ninguno';
 
     // Mapear textos
     let envText = 'Hogar / Pyme';
     if (envVal === 'oficina_mediana') envText = 'Oficina Mediana';
     else if (envVal === 'nave_comercio') envText = 'Nave / Fábrica';
     else if (envVal === 'edificio_corp') envText = 'Corporativo / Edificio';
-    document.getElementById('sum-net-env').textContent = envText;
+    const sumEnv = document.getElementById('sum-net-env');
+    if (sumEnv) sumEnv.textContent = envText;
 
     let dropsText = 'Hasta 10 Puntos';
     if (dropsVal === '30') dropsText = '10 a 30 Puntos';
     else if (dropsVal === '70') dropsText = '30 a 70 Puntos';
     else if (dropsVal === '150') dropsText = 'Más de 70 Puntos';
-    document.getElementById('sum-net-drops').textContent = dropsText;
+    const sumDrops = document.getElementById('sum-net-drops');
+    if (sumDrops) sumDrops.textContent = dropsText;
 
     let rackText = 'Switch de Escritorio';
     if (rackVal === 'mural') rackText = 'Gabinete Mural (6U-12U)';
     else if (rackVal === 'piso') rackText = 'Rack de Piso Autoportante';
-    document.getElementById('sum-net-rack').textContent = rackText;
+    const sumRack = document.getElementById('sum-net-rack');
+    if (sumRack) sumRack.textContent = rackText;
 
     let wifiText = 'Sin WiFi Adicional';
     if (wifiVal === 'basica') wifiText = 'Cobertura Básica (1 AP)';
     else if (wifiVal === 'total') wifiText = 'Red Mesh Total (2-4 APs)';
     else if (wifiVal === 'alta') wifiText = 'Alta Densidad (5+ APs)';
-    document.getElementById('sum-net-wifi').textContent = wifiText;
+    const sumWifi = document.getElementById('sum-net-wifi');
+    if (sumWifi) sumWifi.textContent = wifiText;
 
     // Calcular Precio
-    const basePrice = pricing.dropsBase[dropsVal];
-    const multiplier = pricing.envMultiplier[envVal];
-    const rackAddon = pricing.rackAddon[rackVal];
-    const wifiAddon = pricing.wifiAddon[wifiVal];
+    const basePrice = (pricing.dropsBase && pricing.dropsBase[dropsVal]) || 0;
+    const multiplier = (pricing.envMultiplier && pricing.envMultiplier[envVal]) || 1;
+    const rackAddon = (pricing.rackAddon && pricing.rackAddon[rackVal]) || 0;
+    const wifiAddon = (pricing.wifiAddon && pricing.wifiAddon[wifiVal]) || 0;
 
     const finalPrice = Math.round((basePrice * multiplier) + rackAddon + wifiAddon);
-    document.getElementById('sum-price').textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
+    const sumPrice = document.getElementById('sum-price');
+    if (sumPrice) sumPrice.textContent = 'RD$ ' + finalPrice.toLocaleString('es-DO') + '*';
 
     const waText = `Hola Futunet, usé el Cotizador Rápido de Redes y me interesa este sistema:
 - Entorno: ${envText}
@@ -1522,17 +1527,17 @@
 - Estimación aproximada: RD$ ${finalPrice.toLocaleString('es-DO')} (Equipos + Instalación)
 Me gustaría recibir una asesoría y agendar una visita técnica.`;
 
-    waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
+    if (waBtn) waBtn.href = `https://wa.me/18297411041?text=${encodeURIComponent(waText)}`;
    }
 
-   nextBtn.addEventListener('click', () =>{
+   nextBtn?.addEventListener('click', () =>{
     if (currentStep < totalSteps) {
      currentStep++;
      updateStep();
     }
    });
 
-   prevBtn.addEventListener('click', () =>{
+   prevBtn?.addEventListener('click', () =>{
     if (currentStep>1) {
      currentStep--;
      updateStep();
@@ -1557,15 +1562,18 @@ Me gustaría recibir una asesoría y agendar una visita técnica.`;
    faqItems.forEach(item =>{
     const trigger = item.querySelector('.faq-trigger');
     const answer = item.querySelector('.faq-answer');
+    if (!trigger || !answer) return;
 
     trigger.addEventListener('click', () =>{
      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
      faqItems.forEach(i =>{
-      i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+      i.querySelector('.faq-trigger')?.setAttribute('aria-expanded', 'false');
       const ans = i.querySelector('.faq-answer');
-      ans.style.maxHeight = null;
-      ans.setAttribute('aria-hidden', 'true');
+      if (ans) {
+       ans.style.maxHeight = null;
+       ans.setAttribute('aria-hidden', 'true');
+      }
       i.classList.remove('open');
      });
 

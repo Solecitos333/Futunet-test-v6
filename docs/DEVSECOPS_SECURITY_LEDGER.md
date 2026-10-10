@@ -831,6 +831,28 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 677 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-10 Ciclo Blindaje de Scripts Inline, Null-Safety en Formularios/Cotizadores, Expansión de Páginas en Chatbot y Cache Bump PWA v34)**:
+  - **Blindaje Defensivo y Null-Safety en Formularios y Scripts Inline de Páginas HTML**:
+    - *login.html*: Blindaje integral contra excepciones por elementos nulos en conmutadores de paneles (`#show-register`, `#show-login`, `#show-reset`, `#show-magic`), formularios (`#login-form`, `#register-form`, `#reset-form`, `#magic-form`), campos de entrada, botones de reenvío de confirmación, honeypots antispam y autenticación federada con Google.
+    - *punto-de-venta.html*: Lectura segura con encadenamiento opcional (`?.value`) en los campos de contacto y selección comercial (`#pos-name`, `#pos-phone`, `#pos-biz-select`, `#pos-msg`).
+    - *admin.html*: Enfoque de accesibilidad en dispositivos móviles `#admin-main-content` con `?.focus({ preventScroll: true })` y fallback de compatibilidad ante entornos sin `window.matchMedia`.
+    - *energia-climatizacion.html*: Protección contra excepciones en calculadora interactiva de paneles y climatización, simulador OSD HUD de microred, radio-inputs no seleccionados con valores por defecto (`?.value || 'no'`), asignaciones defensivas a `#sum-solar`, `#sum-backup`, `#sum-clima`, `#sum-price` y acordeones FAQ.
+    - *redes-datos.html*: Blindaje en cotizador de cableado estructurado, simulador de rendimiento de red y WiFi Mesh, radio-inputs con valor por defecto defensivo (`?.value || 'hogar'`), lectura segura de multiplicadores y acordeones FAQ.
+    - *seguridad-electronica.html*: Blindaje en cotizador de cámaras de videovigilancia CCTV, simulador de calidad y ColorVu, radio-inputs con valor por defecto (`?.value || '4'`), cálculo de precios ponderados con validación numérica y acordeones FAQ.
+    - *internet.html*: Blindaje en renderizado de tabla comparativa de planes de internet (`#compare-thead`, `#compare-tbody`) y recomendador tipo Quiz (`#quiz-step-*`, `#quiz-progress-fill`, `#quiz-result-*`).
+  - **Ampliación de Páginas Autorizadas en Chatbot de IA (`futunet-backend/chatbot_api.py` & `test_chatbot_api.py`)**:
+    - Incorporación de `"cotizacion.html"`, `"404.html"`, y `"offline.html"` al conjunto de páginas públicas `PAGES`, permitiendo asistencia personalizada e interactiva cuando el cliente visualiza cotizaciones públicas o se encuentra en páginas de estado.
+    - Verificación completa con 45/45 pruebas unitarias pasando al 100%.
+  - **Evolución del Service Worker PWA (`sw.js` & `tools/test-dom-safety.cjs`)**:
+    - Actualización de versión de caché a `futunet-cache-v34` para invalidar cachés previas y asegurar la propagación instantánea de las optimizaciones y salvaguardas a todos los dispositivos móviles y clientes de escritorio.
+    - Actualización correspondiente de aserciones en `tools/test-dom-safety.cjs`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 174 tests automatizados pasando al 100% en frontend (`npm test`).
+    - 45 tests unitarios de backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 677 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 
 
 

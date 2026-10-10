@@ -238,12 +238,12 @@
     if (target) target.classList.add('is-active');
    }
 
-   document.getElementById('show-register').addEventListener('click', function () { showPanel('panel-register'); });
-   document.getElementById('show-login').addEventListener('click', function () { showPanel('panel-login'); });
-   document.getElementById('show-reset').addEventListener('click', function (e) { e.preventDefault(); showPanel('panel-reset'); });
-   document.getElementById('back-to-login').addEventListener('click', function () { showPanel('panel-login'); });
-   document.getElementById('show-magic').addEventListener('click', function (e) { e.preventDefault(); showPanel('panel-magic'); });
-   document.getElementById('magic-back-to-login').addEventListener('click', function () { showPanel('panel-login'); });
+   document.getElementById('show-register')?.addEventListener('click', function () { showPanel('panel-register'); });
+   document.getElementById('show-login')?.addEventListener('click', function () { showPanel('panel-login'); });
+   document.getElementById('show-reset')?.addEventListener('click', function (e) { e.preventDefault(); showPanel('panel-reset'); });
+   document.getElementById('back-to-login')?.addEventListener('click', function () { showPanel('panel-login'); });
+   document.getElementById('show-magic')?.addEventListener('click', function (e) { e.preventDefault(); showPanel('panel-magic'); });
+   document.getElementById('magic-back-to-login')?.addEventListener('click', function () { showPanel('panel-login'); });
 
    // Password Toggle 
    document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
@@ -382,7 +382,8 @@
 
      if (email) {
       showPanel('panel-magic');
-      document.getElementById('magic-email').value = email;
+      var mInput = document.getElementById('magic-email');
+      if (mInput) mInput.value = email;
       showMessage('magic-message', 'Verificando enlace de acceso... Por favor, espera.', 'success');
       setLoading('magic-btn', true);
 
@@ -398,9 +399,12 @@
       }
      } else {
       showPanel('panel-magic');
-      document.getElementById('magic-title').textContent = 'Confirmar inicio de sesión';
-      document.getElementById('magic-subtitle').textContent = 'Por seguridad, ingresa el correo al cual solicitaste el enlace.';
-      document.getElementById('magic-btn-text').textContent = 'Confirmar y entrar';
+      var mTitle = document.getElementById('magic-title');
+      if (mTitle) mTitle.textContent = 'Confirmar inicio de sesión';
+      var mSub = document.getElementById('magic-subtitle');
+      if (mSub) mSub.textContent = 'Por seguridad, ingresa el correo al cual solicitaste el enlace.';
+      var mBtn = document.getElementById('magic-btn-text');
+      if (mBtn) mBtn.textContent = 'Confirmar y entrar';
       showMessage('magic-message', 'Ingresa tu correo para completar el inicio de sesión.', 'success');
      }
      return;
@@ -412,7 +416,7 @@
    });
 
    // Login Form 
-   document.getElementById('login-form').addEventListener('submit', async function (e) {
+   document.getElementById('login-form')?.addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('login-message');
 
@@ -439,10 +443,10 @@
 
     setLoading('login-btn', true);
 
-    var companyCode = sanitizeAuthInput(document.getElementById('login-company').value).toUpperCase().slice(0, 30);
-    var email = sanitizeAuthInput(document.getElementById('login-email').value).slice(0, 150);
-    var password = document.getElementById('login-password').value;
-    var remember = document.getElementById('login-remember').checked;
+    var companyCode = sanitizeAuthInput(document.getElementById('login-company')?.value).toUpperCase().slice(0, 30);
+    var email = sanitizeAuthInput(document.getElementById('login-email')?.value).slice(0, 150);
+    var password = document.getElementById('login-password')?.value || '';
+    var remember = !!document.getElementById('login-remember')?.checked;
 
     try {
      await FutunetAuth.signIn(email, password, remember, companyCode);
@@ -485,7 +489,7 @@
         '<br><a href="#" id="resend-verification" style="color:#0A70A2;text-decoration:underline;font-weight:600;margin-top:8px;display:inline-block;">¿No recibiste el correo? Reenviar enlace</a>';
        msgEl.className = 'auth-message is-visible error';
 
-       document.getElementById('resend-verification').addEventListener('click', async function(ev) {
+       document.getElementById('resend-verification')?.addEventListener('click', async function(ev) {
         ev.preventDefault();
         var linkBtn = this;
         linkBtn.textContent = 'Enviando...';
@@ -507,7 +511,7 @@
    });
 
    // Register Form 
-   document.getElementById('register-form').addEventListener('submit', async function (e) {
+   document.getElementById('register-form')?.addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('register-message');
 
@@ -516,7 +520,7 @@
     if (hpField && hpField.value.trim() !== '') {
      console.warn('Bot registration blocked via honeypot.');
      showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación.', 'success');
-     document.getElementById('register-form').reset();
+     document.getElementById('register-form')?.reset();
      return;
     }
 
@@ -535,10 +539,10 @@
 
     setLoading('register-btn', true);
 
-    var name = sanitizeAuthInput(document.getElementById('register-name').value).slice(0, 100);
-    var email = sanitizeAuthInput(document.getElementById('register-email').value).slice(0, 150);
-    var password = document.getElementById('register-password').value;
-    var acceptedTerms = document.getElementById('register-terms').checked;
+    var name = sanitizeAuthInput(document.getElementById('register-name')?.value).slice(0, 100);
+    var email = sanitizeAuthInput(document.getElementById('register-email')?.value).slice(0, 150);
+    var password = document.getElementById('register-password')?.value || '';
+    var acceptedTerms = !!document.getElementById('register-terms')?.checked;
 
     if (name.length < 2) {
      showMessage('register-message', 'Ingresa tu nombre completo.', 'error');
@@ -568,7 +572,7 @@
        sessionStorage.setItem(regCooldownKey, String(Date.now()));
      } catch (storageErr) {}
      showMessage('register-message', '¡Registro exitoso! Te hemos enviado un enlace de confirmación a tu correo. Por favor, verifícalo antes de iniciar sesión.', 'success');
-     document.getElementById('register-form').reset();
+     document.getElementById('register-form')?.reset();
      setLoading('register-btn', false);
 
      setTimeout(function () {
@@ -594,9 +598,9 @@
     }
    }
 
-   document.getElementById('google-login-btn').addEventListener('click', handleGoogleSignIn);
-   document.getElementById('google-register-btn').addEventListener('click', function () {
-    if (!document.getElementById('register-terms').checked) {
+   document.getElementById('google-login-btn')?.addEventListener('click', handleGoogleSignIn);
+   document.getElementById('google-register-btn')?.addEventListener('click', function () {
+    if (!document.getElementById('register-terms')?.checked) {
      showMessage('register-message', 'Debes aceptar los términos y la política de privacidad para crear una cuenta.', 'error');
      return;
     }
@@ -606,7 +610,7 @@
    });
 
    // Reset Password 
-   document.getElementById('reset-form').addEventListener('submit', async function (e) {
+   document.getElementById('reset-form')?.addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('reset-message');
 
@@ -629,11 +633,11 @@
     if (hpReset && hpReset.value.trim() !== '') {
      console.warn('Bot password reset blocked via honeypot.');
      showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
-     document.getElementById('reset-form').reset();
+     document.getElementById('reset-form')?.reset();
      return;
     }
 
-    var email = sanitizeAuthInput(document.getElementById('reset-email').value).slice(0, 150);
+    var email = sanitizeAuthInput(document.getElementById('reset-email')?.value).slice(0, 150);
     var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
      showMessage('reset-message', 'El formato del correo no es válido.', 'error');
@@ -655,7 +659,7 @@
    });
 
    // Magic Link Form 
-   document.getElementById('magic-form').addEventListener('submit', async function (e) {
+   document.getElementById('magic-form')?.addEventListener('submit', async function (e) {
     e.preventDefault();
     clearMessage('magic-message');
 
@@ -680,11 +684,11 @@
     if (hpMagic && hpMagic.value.trim() !== '') {
      console.warn('Bot magic link blocked via honeypot.');
      showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
-     document.getElementById('magic-form').reset();
+     document.getElementById('magic-form')?.reset();
      return;
     }
 
-    var email = sanitizeAuthInput(document.getElementById('magic-email').value).slice(0, 150);
+    var email = sanitizeAuthInput(document.getElementById('magic-email')?.value).slice(0, 150);
     var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
      showMessage('magic-message', 'El formato del correo no es válido.', 'error');
@@ -704,7 +708,8 @@
         sessionStorage.setItem(magicCooldownKey, String(Date.now() + 30000));
       } catch (storageErr) {}
       showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
-      document.getElementById('magic-email').value = '';
+      var mInput = document.getElementById('magic-email');
+      if (mInput) mInput.value = '';
      }
     } catch (err) {
      console.error('Magic link error:', err);

@@ -2905,8 +2905,11 @@
     }
 
     closeSidebar();
-    if (window.innerWidth <= 768) document.getElementById('admin-main-content').focus({ preventScroll: true });
-    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    if (window.innerWidth <= 768) {
+     document.getElementById('admin-main-content')?.focus({ preventScroll: true });
+    }
+    var prefersReduced = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)')?.matches : false;
+    window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
     return loadPromise.then(function () { return true; });
    }
 
