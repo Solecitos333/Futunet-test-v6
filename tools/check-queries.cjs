@@ -130,7 +130,13 @@ const queries = [
   'ucg',
   'cloud gateway',
   'uniview',
-  'nvr 8 canales'
+  'nvr 8 canales',
+  'hp probook',
+  'probook',
+  'laserjet',
+  'hp laserjet',
+  'cbs350',
+  'switch cisco'
 ];
 
 

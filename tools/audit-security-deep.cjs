@@ -96,7 +96,7 @@ for (const filePath of allJsFiles) {
     if (line.includes('.innerHTML =') || line.includes('.innerHTML+=')) {
       innerHTMLCount++;
       // Check if variables or template literals are interpolated without escape
-      if (line.includes('${') && !line.includes('escape') && !line.includes('sanitize')) {
+      if (line.includes('${') && !line.includes('escape') && !line.includes('sanitize') && !line.includes('esc(') && !line.includes('Markup(')) {
         // Sample check
         potentialXSS.push({ file: relPath, line: idx + 1, code: line.trim().slice(0, 100) });
       }

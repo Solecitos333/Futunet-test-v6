@@ -744,15 +744,15 @@
             <div class="checkout-form-grid">
               <div class="checkout-form-group full-width">
                 <label for="chk-name">Nombre de Contacto *</label>
-                <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" required>
+                <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" maxlength="100" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-phone">Teléfono de Contacto *</label>
-                <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" required>
+                <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" maxlength="30" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-email">Correo Electrónico *</label>
-                <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" required>
+                <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" maxlength="100" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-document-type">Tipo de Documento *</label>
@@ -763,21 +763,21 @@
               </div>
               <div class="checkout-form-group">
                 <label for="chk-document-number">Número de Cédula o Documento *</label>
-                <input type="text" id="chk-document-number" placeholder="Ej. 001-1234567-8" required>
+                <input type="text" id="chk-document-number" placeholder="Ej. 001-1234567-8" maxlength="30" required>
                 <small id="chk-document-hint" style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">Requerido para facturación legal de tu primera compra</small>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-address">Dirección de Entrega *</label>
-                <textarea id="chk-address" placeholder="Calle, Número, Sector, Ciudad..." rows="2" required></textarea>
+                <textarea id="chk-address" placeholder="Calle, Número, Sector, Ciudad..." rows="2" maxlength="300" required></textarea>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-notes">Notas / Referencias (Opcional)</label>
-                <textarea id="chk-notes" placeholder="Ej. Casa de dos niveles frente al parque..." rows="1"></textarea>
+                <textarea id="chk-notes" placeholder="Ej. Casa de dos niveles frente al parque..." rows="1" maxlength="500"></textarea>
               </div>
               <div class="checkout-form-group full-width" style="margin-top: 8px;">
                 <label for="chk-coupon">Código de Descuento (Opcional)</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" maxlength="50" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
                   <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
                 </div>
                 <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>
@@ -1373,12 +1373,21 @@
     const checkedMethod = document.querySelector('input[name="chk-payment-method"]:checked');
     const paymentMethod = checkedMethod ? checkedMethod.value : 'whatsapp';
     
-    // Validaciones de formato en frontend para mitigar envío de datos inválidos
+    // Validaciones de formato y longitud en frontend para mitigar envío de datos inválidos (OWASP ASVS V5)
+    if (name.length < 2 || name.length > 100) {
+      showCartToast('El nombre de contacto debe tener entre 2 y 100 caracteres.', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
     
-    if (!emailRegex.test(email)) {
-      showCartToast('Por favor introduce un correo electrónico válido.', 'error');
+    if (!emailRegex.test(email) || email.length > 100) {
+      showCartToast('Por favor introduce un correo electrónico válido (máx. 100 caracteres).', 'error');
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
@@ -1386,8 +1395,26 @@
       return;
     }
     
-    if (!phoneRegex.test(phone)) {
-      showCartToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
+    if (!phoneRegex.test(phone) || phone.length > 30) {
+      showCartToast('Por favor introduce un número de teléfono válido (mín. 7 dígitos, máx. 30 caracteres).', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+
+    if (address.length < 2 || address.length > 300) {
+      showCartToast('La dirección de entrega debe tener entre 2 y 300 caracteres.', 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      }
+      return;
+    }
+
+    if (notes.length > 500) {
+      showCartToast('Las notas de entrega no deben superar los 500 caracteres.', 'error');
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;

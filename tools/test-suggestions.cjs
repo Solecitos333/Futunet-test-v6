@@ -1207,6 +1207,60 @@ test('Mejora demandada por usuarios: Grabador NVR Uniview 4K 8 Canales PoE (SUG-
   assert.ok(catJs.includes("/\\b(uniview|unv|nvr301)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar grabadores NVR Uniview');
 });
 
+test('Mejora demandada por usuarios: Laptop Corporativa HP ProBook 450 G10 (SUG-H4500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H4500'") && seedCjs.includes("status: 'implemented'"), 'SUG-H4500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H4500') && sugJs.includes('HP ProBook 450 G10'), 'SUG-H4500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('hp_probook_450_g10_laptop'), 'backup_data.js debe contener hp_probook_450_g10_laptop');
+
+  const probookImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hp-probook-450-g10.webp');
+  assert.ok(fs.existsSync(probookImg), 'La imagen de la laptop HP ProBook debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'probook'"), 'catalog.js debe incluir probook en stem variants');
+  assert.ok(catJs.includes("/\\b(probook|450\\s*g10|probook\\s*450)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar HP ProBook 450 G10');
+});
+
+test('Mejora demandada por usuarios: Impresora Multifuncional Láser HP LaserJet Pro MFP M428fdw (SUG-H4280)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H4280'") && seedCjs.includes("status: 'implemented'"), 'SUG-H4280 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H4280') && sugJs.includes('HP LaserJet Pro MFP M428fdw'), 'SUG-H4280 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_hp_laserjet_pro_m428fdw_multifuncional'), 'backup_data.js debe contener oficina_hp_laserjet_pro_m428fdw_multifuncional');
+
+  const laserjetImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hp-laserjet-pro-mfp-m428fdw.webp');
+  assert.ok(fs.existsSync(laserjetImg), 'La imagen de la impresora HP LaserJet debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'laserjet'"), 'catalog.js debe incluir laserjet en stem variants');
+  assert.ok(catJs.includes("/\\b(laserjet|m428|m428fdw)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar HP LaserJet Pro');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable Cisco Business CBS350-24T-4G (SUG-C3500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C3500'") && seedCjs.includes("status: 'implemented'"), 'SUG-C3500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C3500') && sugJs.includes('Cisco Business CBS350-24T-4G'), 'SUG-C3500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_business_cbs350_24t_switch'), 'backup_data.js debe contener redes_cisco_business_cbs350_24t_switch');
+
+  const switchImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-cbs350-24t-switch.webp');
+  assert.ok(fs.existsSync(switchImg), 'La imagen del switch Cisco debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cbs350'"), 'catalog.js debe incluir cbs350 en stem variants');
+  assert.ok(catJs.includes("/\\b(cbs350|cbs35024t)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar switches Cisco CBS350');
+});
+
 
 
 

@@ -121,7 +121,7 @@
     <!-- Buscador compacto visible al hacer scroll -->
     <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
      <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" maxlength="100" aria-label="Buscar productos" />
      <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
     </div>
 
@@ -1102,23 +1102,23 @@
        </div>
        <div class="request-form-group" style="text-align: left; margin: 0;">
         <label class="request-form-label" for="req-name" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Nombre Completo</label>
-        <input type="text" id="req-name" class="request-form-input" required placeholder="Ej: Francisco Gómez" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+        <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required placeholder="Ej: Francisco Gómez" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
        </div>
        <div class="request-form-group" style="text-align: left; margin: 0;">
         <label class="request-form-label" for="req-phone" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Teléfono / WhatsApp</label>
-        <input type="tel" id="req-phone" class="request-form-input" required placeholder="Ej: 829-741-1041" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+        <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="Ej: 829-741-1041" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
        </div>
        <div class="request-form-group" style="text-align: left; margin: 0;">
         <label class="request-form-label" for="req-email" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Correo Electrónico</label>
-        <input type="email" id="req-email" class="request-form-input" required placeholder="Ej: gerente@empresa.com" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+        <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required placeholder="Ej: gerente@empresa.com" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
        </div>
        <div class="request-form-group" style="text-align: left; margin: 0;">
         <label class="request-form-label" for="req-company" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Empresa (Opcional)</label>
-        <input type="text" id="req-company" class="request-form-input" placeholder="Ej: Constructora Santiago" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
+        <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" placeholder="Ej: Constructora Santiago" style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; transition: all 0.3s; outline: none;" />
        </div>
        <div class="request-form-group" style="text-align: left; margin: 0;">
         <label class="request-form-label" for="req-message" style="color: #cbd5e1; font-weight: 600; display: block; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 6px;">Detalles del Proyecto</label>
-        <textarea id="req-message" class="request-form-input" rows="3" required placeholder="Ej: Requerimos instalación de red inalámbrica y cableado estructurado Cat6 para una oficina de 15 puestos..." style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; resize: vertical; transition: all 0.3s; outline: none;"></textarea>
+        <textarea id="req-message" class="request-form-input" rows="3" maxlength="1500" required placeholder="Ej: Requerimos instalación de red inalámbrica y cableado estructurado Cat6 para una oficina de 15 puestos..." style="background: rgba(15, 23, 42, 0.6); border: 1.5px solid rgba(11, 126, 181, 0.2); color: white; width: 100%; border-radius: 12px; padding: 11px 14px; box-sizing: border-box; font-family: inherit; font-size: 0.86rem; resize: vertical; transition: all 0.3s; outline: none;"></textarea>
        </div>
 
        <div class="request-form-privacy" style="margin: 4px 0 8px; font-size: 0.82rem; color: #cbd5e1; text-align: left;">

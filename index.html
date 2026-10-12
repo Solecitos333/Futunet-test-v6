@@ -192,7 +192,7 @@
     <!-- Buscador compacto visible al hacer scroll -->
     <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
      <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" maxlength="100" aria-label="Buscar productos" />
      <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
     </div>
 
@@ -410,7 +410,7 @@
        <div class="hero-badge"><span class="dot"></span>Santiago, República Dominicana</div>
        <div class="smart-search-wrapper hero-search-block" role="search" aria-label="Buscador de productos y servicios">
         <i data-lucide="search" class="smart-search-icon" aria-hidden="true"></i>
-        <input type="search" id="search-home" name="query" class="smart-search-input" placeholder="Buscar cámaras, laptops, servicios o marcas..." autocomplete="off" aria-label="Buscar productos, marcas o servicios" />
+        <input type="search" id="search-home" name="query" class="smart-search-input" placeholder="Buscar cámaras, laptops, servicios o marcas..." autocomplete="off" maxlength="100" aria-label="Buscar productos, marcas o servicios" />
         <button class="smart-search-btn" type="button" data-search-trigger data-search-input="search-home" aria-label="Ejecutar búsqueda">
          <i data-lucide="arrow-right" aria-hidden="true"></i>
         </button>
@@ -1661,11 +1661,11 @@
      <div class="form-row">
       <div class="form-group">
        <label for="f-nombre">Nombre</label>
-       <input type="text" id="f-nombre" name="nombre" placeholder="Tu nombre completo" required />
+       <input type="text" id="f-nombre" name="nombre" placeholder="Tu nombre completo" maxlength="100" autocomplete="name" required />
       </div>
       <div class="form-group">
        <label for="f-tel">Teléfono</label>
-       <input type="tel" id="f-tel" name="telefono" placeholder="809/829/849-000-0000" required />
+       <input type="tel" id="f-tel" name="telefono" placeholder="809/829/849-000-0000" maxlength="30" autocomplete="tel" required />
       </div>
      </div>
      <div class="form-group">
@@ -1700,7 +1700,7 @@
      </div>
      <div class="form-group">
       <label for="f-msg">Mensaje (opcional)</label>
-      <textarea id="f-msg" name="mensaje" placeholder="Describe tu proyecto o lo que te gustaría cotizar..."></textarea>
+      <textarea id="f-msg" name="mensaje" placeholder="Describe tu proyecto o lo que te gustaría cotizar..." maxlength="1500"></textarea>
      </div>
      <!-- Campo trampa antispam (Honeypot para bots) -->
      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">

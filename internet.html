@@ -142,7 +142,7 @@
     <!-- Buscador compacto visible al hacer scroll -->
     <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
      <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" maxlength="100" aria-label="Buscar productos" />
      <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
     </div>
 
@@ -514,7 +514,7 @@
        <!-- Buscador -->
        <div class="claro-search-box">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" id="plan-search-input" placeholder="Buscar por velocidad o nombre... (ej: Plata, 100M)" oninput="filterPlans()" aria-label="Buscar planes de internet" />
+        <input type="text" id="plan-search-input" placeholder="Buscar por velocidad o nombre... (ej: Plata, 100M)" oninput="filterPlans()" maxlength="100" aria-label="Buscar planes de internet" />
         <button type="button" class="btn-claro-search" onclick="filterPlans()">Buscar</button>
        </div>
 
@@ -743,6 +743,7 @@
          <input type="text" id="coverage-address-input"
           placeholder="Ej: Ensanche Dolores, Calle 5..."
           class="coverage-address-input"
+          maxlength="150"
           aria-label="Tu dirección o sector"
           onkeydown="if(event.key==='Enter') checkCoverage()" />
          <button type="button" class="coverage-check-btn" onclick="checkCoverage()">
@@ -813,7 +814,7 @@
        </button>
        <!-- Input (oculto en móvil hasta que se activa) -->
        <div class="faq-search-input-wrap" id="faq-search-input-wrap">
-        <input type="text" id="faq-search-input" placeholder="Buscar preguntas frecuentes..." oninput="filterFaqs()" style="width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #cbd5e1; border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #0a101d; outline: none; transition: all 0.25s;" aria-label="Buscar preguntas frecuentes" />
+        <input type="text" id="faq-search-input" placeholder="Buscar preguntas frecuentes..." oninput="filterFaqs()" maxlength="100" maxlength="100" style="width: 100%; padding: 14px 20px 14px 48px; border: 1.5px solid #cbd5e1; border-radius: 14px; font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: #0a101d; outline: none; transition: all 0.25s;" aria-label="Buscar preguntas frecuentes" />
         <i class="fas fa-search" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #76889e; font-size: 1.1rem;"></i>
        </div>
       </div>
@@ -1154,18 +1155,18 @@
         <div class="form-row-2">
          <div class="request-form-group">
           <label class="request-form-label" for="p-hir-name">Nombre Completo</label>
-          <input type="text" id="p-hir-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
+          <input type="text" id="p-hir-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" maxlength="100" autocomplete="name" required />
          </div>
          <div class="request-form-group">
           <label class="request-form-label" for="p-hir-email">Correo Electrónico</label>
-          <input type="email" id="p-hir-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required />
+          <input type="email" id="p-hir-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" maxlength="100" autocomplete="email" required />
          </div>
         </div>
 
         <div class="form-row-2">
          <div class="request-form-group">
           <label class="request-form-label" for="p-hir-phone">Teléfono / WhatsApp</label>
-          <input type="tel" id="p-hir-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required placeholder="809-000-0000" />
+          <input type="tel" id="p-hir-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" maxlength="30" autocomplete="tel" required placeholder="809-000-0000" />
          </div>
          <div class="request-form-group">
           <label class="request-form-label" for="p-hir-date">Fecha Preferida</label>
@@ -1184,12 +1185,12 @@
 
         <div class="request-form-group">
          <label class="request-form-label" for="p-hir-address">Dirección de Instalación</label>
-         <textarea id="p-hir-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="3" required placeholder="Indica calle, sector, número de casa/apto y referencias de tu ubicación en Santiago..."></textarea>
+         <textarea id="p-hir-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="3" maxlength="300" required placeholder="Indica calle, sector, número de casa/apto y referencias de tu ubicación en Santiago..."></textarea>
         </div>
 
         <div class="request-form-group">
          <label class="request-form-label" for="p-hir-notes">Comentarios o Referencias Adicionales (Opcional)</label>
-         <textarea id="p-hir-notes" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="2" placeholder="Ej: Llamar antes de llegar, timbre dañado..."></textarea>
+         <textarea id="p-hir-notes" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="2" maxlength="500" placeholder="Ej: Llamar antes de llegar, timbre dañado..."></textarea>
         </div>
 
         <!-- Campo trampa antispam (Honeypot para bots) -->
@@ -1342,18 +1343,18 @@
       <div class="form-row-2">
        <div class="request-form-group">
         <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-name">Nombre Completo</label>
-        <input type="text" id="p-guest-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" required />
+        <input type="text" id="p-guest-name" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" maxlength="100" autocomplete="name" required />
        </div>
        <div class="request-form-group">
         <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-phone">Teléfono / WhatsApp</label>
-        <input type="tel" id="p-guest-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" required placeholder="809-000-0000" />
+        <input type="tel" id="p-guest-phone" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" maxlength="30" autocomplete="tel" required placeholder="809-000-0000" />
        </div>
       </div>
 
       <div class="form-row-2" style="margin-top: 10px;">
        <div class="request-form-group">
         <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-email">Correo Electrónico</label>
-        <input type="email" id="p-guest-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" required placeholder="nombre@correo.com" />
+        <input type="email" id="p-guest-email" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); height:40px; padding:8px 12px;" maxlength="100" autocomplete="email" required placeholder="nombre@correo.com" />
        </div>
        <div class="request-form-group">
         <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-date">Fecha Deseada</label>
@@ -1372,7 +1373,7 @@
 
       <div class="request-form-group" style="margin-top: 10px;">
        <label class="request-form-label" style="color:#a0b0c4;" for="p-guest-address">Dirección de Instalación</label>
-       <textarea id="p-guest-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); padding:8px 12px;" rows="2" required placeholder="Calle, sector, número de casa y referencias de tu ubicación en Santiago..."></textarea>
+       <textarea id="p-guest-address" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08); padding:8px 12px;" rows="2" maxlength="300" required placeholder="Calle, sector, número de casa y referencias de tu ubicación en Santiago..."></textarea>
       </div>
 
       <!-- Campo trampa antispam (Honeypot para bots) -->
@@ -1407,7 +1408,7 @@
     <form id="payment-report-form">
      <div class="request-form-group">
       <label class="request-form-label" style="color:#a0b0c4;" for="pay-amount">Monto pagado (RD$)</label>
-      <input type="number" id="pay-amount" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required placeholder="1995" />
+      <input type="number" id="pay-amount" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" required min="1" max="999999" placeholder="1995" />
      </div>
 
      <div class="request-form-group">
@@ -1488,7 +1489,7 @@
 
      <div class="request-form-group">
       <label class="request-form-label" style="color:#a0b0c4;" for="support-details" id="support-details-label">Detalles del reporte o avería</label>
-      <textarea id="support-details" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="4" required placeholder="Describe tu problema con detalle..."></textarea>
+      <textarea id="support-details" class="request-form-input" style="background:rgba(255,255,255,0.03); color:#fff; border-color:rgba(255,255,255,0.08);" rows="4" maxlength="1500" required placeholder="Describe tu problema con detalle..."></textarea>
      </div>
 
      <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #a0b0c4;">

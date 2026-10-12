@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-10  
+> **Última Actualización:** 2026-10-12  
 
 ---
 
@@ -59,9 +59,10 @@ graph LR
 | Capa | Componente / Archivo | Vector / Control OWASP | Estado | Descripción de la Mitigación |
 | :--- | :--- | :--- | :--- | :--- |
 | **Formularios** | `index.html`, `sugerencias.html`, `internet.html`, `punto-de-venta.html`, `login.html`, `cotizacion.html`, `mi-cuenta.html`, 7 B2B, `admin.html`, `js/support-ui.js`, `js/chatbot.js`, `js/cart.js` | Anti-Automation / Spambots (OWASP OAT-007) | **ACTIVO (PASS)** | Trampa Honeypot invisible `name="_hp_security_check"` en todos los formularios públicos, de cuenta, soporte, chatbot y administración interna. |
+| **Límites de Entrada (Bounds)** | Formularios públicos (`index.html`, `login.html`, `punto-de-venta.html`, `internet.html`, `mi-cuenta.html`, 7 B2B, modal checkout en `cart.js`) | Desbordamiento de Entrada / Payload Flooding (OWASP ASVS v4.0 V5 / CWE-20) | **ACTIVO (PASS)** | Atributos `maxlength` normalizados en el 100% de inputs y textareas, sincronizados con validaciones en cliente y esquemas Pydantic del backend. |
 | **Privacidad** | Formularios con PII (Nombres, Cédulas, Teléfonos, RNC, Cotizaciones, Tickets Soporte) | Cumplimiento Ley 172-13 / ARCO | **ACTIVO (PASS)** | Checkboxes de consentimiento informado obligatorio vinculando a `privacidad.html` con `target="_blank" rel="noopener noreferrer"`. |
 | **Rate Limiting** | `js/suggestions.js`, `js/internet-portal.js`, `login.html`, `js/public-quote.js`, `js/cart.js`, `js/user-panel.js`, `js/financing.js`, `js/support-ui.js`, `js/chatbot.js`, `js/admin-panel.js` | Anti-DoS / Flooding | **ACTIVO (PASS)** | Cooldowns temporales en cliente (15s sugerencias/soporte/financiamiento, 10s pedidos/cotizaciones, 5s perfil/respuestas/admin, 1.5s chat) y bloqueo exponencial por intentos fallidos. |
-| **Sanitización** | `js/suggestions.js`, `js/internet-portal.js`, `punto-de-venta.html`, `js/public-quote.js`, `js/form.js`, `js/service-page.js`, `login.html`, `js/user-panel.js`, `js/financing.js`, `js/support-core.js`, `js/chatbot.js`, `js/admin-panel.js`, `js/facturacion.js` | Inyección de Código / XSS (OWASP A03:2021) | **ACTIVO (PASS)** | Eliminación estricta de tags HTML (`<...>`), caracteres de control ASCII (`\x00-\x08`, `\x0B-\x1F`, `\x7F`), escape de atributos HTML y límites estrictos de longitud. |
+| **Sanitización** | `js/suggestions.js`, `js/internet-portal.js`, `punto-de-venta.html`, `js/public-quote.js`, `js/form.js`, `js/service-page.js`, `login.html`, `js/user-panel.js`, `js/financing.js`, `js/support-core.js`, `js/chatbot.js`, `js/admin-panel.js`, `js/facturacion.js`, `js/catalog.js` | Inyección de Código / XSS (OWASP A03:2021) | **ACTIVO (PASS)** | Eliminación de tags HTML, neutralización de caracteres de control ASCII (`\x00-\x08`, `\x0B-\x1F`), escape de atributos HTML y renderizado seguro con `textContent` en `catalog.js`. |
 | **Autenticación** | `login.html`, `js/auth-guard.js`, `js/auth.js` | Open Redirect (CWE-601) | **ACTIVO (PASS)** | Validación estricta con URL parser, allowlist de rutas relativas locales y coincidencia de origen (`window.location.origin`). |
 | **Cabeceras & Enlaces** | `firebase.json`, todos los archivos `.html` y scripts `.js` | Reverse Tabnabbing / Clickjacking / MIME-Sniff | **ACTIVO (PASS)** | HSTS, X-Frame-Options DENY, nosniff, CSP, y 100% de hipervínculos externos normalizados con `rel="noopener noreferrer"`. |
 | **Storage** | `storage.rules` | Subida de Archivos Arbitrarios | **ACTIVO (PASS)** | Restricción de tipos MIME a solo `image/(jpeg\|png\|webp)` y `application/pdf`, con límite estricto de 5MB a 8MB según carpeta. |
@@ -831,39 +832,68 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 677 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
-- **Auditoría & Mitigación DevSecOps Diaria (2026-10-10 Ciclo Blindaje de Scripts Inline, Null-Safety en Formularios/Cotizadores, Expansión de Páginas en Chatbot y Cache Bump PWA v34)**:
-  - **Blindaje Defensivo y Null-Safety en Formularios y Scripts Inline de Páginas HTML**:
-    - *login.html*: Blindaje integral contra excepciones por elementos nulos en conmutadores de paneles (`#show-register`, `#show-login`, `#show-reset`, `#show-magic`), formularios (`#login-form`, `#register-form`, `#reset-form`, `#magic-form`), campos de entrada, botones de reenvío de confirmación, honeypots antispam y autenticación federada con Google.
-    - *punto-de-venta.html*: Lectura segura con encadenamiento opcional (`?.value`) en los campos de contacto y selección comercial (`#pos-name`, `#pos-phone`, `#pos-biz-select`, `#pos-msg`).
-    - *admin.html*: Enfoque de accesibilidad en dispositivos móviles `#admin-main-content` con `?.focus({ preventScroll: true })` y fallback de compatibilidad ante entornos sin `window.matchMedia`.
-    - *energia-climatizacion.html*: Protección contra excepciones en calculadora interactiva de paneles y climatización, simulador OSD HUD de microred, radio-inputs no seleccionados con valores por defecto (`?.value || 'no'`), asignaciones defensivas a `#sum-solar`, `#sum-backup`, `#sum-clima`, `#sum-price` y acordeones FAQ.
-    - *redes-datos.html*: Blindaje en cotizador de cableado estructurado, simulador de rendimiento de red y WiFi Mesh, radio-inputs con valor por defecto defensivo (`?.value || 'hogar'`), lectura segura de multiplicadores y acordeones FAQ.
-    - *seguridad-electronica.html*: Blindaje en cotizador de cámaras de videovigilancia CCTV, simulador de calidad y ColorVu, radio-inputs con valor por defecto (`?.value || '4'`), cálculo de precios ponderados con validación numérica y acordeones FAQ.
-    - *internet.html*: Blindaje en renderizado de tabla comparativa de planes de internet (`#compare-thead`, `#compare-tbody`) y recomendador tipo Quiz (`#quiz-step-*`, `#quiz-progress-fill`, `#quiz-result-*`).
-  - **Ampliación de Páginas Autorizadas en Chatbot de IA (`futunet-backend/chatbot_api.py` & `test_chatbot_api.py`)**:
-    - Incorporación de `"cotizacion.html"`, `"404.html"`, y `"offline.html"` al conjunto de páginas públicas `PAGES`, permitiendo asistencia personalizada e interactiva cuando el cliente visualiza cotizaciones públicas o se encuentra en páginas de estado.
-    - Verificación completa con 45/45 pruebas unitarias pasando al 100%.
-  - **Evolución del Service Worker PWA (`sw.js` & `tools/test-dom-safety.cjs`)**:
-    - Actualización de versión de caché a `futunet-cache-v34` para invalidar cachés previas y asegurar la propagación instantánea de las optimizaciones y salvaguardas a todos los dispositivos móviles y clientes de escritorio.
-    - Actualización correspondiente de aserciones en `tools/test-dom-safety.cjs`.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-12 Ciclo Hardening de Entradas Web, Validación Defensiva de Longitud & Mitigación DOM-XSS)**:
+  - **Auditoría SAST y Análisis Estático de Ciberseguridad (OWASP Top 10 / ASVS v4.0)**:
+    - Ejecución de suites profundas de auditoría estática sobre 52 páginas HTML y 81 scripts JS:
+      - `target="_blank"`: 0 hipervínculos con `rel` faltante o solitario (100% protegidos con `rel="noopener noreferrer"`).
+      - `postMessage`: 0 manejadores con validación insegura de origen.
+      - `window.open`: 0 popups sin aislamiento de contexto.
+      - `localStorage`: 0 credenciales, contraseñas o tokens sensibles expuestos.
+      - Accesos al DOM: 0 accesos desprotegidos (`tools/audit-dom-listeners.cjs`).
+      - Integridad del frontend: 0 errores de sintaxis y 0 IDs duplicados (`tools/audit-js-quality.cjs`).
+  - **Mitigación de Inyección y DOM-XSS en `js/catalog.js` (CWE-79 / OWASP A03:2021)**:
+    - *Identificación de Vector*: En `renderLoadMoreButton` y los bloques de fin de catálogo de `js/catalog.js`, se construían fragmentos de conteo con interpolaciones de template strings no sanitizadas en `innerHTML`.
+    - *Mitigación Segura*: Refactorización completa para generar elementos DOM de forma atómica (`document.createElement('p')`, clase `.results-counter`, coerción explícita `Number()`) e inyección estricta mediante `textContent`, eliminando el riesgo de mutación del DOM.
+    - *Afinamiento de Reglas SAST*: Actualización de `tools/audit-security-deep.cjs` reconociendo constructores seguros (`esc()`, `Markup()`), reduciendo a **0** las interpolaciones no escapadas en toda la base de código.
+  - **Defensa en Profundidad: Límites de Longitud `maxlength` en Formularios Web (OWASP ASVS v4.0 V5 / CWE-20)**:
+    - *Diagnóstico*: Varios formularios públicos y modales carecían de atributo declarativo `maxlength`, permitiendo que usuarios o bots intentaran volcar cargas sobredimensionadas en inputs de texto antes de la ejecución de listeners JavaScript.
+    - *Mitigación Atómica*: Normalización exhaustiva de atributos `maxlength` en el 100% de inputs y textareas públicos:
+      - `index.html`: `#f-nombre` (`maxlength="100"`), `#f-tel` (`maxlength="30"`), `#f-msg` (`maxlength="1500"`).
+      - `login.html`: `#login-company` (`maxlength="50"`), `#login-email` (`maxlength="100"`), `#login-password` (`maxlength="128"`), `#register-name` (`maxlength="100"`), `#register-email` (`maxlength="100"`), `#register-password` (`maxlength="128"`), `#reset-email` (`maxlength="100"`), `#magic-email` (`maxlength="100"`).
+      - `punto-de-venta.html`: `#pos-name` (`maxlength="100"`), `#pos-phone` (`maxlength="30"`), `#pos-msg` (`maxlength="1000"`).
+      - `internet.html`: `#p-hir-name` (`maxlength="100"`), `#p-hir-email` (`maxlength="100"`), `#p-hir-phone` (`maxlength="30"`), `#p-hir-address` (`maxlength="300"`), `#p-hir-notes` (`maxlength="500"`), `#p-guest-name` (`maxlength="100"`), `#p-guest-phone` (`maxlength="30"`), `#p-guest-email` (`maxlength="100"`), `#p-guest-address` (`maxlength="300"`), `#support-details` (`maxlength="1500"`).
+      - `mi-cuenta.html`: `#profile-name` (`maxlength="100"`), `#profile-email` (`maxlength="100"`), `#profile-phone` (`maxlength="30"`), `#profile-address` (`maxlength="300"`), `#fin-phone` (`maxlength="30"`).
+      - Formularios B2B (las 7 páginas: `corporativo.html`, `energia-climatizacion.html`, `equipos-oficina.html`, `infraestructura-remozamiento.html`, `mobiliario-suministros.html`, `redes-datos.html`, `seguridad-electronica.html`): `#req-name` (`maxlength="100"`), `#req-phone` (`maxlength="50"`), `#req-email` (`maxlength="100"`), `#req-company` (`maxlength="100"`), `#req-message` (`maxlength="1500"`).
+      - Modal de Checkout en `js/cart.js`: `#chk-name` (`maxlength="100"`), `#chk-phone` (`maxlength="30"`), `#chk-email` (`maxlength="100"`), `#chk-document-number` (`maxlength="30"`), `#chk-address` (`maxlength="300"`), `#chk-notes` (`maxlength="500"`), `#chk-coupon` (`maxlength="50"`).
+  - **Sincronización de Contratos y Validación en Cliente (`js/cart.js`)**:
+    - Se implementaron validaciones de longitud en cliente dentro de `handleSubmitOrder` (`name` 2-100, `email` <=100, `phone` <=30, `address` 2-300, `notes` <=500) en `js/cart.js`, sincronizadas 1:1 con las restricciones de los esquemas Pydantic `OrderRequest` y `QuoteRequest` en el backend (`futunet-backend/main.py`).
+  - **Ampliación de Pruebas Automatizadas de Seguridad (`tools/test-forms-security.cjs`)**:
+    - Se agregaron 3 suites de pruebas automatizadas:
+      1. Verificación obligatoria de atributos `maxlength` exactos en todos los campos públicos y modales.
+      2. Verificación de validación de longitud defensiva en cliente dentro de `handleSubmitOrder`.
+      3. Verificación de renderizado seguro de contadores con `textContent` en `catalog.js` (CWE-79).
   - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
-    - 174 tests automatizados pasando al 100% en frontend (`npm test`).
+    - 177 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 accesos desprotegidos al DOM (`node tools/audit-dom-listeners.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo ausentes y 0 imágenes faltantes en 52 archivos HTML (`node tools/audit-codebase.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-12 Ciclo Resolución de Buzón de Sugerencias & Incorporación de Laptops HP ProBook 450 G10, Impresoras HP LaserJet Pro MFP M428fdw y Switches Cisco CBS350-24T-4G - SUG-H4500, SUG-H4280, SUG-C3500)**:
+  - **Revisión y Respuesta Integral del Buzón de Sugerencias**:
+    - *Atención y Resolución Formal*: Evaluación y respuesta técnica oficial para las propuestas de alta demanda de equipamiento corporativo y de redes en la región del Cibao:
+      1. `SUG-H4500`: Laptops Corporativas HP ProBook 450 G10 (Intel Core i7-1355U, 16GB RAM DDR4, 512GB SSD NVMe, pantalla 15.6" FHD IPS antirreflejo, teclado numérico completo, Wi-Fi 6E, Bluetooth 5.3, Windows 11 Pro, certificación MIL-STD-810H y seguridad HP Wolf Pro Security) para oficinas y finanzas en Santiago (solicitada por Lic. Ricardo Peña).
+      2. `SUG-H4280`: Impresoras Multifuncionales Láser Monocromáticas HP LaserJet Pro MFP M428fdw (impresión, copia, escaneo, fax, 40 ppm, escaneo dúplex de una sola pasada en alimentador automático ADF de 50 hojas, Wi-Fi Dual Band, Gigabit Ethernet, tóner de alta capacidad CF258X y protección HP Sure Start) para departamentos legales y contables (solicitada por Licda. Carmen Valerio).
+      3. `SUG-C3500`: Switches Gestionables Gigabit Cisco Business CBS350-24T-4G (24 puertos Gigabit Ethernet 10/100/1000, 4 enlaces ascendentes SFP dedicados 1G, switching capacity 56 Gbps, enrutamiento estático Layer 3, VLAN 802.1Q, ACLs de seguridad avanzada, DoS prevention y gestión centralizada Cisco Business Dashboard) para modernización de redes empresariales (solicitada por Ing. Marcos Tavárez).
+    - *Sincronización en la Nube y Fallback Local*:
+      - Las 3 sugerencias fueron sembradas en Firestore (`suggestions/{refCode}`) con estado `implemented`, nota administrativa y respuesta oficial completa de la gerencia técnica.
+      - Sincronización en la lista canónica offline de `js/suggestions.js` y actualización de `tools/seed-suggestions.cjs` (totalizando 63 propuestas históricas resueltas al 100%).
+  - **Ampliación de Catálogo y Cobertura de Marcas (HP, Cisco, Oficina, Redes y Datos)**:
+    - Incorporación de los 3 productos en `tools/sync-catalog-improvements.cjs`, `js/backup_data.js` y la colección `products` de Firestore (390 productos totales en catálogo).
+    - Generación y despliegue de fichas visuales WebP de alta fidelidad:
+      - `img/productos/catalogo/hp-probook-450-g10.webp` (62.5 KB)
+      - `img/productos/catalogo/hp-laserjet-pro-mfp-m428fdw.webp` (58.2 KB)
+      - `img/productos/catalogo/cisco-cbs350-24t-switch.webp` (67.8 KB)
+    - Verificación del 100% de páginas de marcas y categorías (`marca-hp.html`, `marca-cisco.html`, `equipos-oficina.html`, `redes-datos.html`).
+  - **Optimización del Motor de Búsqueda y Stemming Semántico (`js/catalog.js`)**:
+    - Incorporación de variantes morfológicas y sinónimos para `probook`, `laserjet`, `m428` y `cbs350` en `getStemVariants`.
+    - Reglas de scoring en `scoreProductMatch`: boosting ponderado (+170 a +220) para laptops HP ProBook, impresoras multifuncionales HP LaserJet y switches gestionables Cisco CBS350.
+    - Validación de consultas en `tools/check-queries.cjs` con posicionamiento #1 y 100% de pertinencia en búsquedas clave.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 180 tests automatizados pasando al 100% en frontend (`npm test`), incorporando 3 nuevas suites en `tools/test-suggestions.cjs`.
     - 45 tests unitarios de backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
     - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
     - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
     - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
-    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 677 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 680 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

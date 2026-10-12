@@ -121,7 +121,7 @@
     <!-- Buscador compacto visible al hacer scroll -->
     <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
      <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" maxlength="100" aria-label="Buscar productos" />
      <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
     </div>
 
@@ -1033,23 +1033,23 @@
         </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-name">Nombre y Apellidos</label>
-         <input type="text" id="req-name" class="request-form-input" required placeholder="Ej. Juan Pérez" />
+         <input type="text" id="req-name" class="request-form-input" autocomplete="name" maxlength="100" required placeholder="Ej. Juan Pérez" />
         </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-phone">Teléfono / WhatsApp</label>
-         <input type="tel" id="req-phone" class="request-form-input" required placeholder="809-000-0000" />
+         <input type="tel" id="req-phone" class="request-form-input" autocomplete="tel" inputmode="tel" maxlength="50" required placeholder="809-000-0000" />
         </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-email">Correo Electrónico</label>
-         <input type="email" id="req-email" class="request-form-input" required placeholder="juan@correo.com" />
+         <input type="email" id="req-email" class="request-form-input" autocomplete="email" maxlength="100" required placeholder="juan@correo.com" />
         </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-company">Empresa u Organización (Opcional)</label>
-         <input type="text" id="req-company" class="request-form-input" placeholder="Ej. Minera Nacional" />
+         <input type="text" id="req-company" class="request-form-input" autocomplete="organization" maxlength="100" placeholder="Ej. Minera Nacional" />
         </div>
         <div class="request-form-group">
          <label class="request-form-label" for="req-message">Especificaciones de su Requerimiento</label>
-         <textarea id="req-message" class="request-form-input" rows="4" required placeholder="Detalle qué equipos necesita respaldar o su consumo promedio en RD$..."></textarea>
+         <textarea id="req-message" class="request-form-input" rows="4" maxlength="1500" required placeholder="Detalle qué equipos necesita respaldar o su consumo promedio en RD$..."></textarea>
         </div>
 
         <div class="request-form-privacy" style="margin: 12px 0 16px; font-size: 0.82rem; color: #52616d;">

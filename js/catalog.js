@@ -216,6 +216,10 @@ function getStemVariants(word) {
   if (word === 'ucg' || word === 'ultra') variants.push('ubiquiti', 'unifi', 'gateway', 'cloud');
   if (word === 'uniview' || word === 'unv') variants.push('nvr', 'camara', 'poe', 'ezview', 'ultra265', 'nvr301');
   if (word === 'nvr' || word === 'nvrs') variants.push('uniview', 'grabador', 'poe', 'ip', 'dvr', 'canales', 'hikvision', 'dahua', 'nvr301');
+  if (word === 'probook') variants.push('hp', 'laptop', 'portatil', '450', 'g10');
+  if (word === 'laserjet') variants.push('hp', 'impresora', 'multifuncional', 'toner', 'm428', 'm428fdw');
+  if (word === 'm428' || word === 'm428fdw') variants.push('laserjet', 'hp', 'impresora', 'mfp');
+  if (word === 'cbs350' || word === 'cbs35024t') variants.push('cisco', 'switch', 'cbs', 'gigabit', 'sfp');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -647,6 +651,35 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(estabilizador|estabilizadores|regulador\s*de\s*voltaje)\b/i.test(normalizedQuery)) {
     if (/regulador.*voltaje|estabilizador/i.test(title)) {
       score += 160;
+    }
+  }
+
+  // Priorizar HP ProBook 450 G10 al buscar hp, probook, 450 g10 (SUG-H4500)
+  if (/\b(probook|450\s*g10|probook\s*450)\b/i.test(normalizedQuery) || (/\b(laptop|laptops)\b/i.test(normalizedQuery) && /\b(hp|probook)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'hp' && /probook/i.test(title)) {
+      score += 220;
+    } else if (/probook/i.test(title)) {
+      score += 170;
+    }
+  }
+
+  // Priorizar Impresora Láser HP LaserJet Pro MFP M428fdw al buscar laserjet, m428, m428fdw, hp laserjet (SUG-H4280)
+  if (/\b(laserjet|m428|m428fdw)\b/i.test(normalizedQuery) || (/\b(impresora|impresoras|laser)\b/i.test(normalizedQuery) && /\b(hp|laserjet)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'hp' && /laserjet/i.test(title)) {
+      score += 220;
+    } else if (/laserjet|m428/i.test(title)) {
+      score += 170;
+    }
+  }
+
+  // Priorizar Switch Cisco Business CBS350 al buscar cbs350, cisco switch, switch cisco (SUG-C3500)
+  if (/\b(cbs350|cbs35024t)\b/i.test(normalizedQuery) || (/\b(switch|switches)\b/i.test(normalizedQuery) && /\b(cisco|cbs350|administrable)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'cisco') {
+      if (/cbs350/i.test(title)) {
+        score += 220;
+      } else {
+        score += 160;
+      }
     }
   }
 
@@ -2123,7 +2156,10 @@ function renderPaginatedProducts() {
     // All loaded message
     const msg = document.createElement('div');
     msg.className = 'load-more-container reveal in';
-    msg.innerHTML = `<p class="results-counter">Mostrando todos los ${products.length} productos</p>`;
+    const counterP = document.createElement('p');
+    counterP.className = 'results-counter';
+    counterP.textContent = `Mostrando todos los ${Number(products.length)} productos`;
+    msg.appendChild(counterP);
     appendCatalogContent(msg);
   }
 }
@@ -2135,8 +2171,11 @@ function renderLoadMoreButton(shown, total) {
     <button class="load-more-btn" id="load-more-btn">
       <i data-lucide="chevrons-down"></i> Cargar más productos
     </button>
-    <p class="results-counter">Mostrando ${shown} de ${total} productos</p>
   `;
+  const counterP = document.createElement('p');
+  counterP.className = 'results-counter';
+  counterP.textContent = `Mostrando ${Number(shown)} de ${Number(total)} productos`;
+  div.appendChild(counterP);
   appendCatalogContent(div);
 
   const btn = div.querySelector('#load-more-btn');
@@ -2156,7 +2195,10 @@ function renderLoadMoreButton(shown, total) {
     } else {
       const msg = document.createElement('div');
       msg.className = 'load-more-container reveal in';
-      msg.innerHTML = `<p class="results-counter">Mostrando todos los ${total} productos</p>`;
+      const endCounterP = document.createElement('p');
+      endCounterP.className = 'results-counter';
+      endCounterP.textContent = `Mostrando todos los ${Number(total)} productos`;
+      msg.appendChild(endCounterP);
       appendCatalogContent(msg);
     }
   });

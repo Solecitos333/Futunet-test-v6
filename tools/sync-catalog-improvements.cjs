@@ -1296,6 +1296,84 @@ const univiewNvrItems = [
   }
 ];
 
+const hpLaptopItems = [
+  {
+    id: 'hp_probook_450_g10_laptop',
+    department: 'equipos',
+    category: 'Laptops y Portátiles',
+    brand: 'HP',
+    title: 'Laptop Corporativa HP ProBook 450 G10 Core i7 (15.6" FHD IPS, 16 GB RAM, 512 GB SSD NVMe, Numpad)',
+    desc: 'Laptop empresarial de grado profesional HP ProBook 450 G10 diseñada para despachos corporativos, firmas de contabilidad, constructoras y directivos en Santiago. Equipada con procesador Intel Core i7-1355U de 10 núcleos (hasta 5.0 GHz con Intel Turbo Boost), 16 GB de memoria RAM DDR4 3200 MHz en doble canal (expandible a 32 GB), 512 GB de almacenamiento SSD PCIe NVMe M.2 ultrarrápido, y pantalla de 15.6 pulgadas Full HD (1920x1080) IPS con marco angosto y acabado antirreflejo de 250 nits. Incorpora teclado completo resistente a salpicaduras con bloque numérico dedicado (numpad), suite de seguridad avanzada HP Wolf Pro Security Edition con chip TPM 2.0 y lector de huellas dactilares. Conectividad completa con 2x USB-C (soporta Power Delivery y DisplayPort), 2x USB-A 3.2, puerto HDMI 2.1, Ethernet Gigabit RJ-45, Wi-Fi 6E y Bluetooth 5.3, con chasis de aluminio duradero certificado bajo pruebas militares MIL-STD-810H.',
+    price: 'RD$ 54,800.00',
+    img: 'img/productos/catalogo/hp-probook-450-g10.webp',
+    gallery: [
+      'img/productos/catalogo/hp-probook-450-g10.webp'
+    ],
+    specs: [
+      'Procesador: Intel Core i7-1355U de 13.ª generación (10 núcleos, 12 hilos, hasta 5.0 GHz con Turbo Boost)',
+      'Memoria RAM: 16 GB DDR4-3200 MHz en doble canal (expandible hasta 32 GB)',
+      'Almacenamiento: Unidad de estado sólido SSD de 512 GB PCIe NVMe M.2 ultrarrápida',
+      'Pantalla: 15.6 pulgadas Full HD (1920 x 1080) IPS antirreflejo con biseles delgados y 250 nits',
+      'Teclado y ergonomía: Teclado numérico completo numpad resistente a derrames menores de líquidos',
+      'Seguridad corporativa: HP Wolf Pro Security, sensor biométrico de huellas digitales y TPM 2.0',
+      'Puertos y red: 2x USB Type-C, 2x USB Type-A, HDMI 2.1, RJ-45 Gigabit, Wi-Fi 6E y Bluetooth 5.3',
+      'Garantía oficial HP de 1 año con respaldo corporativo Futunet y comprobante fiscal formal NCF'
+    ]
+  }
+];
+
+const hpPrinterItems = [
+  {
+    id: 'oficina_hp_laserjet_pro_m428fdw_multifuncional',
+    department: 'equipos',
+    category: 'Impresoras y Escáneres',
+    brand: 'HP',
+    title: 'Impresora Multifuncional Láser HP LaserJet Pro MFP M428fdw (40 ppm, Dúplex, Wi-Fi, Ethernet, Fax)',
+    desc: 'Impresora láser multifuncional monocromática 4 en 1 de alta productividad HP LaserJet Pro MFP M428fdw (imprime, escanea, copia y envía fax) diseñada para oficinas, notarías, consultorios médicos, empresas e instituciones en Santiago con alta carga de trabajo documental. Imprime a velocidades de hasta 40 páginas por minuto con resolución nítida HP FastRes 1200. Cuenta con impresión a doble cara automática (dúplex) y alimentador automático de documentos (ADF) de 50 hojas para escaneo dúplex de doble cara en una sola pasada. Equipada con pantalla táctil intuitiva a color de 2.7 pulgadas con accesos directos configurables, conectividad inalámbrica Wi-Fi de doble banda autorreparable, puerto Gigabit Ethernet de red, USB 2.0 de alta velocidad e impresión móvil mediante Apple AirPrint, Mopria y app HP Smart. Capacidad de entrada de hasta 350 hojas (bandeja multiuso de 100 hojas + bandeja principal de 250 hojas) y compatibilidad con cartuchos de tóner de alta capacidad HP CF258A y CF258X.',
+    price: 'RD$ 32,500.00',
+    img: 'img/productos/catalogo/hp-laserjet-pro-mfp-m428fdw.webp',
+    gallery: [
+      'img/productos/catalogo/hp-laserjet-pro-mfp-m428fdw.webp'
+    ],
+    specs: [
+      'Funciones 4 en 1: Impresión láser monocromática, copiado de alta nitidez, escáner y fax de oficina',
+      'Velocidad de impresión: Hasta 40 ppm (A4 / Carta) con salida de primera página en apenas 6.1 segundos',
+      'Doble cara automático (Dúplex): Impresión y escaneo a dos caras simultáneo con ADF de 50 hojas',
+      'Pantalla y control: Pantalla táctil gráfica a color de 2.7 pulgadas (6.8 cm) con accesos directos táctiles',
+      'Conectividad de red: Wi-Fi de doble banda 2.4/5 GHz, Ethernet Gigabit 10/100/1000 y USB 2.0',
+      'Capacidad de papel: Bandeja 1 multipropósito de 100 hojas y Bandeja 2 de 250 hojas (350 hojas estándar)',
+      'Consumibles: Cartuchos originales HP CF258A (3,000 páginas) y HP CF258X de alto rendimiento (10,000 páginas)',
+      'Garantía oficial HP de 1 año con soporte técnico local y factura con NCF corporativo'
+    ]
+  }
+];
+
+const ciscoSwitchItems = [
+  {
+    id: 'redes_cisco_business_cbs350_24t_switch',
+    department: 'redes',
+    category: 'Switches y Redes',
+    brand: 'Cisco',
+    title: 'Switch Administrable Gigabit Cisco Business CBS350-24T-4G (24 Puertos GbE + 4 Uplinks SFP, Capa 3)',
+    desc: 'Switch administrable empresarial de capa 2 y capa 3 Cisco Business 350 Series (CBS350-24T-4G) para infraestructura de telecomunicaciones, naves industriales, centros de datos y redes corporativas de alto rendimiento en Santiago. Cuenta con 24 puertos Gigabit Ethernet 10/100/1000 Mbps con arquitectura sin bloqueo y 4 puertos dedicados SFP Gigabit para enlaces ascendentes de fibra óptica troncal hacia servidores u otros edificios. Proporciona una capacidad de conmutación de 56 Gbps y tasa de reenvío de 41.66 Mpps. Incorpora capacidades avanzadas de enrutamiento estático IPv4/IPv6 de capa 3 para interconectar segmentos y VLANs (hasta 4,094 IDs de VLAN) sin sobrecargar el router perimetral. Ofrece seguridad de red robusta con listas de control de acceso (ACLs), seguridad de puertos IEEE 802.1X, prevención contra ataques DoS, soporte QoS de 8 colas de prioridad y gestión simplificada mediante interfaz web en español, SNMP y la consola en la nube Cisco Business Dashboard sin requerir pago de licencias recurrentes. Formato metálico de montaje en rack de 19 pulgadas (1U) con garantía oficial Cisco y comprobante fiscal formal NCF.',
+    price: 'RD$ 28,900.00',
+    img: 'img/productos/catalogo/cisco-cbs350-24t-switch.webp',
+    gallery: [
+      'img/productos/catalogo/cisco-cbs350-24t-switch.webp'
+    ],
+    specs: [
+      'Puertos de red: 24 puertos Gigabit Ethernet RJ-45 (10/100/1000 Mbps) con autodetección MDI/MDIX',
+      'Puertos de fibra óptica: 4 puertos dedicados SFP Gigabit (1 Gbps) para módulos transceptores de fibra',
+      'Rendimiento y capacidad: Capacidad de conmutación de 56 Gbps y reenvío de 41.66 millones de paquetes/seg (Mpps)',
+      'Enrutamiento de Capa 3: Enrutamiento estático IPv4/IPv6 para segmentación directa de tráfico entre VLANs',
+      'Seguridad de red: IEEE 802.1X, listas de control de acceso (ACLs), inspección ARP dinámica e IP Source Guard',
+      'Administración empresarial: Cisco Business Dashboard, interfaz gráfica Web GUI intuitiva en español y SNMP v1/v2c/v3',
+      'Estructura física: Chasis de acero para montaje en rack estándar de 19" (1U) con brackets de sujeción incluidos',
+      'Garantía oficial Cisco de 2 años con soporte técnico especializado de Futunet en República Dominicana'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -1764,7 +1842,10 @@ async function updateBackupData() {
     ...solarCamItems,
     ...samsungDisplayItems,
     ...ubiquitiGatewayItems,
-    ...univiewNvrItems
+    ...univiewNvrItems,
+    ...hpLaptopItems,
+    ...hpPrinterItems,
+    ...ciscoSwitchItems
   ];
 
   itemsToSync.forEach(item => {
@@ -1823,7 +1904,10 @@ async function updateFirestore() {
     ...solarCamItems,
     ...samsungDisplayItems,
     ...ubiquitiGatewayItems,
-    ...univiewNvrItems
+    ...univiewNvrItems,
+    ...hpLaptopItems,
+    ...hpPrinterItems,
+    ...ciscoSwitchItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

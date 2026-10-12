@@ -49,19 +49,19 @@
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="login-company">Código de empresa <span style="font-weight:500; color:#64748b;">(opcional)</span></label>
-      <input class="auth-input" type="text" id="login-company" name="company" placeholder="Solo para accesos corporativos o ERP" autocomplete="organization" style="text-transform: uppercase;" />
+      <input class="auth-input" type="text" id="login-company" name="company" placeholder="Solo para accesos corporativos o ERP" autocomplete="organization" maxlength="50" style="text-transform: uppercase;" />
       <small style="display:block; margin-top:6px; color:#64748b; line-height:1.45;">Si creaste una cuenta personal o de cliente, deja este campo vacío.</small>
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="login-email">Correo electrónico</label>
-      <input class="auth-input" type="email" id="login-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
+      <input class="auth-input" type="email" id="login-email" name="email" placeholder="tu@email.com" required maxlength="100" autocomplete="email" />
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="login-password">Contraseña</label>
       <div class="auth-password-wrap">
-       <input class="auth-input" type="password" id="login-password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+       <input class="auth-input" type="password" id="login-password" name="password" placeholder="••••••••" required maxlength="128" autocomplete="current-password" />
        <button type="button" class="auth-password-toggle" data-toggle-password="login-password" aria-label="Mostrar contraseña">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
        </button>
@@ -106,18 +106,18 @@
     <form id="register-form" autocomplete="on">
      <div class="auth-form-group">
       <label class="auth-label" for="register-name">Nombre completo</label>
-      <input class="auth-input" type="text" id="register-name" name="name" placeholder="Juan Pérez" required autocomplete="name" />
+      <input class="auth-input" type="text" id="register-name" name="name" placeholder="Juan Pérez" required maxlength="100" autocomplete="name" />
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="register-email">Correo electrónico</label>
-      <input class="auth-input" type="email" id="register-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
+      <input class="auth-input" type="email" id="register-email" name="email" placeholder="tu@email.com" required maxlength="100" autocomplete="email" />
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="register-password">Contraseña</label>
       <div class="auth-password-wrap">
-       <input class="auth-input" type="password" id="register-password" name="password" placeholder="Mínimo 8 caracteres" required minlength="8" autocomplete="new-password" />
+       <input class="auth-input" type="password" id="register-password" name="password" placeholder="Mínimo 8 caracteres" required minlength="8" maxlength="128" autocomplete="new-password" />
        <button type="button" class="auth-password-toggle" data-toggle-password="register-password" aria-label="Mostrar contraseña">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
        </button>
@@ -170,7 +170,7 @@
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="reset-email">Correo electrónico</label>
-      <input class="auth-input" type="email" id="reset-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
+      <input class="auth-input" type="email" id="reset-email" name="email" placeholder="tu@email.com" required maxlength="100" autocomplete="email" />
      </div>
 
      <button type="submit" class="auth-btn auth-btn-primary" id="reset-btn">
@@ -198,7 +198,7 @@
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="magic-email">Correo electrónico</label>
-      <input class="auth-input" type="email" id="magic-email" name="email" placeholder="tu@email.com" required autocomplete="email" />
+      <input class="auth-input" type="email" id="magic-email" name="email" placeholder="tu@email.com" required maxlength="100" autocomplete="email" />
      </div>
 
      <button type="submit" class="auth-btn auth-btn-primary" id="magic-btn">
@@ -443,8 +443,8 @@
 
     setLoading('login-btn', true);
 
-    var companyCode = sanitizeAuthInput(document.getElementById('login-company')?.value).toUpperCase().slice(0, 30);
-    var email = sanitizeAuthInput(document.getElementById('login-email')?.value).slice(0, 150);
+    var companyCode = sanitizeAuthInput(document.getElementById('login-company')?.value).toUpperCase().slice(0, 50);
+    var email = sanitizeAuthInput(document.getElementById('login-email')?.value).slice(0, 100);
     var password = document.getElementById('login-password')?.value || '';
     var remember = !!document.getElementById('login-remember')?.checked;
 
@@ -540,7 +540,7 @@
     setLoading('register-btn', true);
 
     var name = sanitizeAuthInput(document.getElementById('register-name')?.value).slice(0, 100);
-    var email = sanitizeAuthInput(document.getElementById('register-email')?.value).slice(0, 150);
+    var email = sanitizeAuthInput(document.getElementById('register-email')?.value).slice(0, 100);
     var password = document.getElementById('register-password')?.value || '';
     var acceptedTerms = !!document.getElementById('register-terms')?.checked;
 
@@ -637,7 +637,7 @@
      return;
     }
 
-    var email = sanitizeAuthInput(document.getElementById('reset-email')?.value).slice(0, 150);
+    var email = sanitizeAuthInput(document.getElementById('reset-email')?.value).slice(0, 100);
     var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
      showMessage('reset-message', 'El formato del correo no es válido.', 'error');
@@ -688,7 +688,7 @@
      return;
     }
 
-    var email = sanitizeAuthInput(document.getElementById('magic-email')?.value).slice(0, 150);
+    var email = sanitizeAuthInput(document.getElementById('magic-email')?.value).slice(0, 100);
     var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) {
      showMessage('magic-message', 'El formato del correo no es válido.', 'error');

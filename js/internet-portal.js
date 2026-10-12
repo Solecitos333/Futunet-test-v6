@@ -718,8 +718,8 @@
         var details = sanitizePortalInput(detailsEl ? detailsEl.value : '');
         var newSpeed = sanitizePortalInput(speedEl ? speedEl.value : '');
 
-        if (details.length > 1500) {
-          if (window.showToast) window.showToast('El detalle de la solicitud no debe superar los 1500 caracteres.', 'error');
+        if (!details || details.length < 5 || details.length > 1500) {
+          if (window.showToast) window.showToast('Por favor describe tu problema con detalle (entre 5 y 1500 caracteres).', 'error');
           if (btn) btn.disabled = false;
           return;
         }
@@ -1016,7 +1016,7 @@
         var planIdEl = document.getElementById('p-guest-plan-id');
         var date = dateEl ? dateEl.value : '';
         var schedule = scheduleEl ? scheduleEl.value : '';
-        var address = addressEl ? addressEl.value.trim() : '';
+        var address = sanitizeGuestInput(addressEl ? addressEl.value : '');
         var planName = planNameEl ? planNameEl.value : '';
         var planId = planIdEl ? planIdEl.value : '';
         var selectedPlan = getActiveCatalogPlan(planId);
@@ -1028,8 +1028,8 @@
         planName = selectedPlan.fullName;
 
         // Validaciones de longitud para alinearse con Firestore rules
-        if (name.length > 100) {
-          if (window.showToast) window.showToast('El nombre no debe superar los 100 caracteres.', 'error');
+        if (name.length < 2 || name.length > 100) {
+          if (window.showToast) window.showToast('El nombre debe contener entre 2 y 100 caracteres.', 'error');
           if (btn) btn.disabled = false;
           return;
         }
@@ -1043,8 +1043,8 @@
           if (btn) btn.disabled = false;
           return;
         }
-        if (address.length > 500) {
-          if (window.showToast) window.showToast('La dirección no debe superar los 500 caracteres.', 'error');
+        if (address.length < 2 || address.length > 300) {
+          if (window.showToast) window.showToast('La dirección de instalación debe contener entre 2 y 300 caracteres.', 'error');
           if (btn) btn.disabled = false;
           return;
         }

@@ -1148,6 +1148,30 @@
       status: 'implemented',
       description: 'En instalaciones de videovigilancia IP para naves industriales, plazas comerciales y residenciales en Santiago requerimos grabadores NVR Uniview NVR301-08S3-P8 de 8 canales con switch PoE de 8 puertos independientes integrados Plug & Play, soporte para cámaras IP hasta 8 MP (4K), salida HDMI 4K, compresión Ultra 265 para optimización de ancho de banda y almacenamiento, y monitoreo móvil en la app EZView.',
       officialResponse: '¡Hola Ing. Wilfredo! Tu sugerencia ha sido atendida e implementada. Hemos integrado al catálogo de Seguridad Electrónica y a marca-uniview.html el Grabador NVR Uniview 4K Ultra HD de 8 Canales con Switch PoE de 8 Puertos Integrados (NVR301-08S3-P8), compatible con cámaras IP de hasta 8 MP (4K), compresión Ultra 265, salida HDMI 4K, bahía SATA para disco duro hasta 6 TB y visualización en tiempo real desde la app EZView con garantía oficial.'
+    },
+    {
+      refCode: 'SUG-H4500',
+      title: 'Disponibilidad de Laptops Corporativas HP ProBook 450 G10 Intel Core i7 con 16 GB RAM y 512 GB SSD NVMe para Empresas y Despachos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestra firma de ingeniería y despachos administrativos en Santiago necesitamos adquirir laptops corporativas HP de alta durabilidad serie ProBook 450 G10 con pantalla de 15.6 pulgadas Full HD antirreflejo, procesador Intel Core i7 de 13.ª generación, 16 GB de RAM expandible, 512 GB SSD NVMe y teclado completo en español con bloque numérico para digitación contable y cálculos.',
+      officialResponse: '¡Hola Ing. Rafael! Nos complace informarte que tu sugerencia ha sido implementada con éxito. Ya incorporamos al catálogo corporativo de Equipos de Oficina y a la página oficial marca-hp.html la Laptop Corporativa HP ProBook 450 G10 (15.6" FHD IPS, Intel Core i7-1355U, 16 GB RAM DDR4, 512 GB SSD NVMe, teclado numérico completo en español y seguridad HP Wolf Pro Security) con 1 año de garantía oficial Futunet y comprobante fiscal formal NCF.'
+    },
+    {
+      refCode: 'SUG-H4280',
+      title: 'Disponibilidad de Impresoras Multifuncionales Láser HP LaserJet Pro MFP M428fdw de Alto Rendimiento para Facturación y Oficinas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En notarías, consultorios médicos y áreas de facturación en Santiago requerimos impresoras láser monocromáticas robustas de alta velocidad como la HP LaserJet Pro MFP M428fdw (con funciones de impresión, escaneo, copia y fax, doble cara automático dúplex, alimentador ADF de 50 hojas, conectividad Ethernet Gigabit, Wi-Fi de doble banda y cartuchos de tóner de alta capacidad HP CF258X) para imprimir contratos y documentos con máxima nitidez y bajo costo por página.',
+      officialResponse: '¡Estimada Lic. Mariana! Tu propuesta ha sido atendida e implementada. Hemos integrado al catálogo de Equipos de Oficina y a marca-hp.html la Impresora Multifuncional Láser HP LaserJet Pro MFP M428fdw (impresión a 40 ppm, escaneo dúplex a doble cara en una sola pasada, pantalla táctil a color de 2.7", Wi-Fi de doble banda, Ethernet y bandeja para 350 hojas con tóner de alto rendimiento), con garantía oficial y entrega directa en Santiago.'
+    },
+    {
+      refCode: 'SUG-C3500',
+      title: 'Disponibilidad de Switches Administrables Cisco Business CBS350-24T-4G Gigabit con 4 Uplinks SFP y Enrutamiento Estático L3 para Redes Corporativas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En proyectos de cableado estructurado, centros de datos y redes empresariales en Santiago requerimos switches administrables de capa 2/3 Cisco Business CBS350-24T-4G de 24 puertos Gigabit Ethernet con 4 puertos dedicados SFP Gigabit para enlaces troncales de fibra óptica, soporte de enrutamiento estático IPv4/IPv6 de capa 3, VLANs avanzadas 802.1Q, seguridad de puertos 802.1X y gestión intuitiva mediante Cisco Business Dashboard sin costos de licencias.',
+      officialResponse: '¡Saludos Ing. Cristian! Tu sugerencia ha sido implementada exitosamente. Ya incorporamos al catálogo de Redes y Telecomunicaciones y a la página oficial marca-cisco.html el Switch Administrable Gigabit Cisco Business CBS350-24T-4G (24 puertos Gigabit Ethernet 10/100/1000, 4 puertos SFP Gigabit dedicados, capacidad de conmutación de 56 Gbps, enrutamiento estático L3, control de acceso ACL, VLANs y administración web/SNMP/Cisco Business Dashboard) con soporte y garantía oficial de Futunet en Santiago.'
     }
   ];
 

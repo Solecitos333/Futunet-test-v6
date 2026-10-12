@@ -331,7 +331,7 @@
     <!-- Buscador compacto visible al hacer scroll -->
     <div class="nav-search-compact" id="nav-search-compact" role="search" aria-label="Buscador rápido">
      <i data-lucide="search" class="nav-search-compact__icon" aria-hidden="true"></i>
-     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" aria-label="Buscar productos" />
+     <input type="search" id="search-navbar" class="nav-search-compact__input" placeholder="Buscar productos..." autocomplete="off" maxlength="100" aria-label="Buscar productos" />
      <div id="search-drop-navbar" class="search-dropdown" aria-label="Resultados" role="listbox" aria-live="polite"></div>
     </div>
 
@@ -575,19 +575,19 @@
      </div>
       <div class="up-form-group">
        <label class="up-form-label" for="profile-name">Nombre completo</label>
-       <input class="up-form-input" type="text" id="profile-name" required />
+       <input class="up-form-input" type="text" id="profile-name" maxlength="100" autocomplete="name" required />
       </div>
       <div class="up-form-group">
        <label class="up-form-label" for="profile-email">Correo electrónico</label>
-       <input class="up-form-input" type="email" id="profile-email" readonly value="" />
+       <input class="up-form-input" type="email" id="profile-email" readonly maxlength="100" autocomplete="email" value="" />
       </div>
       <div class="up-form-group">
        <label class="up-form-label" for="profile-phone">Teléfono</label>
-       <input class="up-form-input" type="tel" id="profile-phone" placeholder="809-000-0000" />
+       <input class="up-form-input" type="tel" id="profile-phone" maxlength="30" autocomplete="tel" placeholder="809-000-0000" />
       </div>
       <div class="up-form-group">
        <label class="up-form-label" for="profile-address">Dirección</label>
-       <input class="up-form-input" type="text" id="profile-address" placeholder="Tu dirección" />
+       <input class="up-form-input" type="text" id="profile-address" maxlength="300" autocomplete="street-address" placeholder="Tu dirección" />
       </div>
       <div class="fin-grid">
        <div class="up-form-group">
@@ -642,7 +642,7 @@
        </div>
        <div class="up-form-group">
         <label class="up-form-label" for="fin-phone">Teléfono</label>
-        <input class="up-form-input" type="tel" id="fin-phone" required placeholder="809-000-0000" />
+        <input class="up-form-input" type="tel" id="fin-phone" required maxlength="30" autocomplete="tel" placeholder="809-000-0000" />
        </div>
        <div class="up-form-group">
         <label class="up-form-label" for="fin-address">Dirección residencial</label>

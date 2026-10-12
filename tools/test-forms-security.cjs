@@ -512,3 +512,135 @@ test('Seguridad de Autenticación & Redirecciones: allowlist estricta de rutas l
     'login.html debe restringir redirecciones a paneles de administración exclusivamente a usuarios con roles de staff'
   );
 });
+
+test('Defensa en Profundidad: límites de longitud (maxlength) en todos los campos de formularios públicos (OWASP ASVS V5 / CWE-20)', () => {
+  function assertFieldHasMaxLength(htmlContent, fieldId, expectedMax, fileName) {
+    const tagRegex = new RegExp(`<(?:input|textarea)[^>]*id=["']${fieldId}["'][^>]*>`, 'i');
+    const match = htmlContent.match(tagRegex);
+    assert.ok(match, `Elemento con id="${fieldId}" debe existir en ${fileName}`);
+    const tagHtml = match[0];
+    const maxMatch = tagHtml.match(/maxlength=["']([0-9]+)["']/i);
+    assert.ok(maxMatch, `Elemento con id="${fieldId}" en ${fileName} debe tener atributo maxlength`);
+    if (expectedMax !== undefined) {
+      assert.strictEqual(
+        parseInt(maxMatch[1], 10),
+        expectedMax,
+        `Elemento con id="${fieldId}" en ${fileName} debe tener maxlength="${expectedMax}", pero tiene ${maxMatch[1]}`
+      );
+    }
+  }
+
+  // 1. index.html
+  const indexHtml = readHtml('index.html');
+  assertFieldHasMaxLength(indexHtml, 'f-nombre', 100, 'index.html');
+  assertFieldHasMaxLength(indexHtml, 'f-tel', 30, 'index.html');
+  assertFieldHasMaxLength(indexHtml, 'f-msg', 1500, 'index.html');
+
+  // 2. login.html
+  const loginHtml = readHtml('login.html');
+  assertFieldHasMaxLength(loginHtml, 'login-company', 50, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'login-email', 100, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'login-password', 128, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'register-name', 100, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'register-email', 100, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'register-password', 128, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'reset-email', 100, 'login.html');
+  assertFieldHasMaxLength(loginHtml, 'magic-email', 100, 'login.html');
+
+  // 3. punto-de-venta.html
+  const posHtml = readHtml('punto-de-venta.html');
+  assertFieldHasMaxLength(posHtml, 'pos-name', 100, 'punto-de-venta.html');
+  assertFieldHasMaxLength(posHtml, 'pos-phone', 30, 'punto-de-venta.html');
+  assertFieldHasMaxLength(posHtml, 'pos-msg', 1000, 'punto-de-venta.html');
+
+  // 4. internet.html
+  const internetHtml = readHtml('internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-hir-name', 100, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-hir-email', 100, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-hir-phone', 30, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-hir-address', 300, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-hir-notes', 500, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-guest-name', 100, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-guest-phone', 30, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-guest-email', 100, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'p-guest-address', 300, 'internet.html');
+  assertFieldHasMaxLength(internetHtml, 'support-details', 1500, 'internet.html');
+
+  // 5. mi-cuenta.html
+  const accountHtml = readHtml('mi-cuenta.html');
+  assertFieldHasMaxLength(accountHtml, 'profile-name', 100, 'mi-cuenta.html');
+  assertFieldHasMaxLength(accountHtml, 'profile-email', 100, 'mi-cuenta.html');
+  assertFieldHasMaxLength(accountHtml, 'profile-phone', 30, 'mi-cuenta.html');
+  assertFieldHasMaxLength(accountHtml, 'profile-address', 300, 'mi-cuenta.html');
+  assertFieldHasMaxLength(accountHtml, 'fin-phone', 30, 'mi-cuenta.html');
+
+  // 6. Formularios B2B (7 páginas)
+  const b2bPages = [
+    'corporativo.html',
+    'energia-climatizacion.html',
+    'equipos-oficina.html',
+    'infraestructura-remozamiento.html',
+    'mobiliario-suministros.html',
+    'redes-datos.html',
+    'seguridad-electronica.html'
+  ];
+  for (const page of b2bPages) {
+    const b2bHtml = readHtml(page);
+    assertFieldHasMaxLength(b2bHtml, 'req-name', 100, page);
+    assertFieldHasMaxLength(b2bHtml, 'req-phone', 50, page);
+    assertFieldHasMaxLength(b2bHtml, 'req-email', 100, page);
+    assertFieldHasMaxLength(b2bHtml, 'req-company', 100, page);
+    assertFieldHasMaxLength(b2bHtml, 'req-message', 1500, page);
+  }
+
+  // 7. Modal de checkout en cart.js
+  const cartJs = readJs('js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-name', 100, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-phone', 30, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-email', 100, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-document-number', 30, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-address', 300, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-notes', 500, 'js/cart.js');
+  assertFieldHasMaxLength(cartJs, 'chk-coupon', 50, 'js/cart.js');
+});
+
+test('Validación Defensiva en Cliente: límites de longitud en handleSubmitOrder (cart.js) (OWASP ASVS V5)', () => {
+  const cartJs = readJs('js/cart.js');
+  assert.ok(
+    cartJs.includes('name.length < 2 || name.length > 100'),
+    'cart.js debe validar que name tenga longitud entre 2 y 100'
+  );
+  assert.ok(
+    cartJs.includes('email.length > 100'),
+    'cart.js debe validar que email no exceda 100 caracteres'
+  );
+  assert.ok(
+    cartJs.includes('phone.length > 30'),
+    'cart.js debe validar que phone no exceda 30 caracteres'
+  );
+  assert.ok(
+    cartJs.includes('address.length < 2 || address.length > 300'),
+    'cart.js debe validar que address tenga longitud entre 2 y 300'
+  );
+  assert.ok(
+    cartJs.includes('notes.length > 500'),
+    'cart.js debe validar que notes no exceda 500 caracteres'
+  );
+});
+
+test('Seguridad XSS & Renderizado Seguro: mitigación DOM en catalog.js (CWE-79)', () => {
+  const catalogJs = readJs('js/catalog.js');
+  assert.ok(
+    catalogJs.includes("counterP.textContent = `Mostrando ${Number(shown)} de ${Number(total)} productos`"),
+    'catalog.js debe asignar el contador de productos usando textContent seguro en lugar de innerHTML'
+  );
+  assert.ok(
+    catalogJs.includes("counterP.textContent = `Mostrando todos los ${Number(products.length)} productos`") ||
+    catalogJs.includes("counterP.textContent = `Mostrando todos los ${Number(total)} productos`"),
+    'catalog.js debe asignar mensajes de fin de catálogo con textContent seguro'
+  );
+  assert.ok(
+    !catalogJs.includes('div.innerHTML = `<p class="results-counter">Mostrando'),
+    'catalog.js no debe inyectar contadores sin sanitizar directamente en innerHTML'
+  );
+});
