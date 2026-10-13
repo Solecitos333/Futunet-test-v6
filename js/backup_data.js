@@ -7412,6 +7412,76 @@ const mockDatabase = [
       "Estructura física: Chasis de acero para montaje en rack estándar de 19\" (1U) con brackets de sujeción incluidos",
       "Garantía oficial Cisco de 2 años con soporte técnico especializado de Futunet en República Dominicana"
     ]
+  },
+  {
+    "id": "energia_apc_schneider_easy_ups_srv_3000va_online",
+    "department": "energia",
+    "category": "Sistemas UPS y Baterías",
+    "brand": "Schneider Electric",
+    "title": "UPS Online Doble Conversión APC by Schneider Electric Easy UPS SRV 3000VA 120V (2400W, 0 ms Transferencia, LCD, SNMP)",
+    "desc": "Sistema de Alimentación Ininterrumpida (UPS) Online de Doble Conversión de alto rendimiento APC by Schneider Electric Easy UPS SRV 3000VA (SRV3000XLA / SRV3KA) de 2,400 Watts de potencia real con factor de potencia 0.8 / onda senoidal pura y tiempo de conmutación cero (0 ms). Diseñado especialmente para servidores de misión crítica, centros de datos, equipamiento médico y racks de telecomunicaciones en Santiago ante cortes o fluctuaciones extremas de la red eléctrica. Incorpora pantalla LCD gráfica multifunción para monitoreo en tiempo real de voltaje, carga y autonomía en minutos, ranura inteligente Mini-Slot para tarjeta de gestión de red SNMP/Web, bypass automático y tomas de salida profesionales NEMA 5-20R y NEMA L5-30R de alta capacidad.",
+    "price": "RD$ 78,900.00",
+    "img": "img/productos/catalogo/apc-schneider-easy-ups-srv-3000va.webp",
+    "gallery": [
+      "img/productos/catalogo/apc-schneider-easy-ups-srv-3000va.webp"
+    ],
+    "specs": [
+      "Capacidad y potencia: 3,000 VA / 2,400 Watts de potencia real con factor de potencia elevado",
+      "Topología eléctrica: Online Doble Conversión verdadera con tiempo de transferencia cero (0 ms)",
+      "Forma de onda: Onda senoidal pura en salida de 120V CA (±1% de regulación precisa de voltaje)",
+      "Tomas de salida: 6 tomas NEMA 5-20R de 20A + 1 toma de bloqueo industrial NEMA L5-30R de 30A",
+      "Pantalla y gestión: Pantalla LCD gráfica multifunción con estado de carga, batería y alarmas sonoras",
+      "Conectividad inteligente: Ranura Mini-Slot para tarjeta de red SNMP/Web y puerto USB/RS-232",
+      "Protección avanzada: Bypass automático y manual, modo ECO de alta eficiencia energética del 94%",
+      "Garantía oficial Schneider Electric / APC de 2 años con soporte técnico directo de Futunet en Santiago"
+    ]
+  },
+  {
+    "id": "redes_mikrotik_rb5009_router_multiwan",
+    "department": "redes",
+    "category": "Routers y Telecomunicaciones",
+    "brand": "MikroTik",
+    "title": "Router de Alto Rendimiento MikroTik RB5009UG+S+IN Multi-WAN (7x GbE + 1x 2.5 GbE + 1x 10G SFP+, Quad-Core 1.4 GHz)",
+    "desc": "Router corporativo de alta capacidad de enrutamiento MikroTik RB5009UG+S+IN diseñado para balanceo de carga Multi-WAN, enlaces de fibra óptica dedicados de alta velocidad y failover automático en zonas francas, empresas y proveedores en Santiago y el Cibao. Equipado con potente procesador Marvell Armada Quad-Core de 64 bits a 1.4 GHz, 1 GB de memoria RAM DDR4, 1 GB de almacenamiento NAND y chip de conmutación de alto rendimiento. Ofrece 7 puertos Gigabit Ethernet 10/100/1000, 1 puerto 2.5 Gigabit Ethernet para enlaces WAN de ultra banda ancha y 1 jaula 10G SFP+ para fibra óptica troncal a 10 Gbps. Chasis metálico compacto de aleación pesada que actúa como disipador térmico pasivo silencioso sin ventiladores ruidosos, con soporte para montaje en rack de 19 pulgadas y licencia RouterOS v7 Nivel 5 para enrutamiento BGP, OSPF, túneles WireGuard, IPsec acelerado por hardware y colas QoS avanzadas.",
+    "price": "RD$ 17,950.00",
+    "img": "img/productos/catalogo/mikrotik-rb5009-router-multiwan.webp",
+    "gallery": [
+      "img/productos/catalogo/mikrotik-rb5009-router-multiwan.webp"
+    ],
+    "specs": [
+      "Procesador y memoria: Marvell Armada 88F7040 Quad-Core a 1.4 GHz con 1 GB RAM DDR4 y 1 GB NAND",
+      "Puertos Ethernet: 7 puertos Gigabit Ethernet (10/100/1000 Mbps) + 1 puerto 2.5 Gigabit Ethernet (2.5 GbE)",
+      "Puerto de fibra óptica: 1 jaula SFP+ de 10 Gbps (10G SFP+) compatible con módulos de fibra mono/multimodo",
+      "Alimentación redundante: Entrada PoE-In 802.3af/at en puerto 1, DC Jack estándar y terminal bloque de 2 pines (24-57V)",
+      "Sistema operativo: MikroTik RouterOS v7 con Licencia Nivel 5 (soporte WireGuard, BGP, OSPF y VLANs)",
+      "Diseño térmico: Chasis disipador de aluminio macizo para operación 24/7 sin ventiladores y opción rack 1U",
+      "Rendimiento: Capacidad de enrutamiento de hasta 10 Gbps sin cuello de botella y aceleración IPsec",
+      "Garantía oficial MikroTik de 1 año con respaldo técnico y asesoría en Santiago de los Caballeros"
+    ]
+  },
+  {
+    "id": "oficina_lenovo_thinkcentre_m70q_tiny_desktop",
+    "department": "equipos",
+    "category": "Computadoras y Servidores",
+    "brand": "Lenovo",
+    "title": "Computadora Corporativa Ultracompacta Lenovo ThinkCentre M70q Tiny Gen 4 (Intel Core i5-13400T, 16 GB RAM, 512 GB SSD, Wi-Fi 6E)",
+    "desc": "Computadora de escritorio empresarial ultracompacta formato Tiny de 1 litro Lenovo ThinkCentre M70q Gen 4 diseñada para mostradores comerciales, cajas de punto de venta (POS), consultorios, firmas corporativas y espacios reducidos en Santiago. Equipada con procesador Intel Core i5-13400T de 13.ª generación con 10 núcleos y 16 hilos (hasta 4.40 GHz con Intel Max Turbo), 16 GB de memoria RAM DDR4 en doble canal (expandible a 64 GB), unidad de estado sólido de 512 GB SSD M.2 PCIe 4.0 NVMe de alta velocidad y gráficos integrados Intel UHD Graphics 730 con soporte para hasta 3 pantallas independientes vía HDMI 2.1 y DisplayPort 1.4. Cuenta con conectividad inalámbrica de última generación Wi-Fi 6E (802.11ax), Bluetooth 5.1, puerto de red Gigabit Ethernet RJ-45, puerto frontal USB-C 3.2 Gen 1, 5 puertos USB 3.2 Gen 2 y chasis de grado militar certificado bajo pruebas de resistencia extremas MIL-STD-810H. Compatible con montaje VESA detrás de monitores o bajo escritorios. Incluye teclado y mouse óptico Lenovo USB originales en español y Windows 11 Pro preinstalado.",
+    "price": "RD$ 44,500.00",
+    "img": "img/productos/catalogo/lenovo-thinkcentre-m70q-tiny.webp",
+    "gallery": [
+      "img/productos/catalogo/lenovo-thinkcentre-m70q-tiny.webp"
+    ],
+    "specs": [
+      "Procesador: Intel Core i5-13400T de 13.ª generación (10 núcleos: 6 Performance + 4 Efficient, 16 hilos, hasta 4.4 GHz)",
+      "Memoria RAM: 16 GB DDR4-3200 MHz de grado corporativo (expandible hasta 64 GB en dos ranuras SODIMM)",
+      "Almacenamiento: 512 GB SSD M.2 2280 PCIe 4.0 x4 NVMe Opal 2.0 de lectura y escritura ultrarrápida",
+      "Factor de forma Tiny: Chasis ultracompacto de 1 Litro (17.9 cm x 18.2 cm x 3.6 cm) y apenas 1.25 kg de peso",
+      "Salidas gráficas multi-monitor: 1 puerto HDMI 2.1 TMDS + 1 puerto DisplayPort 1.4a con soporte 4K",
+      "Puertos y expansión: 1x USB-C 3.2 Gen 1 frontal, 3x USB 3.2 Gen 2, 2x USB 3.2 Gen 1, RJ-45 Gigabit y combo audio",
+      "Conectividad: Intel Wi-Fi 6E AX211 (2x2 ax) + Bluetooth 5.1 con antena externa de alta ganancia",
+      "Periféricos y SO: Incluye teclado USB tradicional Lenovo y mouse óptico USB en español, con Windows 11 Pro",
+      "Garantía oficial Lenovo de 3 años en sitio con factura formal con valor fiscal NCF en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

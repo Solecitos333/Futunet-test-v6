@@ -1172,6 +1172,30 @@
       status: 'implemented',
       description: 'En proyectos de cableado estructurado, centros de datos y redes empresariales en Santiago requerimos switches administrables de capa 2/3 Cisco Business CBS350-24T-4G de 24 puertos Gigabit Ethernet con 4 puertos dedicados SFP Gigabit para enlaces troncales de fibra óptica, soporte de enrutamiento estático IPv4/IPv6 de capa 3, VLANs avanzadas 802.1Q, seguridad de puertos 802.1X y gestión intuitiva mediante Cisco Business Dashboard sin costos de licencias.',
       officialResponse: '¡Saludos Ing. Cristian! Tu sugerencia ha sido implementada exitosamente. Ya incorporamos al catálogo de Redes y Telecomunicaciones y a la página oficial marca-cisco.html el Switch Administrable Gigabit Cisco Business CBS350-24T-4G (24 puertos Gigabit Ethernet 10/100/1000, 4 puertos SFP Gigabit dedicados, capacidad de conmutación de 56 Gbps, enrutamiento estático L3, control de acceso ACL, VLANs y administración web/SNMP/Cisco Business Dashboard) con soporte y garantía oficial de Futunet en Santiago.'
+    },
+    {
+      refCode: 'SUG-S3000',
+      title: 'Disponibilidad de Sistemas UPS Online de Doble Conversión APC by Schneider Electric Easy UPS SRV 3000VA para Protección de Racks y Servidores Críticos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En salas de servidores, laboratorios clínicos y centros de cómputo en Santiago enfrentamos constantes variaciones de voltaje y microcortes eléctricos que desestabilizan los servidores. Los UPS interactivos convencionales demoran entre 4 y 10 ms en conmutar, lo que puede reiniciar storage o conmutadores sensibles. Requerimos sistemas UPS Online de doble conversión verdadera como el APC by Schneider Electric Easy UPS SRV 2000VA (1600W) o 3000VA (2400W) en formato torre/rack, con onda senoidal pura, cero tiempo de transferencia (0 ms), factor de potencia elevado, pantalla LCD de monitoreo, bypass automático y ranura inteligente para tarjeta de gestión de red SNMP para apagado seguro de servidores Dell PowerEdge.',
+      officialResponse: '¡Hola Ing. Carlos! Nos complace comunicarte que tu sugerencia ha sido aprobada e implementada en su totalidad. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-schneiderelectric.html el Sistema UPS Online Doble Conversión APC by Schneider Electric Easy UPS SRV 3000VA / 2400W (tecnología Online Doble Conversión, 0 ms de tiempo de transferencia, salida senoidal pura a 120V, pantalla LCD gráfica multifunción, ranura para tarjeta de gestión de red SNMP, bypass automático y tomas NEMA 5-20R / L5-30R) con 2 años de garantía oficial y soporte técnico especializado de Futunet en Santiago.'
+    },
+    {
+      refCode: 'SUG-M5009',
+      title: 'Disponibilidad de Routers de Alto Rendimiento MikroTik RB5009UG+S+IN con Puerto 2.5G y 10G SFP+ para Balanceo de Carga Multi-WAN y Enlaces Redundantes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras plantas de ensamblaje y logística en el parque industrial requerimos routers de grado industrial con gran potencia de enrutamiento y puertos multi-gigabit como el MikroTik RB5009UG+S+IN (equipado con procesador Quad-Core a 1.4 GHz, 1 GB RAM DDR4, 7 puertos Gigabit Ethernet, 1 puerto 2.5 Gigabit Ethernet y una jaula SFP+ de 10 Gbps para fibra óptica troncal). Actualmente en marca-mikrotik.html solo tienen el modelo básico hEX RB750Gr3, el cual se satura al manejar múltiples túneles VPN WireGuard, reglas complejas de firewall y balanceo de carga Multi-WAN simultáneo.',
+      officialResponse: '¡Saludos cordiales Ing. Manuel! Tu solicitud ha sido acogida e implementada de inmediato. Hemos agregado al catálogo de Redes de Datos y a marca-mikrotik.html el Router de Alto Rendimiento MikroTik RB5009UG+S+IN (CPU Marvell Armada Quad-Core 1.4 GHz, 1 GB RAM DDR4, 7 puertos Gigabit 10/100/1000, 1 puerto 2.5 GbE, 1 jaula 10G SFP+, sistema operativo RouterOS v7 nivel 5 y chasis de aluminio disipador de calor para montaje en rack) con garantía oficial y asistencia de configuración de failover de Futunet en Santiago.'
+    },
+    {
+      refCode: 'SUG-L7000',
+      title: 'Disponibilidad de Computadoras Corporativas Ultracompactas Lenovo ThinkCentre M70q Tiny Gen 4 Intel Core i5 para Oficinas y Cajas de Cobro',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras sucursales comerciales, farmacias y despachos administrativos en Santiago disponemos de mostradores y escritorios con espacio muy limitado donde no cabe una torre convencional. Requerimos computadoras de formato ultra compacto Lenovo ThinkCentre M70q Tiny Gen 4 (con procesador Intel Core i5 de 13.ª generación, 16 GB de memoria RAM DDR4/DDR5, 512 GB SSD NVMe M.2, conectividad Wi-Fi 6E, Bluetooth, salidas DisplayPort/HDMI para doble monitor y compatibilidad de montaje VESA detrás de la pantalla). En la sección de Lenovo de la web solo figuraba una laptop ThinkPad y requerimos desktops corporativos fijos de alta durabilidad.',
+      officialResponse: '¡Hola Licda. Patricia! Tu propuesta ha sido atendida con éxito. Hemos integrado al catálogo de Equipos de Oficina y a la página oficial marca-lenovo.html la Computadora Ultracompacta Corporativa Lenovo ThinkCentre M70q Tiny Gen 4 (procesador Intel Core i5-13400T de 10 núcleos, 16 GB RAM DDR4 expandible a 64 GB, 512 GB SSD NVMe, puertos HDMI, DisplayPort, USB-C, Wi-Fi 6E, teclado y mouse Lenovo USB en español y chasis ultracompacto de 1 litro con certificación militar MIL-STD-810H) con 3 años de garantía oficial y entrega inmediata en Santiago.'
     }
   ];
 

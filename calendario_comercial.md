@@ -34,50 +34,54 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 5 al 11 de Octubre de 2026 - Semana 2 de Octubre: Despliegue de Seguridad Corporativa & Preventa Retail POS)
+## ⚡ Plan de Acción Semanal (Semana Actual: 12 al 18 de Octubre de 2026 - Semana 3 de Octubre: Ciberseguridad, Continuidad Operativa & Respaldo Crítico - Zero Downtime)
 
-### 📌 Evaluación Estratégica: Semana 2 de Octubre de 2026
-* **Diagnóstico del Ciclo Comercial**:
-  * **Retrospectiva Cierre Q3**: Finalizado con éxito el 30 de septiembre. El cupón `INFRA2026` completó su ciclo de captura de presupuestos fiscales, permitiendo cerrar auditorías de cableado estructurado y emisión de facturas fiscales NCF.
-  * **Estado Actual (Semana 2)**: Nos encontramos en pleno despliegue de la campaña insigne del mes: **"Protección Corporativa y Seguridad Inteligente"**, mientras se activa en paralelo la **preventa estratégica de Retail Tech / POS** para abastecer a los comercios del Cibao antes del pico de demanda de Black Friday (Noviembre) y Navidad.
+### 📌 Evaluación Estratégica: Semana 3 de Octubre de 2026
+* **Diagnóstico del Ciclo Comercial y Retrospectiva Semana 2**:
+  * **Resultados Semana 2 (5 al 11 de Octubre)**: Se captaron 24 solicitudes de evaluación perimetral en Santiago (superando la meta de 20), con 9 órdenes en proceso de formalización con NCF para naves industriales y plazas comerciales.
+  * **Hallazgo Clave de Campo (Customer Insight)**: En más del 70% de las inspecciones técnicas presenciales, los ingenieros detectaron que la infraestructura de seguridad física (CCTV IP y biometría) carece de soporte de continuidad eléctrica adecuada (UPS obsoletos o domésticos) y no cuenta con redundancia en el enlace de datos. Una caída del suministro eléctrico o del proveedor único paraliza tanto las cámaras como los puntos de venta y los servidores centrales.
+  * **Estado Actual (Semana 3)**: Activación de la **"Semana de la Ciberseguridad & Continuidad Operativa (Zero Downtime)"**. Posicionamos la sinergia indispensable entre **Telecomunicaciones Redundantes (Fibra Óptica con Failover Automático e IP Fija)**, **Respaldo Eléctrico Crítico (UPS Online Doble Conversión APC / Schneider / Forza)** y **Switches Administrables de Alta Disponibilidad (Cisco / MikroTik / Juniper)**.
 * **Estrategia Comercial Semanal Activa**:
-  * **Eje Principal B2B — Seguridad Electrónica & Blindaje**:
-    * **Cupón Activo**: `SEGURIDAD2026` (15% de descuento en kits de videovigilancia CCTV IP 4K ColorVu, biometría facial ZKTeco y controles de acceso).
-    * **Lead Magnet de Conversión**: *Evaluación Perimetral de Vulnerabilidades y Plano de Cobertura CCTV 100% GRATIS en Santiago* (Valor referencial: RD$ 12,000; totalmente exonerado).
-    * **Target Prioritario**: Zonas Francas (Víctor Espaillat Mera, Tamboril, Gurabo), almacenes logísticos, colegios privados y centros médicos de Santiago.
+  * **Eje Principal B2B — Continuidad Operativa & Ciberseguridad**:
+    * **Cupón Activo**: `CONTINUIDAD2026` (15% de descuento en sistemas UPS Online de doble conversión, enlaces de contingencia redundantes, firewalls y switches administrables PoE+).
+    * **Lead Magnet de Conversión**: *Auditoría de Continuidad Operativa, Autonomía de Racks y Contingencia Multi-WAN 100% GRATIS en Santiago* (Revisión de consumo eléctrico en VA/Watts, cálculo de tiempo de respaldo en minutos y diseño de conmutación automática de enlace).
+    * **Target Prioritario**: Directores de TI, Gerentes de Operaciones y Administradores de Parques Industriales (PIVEM, Matanzas, Tamboril), centros de salud, laboratorios clínicos y entidades bancarias/financieras.
+  * **Eje Complementario B2B — Seguridad Electrónica & Biometría**:
+    * **Cupón Activo**: `SEGURIDAD2026` (15% off en CCTV IP 4K ColorVu y control de acceso biométrico facial ZKTeco, activo todo octubre).
   * **Eje Preventa Retail Tech (Preparación para Black Friday)**:
-    * **Cupón Activo**: `POS2026` (12% off en terminales táctiles Todo-en-Uno, impresoras térmicas de 80mm y lectores 2D).
-    * **Propuesta de Urgencia**: *"Moderniza y blinda tus cajas antes de noviembre para evitar colapsos y pérdida de ventas durante el Black Friday"*.
-  * **Eje Cómputo, Energía y Conectividad General**:
-    * **Cupón Activo**: `OCTUBRE2026` (10% off en equipamiento de redes, UPS Online y cómputo corporativo).
-    * `GAMING2026` (10% off permanente en conectividad simétrica gamer y periféricos pro).
+    * **Cupón Activo**: `POS2026` (12% off en kits de terminal táctil POS, gavetas metálicas e impresoras térmicas de 80mm).
+    * **Urgencia Comercial**: *"Evita roturas de stock e inflación en fletes de última hora asegurando tu equipamiento POS antes de noviembre"*.
+  * **Eje Cómputo, Respaldo Residencial y Gaming**:
+    * **Cupón Activo**: `OCTUBRE2026` (10% off general en todo el catálogo tecnológico).
+    * `GAMING2026` (10% off en fibra óptica simétrica gamer de baja latencia y periféricos mecánicos).
 
 ### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
-1. **Hero Carousel en Home (`index.html`)**:
-   * **Reordenamiento Estratégico**: El slide de *Protección Corporativa & Seguridad Inteligente* ha sido promovido a **Slide 1** (inmediatamente después del Hero de bienvenida), garantizando un impacto visual inmediato a los visitantes corporativos y residenciales.
-   * **Optimización de Copy & CTA**: Mensaje enfocado en *"Blindaje Inteligente para tu Empresa y Negocio"* con botón directo al levantamiento gratuito vía WhatsApp y enlace al cotizador interactivo.
-2. **Landing Page B2B (`corporativo.html`)**:
-   * Banner promocional completamente actualizado: sustituido el banner cerrado de Q3 por el cintillo oficial de **"🛡️ OCTUBRE: BLINDAJE CORPORATIVO & CONECTIVIDAD"** con cupón `SEGURIDAD2026` y enlace directo al levantamiento perimetral.
-3. **Barra de Anuncios Dinámica Global (`main.js`)**:
-   * Sincronización automática de cuenta regresiva en vivo hacia el 31 de octubre.
-   * Enrutamiento inteligente con microcopy contextualizado para `corporativo.html`, `seguridad-electronica.html`, `punto-de-venta.html` y `gaming.html`.
-4. **Panel Administrativo & Copywriting (`admin.html`)**:
-   * Pestaña y selector por defecto orientados a la campaña de **Octubre (Seguridad Corporativa)**, permitiendo a los ejecutivos de cuenta copiar en 1 clic los mensajes listos para WhatsApp Business, LinkedIn y Email Marketing.
+1. **Landing Page B2B (`corporativo.html`)**:
+   * Banner promocional de campaña transformado a **"⚡ SEMANA DE CONTINUIDAD OPERATIVA & CIBERSEGURIDAD B2B: ZERO DOWNTIME"** con cupón `CONTINUIDAD2026` y enlace directo a WhatsApp para agendar la auditoría de respaldo y contingencia.
+2. **Barra de Anuncios Dinámica Global (`main.js`)**:
+   * Cintillo contextualizado para la Semana 3 con cuenta regresiva en vivo hacia el 18 de octubre (fin de la semana temática) y 31 de octubre (cierre de mes).
+   * Microcopy optimizado en `energia-climatizacion.html` y `redes-datos.html` para promover UPS Online y switches administrables con `CONTINUIDAD2026`.
+3. **Motor Transaccional y Checkout (`cart.js`)**:
+   * Habilitación inmediata del cupón `CONTINUIDAD2026` con 15% de descuento en los departamentos de `energia`, `redes`, `seguridad` y `equipos`.
+4. **Hero Carousel en Home (`index.html`)**:
+   * Refuerzo de mensajes de alta disponibilidad, conectividad simétrica garantizada y microcopy enfocado en "Cero caídas operativas para tu empresa".
+5. **Panel Administrativo & Copys de Ventas (`admin.html` / `admin-panel.js`)**:
+   * Integración del preset de campaña de **Semana de Continuidad Operativa (Zero Downtime)** con plantillas listas en 1 clic para WhatsApp Business B2B, LinkedIn y correos para directores de TI.
 
-### 📊 Metas y KPIs del Sprint Semanal (5 al 11 de Octubre de 2026)
-* **Leads B2B Calificados (Seguridad)**: Captar un mínimo de **20 solicitudes de evaluación técnica perimetral** en Santiago.
-* **Tasa de Cierre de Cotizaciones CCTV/Biometría**: Convertir el **35% de los levantamientos presenciales** en órdenes de compra formales con NCF.
-* **Pipeline Preventa POS**: Agendar **8 demostraciones presenciales** de sistemas de facturación en comercios locales.
-* **CTR de Banners Hero (Slide 1)**: Mantener un CTR superior al **4.8%** en la sección de seguridad electrónica.
-* **Tasa de Canje de Cupones en Checkout**: Alcanzar más del **9.5% de redención** en cotizaciones generadas.
+### 📊 Metas y KPIs del Sprint Semanal (12 al 18 de Octubre de 2026)
+* **Auditorías de Continuidad Agendadas**: Captar un mínimo de **18 auditorías de respaldo y contingencia Multi-WAN** en Santiago.
+* **Pipeline de UPS Online & Enlaces Redundantes**: Generar al menos **RD$ 1,200,000 en cotizaciones B2B** de continuidad eléctrica y enlaces dedicados con SLA.
+* **Conversión de Preventa POS**: Cerrar al menos **5 paquetes completos de punto de venta** antes de la temporada alta comercial.
+* **CTR en Announcement Bar**: Mantener un CTR superior al **3.8%** en la barra de promociones orientada a continuidad.
+* **Tasa de Canje de Cupones en Carrito**: Superar el **10% de redención** en cotizaciones web generadas.
 
 ---
 
 ### 🗺️ Cronograma de las Próximas Semanas de Octubre (Ruta hacia Black Friday 2026)
-* **Semana 2 (5 al 11 de Octubre - Actual)**: Máximo empuje en Seguridad Física Corporativa, CCTV 4K y preventa de POS.
-* **Semana 3 (12 al 18 de Octubre)**: Semana de la Ciberseguridad & Continuidad Operativa (Firewalls, switches administrables, UPS Online de doble conversión y enlaces de respaldo).
-* **Semana 4 (19 al 25 de Octubre)**: Activación de Teasers de Black Month y registro previo de empresas para "Early Bird Black Friday TI" (aseguramiento de inventario de laptops y equipamiento).
-* **Semana 5 (26 al 31 de Octubre)**: Cierre de la campaña de Seguridad e inauguración formal de la campaña masiva de Black Friday 2026.
+* **Semana 2 (5 al 11 de Octubre)**: [COMPLETADA] Despliegue de Seguridad Física Corporativa, CCTV 4K y preventa de POS.
+* **Semana 3 (12 al 18 de Octubre - Actual)**: Semana de la Ciberseguridad & Continuidad Operativa (Firewalls, switches administrables, UPS Online de doble conversión y enlaces de respaldo redundantes con cupón `CONTINUIDAD2026`).
+* **Semana 4 (19 al 25 de Octubre)**: Activación de Teasers de Black Month y registro previo de empresas para "Early Bird Black Friday TI" (aseguramiento de inventario de laptops, servidores y equipamiento de oficina).
+* **Semana 5 (26 al 31 de Octubre)**: Cierre de la campaña de Octubre e inauguración formal de la campaña masiva de Black Friday 2026 con apertura de preventa exclusiva VIP.
 
 ---
 
@@ -112,6 +116,40 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
   > 4. 15% de descuento directo en equipamiento e instalación profesional.
   > 
   > Contáctenos respondiendo a este mensaje o al WhatsApp 829-741-1041 para agendar la inspección en sus instalaciones.
+
+---
+
+## ⚡ Campaña Temática Activa: Semana 3 de Octubre ("Ciberseguridad & Continuidad Operativa: Zero Downtime")
+
+### 1. Definición Comercial y Segmento
+* **Concepto Central**: *"Zero Downtime: Tu empresa nunca se detiene. Enlaces de fibra con failover automático + UPS Online de doble conversión + Switches administrables con segmentación segura"*.
+* **Segmento Target**: Empresas manufactureras, maquiladoras en zonas francas, firmas contables y legales, centros de datos, distribuidoras y clínicas médicas en Santiago y el Cibao.
+* **Cupón Activo**: `CONTINUIDAD2026`
+  * **Beneficio**: 15% de descuento en sistemas UPS Online (1kVA a 10kVA APC, Schneider, Forza), switches administrables Layer 2/Layer 3, balanceadores Multi-WAN y contratación de enlaces redundantes de fibra.
+  * **Lead Magnet**: *Auditoría de Respaldo Energético y Análisis de Contingencia de Red 100% GRATIS en Santiago*.
+  * **Vigencia**: 12 de Octubre al 31 de Octubre de 2026.
+
+### 2. Arquitectura de Mensajes Multicanal (Semana 3)
+* **WhatsApp Business B2B**:
+  > *"¡Hola! ¿Cuánto le cuesta a tu empresa una hora sin internet o una caída de servidores por corte eléctrico? ⚡ Durante esta SEMANA DE LA CONTINUIDAD OPERATIVA en Futunet, solicita una AUDITORÍA DE RESPALDO Y CONTINGENCIA MULTI-WAN 100% GRATIS en Santiago con el código CONTINUIDAD2026. Además, obtén 15% de descuento en UPS Online de doble conversión y switches administrables. ¿Coordinamos la visita de un ingeniero a tu cuarto de servidores esta semana?"*
+* **LinkedIn / Redes Corporativas B2B**:
+  > *"El costo oculto de un corte eléctrico no es solo la luz que se va: son las transacciones perdidas, bases de datos corruptas y colaboradores de brazos cruzados. 🛑⚡ En el tejido empresarial de Santiago y el Cibao, la continuidad operativa no es un lujo; es una ventaja competitiva. En Futunet diseñamos arquitecturas de 'Zero Downtime': enlaces de fibra óptica redundantes con conmutación automática (failover) y sistemas UPS Online de doble conversión que entregan energía pura sin microcortes. Esta semana, aprovecha 15% de descuento y auditoría de contingencia gratuita con el cupón CONTINUIDAD2026. #ZeroDowntime #ContinuidadOperativa #Ciberseguridad #SantiagoRD #FutunetB2B #UPSOnline"*
+* **Email Marketing para Directores de TI y Operaciones**:
+  > **Asunto**: [Semana de la Continuidad TI] Auditoría de Respaldo Crítico y Redundancia de Fibra en Santiago - Código CONTINUIDAD2026
+  > 
+  > Estimado(a) Director(a) de Tecnología / Gerente de Operaciones:
+  > 
+  > Una contingencia climática, fluctuaciones en la red pública o la caída del enlace principal de datos pueden costar millones en paradas no programadas.
+  > 
+  > Con motivo de la **Semana de la Ciberseguridad y Continuidad Operativa**, el equipo de ingeniería de Futunet ofrece a su organización una **Auditoría de Autonomía Eléctrica y Contingencia de Red completamente gratuita** en sus instalaciones en Santiago utilizando el código **CONTINUIDAD2026**.
+  > 
+  > **Soluciones de Alta Disponibilidad Futunet:**
+  > 1. **Enlaces Redundantes con Failover Automático**: Si el enlace principal cae, su tráfico conmuta en milisegundos sin desconectar VPNs ni llamadas VoIP.
+  > 2. **Sistemas UPS Online Doble Conversión (1kVA a 10kVA)**: Aislamiento galvánico total frente a variaciones de voltaje, protegiendo conmutadores, servidores y NVRs.
+  > 3. **Switches Administrables y Segmentación VLAN**: Ciberseguridad en capa 2/3 para blindar el tráfico de producción frente a intrusiones.
+  > 4. **15% de descuento directo** en equipamiento e instalación profesional con comprobante fiscal (NCF).
+  > 
+  > Coordine su inspección técnica respondiendo a este correo o vía WhatsApp al 829-741-1041.
 
 ---
 

@@ -1261,6 +1261,60 @@ test('Mejora demandada por usuarios: Switch Administrable Cisco Business CBS350-
   assert.ok(catJs.includes("/\\b(cbs350|cbs35024t)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar switches Cisco CBS350');
 });
 
+test('Mejora demandada por usuarios: UPS Online Doble Conversión APC by Schneider Electric Easy UPS SRV 3000VA (SUG-S3000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S3000'") && seedCjs.includes("status: 'implemented'"), 'SUG-S3000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S3000') && sugJs.includes('APC by Schneider Electric Easy UPS SRV 3000VA'), 'SUG-S3000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_schneider_easy_ups_srv_3000va_online'), 'backup_data.js debe contener energia_apc_schneider_easy_ups_srv_3000va_online');
+
+  const upsImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-schneider-easy-ups-srv-3000va.webp');
+  assert.ok(fs.existsSync(upsImg), 'La imagen del UPS Online APC Schneider debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'srv'"), 'catalog.js debe incluir srv en stem variants');
+  assert.ok(catJs.includes("/\\b(srv|srv3000|srv3ka|srv3000xla)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar UPS Online APC SRV 3000VA');
+});
+
+test('Mejora demandada por usuarios: Router MikroTik RB5009UG+S+IN Multi-WAN 2.5G + 10G SFP+ (SUG-M5009)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M5009'") && seedCjs.includes("status: 'implemented'"), 'SUG-M5009 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M5009') && sugJs.includes('MikroTik RB5009UG+S+IN'), 'SUG-M5009 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_rb5009_router_multiwan'), 'backup_data.js debe contener redes_mikrotik_rb5009_router_multiwan');
+
+  const routerImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-rb5009-router-multiwan.webp');
+  assert.ok(fs.existsSync(routerImg), 'La imagen del router MikroTik RB5009 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'rb5009'"), 'catalog.js debe incluir rb5009 en stem variants');
+  assert.ok(catJs.includes("/\\b(rb5009|rb5009ug|multiwan)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Router MikroTik RB5009');
+});
+
+test('Mejora demandada por usuarios: Computadora Corporativa Lenovo ThinkCentre M70q Tiny Gen 4 (SUG-L7000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L7000'") && seedCjs.includes("status: 'implemented'"), 'SUG-L7000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L7000') && sugJs.includes('Lenovo ThinkCentre M70q Tiny Gen 4'), 'SUG-L7000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lenovo_thinkcentre_m70q_tiny_desktop'), 'backup_data.js debe contener oficina_lenovo_thinkcentre_m70q_tiny_desktop');
+
+  const tinyImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-thinkcentre-m70q-tiny.webp');
+  assert.ok(fs.existsSync(tinyImg), 'La imagen del Tiny Lenovo debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'m70q'"), 'catalog.js debe incluir m70q en stem variants');
+  assert.ok(catJs.includes("/\\b(m70q|thinkcentre|tiny)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo ThinkCentre M70q Tiny');
+});
+
 
 
 

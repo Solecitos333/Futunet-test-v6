@@ -220,6 +220,11 @@ function getStemVariants(word) {
   if (word === 'laserjet') variants.push('hp', 'impresora', 'multifuncional', 'toner', 'm428', 'm428fdw');
   if (word === 'm428' || word === 'm428fdw') variants.push('laserjet', 'hp', 'impresora', 'mfp');
   if (word === 'cbs350' || word === 'cbs35024t') variants.push('cisco', 'switch', 'cbs', 'gigabit', 'sfp');
+  if (word === 'srv' || word === 'srv3000' || word === 'srv3ka') variants.push('apc', 'schneider', 'ups', 'online', 'conversion');
+  if (word === 'rb5009' || word === 'rb5009ug') variants.push('mikrotik', 'router', 'multiwan', 'sfp');
+  if (word === 'm70q' || word === 'thinkcentre') variants.push('lenovo', 'tiny', 'desktop', 'computadora', 'minipc');
+  if (word === 'tiny') variants.push('lenovo', 'thinkcentre', 'm70q', 'desktop', 'minipc');
+  if (word === 'multiwan') variants.push('router', 'mikrotik', 'rb5009', 'failover', 'balanceador');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -679,6 +684,39 @@ function scoreProductMatch(product, normalizedQuery) {
         score += 220;
       } else {
         score += 160;
+      }
+    }
+  }
+
+  // Priorizar APC by Schneider Electric Easy UPS Online SRV 3000VA al buscar srv, srv3000, ups online, doble conversion (SUG-S3000)
+  if (/\b(srv|srv3000|srv3ka|srv3000xla)\b/i.test(normalizedQuery) || (/\b(ups|nobreak)\b/i.test(normalizedQuery) && /\b(online|doble\s*conversion|3000va|2400w)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('schneider') || product.brand.toLowerCase().includes('apc'))) {
+      if (/srv|online.*doble.*conversion/i.test(title)) {
+        score += 230;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar MikroTik RB5009 Multi-WAN al buscar rb5009, rb5009ug, mikrotik router, router mikrotik, multiwan (SUG-M5009)
+  if (/\b(rb5009|rb5009ug|multiwan)\b/i.test(normalizedQuery) || (/\b(router|enrutador)\b/i.test(normalizedQuery) && /\b(mikrotik|2\.5g|10g|sfp\+)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mikrotik') {
+      if (/rb5009/i.test(title)) {
+        score += 230;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Lenovo ThinkCentre M70q Tiny Gen 4 al buscar m70q, thinkcentre, lenovo tiny, mini pc (SUG-L7000)
+  if (/\b(m70q|thinkcentre|tiny)\b/i.test(normalizedQuery) || (/\b(mini\s*pc|desktop|computadora)\b/i.test(normalizedQuery) && /\b(lenovo|tiny|m70q)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lenovo') {
+      if (/m70q|thinkcentre/i.test(title)) {
+        score += 230;
+      } else {
+        score += 170;
       }
     }
   }

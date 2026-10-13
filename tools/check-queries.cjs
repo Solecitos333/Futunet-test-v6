@@ -136,7 +136,14 @@ const queries = [
   'laserjet',
   'hp laserjet',
   'cbs350',
-  'switch cisco'
+  'switch cisco',
+  'ups online',
+  'srv3000',
+  'rb5009',
+  'router mikrotik',
+  'thinkcentre',
+  'm70q',
+  'mini pc'
 ];
 
 

@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v35';"), 'sw.js debe estar en la versión futunet-cache-v35');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v36';"), 'sw.js debe estar en la versión futunet-cache-v36');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -328,13 +328,15 @@ test('Estabilidad y Resiliencia: auth defensivo, cupones Q4, carga de producto y
     'producto.js debe manejar rechazos de readyPromise con try/catch defensivo'
   );
 
-  // 3. cart.js incluye cupón OCTUBRE2026 y comprobación de array de departamentos
+  // 3. cart.js incluye cupones OCTUBRE2026 y CONTINUIDAD2026 y comprobación de array de departamentos
   const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
   assert.ok(cartJs.includes('OCTUBRE2026'), 'cart.js debe incluir el cupón OCTUBRE2026 para octubre 2026');
+  assert.ok(cartJs.includes('CONTINUIDAD2026'), 'cart.js debe incluir el cupón CONTINUIDAD2026 para la semana de continuidad');
   assert.ok(
     cartJs.includes('Array.isArray(activeCoupon.departments) && activeCoupon.departments.includes(product.department)'),
     'cart.js debe verificar que activeCoupon.departments sea un array'
   );
+
 
   // 4. login.html permite redirecciones a páginas de marcas
   const loginHtml = fs.readFileSync(path.join(projectRoot, 'login.html'), 'utf8');

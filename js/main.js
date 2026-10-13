@@ -1260,7 +1260,10 @@ function initAnnouncementBar() {
     waMsg: 'Hola Futunet, quiero cotizar equipamiento tecnológico corporativo con el código OCTUBRE2026.'
   };
 
-  // Contextualización inteligente por página
+  // Contextualización inteligente por página y calendario comercial semanal
+  const week3End = new Date('2026-10-18T23:59:59');
+  const isWeek3 = now >= new Date('2026-10-12T00:00:00') && now <= week3End;
+
   if (currentPath.includes('gaming.html')) {
     campaign = {
       badge: '🎮 ZONA GAMING PRO',
@@ -1281,12 +1284,21 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('energia-climatizacion.html')) {
     campaign = {
-      badge: '⚡ RESPALDO Y ENERGÍA Q4',
-      message: '10% de Descuento en UPS Online, Baterías e Inversores con',
-      coupon: 'OCTUBRE2026',
-      endDate: new Date('2026-10-31T23:59:59'),
+      badge: '⚡ CONTINUIDAD & ENERGÍA CRÍTICA',
+      message: '15% de Descuento en UPS Online de Doble Conversión e Inversores con',
+      coupon: 'CONTINUIDAD2026',
+      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
       ctaText: 'Proteger Servidores',
-      waMsg: 'Hola Futunet, quiero cotizar UPS de respaldo con el código OCTUBRE2026.'
+      waMsg: 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.'
+    };
+  } else if (currentPath.includes('redes-datos.html')) {
+    campaign = {
+      badge: '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B',
+      message: '15% de Descuento en Switches Administrables y Enlaces Redundantes con',
+      coupon: 'CONTINUIDAD2026',
+      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
+      ctaText: 'Auditar Red',
+      waMsg: 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'
     };
   } else if (currentPath.includes('seguridad-electronica.html')) {
     campaign = {
@@ -1299,15 +1311,29 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('corporativo.html')) {
     campaign = {
-      badge: '🏢 Q4: BLINDAJE & REDES B2B',
-      message: '15% de Descuento en Seguridad Corporativa y Enlaces con',
-      coupon: 'SEGURIDAD2026',
-      endDate: new Date('2026-10-31T23:59:59'),
-      ctaText: 'Solicitar Auditoría B2B',
-      waMsg: 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.'
+      badge: isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : '🏢 Q4: BLINDAJE & REDES B2B',
+      message: isWeek3
+        ? '15% de Descuento en Respaldo Eléctrico, Enlaces Redundantes y Seguridad con'
+        : '15% de Descuento en Seguridad Corporativa y Enlaces con',
+      coupon: isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026',
+      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
+      ctaText: 'Auditoría B2B Gratis',
+      waMsg: isWeek3
+        ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
+        : 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.'
+    };
+  } else if (isWeek3) {
+    // Semana 3 de Octubre: Continuidad Operativa & Zero Downtime Global
+    campaign = {
+      badge: '⚡ SEMANA DE CONTINUIDAD OPERATIVA',
+      message: '15% de Descuento en UPS Online, Enlaces Redundantes y Seguridad con',
+      coupon: 'CONTINUIDAD2026',
+      endDate: week3End,
+      ctaText: 'Auditoría Zero Downtime',
+      waMsg: 'Hola Futunet, me interesa solicitar la auditoría gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
     };
   } else if (currentMonth === 9 || now > q3End) {
-    // Octubre: Campaña de Seguridad Corporativa Global
+    // Octubre general: Campaña de Seguridad Corporativa Global
     campaign = {
       badge: '🛡️ OCTUBRE: SEGURIDAD CORPORATIVA',
       message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',

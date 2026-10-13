@@ -86,6 +86,14 @@
       validFrom: '2026-10-01',
       validUntil: '2026-10-31',
       description: '10% de descuento en Soluciones Tecnológicas y Equipamiento (Octubre 2026)'
+    },
+    CONTINUIDAD2026: {
+      code: 'CONTINUIDAD2026',
+      discount: 0.15,
+      departments: ['energia', 'redes', 'seguridad', 'equipos'],
+      validFrom: '2026-10-12',
+      validUntil: '2026-10-31',
+      description: '15% de descuento en Continuidad Operativa, Respaldo Energético y Enlaces Redundantes (Semana 3 Octubre 2026)'
     }
   };
 
