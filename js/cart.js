@@ -551,7 +551,7 @@
     });
 
     document.querySelectorAll('.wizard-step-node').forEach((node) => {
-      const stepVal = parseInt(node.dataset.step);
+      const stepVal = parseInt(node.dataset.step, 10);
       node.classList.toggle('active', stepVal === currentStep);
       node.classList.toggle('completed', stepVal < currentStep);
     });
@@ -886,7 +886,7 @@
             <!-- Campo trampa antispam (Honeypot para bots) -->
             <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
               <label for="chk-hp-check">No llenar este campo</label>
-              <input type="text" id="chk-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+              <input type="text" id="chk-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" maxlength="50" />
             </div>
 
             <div class="checkout-privacy-consent" style="margin-top: 16px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">

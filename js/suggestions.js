@@ -1196,6 +1196,30 @@
       status: 'implemented',
       description: 'En nuestras sucursales comerciales, farmacias y despachos administrativos en Santiago disponemos de mostradores y escritorios con espacio muy limitado donde no cabe una torre convencional. Requerimos computadoras de formato ultra compacto Lenovo ThinkCentre M70q Tiny Gen 4 (con procesador Intel Core i5 de 13.ª generación, 16 GB de memoria RAM DDR4/DDR5, 512 GB SSD NVMe M.2, conectividad Wi-Fi 6E, Bluetooth, salidas DisplayPort/HDMI para doble monitor y compatibilidad de montaje VESA detrás de la pantalla). En la sección de Lenovo de la web solo figuraba una laptop ThinkPad y requerimos desktops corporativos fijos de alta durabilidad.',
       officialResponse: '¡Hola Licda. Patricia! Tu propuesta ha sido atendida con éxito. Hemos integrado al catálogo de Equipos de Oficina y a la página oficial marca-lenovo.html la Computadora Ultracompacta Corporativa Lenovo ThinkCentre M70q Tiny Gen 4 (procesador Intel Core i5-13400T de 10 núcleos, 16 GB RAM DDR4 expandible a 64 GB, 512 GB SSD NVMe, puertos HDMI, DisplayPort, USB-C, Wi-Fi 6E, teclado y mouse Lenovo USB en español y chasis ultracompacto de 1 litro con certificación militar MIL-STD-810H) con 3 años de garantía oficial y entrega inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-U4080',
+      title: 'Disponibilidad de Cámaras IP Uniview ColorHunter 4K 8MP PoE con Visión Nocturna a Color 24/7 y Micrófono Integrado para Videovigilancia Comercial',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras naves industriales, almacenes de distribución y plazas comerciales en Santiago requerimos cámaras IP profesionales tipo bullet Uniview ColorHunter 4K Ultra HD de 8 Megapíxeles (con lente de gran apertura F1.0 para visión nocturna a color real 24/7 sin blanco y negro borroso, iluminación cálida de 30 metros, analítica inteligente SIP de clasificación humana/vehicular para evitar falsas alarmas, micrófono integrado para audio ambiental, ranura microSD y protección metálica IP67). Ya cuentan con el excelente NVR Uniview 4K de 8 canales en marca-uniview.html pero requerimos las cámaras ColorHunter 4K PoE compatibles para armar la solución de seguridad completa con garantía local y NCF.',
+      officialResponse: '¡Hola Ing. Ramón Emilio! Tu propuesta ha sido evaluada e implementada con éxito. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-uniview.html la Cámara IP Uniview ColorHunter 4K 8MP PoE (visión nocturna a color real 24/7 con apertura F1.0, micrófono integrado, analítica inteligente SIP de clasificación humana/vehicular, protección metálica IP67 y ranura microSD) plenamente compatible con el NVR Uniview 4K de 8 canales, con garantía oficial y asistencia técnica en Santiago.'
+    },
+    {
+      refCode: 'SUG-N308P',
+      title: 'Disponibilidad de Switches Netgear ProSAFE GS308PP Gigabit PoE+ de 8 Puertos con Alta Potencia para Cámaras IP y Puntos de Acceso Wi-Fi',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En consultorios médicos, clínicas dentales y pequeñas oficinas corporativas en Santiago requerimos switches metálicos silenciosos sin ventilador (fanless) Netgear ProSAFE GS308PP de 8 puertos Gigabit Ethernet donde todos los 8 puertos suministren alimentación PoE+ 802.3at con presupuesto de al menos 83 Watts para energizar cámaras de seguridad IP, domos y access points Wi-Fi 6 de techo sin inyectores independientes. En marca-netgear.html solo disponían del switch no PoE básico GS308.',
+      officialResponse: '¡Estimado Lic. Fernando! Nos alegra informarte que tu sugerencia ha sido aprobada e implementada. Hemos integrado al catálogo de Redes de Datos y a la página oficial marca-netgear.html el Switch Netgear ProSAFE GS308PP 8 Puertos Gigabit PoE+ (chasis metálico silencioso sin ventilador, 8 puertos Gigabit con soporte PoE+ 802.3at de alta potencia hasta 83W, QoS de hardware y capacidad de 16 Gbps) con 2 años de garantía corporativa y despacho inmediato en Santiago.'
+    },
+    {
+      refCode: 'SUG-V1030',
+      title: 'Disponibilidad de Controladores de Carga Solar Victron Energy SmartSolar MPPT 100/30 con Bluetooth Integrado para Sistemas de Respaldo Energético y Energía Solar',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En proyectos de energía solar fotovoltaica residencial y comercial y sistemas de respaldo de telecomunicaciones en Santiago requerimos controladores de carga solar Victron Energy SmartSolar MPPT 100/30 (100V / 30A) con Bluetooth Smart integrado para vincular con la aplicación VictronConnect, algoritmo de recarga inteligente BatteryLife para baterías de litio y ciclo profundo y protección total contra sobretensiones. En marca-victronenergy.html solo contaban con el inversor MultiPlus pero no el controlador MPPT de carga solar.',
+      officialResponse: '¡Hola Ing. Carolina! Tu solicitud ha sido atendida e implementada de inmediato. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-victronenergy.html el Controlador de Carga Solar Victron Energy SmartSolar MPPT 100/30 (algoritmo ultra rápido MPPT, 100V / 30A, Bluetooth Smart integrado, gestión inteligente de baterías BatteryLife compatible con Litio y Plomo-Ácido y monitoreo completo mediante app VictronConnect) con 5 años de garantía oficial y soporte técnico de ingeniería en Santiago.'
     }
   ];
 

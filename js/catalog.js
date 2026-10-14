@@ -224,7 +224,11 @@ function getStemVariants(word) {
   if (word === 'rb5009' || word === 'rb5009ug') variants.push('mikrotik', 'router', 'multiwan', 'sfp');
   if (word === 'm70q' || word === 'thinkcentre') variants.push('lenovo', 'tiny', 'desktop', 'computadora', 'minipc');
   if (word === 'tiny') variants.push('lenovo', 'thinkcentre', 'm70q', 'desktop', 'minipc');
+  if (word === 'minipc' || word === 'mini') variants.push('tiny', 'm70q', 'thinkcentre', 'lenovo', 'computadora', 'desktop');
   if (word === 'multiwan') variants.push('router', 'mikrotik', 'rb5009', 'failover', 'balanceador');
+  if (word === 'colorhunter' || word === 'ipc2128') variants.push('uniview', 'camara', '4k', 'poe', 'color');
+  if (word === 'gs308pp' || word === 'gs308p') variants.push('netgear', 'switch', 'poe', 'prosafe', 'gigabit');
+  if (word === 'smartsolar' || word === 'mppt') variants.push('victron', 'controlador', 'solar', 'bluetooth', 'bateria');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -711,10 +715,43 @@ function scoreProductMatch(product, normalizedQuery) {
   }
 
   // Priorizar Lenovo ThinkCentre M70q Tiny Gen 4 al buscar m70q, thinkcentre, lenovo tiny, mini pc (SUG-L7000)
-  if (/\b(m70q|thinkcentre|tiny)\b/i.test(normalizedQuery) || (/\b(mini\s*pc|desktop|computadora)\b/i.test(normalizedQuery) && /\b(lenovo|tiny|m70q)\b/i.test(normalizedQuery))) {
+  if (/\b(m70q|thinkcentre|tiny)\b/i.test(normalizedQuery) || /\b(mini\s*pc|micro\s*pc|tiny\s*pc|minipc)\b/i.test(normalizedQuery) || (/\b(mini|micro|desktop|computadora)\b/i.test(normalizedQuery) && /\b(lenovo|tiny|m70q)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'lenovo') {
-      if (/m70q|thinkcentre/i.test(title)) {
+      if (/m70q|thinkcentre|tiny/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara IP Uniview ColorHunter 4K al buscar colorhunter, uniview camara, camara uniview, ipc2128 (SUG-U4080)
+  if (/\b(colorhunter|ipc2128|color\s*24\/7)\b/i.test(normalizedQuery) || (/\b(camara|camaras|ip)\b/i.test(normalizedQuery) && /\b(uniview|unv|colorhunter)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase() === 'uniview' || product.brand.toLowerCase() === 'unv')) {
+      if (/colorhunter/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Netgear ProSAFE GS308PP PoE+ al buscar gs308pp, gs308p, netgear poe, switch netgear (SUG-N308P)
+  if (/\b(gs308pp|gs308p)\b/i.test(normalizedQuery) || (/\b(switch|switches)\b/i.test(normalizedQuery) && /\b(netgear|prosafe|poe\+?)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'netgear') {
+      if (/gs308pp|poe\+/i.test(title)) {
         score += 230;
+      } else {
+        score += 160;
+      }
+    }
+  }
+
+  // Priorizar Controlador Solar Victron SmartSolar MPPT al buscar smartsolar, mppt, victron solar, victron mppt (SUG-V1030)
+  if (/\b(smartsolar|mppt)\b/i.test(normalizedQuery) || (/\b(controlador|regulador)\b/i.test(normalizedQuery) && /\b(solar|mppt|victron)\b/i.test(normalizedQuery)) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(solar|mppt)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('victron')) {
+      if (/smartsolar|mppt/i.test(title)) {
+        score += 240;
       } else {
         score += 170;
       }

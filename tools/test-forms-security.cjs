@@ -56,6 +56,13 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
       html.includes('name="_hp_security_check"'),
       `El campo Honeypot en ${item.file} debe usar el atributo name="_hp_security_check"`
     );
+    const hpRegex = new RegExp(`<(?:input|textarea)[^>]*id=["']${item.id}["'][^>]*>`, 'i');
+    const hpMatch = html.match(hpRegex);
+    assert.ok(hpMatch, `Etiqueta del honeypot ${item.id} debe encontrarse en ${item.file}`);
+    assert.ok(
+      hpMatch[0].includes('maxlength="50"'),
+      `El campo Honeypot ${item.id} en ${item.file} debe tener maxlength="50"`
+    );
   }
 
   // Verificación adicional de Honeypot en el modal de checkout (cart.js)
@@ -68,6 +75,10 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
     cartJs.includes('name="_hp_security_check"'),
     'cart.js debe usar name="_hp_security_check" en el campo honeypot'
   );
+  assert.ok(
+    cartJs.includes('id="chk-hp-check"') && cartJs.includes('maxlength="50"'),
+    'cart.js debe acotar chk-hp-check con maxlength="50"'
+  );
 
   // Verificación de Honeypot en el widget de Chatbot (chatbot.js)
   const chatJs = readJs('js/chatbot.js');
@@ -78,6 +89,10 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
   assert.ok(
     chatJs.includes('name="_hp_security_check"'),
     'chatbot.js debe usar name="_hp_security_check" en el campo honeypot'
+  );
+  assert.ok(
+    chatJs.includes('id="cb-hp-check"') && chatJs.includes('maxlength="50"'),
+    'chatbot.js debe acotar cb-hp-check con maxlength="50"'
   );
 
   // Verificación de Honeypot en formularios de soporte y respuestas (support-ui.js)
@@ -93,6 +108,14 @@ test('Seguridad en Formularios: trampas Honeypot en todos los formularios públi
   assert.ok(
     supportUiJs.includes('name="_hp_security_check"'),
     'support-ui.js debe usar name="_hp_security_check" en los campos honeypot'
+  );
+  assert.ok(
+    supportUiJs.includes('id="sp-hp-check"') && supportUiJs.includes('maxlength="50"'),
+    'support-ui.js debe acotar sp-hp-check con maxlength="50"'
+  );
+  assert.ok(
+    supportUiJs.includes('id="sp-reply-hp-check"') && supportUiJs.includes('maxlength="50"'),
+    'support-ui.js debe acotar sp-reply-hp-check con maxlength="50"'
   );
 });
 
@@ -643,4 +666,114 @@ test('Seguridad XSS & Renderizado Seguro: mitigación DOM en catalog.js (CWE-79)
     !catalogJs.includes('div.innerHTML = `<p class="results-counter">Mostrando'),
     'catalog.js no debe inyectar contadores sin sanitizar directamente en innerHTML'
   );
+});
+
+test('Defensa en Profundidad: límites de longitud (maxlength) en módulos administrativos y de facturación (admin.html, facturacion.html) (OWASP ASVS V5 / CWE-20)', () => {
+  function assertFieldHasMaxLength(htmlContent, fieldId, expectedMax, fileName) {
+    const tagRegex = new RegExp(`<(?:input|textarea)[^>]*id=["']${fieldId}["'][^>]*>`, 'i');
+    const match = htmlContent.match(tagRegex);
+    assert.ok(match, `Elemento con id="${fieldId}" debe existir en ${fileName}`);
+    const tagHtml = match[0];
+    const maxMatch = tagHtml.match(/maxlength=["']([0-9]+)["']/i);
+    assert.ok(maxMatch, `Elemento con id="${fieldId}" en ${fileName} debe tener atributo maxlength`);
+    if (expectedMax !== undefined) {
+      assert.strictEqual(
+        parseInt(maxMatch[1], 10),
+        expectedMax,
+        `Elemento con id="${fieldId}" en ${fileName} debe tener maxlength="${expectedMax}", pero tiene ${maxMatch[1]}`
+      );
+    }
+  }
+
+  // 1. admin.html
+  const adminHtml = readHtml('admin.html');
+  const adminChecks = [
+    { id: 'inventory-search', max: 100 },
+    { id: 'users-search', max: 100 },
+    { id: 'discounts-search', max: 100 },
+    { id: 'orders-search', max: 100 },
+    { id: 'audit-search', max: 100 },
+    { id: 'requests-search', max: 100 },
+    { id: 'suggestions-search', max: 100 },
+    { id: 'product-title', max: 150 },
+    { id: 'product-sku', max: 50 },
+    { id: 'product-reference', max: 50 },
+    { id: 'product-barcode', max: 50 },
+    { id: 'product-brand', max: 50 },
+    { id: 'product-desc', max: 2000 },
+    { id: 'product-specs', max: 1500 },
+    { id: 'category-name', max: 100 },
+    { id: 'category-icon', max: 50 },
+    { id: 'brand-name', max: 100 },
+    { id: 'user-name-input', max: 100 },
+    { id: 'user-roles-list-input', max: 200 },
+    { id: 'create-user-hp-check', max: 50 },
+    { id: 'create-user-name', max: 100 },
+    { id: 'create-user-email', max: 100 },
+    { id: 'create-user-password', max: 128 },
+    { id: 'discount-code', max: 30 },
+    { id: 'ic-client-code', max: 50 },
+    { id: 'competitor-name', max: 100 },
+    { id: 'competitor-differentiator', max: 500 },
+    { id: 'competitor-strengths', max: 1000 },
+    { id: 'competitor-weaknesses', max: 1000 },
+    { id: 'competitor-improvements', max: 1000 },
+    { id: 'competitor-logo', max: 500 },
+    { id: 'sug-modal-official-response', max: 2000 },
+    { id: 'sug-modal-admin-notes', max: 1500 },
+    { id: 'internal-sug-hp-check', max: 50 }
+  ];
+  for (const c of adminChecks) {
+    assertFieldHasMaxLength(adminHtml, c.id, c.max, 'admin.html');
+  }
+
+  // 2. facturacion.html
+  const erpHtml = readHtml('facturacion.html');
+  const erpChecks = [
+    { id: 'invoice-search', max: 100 },
+    { id: 'pos-client-search', max: 100 },
+    { id: 'pos-product-search', max: 100 },
+    { id: 'clients-search', max: 100 },
+    { id: 'products-search', max: 100 },
+    { id: 'form-client-name', max: 100 },
+    { id: 'form-client-rnc', max: 20 },
+    { id: 'form-client-phone', max: 30 },
+    { id: 'form-client-email', max: 100 },
+    { id: 'form-client-address', max: 300 },
+    { id: 'form-invoice-client-name', max: 100 },
+    { id: 'form-invoice-client-rnc', max: 20 },
+    { id: 'form-invoice-client-phone', max: 30 },
+    { id: 'form-invoice-client-email', max: 100 },
+    { id: 'form-invoice-client-address', max: 300 },
+    { id: 'form-invoice-ncf', max: 20 },
+    { id: 'form-invoice-notes', max: 500 },
+    { id: 'form-product-name', max: 150 },
+    { id: 'form-product-description', max: 500 },
+    { id: 'form-product-sku', max: 50 },
+    { id: 'form-product-reference', max: 50 },
+    { id: 'form-product-barcode', max: 50 },
+    { id: 'set-company-name', max: 100 },
+    { id: 'set-company-rnc', max: 20 },
+    { id: 'set-company-phone', max: 30 },
+    { id: 'set-company-email', max: 100 },
+    { id: 'set-company-address', max: 300 },
+    { id: 'set-invoice-prefix', max: 10 },
+    { id: 'set-quote-prefix', max: 10 },
+    { id: 'set-proforma-prefix', max: 10 },
+    { id: 'set-restaurant-tables', max: 1000 },
+    { id: 'set-ticket-slogan', max: 150 },
+    { id: 'set-ticket-instagram', max: 50 },
+    { id: 'set-ticket-footer', max: 250 },
+    { id: 'set-rnc-api-key', max: 100 },
+    { id: 'pos-restaurant-table', max: 30 },
+    { id: 'pos-restaurant-client-name', max: 100 },
+    { id: 'fiscal-adjustment-reason', max: 500 },
+    { id: 'barcode-simulator-manual', max: 50 },
+    { id: 'form-payment-notes', max: 300 },
+    { id: 'form-cash-close-notes', max: 500 },
+    { id: 'form-abono-notes', max: 300 }
+  ];
+  for (const c of erpChecks) {
+    assertFieldHasMaxLength(erpHtml, c.id, c.max, 'facturacion.html');
+  }
 });

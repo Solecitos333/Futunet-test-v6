@@ -1312,7 +1312,64 @@ test('Mejora demandada por usuarios: Computadora Corporativa Lenovo ThinkCentre 
 
   const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
   assert.ok(catJs.includes("'m70q'"), 'catalog.js debe incluir m70q en stem variants');
+  assert.ok(catJs.includes("'minipc'"), 'catalog.js debe incluir minipc en stem variants');
   assert.ok(catJs.includes("/\\b(m70q|thinkcentre|tiny)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo ThinkCentre M70q Tiny');
+  assert.ok(catJs.includes("/\\b(mini\\s*pc|micro\\s*pc|tiny\\s*pc|minipc)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo ThinkCentre M70q Tiny al buscar mini pc');
+});
+
+
+test('Mejora demandada por usuarios: Cámara IP Uniview ColorHunter 4K 8MP PoE Color 24/7 (SUG-U4080)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U4080'") && seedCjs.includes("status: 'implemented'"), 'SUG-U4080 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U4080') && sugJs.includes('Uniview ColorHunter 4K 8MP PoE'), 'SUG-U4080 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_uniview_colorhunter_4k_poe_camera'), 'backup_data.js debe contener seguridad_uniview_colorhunter_4k_poe_camera');
+
+  const camImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'uniview-colorhunter-4k-poe-camera.webp');
+  assert.ok(fs.existsSync(camImg), 'La imagen de la cámara Uniview ColorHunter 4K debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'colorhunter'"), 'catalog.js debe incluir colorhunter en stem variants');
+  assert.ok(catJs.includes("/\\b(colorhunter|ipc2128|color\\s*24\\/7)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Cámara Uniview ColorHunter');
+});
+
+test('Mejora demandada por usuarios: Switch Netgear ProSAFE GS308PP 8P Gigabit PoE+ (83W) (SUG-N308P)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N308P'") && seedCjs.includes("status: 'implemented'"), 'SUG-N308P debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N308P') && sugJs.includes('Netgear ProSAFE GS308PP'), 'SUG-N308P debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_netgear_gs308pp_switch_8p_poe'), 'backup_data.js debe contener redes_netgear_gs308pp_switch_8p_poe');
+
+  const switchImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-gs308pp-switch-8p-poe.webp');
+  assert.ok(fs.existsSync(switchImg), 'La imagen del switch Netgear GS308PP debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'gs308pp'"), 'catalog.js debe incluir gs308pp en stem variants');
+  assert.ok(catJs.includes("/\\b(gs308pp|gs308p)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Switch Netgear GS308PP');
+});
+
+test('Mejora demandada por usuarios: Controlador de Carga Solar Victron Energy SmartSolar MPPT 100/30 (SUG-V1030)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V1030'") && seedCjs.includes("status: 'implemented'"), 'SUG-V1030 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V1030') && sugJs.includes('Victron Energy SmartSolar MPPT 100/30'), 'SUG-V1030 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_smartsolar_mppt_100_30'), 'backup_data.js debe contener energia_victron_smartsolar_mppt_100_30');
+
+  const mpptImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-smartsolar-mppt-100-30.webp');
+  assert.ok(fs.existsSync(mpptImg), 'La imagen del controlador solar Victron MPPT debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'smartsolar'"), 'catalog.js debe incluir smartsolar en stem variants');
+  assert.ok(catJs.includes("/\\b(smartsolar|mppt)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Controlador Solar Victron SmartSolar MPPT');
 });
 
 

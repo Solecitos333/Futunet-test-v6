@@ -1432,8 +1432,8 @@ const lenovoTinyItems = [
     department: 'equipos',
     category: 'Computadoras y Servidores',
     brand: 'Lenovo',
-    title: 'Computadora Corporativa Ultracompacta Lenovo ThinkCentre M70q Tiny Gen 4 (Intel Core i5-13400T, 16 GB RAM, 512 GB SSD, Wi-Fi 6E)',
-    desc: 'Computadora de escritorio empresarial ultracompacta formato Tiny de 1 litro Lenovo ThinkCentre M70q Gen 4 diseñada para mostradores comerciales, cajas de punto de venta (POS), consultorios, firmas corporativas y espacios reducidos en Santiago. Equipada con procesador Intel Core i5-13400T de 13.ª generación con 10 núcleos y 16 hilos (hasta 4.40 GHz con Intel Max Turbo), 16 GB de memoria RAM DDR4 en doble canal (expandible a 64 GB), unidad de estado sólido de 512 GB SSD M.2 PCIe 4.0 NVMe de alta velocidad y gráficos integrados Intel UHD Graphics 730 con soporte para hasta 3 pantallas independientes vía HDMI 2.1 y DisplayPort 1.4. Cuenta con conectividad inalámbrica de última generación Wi-Fi 6E (802.11ax), Bluetooth 5.1, puerto de red Gigabit Ethernet RJ-45, puerto frontal USB-C 3.2 Gen 1, 5 puertos USB 3.2 Gen 2 y chasis de grado militar certificado bajo pruebas de resistencia extremas MIL-STD-810H. Compatible con montaje VESA detrás de monitores o bajo escritorios. Incluye teclado y mouse óptico Lenovo USB originales en español y Windows 11 Pro preinstalado.',
+    title: 'Computadora Corporativa Ultracompacta Lenovo ThinkCentre M70q Tiny Gen 4 Mini PC (Intel Core i5-13400T, 16 GB RAM, 512 GB SSD, Wi-Fi 6E)',
+    desc: 'Computadora de escritorio empresarial ultracompacta Mini PC formato Tiny de 1 litro Lenovo ThinkCentre M70q Gen 4 diseñada para mostradores comerciales, cajas de punto de venta (POS), consultorios, firmas corporativas y espacios reducidos en Santiago. Equipada con procesador Intel Core i5-13400T de 13.ª generación con 10 núcleos y 16 hilos (hasta 4.40 GHz con Intel Max Turbo), 16 GB de memoria RAM DDR4 en doble canal (expandible a 64 GB), unidad de estado sólido de 512 GB SSD M.2 PCIe 4.0 NVMe de alta velocidad y gráficos integrados Intel UHD Graphics 730 con soporte para hasta 3 pantallas independientes vía HDMI 2.1 y DisplayPort 1.4. Cuenta con conectividad inalámbrica de última generación Wi-Fi 6E (802.11ax), Bluetooth 5.1, puerto de red Gigabit Ethernet RJ-45, puerto frontal USB-C 3.2 Gen 1, 5 puertos USB 3.2 Gen 2 y chasis de grado militar certificado bajo pruebas de resistencia extremas MIL-STD-810H. Compatible con montaje VESA detrás de monitores o bajo escritorios. Incluye teclado y mouse óptico Lenovo USB originales en español y Windows 11 Pro preinstalado.',
     price: 'RD$ 44,500.00',
     img: 'img/productos/catalogo/lenovo-thinkcentre-m70q-tiny.webp',
     gallery: [
@@ -1443,12 +1443,90 @@ const lenovoTinyItems = [
       'Procesador: Intel Core i5-13400T de 13.ª generación (10 núcleos: 6 Performance + 4 Efficient, 16 hilos, hasta 4.4 GHz)',
       'Memoria RAM: 16 GB DDR4-3200 MHz de grado corporativo (expandible hasta 64 GB en dos ranuras SODIMM)',
       'Almacenamiento: 512 GB SSD M.2 2280 PCIe 4.0 x4 NVMe Opal 2.0 de lectura y escritura ultrarrápida',
-      'Factor de forma Tiny: Chasis ultracompacto de 1 Litro (17.9 cm x 18.2 cm x 3.6 cm) y apenas 1.25 kg de peso',
+      'Factor de forma Tiny: Chasis ultracompacto Mini PC de 1 Litro (17.9 cm x 18.2 cm x 3.6 cm) y apenas 1.25 kg de peso',
       'Salidas gráficas multi-monitor: 1 puerto HDMI 2.1 TMDS + 1 puerto DisplayPort 1.4a con soporte 4K',
       'Puertos y expansión: 1x USB-C 3.2 Gen 1 frontal, 3x USB 3.2 Gen 2, 2x USB 3.2 Gen 1, RJ-45 Gigabit y combo audio',
       'Conectividad: Intel Wi-Fi 6E AX211 (2x2 ax) + Bluetooth 5.1 con antena externa de alta ganancia',
       'Periféricos y SO: Incluye teclado USB tradicional Lenovo y mouse óptico USB en español, con Windows 11 Pro',
       'Garantía oficial Lenovo de 3 años en sitio con factura formal con valor fiscal NCF en Santiago'
+    ]
+  }
+];
+
+const univiewCameraItems = [
+  {
+    id: 'seguridad_uniview_colorhunter_4k_poe_camera',
+    department: 'seguridad',
+    category: 'Seguridad y Vigilancia',
+    brand: 'Uniview',
+    title: 'Cámara IP Uniview ColorHunter 4K 8MP PoE con Visión Nocturna a Color 24/7, Micrófono y Analítica Inteligente (IPC2128SB-ADF28KMC-I0)',
+    desc: 'Cámara de seguridad IP tipo Bullet profesional Uniview ColorHunter 4K Ultra HD de 8 Megapíxeles (resolución 3840 x 2160) con tecnología ColorHunter para visión nocturna a todo color real las 24 horas del día. Equipada con lente de gran apertura F1.0 que capta 4 veces más luz que lentes convencionales y reflectores de luz cálida suave con alcance de hasta 30 metros sin deslumbrar. Incorpora prevención inteligente de intrusiones (SIP) con clasificación basada en inteligencia artificial de humanos y vehículos para reducir falsas alarmas provocadas por lluvia, viento, ramas o animales pequeños. Dispone de micrófono integrado de alta fidelidad con reducción de ruido ambiental para registro de audio, ranura para tarjeta de memoria MicroSD de hasta 256 GB para almacenamiento redundante local y alimentación estándar PoE 802.3af (o 12V DC). Chasis metálico de alta resistencia con certificación IP67 contra polvo, lluvia y chorros de agua a presión y protección contra sobretensiones transitorias de 4 kV. Compatible 100% con grabadores NVR Uniview y aplicación móvil gratuita Uniarch / EZView para visualización remota en vivo desde cualquier smartphone.',
+    price: 'RD$ 8,450.00',
+    img: 'img/productos/catalogo/uniview-colorhunter-4k-poe-camera.webp',
+    gallery: [
+      'img/productos/catalogo/uniview-colorhunter-4k-poe-camera.webp'
+    ],
+    specs: [
+      'Resolución Ultra HD 4K (3840 x 2160) a 20 fps con sensor CMOS de 1/2.8" de alta sensibilidad lumínica',
+      'Tecnología ColorHunter: Visión nocturna a todo color 24/7 con lente F1.0 de gran apertura y luz cálida de 30m',
+      'Analítica Inteligente SIP: Clasificación precisa de humanos y vehículos para filtros de cruce de línea e intrusión perimetral',
+      'Micrófono integrado de alta fidelidad con cancelación de ruido ambiental para audio forense claro',
+      'Alimentación Power over Ethernet (PoE 802.3af) y entrada 12V DC con consumo ultra eficiente de energía',
+      'Almacenamiento local redundante: Ranura MicroSD integrada con soporte de hasta 256 GB',
+      'Chasis metálico resistente a intemperie con certificación IP67 y protección contra sobretensiones de 4 kV',
+      'Garantía oficial Uniview de 1 año con soporte técnico y facturación formal NCF en Santiago'
+    ]
+  }
+];
+
+const netgearPoeItems = [
+  {
+    id: 'redes_netgear_gs308pp_switch_8p_poe',
+    department: 'redes',
+    category: 'Switches y Enrutadores',
+    brand: 'Netgear',
+    title: 'Switch Netgear ProSAFE GS308PP 8 Puertos Gigabit Ethernet Metálico Fanless con 8 Puertos PoE+ (Presupuesto 83W)',
+    desc: 'Switch Gigabit Ethernet no administrable de alta potencia Netgear ProSAFE GS308PP de 8 puertos 10/100/1000 Mbps con soporte completo PoE+ (Power over Ethernet IEEE 802.3at/af) en los 8 puertos y un presupuesto total de potencia PoE de 83 Watts (hasta 30W por puerto). Diseñado para conectar y energizar simultáneamente cámaras de videovigilancia IP 4K, puntos de acceso Wi-Fi 6 de doble banda y teléfonos VoIP sin requerir inyectores de corriente externos ni tomas eléctricas adicionales. Construido en chasis metálico de alta resistencia con diseño Fanless silencioso sin ventiladores, ideal para oficinas ejecutivas, salas de juntas, clínicas y cajas de cobro. Cuenta con arquitectura de conmutación sin bloqueo con 16 Gbps de ancho de banda, soporte de tramas Jumbo de 9 KB, priorización de tráfico QoS 802.1p por hardware para transmisión fluida de voz y video, eficiencia energética IEEE 802.3az e instalación instantánea Plug & Play sin configuración.',
+    price: 'RD$ 6,850.00',
+    img: 'img/productos/catalogo/netgear-gs308pp-switch-8p-poe.webp',
+    gallery: [
+      'img/productos/catalogo/netgear-gs308pp-switch-8p-poe.webp'
+    ],
+    specs: [
+      '8 puertos Gigabit Ethernet 10/100/1000 Mbps RJ-45 con auto-negociación y Auto MDI/MDIX',
+      '8 puertos PoE+ IEEE 802.3at/af con presupuesto total de potencia PoE de 83 Watts',
+      'Diseño Fanless silencioso: Chasis metálico compacto para disipación térmica pasiva sin ruido',
+      'Capacidad de conmutación de 16 Gbps sin bloqueo y soporte para tramas Jumbo de hasta 9 KB',
+      'Priorización de tráfico QoS 802.1p basada en hardware para llamadas VoIP y streaming 4K continuo',
+      'Indicadores LED por puerto para estado de enlace, velocidad Gigabit y activación de alimentación PoE+',
+      'Instalación Plug & Play sin requerir software ni configuración, con soporte para montaje en pared o escritorio',
+      'Garantía oficial Netgear de 2 años con soporte técnico y factura con comprobante fiscal NCF en Santiago'
+    ]
+  }
+];
+
+const victronMpptItems = [
+  {
+    id: 'energia_victron_smartsolar_mppt_100_30',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Victron Energy',
+    title: 'Controlador de Carga Solar Victron Energy SmartSolar MPPT 100/30 (100V / 30A) con Bluetooth Integrado y Monitoreo VictronConnect',
+    desc: 'Controlador y regulador de carga solar fotovoltaica inteligente Victron Energy SmartSolar MPPT 100/30 de 30 Amperios de corriente de carga nominal y hasta 100 Voltios de tensión máxima de circuito abierto FV. Incorpora la tecnología exclusiva Ultra-Fast MPPT (Maximum Power Point Tracking) que maximiza la captación de energía de los paneles solares hasta un 30% más rápido en comparación con reguladores PWM y hasta un 10% más eficiente frente a otros controladores MPPT en condiciones de cielo nublado o radiación solar cambiante en República Dominicana. Dispone de conectividad inalámbrica Bluetooth Smart integrada de fábrica para configurar, monitorear y actualizar el sistema en tiempo real desde la aplicación móvil VictronConnect (iOS y Android), visualizando gráficas de generación solar histórica y estado de batería. Cuenta con algoritmo de carga inteligente de 3 etapas y gestión avanzada BatteryLife que previene la degradación prematura de baterías de ciclo profundo, AGM, gel o litio LiFePO4, salida de carga inteligente programable y puerto de comunicación VE.Direct.',
+    price: 'RD$ 14,200.00',
+    img: 'img/productos/catalogo/victron-smartsolar-mppt-100-30.webp',
+    gallery: [
+      'img/productos/catalogo/victron-smartsolar-mppt-100-30.webp'
+    ],
+    specs: [
+      'Tensión máxima de circuito abierto fotovoltaico (Voc): 100 Voltios para arreglos de paneles solares en serie',
+      'Corriente de carga de batería nominal: 30 Amperios con detección automática de bancos de 12V y 24V (hasta 440W en 12V / 880W en 24V)',
+      'Tecnología Ultra-Fast MPPT: Optimización de punto de máxima potencia ultra rápida ante sombras parciales y días nublados',
+      'Bluetooth Smart integrado: Monitoreo inalámbrico en vivo, registro de datos de 30 días y control desde la app VictronConnect',
+      'Algoritmo inteligente BatteryLife: Monitoreo del estado de carga para evitar descargas profundas y prolongar la vida útil de baterías',
+      'Compatibilidad universal: Perfiles de carga configurables para baterías de Litio (LiFePO4), Gel, AGM y Plomo-Ácido',
+      'Salida de consumo inteligente con desconexión automática por baja tensión para proteger el banco de baterías',
+      'Garantía oficial del fabricante Victron Energy de 5 años con soporte técnico especializado de Futunet en Santiago'
     ]
   }
 ];
@@ -1927,7 +2005,10 @@ async function updateBackupData() {
     ...ciscoSwitchItems,
     ...apcUpsOnlineItems,
     ...mikrotikMultiwanItems,
-    ...lenovoTinyItems
+    ...lenovoTinyItems,
+    ...univiewCameraItems,
+    ...netgearPoeItems,
+    ...victronMpptItems
   ];
 
   itemsToSync.forEach(item => {
@@ -1992,7 +2073,10 @@ async function updateFirestore() {
     ...ciscoSwitchItems,
     ...apcUpsOnlineItems,
     ...mikrotikMultiwanItems,
-    ...lenovoTinyItems
+    ...lenovoTinyItems,
+    ...univiewCameraItems,
+    ...netgearPoeItems,
+    ...victronMpptItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

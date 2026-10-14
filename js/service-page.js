@@ -289,7 +289,7 @@
       var hpContainer = document.createElement('div');
       hpContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;';
       hpContainer.setAttribute('aria-hidden', 'true');
-      hpContainer.innerHTML = '<label for="req-hp-check">No llenar este campo</label><input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />';
+      hpContainer.innerHTML = '<label for="req-hp-check">No llenar este campo</label><input type="text" id="req-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" maxlength="50" />';
       form.appendChild(hpContainer);
     }
 

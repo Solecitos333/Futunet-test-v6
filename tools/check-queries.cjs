@@ -143,7 +143,13 @@ const queries = [
   'router mikrotik',
   'thinkcentre',
   'm70q',
-  'mini pc'
+  'mini pc',
+  'colorhunter',
+  'camara uniview',
+  'gs308pp',
+  'switch netgear poe',
+  'smartsolar',
+  'victron mppt'
 ];
 
 

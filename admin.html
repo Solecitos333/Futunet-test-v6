@@ -340,7 +340,7 @@
        </select>
        <div class="admin-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="inventory-search" placeholder="Buscar productos..." aria-label="Buscar en el inventario" />
+        <input type="text" id="inventory-search" placeholder="Buscar productos..." aria-label="Buscar en el inventario" maxlength="100" />
        </div>
       </div>
      </div>
@@ -385,7 +385,7 @@
       <h3>Usuarios registrados</h3>
       <div class="admin-search">
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-       <input type="text" id="users-search" placeholder="Buscar usuarios..." aria-label="Buscar usuarios" />
+       <input type="text" id="users-search" placeholder="Buscar usuarios..." aria-label="Buscar usuarios" maxlength="100" />
       </div>
      </div>
      <div style="overflow-x:auto;">
@@ -460,7 +460,7 @@
       <h3>Códigos de descuento</h3>
       <div class="admin-search">
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-       <input type="text" id="discounts-search" placeholder="Buscar código..." aria-label="Buscar códigos de descuento" />
+       <input type="text" id="discounts-search" placeholder="Buscar código..." aria-label="Buscar códigos de descuento" maxlength="100" />
       </div>
      </div>
      <div style="overflow-x:auto;">
@@ -524,7 +524,7 @@
        </select>
        <div class="admin-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="orders-search" placeholder="Buscar pedido/cliente..." aria-label="Buscar pedidos por cliente o código" />
+        <input type="text" id="orders-search" placeholder="Buscar pedido/cliente..." aria-label="Buscar pedidos por cliente o código" maxlength="100" />
        </div>
       </div>
      </div>
@@ -996,7 +996,7 @@
       <h3>Historial de Acciones</h3>
       <div class="admin-search">
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-       <input type="text" id="audit-search" placeholder="Buscar en auditoría..." aria-label="Buscar en logs de auditoría" />
+       <input type="text" id="audit-search" placeholder="Buscar en auditoría..." aria-label="Buscar en logs de auditoría" maxlength="100" />
       </div>
      </div>
      <div style="overflow-x:auto;">
@@ -1048,7 +1048,7 @@
        </select>
        <div class="admin-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="requests-search" placeholder="Buscar solicitud..." aria-label="Buscar solicitudes de servicio" onkeyup="AdminPanel.filterRequestsTable()" />
+        <input type="text" id="requests-search" placeholder="Buscar solicitud..." aria-label="Buscar solicitudes de servicio" maxlength="100" onkeyup="AdminPanel.filterRequestsTable()" />
        </div>
       </div>
      </div>
@@ -1138,7 +1138,7 @@
        </select>
        <div class="admin-search">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="suggestions-search" placeholder="Buscar sugerencia..." aria-label="Buscar sugerencias" onkeyup="AdminPanel.filterSuggestionsTable()" />
+        <input type="text" id="suggestions-search" placeholder="Buscar sugerencia..." aria-label="Buscar sugerencias" maxlength="100" onkeyup="AdminPanel.filterSuggestionsTable()" />
        </div>
       </div>
      </div>
@@ -1878,11 +1878,11 @@
      <input type="hidden" id="category-id" />
      <div class="auth-form-group">
       <label class="auth-label" for="category-name">Nombre de la Categoría</label>
-      <input class="auth-input" type="text" id="category-name" placeholder="Ej. Laptops Corporativas" required />
+      <input class="auth-input" type="text" id="category-name" placeholder="Ej. Laptops Corporativas" maxlength="100" required />
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="category-icon">Nombre de Icono Lucide (Opcional)</label>
-      <input class="auth-input" type="text" id="category-icon" placeholder="Ej. monitor, shield, battery-charging" />
+      <input class="auth-input" type="text" id="category-icon" placeholder="Ej. monitor, shield, battery-charging" maxlength="50" />
      </div>
      <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
       <button type="button" class="admin-btn admin-btn-ghost" data-close-modal>Cancelar</button>
@@ -1916,7 +1916,7 @@
 
      <div class="auth-form-group">
       <label class="auth-label" for="brand-name">Nombre de la Marca</label>
-      <input class="auth-input" type="text" id="brand-name" placeholder="Ej. Dell, Hikvision, Epson" required />
+      <input class="auth-input" type="text" id="brand-name" placeholder="Ej. Dell, Hikvision, Epson" maxlength="100" required />
      </div>
 
      <div class="admin-modal-footer" style="padding:16px 0 0;border-top:none;">
@@ -1981,7 +1981,7 @@
      <!-- Información Básica -->
      <div class="auth-form-group">
       <label class="auth-label" for="product-title">Título del producto</label>
-      <input class="auth-input" type="text" id="product-title" placeholder="Ej. Escritorio Ejecutivo en L" required />
+      <input class="auth-input" type="text" id="product-title" placeholder="Ej. Escritorio Ejecutivo en L" maxlength="150" required />
      </div>
 
      <div class="admin-grid-form-2col">
@@ -1999,15 +1999,15 @@
      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px;">
       <div class="auth-form-group">
        <label class="auth-label" for="product-sku">SKU</label>
-       <input class="auth-input" type="text" id="product-sku" placeholder="Ej. FUT-01" />
+       <input class="auth-input" type="text" id="product-sku" placeholder="Ej. FUT-01" maxlength="50" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="product-reference">Referencia</label>
-       <input class="auth-input" type="text" id="product-reference" placeholder="Ej. REF-ABC" />
+       <input class="auth-input" type="text" id="product-reference" placeholder="Ej. REF-ABC" maxlength="50" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="product-barcode">Código de Barra</label>
-       <input class="auth-input" type="text" id="product-barcode" placeholder="Ej. 742111..." />
+       <input class="auth-input" type="text" id="product-barcode" placeholder="Ej. 742111..." maxlength="50" />
       </div>
      </div>
 
@@ -2042,7 +2042,7 @@
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="product-brand">Marca</label>
-       <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." />
+       <input class="auth-input" type="text" id="product-brand" placeholder="Ej. Genérico, Apple, HP..." maxlength="50" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="product-service-sub">Clasificación de Servicio (Opcional)</label>
@@ -2091,12 +2091,12 @@
 
      <div class="auth-form-group">
       <label class="auth-label" for="product-desc">Descripción</label>
-      <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical; margin-top:6px;" placeholder="Describe el estado, medidas, material, etc."></textarea>
+      <textarea class="auth-input" id="product-desc" rows="4" style="resize:vertical; margin-top:6px;" placeholder="Describe el estado, medidas, material, etc." maxlength="2000"></textarea>
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="product-specs">Características principales (Una por línea)</label>
-      <textarea class="auth-input" id="product-specs" rows="3" style="resize:vertical; margin-top:6px;" placeholder="Color negro&#10;Garantía de 1 año&#10;Incluye instalación"></textarea>
+      <textarea class="auth-input" id="product-specs" rows="3" style="resize:vertical; margin-top:6px;" placeholder="Color negro&#10;Garantía de 1 año&#10;Incluye instalación" maxlength="1500"></textarea>
      </div>
 
      <div class="admin-modal-footer" style="padding:20px 0 0; border-top:1px solid #e5eef8;">
@@ -2120,7 +2120,7 @@
      <input type="hidden" id="user-id" />
      <div class="auth-form-group">
       <label class="auth-label" for="user-name-input">Nombre</label>
-      <input class="auth-input" type="text" id="user-name-input" />
+      <input class="auth-input" type="text" id="user-name-input" maxlength="100" />
      </div>
      <div class="auth-form-group">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
@@ -2140,7 +2140,7 @@
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="user-roles-list-input">Roles Asignados (Separados por comas)</label>
-      <input class="auth-input" type="text" id="user-roles-list-input" placeholder="Ej. user, revendedor, creaticos_admin" />
+      <input class="auth-input" type="text" id="user-roles-list-input" placeholder="Ej. user, revendedor, creaticos_admin" maxlength="200" />
       <div style="margin-top: 8px; font-size: 0.72rem; color: #475569;">
        <strong style="display:block; margin-bottom:4px;">Accesos Rápidos (Haz clic para alternar):</strong>
        <div style="display: flex; flex-wrap: wrap; gap: 6px;" id="role-quick-toggles">
@@ -2173,15 +2173,15 @@
      <!-- Trampa Honeypot anti-bots -->
      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
       <label for="create-user-hp-check">No llenar este campo</label>
-      <input type="text" id="create-user-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+      <input type="text" id="create-user-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="create-user-name">Nombre completo</label>
-      <input class="auth-input" type="text" id="create-user-name" placeholder="Ej. Juan Pérez" required />
+      <input class="auth-input" type="text" id="create-user-name" placeholder="Ej. Juan Pérez" maxlength="100" required />
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="create-user-email">Correo electrónico</label>
-      <input class="auth-input" type="email" id="create-user-email" placeholder="tu@email.com" required />
+      <input class="auth-input" type="email" id="create-user-email" placeholder="tu@email.com" maxlength="100" required />
      </div>
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
@@ -2199,7 +2199,7 @@
      <div class="auth-form-group">
       <label class="auth-label" for="create-user-password">Contraseña</label>
       <div class="auth-password-wrap">
-       <input class="auth-input" type="password" id="create-user-password" placeholder="Mínimo 8 caracteres" required minlength="8" />
+       <input class="auth-input" type="password" id="create-user-password" placeholder="Mínimo 8 caracteres" required minlength="8" maxlength="128" />
        <button type="button" class="auth-password-toggle" data-toggle-password="create-user-password" aria-label="Mostrar contraseña">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
        </button>
@@ -2287,7 +2287,7 @@
     <form id="discount-form">
      <div class="auth-form-group">
       <label class="auth-label" for="discount-code">Código</label>
-      <input class="auth-input" type="text" id="discount-code" placeholder="FUTUNET20" required style="text-transform:uppercase;" />
+      <input class="auth-input" type="text" id="discount-code" placeholder="FUTUNET20" maxlength="30" required style="text-transform:uppercase;" />
      </div>
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
@@ -2452,7 +2452,7 @@
 
     <div class="auth-form-group">
      <label class="auth-label" for="ic-client-code">Código Interno de Cliente</label>
-     <input type="text" id="ic-client-code" class="auth-input" placeholder="FT-INTERNET-101" required />
+     <input type="text" id="ic-client-code" class="auth-input" placeholder="FT-INTERNET-101" maxlength="50" required />
     </div>
 
     <div class="auth-form-group">
@@ -2536,7 +2536,7 @@
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="competitor-name">Nombre del Competidor</label>
-       <input class="auth-input" type="text" id="competitor-name" placeholder="Ej. Claro Dominicana" required />
+       <input class="auth-input" type="text" id="competitor-name" placeholder="Ej. Claro Dominicana" maxlength="100" required />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="competitor-rank">Rango de Amenaza (1-10)</label>
@@ -2577,28 +2577,28 @@
 
      <div class="auth-form-group">
       <label class="auth-label" for="competitor-differentiator">¿Qué los diferencia? (Diferenciadores Clave)</label>
-      <textarea class="auth-input" id="competitor-differentiator" rows="2" style="resize:vertical;" placeholder="Ej. Infraestructura propia de fibra a nivel nacional..." required></textarea>
+      <textarea class="auth-input" id="competitor-differentiator" rows="2" style="resize:vertical;" placeholder="Ej. Infraestructura propia de fibra a nivel nacional..." maxlength="500" required></textarea>
      </div>
 
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="competitor-strengths">Fortalezas (Una por línea)</label>
-       <textarea class="auth-input" id="competitor-strengths" rows="3" style="resize:vertical;" placeholder="Gran liquidez&#10;Marca reconocida&#10;Amplio catálogo" required></textarea>
+       <textarea class="auth-input" id="competitor-strengths" rows="3" style="resize:vertical;" placeholder="Gran liquidez&#10;Marca reconocida&#10;Amplio catálogo" maxlength="1000" required></textarea>
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="competitor-weaknesses">Debilidades (Una por línea)</label>
-       <textarea class="auth-input" id="competitor-weaknesses" rows="3" style="resize:vertical;" placeholder="Soporte lento&#10;Contratos de 18 meses&#10;Precios elevados" required></textarea>
+       <textarea class="auth-input" id="competitor-weaknesses" rows="3" style="resize:vertical;" placeholder="Soporte lento&#10;Contratos de 18 meses&#10;Precios elevados" maxlength="1000" required></textarea>
       </div>
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="competitor-improvements">¿Qué puede mejorar Futunet para superarlos?</label>
-      <textarea class="auth-input" id="competitor-improvements" rows="2" style="resize:vertical;" placeholder="Ofrecer contratos sin permanencia, instalación en menos de 24 horas y soporte técnico local inmediato..." required></textarea>
+      <textarea class="auth-input" id="competitor-improvements" rows="2" style="resize:vertical;" placeholder="Ofrecer contratos sin permanencia, instalación en menos de 24 horas y soporte técnico local inmediato..." maxlength="1000" required></textarea>
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="competitor-logo">URL de Logo/Imagen (Opcional)</label>
-      <input class="auth-input" type="text" id="competitor-logo" placeholder="Ej. img/competitors/claro.png o dejar vacío" />
+      <input class="auth-input" type="text" id="competitor-logo" placeholder="Ej. img/competitors/claro.png o dejar vacío" maxlength="500" />
      </div>
 
      <div class="admin-modal-footer" style="padding:20px 0 0; border-top:1px solid #e5eef8;">
@@ -2675,7 +2675,7 @@
 
      <div class="auth-form-group" style="margin-bottom:14px;">
       <label class="auth-label" for="sug-modal-official-response" style="font-weight:600; color:#0B7EB5;">Respuesta oficial para el solicitante / cliente (Pública en seguimiento)</label>
-      <textarea id="sug-modal-official-response" class="auth-input" rows="3" placeholder="Escribe aquí la respuesta oficial que verá el usuario cuando consulte su código de seguimiento o reciba respuesta..." style="resize:vertical; border-color:#93c5fd; background:#f0f9ff;"></textarea>
+      <textarea id="sug-modal-official-response" class="auth-input" rows="3" placeholder="Escribe aquí la respuesta oficial que verá el usuario cuando consulte su código de seguimiento o reciba respuesta..." maxlength="2000" style="resize:vertical; border-color:#93c5fd; background:#f0f9ff;"></textarea>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
        <span style="font-size:0.75rem; color:#64748b;">Esta respuesta se mostrará al usuario al consultar su código en el portal web.</span>
        <a id="sug-modal-email-btn" href="#" target="_blank" rel="noopener noreferrer" class="admin-btn admin-btn-ghost admin-btn-sm" style="font-size:0.75rem; padding:4px 10px; display:none;">
@@ -2686,7 +2686,7 @@
 
      <div class="auth-form-group" style="margin-bottom:0;">
       <label class="auth-label" for="sug-modal-admin-notes" style="font-weight:600;">Notas internas del personal (Confidencial)</label>
-      <textarea id="sug-modal-admin-notes" class="auth-input" rows="2" placeholder="Añade notas del equipo sobre viabilidad, estimación o resolución..." style="resize:vertical;"></textarea>
+      <textarea id="sug-modal-admin-notes" class="auth-input" rows="2" placeholder="Añade notas del equipo sobre viabilidad, estimación o resolución..." maxlength="1500" style="resize:vertical;"></textarea>
      </div>
     </div>
 
@@ -2714,7 +2714,7 @@
      <!-- Trampa Honeypot anti-bots -->
      <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
       <label for="internal-sug-hp-check">No llenar este campo</label>
-      <input type="text" id="internal-sug-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+      <input type="text" id="internal-sug-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
      </div>
 
      <div class="auth-form-group">

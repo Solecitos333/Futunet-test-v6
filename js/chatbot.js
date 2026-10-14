@@ -43,7 +43,7 @@ function initFutunetChatbot() {
           <!-- Trampa Honeypot anti-bots -->
           <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
             <label for="cb-hp-check">No llenar este campo</label>
-            <input type="text" id="cb-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" />
+            <input type="text" id="cb-hp-check" name="_hp_security_check" tabindex="-1" autocomplete="off" maxlength="50" />
           </div>
           <input type="text" id="cb-input-text" maxlength="1500" placeholder="Escribe tu pregunta aquí..." autocomplete="off" aria-label="Escribe tu mensaje" />
           <button type="button" id="cb-send-btn" aria-label="Enviar" class="chatbot-send-btn">

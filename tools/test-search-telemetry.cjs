@@ -1,3 +1,5 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -42,24 +44,30 @@ const testQueries = [
   'silla',
   'sillas',
   'silla ergonomica',
-  'forza'
+  'forza',
+  'mini pc'
 ];
 
-console.log('Testing REAL catalog scoring for queries:');
-for (const q of testQueries) {
-  const normQ = normalizeSearch(q);
-  const scored = mockDatabase
-    .map(p => ({ p, score: scoreProductMatch(p, normQ) }))
-    .filter(item => item.score > 0)
-    .sort((a, b) => b.score - a.score);
+test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
+  for (const q of testQueries) {
+    const normQ = normalizeSearch(q);
+    const scored = mockDatabase
+      .map(p => ({ p, score: scoreProductMatch(p, normQ) }))
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score);
 
-  console.log(`Query "${q}" (normalized: "${normQ}") -> ${scored.length} results.`);
-  if (scored.length > 0) {
-    console.log(`   Top 1 (score ${scored[0].score}): [${scored[0].p.brand}] ${scored[0].p.title} (${scored[0].p.category})`);
-    if (scored.length > 1) {
-      console.log(`   Top 2 (score ${scored[1].score}): [${scored[1].p.brand}] ${scored[1].p.title}`);
+    assert.ok(scored.length > 0, `La consulta "${q}" no debe arrojar 0 resultados en el catálogo`);
+
+    if (q === 'mini pc') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Lenovo',
+        'La búsqueda "mini pc" debe priorizar el Mini PC Lenovo ThinkCentre M70q Tiny'
+      );
+      assert.ok(
+        /m70q|thinkcentre|tiny/i.test(scored[0].p.title),
+        'El producto top para "mini pc" debe ser Lenovo ThinkCentre M70q Tiny'
+      );
     }
-  } else {
-    console.log(`   *** ZERO RESULTS ***`);
   }
-}
+});
