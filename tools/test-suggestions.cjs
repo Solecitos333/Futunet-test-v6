@@ -1372,6 +1372,60 @@ test('Mejora demandada por usuarios: Controlador de Carga Solar Victron Energy S
   assert.ok(catJs.includes("/\\b(smartsolar|mppt)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Controlador Solar Victron SmartSolar MPPT');
 });
 
+test('Mejora demandada por usuarios: Teléfono IP Ejecutivo Panasonic KX-HDV230 (SUG-P2300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P2300'") && seedCjs.includes("status: 'implemented'"), 'SUG-P2300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P2300') && sugJs.includes('Panasonic KX-HDV230'), 'SUG-P2300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kxhdv230_ip_phone'), 'backup_data.js debe contener oficina_panasonic_kxhdv230_ip_phone');
+
+  const phoneImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kxhdv230-ip-phone.webp');
+  assert.ok(fs.existsSync(phoneImg), 'La imagen del teléfono IP Panasonic KX-HDV230 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'hdv230'"), 'catalog.js debe incluir hdv230 en stem variants');
+  assert.ok(catJs.includes("/\\b(kxhdv230|hdv230)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Teléfono IP Panasonic KX-HDV230');
+});
+
+test('Mejora demandada por usuarios: Firewall y Gateway Juniper Networks SRX300 (SUG-J3000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J3000'") && seedCjs.includes("status: 'implemented'"), 'SUG-J3000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-J3000') && sugJs.includes('Juniper Networks SRX300'), 'SUG-J3000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_srx300_security_gateway'), 'backup_data.js debe contener redes_juniper_srx300_security_gateway');
+
+  const srxImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-srx300-security-gateway.webp');
+  assert.ok(fs.existsSync(srxImg), 'La imagen del gateway Juniper SRX300 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'srx300'"), 'catalog.js debe incluir srx300 en stem variants');
+  assert.ok(catJs.includes("/\\b(srx300|srx)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Gateway Juniper SRX300');
+});
+
+test('Mejora demandada por usuarios: Contactor Industrial Siemens Sirius 3RT 25A (SUG-S2500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S2500'") && seedCjs.includes("status: 'implemented'"), 'SUG-S2500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S2500') && sugJs.includes('Siemens Sirius 3RT'), 'SUG-S2500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_sirius_contactor_3rt_25a'), 'backup_data.js debe contener energia_siemens_sirius_contactor_3rt_25a');
+
+  const contactorImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-sirius-contactor-3rt-25a.webp');
+  assert.ok(fs.existsSync(contactorImg), 'La imagen del contactor Siemens Sirius debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'sirius'"), 'catalog.js debe incluir sirius en stem variants');
+  assert.ok(catJs.includes("/\\b(sirius|3rt|3rt2026)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Contactor Siemens Sirius 3RT');
+});
+
 
 
 

@@ -1220,6 +1220,30 @@
       status: 'implemented',
       description: 'En proyectos de energía solar fotovoltaica residencial y comercial y sistemas de respaldo de telecomunicaciones en Santiago requerimos controladores de carga solar Victron Energy SmartSolar MPPT 100/30 (100V / 30A) con Bluetooth Smart integrado para vincular con la aplicación VictronConnect, algoritmo de recarga inteligente BatteryLife para baterías de litio y ciclo profundo y protección total contra sobretensiones. En marca-victronenergy.html solo contaban con el inversor MultiPlus pero no el controlador MPPT de carga solar.',
       officialResponse: '¡Hola Ing. Carolina! Tu solicitud ha sido atendida e implementada de inmediato. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-victronenergy.html el Controlador de Carga Solar Victron Energy SmartSolar MPPT 100/30 (algoritmo ultra rápido MPPT, 100V / 30A, Bluetooth Smart integrado, gestión inteligente de baterías BatteryLife compatible con Litio y Plomo-Ácido y monitoreo completo mediante app VictronConnect) con 5 años de garantía oficial y soporte técnico de ingeniería en Santiago.'
+    },
+    {
+      refCode: 'SUG-P2300',
+      title: 'Disponibilidad de Teléfonos IP Ejecutivos Panasonic KX-HDV230 con 6 Líneas SIP, Pantalla LCD Retroiluminada y Teclas BLF Programables para Recepciones y Gerencia',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras empresas, notarías y oficinas corporativas en Santiago requerimos teléfonos IP de escritorio ejecutivos Panasonic KX-HDV230 con capacidad para 6 líneas SIP simultáneas, doble pantalla LCD gráfica con teclas virtuales de auto-etiquetado BLF (Busy Lamp Field) para supervisar extensiones internas en tiempo real con indicador luminoso y doble puerto Gigabit Ethernet PoE para evitar adaptadores de corriente en cada escritorio. En marca-panasonic.html solo figuraba el modelo básico KX-HDV130 de 2 líneas y requerimos terminales ejecutivas para puestos de operadora y despachos gerenciales.',
+      officialResponse: '¡Hola Lic. José Luis! Tu sugerencia ha sido implementada con total éxito. Ya incorporamos al catálogo de Equipos de Oficina y a la página oficial marca-panasonic.html el Teléfono IP Ejecutivo Panasonic KX-HDV230 de 6 líneas SIP con pantalla principal LCD retroiluminada de 2.3", pantalla secundaria con 12 teclas BLF / DSS de auto-etiquetado (hasta 24 funciones en 2 páginas con LED bicolor), audio Sonic HD de banda ancha, doble puerto Gigabit Ethernet con soporte PoE y conector RJ9 para cintillo telefónico, respaldado por 1 año de garantía oficial y factura fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-J3000',
+      title: 'Disponibilidad de Gateways de Seguridad y Firewalls Empresariales Juniper Networks SRX300 para Protección Perimetral y VPNs Corporativas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras plantas de ensamblaje en el parque industrial de zonas francas (PIVEM), bancos y sedes corporativas en Santiago requerimos gateways de seguridad y firewalls perimetrales de próxima generación Juniper Networks SRX300 de 8 puertos Gigabit (incluyendo 2 puertos combo de fibra óptica SFP) con rendimiento de firewall de hasta 1 Gbps, 250 Mbps de throughput en túneles VPN IPsec de alta seguridad, sistema operativo Junos OS y diseño Fanless sin ventiladores para cuartos de telecomunicaciones. En marca-juniper.html solo figuraba el switch EX2300 pero no la solución de enrutamiento y seguridad perimetral.',
+      officialResponse: '¡Saludos cordiales Ing. Rafael! Nos complace informarte que tu requerimiento ha sido acogido e implementado de inmediato. Ya incorporamos al catálogo de Redes y Datos y a la página oficial marca-juniper.html el Firewall y Gateway de Servicios Juniper Networks SRX300 (8 puertos Gigabit Ethernet con 2 puertos combo SFP de fibra óptica, firewall de 1 Gbps, VPN IPsec cifrada AES-256 de 250 Mbps, enrutamiento dinámico Junos OS, seguridad UTM con prevención de intrusiones IPS y chasis metálico Fanless silencioso de grado industrial) con 2 años de garantía corporativa y soporte de ingeniería en Santiago.'
+    },
+    {
+      refCode: 'SUG-S2500',
+      title: 'Disponibilidad de Contactores Magnéticos Industriales Siemens Sirius 3RT y Relés de Sobrecarga para Protección y Arranque de Motores Trifásicos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En tableros eléctricos industriales, estaciones de bombeo de agua y cuartos de máquinas en naves comerciales de Santiago requerimos contactores magnéticos trifásicos Siemens Sirius de la serie 3RT (tamaño S0, 25 Amperios / 11 kW / 15 HP a 400V en categoría AC-3) con bobina de control a 110V/120V AC estándar y contactos auxiliares 1NA + 1NC integrados para arranque directo, enclavamiento y mando de motores trifásicos. En marca-siemens.html solo figuraba el interruptor termomagnético en caja moldeada Sentron.',
+      officialResponse: '¡Hola Ing. Carlos! Tu propuesta ha sido implementada con éxito. Ya incorporamos al catálogo de Energía y Climatización y a la página oficial marca-siemens.html el Contactor Magnético Industrial Siemens Sirius 3RT2026-1AK60 Trifásico 25A (11 kW a 400V, bobina de 110V/120V AC 50/60 Hz, contactos auxiliares 1NA+1NC integrados, vida útil de más de 10 millones de maniobras mecánicas y montaje universal a presión en riel DIN de 35 mm) con 2 años de garantía oficial Siemens y facturación con comprobante fiscal NCF en Santiago.'
     }
   ];
 

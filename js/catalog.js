@@ -229,6 +229,9 @@ function getStemVariants(word) {
   if (word === 'colorhunter' || word === 'ipc2128') variants.push('uniview', 'camara', '4k', 'poe', 'color');
   if (word === 'gs308pp' || word === 'gs308p') variants.push('netgear', 'switch', 'poe', 'prosafe', 'gigabit');
   if (word === 'smartsolar' || word === 'mppt') variants.push('victron', 'controlador', 'solar', 'bluetooth', 'bateria');
+  if (word === 'hdv230' || word === 'kxhdv230') variants.push('panasonic', 'telefono', 'ip', 'sip', 'blf');
+  if (word === 'srx300' || word === 'srx') variants.push('juniper', 'firewall', 'gateway', 'vpn', 'junos');
+  if (word === 'sirius' || word === '3rt' || word === '3rt2026') variants.push('siemens', 'contactor', 'trifasico', 'motor', 'rele');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -751,6 +754,39 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(smartsolar|mppt)\b/i.test(normalizedQuery) || (/\b(controlador|regulador)\b/i.test(normalizedQuery) && /\b(solar|mppt|victron)\b/i.test(normalizedQuery)) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(solar|mppt)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('victron')) {
       if (/smartsolar|mppt/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Teléfono IP Ejecutivo Panasonic KX-HDV230 al buscar kxhdv230, hdv230, panasonic telefono, telefono panasonic (SUG-P2300)
+  if (/\b(kxhdv230|hdv230)\b/i.test(normalizedQuery) || (/\b(telefono|telefonos)\b/i.test(normalizedQuery) && /\b(panasonic|ip|sip)\b/i.test(normalizedQuery)) || (/\b(panasonic)\b/i.test(normalizedQuery) && /\b(telefono|ip|sip)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'panasonic') {
+      if (/hdv230/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Firewall y Gateway Juniper Networks SRX300 al buscar srx300, srx, juniper firewall, firewall juniper (SUG-J3000)
+  if (/\b(srx300|srx)\b/i.test(normalizedQuery) || (/\b(firewall|gateway)\b/i.test(normalizedQuery) && /\b(juniper|srx|junos)\b/i.test(normalizedQuery)) || (/\b(juniper)\b/i.test(normalizedQuery) && /\b(firewall|gateway|vpn)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'juniper') {
+      if (/srx300|firewall/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Contactor Industrial Siemens Sirius 3RT al buscar sirius, 3rt, siemens contactor, contactor siemens (SUG-S2500)
+  if (/\b(sirius|3rt|3rt2026)\b/i.test(normalizedQuery) || (/\b(contactor|contactores)\b/i.test(normalizedQuery) && /\b(siemens|sirius|trifasico)\b/i.test(normalizedQuery)) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(contactor|sirius|motor)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'siemens') {
+      if (/sirius|contactor/i.test(title)) {
         score += 240;
       } else {
         score += 170;

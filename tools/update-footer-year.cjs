@@ -18,6 +18,18 @@ for (const f of files) {
     content = content.replace('© <script>document.write(new Date().getFullYear())</script> Futunet', '© <span id="footer-year">2026</span> Futunet');
     changed = true;
   }
+  if (content.includes('© <span id="footer-year"></span>Futunet')) {
+    content = content.replace('© <span id="footer-year"></span>Futunet', '© <span id="footer-year">2026</span> Futunet');
+    changed = true;
+  }
+  if (content.includes('© <span id="footer-year">2026</span>Futunet')) {
+    content = content.replace('© <span id="footer-year">2026</span>Futunet', '© <span id="footer-year">2026</span> Futunet');
+    changed = true;
+  }
+  if (content.includes('&copy; 2026 Futunet SRL.')) {
+    content = content.replace('&copy; 2026 Futunet SRL.', '© <span id="footer-year">2026</span> Futunet SRL.');
+    changed = true;
+  }
 
   if (changed) {
     fs.writeFileSync(fileP, content, 'utf8');

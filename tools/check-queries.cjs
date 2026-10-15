@@ -149,7 +149,13 @@ const queries = [
   'gs308pp',
   'switch netgear poe',
   'smartsolar',
-  'victron mppt'
+  'victron mppt',
+  'hdv230',
+  'telefono panasonic',
+  'srx300',
+  'juniper firewall',
+  'sirius',
+  'siemens contactor'
 ];
 
 

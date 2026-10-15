@@ -1531,6 +1531,81 @@ const victronMpptItems = [
   }
 ];
 
+const panasonicPhoneItems = [
+  {
+    id: 'oficina_panasonic_kxhdv230_ip_phone',
+    department: 'oficina',
+    category: 'Equipos de Oficina',
+    brand: 'Panasonic',
+    title: 'Teléfono IP Ejecutivo Panasonic KX-HDV230 de 6 Líneas SIP con Pantalla Dual LCD, Teclas BLF/DSS Programables y Audio Sonic HD',
+    desc: 'Teléfono IP corporativo y ejecutivo Panasonic KX-HDV230 de alta gama con capacidad para hasta 6 cuentas o líneas SIP simultáneas. Equipado con pantalla principal LCD gráfica monocromática retroiluminada de 2.3 pulgadas y una segunda pantalla LCD para etiquetas digitales de auto-etiquetado con 12 teclas de función rápida flexibles y teclas DSS/BLF (Busy Lamp Field) programables en dos páginas virtuales para un total de 24 extensiones supervisadas con LED bicolor (verde/rojo). Incorpora tecnología de audio HD de banda ancha Sonic HD con altavoz manos libres full dúplex, doble puerto Gigabit Ethernet 10/100/1000Base-T con alimentación PoE (Power over Ethernet 802.3af) integrada para evitar fuentes externas y conector RJ9 para cintillo telefónico de operador. Soporta agenda de hasta 500 contactos, registro de 30 llamadas entrantes y salientes, conferencia a 3 vías y compatibilidad total con centrales IP PBX Asterisk, FreePBX, Grandstream, Yeastar y Panasonic KX-NS500 / KX-HTS32 para recepciones, gerencias y centros de llamadas en Santiago y República Dominicana.',
+    price: 'RD$ 6,850.00',
+    img: 'img/productos/catalogo/panasonic-kxhdv230-ip-phone.webp',
+    gallery: [
+      'img/productos/catalogo/panasonic-kxhdv230-ip-phone.webp'
+    ],
+    specs: [
+      '6 cuentas o líneas SIP simultáneas con registro independiente y audio HD de banda ancha',
+      'Pantalla principal LCD gráfica retroiluminada de 2.3 pulgadas con ajuste de contraste',
+      'Segunda pantalla LCD con 12 teclas flexibles BLF / DSS de auto-etiquetado (hasta 24 funciones en 2 páginas)',
+      'Doble puerto Gigabit Ethernet 10/100/1000 Mbps con soporte de alimentación PoE integrado',
+      'Altavoz manos libres full dúplex y puerto dedicado RJ9 para cintillo de operadora telefónica',
+      'Agenda de 500 contactos, registro de llamadas, conferencia tripartita y códecs G.722, G.711, G.729a',
+      'Garantía oficial corporativa Panasonic de 1 año y comprobante fiscal formal NCF en Santiago'
+    ]
+  }
+];
+
+const juniperGatewayItems = [
+  {
+    id: 'redes_juniper_srx300_security_gateway',
+    department: 'redes',
+    category: 'Switches y Enrutadores',
+    brand: 'Juniper',
+    title: 'Firewall y Gateway de Seguridad Empresarial Juniper Networks SRX300 (8 Puertos Gigabit Ethernet, VPN IPsec 250 Mbps, Junos OS)',
+    desc: 'Gateway de servicios de seguridad y firewall empresarial de próxima generación Juniper Networks SRX300 (SRX300-SYS-JB) diseñado para sucursales corporativas, instituciones bancarias, oficinas gubernamentales y plantas en zonas francas de Santiago. Equipado con 8 puertos Gigabit Ethernet 10/100/1000 Mbps (incluyendo 6 puertos RJ-45 de cobre y 2 puertos combo RJ-45 / SFP para enlaces de fibra óptica dedicados o redundantes). Ofrece un rendimiento de firewall de inspección de estado de hasta 1 Gbps, 250 Mbps de throughput en VPNs IPsec seguras de sitio a sitio con cifrado AES-256, hasta 64,000 sesiones concurrentes y sistema de prevención de intrusiones (IPS/IDP). Funciona con el robusto sistema operativo de clase portadora Junos OS, brindando enrutamiento dinámico avanzado (BGP, OSPF, RIP, MPLS), filtrado web UTM, políticas de seguridad basadas en aplicaciones (AppSecure) y chasis compacto metálico silencioso sin ventilador (fanless) con certificación de grado carrier para operación continua 24/7 sin caídas.',
+    price: 'RD$ 26,500.00',
+    img: 'img/productos/catalogo/juniper-srx300-security-gateway.webp',
+    gallery: [
+      'img/productos/catalogo/juniper-srx300-security-gateway.webp'
+    ],
+    specs: [
+      '8 puertos Gigabit Ethernet (6 puertos 10/100/1000Base-T RJ-45 + 2 puertos combo RJ-45 / SFP para fibra óptica)',
+      'Rendimiento de Firewall Stateful de hasta 1 Gbps y rendimiento de túneles VPN IPsec de 250 Mbps',
+      'Capacidad para hasta 64,000 sesiones concurrentes de red y 2,048 túneles VPN de sitio a sitio y acceso remoto',
+      'Sistema operativo Junos OS con arquitectura modular, enrutamiento dinámico BGP, OSPF, NAT y QoS',
+      'Seguridad UTM integrada: Filtrado web, control de aplicaciones AppSecure, antivirus y prevención de intrusiones (IPS)',
+      'Diseño Fanless silencioso de grado industrial para instalación en rack, pared o escritorio sin ruido acústico',
+      'Garantía oficial Juniper Networks de 2 años con soporte técnico de ingeniería y facturación con NCF en Santiago'
+    ]
+  }
+];
+
+const siemensContactorItems = [
+  {
+    id: 'energia_siemens_sirius_contactor_3rt_25a',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Siemens',
+    title: 'Contactor Magnético Industrial Siemens Sirius 3RT2026-1AK60 Trifásico 25A (11 kW a 400V) Bobina 110V/120V AC con Contactos Auxiliares 1NA+1NC',
+    desc: 'Contactor magnético industrial tripolar Siemens Sirius serie 3RT (tamaño constructivo S0, modelo 3RT2026-1AK60) para conmutación, arranque suave y protección de motores eléctricos trifásicos de hasta 25 Amperios en categoría AC-3 (11 kW / 15 HP a 400V / 480V) y hasta 40 Amperios en categoría AC-1 para cargas resistivas y bancos de resistencias. Equipado con bobina de accionamiento de control de alta resistencia a 110V / 120V AC a 50/60 Hz habitual en cuadros industriales dominicanos y contactos auxiliares integrados de fábrica 1NA (normalmente abierto) + 1NC (normalmente cerrado) para enclavamiento de seguridad y señalización luminosa. Diseñado con mecanismo de contactos de aleación de plata resistente al arco eléctrico con vida útil mecánica de más de 10 millones de ciclos de maniobra, bornes de conexión por tornillo a prueba de vibraciones y montaje rápido en riel DIN de 35 mm o mediante placa de montaje con tornillos. Compatible con relés de sobrecarga térmicos y electrónicos Siemens Sirius para la protección integral de bombas de agua, compresores de climatización, extractores de aire y maquinaria de zonas francas en Santiago.',
+    price: 'RD$ 3,850.00',
+    img: 'img/productos/catalogo/siemens-sirius-contactor-3rt-25a.webp',
+    gallery: [
+      'img/productos/catalogo/siemens-sirius-contactor-3rt-25a.webp'
+    ],
+    specs: [
+      'Corriente nominal de empleo: 25 Amperios (AC-3 a 400V / 11 kW / 15 HP) y hasta 40A en cargas resistivas (AC-1)',
+      'Tensión nominal de control (bobina): 110V - 120V AC a 50/60 Hz de bajo consumo de atracción y retención',
+      'Configuración de polos: 3 polos principales de potencia (3P) con tensión asignada de aislamiento de 690V',
+      'Contactos auxiliares incorporados: 1 Normal Abierto (1NA) + 1 Normal Cerrado (1NC) con contactos de espejo',
+      'Vida útil mecánica superior: Hasta 10,000,000 de ciclos continuos de operación industrial pesada',
+      'Fijación versátil: Montaje universal a presión en riel DIN estándar de 35 mm o atornillado directo a placa',
+      'Garantía oficial Siemens de 2 años con despacho inmediato y factura con comprobante fiscal NCF en Santiago'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -2008,7 +2083,10 @@ async function updateBackupData() {
     ...lenovoTinyItems,
     ...univiewCameraItems,
     ...netgearPoeItems,
-    ...victronMpptItems
+    ...victronMpptItems,
+    ...panasonicPhoneItems,
+    ...juniperGatewayItems,
+    ...siemensContactorItems
   ];
 
   itemsToSync.forEach(item => {
@@ -2076,7 +2154,10 @@ async function updateFirestore() {
     ...lenovoTinyItems,
     ...univiewCameraItems,
     ...netgearPoeItems,
-    ...victronMpptItems
+    ...victronMpptItems,
+    ...panasonicPhoneItems,
+    ...juniperGatewayItems,
+    ...siemensContactorItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);
