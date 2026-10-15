@@ -112,7 +112,11 @@
     const now = Date.now();
     if (lastSub && (now - Number(lastSub)) < 10000) {
       const remaining = Math.ceil((10000 - (now - Number(lastSub))) / 1000);
-      alert('Por favor espera ' + remaining + ' segundos antes de enviar otra respuesta.');
+      if (window.showToast) {
+        window.showToast('Por favor espera ' + remaining + ' segundos antes de enviar otra respuesta.', 'info');
+      } else {
+        alert('Por favor espera ' + remaining + ' segundos antes de enviar otra respuesta.');
+      }
       return;
     }
 

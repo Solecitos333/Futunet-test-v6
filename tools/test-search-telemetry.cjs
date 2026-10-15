@@ -45,7 +45,13 @@ const testQueries = [
   'sillas',
   'silla ergonomica',
   'forza',
-  'mini pc'
+  'mini pc',
+  'hdv230',
+  'panasonic',
+  'srx300',
+  'juniper',
+  'sirius',
+  'contactor'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -67,6 +73,42 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /m70q|thinkcentre|tiny/i.test(scored[0].p.title),
         'El producto top para "mini pc" debe ser Lenovo ThinkCentre M70q Tiny'
+      );
+    }
+
+    if (q === 'hdv230') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Panasonic',
+        'La búsqueda "hdv230" debe priorizar el Teléfono IP Panasonic KX-HDV230'
+      );
+      assert.ok(
+        /hdv230/i.test(scored[0].p.title),
+        'El producto top para "hdv230" debe ser Panasonic KX-HDV230'
+      );
+    }
+
+    if (q === 'srx300') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Juniper',
+        'La búsqueda "srx300" debe priorizar el Gateway Juniper Networks SRX300'
+      );
+      assert.ok(
+        /srx300/i.test(scored[0].p.title),
+        'El producto top para "srx300" debe ser Juniper Networks SRX300'
+      );
+    }
+
+    if (q === 'sirius') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Siemens',
+        'La búsqueda "sirius" debe priorizar el Contactor Siemens Sirius 3RT'
+      );
+      assert.ok(
+        /sirius|3rt/i.test(scored[0].p.title),
+        'El producto top para "sirius" debe ser Siemens Sirius 3RT'
       );
     }
   }

@@ -459,7 +459,11 @@
           window.FutunetCart.openDrawer();
         }
       } else {
-        alert('Producto agregado al carrito.');
+        if (typeof window.showToast === 'function') {
+          window.showToast('Producto agregado al carrito.', 'success');
+        } else {
+          alert('Producto agregado al carrito.');
+        }
       }
     },
     addFeaturedToCart: function (productId) {

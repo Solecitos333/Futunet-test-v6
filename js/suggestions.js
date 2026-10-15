@@ -544,8 +544,9 @@
       sessionStorage.setItem(trackCooldownKey, String(Date.now()));
     } catch (e) {}
 
-    var match = raw.match(/SUG-[A-Z0-9]{5}/i);
-    var code = match ? match[0].toUpperCase() : raw.toUpperCase();
+    var normalizedRaw = raw.replace(/^SUG[\s_]?/i, 'SUG-');
+    var match = normalizedRaw.match(/SUG-[A-Z0-9]{5}/i);
+    var code = match ? match[0].toUpperCase() : normalizedRaw.toUpperCase();
     var db = window.FutunetFirebase ? window.FutunetFirebase.db : (window.firebase ? firebase.firestore() : null);
     if (!db) {
       var fbOffline = getFallbackSuggestionByCode(code);
@@ -1268,7 +1269,7 @@
     try {
       var snap = await db.collection('suggestions')
         .where('status', 'in', ['implemented', 'planned'])
-        .limit(50)
+        .limit(100)
         .get();
 
       if (snap.empty) {
@@ -1278,8 +1279,17 @@
 
       var items = [];
       snap.forEach(function (doc) {
-        items.push(doc.data());
+        var data = doc.data() || {};
+        data.id = doc.id;
+        items.push(data);
       });
+
+      items.sort(function (a, b) {
+        var tA = a.createdAt ? (a.createdAt.seconds || (a.createdAt.getTime ? a.createdAt.getTime() / 1000 : 0)) : 0;
+        var tB = b.createdAt ? (b.createdAt.seconds || (b.createdAt.getTime ? b.createdAt.getTime() / 1000 : 0)) : 0;
+        return tB - tA;
+      });
+
       loadedCommunityIdeas = items;
       updateCommunityFilterCounts(loadedCommunityIdeas);
       renderCommunityCards(loadedCommunityIdeas);

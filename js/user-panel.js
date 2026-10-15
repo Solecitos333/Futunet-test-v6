@@ -324,7 +324,14 @@
         var date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
         var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(o.total);
         
-        var methodMap = { whatsapp: 'WhatsApp', bank_transfer: 'Transferencia' };
+        var methodMap = {
+          whatsapp: 'WhatsApp',
+          bank_transfer: 'Transferencia',
+          financing: 'Financiamiento',
+          card: 'Tarjeta',
+          cash: 'Efectivo',
+          credit_card: 'Tarjeta de Crédito'
+        };
         var method = escapeHtml(methodMap[o.paymentMethod] || o.paymentMethod || 'WhatsApp');
 
         var statusMap = { pending: 'Pendiente', processing: 'Procesando', shipped: 'Enviado', delivered: 'Entregado' };

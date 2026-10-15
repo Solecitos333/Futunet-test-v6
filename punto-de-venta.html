@@ -1762,14 +1762,22 @@
       var lastPos = sessionStorage.getItem(lastPosKey);
       if (lastPos && (now - Number(lastPos)) < 10000) {
         var remaining = Math.ceil((10000 - (now - Number(lastPos))) / 1000);
-        alert('Por favor espera ' + remaining + ' segundos antes de enviar otra cotización.');
+        if (window.showToast) {
+          window.showToast('Por favor espera ' + remaining + ' segundos antes de enviar otra cotización.', 'info');
+        } else {
+          alert('Por favor espera ' + remaining + ' segundos antes de enviar otra cotización.');
+        }
         return;
       }
 
       // 3. Verificación de Consentimiento de Privacidad (Ley 172-13 / RGPD)
       var privacyConsent = document.getElementById('pos-privacy-consent');
       if (privacyConsent && !privacyConsent.checked) {
-        alert('Debes aceptar la política de privacidad para enviar la solicitud.');
+        if (window.showToast) {
+          window.showToast('Debes aceptar la política de privacidad para enviar la solicitud.', 'error');
+        } else {
+          alert('Debes aceptar la política de privacidad para enviar la solicitud.');
+        }
         privacyConsent.focus();
         return;
       }

@@ -5893,7 +5893,7 @@
       openModal('suggestion-detail-modal');
     } catch (err) {
       console.error('Error al abrir detalle de sugerencia:', err);
-      alert('No se pudo cargar el detalle de la sugerencia.');
+      showToast('No se pudo cargar el detalle de la sugerencia.', 'error');
     }
   }
 
@@ -5928,9 +5928,10 @@
 
       closeModal('suggestion-detail-modal');
       await loadSuggestions();
+      showToast('Gestión de sugerencia actualizada con éxito', 'success');
     } catch (err) {
       console.error('Error al guardar gestión de sugerencia:', err);
-      alert('Error al guardar los cambios: ' + (err.message || ''));
+      showToast('Error al guardar los cambios: ' + (err.message || ''), 'error');
     } finally {
       if (btn) btn.disabled = false;
     }
@@ -5942,7 +5943,7 @@
       var code = refEl.textContent.trim();
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(code).then(function () {
-          alert('Código copiado al portapapeles: ' + code);
+          showToast('Código copiado al portapapeles: ' + code, 'success');
         }).catch(function () {
           prompt('Copia este código de referencia:', code);
         });
@@ -5973,7 +5974,7 @@
       lastTs = parseInt(sessionStorage.getItem('futunet_last_internal_sug_ts') || '0', 10);
     } catch (_) {}
     if (now - lastTs < 5000) {
-      alert('Por favor espera unos segundos antes de enviar otra propuesta.');
+      showToast('Por favor espera unos segundos antes de enviar otra propuesta.', 'warning');
       return;
     }
 
@@ -5991,11 +5992,11 @@
     var benefit = sanitizeAdminSuggestionInput(document.getElementById('internal-sug-benefit')?.value);
 
     if (title.length < 3) {
-      alert('Por favor escribe un título claro de al menos 3 caracteres.');
+      showToast('Por favor escribe un título claro de al menos 3 caracteres.', 'error');
       return;
     }
     if (desc.length < 5) {
-      alert('Por favor describe la propuesta con al menos 5 caracteres.');
+      showToast('Por favor describe la propuesta con al menos 5 caracteres.', 'error');
       return;
     }
 
@@ -6034,10 +6035,10 @@
 
       closeModal('internal-suggestion-modal');
       await loadSuggestions();
-      alert('¡Propuesta interna registrada exitosamente!');
+      showToast('¡Propuesta interna registrada exitosamente!', 'success');
     } catch (err) {
       console.error('Error al guardar sugerencia interna:', err);
-      alert('Error al registrar sugerencia interna: ' + (err.message || ''));
+      showToast('Error al registrar sugerencia interna: ' + (err.message || ''), 'error');
     } finally {
       if (btn) btn.disabled = false;
     }

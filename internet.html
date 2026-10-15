@@ -544,7 +544,7 @@
         <button type="button" class="quiz-cta-btn" onclick="openQuizModal()">
          Test rápido <i class="fas fa-arrow-right"></i>
         </button>
-        <button type="button" class="quiz-cta-btn" style="background: linear-gradient(135deg, #0b5fc6, #0284c7) !important;" onclick="if(window.FutunetAI){window.FutunetAI.askInternet();}else{alert('Iniciando asistente...');}">
+        <button type="button" class="quiz-cta-btn" style="background: linear-gradient(135deg, #0b5fc6, #0284c7) !important;" onclick="if(window.FutunetAI){window.FutunetAI.askInternet();}else{window.dispatchEvent(new CustomEvent('futunet-open-chat',{detail:{prompt:'Hola, quisiera que me asesores para elegir el mejor plan de Internet de fibra óptica según mis necesidades.'}})); if(window.showToast) window.showToast('Conectando con el Asesor IA...', 'info');}">
          <i class="fas fa-robot"></i> Asesor con IA
         </button>
        </div>
