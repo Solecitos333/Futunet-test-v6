@@ -155,7 +155,11 @@ const queries = [
   'srx300',
   'juniper firewall',
   'sirius',
-  'siemens contactor'
+  'siemens contactor',
+  'wall connector',
+  'cassette',
+  'ip150',
+  'velop pro'
 ];
 
 

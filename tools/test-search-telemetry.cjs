@@ -51,7 +51,11 @@ const testQueries = [
   'srx300',
   'juniper',
   'sirius',
-  'contactor'
+  'contactor',
+  'wall connector',
+  'cassette',
+  'ip150',
+  'velop'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -111,5 +115,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
         'El producto top para "sirius" debe ser Siemens Sirius 3RT'
       );
     }
+
+    if (q === 'wall connector') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Tesla',
+        'La búsqueda "wall connector" debe priorizar el Cargador Tesla Wall Connector Gen 3'
+      );
+      assert.ok(
+        /wall\s*connector/i.test(scored[0].p.title),
+        'El producto top para "wall connector" debe ser Tesla Wall Connector'
+      );
+    }
+
+    if (q === 'cassette') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Mitsubishi',
+        'La búsqueda "cassette" debe priorizar el Aire Acondicionado Cassette Mitsubishi Electric'
+      );
+      assert.ok(
+        /cassette/i.test(scored[0].p.title),
+        'El producto top para "cassette" debe ser Cassette Mitsubishi Electric'
+      );
+    }
+
+    if (q === 'ip150') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Paradox',
+        'La búsqueda "ip150" debe priorizar el Módulo Comunicador Paradox IP150+'
+      );
+      assert.ok(
+        /ip150/i.test(scored[0].p.title),
+        'El producto top para "ip150" debe ser Paradox IP150+'
+      );
+    }
+
+    if (q === 'velop') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Linksys',
+        'La búsqueda "velop" debe priorizar el Sistema Mesh Linksys Velop Pro 6E'
+      );
+      assert.ok(
+        /velop/i.test(scored[0].p.title),
+        'El producto top para "velop" debe ser Linksys Velop Pro 6E'
+      );
+    }
   }
 });
+

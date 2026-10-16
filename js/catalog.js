@@ -232,6 +232,10 @@ function getStemVariants(word) {
   if (word === 'hdv230' || word === 'kxhdv230') variants.push('panasonic', 'telefono', 'ip', 'sip', 'blf');
   if (word === 'srx300' || word === 'srx') variants.push('juniper', 'firewall', 'gateway', 'vpn', 'junos');
   if (word === 'sirius' || word === '3rt' || word === '3rt2026') variants.push('siemens', 'contactor', 'trifasico', 'motor', 'rele');
+  if (word === 'connector' || word === 'charger') variants.push('tesla', 'wall', 'ev', 'cargador', 'recarga');
+  if (word === 'cassette' || word === 'plam') variants.push('mitsubishi', 'inverter', 'techo', 'aire', 'climatizacion');
+  if (word === 'ip150' || word === 'ip150plus') variants.push('paradox', 'modulo', 'comunicador', 'internet', 'alarma', 'insite');
+  if (word === 'velop' || word === 'axe5400') variants.push('linksys', 'mesh', 'wifi', 'wifi6e', 'tribanda');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -787,6 +791,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(sirius|3rt|3rt2026)\b/i.test(normalizedQuery) || (/\b(contactor|contactores)\b/i.test(normalizedQuery) && /\b(siemens|sirius|trifasico)\b/i.test(normalizedQuery)) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(contactor|sirius|motor)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'siemens') {
       if (/sirius|contactor/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cargador Tesla Wall Connector Gen 3 al buscar wall connector, cargador tesla, tesla charger, cargador ev (SUG-T4800)
+  if (/\b(wall\s*connector|cargador\s*tesla|tesla\s*charger|cargador\s*ev)\b/i.test(normalizedQuery) || (/\b(cargador|charger)\b/i.test(normalizedQuery) && /\b(tesla|ev|electrico)\b/i.test(normalizedQuery)) || (/\b(tesla)\b/i.test(normalizedQuery) && /\b(cargador|connector|wall)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'tesla') {
+      if (/wall\s*connector/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Aire Acondicionado Cassette Mitsubishi Electric al buscar cassette mitsubishi, mitsubishi cassette, aire cassette, pla-m (SUG-M3600)
+  if (/\b(cassette|plam|pla-m)\b/i.test(normalizedQuery) || (/\b(cassette)\b/i.test(normalizedQuery) && /\b(mitsubishi|aire|inverter|techo)\b/i.test(normalizedQuery)) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(cassette|techo|36000)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mitsubishi') {
+      if (/cassette/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Módulo Comunicador IP Paradox IP150+ al buscar ip150, comunicador ip, paradox ip, modulo ip, insite gold (SUG-P1500)
+  if (/\b(ip150|ip150\+|insite\s*gold)\b/i.test(normalizedQuery) || (/\b(comunicador|modulo)\b/i.test(normalizedQuery) && /\b(paradox|ip|internet)\b/i.test(normalizedQuery)) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(ip|comunicador|modulo)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'paradox') {
+      if (/ip150/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Sistema Mesh Linksys Velop Pro 6E al buscar velop, velop pro, linksys velop, axe5400, wifi 6e (SUG-L6400)
+  if (/\b(velop|axe5400|wifi\s*6e)\b/i.test(normalizedQuery) || (/\b(mesh)\b/i.test(normalizedQuery) && /\b(linksys|velop|6e)\b/i.test(normalizedQuery)) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(velop|mesh|6e)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'linksys') {
+      if (/velop/i.test(title)) {
         score += 240;
       } else {
         score += 170;

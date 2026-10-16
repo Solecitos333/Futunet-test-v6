@@ -1426,6 +1426,79 @@ test('Mejora demandada por usuarios: Contactor Industrial Siemens Sirius 3RT 25A
   assert.ok(catJs.includes("/\\b(sirius|3rt|3rt2026)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Contactor Siemens Sirius 3RT');
 });
 
+test('Mejora demandada por usuarios: Cargador de Vehículos Eléctricos Tesla Wall Connector Gen 3 (SUG-T4800)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T4800'") && seedCjs.includes("status: 'implemented'"), 'SUG-T4800 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T4800') && sugJs.includes('Tesla Wall Connector'), 'SUG-T4800 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_wall_connector_gen3'), 'backup_data.js debe contener energia_tesla_wall_connector_gen3');
+
+  const teslaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-wall-connector-gen3.webp');
+  assert.ok(fs.existsSync(teslaImg), 'La imagen del cargador Tesla Wall Connector debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'connector'"), 'catalog.js debe incluir connector en stem variants');
+  assert.ok(catJs.includes("/\\b(wall\\s*connector|cargador\\s*tesla|tesla\\s*charger|cargador\\s*ev)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Wall Connector');
+});
+
+test('Mejora demandada por usuarios: Aire Acondicionado Cassette Inverter Mitsubishi Electric PLA-M 36K (SUG-M3600)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M3600'") && seedCjs.includes("status: 'implemented'"), 'SUG-M3600 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M3600') && sugJs.includes('Mitsubishi Electric PLA-M'), 'SUG-M3600 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_cassette_inverter_36k'), 'backup_data.js debe contener energia_mitsubishi_cassette_inverter_36k');
+
+  const mitsubishiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-cassette-inverter-36k.webp');
+  assert.ok(fs.existsSync(mitsubishiImg), 'La imagen del cassette Mitsubishi debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cassette'"), 'catalog.js debe incluir cassette en stem variants');
+  assert.ok(catJs.includes("/\\b(cassette|plam|pla-m)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Cassette Mitsubishi Electric');
+});
+
+test('Mejora demandada por usuarios: Módulo Comunicador IP Paradox IP150+ (SUG-P1500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P1500'") && seedCjs.includes("status: 'implemented'"), 'SUG-P1500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P1500') && sugJs.includes('Paradox IP150+'), 'SUG-P1500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_ip150_modulo_comunicador'), 'backup_data.js debe contener seguridad_paradox_ip150_modulo_comunicador');
+
+  const paradoxImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-ip150-modulo-comunicador.webp');
+  assert.ok(fs.existsSync(paradoxImg), 'La imagen del módulo Paradox IP150+ debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ip150'"), 'catalog.js debe incluir ip150 en stem variants');
+  assert.ok(catJs.includes("/\\b(ip150|ip150\\+|insite\\s*gold)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Paradox IP150+');
+});
+
+test('Mejora demandada por usuarios: Sistema Mesh Wi-Fi 6E Tri-Banda Linksys Velop Pro 6E (SUG-L6400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L6400'") && seedCjs.includes("status: 'implemented'"), 'SUG-L6400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L6400') && sugJs.includes('Linksys Velop Pro 6E'), 'SUG-L6400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_velop_pro_6e_mesh'), 'backup_data.js debe contener redes_linksys_velop_pro_6e_mesh');
+
+  const linksysImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-velop-pro-6e-mesh.webp');
+  assert.ok(fs.existsSync(linksysImg), 'La imagen del router Linksys Velop Pro 6E debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'velop'"), 'catalog.js debe incluir velop en stem variants');
+  assert.ok(catJs.includes("/\\b(velop|axe5400|wifi\\s*6e)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Linksys Velop Pro 6E');
+});
+
+
 
 
 

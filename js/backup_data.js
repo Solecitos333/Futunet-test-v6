@@ -7617,6 +7617,90 @@ const mockDatabase = [
       "Fijación versátil: Montaje universal a presión en riel DIN estándar de 35 mm o atornillado directo a placa",
       "Garantía oficial Siemens de 2 años con despacho inmediato y factura con comprobante fiscal NCF en Santiago"
     ]
+  },
+  {
+    "id": "energia_tesla_wall_connector_gen3",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Tesla",
+    "title": "Cargador de Vehículos Eléctricos Tesla Wall Connector Gen 3 (48A / 11.5 kW) con Wi-Fi",
+    "desc": "Estación de recarga inteligente de alta potencia para vehículos eléctricos (EV) Tesla Wall Connector Gen 3. Ofrece hasta 48 Amperios (11.5 kW a 240V) permitiendo recuperar hasta 44 millas de autonomía por hora. Equipado con conectividad Wi-Fi de 2.4 GHz para actualizaciones de firmware automáticas, cable liviano y flexible de 24 pies (7.3 metros) de longitud para fácil alcance, gestión inteligente de carga Power Sharing para hasta 6 unidades compartiendo un circuito y monitoreo en tiempo real desde la aplicación móvil Tesla. Con certificación NEMA 3R para instalación en pared interior o exterior protegida.",
+    "price": "RD$ 42,500.00",
+    "img": "img/productos/catalogo/tesla-wall-connector-gen3.webp",
+    "gallery": [
+      "img/productos/catalogo/tesla-wall-connector-gen3.webp"
+    ],
+    "specs": [
+      "Potencia máxima de carga: hasta 48A / 11.5 kW en alimentación monofásica o bifásica a 240V",
+      "Cable de recarga integrado de 24 pies (7.3 metros) con conector estándar Tesla",
+      "Conectividad Wi-Fi 802.11 b/g/n para control de acceso, estadísticas y firmware OTA",
+      "Tecnología Power Sharing para equilibrar la potencia entre múltiples estaciones de carga",
+      "Certificación NEMA 3R resistente a intemperie para montaje mural en residencial o comercial",
+      "Garantía oficial Tesla de 4 años para uso residencial (1 año comercial) con factura NCF"
+    ]
+  },
+  {
+    "id": "energia_mitsubishi_cassette_inverter_36k",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Mitsubishi",
+    "title": "Aire Acondicionado Comercial Tipo Cassette Inverter Mitsubishi Electric PLA-M 36,000 BTU 4 Vías",
+    "desc": "Sistema de climatización comercial tipo cassette de 4 vías para empotrar en falso techo Mitsubishi Electric Serie PLA-M de 36,000 BTU (3 Toneladas de refrigeración). Equipado con tecnología Inverter PAM de compresor rotativo de velocidad variable y calificación de eficiencia estacional hasta 21 SEER. Incorpora el sensor térmico inteligente 3D i-See Sensor que mide la temperatura a nivel del piso y detecta la presencia humana para dirigir el flujo de aire de forma personalizada. Cuenta con bomba de drenaje de condensado de alto levante integrada (hasta 850 mm), panel decorativo ultra delgado con aletas independientes y operación silenciosa con refrigerante ecológico.",
+    "price": "RD$ 145,000.00",
+    "img": "img/productos/catalogo/mitsubishi-cassette-inverter-36k.webp",
+    "gallery": [
+      "img/productos/catalogo/mitsubishi-cassette-inverter-36k.webp"
+    ],
+    "specs": [
+      "Capacidad de enfriamiento comercial: 36,000 BTU/h (3.0 Toneladas TR de refrigeración)",
+      "Tecnología Inverter PAM ultra eficiente con calificación hasta 21.0 SEER",
+      "Diseño para falso techo de 4 vías con control de flujo de aire individual por aleta",
+      "Sensor infrarrojo inteligente 3D i-See Sensor para escaneo térmico y ahorro energético",
+      "Bomba de condensado de alto levante incorporada de fábrica (850 mm de elevación)",
+      "Garantía oficial Mitsubishi Electric de 3 años en compresor y facturación NCF en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_paradox_ip150_modulo_comunicador",
+    "department": "seguridad",
+    "category": "Sistemas de Seguridad CCTV",
+    "brand": "Paradox",
+    "title": "Módulo Comunicador de Red IP / Internet Paradox IP150+ para Paneles Spectra y EVO",
+    "desc": "Módulo de comunicación IP / Ethernet de alta seguridad Paradox IP150+ diseñado para conectar centrales de alarma Paradox Spectra SP, Magellan y EVO directamente a la red de datos local e Internet. Permite a los usuarios armar, desarmar y verificar el estado del sistema en tiempo real desde la aplicación móvil Insite Gold mediante notificaciones push inmediatas de alarmas, fallas o pánicos. Admite reporte a estaciones centrales de monitoreo receptoras vía protocolo IP/GPRS con cifrado de grado bancario AES-256 / MD5, actualización remota de firmware y conexión plug-and-play con puerto Ethernet 10/100.",
+    "price": "RD$ 8,950.00",
+    "img": "img/productos/catalogo/paradox-ip150-modulo-comunicador.webp",
+    "gallery": [
+      "img/productos/catalogo/paradox-ip150-modulo-comunicador.webp"
+    ],
+    "specs": [
+      "Compatibilidad universal con paneles Paradox Spectra SP, Magellan MG5000/MG5050 y EVO192",
+      "Conexión Ethernet 10/100 Mbps con indicadores LED de enlace, alimentación y actividad de bus",
+      "Soporte completo para app móvil Insite Gold (iOS y Android) y software BabyWare",
+      "Transmisión de eventos por correo electrónico y reportes a central receptora por IP",
+      "Cifrado de datos AES-256 bits y MD5 para máxima protección contra interceptaciones",
+      "Garantía oficial Paradox de 1 año con soporte técnico y configuración en Santiago"
+    ]
+  },
+  {
+    "id": "redes_linksys_velop_pro_6e_mesh",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Linksys",
+    "title": "Sistema Wi-Fi 6E Mesh Tri-Banda Linksys Velop Pro 6E AXE5400 con Banda de 6 GHz",
+    "desc": "Sistema de red inalámbrica en malla (Mesh) de nueva generación Linksys Velop Pro 6E con tecnología Cognitive Mesh y velocidad total combinada AXE5400. Incorpora la nueva banda limpia de 6 GHz libre de interferencias para dispositivos compatibles, complementada por bandas de 5 GHz y 2.4 GHz concurrentes. Cada nodo proporciona una cobertura uniforme de hasta 3,000 pies cuadrados (aproximadamente 275 m²) y gestiona más de 200 dispositivos simultáneos con latencia ultra baja. Incluye 1 puerto Gigabit WAN y 1 puerto Gigabit LAN para conexiones cableadas de alta velocidad y configuración en minutos mediante la app Linksys.",
+    "price": "RD$ 18,900.00",
+    "img": "img/productos/catalogo/linksys-velop-pro-6e-mesh.webp",
+    "gallery": [
+      "img/productos/catalogo/linksys-velop-pro-6e-mesh.webp"
+    ],
+    "specs": [
+      "Velocidad Tri-Banda AXE5400: hasta 2402 Mbps en 6 GHz + 2402 Mbps en 5 GHz + 574 Mbps en 2.4 GHz",
+      "Banda exclusiva de 6 GHz con canales amplios para streaming 8K y videoconferencias sin congestión",
+      "Tecnología Cognitive Mesh para optimización automática de frecuencias y canales en tiempo real",
+      "Cobertura continua de hasta 3,000 pies cuadrados y soporte para más de 200 conexiones",
+      "Puertos Gigabit Ethernet 10/100/1000 para backhaul cableado o equipos de red de alto consumo",
+      "Garantía corporativa Linksys de 2 años con entrega y soporte técnico de Futunet en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

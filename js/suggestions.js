@@ -1245,6 +1245,38 @@
       status: 'implemented',
       description: 'En tableros eléctricos industriales, estaciones de bombeo de agua y cuartos de máquinas en naves comerciales de Santiago requerimos contactores magnéticos trifásicos Siemens Sirius de la serie 3RT (tamaño S0, 25 Amperios / 11 kW / 15 HP a 400V en categoría AC-3) con bobina de control a 110V/120V AC estándar y contactos auxiliares 1NA + 1NC integrados para arranque directo, enclavamiento y mando de motores trifásicos. En marca-siemens.html solo figuraba el interruptor termomagnético en caja moldeada Sentron.',
       officialResponse: '¡Hola Ing. Carlos! Tu propuesta ha sido implementada con éxito. Ya incorporamos al catálogo de Energía y Climatización y a la página oficial marca-siemens.html el Contactor Magnético Industrial Siemens Sirius 3RT2026-1AK60 Trifásico 25A (11 kW a 400V, bobina de 110V/120V AC 50/60 Hz, contactos auxiliares 1NA+1NC integrados, vida útil de más de 10 millones de maniobras mecánicas y montaje universal a presión en riel DIN de 35 mm) con 2 años de garantía oficial Siemens y facturación con comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-T4800',
+      title: 'Disponibilidad de Cargadores de Vehículos Eléctricos Tesla Wall Connector Gen 3 (48A / 11.5 kW) con Wi-Fi para Residencias, Negocios y Flotas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para residencias modernas, edificios corporativos, plazas comerciales y flotas de transporte en Santiago requerimos estaciones de carga para vehículos eléctricos (EV) Tesla Wall Connector Gen 3 (capacidad de hasta 48 Amperios / 11.5 kW de potencia en 240V monofásico/bifásico, cable de 24 pies de longitud, conectividad Wi-Fi integrada para actualizaciones de firmware y control de acceso, compartición de energía Power Sharing para hasta 6 unidades en un mismo circuito y monitoreo en tiempo real desde la aplicación móvil Tesla). En marca-tesla.html solo disponían de la batería Powerwall 2 pero no cargadores de pared para vehículos.',
+      officialResponse: '¡Hola Ing. Héctor! Tu sugerencia ha sido implementada con total éxito. Ya incorporamos al catálogo de Energía & Climatización y a la página oficial marca-tesla.html el Cargador de Vehículos Eléctricos Tesla Wall Connector Gen 3 (48A / 11.5 kW a 240V, cable de 24 pies, conectividad Wi-Fi, gestión de carga inteligente Power Sharing y monitoreo vía app Tesla) con 4 años de garantía oficial y facturación con comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-M3600',
+      title: 'Disponibilidad de Aires Acondicionados Comerciales Tipo Cassette Inverter Mitsubishi Electric PLA-M 36,000 BTU (3 Toneladas) para Falsos Techos en Oficinas y Clínicas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En remodelaciones corporativas, clínicas de diagnóstico, bufetes y salones de conferencia en Santiago con falsos techos requerimos sistemas de climatización comerciales tipo cassette de 4 vías Mitsubishi Electric PLA-M de 36,000 BTU (3 Toneladas) con tecnología Inverter PAM de alta eficiencia (hasta 21 SEER), flujo de aire 3D omnidireccional con sensor 3D i-See Sensor, bomba de condensado de alto levante integrada y control remoto programable silencioso. En marca-mitsubishi.html solo figuraba el mini-split mural MSZ-GL18 pero no unidades de techo para diseño arquitectónico comercial.',
+      officialResponse: '¡Saludos cordiales Arq. Nelson! Nos complace comunicarte que tu propuesta ha sido implementada con éxito. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-mitsubishi.html el Aire Acondicionado Comercial Tipo Cassette Inverter Mitsubishi Electric PLA-M 36,000 BTU / 3 TR (diseño para falso techo de 4 vías, 3D i-See Sensor inteligente, bomba de drenaje incorporada, compresor Inverter ultra eficiente y operación silenciosa) con 3 años de garantía oficial y entrega en Santiago.'
+    },
+    {
+      refCode: 'SUG-P1500',
+      title: 'Disponibilidad de Módulos Comunicadores de Red IP Paradox IP150+ para Conexión de Paneles de Alarma Spectra y EVO a la App Móvil Insite Gold',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para completar los sistemas de alarma contra intrusión Paradox Spectra SP4000 que ofrecen en la web, en residencias, joyerías y almacenes en Santiago requerimos módulos de comunicación IP / Ethernet Paradox IP150+ para conectar el panel de alarma al router de internet de la propiedad y permitir armado/desarmado remoto, recepción de notificaciones push instantáneas de pánico o intrusión en la app móvil Insite Gold y reporte a estaciones centrales de monitoreo por protocolo IP/GPRS sin necesidad de línea telefónica fija terrestre.',
+      officialResponse: '¡Hola Lic. Francisco Javier! Tu requerimiento ha sido atendido e implementado de inmediato. Incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-paradox.html el Módulo Comunicador de Red IP Paradox IP150+ (puerto Ethernet 10/100, soporte de cifrado AES-256 / MD5, compatibilidad total con paneles Paradox Spectra SP, Magellan y EVO, conexión a la app móvil Insite Gold y envío de eventos por correo electrónico o central receptora) con 1 año de garantía oficial y asesoría técnica en Santiago.'
+    },
+    {
+      refCode: 'SUG-L6400',
+      title: 'Disponibilidad de Sistemas Wi-Fi 6E Mesh Tri-Banda Linksys Velop Pro 6E AXE5400 con Banda de 6 GHz para Redes Residenciales y Corporativas de Ultra Alta Velocidad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para aprovechar al 100% los planes de fibra óptica de ultra alta velocidad de Futunet (300 a 500 Megas o 1 Gbps) en condominios, chalets y oficinas con docenas de dispositivos inalámbricos simultáneos en Santiago, requerimos sistemas en malla (Mesh) Tri-Banda Linksys Velop Pro 6E AXE5400 con la nueva banda limpia de 6 GHz (sin interferencias de vecinos), puerto WAN Gigabit de 1 Gbps, tecnología Cognitive Mesh para auto-optimización continua y cobertura sin zonas muertas de hasta 3,000 pies cuadrados por nodo.',
+      officialResponse: '¡Saludos Ing. David! Nos alegra informarte que tu propuesta ha sido implementada. Ya incorporamos al catálogo de Redes y Datos y a la página oficial marca-linksys.html el Sistema Wi-Fi 6E Mesh Tri-Banda Linksys Velop Pro 6E AXE5400 (tri-banda concurrente 2.4 GHz, 5 GHz y la nueva banda libre de 6 GHz, tecnología Cognitive Mesh, cobertura de hasta 3,000 pies cuadrados, puertos Gigabit y configuración fácil desde app Linksys) con 2 años de garantía corporativa y entrega inmediata en Santiago.'
     }
   ];
 
