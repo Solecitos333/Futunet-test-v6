@@ -321,8 +321,17 @@
         o.id = doc.id;
         allUserOrders.push(o);
 
-        var date = o.createdAt ? new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO') : '—';
-        var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(o.total);
+        var date = '—';
+        if (o.createdAt && o.createdAt.seconds) {
+          date = new Date(o.createdAt.seconds * 1000).toLocaleDateString('es-DO');
+        } else if (o.createdAt && o.createdAt.toDate) {
+          date = o.createdAt.toDate().toLocaleDateString('es-DO');
+        } else if (typeof o.createdAt === 'string' && o.createdAt.length >= 8) {
+          var dO = new Date(o.createdAt);
+          if (!isNaN(dO.getTime())) date = dO.toLocaleDateString('es-DO');
+        }
+        var totalNum = typeof o.total === 'number' ? o.total : (parseFloat(String(o.total || '').replace(/[^0-9.-]+/g, '')) || 0);
+        var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(totalNum);
         
         var methodMap = {
           whatsapp: 'WhatsApp',
@@ -370,21 +379,24 @@
     var itemsHtml = '';
     var items = order.items || [];
     items.forEach(function (item) {
-      var priceFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(item.price);
-      var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(item.price * item.qty);
+      var numPrice = typeof item.price === 'number' ? item.price : (parseFloat(String(item.price || '').replace(/[^0-9.-]+/g, '')) || 0);
+      var numQty = typeof item.qty === 'number' ? item.qty : (parseInt(item.qty, 10) || 1);
+      var priceFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(numPrice);
+      var totalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(numPrice * numQty);
       var img = item.img || 'img/logo.webp';
       
       itemsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #e5eef8;">' +
         '  <img src="' + escapeHtml(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.webp\'">' +
         '  <div style="flex-grow:1;">' +
         '    <div style="font-weight:600; color:#0a101d; font-size:0.85rem;">' + escapeHtml(item.title) + '</div>' +
-        '    <div style="font-size:0.75rem; color:#76889e;">' + priceFormatted + ' x ' + item.qty + '</div>' +
+        '    <div style="font-size:0.75rem; color:#76889e;">' + priceFormatted + ' x ' + numQty + '</div>' +
         '  </div>' +
         '  <div style="font-weight:600; color:#0a101d; font-size:0.85rem;">' + totalFormatted + '</div>' +
         '</div>';
     });
 
-    var subtotalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(order.total);
+    var numOrderTotal = typeof order.total === 'number' ? order.total : (parseFloat(String(order.total || '').replace(/[^0-9.-]+/g, '')) || 0);
+    var subtotalFormatted = new Intl.NumberFormat('es-DO', { style: 'currency', currency: 'DOP' }).format(numOrderTotal);
 
     var voucherHtml = '';
     if (order.paymentMethod === 'bank_transfer' && order.paymentVoucherUrl) {

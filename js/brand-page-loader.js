@@ -307,7 +307,10 @@ async function initBrandPageLoader() {
     await window.FutunetData.readyPromise;
   }
 
-  const products = window.mockDatabase || window.FutunetData?.products || [];
+  const products = (typeof getCatalogDb === 'function' ? getCatalogDb() : null) ||
+    (Array.isArray(window.mockDatabase) && window.mockDatabase.length > 0 ? window.mockDatabase : null) ||
+    (Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0 ? window.backupDatabase : null) ||
+    window.FutunetData?.products || [];
   
   // 2. Filtrar productos de la marca de forma tolerante y resiliente
   const brandProducts = products.filter(p => {

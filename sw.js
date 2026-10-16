@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v40';
+const CACHE_NAME = 'futunet-cache-v41';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -98,7 +98,13 @@ const OPTIONAL_ASSETS = [
   './img/gaming/componentes/ram-kingston-fury-beast-ddr5-64gb.jpg',
   './img/gaming/componentes/ssd-crucial-p310-1tb.jpg',
   './img/gaming/componentes/ssd-crucial-p310-2tb.jpg',
-  './img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg'
+  './img/gaming/componentes/ssd-samsung-9100-pro-2tb.jpg',
+  './img/productos/catalogo/panasonic-kxhdv230-ip-phone.webp',
+  './img/productos/catalogo/juniper-srx300-security-gateway.webp',
+  './img/productos/catalogo/siemens-sirius-contactor-3rt-25a.webp',
+  './img/productos/catalogo/uniview-colorhunter-4k-poe-camera.webp',
+  './img/productos/catalogo/netgear-gs308pp-switch-8p-poe.webp',
+  './img/productos/catalogo/victron-smartsolar-mppt-100-30.webp'
 ];
 
 // Install Event — cachear assets críticos
@@ -231,7 +237,12 @@ self.addEventListener('fetch', event => {
         }
 
         return networkResponse;
-      }).catch(() => Response.error());
+      }).catch(async () => {
+        if (event.request.destination === 'image' || event.request.url.match(/\.(png|jpe?g|webp|gif|svg)$/i)) {
+          return (await caches.match('./img/placeholder.svg')) || Response.error();
+        }
+        return Response.error();
+      });
     })
   );
 });

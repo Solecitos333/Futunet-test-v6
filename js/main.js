@@ -799,6 +799,8 @@ window.showToast = function(msg, type) {
   toast.style.boxShadow = '0 12px 32px rgba(0,0,0,0.12)';
   toast.style.backgroundColor = type === 'success' ? '#0e8a5f' : (type === 'error' ? '#c0392b' : '#0B7EB5');
   toast.style.color = '#ffffff';
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
 
   document.body.appendChild(toast);
   requestAnimationFrame(function () {
@@ -940,10 +942,14 @@ function switchPortalTab(tabName) {
 window.switchPortalTab = switchPortalTab;
 
 function selectHomePlan(planName, planId, price) {
+  if (price === undefined && typeof planId === 'number') {
+    price = planId;
+    planId = String(planName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  }
   try {
-    sessionStorage.setItem('pending_hiring_plan_name', planName);
-    sessionStorage.setItem('pending_hiring_plan_id', planId);
-    sessionStorage.setItem('pending_hiring_plan_price', price);
+    sessionStorage.setItem('pending_hiring_plan_name', String(planName || ''));
+    sessionStorage.setItem('pending_hiring_plan_id', String(planId || ''));
+    sessionStorage.setItem('pending_hiring_plan_price', String(price || ''));
   } catch (err) {
     console.warn('Storage no disponible para pending_hiring_plan:', err);
   }
@@ -1453,6 +1459,27 @@ function initAnnouncementBar() {
 
   updateTimer();
   setInterval(updateTimer, 60000);
+}
+
+/* -------------------------------------------------------------
+   7. RUNTIME SAFETY & RESILIENCE SHIELD (DevSecOps)
+   Captura excepciones asíncronas no controladas y previene 
+   bloqueos de la interfaz de usuario en producción.
+   ------------------------------------------------------------- */
+if (typeof window !== 'undefined') {
+  window.addEventListener('unhandledrejection', function (event) {
+    if (event && event.reason) {
+      var reasonStr = String(event.reason.message || event.reason);
+      if (
+        reasonStr.includes('Failed to fetch') ||
+        reasonStr.includes('NetworkError') ||
+        reasonStr.includes('aborted')
+      ) {
+        if (typeof event.preventDefault === 'function') event.preventDefault();
+      }
+      console.warn('Unhandled promise rejection safely caught:', event.reason);
+    }
+  });
 }
 
 

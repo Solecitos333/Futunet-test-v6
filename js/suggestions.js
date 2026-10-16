@@ -619,6 +619,11 @@
     } else if (data.createdAt && data.createdAt.seconds) {
       var dSec = new Date(data.createdAt.seconds * 1000);
       dateStr = dSec.toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+    } else if (typeof data.createdAt === 'string' && data.createdAt.length >= 8) {
+      var dStr = new Date(data.createdAt);
+      if (!isNaN(dStr.getTime())) {
+        dateStr = dStr.toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+      }
     }
 
     var badgeHtml = getStatusBadge(data.status);
@@ -631,6 +636,11 @@
         respDateStr = ' — ' + data.respondedAt.toDate().toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
       } else if (data.respondedAt && data.respondedAt.seconds) {
         respDateStr = ' — ' + new Date(data.respondedAt.seconds * 1000).toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+      } else if (typeof data.respondedAt === 'string' && data.respondedAt.length >= 8) {
+        var dResp = new Date(data.respondedAt);
+        if (!isNaN(dResp.getTime())) {
+          respDateStr = ' — ' + dResp.toLocaleDateString('es-DO', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
       }
       var responder = data.respondedBy ? (' por ' + escapeHtml(data.respondedBy)) : '';
       responseHtml = '<div class="sug-response-box">' +
@@ -1316,10 +1326,20 @@
         items.push(data);
       });
 
+      function getTimestamp(val) {
+        if (!val) return 0;
+        if (typeof val.seconds === 'number') return val.seconds;
+        if (typeof val.toDate === 'function') return val.toDate().getTime() / 1000;
+        if (typeof val.getTime === 'function') return val.getTime() / 1000;
+        if (typeof val === 'string') {
+          var d = new Date(val);
+          return isNaN(d.getTime()) ? 0 : d.getTime() / 1000;
+        }
+        return 0;
+      }
+
       items.sort(function (a, b) {
-        var tA = a.createdAt ? (a.createdAt.seconds || (a.createdAt.getTime ? a.createdAt.getTime() / 1000 : 0)) : 0;
-        var tB = b.createdAt ? (b.createdAt.seconds || (b.createdAt.getTime ? b.createdAt.getTime() / 1000 : 0)) : 0;
-        return tB - tA;
+        return getTimestamp(b.createdAt) - getTimestamp(a.createdAt);
       });
 
       loadedCommunityIdeas = items;

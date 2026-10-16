@@ -208,8 +208,16 @@
       const stored = window.localStorage.getItem(CART_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && typeof parsed === 'object' && parsed.items) {
-          cartState.items = parsed.items;
+        if (parsed && typeof parsed === 'object' && parsed.items && typeof parsed.items === 'object') {
+          const cleanItems = {};
+          Object.keys(parsed.items).forEach(id => {
+            const raw = parsed.items[id];
+            const q = parseInt(typeof raw === 'object' && raw ? raw.qty : raw, 10);
+            if (!isNaN(q) && q > 0) {
+              cleanItems[id] = { qty: q };
+            }
+          });
+          cartState.items = cleanItems;
         }
       }
     } catch (error) {
@@ -326,8 +334,10 @@
   function addToCart(productId, qty = 1) {
     const product = findProduct(productId);
     if (!product) return;
-    const currentQty = cartState.items[productId]?.qty || 0;
-    cartState.items[productId] = { qty: currentQty + qty };
+    const currentQty = parseInt(cartState.items[productId]?.qty, 10) || 0;
+    const parsedQty = parseInt(qty, 10);
+    const safeQty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 1;
+    cartState.items[productId] = { qty: currentQty + safeQty };
     saveCartState();
     updateCartCount();
     renderCartDrawer();
@@ -351,13 +361,14 @@
   }
 
   function changeCartQuantity(productId, delta) {
-    const current = cartState.items[productId]?.qty || 0;
-    const next = Math.max(0, current + delta);
+    const current = parseInt(cartState.items[productId]?.qty, 10) || 0;
+    const parsedDelta = parseInt(delta, 10) || 0;
+    const next = Math.max(0, current + parsedDelta);
     if (next === 0) {
       removeFromCart(productId);
       return;
     }
-    cartState.items[productId].qty = next;
+    cartState.items[productId] = { qty: next };
     saveCartState();
     updateCartCount();
     renderCartDrawer();
@@ -1317,7 +1328,7 @@
   }
 
   async function handleCheckoutSubmit(e) {
-    e.preventDefault();
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
     
     const items = getCartItems();
     if (!items.length) return;
@@ -1491,8 +1502,10 @@
         downloadUrl = await uploadTask.ref.getDownloadURL();
       }
       
-      const form = e.currentTarget;
-      if (!form.dataset.requestId) {
+      const form = (e && e.currentTarget && e.currentTarget.id === 'cart-checkout-form')
+        ? e.currentTarget
+        : document.getElementById('cart-checkout-form');
+      if (form && !form.dataset.requestId) {
         form.dataset.requestId = window.crypto?.randomUUID
           ? window.crypto.randomUUID()
           : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -1619,7 +1632,7 @@
       try {
         sessionStorage.setItem('futunet_last_order_ts', String(Date.now()));
       } catch (_) {}
-      delete form.dataset.requestId;
+      if (form && form.dataset) delete form.dataset.requestId;
     } catch (err) {
       console.error('Error during checkout processing:', err);
       showCartToast('Error al procesar el pedido: ' + err.message, 'error');

@@ -417,9 +417,18 @@ function initFutunetChatbot() {
     },
     askProduct(product) {
       const title = product?.title || 'este producto';
-      const price = product?.price ? ` (precio: RD$ ${Number(product.price).toLocaleString('es-DO')})` : '';
+      let priceStr = '';
+      if (product?.price !== undefined && product?.price !== null) {
+        if (typeof product.price === 'number') {
+          priceStr = ` (precio: RD$ ${product.price.toLocaleString('es-DO')})`;
+        } else if (String(product.price).toLowerCase().includes('cotizar')) {
+          priceStr = ' (precio a cotizar)';
+        } else {
+          priceStr = ` (precio: ${product.price})`;
+        }
+      }
       const cat = product?.category ? ` en la categoría ${product.category}` : '';
-      const p = `Hola, me interesa obtener más detalles y asesoría sobre ${title}${price}${cat}. ¿Qué características técnicas tiene y cómo es el proceso de entrega o instalación?`;
+      const p = `Hola, me interesa obtener más detalles y asesoría sobre ${title}${priceStr}${cat}. ¿Qué características técnicas tiene y cómo es el proceso de entrega o instalación?`;
       sendPrompt(p);
     },
     close: closeChat,

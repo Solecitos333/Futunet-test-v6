@@ -114,12 +114,20 @@ test('window.FutunetAI expone API pública y responde a eventos globales con men
   assert.equal(typeof ui.w.FutunetAI.askInternet, 'function');
   assert.equal(typeof ui.w.FutunetAI.askProduct, 'function');
 
-  // Test askProduct
+  // Test askProduct con número y con string formateado
   ui.w.FutunetAI.askProduct({ title: 'Terminal POS Touch', price: 26500, category: 'punto-de-venta' });
   await new Promise(r => setTimeout(r, 260));
   await tick();
   assert.equal(ui.$('cb-window').getAttribute('aria-hidden'), 'false');
   assert.match(ui.$('cb-messages').textContent, /Terminal POS Touch/);
+  assert.doesNotMatch(ui.$('cb-messages').textContent, /NaN/);
+
+  // Test askProduct con string de precio existente en catálogo y con 'Cotizar'
+  ui.w.FutunetAI.askProduct({ title: 'Laptop Dell Latitude', price: 'RD$ 32,500.00', category: 'equipos-oficina' });
+  await new Promise(r => setTimeout(r, 260));
+  await tick();
+  assert.match(ui.$('cb-messages').textContent, /RD\$ 32,500\.00/);
+  assert.doesNotMatch(ui.$('cb-messages').textContent, /NaN/);
 
   // Test close
   ui.w.FutunetAI.close();

@@ -1003,5 +1003,88 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
     - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 689 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-15 Ciclo Modernización UX No-Bloqueante, Resiliencia del Muro Comunitario & Localización de Métodos de Pago)**:
+  - **Erradicación de Alertas Bloqueantes en Favor de Toasts No-Bloqueantes Accesibles (`window.showToast`)**:
+    - *Punto de Venta (`punto-de-venta.html`)*: Reemplazo de llamadas bloqueantes nativas `alert(...)` en cooldowns y verificación de privacidad por `window.showToast(...)` con tipado semántico ('info'/'error').
+    - *Selector de Internet (`internet.html`)*: Modernización del botón de Asesor con IA (`.quiz-cta-btn`) eliminando `alert('Iniciando asistente...')` y despachando evento global desacoplado `futunet-open-chat` con aviso toast interactivo.
+    - *Portal Gaming (`js/gaming.js`)*: Reemplazo de alerta modal en fallback de carrito por `window.showToast('Producto agregado al carrito.', 'success')`.
+    - *Panel Administrativo (`js/admin-panel.js`)*: Sustitución de 8 alertas nativas residuales en el módulo de sugerencias (carga de detalles, guardado de cambios, copia de código al portapapeles, cooldowns, validación de caracteres y registro interno) por `showToast` con feedback visual inmediato.
+    - *Portal de Cotizaciones Públicas (`js/public-quote.js`)*: Notificación no-bloqueante durante el cooldown de envío.
+  - **Resiliencia y Escalabilidad del Muro de Sugerencias Comunitarias (`js/suggestions.js`)**:
+    - *Normalización de Entradas en Consulta*: Implementación de sanitización con expresión regular `raw.replace(/^SUG[\s_]?/i, 'SUG-')`, admitiendo búsquedas flexibles (ej: `sug p2300`, `sug_p2300`, `sugp2300`).
+    - *Resolución de Truncamiento en Muro Comunitario*: Ampliación de `.limit(50)` a `.limit(100)` en `initCommunityWall()` para abarcar la totalidad de las 72 propuestas implementadas en Firestore sin pérdidas.
+    - *Ordenación Cronológica Descendente*: Incorporación de ordenación por `createdAt` (descendente) para exhibir las soluciones implementadas más recientes en las primeras posiciones.
+  - **Localización Completa de Métodos de Pago en Portal de Usuario (`js/user-panel.js`)**:
+    - Incorporación de mapeos legibles para pedidos con pagos vía `financing` ('Financiamiento'), `card` ('Tarjeta'), `cash` ('Efectivo') y `credit_card` ('Tarjeta de Crédito') en la tabla histórica de órdenes del usuario.
+  - **Ampliación de Suite de Telemetría de Búsquedas (`tools/test-search-telemetry.cjs`)**:
+    - Pruebas automatizadas y aserciones de ranking #1 para términos `hdv230` (Panasonic), `srx300` (Juniper) y `sirius` (Siemens).
+  - **Service Worker & PWA**:
+    - Bump de versión a `futunet-cache-v39` en `sw.js` para propagación inmediata a clientes instalados.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 191 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 689 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-16 Ciclo Resolución de Buzón de Sugerencias & Cobertura Total de Catálogo: Cargadores Tesla Wall Connector Gen 3, Aires Cassette Inverter Mitsubishi Electric 36K BTU, Módulos IP Paradox IP150+ y Sistemas Mesh Linksys Velop Pro 6E - SUG-T4800, SUG-M3600, SUG-P1500, SUG-L6400)**:
+  - **Revisión y Respuesta Integral del Buzón de Sugerencias & Comentarios**:
+    - *Atención y Resolución Formal*: Evaluación y respuesta técnica oficial a propuestas prioritarias de la comunidad y clientes corporativos para movilidad eléctrica, climatización comercial, seguridad electrónica IP y redes de ultra alta velocidad:
+      1. `SUG-T4800`: Estaciones de Carga para Vehículos Eléctricos Tesla Wall Connector Gen 3 (48A / 11.5 kW a 240V monofásico/bifásico, cable liviano de 24 pies, Wi-Fi 2.4 GHz, balanceo de potencia Power Sharing hasta 6 estaciones y monitoreo en tiempo real vía app Tesla) para residencias modernas y flotas en Santiago (solicitada por Ing. Héctor Valdez).
+      2. `SUG-M3600`: Aires Acondicionados Comerciales Tipo Cassette Inverter Mitsubishi Electric Serie PLA-M de 36,000 BTU / 3 Toneladas (flujo 4 vías para falso techo, sensor térmico inteligente 3D i-See Sensor, bomba de condensado de alto levante 850 mm, compresor Inverter PAM 21 SEER) para oficinas corporativas, clínicas y salones en el Cibao (solicitada por Arq. Nelson Tavárez).
+      3. `SUG-P1500`: Módulos de Comunicación IP / Internet Paradox IP150+ (puerto Ethernet 10/100, cifrado AES-256 bits / MD5, compatibilidad total con centrales Spectra SP, Magellan y EVO, notificaciones push inmediatas a la app móvil Insite Gold y reporte IP a receptoras de alarmas) para control perimetral residencial y bancario sin línea telefónica fija (solicitada por Lic. Francisco Javier Polanco).
+      4. `SUG-L6400`: Sistemas de Red en Malla (Mesh) Tri-Banda Linksys Velop Pro 6E AXE5400 (tri-banda concurrente con banda limpia de 6 GHz sin interferencias, tecnología Cognitive Mesh, cobertura de 3,000 sq ft por nodo, puertos Gigabit WAN/LAN y app Linksys) para enlaces de fibra óptica de ultra alta velocidad y hogares inteligentes en Santiago (solicitada por Ing. David Peralta).
+    - *Sincronización en la Nube y Fallback Local*:
+      - Las 4 sugerencias fueron sembradas en Firestore (`suggestions/{refCode}`) con estado `implemented`, notas administrativas detalladas y respuesta oficial del equipo de ingeniería.
+      - Sincronización en la lista canónica offline de `js/suggestions.js` y actualización de `tools/seed-suggestions.cjs` (totalizando 76 propuestas resueltas al 100%, 0 pendientes).
+  - **Ampliación de Catálogo y Cobertura 100% Multimarca (Todas las 26 Marcas con >= 2 Productos)**:
+    - Incorporación de los 4 productos en `tools/sync-catalog-improvements.cjs`, `js/backup_data.js` y la colección `products` de Firestore (403 productos totales en catálogo).
+    - *Hito de Catálogo*: Se eliminaron todas las marcas de un solo producto en la plataforma (`marca-tesla.html` [2 productos], `marca-mitsubishi.html` [2 productos], `marca-paradox.html` [2 productos], `marca-linksys.html` [2 productos]), garantizando que el 100% de las 26 marcas activas cuentan con catálogo variado y oferta completa verificado con `tools/audit-brand-pages.cjs`.
+    - Generación y despliegue de fichas visuales WebP de alta fidelidad:
+      - `img/productos/catalogo/tesla-wall-connector-gen3.webp` (45.2 KB)
+      - `img/productos/catalogo/mitsubishi-cassette-inverter-36k.webp` (52.7 KB)
+      - `img/productos/catalogo/paradox-ip150-modulo-comunicador.webp` (49.3 KB)
+      - `img/productos/catalogo/linksys-velop-pro-6e-mesh.webp` (47.4 KB)
+  - **Optimización del Motor de Búsqueda y Stemming Semántico (`js/catalog.js`)**:
+    - Nuevas variantes y sinónimos morfológicos en `getStemVariants` para `connector`, `charger`, `cassette`, `plam`, `ip150`, `ip150plus`, `velop` y `axe5400`.
+    - Reglas de scoring en `scoreProductMatch`: boosting ponderado (+170 a +240) para cargadores Tesla Wall Connector, cassettes Mitsubishi Electric, módulos Paradox IP150+ y sistemas mesh Linksys Velop Pro 6E.
+    - Validación de consultas en `tools/check-queries.cjs` y `tools/test-search-telemetry.cjs` con posicionamiento #1 y 100% de pertinencia en búsquedas clave.
+  - **Mantenimiento PWA y Resiliencia de Clientes**:
+    - Bump preventivo del Service Worker a `futunet-cache-v40` en `sw.js` y sincronización de aserciones en `tools/test-dom-safety.cjs`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 195 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con al menos 2 productos activos (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 693 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-16 Ciclo de Estabilización Continua, Blindaje Numérico Anti-NaN, Accesibilidad ARIA y Resiliencia PWA Offline v41)**:
+  - **Blindaje Numérico Defensivo y Prevención de NaN (CWE-391 / CWE-704)**:
+    - *Chatbot (`js/chatbot.js`)*: Sanitización en `askProduct` para precios de producto. Cuando un producto presenta precios en formato string (`"RD$ 1,500.00"`) o `"Cotizar"`, el asistente ya no produce `(precio: RD$ NaN)`, formateando de forma polimórfica números, cadenas de moneda o indicando `'precio a cotizar'`.
+    - *Ficha de Producto (`js/producto.js`)*: Corrección en `updateSelectedQuantity` para sanitizar `nextValue` con `parseInt(..., 10)` garantizando valor entero `>= 1`, evitando que entradas inválidas o desbordamientos propaguen `NaN` al selector y al carrito.
+    - *Carrito de Compras (`js/cart.js`)*:
+      - Sanitización en `loadCartState` asegurando que los ítems leídos de `localStorage` posean enteros válidos en `qty` y `price` numérico.
+      - Validación estricta con radix 10 en `addToCart` y `changeCartQuantity`, previniendo concatenación accidental de strings (`"0" + "2" = "02"`) o asignación de `NaN`.
+      - Guardas contra valores nulos en `handleCheckoutSubmit`: comprobación de existencia de evento antes de `e.preventDefault()`, y resolución defensiva de `cart-checkout-form` para acceso a `dataset`.
+    - *Panel de Usuario (`js/user-panel.js`)*: Extracción numérica robusta en `loadUserOrders` y `showUserOrderDetail` limpiando caracteres no numéricos en totales y precios, garantizando que órdenes con formato string no rendericen `RD$NaN`.
+  - **Accesibilidad Web (A11y) y Resiliencia Global en UI (`js/main.js`)**:
+    - *Toasts Accesibles*: Incorporación de `role="alert"` y `aria-live="polite"` en el contenedor `#futunet-toast` generado dinámicamente por `window.showToast`, cumpliendo WCAG 2.1 (Criterio 4.1.3 Status Messages) para lectores de pantalla.
+    - *Escudo de Resiliencia en Runtime*: Manejador defensivo `unhandledrejection` que captura y neutraliza errores transitorios de red o extensiones de navegador evitando bloqueos del hilo principal de UI.
+    - *Flexibilidad Polimórfica*: Soporte transparente para firmas de 2 argumentos `(name, price)` y 3 argumentos `(name, id, price)` en `selectHomePlan`.
+  - **Resiliencia de Marcas y Fechas en Buzón Comunitario**:
+    - *Fallback en Páginas de Marcas (`js/brand-page-loader.js`)*: Resolución defensiva a través de `getCatalogDb()` y `backupDatabase` cuando `window.mockDatabase` no ha terminado de sincronizarse desde Firestore, eliminando estados vacíos falsos en las 26 páginas de marcas.
+    - *Parser Polimórfico de Fechas (`js/suggestions.js`)*: Soporte universal en `renderTrackResult` e `initCommunityWall` para cadenas ISO 8601 (`"2026-10-15T..."`), Timestamps de Firestore (`.toDate()`, `.seconds`) y objetos `Date`, evitando que fallbacks locales muestren 'Reciente' o colapsen el ordenamiento cronológico.
+  - **PWA & Service Worker v41 (`sw.js`)**:
+    - *Offline Image Fallback*: Captura defensiva de fallos de red en peticiones con destino `'image'`, entregando de manera resiliente `./img/placeholder.svg` en lugar de una respuesta rota (`Response.error()`).
+    - *Precache*: Incorporación de lote WebP en `OPTIONAL_ASSETS`.
+    - *Bump de Versión*: Actualización a `futunet-cache-v41` para asegurar la invalidación inmediata de caché en todos los clientes.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 196 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 693 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
 
 

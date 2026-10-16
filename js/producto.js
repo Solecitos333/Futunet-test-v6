@@ -58,7 +58,8 @@
   }
 
   function updateSelectedQuantity(nextValue) {
-    selectedQuantity = Math.max(1, nextValue);
+    const parsed = parseInt(nextValue, 10);
+    selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;
     const valueEl = document.getElementById('product-detail-qty-value');
     if (valueEl) valueEl.textContent = selectedQuantity;
   }

@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v40';"), 'sw.js debe estar en la versión futunet-cache-v40');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v41';"), 'sw.js debe estar en la versión futunet-cache-v41');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -700,6 +700,51 @@ test('Seguridad & DOM Safety: admin-financing.js abre documentos con noopener,no
     'facturacion.js debe definir los helpers utilitarios getVal, setVal, getText, setText y setHTML'
   );
 });
+
+test('Estabilidad & Blindaje Numérico: producto.js, cart.js, user-panel.js y sw.js libres de NaN y protegidos contra fallos offline', () => {
+  // 1. producto.js previene NaN en updateSelectedQuantity
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(
+    prodJs.includes("const parsed = parseInt(nextValue, 10);") &&
+    prodJs.includes("selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;"),
+    'producto.js debe parsear nextValue y prevenir propagación de NaN en cantidades'
+  );
+
+  // 2. cart.js previene NaN en cantidades y mutaciones
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(
+    cartJs.includes("const safeQty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 1;"),
+    'cart.js debe asegurar safeQty numérica en addToCart'
+  );
+  assert.ok(
+    cartJs.includes("const parsedDelta = parseInt(delta, 10) || 0;"),
+    'cart.js debe parsear delta en changeCartQuantity'
+  );
+  assert.ok(
+    cartJs.includes("if (e && typeof e.preventDefault === 'function') e.preventDefault();"),
+    'cart.js handleCheckoutSubmit debe proteger preventDefault ante llamadas programáticas sin evento'
+  );
+
+  // 3. main.js toasts son accesibles y capturan unhandledrejection
+  const mainJs = fs.readFileSync(path.join(projectRoot, 'js', 'main.js'), 'utf8');
+  assert.ok(
+    mainJs.includes("toast.setAttribute('role', 'alert');") &&
+    mainJs.includes("toast.setAttribute('aria-live', 'polite');"),
+    'main.js showToast debe incluir atributos ARIA role=alert y aria-live=polite'
+  );
+  assert.ok(
+    mainJs.includes("window.addEventListener('unhandledrejection'"),
+    'main.js debe incluir listener global para capturar promesas no controladas y proteger la interfaz'
+  );
+
+  // 4. sw.js provee fallback graceful para imágenes offline
+  const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
+  assert.ok(
+    swJs.includes("caches.match('./img/placeholder.svg')"),
+    'sw.js debe servir img/placeholder.svg cuando las solicitudes de imagen fallan offline'
+  );
+});
+
 
 
 
