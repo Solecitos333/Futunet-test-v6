@@ -115,12 +115,14 @@
   }
 
   function formatCurrency(value) {
+    const num = Number(value);
+    const safeNum = Number.isFinite(num) ? num : 0;
     return new Intl.NumberFormat('es-DO', {
       style: 'currency',
       currency: 'DOP',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    }).format(value);
+    }).format(safeNum);
   }
 
   function formatCartQuantity(count) {
@@ -543,6 +545,8 @@
 
     const toast = document.createElement('div');
     toast.className = `cart-toast cart-toast-${type}`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
     toast.textContent = msg;
     
     toast.style.position = 'fixed';
@@ -573,9 +577,31 @@
     }, 4000);
   }
 
+  function updateDocumentFieldUI() {
+    const docTypeSelect = document.getElementById('chk-document-type');
+    const docLabel = document.querySelector('label[for="chk-document-number"]');
+    const docInput = document.getElementById('chk-document-number');
+    const hintEl = document.getElementById('chk-document-hint');
+    if (!docTypeSelect || !docInput) return;
+
+    const val = docTypeSelect.value;
+    if (val === 'passport') {
+      if (docLabel) docLabel.textContent = 'Número de Pasaporte *';
+      docInput.placeholder = 'Ej. RD1234567 o A12345678';
+      docInput.maxLength = 20;
+      if (hintEl) hintEl.textContent = 'Requerido para facturación e identificación de clientes extranjeros';
+    } else {
+      if (docLabel) docLabel.textContent = 'Número de Cédula Dominicana *';
+      docInput.placeholder = 'Ej. 001-1234567-8';
+      docInput.maxLength = 15;
+      if (hintEl) hintEl.textContent = '11 dígitos requeridos para facturación legal de tu primera compra';
+    }
+  }
+
   let currentStep = 1;
 
   function updateWizardUI() {
+    updateDocumentFieldUI();
     document.querySelectorAll('#cart-checkout-form .checkout-step').forEach((el, index) => {
       el.style.display = (index + 1 === currentStep) ? 'block' : 'none';
     });
@@ -1049,6 +1075,12 @@
         updateWizardUI();
       }
     });
+
+    // Document type toggle
+    const chkDocTypeEl = document.getElementById('chk-document-type');
+    if (chkDocTypeEl) {
+      chkDocTypeEl.addEventListener('change', updateDocumentFieldUI);
+    }
 
     // Payment method toggle
     const methods = modal.querySelectorAll('input[name="chk-payment-method"]');

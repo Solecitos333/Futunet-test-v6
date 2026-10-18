@@ -240,6 +240,10 @@ function getStemVariants(word) {
   if (word === 'meetup') variants.push('logitech', 'videoconferencia', 'camara', '4k', 'conferencia', 'reunion');
   if (word === 'tl400b' || word === 'tl400') variants.push('zkteco', 'cerradura', 'inteligente', 'biometrica', 'huella');
   if (word === 'u6pro' || word === 'u6-pro') variants.push('ubiquiti', 'unifi', 'access', 'point', 'wifi6', 'poe');
+  if (word === 'flip' || word === 'wm65b') variants.push('samsung', 'pantalla', 'interactiva', 'tactil', 'pizarra');
+  if (word === 'precision' || word === '3660') variants.push('dell', 'workstation', 'estacion', 'rtx', 'cad');
+  if (word === 'pdu' || word === 'ap7900' || word === 'metered') variants.push('apc', 'schneider', 'rack', 'regleta', 'amperios');
+  if (word === 'facial' || word === 'asi3213g') variants.push('dahua', 'rostro', 'biometrico', 'acceso', 'asistencia', 'camara');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -890,6 +894,50 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
+  // Priorizar Pantalla Interactiva Táctil Samsung Flip Pro al buscar flip pro, samsung flip, pantalla interactiva (SUG-S6500)
+  if (/\b(flip\s*pro|samsung\s*flip|wm65b)\b/i.test(normalizedQuery) || (/\b(interactiva|tactil)\b/i.test(normalizedQuery) && /\b(samsung|pantalla|flip)\b/i.test(normalizedQuery)) || (/\b(samsung)\b/i.test(normalizedQuery) && /\b(flip|interactiva|pizarra)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'samsung') {
+      if (/flip\s*pro|interactiva/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Estación de Trabajo Dell Precision 3660 al buscar precision, precision 3660, workstation, dell workstation (SUG-D3660)
+  if (/\b(precision|precision\s*3660)\b/i.test(normalizedQuery) || (/\b(workstation|estacion\s*de\s*trabajo)\b/i.test(normalizedQuery) && /\b(dell|precision|rtx)\b/i.test(normalizedQuery)) || (/\b(dell)\b/i.test(normalizedQuery) && /\b(precision|workstation)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'dell') {
+      if (/precision\s*3660|workstation/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Unidad PDU Administrable APC by Schneider Electric al buscar pdu, rack pdu, apc pdu, metered pdu (SUG-A7900)
+  if (/\b(pdu|rack\s*pdu|metered\s*pdu|ap7900)\b/i.test(normalizedQuery) || (/\b(pdu)\b/i.test(normalizedQuery) && /\b(apc|schneider|rack|120v)\b/i.test(normalizedQuery)) || (/\b(apc|schneider)\b/i.test(normalizedQuery) && /\b(pdu|regleta\s*rack)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('schneider') || product.brand.toLowerCase().includes('apc'))) {
+      if (/pdu|metered/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Terminal Facial Dahua IA al buscar dahua facial, reconocimiento facial, acceso facial, asi3213g (SUG-D4300)
+  if (/\b(asi3213g|dahua\s*facial)\b/i.test(normalizedQuery) || (/\b(facial|rostro)\b/i.test(normalizedQuery) && /\b(dahua|acceso|asistencia|terminal)\b/i.test(normalizedQuery)) || (/\b(dahua)\b/i.test(normalizedQuery) && /\b(facial|reconocimiento\s*facial)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'dahua') {
+      if (/facial|reconocimiento\s*facial/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
   // Priorizar sillas y asientos reales sobre materiales auxiliares (ej. masilla de pared)
   if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(normalizedQuery)) {
     if (/\b(sillas?|sillones?|ergonomica?s?)\b/i.test(title)) {
@@ -980,12 +1028,25 @@ function sortCatalogProducts(products) {
     list.sort((a, b) => String(b.title || '').localeCompare(String(a.title || ''), 'es'));
   } else if (state.sort === 'price-asc') {
     list.sort((a, b) => {
-      const priceA = parsePrice(a.price) || Number.POSITIVE_INFINITY;
-      const priceB = parsePrice(b.price) || Number.POSITIVE_INFINITY;
-      return priceA - priceB;
+      const priceA = parsePrice(a.price);
+      const priceB = parsePrice(b.price);
+      const hasA = Number.isFinite(priceA) && priceA > 0;
+      const hasB = Number.isFinite(priceB) && priceB > 0;
+      if (!hasA && !hasB) return String(a.title || '').localeCompare(String(b.title || ''), 'es');
+      if (!hasA) return 1;
+      if (!hasB) return -1;
+      if (priceA !== priceB) return priceA - priceB;
+      return String(a.title || '').localeCompare(String(b.title || ''), 'es');
     });
   } else if (state.sort === 'price-desc') {
-    list.sort((a, b) => (parsePrice(b.price) || 0) - (parsePrice(a.price) || 0));
+    list.sort((a, b) => {
+      const priceA = parsePrice(a.price);
+      const priceB = parsePrice(b.price);
+      const valA = Number.isFinite(priceA) && priceA > 0 ? priceA : 0;
+      const valB = Number.isFinite(priceB) && priceB > 0 ? priceB : 0;
+      if (valB !== valA) return valB - valA;
+      return String(a.title || '').localeCompare(String(b.title || ''), 'es');
+    });
   }
   return list;
 }

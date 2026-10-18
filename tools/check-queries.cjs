@@ -163,7 +163,11 @@ const queries = [
   'h8c',
   'meetup',
   'tl400b',
-  'u6 pro'
+  'u6 pro',
+  'flip pro',
+  'precision 3660',
+  'apc pdu',
+  'dahua facial'
 ];
 
 

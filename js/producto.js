@@ -331,7 +331,46 @@
     if (breadcrumbCurrent) breadcrumbCurrent.textContent = detail.title;
 
     const setElemText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || ''; };
-    setElemText('product-detail-brand', detail.brand);
+    const brandEl = document.getElementById('product-detail-brand');
+    if (brandEl) {
+      brandEl.textContent = detail.brand || '';
+      const brandKey = String(detail.brand || '').toLowerCase().trim();
+      const slugMap = {
+        'cisco': 'marca-cisco.html',
+        'dahua': 'marca-dahua.html',
+        'dell': 'marca-dell.html',
+        'epson': 'marca-epson.html',
+        'ezviz': 'marca-ezviz.html',
+        'hikvision': 'marca-hikvision.html',
+        'hp': 'marca-hp.html',
+        'juniper': 'marca-juniper.html',
+        'lenovo': 'marca-lenovo.html',
+        'lg': 'marca-lg.html',
+        'linksys': 'marca-linksys.html',
+        'logitech': 'marca-logitech.html',
+        'mikrotik': 'marca-mikrotik.html',
+        'mitsubishi': 'marca-mitsubishi.html',
+        'netgear': 'marca-netgear.html',
+        'panasonic': 'marca-panasonic.html',
+        'paradox': 'marca-paradox.html',
+        'samsung': 'marca-samsung.html',
+        'schneider electric': 'marca-schneiderelectric.html',
+        'siemens': 'marca-siemens.html',
+        'tesla': 'marca-tesla.html',
+        'tp-link': 'marca-tp-link.html',
+        'ubiquiti': 'marca-ubiquiti.html',
+        'uniview': 'marca-uniview.html',
+        'victron energy': 'marca-victronenergy.html',
+        'zkteco': 'marca-zkteco.html'
+      };
+      if (slugMap[brandKey]) {
+        brandEl.href = slugMap[brandKey];
+      } else if (detail.brand && detail.brand !== 'SERVICIO' && detail.brand !== 'Genérico') {
+        brandEl.href = `catalogo.html?q=${encodeURIComponent(detail.brand)}`;
+      } else {
+        brandEl.href = 'catalogo.html';
+      }
+    }
     const availEl = document.getElementById('product-detail-availability');
     if (availEl) {
       availEl.textContent = detail.availabilityLabel || '';
@@ -391,12 +430,95 @@
       document.head.appendChild(script);
     }
 
+    function renderRelatedProducts(detail) {
+      const section = document.getElementById('product-related-section');
+      const grid = document.getElementById('product-related-grid');
+      if (!section || !grid) return;
+
+      grid.innerHTML = '';
+      const allProducts = window.FutunetProductDetail ? window.FutunetProductDetail.getCatalogData() : [];
+      if (!Array.isArray(allProducts) || allProducts.length === 0) {
+        section.hidden = true;
+        return;
+      }
+
+      const currentId = String(detail.id || '');
+      const currentBrand = String(detail.brand || '').toLowerCase().trim();
+      const currentCategory = String(detail.category || '').toLowerCase().trim();
+      const currentDept = String(detail.department || '').toLowerCase().trim();
+
+      const candidates = [];
+      allProducts.forEach((item) => {
+        if (!item || !item.id || item.id === currentId) return;
+        const b = String(item.brand || '').toLowerCase().trim();
+        const c = String(item.category || '').toLowerCase().trim();
+        const d = String(item.department || '').toLowerCase().trim();
+
+        let score = 0;
+        if (currentBrand && b === currentBrand && currentCategory && c === currentCategory) {
+          score = 40;
+        } else if (currentBrand && b === currentBrand) {
+          score = 25;
+        } else if (currentCategory && c === currentCategory) {
+          score = 20;
+        } else if (currentDept && d === currentDept) {
+          score = 10;
+        }
+
+        if (score > 0) {
+          candidates.push({ item, score });
+        }
+      });
+
+      candidates.sort((a, b) => b.score - a.score);
+      const topItems = candidates.slice(0, 4).map(c => c.item);
+
+      if (topItems.length === 0) {
+        section.hidden = true;
+        return;
+      }
+
+      topItems.forEach((product) => {
+        const card = document.createElement('article');
+        card.className = 'product-related-card';
+        const detailUrl = window.FutunetProductDetail
+          ? window.FutunetProductDetail.buildProductDetailUrl(product.id, window.location.href)
+          : `producto.html?id=${encodeURIComponent(product.id)}`;
+        const safeTitle = escapeHTML(product.title || 'Producto');
+        const safeBrand = escapeHTML(product.brand || 'Futunet');
+        const safePrice = escapeHTML(product.price || 'Cotizar');
+        const safeImg = escapeHTML(product.img || 'img/placeholder.svg');
+
+        card.innerHTML = `
+          <a href="${escapeHTML(detailUrl)}" class="product-related-img-wrap" aria-label="${safeTitle}">
+            <img src="${safeImg}" alt="${safeTitle}" loading="lazy" onerror="this.onerror=null;this.src='img/placeholder.svg';" />
+          </a>
+          <div class="product-related-content">
+            <span class="product-badge">${safeBrand}</span>
+            <h3 class="product-related-card-title">
+              <a href="${escapeHTML(detailUrl)}">${safeTitle}</a>
+            </h3>
+            <div class="product-related-card-price">${safePrice}</div>
+            <a href="${escapeHTML(detailUrl)}" class="product-related-action-btn">
+              <span>Ver detalle</span>
+              <i data-lucide="arrow-right"></i>
+            </a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      section.hidden = false;
+      refreshIcons();
+    }
+
     renderGallery(detail);
     renderSpecs(detail);
     bindTabs(detail);
     updateSelectedQuantity(1);
     updateShareActions(detail);
     injectProductJsonLd(detail);
+    renderRelatedProducts(detail);
 
     const qtyBox = document.getElementById('product-detail-qty-box');
     const primaryAction = document.getElementById('product-primary-action');
@@ -458,8 +580,10 @@
   function showEmptyState() {
     const detailShell = document.getElementById('product-detail-shell');
     const emptyState = document.getElementById('product-detail-empty');
+    const relSection = document.getElementById('product-related-section');
     if (detailShell) detailShell.hidden = true;
     if (emptyState) emptyState.hidden = false;
+    if (relSection) relSection.hidden = true;
     document.title = 'Producto no encontrado | Futunet';
     const robots = document.querySelector('meta[name="robots"]');
     const canonical = document.querySelector('link[rel="canonical"]');

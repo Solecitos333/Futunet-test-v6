@@ -59,7 +59,11 @@ const testQueries = [
   'h8c',
   'meetup',
   'tl400b',
-  'u6 pro'
+  'u6 pro',
+  'flip pro',
+  'precision 3660',
+  'apc pdu',
+  'dahua facial'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -213,6 +217,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /u6-pro|u6\s*pro/i.test(scored[0].p.title),
         'El producto top para "u6 pro" debe ser Ubiquiti UniFi 6 Pro'
+      );
+    }
+
+    if (q === 'flip pro') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Samsung',
+        'La búsqueda "flip pro" debe priorizar la Pantalla Interactiva Samsung Flip Pro'
+      );
+      assert.ok(
+        /flip\s*pro|interactiva/i.test(scored[0].p.title),
+        'El producto top para "flip pro" debe ser Samsung Flip Pro'
+      );
+    }
+
+    if (q === 'precision 3660') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Dell',
+        'La búsqueda "precision 3660" debe priorizar la Workstation Dell Precision 3660'
+      );
+      assert.ok(
+        /precision\s*3660/i.test(scored[0].p.title),
+        'El producto top para "precision 3660" debe ser Dell Precision 3660'
+      );
+    }
+
+    if (q === 'apc pdu') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Schneider Electric',
+        'La búsqueda "apc pdu" debe priorizar la Unidad PDU APC by Schneider Electric'
+      );
+      assert.ok(
+        /pdu|metered/i.test(scored[0].p.title),
+        'El producto top para "apc pdu" debe ser APC Metered Rack PDU'
+      );
+    }
+
+    if (q === 'dahua facial') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Dahua',
+        'La búsqueda "dahua facial" debe priorizar la Terminal Facial Dahua IA'
+      );
+      assert.ok(
+        /facial|reconocimiento\s*facial/i.test(scored[0].p.title),
+        'El producto top para "dahua facial" debe ser la Terminal Facial Dahua'
       );
     }
   }

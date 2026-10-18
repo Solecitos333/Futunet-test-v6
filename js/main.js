@@ -1288,6 +1288,8 @@ function initAnnouncementBar() {
   // Contextualización inteligente por página y calendario comercial semanal
   const week3End = new Date('2026-10-18T23:59:59');
   const isWeek3 = now >= new Date('2026-10-12T00:00:00') && now <= week3End;
+  const week4End = new Date('2026-10-25T23:59:59');
+  const isWeek4 = now >= new Date('2026-10-19T00:00:00') && now <= week4End;
 
   if (currentPath.includes('gaming.html')) {
     campaign = {
@@ -1312,7 +1314,7 @@ function initAnnouncementBar() {
       badge: '⚡ CONTINUIDAD & ENERGÍA CRÍTICA',
       message: '15% de Descuento en UPS Online de Doble Conversión e Inversores con',
       coupon: 'CONTINUIDAD2026',
-      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
+      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
       ctaText: 'Proteger Servidores',
       waMsg: 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.'
     };
@@ -1321,7 +1323,7 @@ function initAnnouncementBar() {
       badge: '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B',
       message: '15% de Descuento en Switches Administrables y Enlaces Redundantes con',
       coupon: 'CONTINUIDAD2026',
-      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
+      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
       ctaText: 'Auditar Red',
       waMsg: 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'
     };
@@ -1336,12 +1338,12 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('corporativo.html')) {
     campaign = {
-      badge: isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : '🏢 Q4: BLINDAJE & REDES B2B',
+      badge: isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B'),
       message: isWeek3
         ? '15% de Descuento en Respaldo Eléctrico, Enlaces Redundantes y Seguridad con'
         : '15% de Descuento en Seguridad Corporativa y Enlaces con',
       coupon: isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026',
-      endDate: isWeek3 ? week3End : new Date('2026-10-31T23:59:59'),
+      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
       ctaText: 'Auditoría B2B Gratis',
       waMsg: isWeek3
         ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
@@ -1356,6 +1358,16 @@ function initAnnouncementBar() {
       endDate: week3End,
       ctaText: 'Auditoría Zero Downtime',
       waMsg: 'Hola Futunet, me interesa solicitar la auditoría gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
+    };
+  } else if (isWeek4) {
+    // Semana 4 de Octubre: Infraestructura, Redes Gigabit y Seguridad B2B
+    campaign = {
+      badge: '🏢 SEMANA DE INFRAESTRUCTURA & SEGURIDAD B2B',
+      message: '15% de Descuento en Seguridad CCTV, Redes Gigabit y Servidores con',
+      coupon: 'SEGURIDAD2026',
+      endDate: week4End,
+      ctaText: 'Auditoría B2B Gratis',
+      waMsg: 'Hola Futunet, me interesa la auditoría técnica y cotizar infraestructura y seguridad con el código SEGURIDAD2026.'
     };
   } else if (currentMonth === 9 || now > q3End) {
     // Octubre general: Campaña de Seguridad Corporativa Global

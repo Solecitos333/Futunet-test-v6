@@ -7793,6 +7793,98 @@ const mockDatabase = [
       "Carcasa con certificación climática IP54 para instalación versátil en techo o pared con herrajes incluidos",
       "Garantía corporativa Ubiquiti de 1 año con soporte técnico y facturación con comprobante fiscal NCF en Santiago"
     ]
+  },
+  {
+    "id": "oficina_samsung_flip_pro_65_interactiva",
+    "department": "equipos",
+    "category": "Equipos de Oficina",
+    "brand": "Samsung",
+    "title": "Pantalla Interactiva Táctil Samsung Flip Pro 65\" 4K UHD para Salas de Juntas y Colaboración",
+    "desc": "Pantalla táctil interactiva profesional de 65 pulgadas Samsung Flip Pro (serie WM65B) diseñada para salas de conferencias ejecutivas, centros de diseño, aulas universitarias y espacios de coworking en Santiago. Ofrece resolución 4K Ultra HD con panel antirreflejo y tecnología táctil de vanguardia que admite hasta 20 puntos táctiles simultáneos y escritura suave y fluida con lápiz interactivo de baja latencia (26 ms). Dispone de conectividad avanzada USB-C 3-en-1 (video, control táctil y suministro de energía PD de 65W a laptops), puertos HDMI, DisplayPort, salida de audio, conectividad Wi-Fi y Bluetooth, altavoces estéreo de 40W (4 canales x 10W), sensor de luz ambiental y ranura para módulo OPS estándar para integración con PC Windows empresarial.",
+    "price": "RD$ 115,000.00",
+    "img": "img/productos/catalogo/samsung-flip-pro-65-pantalla-interactiva.webp",
+    "gallery": [
+      "img/productos/catalogo/samsung-flip-pro-65-pantalla-interactiva.webp"
+    ],
+    "specs": [
+      "Pantalla interactiva de 65 pulgadas con panel IPS 4K Ultra HD (3840 x 2160) y revestimiento antirreflejo",
+      "Tecnología táctil capacitiva infrarroja con hasta 20 puntos multitoque simultáneos y latencia mínima de 26 ms",
+      "Lápiz táctil pasivo de precisión con detección de punta y borrado magnético sin baterías",
+      "Puerto USB-C multifunción con transmisión de pantalla 4K, retorno táctil y carga rápida Power Delivery de 65W",
+      "Duplicación de pantalla inalámbrica hasta 4 dispositivos simultáneos con Samsung SmartView+, Apple AirPlay 2 y Miracast",
+      "Sistema de sonido envolvente de 40W (4 x 10W) integrado y matriz de sensores de presencia y luminosidad ambiental",
+      "Ranura estándar OPS (Open Pluggable Specification) para instalación de módulo PC con Windows empresarial",
+      "Garantía comercial Samsung de 3 años con comprobante fiscal formal NCF y entrega directa en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_dell_precision_3660_workstation",
+    "department": "equipos",
+    "category": "Equipos de Oficina",
+    "brand": "Dell",
+    "title": "Estación de Trabajo en Torre Dell Precision 3660 Workstation (Core i7-13700, 32GB DDR5, NVIDIA RTX, 1TB SSD)",
+    "desc": "Estación de trabajo profesional de alto rendimiento en formato torre Dell Precision 3660 diseñada para arquitectos, ingenieros civiles, diseñadores industriales y creadores de contenido 3D en Santiago. Potenciada por procesador Intel Core i7-13700 (16 núcleos, 24 hilos, hasta 5.2 GHz), 32 GB de memoria RAM DDR5 de alta velocidad (expandible a 128 GB), tarjeta gráfica profesional dedicada NVIDIA RTX con certificación ISV para máxima estabilidad en AutoCAD, Revit, ArchiCAD, 3ds Max y SolidWorks, unidad de almacenamiento de estado sólido M.2 PCIe Gen4 NVMe de 1 TB para arranque instantáneo de proyectos masivos y disco duro complementario de 2 TB a 7200 RPM para archivo de planos. Chasis con flujo de aire optimizado, puertos frontales USB-C y USB 3.2 de alta velocidad, lector de tarjetas SD y sistema operativo Windows 11 Pro con Dell Optimizer for Precision.",
+    "price": "RD$ 89,500.00",
+    "img": "img/productos/catalogo/dell-precision-3660-tower-workstation.webp",
+    "gallery": [
+      "img/productos/catalogo/dell-precision-3660-tower-workstation.webp"
+    ],
+    "specs": [
+      "Procesador Intel Core i7-13700 de 13.ª generación (16 núcleos: 8 de rendimiento + 8 de eficiencia, 24 subprocesos, hasta 5.2 GHz)",
+      "Memoria RAM de 32 GB DDR5 a 4400 MHz en doble canal (ampliable hasta 128 GB con soporte ECC)",
+      "Tarjeta gráfica profesional dedicada NVIDIA RTX con 12 GB de VRAM GDDR6 y certificación de software independiente ISV",
+      "Almacenamiento híbrido de alta velocidad: 1 TB SSD M.2 NVMe PCIe 4.0 Class 40 + 2 TB HDD SATA de 7200 RPM",
+      "Chasis torre industrial Dell con enfriamiento avanzado silencioso y fuente de poder de 500W 80 Plus Platinum",
+      "Conectividad frontal USB 3.2 Gen 2x2 Type-C (20 Gbps), 3x USB 3.2 Gen 1, lector de tarjetas SD y conector de audio universal",
+      "Conectividad de red Ethernet Gigabit Intel I219-LM con soporte de administración remota",
+      "Garantía empresarial Dell ProSupport de 3 años con servicio técnico en sitio al siguiente día hábil en Santiago"
+    ]
+  },
+  {
+    "id": "energia_apc_metered_rack_pdu_120v",
+    "department": "energia",
+    "category": "Protección Eléctrica",
+    "brand": "Schneider Electric",
+    "title": "Unidad PDU Administrable para Rack APC by Schneider Electric Metered 120V 20A con Pantalla LCD y Red SNMP",
+    "desc": "Unidad de distribución de energía inteligente para rack (Rack PDU Metered) APC by Schneider Electric de grado data center diseñada para centros de datos, cuartos de cableado y salas de servidores en Santiago. Proporciona distribución de energía confiable a 120V con capacidad de corriente de 20A a través de 16 salidas NEMA 5-20R con retención segura de cables. Incorpora pantalla digital LCD frontal para monitoreo local en tiempo real del amperaje consumido, previniendo sobrecargas de circuito antes de que ocurran fallas. Cuenta con tarjeta de gestión de red integrada con interfaz web HTTP/HTTPS, compatibilidad SNMP v1/v2c/v3, registro de eventos, alarmas auditivas y compatibilidad con plataformas de gestión de infraestructura de centros de datos (DCIM) como StruxureWare Data Center Expert.",
+    "price": "RD$ 22,400.00",
+    "img": "img/productos/catalogo/apc-schneider-metered-rack-pdu-120v.webp",
+    "gallery": [
+      "img/productos/catalogo/apc-schneider-metered-rack-pdu-120v.webp"
+    ],
+    "specs": [
+      "Voltaje nominal de entrada y salida: 120V AC monofásico (50/60 Hz) con capacidad de 20A (desclasificado a 16A continuo)",
+      "Distribución de energía mediante 16 tomas de corriente NEMA 5-20R protegidas contra desconexión accidental",
+      "Conector de entrada de alta corriente NEMA 5-20P / L5-20P con cable de alimentación de 3 metros (10 pies)",
+      "Pantalla digital LCD integrada que indica la corriente consumida en amperios (A) con precisión de ±2%",
+      "Puerto de red Ethernet 10/100 Base-T para administración remota vía navegador Web, SNMP v1/v3 y Telnet/SSH",
+      "Configuración de umbrales de alarma de sobrecarga para recibir notificaciones preventivas por correo electrónico y traps SNMP",
+      "Factor de forma universal apto para montaje horizontal 1U / 2U en rack de 19 pulgadas o montaje vertical 0U",
+      "Garantía oficial de 2 años de APC by Schneider Electric con comprobante fiscal formal NCF en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_dahua_terminal_facial_acceso_ia",
+    "department": "seguridad",
+    "category": "Control de Acceso y Asistencia",
+    "brand": "Dahua",
+    "title": "Terminal Biométrica de Control de Acceso Facial Dahua con Inteligencia Artificial y Pantalla Táctil 4.3\"",
+    "desc": "Terminal autónoma inteligente de control de acceso y asistencia de personal Dahua Technology (modelo ASI3213G-W) para empresas, instituciones médicas, naves industriales y residencias en Santiago. Equipada con algoritmo de aprendizaje profundo (Deep Learning) con reconocimiento facial ultra veloz (menos de 0.2 segundos por persona) a distancias de 0.3 a 1.5 metros, sin requerir contacto físico. Integra óptica dual de 2 megapíxeles (lente de color con WDR real de 120 dB y lente infrarroja) con potente algoritmo de detección de vida real que bloquea intentos de suplantación con fotografías, pantallas de celular o máscaras. Dispone de pantalla táctil capacitiva a color de 4.3 pulgadas (480 x 272), lector de tarjetas de proximidad Mifare/IC, conectividad Wi-Fi integrada y Ethernet TCP/IP, entrada y salida Wiegand/RS-485, y relé de contacto seco para apertura de cerraduras electromagnéticas y torniquetes.",
+    "price": "RD$ 14,900.00",
+    "img": "img/productos/catalogo/dahua-terminal-reconocimiento-facial-ia.webp",
+    "gallery": [
+      "img/productos/catalogo/dahua-terminal-reconocimiento-facial-ia.webp"
+    ],
+    "specs": [
+      "Pantalla táctil LCD capacitiva a color de 4.3 pulgadas con resolución de 480 x 272 píxeles",
+      "Cámara dual de 2 MP con sensor CMOS progresivo de luz estelar, WDR amplio de 120 dB e iluminación infrarroja automática",
+      "Algoritmo de reconocimiento facial asistido por IA con precisión superior al 99.5% y velocidad < 0.2 segundos",
+      "Detección de presencia real (Liveness Detection) que previene eficazmente fraudes con fotos impresas o videos digitales",
+      "Capacidad de almacenamiento local para 1,500 rostros, 3,000 tarjetas de proximidad IC Mifare (13.56 MHz) y 150,000 registros",
+      "Conectividad de red flexible con puerto Ethernet 10/100 Mbps y conexión inalámbrica Wi-Fi 2.4 GHz integrada",
+      "Múltiples interfaces de control: relé de cerradura de puerta, sensor de puerta magnético, botón de salida y alarma de tamper",
+      "Garantía oficial Dahua Technology de 1 año con comprobante fiscal formal NCF y asesoría de configuración en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

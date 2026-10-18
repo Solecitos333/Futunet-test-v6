@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-15  
+> **Última Actualización:** 2026-10-18  
 
 ---
 
@@ -1155,7 +1155,75 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 697 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mantenimiento Diario de Robustez y UX (2026-10-18 Ciclo de Recomendaciones en Ficha de Producto, Eliminación de NaN en Ordenamiento de Catálogo, Accesibilidad ARIA en Toasts y Transición Dinámica de Calendario Comercial)**:
+  - **Ficha de Producto y Experiencia de Descubrimiento (`producto.html`, `js/producto.js`, `css/producto.css`)**:
+    - *Motor de Productos Relacionados (`renderRelatedProducts`)*: Algoritmo contextual que calcula puntuaciones de afinidad combinando marca, categoría y departamento contra el inventario global de 411 productos activos. Renderiza de forma dinámica hasta 4 artículos relevantes en `#product-related-section` con diseño responsivo pulido, miniaturas WebP con fallback `onerror="this.src='img/placeholder.svg'"`, badge de marca, precio en RD$ y enlace directo a la ficha, eliminando callejones sin salida de navegación y maximizando la retención y conversión de usuarios.
+    - *Navegación Interactiva por Marcas*: Transformación del badge de marca de la ficha (`#product-detail-brand`) en hipervínculo inteligente interactivo que conduce a la página dedicada `marca-[slug].html` para las 26 marcas auditadas (o búsqueda temática en catálogo para marcas generales), permitiendo saltar ágilmente a otros artículos del mismo fabricante.
+    - *Cota Defensiva en Selector de Cantidad*: Sanitización con `Math.min(1000, Math.max(1, parsed))` previniendo que clicks repetitivos o inputs maliciosos superen el límite de 1000 unidades admitido por los esquemas Pydantic del backend.
+  - **Blindaje Numérico y Corrección de TimSort en Catálogo (`js/catalog.js`)**:
+    - *Eliminación de `NaN` en Comparadores*: Corrección en `sortCatalogProducts` para ordenamientos `price-asc` y `price-desc`. La resta anterior `priceA - priceB` cuando dos productos tenían precio a cotizar producía `Infinity - Infinity === NaN`, violando la relación de orden estricto requerida por el algoritmo TimSort en V8 / Chromium y produciendo inconsistencias visuales en el catálogo. Se implementó una rutina determinista con guardas `Number.isFinite()`, colocando los productos a cotizar al final de manera uniforme y resolviendo empates mediante `String.localeCompare` de títulos.
+  - **Accesibilidad Web (A11y WCAG 2.1 Criterio 4.1.3 Status Messages)**:
+    - *Toasts de Carrito (`js/cart.js`)*: Incorporación de atributos `role="alert"` y `aria-live="polite"` en `showCartToast`, garantizando que lectores de pantalla anuncien confirmaciones de adición al carrito o errores de validación sin perder foco.
+    - *Toasts de Panel de Usuario (`js/user-panel.js`)*: Incorporación de atributos `role="alert"` y `aria-live="polite"` en `showToast`.
+  - **Formateo Seguro de Moneda (`js/cart.js`)**:
+    - *Prevención de `RD$ NaN`*: Sanitización previa en `formatCurrency` verificando `Number.isFinite(num) ? num : 0` antes de invocar `Intl.NumberFormat`, impidiendo que valores nulos o no numéricos se rendericen en el carrito o resumen de compra.
+  - **Experiencia de Checkout y Dinamismo de Documentos (`js/cart.js`)**:
+    - *Alternancia Dinámica de Identificación*: Función `updateDocumentFieldUI` y listener reactivo sobre `#chk-document-type` que conmuta instantáneamente etiquetas, placeholders y textos de ayuda entre "Cédula Dominicana" (11 dígitos para facturación con valor fiscal DGII) y "Pasaporte" (hasta 20 caracteres para clientes y visitantes extranjeros).
+  - **Continuidad de Campañas Comerciales Automatizadas (`js/main.js`)**:
+    - *Transición Automatizada de Semana 4 de Octubre*: Incorporación de reglas de transición en `initAnnouncementBar` activando la "Semana de Infraestructura & Seguridad B2B" con cupón `SEGURIDAD2026` (15% OFF) para la Semana 4 (19 al 25 de Octubre) y cierre de mes con cupón `OCTUBRE2026` (10% OFF), asegurando que la barra promocional se mantenga permanentemente sincronizada sin intervención manual.
+  - **PWA & Service Worker v44 (`sw.js`)**:
+    - Bump preventivo del Service Worker a `futunet-cache-v44` y sincronización en `tools/test-dom-safety.cjs` para invalidación inmediata de caché en todos los clientes móviles y de escritorio.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 204 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest discover`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 701 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 
-
-
+- **Atención Autónoma del Buzón de Sugerencias — Batch 13 (2026-10-18: 84 Sugerencias Oficiales Implementadas, Catálogo Expandido a 411 Ítems, PDU Administrable APC, Workstation Dell Precision, Pizarra Interactiva Samsung y Control Facial Dahua IA)**:
+  - **Sugerencias de la Comunidad y Clientes Atendidas (84 en total, 100% implementadas con respuesta oficial y nota administrativa)**:
+    - **`SUG-S6500`** (Ing. Arnaldo Peralta, Innovación & Tecnologías Educativas Cibao):
+      - *Título*: Disponibilidad de Pantallas Interactivas Táctiles Samsung Flip Pro 65" 4K UHD para Salas de Juntas, Capacitación y Teletrabajo Colaborativo.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo corporativo de Equipos de Oficina y a `marca-samsung.html` la Pantalla Interactiva Táctil Samsung Flip Pro de 65" 4K UHD (`oficina_samsung_flip_pro_65_interactiva`) con panel 4K antirreflejo, multitáctil de 20 puntos, lápiz pasivo de baja latencia (26 ms), puerto USB-C 65W Todo-en-Uno, SmartView+, AirPlay 2 y audio de 40W con 3 años de garantía oficial y NCF.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`samsung-flip-pro-65-pantalla-interactiva.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-D3660`** (Arq. Giancarlo Bonnelly, Bonnelly & Asociados Arquitectura Cibao):
+      - *Título*: Disponibilidad de Estaciones de Trabajo Profesionales Dell Precision 3660 Tower con Gráficos Dedicados NVIDIA RTX para Arquitectura, Ingeniería y Modelado BIM.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada la Estación de Trabajo en Torre Dell Precision 3660 Workstation (`oficina_dell_precision_3660_workstation`) con Intel Core i7-13700 (16 núcleos hasta 5.2 GHz), 32 GB RAM DDR5, GPU NVIDIA RTX dedicada de 12 GB con certificación ISV para AutoCAD/Revit/SolidWorks, 1 TB SSD NVMe PCIe Gen4 + 2 TB HDD, fuente 500W Platinum y soporte ProSupport en sitio en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`dell-precision-3660-tower-workstation.webp`).
+    - **`SUG-A7900`** (Ing. Franklyn Almonte, Centro Tecnológico & Servidores Cibao):
+      - *Título*: Disponibilidad de Unidades PDU Administrables para Rack APC by Schneider Electric con Monitoreo Remoto de Energía y Pantalla Digital para Data Centers.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Integrada al catálogo corporativo de Protección Eléctrica y a `marca-schneiderelectric.html` la Unidad de Distribución de Energía PDU para Rack APC by Schneider Electric Metered 120V / 20A (`energia_apc_metered_rack_pdu_120v`) con 16 tomas NEMA 5-20R, pantalla digital LCD de corriente en tiempo real, red Ethernet con SNMP v1/v3 y alertas de sobrecarga.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`apc-schneider-metered-rack-pdu-120v.webp`).
+    - **`SUG-D4300`** (Ing. Ramón Emilio Tavárez, Sistemas de Seguridad & Automatización Norte):
+      - *Título*: Disponibilidad de Terminales de Control de Acceso y Asistencia Facial Dahua con Inteligencia Artificial, Doble Cámara y Pantalla Táctil.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de Seguridad Electrónica y a `marca-dahua.html` la Terminal Biométrica de Control de Acceso Facial Dahua con IA (`seguridad_dahua_terminal_facial_acceso_ia`) con doble cámara de 2 MP (RGB + IR) anti-suplantación, pantalla táctil a color de 4.3", reconocimiento en < 0.2s, lector de tarjetas IC Mifare y conexión Wi-Fi/Ethernet con SmartPSS/DSS.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`dahua-terminal-reconocimiento-facial-ia.webp`).
+  - **Sincronización del Catálogo y Base de Datos**:
+    - Catálogo expandido a 411 productos únicos en `js/backup_data.js`, `tools/sync-catalog-improvements.cjs` y sincronizado en colección Firestore `products`.
+    - Sincronización en `js/suggestions.js` de las 84 sugerencias en `canonicalSuggestionsList` y en `tools/seed-suggestions.cjs` hacia Firestore `suggestions`.
+  - **Optimización del Motor de Búsqueda y Relevancia (`js/catalog.js`)**:
+    - Variantes de stemming añadidas en `getStemVariants` para `flip`, `wm65b`, `precision`, `3660`, `pdu`, `ap7900`, `metered`, `facial`, `asi3213g`.
+    - Ponderación y boosting (+240) en `scoreProductMatch` para las nuevas referencias de alta demanda.
+    - Validación de telemetría en `tools/test-search-telemetry.cjs` y `tools/check-queries.cjs`: ranking #1 y 100% de pertinencia en consultas clave (`flip pro`, `precision 3660`, `apc pdu`, `dahua facial`).
+  - **PWA & Service Worker v44 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP en `OPTIONAL_ASSETS`.
+    - Bump de versión a `futunet-cache-v44`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 204 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 701 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 

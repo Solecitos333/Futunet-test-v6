@@ -1319,6 +1319,38 @@
       status: 'implemented',
       description: 'En naves industriales de zonas francas (PIVEM), centros de eventos, centros médicos y oficinas de arquitectura en Santiago con alta densidad de usuarios inalámbricos requerimos puntos de acceso de alto rendimiento Ubiquiti UniFi 6 Pro (U6-Pro) con Wi-Fi 6 de doble banda concurrente (hasta 5.3 Gbps de tasa total de transferencia con 4x4 MU-MIMO en 5 GHz con canales de 160 MHz y 2x2 en 2.4 GHz), puerto Gigabit Ethernet PoE+, soporte para más de 350 clientes conectados simultáneos y aislamiento de tráfico por VLANs.',
       officialResponse: '¡Saludos cordiales Ing. Cristian! Tu solicitud ha sido implementada de inmediato. Ya incorporamos al catálogo de Redes de Datos y a la página oficial marca-ubiquiti.html el Punto de Acceso Wi-Fi 6 Ubiquiti UniFi 6 Pro (U6-Pro), con tasa agregada de 5.3 Gbps (4x4 MU-MIMO en 5 GHz con canales de 160 MHz hasta 4.8 Gbps y 2x2 en 2.4 GHz hasta 573.5 Mbps), puerto Gigabit Ethernet PoE+, capacidad para más de 350 clientes simultáneos y gestión centralizada UniFi Network sin licencias, con 1 año de garantía oficial en Santiago.'
+    },
+    {
+      refCode: 'SUG-S6500',
+      title: 'Disponibilidad de Pantallas Interactivas Táctiles Samsung Flip Pro 65" 4K UHD para Salas de Juntas, Capacitación y Teletrabajo Colaborativo',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En salas de conferencias, centros de innovación, universidades (PUCMM/UTESA) y oficinas corporativas en Santiago requerimos pantallas interactivas táctiles profesionales Samsung Flip Pro (WM65B) de 65 pulgadas con resolución 4K UHD, tecnología táctil multitoque de baja latencia (26 ms) con hasta 20 puntos táctiles simultáneos, lápiz interactivo pasivo, conectividad versátil (HDMI, DisplayPort, USB-C con carga de 65W y transferencia de datos/video en un solo cable), altavoces estéreo integrados de 40W y compatibilidad inalámbrica con SmartView+, AirPlay 2 y OPS slot.',
+      officialResponse: '¡Saludos cordiales Ing. Arnaldo! Tu propuesta ha sido acogida e implementada de inmediato. Ya incorporamos al catálogo de Equipos de Oficina y a la página oficial marca-samsung.html la Pantalla Interactiva Táctil Samsung Flip Pro de 65" 4K UHD (resolución 3840 x 2160, multitáctil de 20 puntos con latencia ultrabaja de 26 ms, puerto USB-C 65W Todo-en-Uno, duplicación inalámbrica SmartView+ y AirPlay 2, altavoces estéreo frontales de 40W y ranura OPS) con 3 años de garantía oficial Samsung y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-D3660',
+      title: 'Disponibilidad de Estaciones de Trabajo Profesionales Dell Precision 3660 Tower con Gráficos Dedicados NVIDIA RTX para Arquitectura, Ingeniería y Modelado BIM',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En firmas de arquitectura, constructoras e ingenierías en Santiago requerimos estaciones de trabajo certificadas Dell Precision 3660 Tower equipadas con procesador Intel Core i7 de 13.ª generación (16 núcleos), 32 GB de memoria RAM DDR5 con soporte ECC, tarjeta gráfica profesional dedicada NVIDIA RTX con certificación ISV para AutoCAD, Revit, SketchUp, Lumion y SolidWorks, almacenamiento dual ultrarrápido SSD NVMe PCIe 4.0 de 1 TB más disco secundario de 2 TB para proyectos pesados, y fuente de poder de 500W con certificación 80 Plus Platinum.',
+      officialResponse: '¡Hola Arq. Giancarlo! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya incorporamos al catálogo corporativo de Equipos de Oficina y a la página oficial marca-dell.html la Estación de Trabajo en Torre Dell Precision 3660 Workstation (Intel Core i7-13700 16 núcleos hasta 5.2 GHz, 32 GB RAM DDR5, gráficos profesionales dedicados NVIDIA RTX con certificación ISV, 1 TB SSD NVMe PCIe Gen4 + 2 TB HDD, fuente 500W Platinum y Windows 11 Pro) con 3 años de soporte Dell ProSupport en sitio en Santiago.'
+    },
+    {
+      refCode: 'SUG-A7900',
+      title: 'Disponibilidad de Unidades PDU Administrables para Rack APC by Schneider Electric con Monitoreo Remoto de Energía y Pantalla Digital para Data Centers',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En salas de servidores, centros de cómputo y racks de telecomunicaciones en Santiago requerimos unidades de distribución de energía en rack (Rack PDU) monitoreables y administrables APC by Schneider Electric Metered Rack PDU de 120V / 20A con 16 tomas NEMA 5-20R para montaje vertical 0U o horizontal 1U/2U, con pantalla LCD frontal de consumo de corriente en amperios (A), interfaz de gestión web HTTP/HTTPS, SNMP y Telnet con umbrales de alerta temprana para prevenir sobrecargas en interruptores y monitoreo ambiental.',
+      officialResponse: '¡Saludos cordiales Ing. Franklyn! Tu propuesta ha sido atendida e implementada exitosamente. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-schneiderelectric.html la Unidad de Distribución de Energía PDU para Rack APC by Schneider Electric Metered 120V / 20A (16 tomas NEMA 5-20R, pantalla digital LCD de corriente en tiempo real, interfaz de red Ethernet RJ-45 con soporte SNMP/Web/CLI, alertas configurables de sobrecarga y montaje versátil en rack) con 2 años de garantía corporativa y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-D4300',
+      title: 'Disponibilidad de Terminales de Control de Acceso y Asistencia Facial Dahua con Inteligencia Artificial, Doble Cámara y Pantalla Táctil',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En torres empresariales, almacenes de zonas francas, condominios residenciales y clínicas en Santiago requerimos terminales biométricas autónomas de control de acceso y control de tiempo Dahua Technology con reconocimiento facial asistido por IA mediante doble cámara de 2 MP con luz estelar e infrarroja (anti-suplantación por fotos o videos), pantalla táctil a color de 4.3 pulgadas, capacidad para 1,500 rostros y 3,000 tarjetas IC/Mifare, verificación ultra rápida (< 0.2s), conexión Ethernet TCP/IP, puerto Wi-Fi y salida de relé para control de electroimán y cerradura de puerta.',
+      officialResponse: '¡Hola Ing. Ramón Emilio! Nos alegra informarte que tu propuesta ha sido implementada exitosamente. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-dahua.html la Terminal Biométrica de Control de Acceso Facial Dahua con Inteligencia Artificial (doble cámara 2MP con sensor WDR y luz visible, pantalla táctil LCD de 4.3", reconocimiento en < 0.2s anti-suplantación, 1,500 rostros, lector de tarjetas IC Mifare, Wi-Fi, Ethernet y software de gestión SmartPSS / DSS) con 1 año de garantía oficial Dahua y facturación formal con NCF en Santiago.'
     }
   ];
 

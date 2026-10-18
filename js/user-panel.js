@@ -607,6 +607,8 @@
 
     var toast = document.createElement('div');
     toast.className = 'up-toast up-toast-' + (type || 'info');
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
     toast.textContent = msg;
     document.body.appendChild(toast);
     requestAnimationFrame(function () { toast.classList.add('is-visible'); });

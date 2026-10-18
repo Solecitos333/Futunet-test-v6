@@ -1570,6 +1570,79 @@ test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 Ubiquiti UniFi 6 Pr
   assert.ok(catJs.includes("/\\b(u6\\s*pro|u6-pro|u6pro)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Ubiquiti UniFi 6 Pro');
 });
 
+test('Mejora demandada por usuarios: Pantalla Interactiva Táctil Samsung Flip Pro 65" 4K UHD (SUG-S6500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S6500'") && seedCjs.includes("status: 'implemented'"), 'SUG-S6500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S6500') && sugJs.includes('Samsung Flip Pro'), 'SUG-S6500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_samsung_flip_pro_65_interactiva'), 'backup_data.js debe contener oficina_samsung_flip_pro_65_interactiva');
+
+  const samsungImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'samsung-flip-pro-65-pantalla-interactiva.webp');
+  assert.ok(fs.existsSync(samsungImg), 'La imagen de la pantalla Samsung Flip Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'flip'"), 'catalog.js debe incluir flip en stem variants');
+  assert.ok(catJs.includes("/\\b(flip\\s*pro|samsung\\s*flip|wm65b)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Samsung Flip Pro');
+});
+
+test('Mejora demandada por usuarios: Estación de Trabajo Profesional Dell Precision 3660 Workstation (SUG-D3660)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D3660'") && seedCjs.includes("status: 'implemented'"), 'SUG-D3660 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D3660') && sugJs.includes('Dell Precision 3660'), 'SUG-D3660 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_dell_precision_3660_workstation'), 'backup_data.js debe contener oficina_dell_precision_3660_workstation');
+
+  const dellImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dell-precision-3660-tower-workstation.webp');
+  assert.ok(fs.existsSync(dellImg), 'La imagen de la workstation Dell Precision 3660 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'precision'"), 'catalog.js debe incluir precision en stem variants');
+  assert.ok(catJs.includes("/\\b(precision|precision\\s*3660)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Dell Precision 3660');
+});
+
+test('Mejora demandada por usuarios: Unidad PDU Administrable para Rack APC by Schneider Electric (SUG-A7900)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A7900'") && seedCjs.includes("status: 'implemented'"), 'SUG-A7900 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A7900') && sugJs.includes('APC by Schneider Electric Metered'), 'SUG-A7900 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_metered_rack_pdu_120v'), 'backup_data.js debe contener energia_apc_metered_rack_pdu_120v');
+
+  const apcImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-schneider-metered-rack-pdu-120v.webp');
+  assert.ok(fs.existsSync(apcImg), 'La imagen de la PDU APC Schneider debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'pdu'"), 'catalog.js debe incluir pdu en stem variants');
+  assert.ok(catJs.includes("/\\b(pdu|rack\\s*pdu|metered\\s*pdu|ap7900)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar APC Metered PDU');
+});
+
+test('Mejora demandada por usuarios: Terminal Biométrica de Acceso Facial Dahua IA (SUG-D4300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D4300'") && seedCjs.includes("status: 'implemented'"), 'SUG-D4300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D4300') && sugJs.includes('Terminal Biométrica de Control de Acceso Facial Dahua'), 'SUG-D4300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_dahua_terminal_facial_acceso_ia'), 'backup_data.js debe contener seguridad_dahua_terminal_facial_acceso_ia');
+
+  const dahuaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-terminal-reconocimiento-facial-ia.webp');
+  assert.ok(fs.existsSync(dahuaImg), 'La imagen de la terminal facial Dahua debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'facial'"), 'catalog.js debe incluir facial en stem variants');
+  assert.ok(catJs.includes("/\\b(asi3213g|dahua\\s*facial)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Terminal Facial Dahua');
+});
+
+
 
 
 
