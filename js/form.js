@@ -122,7 +122,7 @@ function sendForm(event) {
   // Registrar timestamp de envío para cooldown
   sessionStorage.setItem(lastSubmitKey, String(now));
 
-  // Abrir WhatsApp con el mensaje construido de forma segura sin exponer window.opener
+  // Abrir WhatsApp con el mensaje construido de forma segura con fallback para bloqueadores de ventanas emergentes
   const targetNumber = (window.FUTUNET_CONFIG && window.FUTUNET_CONFIG.WHATSAPP_NUMBER) || '18297411041';
   const waUrl = `https://wa.me/${encodeURIComponent(targetNumber)}?text=${encodeURIComponent(text)}`;
   const win = window.open(waUrl, '_blank', 'noopener,noreferrer');

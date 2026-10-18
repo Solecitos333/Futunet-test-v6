@@ -127,6 +127,25 @@
     return `${count} artículo${count !== 1 ? 's' : ''}`;
   }
 
+  function safeOpenWhatsApp(url) {
+    if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+      return window.safeOpenWhatsApp(url);
+    }
+    if (!url) return;
+    try {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+    } catch (e) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
   // Permite obtener el producto independientemente de si estamos en catalog.js o producto.js
   function findProduct(productId) {
     if (productId === 'custom_office_bundle') {
@@ -1616,12 +1635,7 @@
         const phoneNo = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
         const waUrl = `https://wa.me/${phoneNo}?text=${encodeURIComponent(message)}`;
 
-        const waWin = window.open(waUrl, '_blank', 'noopener,noreferrer');
-        if (!waWin || waWin.closed || typeof waWin.closed === 'undefined') {
-          setTimeout(() => {
-            window.location.href = waUrl;
-          }, 300);
-        }
+        safeOpenWhatsApp(waUrl);
 
         cartState.items = {};
         saveCartState();

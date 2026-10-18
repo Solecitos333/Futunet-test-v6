@@ -348,7 +348,7 @@
         var statusClass = 'up-badge up-badge-' + escapeHtml(o.status || 'pending');
 
           html += '<tr class="up-table-row">' +
-          '  <td class="up-table-cell up-order-id">#' + o.id.substring(0, 8) + '</td>' +
+          '  <td class="up-table-cell up-order-id">#' + escapeHtml(String(o.id || '').substring(0, 8)) + '</td>' +
           '  <td class="up-table-cell">' + date + '</td>' +
           '  <td class="up-table-cell" style="font-weight:700;">' + totalFormatted + '</td>' +
           '  <td class="up-table-cell">' + method + '</td>' +

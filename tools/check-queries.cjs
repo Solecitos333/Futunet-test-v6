@@ -159,7 +159,11 @@ const queries = [
   'wall connector',
   'cassette',
   'ip150',
-  'velop pro'
+  'velop pro',
+  'h8c',
+  'meetup',
+  'tl400b',
+  'u6 pro'
 ];
 
 

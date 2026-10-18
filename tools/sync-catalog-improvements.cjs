@@ -1702,6 +1702,110 @@ const linksysMeshItems = [
   }
 ];
 
+const ezvizPtzItems = [
+  {
+    id: 'seguridad_ezviz_h8c_camara_ptz_exterior',
+    department: 'seguridad',
+    category: 'Sistemas de Seguridad CCTV',
+    brand: 'Ezviz',
+    title: 'Cámara de Seguridad Wi-Fi PTZ Exterior Ezviz H8c 1080p con Visión Nocturna a Color y Seguimiento IA',
+    desc: 'Cámara de seguridad para exteriores tipo domo PTZ motorizada Ezviz H8c con rotación horizontal panorámica de 350 grados e inclinación vertical de 80 grados, eliminando puntos ciegos en patios, estacionamientos y fachadas comerciales en Santiago. Cuenta con resolución Full HD 1080p con compresión de video H.265, visión nocturna a color real las 24 horas del día mediante reflectores LED integrados, detección inteligente de siluetas humanas con seguimiento automático (Auto-Tracking), defensa activa con sirena de advertencia y luz estroboscópica, audio bidireccional para hablar y escuchar, diseño resistente a la intemperie IP65 y ranura para tarjeta microSD de hasta 512 GB.',
+    price: 'RD$ 4,850.00',
+    img: 'img/productos/catalogo/ezviz-h8c-camara-ptz-exterior.webp',
+    gallery: [
+      'img/productos/catalogo/ezviz-h8c-camara-ptz-exterior.webp'
+    ],
+    specs: [
+      'Cobertura panorámica de 360° con giro horizontal motorizado de 350° e inclinación vertical de 80°',
+      'Resolución Full HD 1080p a 30 fps con compresión de video eficiente H.265 / H.264',
+      'Detección inteligente de siluetas humanas asistida por IA con seguimiento automático de objetivos',
+      'Visión nocturna a color en tiempo real con 4 luces LED y alcance nocturno infrarrojo de hasta 30 metros',
+      'Defensa activa con sirena de alta potencia y luz estroboscópica disuasoria ante intrusiones',
+      'Comunicación de audio bidireccional con micrófono y altavoz integrados de alta fidelidad',
+      'Diseño resistente al agua y polvo IP65 con ranura para tarjeta microSD de hasta 512 GB y almacenamiento en la nube EZVIZ CloudPlay',
+      'Garantía oficial Ezviz de 1 año con comprobante fiscal formal NCF y entrega inmediata en Santiago'
+    ]
+  }
+];
+
+const logitechMeetupItems = [
+  {
+    id: 'oficina_logitech_meetup_videoconferencia_4k',
+    department: 'equipos',
+    category: 'Equipos de Oficina',
+    brand: 'Logitech',
+    title: 'Cámara de Videoconferencia Todo en Uno Logitech MeetUp 4K Ultra HD con Micrófonos Integrados',
+    desc: 'Sistema de videoconferencia profesional Todo en Uno Logitech MeetUp especialmente diseñado para salas de juntas pequeñas, medianas y despachos ejecutivos (huddle rooms) en Santiago. Cuenta con óptica 4K Ultra HD con campo visual superancho de 120 grados que encuadra perfectamente a todos los asistentes en la mesa sin distorsión. Incorpora cámara motorizada con panorámica (+/- 25°) e inclinación (+/- 15°) con zoom digital 5x HD, tecnología Logitech RightSight de encuadre automático por IA, matriz de 3 micrófonos con formación de haces y tecnología RightSound con cancelación de eco y supresión de ruidos, y potente altavoz optimizado para frecuencias vocales. Certificada para Microsoft Teams, Zoom, Google Meet y Skype for Business.',
+    price: 'RD$ 58,900.00',
+    img: 'img/productos/catalogo/logitech-meetup-videoconferencia-4k.webp',
+    gallery: [
+      'img/productos/catalogo/logitech-meetup-videoconferencia-4k.webp'
+    ],
+    specs: [
+      'Óptica Ultra HD 4K (hasta 3840 x 2160 a 30 fps) con lente gran angular de 120° libre de distorsión',
+      'Panorámica motorizada (+/- 25°) e inclinación (+/- 15°) con zoom digital 5x de alta definición',
+      'Tecnología Logitech RightSight para encuadre automático inteligente de los participantes en la sala',
+      'Matriz integrada de 3 micrófonos con formación de haces y tecnología RightSound con supresión de eco y ruido ambiente',
+      'Altavoz de rango completo afinado acústicamente para máxima inteligibilidad en frecuencias de voz humana',
+      'Conectividad Plug and Play USB 2.0 / 3.0 certificada para Microsoft Teams, Zoom, Google Meet y Cisco Webex',
+      'Conectividad Bluetooth integrada para emparejamiento de llamadas móviles desde smartphones corporativos',
+      'Garantía oficial Logitech de 2 años con comprobante fiscal formal NCF y soporte técnico en Santiago'
+    ]
+  }
+];
+
+const zktecoLockItems = [
+  {
+    id: 'seguridad_zkteco_tl400b_cerradura_inteligente',
+    department: 'seguridad',
+    category: 'Control de Acceso y Asistencia',
+    brand: 'ZKTeco',
+    title: 'Cerradura Digital Inteligente ZKTeco TL400B Biométrica con Huella, Teclado Táctil y Tarjeta RFID',
+    desc: 'Cerradura digital inteligente de alta gama ZKTeco TL400B para puertas principales de oficinas, salas de servidores, despachos ejecutivos y residencias en Santiago. Diseñada con lector biométrico semiconductor de huella digital de respuesta instantánea (menos de 0.5 segundos), teclado táctil capacitivo retroiluminado con soporte de contraseña aleatoria anti-espía, lector de tarjetas de proximidad RFID Mifare (13.56 MHz), llave física oculta de alta seguridad y pestillo embutido europeo de acero inoxidable. Dispone de manija reversible universal, aviso sonoro de batería baja, puerto micro USB externo para alimentación de emergencia con power bank y voz interactiva en español para administración fluida de accesos.',
+    price: 'RD$ 12,850.00',
+    img: 'img/productos/catalogo/zkteco-tl400b-cerradura-inteligente.webp',
+    gallery: [
+      'img/productos/catalogo/zkteco-tl400b-cerradura-inteligente.webp'
+    ],
+    specs: [
+      'Sensor biométrico semiconductor de huella digital con verificación ultra rápida (< 0.5 segundos)',
+      'Teclado táctil capacitivo de alta durabilidad con función de dígitos aleatorios anti-espía',
+      'Lector de tarjetas RFID de proximidad Mifare estándar de 13.56 MHz y llave física de emergencia oculta',
+      'Capacidad para 100 huellas digitales, 100 contraseñas de usuario y 100 tarjetas RFID',
+      'Manija reversible e intercambiable compatible con puertas de madera y metal de 35 mm a 55 mm de espesor',
+      'Alimentación autónoma con 4 baterías alcalinas AA de 1.5V con autonomía de más de 12 meses',
+      'Puerto micro USB inferior para energización de respaldo con batería externa portátil ante descarga total',
+      'Garantía oficial ZKTeco de 1 año con soporte técnico y asesoría de instalación en Santiago'
+    ]
+  }
+];
+
+const ubiquitiU6ProItems = [
+  {
+    id: 'redes_ubiquiti_unifi_u6_pro_access_point',
+    department: 'redes',
+    category: 'Redes y Conectividad',
+    brand: 'Ubiquiti',
+    title: 'Punto de Acceso Wi-Fi 6 Ubiquiti UniFi 6 Pro (U6-Pro) Doble Banda 5.3 Gbps PoE+ para Alta Densidad',
+    desc: 'Punto de acceso inalámbrico de grado empresarial y alto rendimiento Ubiquiti UniFi 6 Pro (U6-Pro) diseñado para entornos corporativos de alta densidad en Santiago como naves de zonas francas (PIVEM), centros de convenciones, centros médicos, colegios y oficinas con cientos de dispositivos concurrentes. Ofrece una tasa de transferencia agregada de hasta 5.3 Gbps combinando 4x4 MU-MIMO en la banda de 5 GHz con canales de 160 MHz (hasta 4.8 Gbps) y 2x2 MU-MIMO en la banda de 2.4 GHz (hasta 573.5 Mbps). Soporta más de 350 clientes simultáneos, puerto Gigabit Ethernet PoE+, aislamiento de invitados por VLANs, balanceo de clientes y gestión centralizada sin licencias a través de UniFi Network Application.',
+    price: 'RD$ 13,950.00',
+    img: 'img/productos/catalogo/ubiquiti-unifi-u6-pro-access-point.webp',
+    gallery: [
+      'img/productos/catalogo/ubiquiti-unifi-u6-pro-access-point.webp'
+    ],
+    specs: [
+      'Tecnología Wi-Fi 6 (802.11ax) de ultra alta velocidad con tasa inalámbrica agregada de hasta 5.3 Gbps',
+      'Banda de 5 GHz con 4x4 MU-MIMO y OFDMA con soporte de canales anchos de 160 MHz (tasa de 4.8 Gbps)',
+      'Banda de 2.4 GHz con 2x2 MU-MIMO y OFDMA para dispositivos IoT y legado (tasa de 573.5 Mbps)',
+      'Capacidad masiva de conexión concurrente para más de 350 dispositivos sin degradación de velocidad',
+      'Puerto Gigabit Ethernet 10/100/1000 con alimentación PoE / PoE+ estándar 802.3at',
+      'Gestión centralizada en la nube mediante UniFi Network Application (sin suscripciones ni licencias periódicas)',
+      'Carcasa con certificación climática IP54 para instalación versátil en techo o pared con herrajes incluidos',
+      'Garantía corporativa Ubiquiti de 1 año con soporte técnico y facturación con comprobante fiscal NCF en Santiago'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -2186,7 +2290,11 @@ async function updateBackupData() {
     ...teslaEvItems,
     ...mitsubishiCassetteItems,
     ...paradoxIpItems,
-    ...linksysMeshItems
+    ...linksysMeshItems,
+    ...ezvizPtzItems,
+    ...logitechMeetupItems,
+    ...zktecoLockItems,
+    ...ubiquitiU6ProItems
   ];
 
   itemsToSync.forEach(item => {
@@ -2261,7 +2369,11 @@ async function updateFirestore() {
     ...teslaEvItems,
     ...mitsubishiCassetteItems,
     ...paradoxIpItems,
-    ...linksysMeshItems
+    ...linksysMeshItems,
+    ...ezvizPtzItems,
+    ...logitechMeetupItems,
+    ...zktecoLockItems,
+    ...ubiquitiU6ProItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

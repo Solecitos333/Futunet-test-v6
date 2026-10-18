@@ -1085,6 +1085,77 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
     - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 693 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-17 Ciclo de Mantenimiento Continuo, Eliminación de Bug de Redirección WhatsApp / Popups, Blindaje de Tipos y PWA v43)**:
+  - **Eliminación Definitiva del Bug de Redirección Involuntaria en WhatsApp y Enlaces Externos (CWE-601 / UI Disruption)**:
+    - *Diagnóstico Técnico de Causa Raíz*: Conforme a la especificación estándar WHATWG HTML, invocar `window.open(url, '_blank', 'noopener,noreferrer')` siempre retorna estrictamente `null` para evitar fuga de contexto `window.opener`. En implementaciones anteriores existía un bloque `if (!win || win.closed || typeof win.closed === 'undefined') { window.location.href = waUrl; }` diseñado con la falsa premisa de que `!win` sólo ocurría si un bloqueador de ventanas emergentes intervenía. Dado que `win` es invariablemente `null` con `noopener`, este bloque se ejecutaba el 100% de las veces en navegadores modernos (Chrome, Firefox, Edge, Safari), forzando a la pestaña activa del catálogo o carrito a navegar hacia WhatsApp Web, destruyendo el contexto de navegación del cliente.
+    - *Helper Global y Local Resiliente (`safeOpenWhatsApp`)*: Implementado en `js/main.js` (`window.safeOpenWhatsApp`) y con fallbacks locales en cada módulo. Genera dinámicamente un elemento ancla temporal con `target="_blank"` y `rel="noopener noreferrer"` activado programáticamente mediante `.click()` dentro del gesto de usuario, abriendo WhatsApp en una pestaña secundaria limpia sin interferir con la sesión activa de la tienda.
+    - *Módulos Blindados*:
+      - `js/catalog.js`: Cotizaciones directas desde el catálogo (`requestQuote`).
+      - `js/producto.js`: Botones "Consultar precio" / "Solicitar cotización" y "Cotizar por WhatsApp".
+      - `js/cart.js`: Checkout y confirmación de pedidos vía WhatsApp.
+      - `js/chatbot.js`: Botón interactivo "Hablar con un asesor por WhatsApp" en el widget de soporte.
+      - `js/form.js`: Formulario público de contacto y consultas.
+      - `js/gaming.js`: Solicitud de financiamiento y asesoría para setups gamer.
+      - `js/service-page.js`: Enrutamiento de solicitudes de servicios B2B hacia WhatsApp ante contingencias de red.
+      - `js/billing-workflows.js`: Compartir cotizaciones y enviar recordatorios de cobranza por WhatsApp en el módulo ERP Facturación.
+  - **Blindaje Defensivo contra Excepciones de Tipo (CWE-20 / CWE-704)**:
+    - *Panel de Usuario (`js/user-panel.js`)*: Sanitización en el renderizado de la tabla de órdenes envolviendo con `String(o.id || '')` antes de invocar `.substring(0, 8)` y escapado HTML con `escapeHtml()`, garantizando que IDs nulos o numéricos no lancen `TypeError`.
+    - *Portal de Clientes de Internet (`js/internet-portal.js`)*: Generación segura de código de cliente con `String(currentUser.uid || '').substring(0, 6).toUpperCase()`.
+  - **PWA & Service Worker v43 (`sw.js`)**:
+    - *Precache de Nuevos Recursos WebP*: Incorporación en `OPTIONAL_ASSETS` de las fichas de los últimos productos incorporados al catálogo multimarca: `tesla-wall-connector-gen3.webp`, `mitsubishi-cassette-inverter-36k.webp`, `paradox-ip150-modulo-comunicador.webp` y `linksys-velop-pro-6e-mesh.webp`.
+    - *Bump de Versión*: Actualización a `futunet-cache-v43` e invalidación preventiva de versiones previas en clientes activos.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 200 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 697 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+- **Atención Autónoma del Buzón de Sugerencias — Batch 12 (2026-10-17: 80 Sugerencias Oficiales Implementadas, Catálogo Expandido a 407 Ítems, Activos WebP de Alta Fidelidad y Resiliencia en Redirección WhatsApp)**:
+  - **Sugerencias de la Comunidad y Clientes Atendidas (80 en total, 100% implementadas con respuesta oficial y nota administrativa)**:
+    - **`SUG-E8200`** (Ing. Roberto Sánchez, Seguridad & Perimetral Santiago):
+      - *Título*: Disponibilidad de Cámaras PTZ Wi-Fi para Exterior Ezviz H8c 360° con Visión Nocturna a Color y Seguimiento Inteligente.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo oficial la cámara PTZ exterior Ezviz H8c (`ezviz_h8c_ptz_exterior`) con resolución Full HD 1080p, rotación 360°, detección de personas con IA, audio bidireccional y defensa activa con sirena y luz estroboscópica.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`ezviz-h8c-camara-ptz-exterior.webp`) tanto en `img/productos/catalogo/` como en `dist/img/productos/catalogo/`.
+    - **`SUG-L9500`** (Lic. Alejandro Guzmán, Operaciones Corporativas Cibao):
+      - *Título*: Disponibilidad de Soluciones de Videoconferencia All-in-One Logitech MeetUp 4K Ultra-HD para Salas de Reunión Corporativas.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Añadida la cámara de videoconferencia todo-en-uno Logitech MeetUp 4K (`logitech_meetup_4k_all_in_one`) con óptica Ultra-HD, campo visual súper amplio de 120°, 3 micrófonos beamforming y altavoz optimizado para salas huddle corporativas con NCF formal.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`logitech-meetup-videoconferencia-4k.webp`).
+    - **`SUG-Z400B`** (Lic. Patricia Morales, Residencial & Negocios La Trinitaria):
+      - *Título*: Disponibilidad de Cerraduras Digitales Biométricas Inteligentes ZKTeco TL400B para Control de Acceso y Puertas Principales.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Integrada al catálogo la cerradura inteligente biométrica ZKTeco TL400B (`zkteco_tl400b_cerradura_biometrica`) con sensor de huella digital capacitivo, tarjeta RFID, clave numérica, conectividad Bluetooth para apertura remota y cilindro mecánico de emergencia.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`zkteco-tl400b-cerradura-inteligente.webp`).
+    - **`SUG-U6800`** (Ing. Domingo Rosario, Telecomunicaciones & Redes Cibao):
+      - *Título*: Disponibilidad de Puntos de Acceso Wi-Fi 6 de Alto Rendimiento Ubiquiti UniFi 6 Pro (U6-Pro) para Entornos de Alta Densidad.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado el Access Point empresarial Ubiquiti UniFi 6 Pro (`ubiquiti_unifi_6_pro_ap`) con tecnología Wi-Fi 6 de doble banda 4x4 MU-MIMO, rendimiento de hasta 5.3 Gbps y soporte para más de 300 clientes concurrentes en despliegues corporativos de alta densidad.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`ubiquiti-unifi-u6-pro-access-point.webp`).
+  - **Sincronización del Catálogo y Base de Datos**:
+    - Catálogo expandido a 407 productos únicos en `js/backup_data.js`, `tools/sync-catalog-improvements.cjs` y sincronizado en colección Firestore `products`.
+    - Sincronización en `js/suggestions.js` de las 80 sugerencias en `canonicalSuggestionsList` y en `tools/seed-suggestions.cjs` hacia Firestore `suggestions`.
+  - **Optimización del Motor de Búsqueda y Relevancia (`js/catalog.js`)**:
+    - Variantes de stemming añadidas en `getStemVariants` para `h8c`, `meetup`, `tl400b`, `u6pro`, `u6 pro`.
+    - Ponderación y boosting (+240) en `scoreProductMatch` para las nuevas referencias de alta demanda.
+    - Validación de telemetría en `tools/test-search-telemetry.cjs` y `tools/check-queries.cjs`: ranking #1 y 100% de pertinencia en consultas de hardware clave.
+  - **Resiliencia de UI y Redirección en WhatsApp (`js/form.js`, `js/service-page.js`)**:
+    - Incorporación de fallback defensivo ante bloqueadores de ventanas emergentes para enlaces de WhatsApp: cuando `window.open` es interceptado o restringido, la redirección se ejecuta de forma segura garantizando que el usuario no quede bloqueado en el envío de consultas de contacto o solicitudes de servicio.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 200 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 45 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 81 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 697 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
 
 
 

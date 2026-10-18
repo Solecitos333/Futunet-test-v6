@@ -55,7 +55,11 @@ const testQueries = [
   'wall connector',
   'cassette',
   'ip150',
-  'velop'
+  'velop',
+  'h8c',
+  'meetup',
+  'tl400b',
+  'u6 pro'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -161,6 +165,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /velop/i.test(scored[0].p.title),
         'El producto top para "velop" debe ser Linksys Velop Pro 6E'
+      );
+    }
+
+    if (q === 'h8c') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ezviz',
+        'La búsqueda "h8c" debe priorizar la Cámara PTZ Exterior Ezviz H8c'
+      );
+      assert.ok(
+        /h8c/i.test(scored[0].p.title),
+        'El producto top para "h8c" debe ser Ezviz H8c'
+      );
+    }
+
+    if (q === 'meetup') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Logitech',
+        'La búsqueda "meetup" debe priorizar la Cámara de Videoconferencia Logitech MeetUp'
+      );
+      assert.ok(
+        /meetup/i.test(scored[0].p.title),
+        'El producto top para "meetup" debe ser Logitech MeetUp'
+      );
+    }
+
+    if (q === 'tl400b') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'ZKTeco',
+        'La búsqueda "tl400b" debe priorizar la Cerradura Digital Inteligente ZKTeco TL400B'
+      );
+      assert.ok(
+        /tl400b/i.test(scored[0].p.title),
+        'El producto top para "tl400b" debe ser ZKTeco TL400B'
+      );
+    }
+
+    if (q === 'u6 pro') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ubiquiti',
+        'La búsqueda "u6 pro" debe priorizar el Punto de Acceso Ubiquiti UniFi 6 Pro'
+      );
+      assert.ok(
+        /u6-pro|u6\s*pro/i.test(scored[0].p.title),
+        'El producto top para "u6 pro" debe ser Ubiquiti UniFi 6 Pro'
       );
     }
   }

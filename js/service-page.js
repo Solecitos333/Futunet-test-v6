@@ -8,6 +8,25 @@
   var db = null;
   var serviceId = '';
 
+  function safeOpenWhatsApp(url) {
+    if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+      return window.safeOpenWhatsApp(url);
+    }
+    if (!url) return;
+    try {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+    } catch (e) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
   // Inicialización de la Página de Servicio
   async function init() {
     var requestForm = document.getElementById('service-request-form');

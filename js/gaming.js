@@ -14,6 +14,25 @@
     sortOrder: 'featured'
   };
 
+  function safeOpenWhatsApp(url) {
+    if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+      return window.safeOpenWhatsApp(url);
+    }
+    if (!url) return;
+    try {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+    } catch (e) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
   // Fallback gaming catalogue in case of network latency
   var FALLBACK_GAMING_PRODUCTS = [
     {
@@ -479,10 +498,7 @@
       if (item) {
         var msg = 'Hola Futunet, me interesa solicitar financiamiento en cuotas para el equipo: ' + item.title + ' (' + item.price + ').';
         var waUrl = 'https://wa.me/18297411041?text=' + encodeURIComponent(msg);
-        var win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-        if (!win || win.closed || typeof win.closed === 'undefined') {
-          window.location.href = waUrl;
-        }
+        safeOpenWhatsApp(waUrl);
       }
     },
     resetFilters: function () {

@@ -125,6 +125,25 @@
     return fallbackCopy(text);
   }
 
+  function safeOpenWhatsApp(url) {
+    if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+      return window.safeOpenWhatsApp(url);
+    }
+    if (!url) return;
+    try {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+    } catch (e) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
   function updateShareActions(detail) {
     const shareBtn = document.getElementById('product-share-btn');
     const copyBtn = document.getElementById('product-copy-link-btn');
@@ -393,10 +412,7 @@
         const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
         if (detail.requiresQuote) {
           const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`;
-          const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-          if (!win || win.closed || typeof win.closed === 'undefined') {
-            window.location.href = waUrl;
-          }
+          safeOpenWhatsApp(waUrl);
           return;
         }
         if (window.FutunetCart) {
@@ -415,10 +431,7 @@
         quoteAction.onclick = () => {
           const phone = typeof FUTUNET_CONFIG !== 'undefined' ? FUTUNET_CONFIG.WHATSAPP_NUMBER : '18297411041';
           const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(getQuoteMessage(detail))}`;
-          const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-          if (!win || win.closed || typeof win.closed === 'undefined') {
-            window.location.href = waUrl;
-          }
+          safeOpenWhatsApp(waUrl);
         };
       }
     }

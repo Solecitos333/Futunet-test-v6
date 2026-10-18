@@ -1498,6 +1498,78 @@ test('Mejora demandada por usuarios: Sistema Mesh Wi-Fi 6E Tri-Banda Linksys Vel
   assert.ok(catJs.includes("/\\b(velop|axe5400|wifi\\s*6e)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Linksys Velop Pro 6E');
 });
 
+test('Mejora demandada por usuarios: Cámara Wi-Fi de Seguridad PTZ Exterior Ezviz H8c (SUG-E8200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E8200'") && seedCjs.includes("status: 'implemented'"), 'SUG-E8200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E8200') && sugJs.includes('Ezviz H8c'), 'SUG-E8200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_ezviz_h8c_camara_ptz_exterior'), 'backup_data.js debe contener seguridad_ezviz_h8c_camara_ptz_exterior');
+
+  const ezvizImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-h8c-camara-ptz-exterior.webp');
+  assert.ok(fs.existsSync(ezvizImg), 'La imagen de la cámara Ezviz H8c debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'h8c'"), 'catalog.js debe incluir h8c en stem variants');
+  assert.ok(catJs.includes("/\\b(h8c)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Cámara Ezviz H8c');
+});
+
+test('Mejora demandada por usuarios: Cámara de Videoconferencia Todo en Uno Logitech MeetUp 4K (SUG-L9500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L9500'") && seedCjs.includes("status: 'implemented'"), 'SUG-L9500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L9500') && sugJs.includes('Logitech MeetUp'), 'SUG-L9500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_logitech_meetup_videoconferencia_4k'), 'backup_data.js debe contener oficina_logitech_meetup_videoconferencia_4k');
+
+  const logitechImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'logitech-meetup-videoconferencia-4k.webp');
+  assert.ok(fs.existsSync(logitechImg), 'La imagen de la cámara Logitech MeetUp debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'meetup'"), 'catalog.js debe incluir meetup en stem variants');
+  assert.ok(catJs.includes("/\\b(meetup)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Logitech MeetUp');
+});
+
+test('Mejora demandada por usuarios: Cerradura Digital Inteligente ZKTeco TL400B Biométrica (SUG-Z400B)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-Z400B'") && seedCjs.includes("status: 'implemented'"), 'SUG-Z400B debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-Z400B') && sugJs.includes('ZKTeco TL400B'), 'SUG-Z400B debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_zkteco_tl400b_cerradura_inteligente'), 'backup_data.js debe contener seguridad_zkteco_tl400b_cerradura_inteligente');
+
+  const zktecoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'zkteco-tl400b-cerradura-inteligente.webp');
+  assert.ok(fs.existsSync(zktecoImg), 'La imagen de la cerradura ZKTeco TL400B debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tl400b'"), 'catalog.js debe incluir tl400b en stem variants');
+  assert.ok(catJs.includes("/\\b(tl400b|tl400)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar ZKTeco TL400B');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 Ubiquiti UniFi 6 Pro (U6-Pro) (SUG-U6800)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U6800'") && seedCjs.includes("status: 'implemented'"), 'SUG-U6800 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U6800') && sugJs.includes('UniFi 6 Pro'), 'SUG-U6800 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_unifi_u6_pro_access_point'), 'backup_data.js debe contener redes_ubiquiti_unifi_u6_pro_access_point');
+
+  const ubiquitiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-unifi-u6-pro-access-point.webp');
+  assert.ok(fs.existsSync(ubiquitiImg), 'La imagen del Access Point Ubiquiti U6-Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'u6pro'"), 'catalog.js debe incluir u6pro en stem variants');
+  assert.ok(catJs.includes("/\\b(u6\\s*pro|u6-pro|u6pro)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Ubiquiti UniFi 6 Pro');
+});
+
 
 
 

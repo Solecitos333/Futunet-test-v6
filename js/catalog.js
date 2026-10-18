@@ -236,6 +236,10 @@ function getStemVariants(word) {
   if (word === 'cassette' || word === 'plam') variants.push('mitsubishi', 'inverter', 'techo', 'aire', 'climatizacion');
   if (word === 'ip150' || word === 'ip150plus') variants.push('paradox', 'modulo', 'comunicador', 'internet', 'alarma', 'insite');
   if (word === 'velop' || word === 'axe5400') variants.push('linksys', 'mesh', 'wifi', 'wifi6e', 'tribanda');
+  if (word === 'h8c') variants.push('ezviz', 'camara', 'ptz', 'exterior', '360');
+  if (word === 'meetup') variants.push('logitech', 'videoconferencia', 'camara', '4k', 'conferencia', 'reunion');
+  if (word === 'tl400b' || word === 'tl400') variants.push('zkteco', 'cerradura', 'inteligente', 'biometrica', 'huella');
+  if (word === 'u6pro' || word === 'u6-pro') variants.push('ubiquiti', 'unifi', 'access', 'point', 'wifi6', 'poe');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -835,6 +839,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(velop|axe5400|wifi\s*6e)\b/i.test(normalizedQuery) || (/\b(mesh)\b/i.test(normalizedQuery) && /\b(linksys|velop|6e)\b/i.test(normalizedQuery)) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(velop|mesh|6e)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'linksys') {
       if (/velop/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara PTZ Exterior Ezviz H8c al buscar h8c, ptz ezviz, camara ptz, ezviz ptz, ezviz exterior (SUG-E8200)
+  if (/\b(h8c)\b/i.test(normalizedQuery) || (/\b(ptz)\b/i.test(normalizedQuery) && /\b(ezviz|exterior|360)\b/i.test(normalizedQuery)) || (/\b(ezviz)\b/i.test(normalizedQuery) && /\b(ptz|h8c|exterior)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'ezviz') {
+      if (/h8c|ptz/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara de Videoconferencia Logitech MeetUp al buscar meetup, logitech meetup, videoconferencia (SUG-L9500)
+  if (/\b(meetup)\b/i.test(normalizedQuery) || (/\b(videoconferencia|conferencia)\b/i.test(normalizedQuery) && /\b(logitech|meetup|sala)\b/i.test(normalizedQuery)) || (/\b(logitech)\b/i.test(normalizedQuery) && /\b(meetup|videoconferencia)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'logitech') {
+      if (/meetup/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cerradura Digital Inteligente ZKTeco TL400B al buscar tl400b, tl400, cerradura inteligente, cerradura zkteco (SUG-Z400B)
+  if (/\b(tl400b|tl400)\b/i.test(normalizedQuery) || (/\b(cerradura)\b/i.test(normalizedQuery) && /\b(zkteco|inteligente|biometrica|tl400)\b/i.test(normalizedQuery)) || (/\b(zkteco)\b/i.test(normalizedQuery) && /\b(cerradura|tl400|puerta)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'zkteco') {
+      if (/tl400b|cerradura\s*digital|cerradura\s*inteligente/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Punto de Acceso Ubiquiti UniFi 6 Pro al buscar u6 pro, u6-pro, unifi 6 pro, access point pro (SUG-U6800)
+  if (/\b(u6\s*pro|u6-pro|u6pro)\b/i.test(normalizedQuery) || (/\b(pro)\b/i.test(normalizedQuery) && /\b(unifi|ubiquiti|u6)\b/i.test(normalizedQuery)) || (/\b(unifi\s*6\s*pro|unifi\s*pro)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'ubiquiti') {
+      if (/u6-pro|unifi\s*6\s*pro/i.test(title)) {
         score += 240;
       } else {
         score += 170;
@@ -2683,6 +2731,25 @@ document.addEventListener('click', (e) => {
   if (modal && e.target === modal) closeProductModal();
 });
 
+function safeOpenWhatsApp(url) {
+  if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+    return window.safeOpenWhatsApp(url);
+  }
+  if (!url) return;
+  try {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+  } catch (e) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+}
+
 function requestQuote(product, brand, price, serviceItem = false, quoteOnlyItem = false) {
   const isService = serviceItem || String(brand || '').toLowerCase() === 'servicios';
   const text = quoteOnlyItem
@@ -2694,10 +2761,7 @@ function requestQuote(product, brand, price, serviceItem = false, quoteOnlyItem 
     ? FUTUNET_CONFIG.WHATSAPP_NUMBER
     : '18297411041';
   const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-  const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-  if (!win || win.closed || typeof win.closed === 'undefined') {
-    window.location.href = waUrl;
-  }
+  safeOpenWhatsApp(waUrl);
 }
 
 

@@ -37,6 +37,24 @@ window.ERPBillingWorkflows = (function () {
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
   function escapeAttr(value) { return escapeHTML(value).replace(/`/g, '&#96;'); }
+  function safeOpenWhatsApp(url) {
+    if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
+      return window.safeOpenWhatsApp(url);
+    }
+    if (!url) return;
+    try {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
+    } catch (e) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
   function notify(message, type = 'info') { window.ERPBilling.showToast(message, type); }
   function collection(name) { return db().collection(`${prefix}_${name}`); }
   function currentSettings() { return billing().settings || {}; }
@@ -468,10 +486,7 @@ window.ERPBillingWorkflows = (function () {
         notify('Enlace copiado.', 'success');
       } else if (channel === 'whatsapp') {
         const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-        if (!win || win.closed || typeof win.closed === 'undefined') {
-          window.location.href = waUrl;
-        }
+        safeOpenWhatsApp(waUrl);
       } else if (channel === 'email') {
         window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`${invoice.docType === 'proforma' ? 'Proforma' : 'Cotización'} ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
       } else if (channel === 'pdf') {
@@ -586,10 +601,7 @@ window.ERPBillingWorkflows = (function () {
     const message = `Hola ${invoice.clientName}, te recordamos que la factura ${invoice.invoiceNumber} presenta un balance de ${money(balance)} con vencimiento ${dateLabel(invoice.dueDate)}. Quedamos atentos para ayudarte.`;
     if (reminder.channel === 'whatsapp') {
       const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-      const win = window.open(waUrl, '_blank', 'noopener,noreferrer');
-      if (!win || win.closed || typeof win.closed === 'undefined') {
-        window.location.href = waUrl;
-      }
+      safeOpenWhatsApp(waUrl);
     }
     if (reminder.channel === 'email') window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`Recordatorio ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
     if (reminder.channel === 'phone') await navigator.clipboard.writeText(message);

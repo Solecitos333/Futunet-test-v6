@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v41';
+const CACHE_NAME = 'futunet-cache-v43';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -104,7 +104,15 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/siemens-sirius-contactor-3rt-25a.webp',
   './img/productos/catalogo/uniview-colorhunter-4k-poe-camera.webp',
   './img/productos/catalogo/netgear-gs308pp-switch-8p-poe.webp',
-  './img/productos/catalogo/victron-smartsolar-mppt-100-30.webp'
+  './img/productos/catalogo/victron-smartsolar-mppt-100-30.webp',
+  './img/productos/catalogo/ezviz-h8c-camara-ptz-exterior.webp',
+  './img/productos/catalogo/logitech-meetup-videoconferencia-4k.webp',
+  './img/productos/catalogo/zkteco-tl400b-cerradura-inteligente.webp',
+  './img/productos/catalogo/ubiquiti-unifi-u6-pro-access-point.webp',
+  './img/productos/catalogo/tesla-wall-connector-gen3.webp',
+  './img/productos/catalogo/mitsubishi-cassette-inverter-36k.webp',
+  './img/productos/catalogo/paradox-ip150-modulo-comunicador.webp',
+  './img/productos/catalogo/linksys-velop-pro-6e-mesh.webp'
 ];
 
 // Install Event — cachear assets críticos

@@ -196,7 +196,7 @@
 
     // Rellenar datos
     setText('client-name', 'Hola, ' + (userData.displayName || 'Cliente'));
-    setText('client-code', 'CÓDIGO: ' + (userData.clientCode || 'FT-INTERNET-' + currentUser.uid.substring(0, 6).toUpperCase()));
+    setText('client-code', 'CÓDIGO: ' + (userData.clientCode || 'FT-INTERNET-' + String(currentUser.uid || '').substring(0, 6).toUpperCase()));
     
     var planId = userData.internetPlan || '100mb';
     var catalogPlan = window.FutunetInternetCatalog && window.FutunetInternetCatalog.findById(planId);

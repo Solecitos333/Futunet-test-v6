@@ -1287,6 +1287,38 @@
       status: 'implemented',
       description: 'Para aprovechar al 100% los planes de fibra óptica de ultra alta velocidad de Futunet (300 a 500 Megas o 1 Gbps) en condominios, chalets y oficinas con docenas de dispositivos inalámbricos simultáneos en Santiago, requerimos sistemas en malla (Mesh) Tri-Banda Linksys Velop Pro 6E AXE5400 con la nueva banda limpia de 6 GHz (sin interferencias de vecinos), puerto WAN Gigabit de 1 Gbps, tecnología Cognitive Mesh para auto-optimización continua y cobertura sin zonas muertas de hasta 3,000 pies cuadrados por nodo.',
       officialResponse: '¡Saludos Ing. David! Nos alegra informarte que tu propuesta ha sido implementada. Ya incorporamos al catálogo de Redes y Datos y a la página oficial marca-linksys.html el Sistema Wi-Fi 6E Mesh Tri-Banda Linksys Velop Pro 6E AXE5400 (tri-banda concurrente 2.4 GHz, 5 GHz y la nueva banda libre de 6 GHz, tecnología Cognitive Mesh, cobertura de hasta 3,000 pies cuadrados, puertos Gigabit y configuración fácil desde app Linksys) con 2 años de garantía corporativa y entrega inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-E8200',
+      title: 'Disponibilidad de Cámaras Wi-Fi de Seguridad PTZ Motorizadas Ezviz H8c 360° para Exterior con Visión Nocturna a Color y Seguimiento IA',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En residencias unifamiliares, almacenes y condominios en Santiago requerimos cámaras de seguridad para intemperie tipo domo PTZ motorizadas con rotación horizontal de 350° y vertical de 80° Ezviz H8c (resolución Full HD 1080p, visión nocturna a color, seguimiento automático de personas con IA, defensa activa con sirena y luz estroboscópica, audio bidireccional, protección IP65 y ranura microSD hasta 512 GB).',
+      officialResponse: '¡Hola Licda. Carmen Rosa! Tu propuesta ha sido implementada con total éxito. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-ezviz.html la Cámara de Seguridad Wi-Fi PTZ Exterior Ezviz H8c 1080p (giro horizontal motorizado de 350° e inclinación de 80°, visión nocturna a color real 24/7, detección y seguimiento inteligente de siluetas humanas con IA, defensa activa con sirena y luz estroboscópica, audio bidireccional y ranura para tarjeta microSD de hasta 512 GB) con 1 año de garantía oficial Ezviz y entrega inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-L9500',
+      title: 'Disponibilidad de Cámaras de Conferencia Todo en Uno Logitech MeetUp 4K Ultra HD con Micrófonos Integrados para Salas de Reuniones Corporativas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En salas de juntas, despachos gerenciales y salones de conferencia en Santiago requerimos sistemas de videoconferencia profesionales Todo en Uno Logitech MeetUp con lente ultra gran angular de 120° con resolución 4K Ultra HD, panorámica e inclinación motorizada, tecnología RightSight para encuadre automático de participantes, matriz de 3 micrófonos con cancelación de eco RightSound y altavoz optimizado para la voz humana.',
+      officialResponse: '¡Saludos Ing. Manuel! Nos complace comunicarte que tu sugerencia ha sido implementada exitosamente. Ya incorporamos al catálogo de Equipos de Oficina y a la página oficial marca-logitech.html la Cámara de Videoconferencia Todo en Uno Logitech MeetUp 4K Ultra HD (lente ultra gran angular de 120°, óptica 4K, panorámica/inclinación motorizada, encuadre automático RightSight, 3 micrófonos con formación de haces RightSound y altavoz full duplex de alta fidelidad) certificada para Teams, Zoom y Google Meet, con 2 años de garantía corporativa y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-Z400B',
+      title: 'Disponibilidad de Cerraduras Digitales Inteligentes ZKTeco TL400B Biométricas con Huella, Teclado Táctil y Tarjeta RFID',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Para oficinas privadas, salas de servidores, despachos directivos y residencias premium en Santiago requerimos cerraduras digitales inteligentes ZKTeco TL400B con lector semiconductor de huella digital ultrarrápido, teclado numérico táctil capacitivo con contraseña aleatoria anti-espía, lector de tarjetas de proximidad RFID Mifare, llave física de alta seguridad oculta, pestillo reversible de acero inoxidable y aviso de batería baja con puerto USB para alimentación de emergencia.',
+      officialResponse: '¡Hola Arq. Roberto! Tu propuesta ha sido evaluada y acogida con éxito. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-zkteco.html la Cerradura Digital Inteligente ZKTeco TL400B Biométrica (sensor semiconductor de huella digital < 0.5s, teclado táctil anti-espía, tarjeta RFID Mifare, llave mecánica de seguridad oculta, pestillo reversible europeo en acero inoxidable y puerto micro USB de emergencia) con 1 año de garantía oficial ZKTeco y comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-U6800',
+      title: 'Disponibilidad de Puntos de Acceso Wi-Fi 6 de Alto Rendimiento Ubiquiti UniFi 6 Pro (U6-Pro) Doble Banda 5.3 Gbps para Naves, Zonas Francas y Alta Densidad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En naves industriales de zonas francas (PIVEM), centros de eventos, centros médicos y oficinas de arquitectura en Santiago con alta densidad de usuarios inalámbricos requerimos puntos de acceso de alto rendimiento Ubiquiti UniFi 6 Pro (U6-Pro) con Wi-Fi 6 de doble banda concurrente (hasta 5.3 Gbps de tasa total de transferencia con 4x4 MU-MIMO en 5 GHz con canales de 160 MHz y 2x2 en 2.4 GHz), puerto Gigabit Ethernet PoE+, soporte para más de 350 clientes conectados simultáneos y aislamiento de tráfico por VLANs.',
+      officialResponse: '¡Saludos cordiales Ing. Cristian! Tu solicitud ha sido implementada de inmediato. Ya incorporamos al catálogo de Redes de Datos y a la página oficial marca-ubiquiti.html el Punto de Acceso Wi-Fi 6 Ubiquiti UniFi 6 Pro (U6-Pro), con tasa agregada de 5.3 Gbps (4x4 MU-MIMO en 5 GHz con canales de 160 MHz hasta 4.8 Gbps y 2x2 en 2.4 GHz hasta 573.5 Mbps), puerto Gigabit Ethernet PoE+, capacidad para más de 350 clientes simultáneos y gestión centralizada UniFi Network sin licencias, con 1 año de garantía oficial en Santiago.'
     }
   ];
 
