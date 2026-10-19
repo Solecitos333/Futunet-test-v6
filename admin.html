@@ -56,7 +56,7 @@
 
    <div class="admin-nav-search-wrap">
     <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="search" id="admin-nav-search" placeholder="Buscar módulo..." autocomplete="off" aria-label="Buscar un módulo del panel" />
+    <input type="search" id="admin-nav-search" placeholder="Buscar módulo..." autocomplete="off" aria-label="Buscar un módulo del panel" maxlength="100" />
    </div>
    <div class="admin-nav-empty" id="admin-nav-empty" hidden>No se encontró ese módulo.</div>
 
@@ -863,7 +863,7 @@
          </strong>
          <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('whatsapp-copy-text')">Copiar</button>
         </div>
-        <textarea id="whatsapp-copy-text" class="auth-input" style="height: 100px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+        <textarea id="whatsapp-copy-text" class="auth-input" style="height: 100px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly maxlength="2000"></textarea>
        </div>
 
        <!-- Social Media Copy -->
@@ -875,7 +875,7 @@
          </strong>
          <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('social-copy-text')">Copiar</button>
         </div>
-        <textarea id="social-copy-text" class="auth-input" style="height: 110px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+        <textarea id="social-copy-text" class="auth-input" style="height: 110px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly maxlength="2000"></textarea>
        </div>
 
        <!-- Email Subject & Content -->
@@ -887,7 +887,7 @@
          </strong>
          <button class="admin-btn admin-btn-ghost admin-btn-sm" onclick="AdminPanel.copyToClipboard('email-copy-text')">Copiar</button>
         </div>
-        <textarea id="email-copy-text" class="auth-input" style="height: 130px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly></textarea>
+        <textarea id="email-copy-text" class="auth-input" style="height: 130px; font-family: sans-serif; font-size: 0.85rem; padding: 10px; resize: vertical;" readonly maxlength="2000"></textarea>
        </div>
 
       </div>
@@ -1280,7 +1280,7 @@
 
        <div class="auth-form-group" style="margin-bottom:0; grid-column: span 2;">
         <label class="auth-label" for="map-install-notes">Notas de Instalación ( splitter, poste, caja... )</label>
-        <input type="text" id="map-install-notes" class="auth-input" placeholder="Ej. Caja de distribución #3, poste #12, segundo piso..." />
+        <input type="text" id="map-install-notes" class="auth-input" placeholder="Ej. Caja de distribución #3, poste #12, segundo piso..." maxlength="300" />
        </div>
 
        <div style="display:flex; gap:10px; grid-column: span 2; justify-content: flex-end; margin-top:10px;">
@@ -1352,38 +1352,38 @@
        <div class="admin-grid-form-2col">
         <div class="auth-form-group">
          <label class="auth-label" for="config-whatsapp">Número WhatsApp</label>
-         <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" />
+         <input class="auth-input" type="text" id="config-whatsapp" placeholder="18297411041" maxlength="30" />
         </div>
         <div class="auth-form-group">
          <label class="auth-label" for="config-sitename">Nombre del sitio</label>
-         <input class="auth-input" type="text" id="config-sitename" placeholder="Futunet" />
+         <input class="auth-input" type="text" id="config-sitename" placeholder="Futunet" maxlength="100" />
         </div>
        </div>
 
        <div class="admin-grid-form-2col">
         <div class="auth-form-group">
          <label class="auth-label" for="config-advisor">Nombre del Asesor</label>
-         <input class="auth-input" type="text" id="config-advisor" placeholder="Orbis Espinal" />
+         <input class="auth-input" type="text" id="config-advisor" placeholder="Orbis Espinal" maxlength="100" />
         </div>
         <div class="auth-form-group">
          <label class="auth-label" for="config-address">Dirección Física</label>
-         <input class="auth-input" type="text" id="config-address" placeholder="Santiago, República Dominicana" />
+         <input class="auth-input" type="text" id="config-address" placeholder="Santiago, República Dominicana" maxlength="300" />
         </div>
        </div>
 
        <div class="auth-form-group">
         <label class="auth-label" for="config-map-url">URL de Google Maps (Iframe Src)</label>
-        <input class="auth-input" type="text" id="config-map-url" placeholder="https://www.google.com/maps/embed?pb=..." />
+        <input class="auth-input" type="text" id="config-map-url" placeholder="https://www.google.com/maps/embed?pb=..." maxlength="500" />
        </div>
 
        <div class="admin-grid-form-2col">
         <div class="auth-form-group">
          <label class="auth-label" for="config-instagram">Instagram URL</label>
-         <input class="auth-input" type="text" id="config-instagram" placeholder="https://instagram.com/..." />
+         <input class="auth-input" type="text" id="config-instagram" placeholder="https://instagram.com/..." maxlength="200" />
         </div>
         <div class="auth-form-group">
          <label class="auth-label" for="config-facebook">Facebook URL</label>
-         <input class="auth-input" type="text" id="config-facebook" placeholder="https://facebook.com/..." />
+         <input class="auth-input" type="text" id="config-facebook" placeholder="https://facebook.com/..." maxlength="200" />
         </div>
        </div>
 
@@ -1396,7 +1396,7 @@
 
        <div class="auth-form-group">
         <label class="auth-label" for="config-maintenance-msg">Mensaje de Mantenimiento</label>
-        <textarea class="auth-input" id="config-maintenance-msg" rows="3" placeholder="Estamos realizando mejoras en nuestra tienda online. Por favor, vuelve más tarde o contáctanos por WhatsApp."></textarea>
+        <textarea class="auth-input" id="config-maintenance-msg" rows="3" placeholder="Estamos realizando mejoras en nuestra tienda online. Por favor, vuelve más tarde o contáctanos por WhatsApp." maxlength="1000"></textarea>
        </div>
 
        <button type="submit" class="admin-btn admin-btn-primary" style="margin-top:16px;">Guardar configuración</button>
@@ -1590,7 +1590,7 @@
 
         <!-- Input Area -->
         <div class="ai-chat-input-area">
-          <textarea class="ai-chat-textarea" id="ai-chat-input" placeholder="Escribe tu mensaje... (Shift+Enter para nueva línea)" rows="1"></textarea>
+          <textarea class="ai-chat-textarea" id="ai-chat-input" placeholder="Escribe tu mensaje... (Shift+Enter para nueva línea)" rows="1" maxlength="1500"></textarea>
           <button type="button" class="ai-send-btn" id="ai-send-btn" title="Enviar mensaje">
            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -1610,7 +1610,7 @@
          <h3 style="color:#fff; margin-top:0; margin-bottom:16px;">Generador Visual de IA (ComfyUI)</h3>
          <div class="ai-form-group">
           <label class="ai-form-label" for="comfy-prompt-input">Prompt Positivo (Descripción de la Imagen)</label>
-          <textarea class="ai-input" id="comfy-prompt-input" rows="4" placeholder="Ej. A sleek futuristic network router on a glowing blue cybernetic table, highly detailed 8k rendering..." style="resize:vertical;"></textarea>
+          <textarea class="ai-input" id="comfy-prompt-input" rows="4" placeholder="Ej. A sleek futuristic network router on a glowing blue cybernetic table, highly detailed 8k rendering..." maxlength="2000" style="resize:vertical;"></textarea>
          </div>
          <button type="button" class="admin-btn admin-btn-primary" id="comfy-generate-btn" style="background:linear-gradient(135deg, #9d4edd 0%, #7b2cbf 100%); border:none; width:100%; padding:12px; font-weight:700;">
            Generar Imagen con ComfyUI
@@ -1664,15 +1664,15 @@
        <div class="admin-grid-form-3col">
         <div class="ai-form-group">
          <label class="ai-form-label" for="ai-config-remote">Cloudflare Tunnel URL</label>
-         <input class="ai-input" type="text" id="ai-config-remote" placeholder="https://..." />
+         <input class="ai-input" type="text" id="ai-config-remote" placeholder="https://..." maxlength="200" />
         </div>
         <div class="ai-form-group">
          <label class="ai-form-label" for="ai-config-ollama">Ollama Local URL</label>
-         <input class="ai-input" type="text" id="ai-config-ollama" placeholder="http://localhost:11434" />
+         <input class="ai-input" type="text" id="ai-config-ollama" placeholder="http://localhost:11434" maxlength="200" />
         </div>
         <div class="ai-form-group">
          <label class="ai-form-label" for="ai-config-comfy">ComfyUI Local URL</label>
-         <input class="ai-input" type="text" id="ai-config-comfy" placeholder="http://localhost:8188" />
+         <input class="ai-input" type="text" id="ai-config-comfy" placeholder="http://localhost:8188" maxlength="200" />
         </div>
        </div>
        <button type="button" class="admin-btn admin-btn-primary" id="ai-save-config-btn" style="margin-top:8px;">
@@ -1734,13 +1734,13 @@
 
          <div class="ai-form-group" style="margin-bottom:14px;">
           <label class="ai-form-label" for="ai-client-wa-number">WhatsApp de Cierre Comercial y Soporte</label>
-          <input class="ai-input" type="text" id="ai-client-wa-number" value="18297411041" placeholder="Ej: 18297411041" style="width:100%;" />
+          <input class="ai-input" type="text" id="ai-client-wa-number" value="18297411041" placeholder="Ej: 18297411041" maxlength="30" style="width:100%;" />
           <span style="font-size:0.75rem; color:#64748b;">Número directo para el botón de compra o contratación con el que la IA conecta al cliente.</span>
          </div>
 
          <div class="ai-form-group" style="margin-bottom:14px;">
           <label class="ai-form-label" for="ai-client-currency">Moneda de Catálogo</label>
-          <input class="ai-input" type="text" id="ai-client-currency" value="DOP (Pesos Dominicanos RD$)" readonly style="width:100%; opacity:0.8;" />
+          <input class="ai-input" type="text" id="ai-client-currency" value="DOP (Pesos Dominicanos RD$)" readonly maxlength="50" style="width:100%; opacity:0.8;" />
          </div>
 
          <button type="button" class="admin-btn admin-btn-primary" id="ai-client-save-btn" style="width:100%; margin-top:8px;">
@@ -1784,7 +1784,7 @@
         </h4>
         <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:14px;">Prueba en tiempo real cómo responderá el asistente a los clientes sin necesidad de abrir la tienda.</p>
         <div style="display:flex; gap:10px; margin-bottom:14px;">
-         <input class="ai-input" type="text" id="ai-client-test-query" placeholder="Ej: ¿Qué cámara wifi o plan de 100 megas me recomiendas?" style="flex:1;" />
+         <input class="ai-input" type="text" id="ai-client-test-query" placeholder="Ej: ¿Qué cámara wifi o plan de 100 megas me recomiendas?" maxlength="500" style="flex:1;" />
          <button type="button" class="admin-btn admin-btn-primary" id="ai-client-test-send-btn">
           Probar Respuesta
          </button>
@@ -1822,22 +1822,22 @@
 
      <div class="auth-form-group">
       <label class="auth-label" for="banner-title">Título del Banner (HTML permitido)</label>
-      <input class="auth-input" type="text" id="banner-title" placeholder="Ej. Soluciones en <strong>Energía Solar</strong>" required />
+      <input class="auth-input" type="text" id="banner-title" placeholder="Ej. Soluciones en <strong>Energía Solar</strong>" required maxlength="150" />
      </div>
 
      <div class="auth-form-group">
       <label class="auth-label" for="banner-subtitle">Subtítulo o Descripción</label>
-      <input class="auth-input" type="text" id="banner-subtitle" placeholder="Ej. Equipos de alta eficiencia con garantía" />
+      <input class="auth-input" type="text" id="banner-subtitle" placeholder="Ej. Equipos de alta eficiencia con garantía" maxlength="300" />
      </div>
 
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="banner-link">Enlace / Botón URL</label>
-       <input class="auth-input" type="text" id="banner-link" placeholder="Ej. #contacto, catalogo.html?cat=energia" />
+       <input class="auth-input" type="text" id="banner-link" placeholder="Ej. #contacto, catalogo.html?cat=energia" maxlength="200" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="banner-order">Orden de Visualización</label>
-       <input class="auth-input" type="number" id="banner-order" min="1" value="1" required />
+       <input class="auth-input" type="number" id="banner-order" min="1" max="100" value="1" required />
       </div>
      </div>
 
@@ -2127,7 +2127,7 @@
        <label class="auth-label" for="user-email-input" style="margin-bottom:0;">Email</label>
        <button type="button" class="admin-btn admin-btn-ghost admin-btn-sm" id="btn-reset-password" style="font-size:0.72rem; padding:2px 8px; border-radius:6px; color:#2a75d3; border-color:#e5eef8;">Enviar Restablecer Contraseña</button>
       </div>
-      <input class="auth-input" type="email" id="user-email-input" readonly />
+      <input class="auth-input" type="email" id="user-email-input" readonly maxlength="100" />
      </div>
      <div class="auth-form-group">
       <label class="auth-label" for="user-role-select">Rol Principal</label>
@@ -2199,7 +2199,7 @@
      <div class="auth-form-group">
       <label class="auth-label" for="create-user-password">Contraseña</label>
       <div class="auth-password-wrap">
-       <input class="auth-input" type="password" id="create-user-password" placeholder="Mínimo 8 caracteres" required minlength="8" maxlength="128" />
+       <input class="auth-input" type="password" id="create-user-password" placeholder="Mínimo 8 caracteres" required minlength="8" maxlength="128" autocomplete="new-password" spellcheck="false" />
        <button type="button" class="auth-password-toggle" data-toggle-password="create-user-password" aria-label="Mostrar contraseña">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
        </button>
@@ -2305,11 +2305,11 @@
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="discount-min">Compra mínima (RD$)</label>
-       <input class="auth-input" type="number" id="discount-min" min="0" value="0" />
+       <input class="auth-input" type="number" id="discount-min" min="0" max="10000000" value="0" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="discount-max-uses">Usos máximos</label>
-       <input class="auth-input" type="number" id="discount-max-uses" min="0" placeholder="0 = ilimitado" />
+       <input class="auth-input" type="number" id="discount-max-uses" min="0" max="1000000" placeholder="0 = ilimitado" />
       </div>
      </div>
      <div class="auth-form-group">

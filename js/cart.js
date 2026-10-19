@@ -808,15 +808,15 @@
             <div class="checkout-form-grid">
               <div class="checkout-form-group full-width">
                 <label for="chk-name">Nombre de Contacto *</label>
-                <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" maxlength="100" required>
+                <input type="text" id="chk-name" placeholder="Ej. Juan Pérez" maxlength="100" autocomplete="name" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-phone">Teléfono de Contacto *</label>
-                <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" maxlength="30" required>
+                <input type="tel" id="chk-phone" placeholder="Ej. 809-555-5555" maxlength="30" autocomplete="tel" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-email">Correo Electrónico *</label>
-                <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" maxlength="100" required>
+                <input type="email" id="chk-email" placeholder="Ej. juan.perez@correo.com" maxlength="100" autocomplete="email" required>
               </div>
               <div class="checkout-form-group">
                 <label for="chk-document-type">Tipo de Documento *</label>
@@ -827,12 +827,12 @@
               </div>
               <div class="checkout-form-group">
                 <label for="chk-document-number">Número de Cédula o Documento *</label>
-                <input type="text" id="chk-document-number" placeholder="Ej. 001-1234567-8" maxlength="30" required>
+                <input type="text" id="chk-document-number" placeholder="Ej. 001-1234567-8" maxlength="30" autocomplete="off" spellcheck="false" required>
                 <small id="chk-document-hint" style="display: block; margin-top: 4px; font-size: 0.72rem; color: #64748b;">Requerido para facturación legal de tu primera compra</small>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-address">Dirección de Entrega *</label>
-                <textarea id="chk-address" placeholder="Calle, Número, Sector, Ciudad..." rows="2" maxlength="300" required></textarea>
+                <textarea id="chk-address" placeholder="Calle, Número, Sector, Ciudad..." rows="2" maxlength="300" autocomplete="street-address" required></textarea>
               </div>
               <div class="checkout-form-group full-width">
                 <label for="chk-notes">Notas / Referencias (Opcional)</label>
@@ -841,7 +841,7 @@
               <div class="checkout-form-group full-width" style="margin-top: 8px;">
                 <label for="chk-coupon">Código de Descuento (Opcional)</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" maxlength="50" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" maxlength="50" autocomplete="off" spellcheck="false" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
                   <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
                 </div>
                 <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>

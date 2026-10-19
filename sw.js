@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v44';
+const CACHE_NAME = 'futunet-cache-v45';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -85,8 +85,6 @@ const OPTIONAL_ASSETS = [
   './js/support-core.js',
   './js/support-service.js',
   './js/support-ui.js',
-  './js/firebase-config.js',
-  './js/auth.js',
   './img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg',
   './img/gaming/componentes/case-msi-mag-pano-100r.jpg',
   './img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg',

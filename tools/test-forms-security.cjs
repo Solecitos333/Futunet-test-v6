@@ -777,3 +777,142 @@ test('Defensa en Profundidad: límites de longitud (maxlength) en módulos admin
     assertFieldHasMaxLength(erpHtml, c.id, c.max, 'facturacion.html');
   }
 });
+
+test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V5 / Ley 172-13)', () => {
+  // 1. Password fields deben tener spellcheck="false" y autocomplete explícito
+  const adminHtml = readHtml('admin.html');
+  const loginHtml = readHtml('login.html');
+  const factHtml = readHtml('facturacion.html');
+
+  assert.ok(
+    adminHtml.includes('id="create-user-password"') &&
+    adminHtml.includes('autocomplete="new-password"') &&
+    adminHtml.includes('spellcheck="false"'),
+    'admin.html debe tener autocomplete="new-password" y spellcheck="false" en create-user-password'
+  );
+
+  assert.ok(
+    loginHtml.includes('id="login-password"') &&
+    loginHtml.includes('autocomplete="current-password"') &&
+    loginHtml.includes('spellcheck="false"'),
+    'login.html debe tener autocomplete="current-password" y spellcheck="false" en login-password'
+  );
+
+  assert.ok(
+    loginHtml.includes('id="register-password"') &&
+    loginHtml.includes('autocomplete="new-password"') &&
+    loginHtml.includes('spellcheck="false"'),
+    'login.html debe tener autocomplete="new-password" y spellcheck="false" en register-password'
+  );
+
+  assert.ok(
+    factHtml.includes('id="set-rnc-api-key"') &&
+    factHtml.includes('autocomplete="new-password"') &&
+    factHtml.includes('spellcheck="false"'),
+    'facturacion.html debe tener autocomplete="new-password" y spellcheck="false" en set-rnc-api-key'
+  );
+
+  // 2. Identificadores fiscales (RNC / Cédula) con spellcheck="false" y autocomplete="off"
+  const rncChecks = [
+    { html: factHtml, id: 'form-invoice-client-rnc', file: 'facturacion.html' },
+    { html: factHtml, id: 'form-client-rnc', file: 'facturacion.html' },
+    { html: factHtml, id: 'purchase-supplier-rnc', file: 'facturacion.html' },
+    { html: factHtml, id: 'set-company-rnc', file: 'facturacion.html' }
+  ];
+  for (const c of rncChecks) {
+    const tagMatch = c.html.match(new RegExp('<input[^>]*id=["\']' + c.id + '["\'][^>]*>', 'i'));
+    assert.ok(tagMatch, `${c.id} debe existir en ${c.file}`);
+    assert.ok(tagMatch[0].includes('spellcheck="false"'), `${c.id} en ${c.file} debe tener spellcheck="false"`);
+    assert.ok(tagMatch[0].includes('autocomplete="off"'), `${c.id} en ${c.file} debe tener autocomplete="off"`);
+  }
+
+  // 3. Documentos de usuario en mi-cuenta.html
+  const miCuentaHtml = readHtml('mi-cuenta.html');
+  const accountDocChecks = ['profile-document-number', 'fin-document-number'];
+  for (const docId of accountDocChecks) {
+    const tagMatch = miCuentaHtml.match(new RegExp('<input[^>]*id=["\']' + docId + '["\'][^>]*>', 'i'));
+    assert.ok(tagMatch, `${docId} debe existir en mi-cuenta.html`);
+    assert.ok(tagMatch[0].includes('spellcheck="false"'), `${docId} debe tener spellcheck="false"`);
+    assert.ok(tagMatch[0].includes('autocomplete="off"'), `${docId} debe tener autocomplete="off"`);
+  }
+
+  // 4. Modal de Checkout (cart.js)
+  const cartJs = readJs('js/cart.js');
+  assert.ok(
+    cartJs.includes('id="chk-document-number"') &&
+    cartJs.includes('autocomplete="off"') &&
+    cartJs.includes('spellcheck="false"'),
+    'cart.js debe proteger chk-document-number con autocomplete="off" y spellcheck="false"'
+  );
+  assert.ok(
+    cartJs.includes('id="chk-coupon"') &&
+    cartJs.includes('autocomplete="off"') &&
+    cartJs.includes('spellcheck="false"'),
+    'cart.js debe proteger chk-coupon con autocomplete="off" y spellcheck="false"'
+  );
+  assert.ok(
+    cartJs.includes('autocomplete="name"') &&
+    cartJs.includes('autocomplete="tel"') &&
+    cartJs.includes('autocomplete="email"') &&
+    cartJs.includes('autocomplete="street-address"'),
+    'cart.js debe configurar autocompletado estándar seguro para datos de contacto de envío'
+  );
+});
+
+test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
+  const swJs = readJs('sw.js');
+  assert.ok(
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v45';"),
+    'sw.js debe estar en la versión futunet-cache-v45'
+  );
+  // Verificar que firebase-config.js y auth.js NO están presentes en OPTIONAL_ASSETS
+  const optionalAssetsMatch = swJs.match(/const OPTIONAL_ASSETS = \[([\s\S]*?)\];/);
+  assert.ok(optionalAssetsMatch, 'sw.js debe definir OPTIONAL_ASSETS');
+  const optionalAssetsBody = optionalAssetsMatch[1];
+  assert.ok(
+    !optionalAssetsBody.includes('firebase-config.js'),
+    'sw.js NO debe cachear firebase-config.js en OPTIONAL_ASSETS'
+  );
+  assert.ok(
+    !optionalAssetsBody.includes('auth.js'),
+    'sw.js NO debe cachear auth.js en OPTIONAL_ASSETS'
+  );
+});
+
+test('Validación Numérica Defensiva & Cotas Superiores (OWASP ASVS V5 / CWE-20)', () => {
+  const factHtml = readHtml('facturacion.html');
+  const seqChecks = [
+    'set-invoice-seq',
+    'set-quote-seq',
+    'set-proforma-seq',
+    'set-ncf-b01-start',
+    'set-ncf-b01-end',
+    'set-ncf-b02-start',
+    'set-ncf-b02-end',
+    'set-ncf-b03-start',
+    'set-ncf-b03-end',
+    'set-ncf-b04-start',
+    'set-ncf-b04-end',
+    'set-ncf-b12-start',
+    'set-ncf-b12-end',
+    'set-ncf-b14-start',
+    'set-ncf-b14-end',
+    'set-ncf-b15-start',
+    'set-ncf-b15-end'
+  ];
+  for (const seqId of seqChecks) {
+    const match = factHtml.match(new RegExp('<input[^>]*id=["\']' + seqId + '["\'][^>]*>', 'i'));
+    assert.ok(match, `${seqId} debe existir en facturacion.html`);
+    assert.ok(match[0].includes('max="99999999"'), `${seqId} debe tener max="99999999" conforme al estándar DGII`);
+  }
+
+  const adminHtml = readHtml('admin.html');
+  assert.ok(
+    adminHtml.includes('id="discount-min"') && adminHtml.includes('max="10000000"'),
+    'admin.html debe acotar discount-min con max="10000000"'
+  );
+  assert.ok(
+    adminHtml.includes('id="discount-max-uses"') && adminHtml.includes('max="1000000"'),
+    'admin.html debe acotar discount-max-uses con max="1000000"'
+  );
+});
