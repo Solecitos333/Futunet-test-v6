@@ -10,11 +10,11 @@
   var isInitialized = false;
   var unsubscribeChats = null;
 
-  var LIVE_TUNNEL_URL = 'https://continually-dairy-aim-accompanying.trycloudflare.com';
+  var LIVE_TUNNEL_URL = '';
 
   var DEFAULT_CONFIG = {
-    remoteUrl: LIVE_TUNNEL_URL,
-    proxyUrl: LIVE_TUNNEL_URL,
+    remoteUrl: '',
+    proxyUrl: '',
     ollamaUrl: 'http://localhost:11434',
     comfyUrl: 'http://localhost:8188'
   };
@@ -94,8 +94,6 @@
     var candidates = [
       config.remoteUrl,
       config.proxyUrl,
-      LIVE_TUNNEL_URL,
-      'http://10.0.0.117:3000',
       'http://localhost:3000'
     ].filter(Boolean);
 
@@ -103,6 +101,10 @@
 
     for (var i = 0; i < unique.length; i++) {
       var ep = unique[i];
+      // Defensive: only allow https or localhost to prevent private network IP probe / MITM
+      if (!ep.startsWith('http://localhost') && !ep.startsWith('http://127.0.0.1') && !ep.startsWith('https://')) {
+        continue;
+      }
       try {
         var ctrl = new AbortController();
         var tid = setTimeout(function() { ctrl.abort(); }, 4000);
@@ -134,6 +136,11 @@
     if (inputRemote) inputRemote.value = config.remoteUrl || config.proxyUrl || '';
     if (inputOllama) inputOllama.value = config.ollamaUrl || '';
     if (inputComfy)  inputComfy.value  = config.comfyUrl  || '';
+
+    var displayEl = document.getElementById('ai-display-remote-url');
+    if (displayEl) {
+      displayEl.textContent = config.remoteUrl || config.proxyUrl || 'https://ai.futunet.com.do (o túnel propio)';
+    }
   }
 
   function saveConfig() {
@@ -150,6 +157,10 @@
 
     try {
       localStorage.setItem('futunet_ai_server_config', JSON.stringify(config));
+      var displayEl = document.getElementById('ai-display-remote-url');
+      if (displayEl) {
+        displayEl.textContent = config.remoteUrl || config.proxyUrl || 'https://ai.futunet.com.do (o túnel propio)';
+      }
       showAdminToast('Configuración guardada', 'success');
       discoverProxy().then(function(url) {
         activeProxyUrl = url;

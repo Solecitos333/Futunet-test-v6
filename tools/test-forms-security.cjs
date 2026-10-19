@@ -916,3 +916,31 @@ test('Validación Numérica Defensiva & Cotas Superiores (OWASP ASVS V5 / CWE-20
     'admin.html debe acotar discount-max-uses con max="1000000"'
   );
 });
+
+test('Mitigación de Subdominio Efímero & Fuga de Red Privada (CWE-494 / CWE-1188)', () => {
+  const adminHtml = readHtml('admin.html');
+  const aiServerJs = readJs('js/ai-server.js');
+
+  // 1. Cero presencia de subdominios efímeros de Cloudflare o túneles públicos no controlados
+  assert.ok(
+    !adminHtml.includes('trycloudflare.com'),
+    'admin.html no debe contener subdominios efímeros trycloudflare.com'
+  );
+  assert.ok(
+    !aiServerJs.includes('trycloudflare.com'),
+    'js/ai-server.js no debe contener subdominios efímeros trycloudflare.com'
+  );
+
+  // 2. Cero presencia de IPs privadas RFC 1918 cableadas en código cliente
+  assert.ok(
+    !aiServerJs.includes('10.0.0.117'),
+    'js/ai-server.js no debe contener IPs privadas locales cableadas (10.0.0.117)'
+  );
+
+  // 3. Validación de candidatos en discoverProxy
+  assert.ok(
+    aiServerJs.includes("ep.startsWith('https://')") && aiServerJs.includes("ep.startsWith('http://localhost')"),
+    'js/ai-server.js discoverProxy debe validar esquemas seguros (https o localhost) antes de emitir sondeos'
+  );
+});
+
