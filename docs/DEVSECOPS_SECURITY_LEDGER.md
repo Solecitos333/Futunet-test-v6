@@ -1270,3 +1270,26 @@ python -m unittest test_main.py test_chatbot_api.py
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 705 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 
+
+
+- **Auditoría & Mantenimiento Preventivo Diario (2026-10-19 Ciclo 3: Restauración de Iconografía FontAwesome, Bounding Completo de Entradas Numéricas Fiscales ASVS V5, Eliminación de Deprecaciones PDF Backend y Resiliencia en Autenticación Magic Link)**:
+  - **Restauración de Iconografía y Consistencia Visual (UI / UX)**:
+    - Incorporación de la hoja de estilos de FontAwesome (`cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css`) en `admin.html`, `catalogo.html`, `mi-cuenta.html` y `producto.html`, corrigiendo glifos vacíos y cuadrantes invisibles en navegación de servicios, selector de sucursales Santiago y badges de soporte.
+  - **Cierre Integral de Cotas Numéricas y Protección de Desbordamiento (OWASP ASVS V5 / CWE-20)**:
+    - Bounding numérico exhaustivo en el 100% de entradas cuantitativas pendientes:
+      - `set-ncf-b01-seq`, `set-ncf-b02-seq`, `set-ncf-b14-seq`, `set-ncf-b15-seq`, `set-ncf-b12-seq`, `set-ncf-b03-seq` y `set-ncf-b04-seq` delimitados con `max="99999999"` conforme a la norma fiscal DGII de 8 dígitos de secuencia.
+      - Límites financieros defensivos (`max="100000000"` / `max="1000000000"`) en `product-price`, `product-stock`, `fin-admin-total`, `fin-admin-down`, `fin-payment-amount`, `discount-value`, `purchase-goods-amount`, `purchase-services-amount`, `purchase-itbis`, `bank-amount`, `form-payment-amount`, `fiscal-adjustment-amount`, `form-cash-open-amount`, `form-cash-close-real`, `pos-cash-amount-received`, `form-abono-amount`.
+      - Validación de períodos en `fiscal-report-period` y `purchase-fiscal-period` (`min="2020-01"` y `max="2099-12"`).
+      - Reducción a 0 de campos numéricos sin cotas en toda la plataforma (`Number inputs without max bound: 0`).
+  - **Resiliencia en Autenticación & Prevención de Estado Bloqueado en Cliente**:
+    - Asignación obligatoria de `signInLink = window.location.href` en `login.html` antes de despachar `signInWithEmailLink`, resolviendo el inicio de sesión sin contraseña cuando el usuario abre el enlace de verificación en el mismo dispositivo.
+    - Corrección de espaciado en casilla legal de registro (`terminos.html` y `privacidad.html`).
+    - Desbloqueo garantizado de botones (`setLoading(..., false)`) ante activación de honeypots en formularios de restablecimiento y enlaces mágicos.
+  - **Modernización y Supresión de Deprecaciones FPDF en Backend (`futunet-backend/main.py`)**:
+    - Reemplazo de los parámetros obsoletos `ln=False` y `ln=True` por `new_x="RIGHT", new_y="TOP"` y `new_x="LMARGIN", new_y="NEXT"` conforme a la especificación de `fpdf2` v2.5.2+.
+    - 0 warnings de deprecación al compilar y generar cotizaciones en PDF (`Ran 50 tests in 0.253s, OK`).
+  - **Métricas y Regresión Cero**:
+    - 212 tests de frontend pasando al 100% (`npm test`).
+    - 50 tests unitarios en backend pasando al 100% (`python -m unittest discover`).
+    - Hosting validado en `dist/` con 705 recursos públicos (`npm run validate`).
+    - 0 errores sintácticos, 0 IDs duplicados, 0 fugas DOM, 0 llamadas inseguras a `window.open`.
