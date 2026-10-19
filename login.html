@@ -129,7 +129,7 @@
 
      <label style="display:flex;align-items:flex-start;gap:10px;margin:4px 0 16px;color:#52616d;font-size:.82rem;line-height:1.45;">
       <input type="checkbox" id="register-terms" required style="width:18px;height:18px;margin-top:1px;flex:0 0 auto;" />
-      <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">términos de uso</a>y confirmo que leí la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</span>
+      <span>Acepto los <a href="terminos.html" target="_blank" rel="noopener noreferrer">términos de uso</a> y confirmo que leí la <a href="privacidad.html" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</span>
      </label>
 
      <!-- Honeypot de seguridad -->
@@ -375,6 +375,7 @@
     }
     if (FutunetAuth.isSignInWithEmailLink(window.location.href)) {
      isCompletingSignInLink = true;
+     signInLink = window.location.href;
      var email = '';
      try {
        email = window.localStorage.getItem('emailForSignIn') || '';
@@ -633,6 +634,7 @@
     if (hpReset && hpReset.value.trim() !== '') {
      console.warn('Bot password reset blocked via honeypot.');
      showMessage('reset-message', 'Enlace enviado. Revisa tu bandeja de entrada.', 'success');
+     setLoading('reset-btn', false);
      document.getElementById('reset-form')?.reset();
      return;
     }
@@ -684,6 +686,7 @@
     if (hpMagic && hpMagic.value.trim() !== '') {
      console.warn('Bot magic link blocked via honeypot.');
      showMessage('magic-message', 'Enlace de acceso enviado. Revisa tu bandeja de entrada.', 'success');
+     setLoading('magic-btn', false);
      document.getElementById('magic-form')?.reset();
      return;
     }

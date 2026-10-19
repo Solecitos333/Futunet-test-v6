@@ -244,6 +244,10 @@ function getStemVariants(word) {
   if (word === 'precision' || word === '3660') variants.push('dell', 'workstation', 'estacion', 'rtx', 'cad');
   if (word === 'pdu' || word === 'ap7900' || word === 'metered') variants.push('apc', 'schneider', 'rack', 'regleta', 'amperios');
   if (word === 'facial' || word === 'asi3213g') variants.push('dahua', 'rostro', 'biometrico', 'acceso', 'asistencia', 'camara');
+  if (word === 'ultrawide' || word === '34wp500' || word === '34wp500b') variants.push('lg', 'monitor', 'panoramica', 'ips', 'wfhd', '2560x1080', 'splitscreen');
+  if (word === 'ax3' || word === 'hap' || word === 'c53uig') variants.push('mikrotik', 'router', 'wifi6', 'ax1800', 'qualcomm', 'inalambrico');
+  if (word === 'cbs3508p' || word === 'cbs3508pe2g') variants.push('cisco', 'switch', 'poe', 'gigabit', 'sfp', 'cbs350');
+  if (word === 'smt1500c' || word === 'smt1500' || word === 'smartconnect') variants.push('apc', 'schneider', 'ups', 'senoidal', '1500va', 'smartups');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -931,6 +935,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(asi3213g|dahua\s*facial)\b/i.test(normalizedQuery) || (/\b(facial|rostro)\b/i.test(normalizedQuery) && /\b(dahua|acceso|asistencia|terminal)\b/i.test(normalizedQuery)) || (/\b(dahua)\b/i.test(normalizedQuery) && /\b(facial|reconocimiento\s*facial)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'dahua') {
       if (/facial|reconocimiento\s*facial/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Monitor UltraWide LG 34" al buscar ultrawide, monitor ultrawide, lg 34, 34wp500 (SUG-L3400)
+  if (/\b(ultrawide|34wp500|34wp500-b)\b/i.test(normalizedQuery) || (/\b(ultrawide|panoramica)\b/i.test(normalizedQuery) && /\b(lg|monitor|pantalla)\b/i.test(normalizedQuery)) || (/\b(lg)\b/i.test(normalizedQuery) && /\b(34|ultrawide)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lg') {
+      if (/ultrawide|34wp500/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Router MikroTik hAP ax³ Wi-Fi 6 al buscar hap ax3, ax3, mikrotik wifi 6, c53uig (SUG-M5300)
+  if (/\b(hap\s*ax3|hap\s*ax³|ax3|ax³|c53uig)\b/i.test(normalizedQuery) || (/\b(wifi\s*6|ax1800)\b/i.test(normalizedQuery) && /\b(mikrotik|hap)\b/i.test(normalizedQuery)) || (/\b(mikrotik)\b/i.test(normalizedQuery) && /\b(ax3|wifi\s*6|inalambrico)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mikrotik') {
+      if (/hap\s*ax|ax1800/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Cisco Business CBS350-8P al buscar cbs350 8p, cbs350-8p, switch cisco poe 8 puertos (SUG-C3508)
+  if (/\b(cbs350-8p|cbs350\s*8p|cbs350-8p-e-2g)\b/i.test(normalizedQuery) || (/\b(cbs350)\b/i.test(normalizedQuery) && /\b(8p|poe|67w)\b/i.test(normalizedQuery)) || (/\b(cisco)\b/i.test(normalizedQuery) && /\b(8p|8\s*puertos)\b/i.test(normalizedQuery) && /\b(poe|cbs350)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'cisco') {
+      if (/cbs350-8p|8\s*puertos\s*gigabit\s*poe/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Sistema UPS APC Smart-UPS SMT1500C al buscar smt1500c, smart-ups 1500, apc 1500, ups senoidal puro (SUG-A1500)
+  if (/\b(smt1500c|smt1500|smart-ups\s*1500|smart\s*ups\s*1500|apc\s*1500)\b/i.test(normalizedQuery) || (/\b(senoidal|pfc)\b/i.test(normalizedQuery) && /\b(apc|ups|smart-ups)\b/i.test(normalizedQuery)) || (/\b(smartconnect)\b/i.test(normalizedQuery) && /\b(apc|ups|schneider)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('schneider') || product.brand.toLowerCase().includes('apc'))) {
+      if (/smart-ups|smt1500/i.test(title)) {
         score += 240;
       } else {
         score += 170;

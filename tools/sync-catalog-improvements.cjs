@@ -1910,6 +1910,114 @@ const dahuaFacialItems = [
   }
 ];
 
+const lgUltrawideItems = [
+  {
+    id: 'oficina_lg_34wp500_ultrawide_34_ips',
+    department: 'equipos',
+    category: 'Monitores',
+    brand: 'LG',
+    title: 'Monitor UltraWide LG 34WP500-B 34 Pulgadas IPS WFHD (2560x1080) 75Hz HDR10 con Doble HDMI y Control en Pantalla',
+    desc: 'Monitor profesional panorámico UltraWide de 34 pulgadas LG (modelo 34WP500-B) con relación de aspecto 21:9 para estaciones de trabajo corporativas, firmas de contabilidad, programación y edición audiovisual en Santiago. Su panel IPS de resolución WFHD (2560 x 1080) ofrece ángulos de visión de 178 grados y una fidelidad de color excepcional con cobertura del 95% del espectro sRGB y soporte HDR10. La amplitud panorámica permite reemplazar configuraciones de doble pantalla sin marcos divisorios molestos, optimizando la multitarea mediante el software LG OnScreen Control con división de pantalla personalizable en hasta 4 cuadrantes. Incorpora frecuencia de actualización de 75 Hz con AMD FreeSync, modo Dynamic Action Sync para respuesta inmediata, estabilizador de negros y tecnologías Flicker Safe y Modo Lectura que reducen el cansancio ocular en jornadas laborales prolongadas.',
+    price: 'RD$ 22,500.00',
+    img: 'img/productos/catalogo/lg-34wp500-monitor-ultrawide-34.webp',
+    gallery: [
+      'img/productos/catalogo/lg-34wp500-monitor-ultrawide-34.webp'
+    ],
+    specs: [
+      'Pantalla UltraWide de 34 pulgadas en formato 21:9 con panel IPS antirreflejo y ángulos de visión de 178°/178°',
+      'Resolución WFHD de 2560 x 1080 píxeles con un 33% más de espacio de visualización que un monitor Full HD estándar',
+      'Compatibilidad con HDR10 (High Dynamic Range) y gama cromática 95% sRGB con calibración de color de fábrica',
+      'Frecuencia de refresco fluida de 75 Hz con soporte de sincronización adaptativa AMD FreeSync para eliminar el desgarro de imagen',
+      'Conectividad con doble puerto HDMI 2.0 y salida para auriculares estéreo de 3.5 mm',
+      'Software LG OnScreen Control con función Screen Split para segmentación eficiente de ventanas de trabajo',
+      'Protección ocular con tecnologías Flicker Safe y Reader Mode para lectura confortable de documentos',
+      'Soporte de inclinación ergonómico y compatibilidad total con montaje en brazo o pared VESA (100 x 100 mm)',
+      'Garantía oficial LG de 3 años con comprobante fiscal formal NCF y entrega garantizada en Santiago'
+    ]
+  }
+];
+
+const mikrotikAx3Items = [
+  {
+    id: 'redes_mikrotik_hap_ax3_wifi6_router',
+    department: 'redes',
+    category: 'Routers y Redes',
+    brand: 'MikroTik',
+    title: 'Router Inalámbrico Wi-Fi 6 MikroTik hAP ax³ (C53UiG+5HPaxD2HPaxD) AX1800 Dual-Band Gigabit con 1x 2.5 GbE y RouterOS v7',
+    desc: 'Router inalámbrico corporativo de alta gama MikroTik hAP ax³ (código C53UiG+5HPaxD2HPaxD) equipado con el estándar Wi-Fi 6 (802.11ax) y radio de alta potencia para oficinas exigentes, residencias premium y proveedores de servicios de internet en Santiago. Impulsado por un procesador Quad-Core Qualcomm IPQ-6010 a 1.8 GHz de arquitectura ARM de 64 bits con 1 GB de memoria RAM DDR3L y 128 MB de almacenamiento NAND, diseñado para manejar balanceo de carga Multi-WAN masivo, túneles VPN WireGuard e IPsec a velocidad de enlace, cortafuegos con inspección profunda de paquetes y contenedores Docker integrados. Cuenta con 4 puertos Gigabit Ethernet 10/100/1000, 1 puerto 2.5 Gigabit Ethernet (2.5G) para troncales de fibra de alta velocidad, 1 puerto USB 3.0 tipo A para almacenamiento o módem LTE, y antenas omnidireccionales externas de alta ganancia (hasta 5.5 dBi) para cobertura óptima en 2.4 GHz y 5 GHz.',
+    price: 'RD$ 9,850.00',
+    img: 'img/productos/catalogo/mikrotik-hap-ax3-wifi6-router.webp',
+    gallery: [
+      'img/productos/catalogo/mikrotik-hap-ax3-wifi6-router.webp'
+    ],
+    specs: [
+      'Procesador Quad-Core ARM de 64 bits IPQ-6010 a 1.8 GHz con aceleración de cifrado por hardware',
+      'Memoria de trabajo de 1 GB RAM DDR3L y 128 MB de almacenamiento flash NAND para RouterOS v7 nivel 6',
+      'Wi-Fi 6 de doble banda concurrente: hasta 1201 Mbps en 5 GHz (802.11ax) y hasta 574 Mbps en 2.4 GHz (802.11ax)',
+      'Antenas omnidireccionales desmontables externas con ganancia de hasta 5.5 dBi y tecnología MU-MIMO 2x2',
+      '1 Puerto 2.5 Gigabit Ethernet (100M/1G/2.5G) compatible con enlaces WAN de ultra alta velocidad',
+      '4 Puertos Gigabit Ethernet RJ-45 independientes (10/100/1000 Mbps) para conectividad LAN y switches',
+      'Soporte de PoE-in pasivo (puerto 1) y PoE-out pasivo (puerto 5) para energizar otros equipos de red',
+      'Puerto USB 3.0 tipo A multifunción para almacenamiento en red, servidores SMB o módems 4G/5G de contingencia',
+      'Garantía oficial MikroTik de 1 año con soporte de configuración RouterOS y factura formal NCF en Santiago'
+    ]
+  }
+];
+
+const ciscoCbs350Items = [
+  {
+    id: 'redes_cisco_business_cbs350_8p_poe_switch',
+    department: 'redes',
+    category: 'Switches',
+    brand: 'Cisco',
+    title: 'Switch Administrable Cisco Business CBS350-8P-E-2G de 8 Puertos Gigabit PoE+ (Presupuesto 67W) con 2 Puertos Combo SFP Capa 3',
+    desc: 'Switch administrable empresarial compacto de Capa 3 Cisco Business 350 Series (modelo CBS350-8P-E-2G) diseñado para sucursales corporativas, clínicas, salas de servidores y centros de monitoreo en Santiago. Ofrece 8 puertos Gigabit Ethernet 10/100/1000 con soporte Power over Ethernet Plus (PoE+ 802.3at/af) que entregan hasta 30 Watts por puerto con un presupuesto total de alimentación de 67W para energizar teléfonos IP ejecutivos, cámaras de seguridad de alta resolución y puntos de acceso Wi-Fi 6. Incluye 2 puertos de enlace ascendente combinados Gigabit RJ-45 / ranuras SFP para enlaces de fibra óptica de larga distancia. Proporciona enrutamiento estático IPv4/IPv6 de Capa 3, listas de control de acceso (ACL), inspección ARP dinámica, protección de puertos 802.1X, calidad de servicio avanzada (QoS) y administración centralizada mediante interfaz web en español o Cisco Business Dashboard.',
+    price: 'RD$ 19,500.00',
+    img: 'img/productos/catalogo/cisco-business-cbs350-8p-poe-switch.webp',
+    gallery: [
+      'img/productos/catalogo/cisco-business-cbs350-8p-poe-switch.webp'
+    ],
+    specs: [
+      '8 Puertos Gigabit Ethernet 10/100/1000 Mbps con soporte completo PoE+ IEEE 802.3at/af con presupuesto total de 67W',
+      '2 Puertos uplink combo de cobre Gigabit RJ-45 o fibra óptica SFP para interconexión troncal de red',
+      'Capacidad de conmutación de 20 Gbps con una tasa de reenvío de 14.88 millones de paquetes por segundo (Mpps)',
+      'Capacidades de enrutamiento estático de Capa 3 para segmentación de tráfico eficiente entre VLANs sin saturar el router de borde',
+      'Seguridad perimetral integrada: seguridad de primer salto IPv6, inspección dinámica ARP, DHCP Snooping y 802.1X',
+      'Calidad de servicio avanzada (QoS) con colas de prioridad estricta para tráfico de voz sobre IP (VoIP) y video en tiempo real',
+      'Diseño de chasis metálico compacto sin ventilador (fanless) para operación 100% silenciosa en escritorios o racks',
+      'Gestión simplificada a través de panel Web intuitivo con asistente en español, soporte SNMP v1/v2c/v3 y CLI',
+      'Garantía oficial limitada de por vida de Cisco con soporte técnico empresarial y facturación formal con NCF en Santiago'
+    ]
+  }
+];
+
+const apcSmartUpsItems = [
+  {
+    id: 'energia_apc_smart_ups_smt1500c_1500va',
+    department: 'energia',
+    category: 'Protección Eléctrica',
+    brand: 'Schneider Electric',
+    title: 'Sistema UPS Interactivo APC Smart-UPS SMT1500C 1440VA / 1000W Onda Senoidal Pura con Pantalla LCD y Monitoreo Cloud SmartConnect',
+    desc: 'Sistema de alimentación ininterrumpida (UPS) de línea interactiva de grado corporativo APC Smart-UPS SMT1500C fabricado por Schneider Electric para servidores de virtualización, almacenamiento NAS empresarial, conmutadores troncales y equipos médicos sensibles en Santiago. Entrega una capacidad de 1440VA / 1000 Watts con salida de onda senoidal pura sin distorsión armónica, garantizando compatibilidad total con fuentes de poder modernas de corrección de factor de potencia activo (PFC). Incorpora pantalla LCD alfanumérica interactiva frontal con navegación intuitiva para consultar voltaje de entrada/salida, porcentaje de carga, autonomía estimada y estado de baterías. Destaca por su conectividad en la nube APC SmartConnect mediante puerto Ethernet dedicado que proporciona monitoreo remoto seguro y notificaciones automáticas proactivas de mantenimiento. Cuenta con 8 tomas NEMA 5-15R con grupos de tomas conmutables independientes, regulación automática de voltaje AVR y ranura SmartSlot para tarjetas de gestión SNMP opcionales.',
+    price: 'RD$ 38,900.00',
+    img: 'img/productos/catalogo/apc-smart-ups-smt1500c-senoidal-puro.webp',
+    gallery: [
+      'img/productos/catalogo/apc-smart-ups-smt1500c-senoidal-puro.webp'
+    ],
+    specs: [
+      'Capacidad de potencia de 1440VA / 1000 Watts en topología de línea interactiva con salida de onda senoidal pura',
+      '8 Tomas de corriente protegidas NEMA 5-15R divididas en grupos conmutados para reinicio remoto selectivo de cargas',
+      'Regulación Automática de Voltaje (AVR) Boost & Trim que estabiliza caídas de tensión (hasta 82V) y sobrevoltajes (hasta 144V) sin consumir batería',
+      'Pantalla LCD gráfica frontal con teclas de menú y luces LED de estado para supervisión inmediata de energía y fallas',
+      'Función APC SmartConnect con puerto Ethernet integrado para monitoreo remoto automatizado en la nube sin costo adicional',
+      'Gestión de batería inteligente (Battery Management) con compensación de temperatura que prolonga la vida útil de los acumuladores',
+      'Puertos de comunicación serial DB-9 y USB compatibles con el software de apagado seguro desatendido PowerChute Business Edition',
+      'Ranura SmartSlot para instalación de tarjetas accesorias de administración de red (AP9630/AP9640/AP9641)',
+      'Garantía oficial de 3 años para el equipo y 2 años para la batería con comprobante fiscal formal NCF en Santiago'
+    ]
+  }
+];
+
 const sillasItems = [
   {
     id: 'mob_silla_ergonomica_ejecutiva',
@@ -2402,7 +2510,11 @@ async function updateBackupData() {
     ...samsungFlipProItems,
     ...dellPrecisionItems,
     ...apcPduItems,
-    ...dahuaFacialItems
+    ...dahuaFacialItems,
+    ...lgUltrawideItems,
+    ...mikrotikAx3Items,
+    ...ciscoCbs350Items,
+    ...apcSmartUpsItems
   ];
 
   itemsToSync.forEach(item => {
@@ -2485,7 +2597,11 @@ async function updateFirestore() {
     ...samsungFlipProItems,
     ...dellPrecisionItems,
     ...apcPduItems,
-    ...dahuaFacialItems
+    ...dahuaFacialItems,
+    ...lgUltrawideItems,
+    ...mikrotikAx3Items,
+    ...ciscoCbs350Items,
+    ...apcSmartUpsItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

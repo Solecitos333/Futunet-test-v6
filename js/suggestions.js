@@ -1351,6 +1351,38 @@
       status: 'implemented',
       description: 'En torres empresariales, almacenes de zonas francas, condominios residenciales y clínicas en Santiago requerimos terminales biométricas autónomas de control de acceso y control de tiempo Dahua Technology con reconocimiento facial asistido por IA mediante doble cámara de 2 MP con luz estelar e infrarroja (anti-suplantación por fotos o videos), pantalla táctil a color de 4.3 pulgadas, capacidad para 1,500 rostros y 3,000 tarjetas IC/Mifare, verificación ultra rápida (< 0.2s), conexión Ethernet TCP/IP, puerto Wi-Fi y salida de relé para control de electroimán y cerradura de puerta.',
       officialResponse: '¡Hola Ing. Ramón Emilio! Nos alegra informarte que tu propuesta ha sido implementada exitosamente. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-dahua.html la Terminal Biométrica de Control de Acceso Facial Dahua con Inteligencia Artificial (doble cámara 2MP con sensor WDR y luz visible, pantalla táctil LCD de 4.3", reconocimiento en < 0.2s anti-suplantación, 1,500 rostros, lector de tarjetas IC Mifare, Wi-Fi, Ethernet y software de gestión SmartPSS / DSS) con 1 año de garantía oficial Dahua y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-L3400',
+      title: 'Disponibilidad de Monitores UltraWide LG 34WP500-B de 34 Pulgadas IPS WFHD (2560x1080) con Doble HDMI y Split Screen para Productividad y Finanzas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En firmas de contabilidad, despachos de consultoría financiera, estudios de diseño gráfico y estaciones de desarrollo de software en Santiago requerimos monitores panorámicos UltraWide LG 34WP500-B de 34 pulgadas con relación 21:9 y panel IPS WFHD (2560 x 1080) con calibración de color sRGB 95% y HDR10. En nuestros escritorios las configuraciones de doble monitor tradicional generan divisiones molestas con marcos en el centro y ocupan dos enchufes y doble cableado. Con el monitor UltraWide de 34" y el software LG OnScreen Control podemos dividir la pantalla limpiamente en hasta 4 cuadrantes para comparar simultáneamente estados financieros, planos, bases de datos o código fuente.',
+      officialResponse: '¡Hola Lic. Kelvin! Nos complace comunicarte que tu propuesta ha sido implementada con total éxito. Ya incorporamos al catálogo corporativo de Equipos de Oficina y a la página oficial marca-lg.html el Monitor UltraWide LG 34WP500-B de 34 Pulgadas IPS WFHD (resolución 2560 x 1080 en formato panorámico 21:9, cobertura sRGB 95%, HDR10, frecuencia de 75 Hz con AMD FreeSync, doble entrada HDMI 2.0 y soporte de división de pantalla LG OnScreen Control) con 3 años de garantía oficial LG y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-M5300',
+      title: 'Disponibilidad de Routers Inalámbricos Wi-Fi 6 MikroTik hAP ax³ Gigabit con Puerto 2.5G y CPU Quad-Core para Oficinas y Proveedores de Internet',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En empresas de telecomunicaciones, proveedores locales de internet (WISP), despachos profesionales y condominios en Santiago requerimos routers inalámbricos Wi-Fi 6 de alta potencia MikroTik hAP ax³ (código C53UiG+5HPaxD2HPaxD) equipados con procesador Quad-Core a 1.8 GHz, 1 GB de RAM, radio Wi-Fi 6 de doble banda AX1800 de alto rendimiento con antenas externas desmontables, 4 puertos Gigabit Ethernet y un puerto 2.5 Gigabit Ethernet para troncales de fibra óptica o enlaces de alta velocidad.',
+      officialResponse: '¡Saludos cordiales Ing. Nelson! Tu solicitud ha sido atendida e implementada de inmediato. Hemos agregado al catálogo de Redes de Datos y a la página oficial marca-mikrotik.html el Router Inalámbrico Wi-Fi 6 MikroTik hAP ax³ AX1800 (CPU Quad-Core 1.8 GHz, 1 GB RAM, Wi-Fi 6 de doble banda con antenas externas de alta ganancia, 1 puerto 2.5 GbE, 4 puertos Gigabit LAN, PoE y sistema RouterOS v7 nivel 6 con soporte de contenedores y WireGuard) con 1 año de garantía oficial y respaldo de soporte técnico en Santiago.'
+    },
+    {
+      refCode: 'SUG-C3508',
+      title: 'Disponibilidad de Switches Administrables Cisco Business CBS350-8P-E-2G de 8 Puertos Gigabit PoE+ con Enlaces Combo SFP para Sucursales',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En sucursales bancarias, clínicas médicas, recepciones corporativas y salas de servidores de pequeñas y medianas empresas en Santiago requerimos switches administrables de Capa 3 compactos y silenciosos Cisco Business CBS350-8P-E-2G de 8 puertos Gigabit Ethernet con soporte PoE+ (802.3at con presupuesto de 67W) para alimentar puntos de acceso, teléfonos IP y cámaras sin ruido de ventilador, más 2 puertos combo Gigabit RJ-45 / SFP para enlaces ascendentes de fibra óptica troncal.',
+      officialResponse: '¡Hola Ing. Héctor! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya incorporamos al catálogo corporativo de Redes de Datos y a la página oficial marca-cisco.html el Switch Administrable Cisco Business CBS350-8P-E-2G (8 puertos Gigabit PoE+ 802.3at hasta 67W, 2 puertos combo GbE/SFP de fibra óptica, enrutamiento de Capa 3, QoS avanzado, chasis metálico fanless 100% silencioso y panel web en español) con garantía oficial limitada de por vida Cisco y comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-A1500',
+      title: 'Disponibilidad de Sistemas UPS Interactivos APC Smart-UPS SMT1500C 1440VA / 1000W Onda Senoidal Pura con LCD y Monitoreo Cloud SmartConnect',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En servidores corporativos de virtualización, cabinas de almacenamiento NAS (Synology/QNAP), conmutadores centrales y conmutadores telefónicos IP en Santiago requerimos sistemas de respaldo ininterrumpido de energía de onda senoidal pura como el APC Smart-UPS SMT1500C de 1440VA / 1000W fabricado por Schneider Electric con pantalla LCD digital frontal, 8 tomas NEMA 5-15R con grupos conmutados, regulación AVR de amplio rango y puerto de monitoreo en la nube APC SmartConnect.',
+      officialResponse: '¡Saludos cordiales Ing. Joelvis! Tu propuesta ha sido acogida e implementada de inmediato. Ya incorporamos al catálogo de Energía & Climatización y a la página oficial marca-schneiderelectric.html el Sistema UPS Interactivo APC Smart-UPS SMT1500C 1440VA / 1000W (onda senoidal pura con certificación para servidores PFC activo, 8 tomas NEMA 5-15R con grupos conmutados, regulación de voltaje AVR Boost & Trim, pantalla LCD interactiva de navegación, puerto Ethernet SmartConnect de monitoreo en la nube y ranura SmartSlot) con 3 años de garantía oficial y entrega directa en Santiago.'
     }
   ];
 

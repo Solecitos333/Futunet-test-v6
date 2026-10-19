@@ -284,7 +284,7 @@
      <div class="admin-topbar-actions" style="display:flex; gap:8px;">
       <label for="fiscal-report-period" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-muted);">
        Período
-       <input type="month" id="fiscal-report-period" class="form-input" style="width:145px;height:38px;" />
+       <input type="month" id="fiscal-report-period" class="form-input" min="2020-01" max="2099-12" style="width:145px;height:38px;" />
       </label>
       <button class="admin-btn admin-btn-secondary" data-erp-click="ERPBilling.exportInvoicesToCSV()" style="border-radius: 10px; display:inline-flex; align-items:center; gap:8px;" title="Exportar Historial a CSV">
        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -1374,7 +1374,7 @@
      <div><h1>Compras y Cuentas por Pagar</h1><p>Registra gastos, controla vencimientos y genera el reporte 606.</p></div>
      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
       <label for="purchase-fiscal-period" style="font-size:0.8rem;color:var(--text-muted);">Período</label>
-      <input type="month" class="form-input" id="purchase-fiscal-period" style="width:145px;" />
+      <input type="month" class="form-input" id="purchase-fiscal-period" min="2020-01" max="2099-12" style="width:145px;" />
       <button class="admin-btn admin-btn-secondary" type="button" data-erp-click="ERPExtensions.export606()"><i data-lucide="download"></i>Exportar 606</button>
      </div>
     </div>
@@ -1390,9 +1390,9 @@
         <div class="form-group"><label for="purchase-date">Fecha compra *</label><input type="date" class="form-input" id="purchase-date" required /></div>
         <div class="form-group"><label for="purchase-due-date">Vencimiento *</label><input type="date" class="form-input" id="purchase-due-date" required /></div>
         <div class="form-group"><label for="purchase-expense-type">Tipo de bienes/servicios 606</label><select class="form-input" id="purchase-expense-type"><option value="09">09 · Costo de venta</option><option value="01">01 · Gastos de personal</option><option value="02">02 · Trabajos, suministros y servicios</option><option value="03">03 · Arrendamientos</option><option value="04">04 · Activos fijos</option><option value="05">05 · Gastos de representación</option><option value="06">06 · Otras deducciones admitidas</option><option value="07">07 · Gastos financieros</option><option value="08">08 · Gastos extraordinarios</option><option value="10">10 · Adquisiciones de activos</option><option value="11">11 · Gastos de seguros</option></select></div>
-        <div class="form-group"><label for="purchase-goods-amount">Monto en bienes</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-goods-amount" value="0" /></div>
-        <div class="form-group"><label for="purchase-services-amount">Monto en servicios</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-services-amount" value="0" /></div>
-        <div class="form-group"><label for="purchase-itbis">ITBIS facturado</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis" value="0" /></div>
+        <div class="form-group"><label for="purchase-goods-amount">Monto en bienes</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-goods-amount" value="0" /></div>
+        <div class="form-group"><label for="purchase-services-amount">Monto en servicios</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-services-amount" value="0" /></div>
+        <div class="form-group"><label for="purchase-itbis">ITBIS facturado</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis" value="0" /></div>
         <div class="form-group"><label for="purchase-payment-method">Forma de pago</label><select class="form-input" id="purchase-payment-method"><option value="04">Compra a crédito</option><option value="01">Efectivo</option><option value="02">Cheque/Transferencia/Depósito</option><option value="03">Tarjeta</option><option value="05">Permuta</option><option value="06">Nota de crédito</option><option value="07">Mixto</option></select></div>
         <div class="form-group"><label for="purchase-payment-date">Fecha de pago</label><input type="date" class="form-input" id="purchase-payment-date" /></div>
        </div>
@@ -1402,17 +1402,17 @@
         <div class="form-grid-3" style="margin-top:15px;">
          <div class="form-group"><label for="purchase-modified-ncf">NCF modificado</label><input class="form-input" id="purchase-modified-ncf" maxlength="19" /></div>
          <div class="form-group"><label for="purchase-retention-date">Fecha de retención</label><input type="date" class="form-input" id="purchase-retention-date" /></div>
-         <div class="form-group"><label for="purchase-itbis-withheld">ITBIS retenido</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis-withheld" value="0" /></div>
-         <div class="form-group"><label for="purchase-itbis-proportional">ITBIS proporcionalidad</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis-proportional" value="0" /></div>
-         <div class="form-group"><label for="purchase-itbis-cost">ITBIS llevado al costo</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis-cost" value="0" /></div>
-         <div class="form-group"><label for="purchase-itbis-advance">ITBIS por adelantar (automático)</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis-advance" value="0" readonly /></div>
-         <div class="form-group"><label for="purchase-itbis-perceived">ITBIS percibido</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-itbis-perceived" value="0" /></div>
+         <div class="form-group"><label for="purchase-itbis-withheld">ITBIS retenido</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis-withheld" value="0" /></div>
+         <div class="form-group"><label for="purchase-itbis-proportional">ITBIS proporcionalidad</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis-proportional" value="0" /></div>
+         <div class="form-group"><label for="purchase-itbis-cost">ITBIS llevado al costo</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis-cost" value="0" /></div>
+         <div class="form-group"><label for="purchase-itbis-advance">ITBIS por adelantar (automático)</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis-advance" value="0" readonly /></div>
+         <div class="form-group"><label for="purchase-itbis-perceived">ITBIS percibido</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-itbis-perceived" value="0" /></div>
          <div class="form-group"><label for="purchase-income-withholding-type">Tipo retención ISR</label><select class="form-input" id="purchase-income-withholding-type"><option value="">No aplica</option><option value="01">01 · Alquileres</option><option value="02">02 · Honorarios por servicios</option><option value="03">03 · Otras rentas</option><option value="04">04 · Rentas presuntas</option><option value="05">05 · Intereses a personas jurídicas</option><option value="06">06 · Intereses a personas físicas</option><option value="07">07 · Proveedores del Estado</option><option value="08">08 · Juegos telefónicos</option><option value="09">09 · Ganadería bovina</option></select></div>
-         <div class="form-group"><label for="purchase-income-tax-withheld">Retención de renta</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-income-tax-withheld" value="0" /></div>
-         <div class="form-group"><label for="purchase-income-tax-perceived">ISR percibido</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-income-tax-perceived" value="0" /></div>
-         <div class="form-group"><label for="purchase-selective-tax">Impuesto selectivo</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-selective-tax" value="0" /></div>
-         <div class="form-group"><label for="purchase-other-taxes">Otros impuestos/tasas</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-other-taxes" value="0" /></div>
-         <div class="form-group"><label for="purchase-legal-tip">Propina legal</label><input type="number" step="0.01" min="0" class="form-input" id="purchase-legal-tip" value="0" /></div>
+         <div class="form-group"><label for="purchase-income-tax-withheld">Retención de renta</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-income-tax-withheld" value="0" /></div>
+         <div class="form-group"><label for="purchase-income-tax-perceived">ISR percibido</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-income-tax-perceived" value="0" /></div>
+         <div class="form-group"><label for="purchase-selective-tax">Impuesto selectivo</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-selective-tax" value="0" /></div>
+         <div class="form-group"><label for="purchase-other-taxes">Otros impuestos/tasas</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-other-taxes" value="0" /></div>
+         <div class="form-group"><label for="purchase-legal-tip">Propina legal</label><input type="number" step="0.01" min="0" max="1000000000" class="form-input" id="purchase-legal-tip" value="0" /></div>
         </div>
        </details>
        <div class="erp-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i data-lucide="save"></i>Registrar compra</button></div>
@@ -1438,7 +1438,7 @@
         <div class="form-group"><label for="bank-account">Cuenta/Banco *</label><input class="form-input" id="bank-account" required maxlength="100" /></div>
         <div class="form-group"><label for="bank-type">Tipo *</label><select class="form-input" id="bank-type"><option value="deposit">Depósito</option><option value="transfer_in">Transferencia recibida</option><option value="withdrawal">Cargo bancario</option><option value="transfer_out">Transferencia emitida</option><option value="check">Cheque</option></select></div>
         <div class="form-group"><label for="bank-reference">Referencia *</label><input class="form-input" id="bank-reference" required maxlength="100" /></div>
-        <div class="form-group"><label for="bank-amount">Monto *</label><input type="number" step="0.01" min="0.01" class="form-input" id="bank-amount" required /></div>
+        <div class="form-group"><label for="bank-amount">Monto *</label><input type="number" step="0.01" min="0.01" max="1000000000" class="form-input" id="bank-amount" required /></div>
         <div class="form-group"><label for="bank-description">Concepto *</label><input class="form-input" id="bank-description" required maxlength="300" /></div>
        </div>
        <div class="erp-form-actions"><button type="submit" class="admin-btn admin-btn-primary"><i data-lucide="plus"></i>Registrar movimiento</button></div>
@@ -1508,7 +1508,7 @@
        </div>
        <div class="form-group">
         <label for="set-ncf-b01-seq">Siguiente Secuencia B01</label>
-        <input type="number" id="set-ncf-b01-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b01-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
        <div class="form-group">
         <label for="set-ncf-b02-prefix">Prefijo B02 (Consumidor Final)</label>
@@ -1519,7 +1519,7 @@
       <div class="form-grid-3" style="margin-top:15px;">
        <div class="form-group">
         <label for="set-ncf-b02-seq">Siguiente Secuencia B02</label>
-        <input type="number" id="set-ncf-b02-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b02-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
        <div class="form-group">
         <label for="set-ncf-b14-prefix">Prefijo B14 (Regímenes Especiales)</label>
@@ -1527,7 +1527,7 @@
        </div>
        <div class="form-group">
         <label for="set-ncf-b14-seq">Siguiente Secuencia B14</label>
-        <input type="number" id="set-ncf-b14-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b14-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
       </div>
 
@@ -1538,7 +1538,7 @@
        </div>
        <div class="form-group">
         <label for="set-ncf-b15-seq">Siguiente Secuencia B15</label>
-        <input type="number" id="set-ncf-b15-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b15-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
        <div class="form-group">
         <label for="set-ncf-b12-prefix">Prefijo B12 (Único de Ingresos)</label>
@@ -1549,7 +1549,7 @@
       <div class="form-grid-3" style="margin-top:15px;">
        <div class="form-group">
         <label for="set-ncf-b12-seq">Siguiente Secuencia B12</label>
-        <input type="number" id="set-ncf-b12-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b12-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
        <div class="form-group">
         <label for="set-ncf-b03-prefix">Prefijo B03 (Nota de Débito)</label>
@@ -1557,7 +1557,7 @@
        </div>
        <div class="form-group">
         <label for="set-ncf-b03-seq">Siguiente Secuencia B03</label>
-        <input type="number" id="set-ncf-b03-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b03-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
       </div>
 
@@ -1568,7 +1568,7 @@
        </div>
        <div class="form-group">
         <label for="set-ncf-b04-seq">Siguiente Secuencia B04</label>
-        <input type="number" id="set-ncf-b04-seq" class="form-input" min="1" placeholder="Ej. 1" />
+        <input type="number" id="set-ncf-b04-seq" class="form-input" min="1" max="99999999" placeholder="Ej. 1" />
        </div>
        <div class="form-group">
         <label for="set-invoice-prefix">Prefijo de Factura (Interno)</label>
@@ -1770,7 +1770,7 @@
 
      <div class="form-group" style="margin-bottom:15px;">
       <label for="form-payment-amount">Monto a Cobrar (RD$) *</label>
-      <input type="number" id="form-payment-amount" class="form-input" step="0.01" min="0.01" required />
+      <input type="number" id="form-payment-amount" class="form-input" step="0.01" min="0.01" max="1000000000" required />
      </div>
 
      <div class="form-group" style="margin-bottom:15px;">
@@ -1824,7 +1824,7 @@
      </div>
      <div class="form-group" style="margin-top:15px;">
       <label for="fiscal-adjustment-amount">Monto total del ajuste (ITBIS incluido) *</label>
-      <input type="number" id="fiscal-adjustment-amount" class="form-input" min="0.01" step="0.01" required />
+      <input type="number" id="fiscal-adjustment-amount" class="form-input" min="0.01" max="1000000000" step="0.01" required />
       <small class="form-help" id="fiscal-adjustment-limit"></small>
      </div>
      <div class="form-group" style="margin-top:15px;">
@@ -1955,7 +1955,7 @@
      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Antes de realizar ventas en el Punto de Venta, debes registrar la apertura de caja e indicar el efectivo base disponible en gaveta.</p>
      <div class="form-group">
       <label for="form-cash-open-amount">Efectivo Inicial en Gaveta (RD$) *</label>
-      <input type="number" id="form-cash-open-amount" class="form-input" min="0" step="0.01" value="0.00" required />
+      <input type="number" id="form-cash-open-amount" class="form-input" min="0" max="100000000" step="0.01" value="0.00" required />
      </div>
     </div>
     <div class="admin-modal-footer">
@@ -2006,7 +2006,7 @@
 
      <div class="form-group" style="margin-bottom:15px;">
       <label for="form-cash-close-real">Efectivo Real Contado en Caja (RD$) *</label>
-      <input type="number" id="form-cash-close-real" class="form-input" min="0" step="0.01" required data-erp-input="ERPBilling.calculateCashDifference()" />
+      <input type="number" id="form-cash-close-real" class="form-input" min="0" max="100000000" step="0.01" required data-erp-input="ERPBilling.calculateCashDifference()" />
      </div>
 
      <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;">
@@ -2045,7 +2045,7 @@
 
      <div class="form-group" style="margin-bottom:15px;">
       <label for="pos-cash-amount-received">Efectivo Recibido (RD$) *</label>
-      <input type="number" id="pos-cash-amount-received" class="form-input" step="0.01" min="0" required data-erp-input="ERPBilling.calculatePosCashChange()" style="font-size: 1.3rem; font-weight: 700; text-align: center; height: 48px;" />
+      <input type="number" id="pos-cash-amount-received" class="form-input" step="0.01" min="0" max="100000000" required data-erp-input="ERPBilling.calculatePosCashChange()" style="font-size: 1.3rem; font-weight: 700; text-align: center; height: 48px;" />
      </div>
 
      <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:15px; text-align:center;">
@@ -2087,7 +2087,7 @@
      </div>
      <div class="form-group" style="margin-bottom:15px;">
       <label for="form-abono-amount">Monto del Abono (RD$) *</label>
-      <input type="number" id="form-abono-amount" class="form-input" step="0.01" min="0.01" required />
+      <input type="number" id="form-abono-amount" class="form-input" step="0.01" min="0.01" max="100000000" required />
      </div>
      <div class="form-group" style="margin-bottom:15px;">
       <label for="form-abono-method">Método de Pago *</label>

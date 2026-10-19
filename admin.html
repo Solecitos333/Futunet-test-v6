@@ -18,6 +18,8 @@
  <link rel="stylesheet" href="css/ai-server.css?v=2.1" />
  <link rel="stylesheet" href="css/auth.css?v=3.0" media="print" onload="this.media='all'" />
  <noscript><link rel="stylesheet" href="css/auth.css?v=3.0" /></noscript>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'" />
+ <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /></noscript>
  <link rel="icon" type="image/png" sizes="192x192" href="https://futunet.com.do/favicon.png" />
  <link rel="apple-touch-icon" href="https://futunet.com.do/favicon.png" />
  <link rel="icon" href="https://futunet.com.do/favicon.ico" type="image/x-icon" />
@@ -1822,7 +1824,7 @@
 
      <div class="auth-form-group">
       <label class="auth-label" for="banner-title">Título del Banner (HTML permitido)</label>
-      <input class="auth-input" type="text" id="banner-title" placeholder="Ej. Soluciones en <strong>Energía Solar</strong>" required maxlength="150" />
+      <input class="auth-input" type="text" id="banner-title" placeholder="Ej. Soluciones en &lt;strong&gt;Energía Solar&lt;/strong&gt;" required maxlength="150" />
      </div>
 
      <div class="auth-form-group">
@@ -1987,11 +1989,11 @@
      <div class="admin-grid-form-2col">
       <div class="auth-form-group">
        <label class="auth-label" for="product-price">Precio (RD$)</label>
-       <input class="auth-input" type="number" id="product-price" step="0.01" min="0" placeholder="0.00" />
+       <input class="auth-input" type="number" id="product-price" step="0.01" min="0" max="100000000" placeholder="0.00" />
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="product-stock">Inventario (Stock)</label>
-       <input class="auth-input" type="number" id="product-stock" min="0" placeholder="0" />
+       <input class="auth-input" type="number" id="product-stock" min="0" max="1000000" placeholder="0" />
       </div>
      </div>
 
@@ -2236,8 +2238,8 @@
      <div class="auth-form-group"><label class="auth-label" for="fin-admin-item">Artículo o servicio</label><input class="auth-input" id="fin-admin-item" required maxlength="180" placeholder="Ej. Laptop Dell Latitude 5420" /></div>
      <div class="auth-form-group"><label class="auth-label" for="fin-admin-description">Detalle</label><textarea class="auth-input" id="fin-admin-description" rows="3" maxlength="1000" placeholder="Modelo, serial, garantía u observaciones"></textarea></div>
      <div class="admin-grid-form-2col">
-      <div class="auth-form-group"><label class="auth-label" for="fin-admin-total">Precio total (RD$)</label><input class="auth-input" type="number" id="fin-admin-total" min="1" step="0.01" required /></div>
-      <div class="auth-form-group"><label class="auth-label" for="fin-admin-down">Inicial (RD$)</label><input class="auth-input" type="number" id="fin-admin-down" min="0" step="0.01" value="0" required /></div>
+      <div class="auth-form-group"><label class="auth-label" for="fin-admin-total">Precio total (RD$)</label><input class="auth-input" type="number" id="fin-admin-total" min="1" max="100000000" step="0.01" required /></div>
+      <div class="auth-form-group"><label class="auth-label" for="fin-admin-down">Inicial (RD$)</label><input class="auth-input" type="number" id="fin-admin-down" min="0" max="100000000" step="0.01" value="0" required /></div>
      </div>
      <div class="admin-grid-form-2col">
       <div class="auth-form-group"><label class="auth-label" for="fin-admin-count">Cantidad de cuotas</label><input class="auth-input" type="number" id="fin-admin-count" min="1" max="240" value="12" required /></div>
@@ -2262,7 +2264,7 @@
      <input type="hidden" id="fin-payment-account-id" />
      <div class="fin-status-banner" id="fin-payment-account-summary"></div>
      <div class="admin-grid-form-2col">
-      <div class="auth-form-group"><label class="auth-label" for="fin-payment-amount">Monto (RD$)</label><input class="auth-input" type="number" id="fin-payment-amount" min="0.01" step="0.01" required /></div>
+      <div class="auth-form-group"><label class="auth-label" for="fin-payment-amount">Monto (RD$)</label><input class="auth-input" type="number" id="fin-payment-amount" min="0.01" max="100000000" step="0.01" required /></div>
       <div class="auth-form-group"><label class="auth-label" for="fin-payment-date">Fecha del pago</label><input class="auth-input" type="date" id="fin-payment-date" required /></div>
      </div>
      <div class="admin-grid-form-2col">
@@ -2299,7 +2301,7 @@
       </div>
       <div class="auth-form-group">
        <label class="auth-label" for="discount-value">Valor</label>
-       <input class="auth-input" type="number" id="discount-value" min="0" step="0.01" required />
+       <input class="auth-input" type="number" id="discount-value" min="0" max="10000000" step="0.01" required />
       </div>
      </div>
      <div class="admin-grid-form-2col">

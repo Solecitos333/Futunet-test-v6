@@ -167,7 +167,11 @@ const queries = [
   'flip pro',
   'precision 3660',
   'apc pdu',
-  'dahua facial'
+  'dahua facial',
+  'ultrawide',
+  'hap ax3',
+  'cbs350 8p',
+  'smt1500c'
 ];
 
 

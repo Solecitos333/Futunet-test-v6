@@ -1642,6 +1642,79 @@ test('Mejora demandada por usuarios: Terminal Biométrica de Acceso Facial Dahua
   assert.ok(catJs.includes("/\\b(asi3213g|dahua\\s*facial)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Terminal Facial Dahua');
 });
 
+test('Mejora demandada por usuarios: Monitor UltraWide LG 34WP500-B 34" IPS WFHD (SUG-L3400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L3400'") && seedCjs.includes("status: 'implemented'"), 'SUG-L3400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L3400') && sugJs.includes('Monitor UltraWide LG 34WP500-B'), 'SUG-L3400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lg_34wp500_ultrawide_34_ips'), 'backup_data.js debe contener oficina_lg_34wp500_ultrawide_34_ips');
+
+  const lgImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lg-34wp500-monitor-ultrawide-34.webp');
+  assert.ok(fs.existsSync(lgImg), 'La imagen del monitor LG 34 UltraWide debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ultrawide'"), 'catalog.js debe incluir ultrawide en stem variants');
+  assert.ok(catJs.includes("/\\b(ultrawide|34wp500|34wp500-b)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Monitor UltraWide LG');
+});
+
+test('Mejora demandada por usuarios: Router Inalámbrico Wi-Fi 6 MikroTik hAP ax³ (SUG-M5300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M5300'") && seedCjs.includes("status: 'implemented'"), 'SUG-M5300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M5300') && sugJs.includes('MikroTik hAP ax³'), 'SUG-M5300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_hap_ax3_wifi6_router'), 'backup_data.js debe contener redes_mikrotik_hap_ax3_wifi6_router');
+
+  const mikrotikImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-hap-ax3-wifi6-router.webp');
+  assert.ok(fs.existsSync(mikrotikImg), 'La imagen del router MikroTik hAP ax3 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ax3'"), 'catalog.js debe incluir ax3 en stem variants');
+  assert.ok(catJs.includes("/\\b(hap\\s*ax3|hap\\s*ax³|ax3|ax³|c53uig)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar MikroTik hAP ax3');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable Cisco Business CBS350-8P PoE+ (SUG-C3508)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C3508'") && seedCjs.includes("status: 'implemented'"), 'SUG-C3508 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C3508') && sugJs.includes('Cisco Business CBS350-8P-E-2G'), 'SUG-C3508 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_business_cbs350_8p_poe_switch'), 'backup_data.js debe contener redes_cisco_business_cbs350_8p_poe_switch');
+
+  const ciscoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-business-cbs350-8p-poe-switch.webp');
+  assert.ok(fs.existsSync(ciscoImg), 'La imagen del switch Cisco CBS350-8P debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cbs3508p'"), 'catalog.js debe incluir cbs3508p en stem variants');
+  assert.ok(catJs.includes("/\\b(cbs350-8p|cbs350\\s*8p|cbs350-8p-e-2g)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Cisco CBS350-8P');
+});
+
+test('Mejora demandada por usuarios: Sistema UPS APC Smart-UPS SMT1500C Onda Senoidal Pura (SUG-A1500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A1500'") && seedCjs.includes("status: 'implemented'"), 'SUG-A1500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A1500') && sugJs.includes('APC Smart-UPS SMT1500C'), 'SUG-A1500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_smart_ups_smt1500c_1500va'), 'backup_data.js debe contener energia_apc_smart_ups_smt1500c_1500va');
+
+  const apcImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-smart-ups-smt1500c-senoidal-puro.webp');
+  assert.ok(fs.existsSync(apcImg), 'La imagen del UPS APC Smart-UPS SMT1500C debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'smt1500c'"), 'catalog.js debe incluir smt1500c en stem variants');
+  assert.ok(catJs.includes("/\\b(smt1500c|smt1500|smart-ups\\s*1500|smart\\s*ups\\s*1500|apc\\s*1500)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar APC Smart-UPS SMT1500C');
+});
+
+
 
 
 

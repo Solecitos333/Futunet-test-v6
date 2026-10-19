@@ -63,7 +63,11 @@ const testQueries = [
   'flip pro',
   'precision 3660',
   'apc pdu',
-  'dahua facial'
+  'dahua facial',
+  'ultrawide',
+  'hap ax3',
+  'cbs350 8p',
+  'smt1500c'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -265,6 +269,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /facial|reconocimiento\s*facial/i.test(scored[0].p.title),
         'El producto top para "dahua facial" debe ser la Terminal Facial Dahua'
+      );
+    }
+
+    if (q === 'ultrawide') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'LG',
+        'La búsqueda "ultrawide" debe priorizar el Monitor UltraWide LG 34WP500-B'
+      );
+      assert.ok(
+        /ultrawide|34wp500/i.test(scored[0].p.title),
+        'El producto top para "ultrawide" debe ser Monitor UltraWide LG'
+      );
+    }
+
+    if (q === 'hap ax3') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'MikroTik',
+        'La búsqueda "hap ax3" debe priorizar el Router MikroTik hAP ax³'
+      );
+      assert.ok(
+        /hap\s*ax|ax1800/i.test(scored[0].p.title),
+        'El producto top para "hap ax3" debe ser MikroTik hAP ax³'
+      );
+    }
+
+    if (q === 'cbs350 8p') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Cisco',
+        'La búsqueda "cbs350 8p" debe priorizar el Switch Cisco Business CBS350-8P'
+      );
+      assert.ok(
+        /cbs350-8p|8\s*puertos\s*gigabit\s*poe/i.test(scored[0].p.title),
+        'El producto top para "cbs350 8p" debe ser Cisco Business CBS350-8P'
+      );
+    }
+
+    if (q === 'smt1500c') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Schneider Electric',
+        'La búsqueda "smt1500c" debe priorizar el UPS APC Smart-UPS SMT1500C'
+      );
+      assert.ok(
+        /smart-ups|smt1500/i.test(scored[0].p.title),
+        'El producto top para "smt1500c" debe ser APC Smart-UPS SMT1500C'
       );
     }
   }
