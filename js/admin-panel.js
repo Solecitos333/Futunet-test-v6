@@ -299,11 +299,11 @@
       var brandsSnapshot = await db.collection('brands').get();
       if (brandsSnapshot.empty) {
         var defaultBrands = [
-          { name: 'Dell', logo: 'img/marcas/dell.webp' },
-          { name: 'HP', logo: 'img/marcas/hp.webp' },
-          { name: 'Hikvision', logo: 'img/marcas/hikvision.webp' },
-          { name: 'Epson', logo: 'img/marcas/epson.webp' },
-          { name: 'Intel', logo: 'img/marcas/intel.webp' }
+          { name: 'Dell', logo: 'img/marcas/dell.svg' },
+          { name: 'HP', logo: 'img/marcas/hp.svg' },
+          { name: 'Hikvision', logo: 'img/marcas/hikvision.svg' },
+          { name: 'Epson', logo: 'img/marcas/epson.svg' },
+          { name: 'Lenovo', logo: 'img/marcas/lenovo.svg' }
         ];
         var batch = db.batch();
         defaultBrands.forEach(function (b) {

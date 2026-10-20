@@ -629,9 +629,9 @@
          <p style="color:#64748b; font-size:0.78rem; margin:0;">Elige la cantidad de colaboradores que equiparás en la oficina.</p>
         </div>
         <div class="qty-control" style="display:flex; align-items:center; background:#f1f5f9; border-radius:50px; padding:6px 12px; border:1px solid #e2e8f0;">
-         <button type="button" class="qty-btn" id="est-qty-minus" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(-1)">&minus;</button>
-         <input type="number" id="est-qty-val" value="1" min="1" max="100" style="border:none; background:none; text-align:center; width:45px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.1rem; color:#0a101d; outline:none;" readonly />
-         <button type="button" class="qty-btn" id="est-qty-plus" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(1)">&plus;</button>
+         <button type="button" class="qty-btn" id="est-qty-minus" aria-label="Reducir cantidad" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(-1)">&minus;</button>
+         <input type="number" id="est-qty-val" value="1" min="1" max="100" aria-label="Cantidad estimada de equipos" style="border:none; background:none; text-align:center; width:45px; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.1rem; color:#0a101d; outline:none;" readonly />
+         <button type="button" class="qty-btn" id="est-qty-plus" aria-label="Aumentar cantidad" style="background:none; border:none; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#64748b; cursor:pointer; font-weight:700; transition:all 0.2s;" onclick="changeEstQty(1)">&plus;</button>
         </div>
        </div>
       </div>
@@ -1040,7 +1040,7 @@
         </div>
 
         <div class="request-form-privacy" style="margin: 4px 0 8px; font-size: 0.82rem; color: #cbd5e1; text-align: left;">
-         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
+         <label for="req-privacy-consent" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;line-height:1.4;">
           <input type="checkbox" id="req-privacy-consent" required style="width:16px;height:16px;margin-top:2px;flex:0 0 auto;accent-color:#0B7EB5;" />
           <span>Acepto la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:#7dd3fc;text-decoration:underline;font-weight:500;">política de privacidad</a> y autorizo el tratamiento de mis datos para esta propuesta comercial.</span>
          </label>
@@ -1852,6 +1852,16 @@ Me gustaría recibir una propuesta formal y coordinar facturación con NCF corpo
       }
      });
 
+     function escapeMiniHTML(str) {
+      if (str === undefined || str === null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+     }
+
      const featured = products.slice(0, 3);
      if (featured.length === 0) {
       container.style.display = 'none';
@@ -1859,30 +1869,45 @@ Me gustaría recibir una propuesta formal y coordinar facturación con NCF corpo
      }
 
      container.style.display = 'block';
-     container.innerHTML = `
-      <h4 style="font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700; color:#0f172a; margin-top:35px; margin-bottom:18px; display:flex; align-items:center; gap:8px;">
-       <i class="fas fa-store" style="color:var(--brand-office); font-size:0.95rem;"></i>Equipos Relacionados en Stock
-      </h4>
-      <div class="featured-grid">
-       ${featured.map(p =>`
-        <div class="product-mini-card">
-         <div class="mini-card-img">
-          <img src="${p.img}" alt="${p.title}" loading="lazy" onerror="this.onerror=null;this.src='img/placeholder.svg'" />
-         </div>
-         <div class="mini-card-body" style="display:flex; flex-direction:column; flex:1;">
-          <span class="mini-card-brand">${p.brand || 'FUTUNET'}</span>
-          <h5 class="mini-card-title" title="${p.title}">${p.title}</h5>
-          <div class="mini-card-footer">
-           <span class="mini-card-price">${p.price}</span>
-           <button class="btn-add-mini" onclick="window.addToCartFromMini('${p.id}')" title="Añadir al carrito" aria-label="Añadir al carrito">
-            <i class="fas fa-shopping-cart"></i>
-           </button>
-          </div>
-         </div>
-        </div>
-       `).join('')}
-      </div>
-     `;
+     var cardsHtml = featured.map(function(p) {
+      var safeId = escapeMiniHTML(p.id || '');
+      var safeTitle = escapeMiniHTML(p.title || '');
+      var safeBrand = escapeMiniHTML(p.brand || 'FUTUNET');
+      var safePrice = escapeMiniHTML(p.price || '');
+      var safeImg = escapeMiniHTML(p.img || 'img/placeholder.svg');
+
+      return '<div class="product-mini-card">' +
+        '<div class="mini-card-img">' +
+          '<img src="' + safeImg + '" alt="' + safeTitle + '" loading="lazy" onerror="this.onerror=null;this.src=\'img/placeholder.svg\'" />' +
+        '</div>' +
+        '<div class="mini-card-body" style="display:flex; flex-direction:column; flex:1;">' +
+          '<span class="mini-card-brand">' + safeBrand + '</span>' +
+          '<h5 class="mini-card-title" title="' + safeTitle + '">' + safeTitle + '</h5>' +
+          '<div class="mini-card-footer">' +
+            '<span class="mini-card-price">' + safePrice + '</span>' +
+            '<button type="button" class="btn-add-mini" data-mini-add="' + safeId + '" title="Añadir al carrito" aria-label="Añadir al carrito">' +
+              '<i class="fas fa-shopping-cart"></i>' +
+            '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+     }).join('');
+
+     container.innerHTML = '<h4 style="font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700; color:#0f172a; margin-top:35px; margin-bottom:18px; display:flex; align-items:center; gap:8px;">' +
+       '<i class="fas fa-store" style="color:var(--brand-office); font-size:0.95rem;"></i>Equipos Relacionados en Stock' +
+     '</h4>' +
+     '<div class="featured-grid">' + cardsHtml + '</div>';
+
+     if (!container.dataset.miniListenerBound) {
+       container.dataset.miniListenerBound = 'true';
+       container.addEventListener('click', function(e) {
+         var btn = e.target.closest('[data-mini-add]');
+         if (btn) {
+           var pId = btn.getAttribute('data-mini-add');
+           if (pId) window.addToCartFromMini(pId);
+         }
+       });
+     }
     });
    }
 

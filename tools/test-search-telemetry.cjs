@@ -67,7 +67,11 @@ const testQueries = [
   'ultrawide',
   'hap ax3',
   'cbs350 8p',
-  'smt1500c'
+  'smt1500c',
+  'thinkpad e16',
+  'omada',
+  'l5590',
+  'acusense'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -317,6 +321,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /smart-ups|smt1500/i.test(scored[0].p.title),
         'El producto top para "smt1500c" debe ser APC Smart-UPS SMT1500C'
+      );
+    }
+
+    if (q === 'thinkpad e16') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Lenovo',
+        'La búsqueda "thinkpad e16" debe priorizar la Laptop Lenovo ThinkPad E16'
+      );
+      assert.ok(
+        /thinkpad\s*e16/i.test(scored[0].p.title),
+        'El producto top para "thinkpad e16" debe ser Lenovo ThinkPad E16'
+      );
+    }
+
+    if (q === 'omada') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'TP-Link',
+        'La búsqueda "omada" debe priorizar el Punto de Acceso TP-Link Omada EAP653'
+      );
+      assert.ok(
+        /omada|eap653/i.test(scored[0].p.title),
+        'El producto top para "omada" debe ser TP-Link Omada EAP653'
+      );
+    }
+
+    if (q === 'l5590') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Epson',
+        'La búsqueda "l5590" debe priorizar la Impresora Epson EcoTank L5590'
+      );
+      assert.ok(
+        /l5590|ecotank/i.test(scored[0].p.title),
+        'El producto top para "l5590" debe ser Epson EcoTank L5590'
+      );
+    }
+
+    if (q === 'acusense') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Hikvision',
+        'La búsqueda "acusense" debe priorizar la Cámara Hikvision AcuSense 4K'
+      );
+      assert.ok(
+        /acusense|2cd2183g2/i.test(scored[0].p.title),
+        'El producto top para "acusense" debe ser Hikvision AcuSense 4K'
       );
     }
   }

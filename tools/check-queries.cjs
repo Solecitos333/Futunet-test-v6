@@ -171,7 +171,11 @@ const queries = [
   'ultrawide',
   'hap ax3',
   'cbs350 8p',
-  'smt1500c'
+  'smt1500c',
+  'thinkpad e16',
+  'omada',
+  'l5590',
+  'acusense'
 ];
 
 

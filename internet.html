@@ -557,7 +557,7 @@
         <button type="button" class="compare-btn-open" id="compare-btn-open" onclick="openCompareModal()" disabled>
          <i class="fas fa-columns"></i>Comparar planes
         </button>
-        <button type="button" class="compare-btn-clear" onclick="clearComparison()">
+        <button type="button" class="compare-btn-clear" onclick="clearComparison()" aria-label="Limpiar comparación de planes" title="Limpiar comparación">
          <i class="fas fa-times"></i>
         </button>
        </div>
@@ -999,7 +999,7 @@
       <div class="bank-details">
        <div class="bank-row">
         <span>Titular</span>
-        <strong>FUTUNET.SRL <button class="btn-copy" onclick="copyText('FUTUNET.SRL')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+        <strong>FUTUNET.SRL <button class="btn-copy" onclick="copyText('FUTUNET.SRL')" aria-label="Copiar titular de cuenta" title="Copiar"><i data-lucide="copy" style="width:12px;"></i></button></strong>
        </div>
        <div class="bank-row">
         <span>Banco</span>
@@ -1011,11 +1011,11 @@
        </div>
        <div class="bank-row">
         <span>Cuenta</span>
-        <strong>9605759674 <button class="btn-copy" onclick="copyText('9605759674')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+        <strong>9605759674 <button class="btn-copy" onclick="copyText('9605759674')" aria-label="Copiar número de cuenta" title="Copiar"><i data-lucide="copy" style="width:12px;"></i></button></strong>
        </div>
        <div class="bank-row">
         <span>RNC</span>
-        <strong>132702077 <button class="btn-copy" onclick="copyText('132702077')"><i data-lucide="copy" style="width:12px;"></i></button></strong>
+        <strong>132702077 <button class="btn-copy" onclick="copyText('132702077')" aria-label="Copiar número de RNC" title="Copiar"><i data-lucide="copy" style="width:12px;"></i></button></strong>
        </div>
       </div>
 
@@ -1255,7 +1255,7 @@
       <h4>Instalar App de Clientes</h4>
       <p id="pwa-instructions">Pulsa el botón Compartir y selecciona "Añadir a pantalla de inicio" para instalar.</p>
      </div>
-     <button class="pwa-close-btn" onclick="hidePwaBanner()"><i data-lucide="x" style="width:14px;"></i></button>
+     <button class="pwa-close-btn" onclick="hidePwaBanner()" aria-label="Cerrar aviso de instalación" title="Cerrar"><i data-lucide="x" style="width:14px;"></i></button>
     </div>
 
    </div>
@@ -1266,7 +1266,7 @@
    <div class="hiring-channels-modal-card">
     <div class="portal-modal-header" style="margin-bottom: 15px;">
      <h3>Método de Contratación</h3>
-     <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+     <button class="portal-modal-close" onclick="closePortalModals()" aria-label="Cerrar modal" title="Cerrar"><i data-lucide="x" style="width:18px;"></i></button>
     </div>
 
     <!-- Información del Plan Seleccionado -->
@@ -1402,7 +1402,7 @@
    <div class="portal-modal-card">
     <div class="portal-modal-header">
      <h3>Reportar Transferencia</h3>
-     <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+     <button class="portal-modal-close" onclick="closePortalModals()" aria-label="Cerrar modal" title="Cerrar"><i data-lucide="x" style="width:18px;"></i></button>
     </div>
 
     <form id="payment-report-form">
@@ -1434,7 +1434,7 @@
       <div class="voucher-preview-box" id="voucher-preview-box">
        <i data-lucide="check-circle" style="color:#2ecc71; width:16px;"></i>
        <span id="voucher-filename">archivo.jpg</span>
-       <button type="button" class="voucher-preview-remove" onclick="removeVoucherFile()"><i data-lucide="trash-2" style="width:14px;"></i></button>
+       <button type="button" class="voucher-preview-remove" onclick="removeVoucherFile()" aria-label="Eliminar comprobante adjunto" title="Eliminar"><i data-lucide="trash-2" style="width:14px;"></i></button>
       </div>
      </div>
 
@@ -1463,7 +1463,7 @@
    <div class="portal-modal-card">
     <div class="portal-modal-header">
      <h3 id="support-modal-title">Solicitud de Soporte</h3>
-     <button class="portal-modal-close" onclick="closePortalModals()"><i data-lucide="x" style="width:18px;"></i></button>
+     <button class="portal-modal-close" onclick="closePortalModals()" aria-label="Cerrar modal" title="Cerrar"><i data-lucide="x" style="width:18px;"></i></button>
     </div>
 
     <form id="support-form">

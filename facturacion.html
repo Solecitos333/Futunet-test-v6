@@ -324,11 +324,11 @@
       <div class="erp-filter-bar" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:12px; padding:18px 24px; border-bottom:1.5px solid var(--border-color); background:var(--bg-light); border-radius:12px 12px 0 0;">
        <div class="form-group" style="margin:0;">
         <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Fecha Inicio</label>
-        <input type="date" id="filter-invoice-start-date" class="form-input" style="height:38px;" data-erp-change="ERPBilling.renderInvoicesTable()" />
+        <input type="date" id="filter-invoice-start-date" class="form-input" style="height:38px;" aria-label="Fecha inicial de filtro de facturas" data-erp-change="ERPBilling.renderInvoicesTable()" />
        </div>
        <div class="form-group" style="margin:0;">
         <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Fecha Fin</label>
-        <input type="date" id="filter-invoice-end-date" class="form-input" style="height:38px;" data-erp-change="ERPBilling.renderInvoicesTable()" />
+        <input type="date" id="filter-invoice-end-date" class="form-input" style="height:38px;" aria-label="Fecha final de filtro de facturas" data-erp-change="ERPBilling.renderInvoicesTable()" />
        </div>
        <div class="form-group" style="margin:0;">
         <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Estado</label>
@@ -369,7 +369,7 @@
        <div class="form-group" style="margin:0; display:flex; align-items:flex-end;">
         <div class="admin-search" style="margin:0; width:100%; height:38px;">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:12px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-         <input type="text" id="invoice-search" placeholder="Buscar cliente, RNC, No..." data-erp-input="ERPBilling.renderInvoicesTable()" maxlength="100" style="padding-left:36px; height:100%; width:100%;" />
+         <input type="text" id="invoice-search" placeholder="Buscar cliente, RNC, No..." aria-label="Buscar cliente, RNC o número de factura" data-erp-input="ERPBilling.renderInvoicesTable()" maxlength="100" style="padding-left:36px; height:100%; width:100%;" />
         </div>
        </div>
       </div>
@@ -559,7 +559,7 @@
         <div class="summary-box">
          <div class="summary-row" style="align-items:center;">
           <span>Desc. Global (%):</span>
-          <input type="number" id="form-invoice-discount-pct" class="form-input" min="0" max="100" value="0" style="width: 90px; height: 32px; padding: 0 8px; text-align: right; font-size: 0.85rem;" data-erp-input="ERPBilling.calculateInvoiceFormTotals()" />
+          <input type="number" id="form-invoice-discount-pct" class="form-input" min="0" max="100" value="0" aria-label="Porcentaje de descuento global" style="width: 90px; height: 32px; padding: 0 8px; text-align: right; font-size: 0.85rem;" data-erp-input="ERPBilling.calculateInvoiceFormTotals()" />
          </div>
          <div class="summary-row">
           <span>Subtotal:</span>
@@ -625,7 +625,7 @@
         <div class="form-group" style="margin-bottom:10px;">
          <label style="font-size:0.75rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Cliente *</label>
          <div style="position:relative; display:flex; gap:8px;">
-          <input type="text" id="pos-client-search" class="form-input" placeholder="Consumidor Final..." data-erp-input="ERPBilling.searchPosClient(this.value)" autocomplete="off" maxlength="100" style="height:36px; font-size:0.85rem;" />
+          <input type="text" id="pos-client-search" class="form-input" placeholder="Consumidor Final..." aria-label="Buscar cliente en punto de venta" data-erp-input="ERPBilling.searchPosClient(this.value)" autocomplete="off" maxlength="100" style="height:36px; font-size:0.85rem;" />
           <input type="hidden" id="pos-client-id" value="" />
           <input type="hidden" id="pos-client-rnc" value="" />
           <button type="button" class="admin-btn admin-btn-secondary" data-erp-click="ERPBilling.openNewClientFormFromPos()" style="padding: 0 10px; height: 36px; border-radius: 10px;" title="Nuevo Cliente">
@@ -641,11 +641,11 @@
          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
           <div class="form-group" style="margin:0;">
            <label style="font-size:0.7rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">No. Mesa *</label>
-           <input type="text" id="pos-restaurant-table" class="form-input" placeholder="Ej. Mesa 5" maxlength="30" style="height:32px; font-size:0.8rem; padding: 6px 10px;" />
+           <input type="text" id="pos-restaurant-table" class="form-input" placeholder="Ej. Mesa 5" aria-label="Número o nombre de mesa" maxlength="30" style="height:32px; font-size:0.8rem; padding: 6px 10px;" />
           </div>
           <div class="form-group" style="margin:0;">
            <label style="font-size:0.7rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:4px;">Nombre Orden / Cliente</label>
-           <input type="text" id="pos-restaurant-client-name" class="form-input" placeholder="Ej. Juan Pérez" maxlength="100" style="height:32px; font-size:0.8rem; padding: 6px 10px;" />
+           <input type="text" id="pos-restaurant-client-name" class="form-input" placeholder="Ej. Juan Pérez" aria-label="Nombre del cliente en comanda" maxlength="100" style="height:32px; font-size:0.8rem; padding: 6px 10px;" />
           </div>
          </div>
          <div class="restaurant-order-metadata">
@@ -733,7 +733,7 @@
        <div class="pos-catalog-header">
         <div class="admin-search" style="margin: 0; flex:1; height:40px;">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="left:12px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-         <input type="text" id="pos-product-search" placeholder="Buscar por Nombre, SKU, Ref o Código de barras..." data-erp-input="ERPBilling.searchPosProducts(this.value)" maxlength="100" style="padding-left:36px; font-size:0.85rem;" />
+         <input type="text" id="pos-product-search" placeholder="Buscar por Nombre, SKU, Ref o Código de barras..." aria-label="Buscar producto en punto de venta" data-erp-input="ERPBilling.searchPosProducts(this.value)" maxlength="100" style="padding-left:36px; font-size:0.85rem;" />
         </div>
         <!-- Simulated USB Barcode Scanner Input -->
         <button type="button" class="admin-btn admin-btn-secondary" data-erp-click="ERPBilling.openSimulatedBarcodeModal()" style="height:40px; display:flex; align-items:center; gap:6px; border-radius:10px; padding:0 12px; font-size:0.8rem;">
@@ -1083,7 +1083,7 @@
        <h3>Clientes Registrados</h3>
        <div class="admin-search" style="margin:0;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="text" id="clients-search" placeholder="Buscar cliente por nombre o RNC..." data-erp-input="ERPBilling.renderClientsTable()" maxlength="100" />
+        <input type="text" id="clients-search" placeholder="Buscar cliente por nombre o RNC..." aria-label="Buscar cliente por nombre o RNC" data-erp-input="ERPBilling.renderClientsTable()" maxlength="100" />
        </div>
       </div>
 
@@ -1112,6 +1112,9 @@
      <div class="invoice-form-container" style="max-width:600px;">
       <form id="client-editor-form" data-erp-submit="ERPBilling.saveClient(event)">
        <input type="hidden" id="form-client-id" />
+       <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; line-height:1.4;">
+        Los datos fiscales recopilados se procesan para emisión de comprobantes (DGII) bajo la Ley 11-92 y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">política de privacidad</a> (Ley 172-13).
+       </p>
        <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;" id="client-form-title">Detalles del Cliente</h3>
        <div class="form-group" style="margin-bottom:15px;">
         <label for="form-client-name">Nombre o Razón Social *</label>
@@ -1176,7 +1179,7 @@
         </select>
         <div class="admin-search" style="margin: 0;">
          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-         <input type="text" id="products-search" placeholder="Buscar ítem..." data-erp-input="ERPBilling.renderProductsTable()" maxlength="100" />
+         <input type="text" id="products-search" placeholder="Buscar ítem..." aria-label="Buscar ítem en inventario" data-erp-input="ERPBilling.renderProductsTable()" maxlength="100" />
         </div>
        </div>
       </div>
@@ -1593,13 +1596,13 @@
          <tr><th>Tipo</th><th>Inicio autorizado</th><th>Fin autorizado</th><th>Vencimiento</th></tr>
         </thead>
         <tbody>
-         <tr><td>B01</td><td><input type="number" id="set-ncf-b01-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b01-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b01-expiry" class="form-input" /></td></tr>
-         <tr><td>B02</td><td><input type="number" id="set-ncf-b02-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b02-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b02-expiry" class="form-input" /></td></tr>
-         <tr><td>B03</td><td><input type="number" id="set-ncf-b03-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b03-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b03-expiry" class="form-input" /></td></tr>
-         <tr><td>B04</td><td><input type="number" id="set-ncf-b04-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b04-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b04-expiry" class="form-input" /></td></tr>
-         <tr><td>B12</td><td><input type="number" id="set-ncf-b12-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b12-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b12-expiry" class="form-input" /></td></tr>
-         <tr><td>B14</td><td><input type="number" id="set-ncf-b14-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b14-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b14-expiry" class="form-input" /></td></tr>
-         <tr><td>B15</td><td><input type="number" id="set-ncf-b15-start" class="form-input" min="1" max="99999999" /></td><td><input type="number" id="set-ncf-b15-end" class="form-input" min="1" max="99999999" /></td><td><input type="date" id="set-ncf-b15-expiry" class="form-input" /></td></tr>
+         <tr><td>B01</td><td><input type="number" id="set-ncf-b01-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B01" /></td><td><input type="number" id="set-ncf-b01-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B01" /></td><td><input type="date" id="set-ncf-b01-expiry" class="form-input" aria-label="Vencimiento NCF B01" /></td></tr>
+         <tr><td>B02</td><td><input type="number" id="set-ncf-b02-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B02" /></td><td><input type="number" id="set-ncf-b02-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B02" /></td><td><input type="date" id="set-ncf-b02-expiry" class="form-input" aria-label="Vencimiento NCF B02" /></td></tr>
+         <tr><td>B03</td><td><input type="number" id="set-ncf-b03-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B03" /></td><td><input type="number" id="set-ncf-b03-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B03" /></td><td><input type="date" id="set-ncf-b03-expiry" class="form-input" aria-label="Vencimiento NCF B03" /></td></tr>
+         <tr><td>B04</td><td><input type="number" id="set-ncf-b04-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B04" /></td><td><input type="number" id="set-ncf-b04-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B04" /></td><td><input type="date" id="set-ncf-b04-expiry" class="form-input" aria-label="Vencimiento NCF B04" /></td></tr>
+         <tr><td>B12</td><td><input type="number" id="set-ncf-b12-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B12" /></td><td><input type="number" id="set-ncf-b12-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B12" /></td><td><input type="date" id="set-ncf-b12-expiry" class="form-input" aria-label="Vencimiento NCF B12" /></td></tr>
+         <tr><td>B14</td><td><input type="number" id="set-ncf-b14-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B14" /></td><td><input type="number" id="set-ncf-b14-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B14" /></td><td><input type="date" id="set-ncf-b14-expiry" class="form-input" aria-label="Vencimiento NCF B14" /></td></tr>
+         <tr><td>B15</td><td><input type="number" id="set-ncf-b15-start" class="form-input" min="1" max="99999999" aria-label="Inicio autorizado NCF B15" /></td><td><input type="number" id="set-ncf-b15-end" class="form-input" min="1" max="99999999" aria-label="Fin autorizado NCF B15" /></td><td><input type="date" id="set-ncf-b15-expiry" class="form-input" aria-label="Vencimiento NCF B15" /></td></tr>
         </tbody>
        </table>
       </div>
@@ -1708,7 +1711,10 @@
        </div>
       </div>
 
-      <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px; text-align:right;">
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-top:12px; margin-bottom:12px; text-align:left; line-height:1.4;">
+        La información de la empresa y credenciales fiscales se resguardan de forma segura conforme a la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">política de privacidad</a>.
+       </p>
+       <div style="margin-top:30px; border-top:1px solid var(--border-color); padding-top:20px; text-align:right;">
        <button type="submit" class="admin-btn admin-btn-primary">Guardar Configuración</button>
       </div>
      </form>
@@ -1746,7 +1752,7 @@
   <div class="admin-modal-content">
    <div class="admin-modal-header">
     <h2>Registrar Cobro / Abono</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-payment')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-payment')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>
@@ -1868,7 +1874,7 @@
   <div class="admin-modal-content" style="max-width: 450px;">
    <div class="admin-modal-header">
     <h2>Simulador de Escáner de Barras</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-barcode-scan')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-barcode-scan')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>
@@ -1946,7 +1952,7 @@
   <div class="admin-modal-content" style="max-width: 450px;">
    <div class="admin-modal-header">
     <h2>Apertura de Caja (POS)</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-cash-open')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-cash-open')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>
@@ -1971,7 +1977,7 @@
   <div class="admin-modal-content" style="max-width: 500px;">
    <div class="admin-modal-header">
     <h2>Cierre de Caja / Arqueo</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-cash-close')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-cash-close')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>
@@ -2032,7 +2038,7 @@
   <div class="admin-modal-content" style="max-width: 400px;">
    <div class="admin-modal-header">
     <h2>Cobro en Efectivo</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-pos-cash-payment')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-pos-cash-payment')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>
@@ -2065,7 +2071,7 @@
   <div class="admin-modal-content" style="max-width: 450px;">
    <div class="admin-modal-header">
     <h2>Registrar Abono General de Cliente</h2>
-    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-general-abono')">
+    <button class="admin-modal-close" data-erp-click="ERPBilling.closeModal('modal-general-abono')" aria-label="Cerrar modal" title="Cerrar">
      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
    </div>

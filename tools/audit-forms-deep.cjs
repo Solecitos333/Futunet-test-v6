@@ -72,7 +72,7 @@ htmlFiles.forEach(file => {
       continue;
     }
 
-    if (type === 'date' || type === 'datetime-local') {
+    if (['date', 'datetime-local', 'month', 'time', 'week'].includes(type)) {
       continue;
     }
 
@@ -85,8 +85,8 @@ htmlFiles.forEach(file => {
       passwordFields.push({ file, id, hasAutocomplete, raw: inputMatch[0].trim() });
     }
 
-    // Check sensitive inputs (password, credit card, tokens, cedula, rnc) without spellcheck="false"
-    if (['password'].includes(type) || /cedula|rnc|token|pin|secret|pass/i.test(id) || /cedula|rnc|token|pin|secret|pass/i.test(name)) {
+    // Check sensitive inputs (password, credit card, tokens, cedula, rnc, document, passport) without spellcheck="false"
+    if (['password'].includes(type) || /cedula|rnc|token|pin|secret|pass|document|passport/i.test(id) || /cedula|rnc|token|pin|secret|pass|document|passport/i.test(name)) {
       if (!attrs.includes('spellcheck="false"')) {
         sensitiveFieldsWithoutSpellcheckFalse.push({ file, id, name, type, raw: inputMatch[0].trim() });
       }

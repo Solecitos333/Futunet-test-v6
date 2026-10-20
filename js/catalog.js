@@ -248,6 +248,10 @@ function getStemVariants(word) {
   if (word === 'ax3' || word === 'hap' || word === 'c53uig') variants.push('mikrotik', 'router', 'wifi6', 'ax1800', 'qualcomm', 'inalambrico');
   if (word === 'cbs3508p' || word === 'cbs3508pe2g') variants.push('cisco', 'switch', 'poe', 'gigabit', 'sfp', 'cbs350');
   if (word === 'smt1500c' || word === 'smt1500' || word === 'smartconnect') variants.push('apc', 'schneider', 'ups', 'senoidal', '1500va', 'smartups');
+  if (word === 'e16' || word === 'thinkpad e16' || word === 'e16gen1') variants.push('lenovo', 'thinkpad', 'laptop', 'wuxga', 'numpad', 'i7');
+  if (word === 'omada' || word === 'eap653' || word === 'eap') variants.push('tplink', 'ap', 'wifi6', 'ax3000', 'sdn', 'poe', 'techo');
+  if (word === 'l5590' || word === 'ecotank l5590') variants.push('epson', 'ecotank', 'impresora', 'multifuncional', 'adf', 'ethernet', 'tinta');
+  if (word === 'acusense' || word === '2cd2183g2' || word === 'ds2cd2183g2') variants.push('hikvision', 'camara', 'domo', '4k', '8mp', 'ia', 'microfono');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -979,6 +983,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(smt1500c|smt1500|smart-ups\s*1500|smart\s*ups\s*1500|apc\s*1500)\b/i.test(normalizedQuery) || (/\b(senoidal|pfc)\b/i.test(normalizedQuery) && /\b(apc|ups|smart-ups)\b/i.test(normalizedQuery)) || (/\b(smartconnect)\b/i.test(normalizedQuery) && /\b(apc|ups|schneider)\b/i.test(normalizedQuery))) {
     if (product.brand && (product.brand.toLowerCase().includes('schneider') || product.brand.toLowerCase().includes('apc'))) {
       if (/smart-ups|smt1500/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Laptop Corporativa Lenovo ThinkPad E16 al buscar thinkpad e16, e16, lenovo 16, laptop teclado numerico (SUG-L1600)
+  if (/\b(thinkpad\s*e16|e16|lenovo\s*16|e16\s*gen)\b/i.test(normalizedQuery) || (/\b(thinkpad)\b/i.test(normalizedQuery) && /\b(16|e16|numerico)\b/i.test(normalizedQuery)) || (/\b(lenovo)\b/i.test(normalizedQuery) && /\b(e16|16\s*pulgadas|teclado\s*numerico)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lenovo') {
+      if (/thinkpad\s*e16|e16\s*gen/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Punto de Acceso TP-Link Omada EAP653 al buscar omada, eap653, omada wifi 6, ap techo (SUG-T6530)
+  if (/\b(omada|eap653|eap-653)\b/i.test(normalizedQuery) || (/\b(omada)\b/i.test(normalizedQuery) && /\b(ap|wifi\s*6|ax3000|techo)\b/i.test(normalizedQuery)) || (/\b(tp-link|tplink)\b/i.test(normalizedQuery) && /\b(omada|eap653)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase().includes('tp-link') || product.brand.toLowerCase().includes('tplink'))) {
+      if (/omada\s*eap653|eap653/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Impresora Epson EcoTank L5590 al buscar l5590, epson l5590, ecotank adf, impresora con adf (SUG-E5590)
+  if (/\b(l5590|epson\s*l5590|ecotank\s*l5590)\b/i.test(normalizedQuery) || (/\b(ecotank|epson)\b/i.test(normalizedQuery) && /\b(adf|l5590|ethernet)\b/i.test(normalizedQuery)) || (/\b(impresora)\b/i.test(normalizedQuery) && /\b(l5590|adf\s*red)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'epson') {
+      if (/l5590|ecotank\s*l5590/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara IP Hikvision AcuSense 4K al buscar acusense, 2cd2183g2, hikvision 4k, camara acusense (SUG-H8240)
+  if (/\b(acusense|2cd2183g2|ds-2cd2183g2|2cd2183g2-iu)\b/i.test(normalizedQuery) || (/\b(acusense)\b/i.test(normalizedQuery) && /\b(4k|hikvision|domo|camara)\b/i.test(normalizedQuery)) || (/\b(hikvision)\b/i.test(normalizedQuery) && /\b(acusense|4k\s*8mp|domo\s*ia)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'hikvision') {
+      if (/acusense|2cd2183g2/i.test(title)) {
         score += 240;
       } else {
         score += 170;

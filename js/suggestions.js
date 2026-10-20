@@ -1383,6 +1383,38 @@
       status: 'implemented',
       description: 'En servidores corporativos de virtualización, cabinas de almacenamiento NAS (Synology/QNAP), conmutadores centrales y conmutadores telefónicos IP en Santiago requerimos sistemas de respaldo ininterrumpido de energía de onda senoidal pura como el APC Smart-UPS SMT1500C de 1440VA / 1000W fabricado por Schneider Electric con pantalla LCD digital frontal, 8 tomas NEMA 5-15R con grupos conmutados, regulación AVR de amplio rango y puerto de monitoreo en la nube APC SmartConnect.',
       officialResponse: '¡Saludos cordiales Ing. Joelvis! Tu propuesta ha sido acogida e implementada de inmediato. Ya incorporamos al catálogo de Energía & Climatización y a la página oficial marca-schneiderelectric.html el Sistema UPS Interactivo APC Smart-UPS SMT1500C 1440VA / 1000W (onda senoidal pura con certificación para servidores PFC activo, 8 tomas NEMA 5-15R con grupos conmutados, regulación de voltaje AVR Boost & Trim, pantalla LCD interactiva de navegación, puerto Ethernet SmartConnect de monitoreo en la nube y ranura SmartSlot) con 3 años de garantía oficial y entrega directa en Santiago.'
+    },
+    {
+      refCode: 'SUG-L1600',
+      title: 'Disponibilidad de Laptops Corporativas Lenovo ThinkPad E16 Gen 1 de 16 Pulgadas FHD+ (Intel Core i7 13.ª Gen, 16GB RAM, 512GB SSD) con Teclado Numérico para Contabilidad y Gestión Empresarial',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras firmas de contabilidad, auditoría externa y consultoría fiscal en Santiago requerimos laptops corporativas Lenovo ThinkPad E16 Gen 1 con pantalla de 16 pulgadas antirreflejo WUXGA (1920x1200) formato 16:10, procesador Intel Core i7-1355U de 10 núcleos, 16 GB de memoria RAM DDR4 expandible, unidad de estado sólido de 512 GB SSD NVMe M.2 y teclado retroiluminado completo en español con bloque numérico dedicado independiente. En marca-lenovo.html solo contaban con la ThinkPad L14 de 14" que no tiene bloque numérico y ralentiza el ingreso de comprobantes fiscales NCF y nóminas TSS.',
+      officialResponse: '¡Hola Lic. Carlos Manuel! Tu solicitud ha sido atendida e implementada de inmediato. Ya incorporamos al catálogo corporativo de Equipos de Oficina y a la página oficial marca-lenovo.html la Laptop Corporativa Lenovo ThinkPad E16 Gen 1 (pantalla IPS WUXGA de 16" 16:10 antirreflejo, Intel Core i7-1355U hasta 5.0 GHz, 16 GB RAM DDR4, 512 GB SSD NVMe M.2, teclado ergonómico en español con teclado numérico integrado, lector de huella dactilar en botón de encendido, cámara FHD con obturador de privacidad ThinkShutter y certificación militar MIL-STD-810H) con 1 año de garantía oficial Lenovo y facturación formal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-T6530',
+      title: 'Disponibilidad de Puntos de Acceso Wi-Fi 6 de Techo TP-Link Omada EAP653 AX3000 Gigabit PoE para Hoteles, Oficinas y Restaurantes con Gestión en la Nube Omada SDN',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En hoteles boutique de Los Jardines, clínicas odontológicas, restaurantes y oficinas corporativas en Santiago requerimos puntos de acceso inalámbricos Wi-Fi 6 de techo TP-Link Omada EAP653 con velocidad AX3000 (hasta 2402 Mbps en 5 GHz + 574 Mbps en 2.4 GHz), puerto Gigabit Ethernet con alimentación PoE+ 802.3at, diseño ultra delgado de montaje en techo o pared y compatibilidad con el controlador Omada SDN en la nube para configuración masiva, portal cautivo para invitados con vouchers y roaming fluido 802.11k/v. En marca-tp-link.html solo contaban con routers residenciales y el sistema Deco, requiriendo una solución profesional de techo con gestión centralizada.',
+      officialResponse: '¡Saludos cordiales Ing. Ramón Antonio! Nos complace informarte que tu requerimiento ha sido acogido e implementado en su totalidad. Ya incorporamos al catálogo de Redes de Datos y a la página oficial marca-tp-link.html el Punto de Acceso Wi-Fi 6 TP-Link Omada EAP653 AX3000 (diseño ultra slim de techo, doble banda AX3000 con OFDMA y MU-MIMO, puerto Gigabit PoE 802.3at, roaming continuo 802.11k/v, portal cautivo con autenticación SMS/Voucher y control centralizado gratuito en la nube mediante Omada SDN) con 3 años de garantía oficial y entrega inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-E5590',
+      title: 'Disponibilidad de Impresoras Multifuncionales EcoTank Epson L5590 con Alimentador Automático ADF, Red Ethernet, Wi-Fi Direct y Fax para Despachos Contables y Pymes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras oficinas de contabilidad, notarías y despachos legales en Santiago requerimos impresoras multifuncionales de tinta continua original Epson EcoTank L5590 4-en-1 (impresora, copiadora, escáner y fax) equipadas con alimentador automático de documentos (ADF) de 30 hojas para escanear y copiar contratos multi-página sin levantar la tapa hoja por hoja, conectividad de red por cable Ethernet RJ-45 más Wi-Fi Direct para compartir en red local entre varios contadores sin desconexiones, pantalla LCD a color de 1.44" y compatibilidad con botellas de tinta de ultra alto rendimiento Epson 544 (hasta 4,500 páginas en negro y 7,500 en color). En marca-epson.html solo figuraban los modelos L3210/L3250 que no tienen ADF ni puerto Ethernet.',
+      officialResponse: '¡Hola Licda. Xiomara! Tu propuesta ha sido implementada con total éxito. Ya incorporamos al catálogo corporativo de Equipos de Oficina y a la página oficial marca-epson.html la Impresora Multifuncional Epson EcoTank L5590 (sistema de tanque de tinta continua 100% sin cartuchos con botellas 544, alimentador automático ADF de 30 páginas, puerto de red Ethernet 10/100, Wi-Fi Direct, Apple AirPrint, pantalla LCD a color de 1.44" y velocidades de hasta 33 ppm) con 2 años de garantía oficial Epson registrando el equipo y suministro garantizado de tintas originales en Santiago.'
+    },
+    {
+      refCode: 'SUG-H8240',
+      title: 'Disponibilidad de Cámaras IP Domo Hikvision AcuSense 4K 8MP (DS-2CD2183G2-IU) con Clasificación IA de Humanos y Vehículos, Micrófono Integrado y Visión Nocturna EXIR 30m',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En condominios residenciales de Cerros de Gurabo, entradas de naves en zonas francas (PIVEM) y estacionamientos comerciales en Santiago requerimos cámaras IP domo antivandálicas Hikvision AcuSense 4K de 8 Megapíxeles (modelo DS-2CD2183G2-IU) con tecnología de Inteligencia Artificial Deep Learning para clasificación precisa de humanos y vehículos, eliminando las falsas alarmas ocasionadas por ramas, lluvias o gatos. Necesitamos este modelo con micrófono ambiental incorporado para registro sonoro de incidentes, lente gran angular de 2.8 mm (107° de visión), compresión H.265+, ranura para tarjeta microSD de hasta 512 GB, visión nocturna infrarroja EXIR de hasta 30 metros y certificación IP67 para intemperie con chasis antivandálico IK10.',
+      officialResponse: '¡Saludos cordiales Ing. Arnaldo! Tu solicitud ha sido aprobada e integrada de inmediato. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-hikvision.html la Cámara IP Domo Hikvision AcuSense 4K 8MP DS-2CD2183G2-IU (resolución 3840x2160 a 20 fps, filtro de falsas alarmas mediante IA para humanos y vehículos, micrófono integrado de alta fidelidad, visión nocturna EXIR 30m, rango dinámico WDR 120 dB, ranura MicroSD hasta 512GB, protección intemperie IP67 y antivandálica IK10) con 2 años de garantía oficial Hikvision y soporte técnico de configuración en Santiago.'
     }
   ];
 

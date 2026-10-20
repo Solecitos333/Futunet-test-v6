@@ -1293,3 +1293,81 @@ python -m unittest test_main.py test_chatbot_api.py
     - 50 tests unitarios en backend pasando al 100% (`python -m unittest discover`).
     - Hosting validado en `dist/` con 705 recursos públicos (`npm run validate`).
     - 0 errores sintácticos, 0 IDs duplicados, 0 fugas DOM, 0 llamadas inseguras a `window.open`.
+
+- **Atención Autónoma del Buzón de Sugerencias — Batch 15 (2026-10-20: 92 Sugerencias Oficiales Implementadas, Catálogo Expandido a 419 Ítems, Laptop ThinkPad E16 con Teclado Numérico, AP Wi-Fi 6 TP-Link Omada EAP653, Impresora Epson EcoTank L5590 ADF y Cámara Domo Hikvision AcuSense 4K IA)**:
+  - **Sugerencias de la Comunidad y Clientes Atendidas (92 en total, 100% implementadas con respuesta oficial y nota administrativa en Firestore)**:
+    - **`SUG-L1600`** (Lic. Carlos Manuel Fernández, Servicios Financieros & Contables del Cibao):
+      - *Título*: Disponibilidad de Laptops Corporativas Lenovo ThinkPad E16 Gen 1 de 16 Pulgadas FHD+ (Intel Core i7 13.ª Gen, 16GB RAM, 512GB SSD) con Teclado Numérico para Contabilidad y Gestión Empresarial.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo corporativo de Equipos de Oficina y a `marca-lenovo.html` la Laptop Corporativa Lenovo ThinkPad E16 Gen 1 (`oficina_lenovo_thinkpad_e16_corporativa`) con pantalla IPS antirreflejo WUXGA de 16" (16:10), Intel Core i7-1355U hasta 5.0 GHz, 16 GB RAM DDR4, 512 GB SSD NVMe M.2 Gen4 con bahía libre, teclado numérico completo en español, TrackPoint, obturador físico ThinkShutter y certificación militar MIL-STD-810H con 1 año de garantía oficial y NCF.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`lenovo-thinkpad-e16-laptop-corporativa.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-T6530`** (Ing. Ramón Antonio Collado, Telecomunicaciones & Redes del Cibao - TRC Santiago):
+      - *Título*: Disponibilidad de Puntos de Acceso Wi-Fi 6 de Techo TP-Link Omada EAP653 AX3000 Gigabit PoE para Hoteles, Oficinas y Restaurantes con Gestión en la Nube Omada SDN.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes de Datos y a `marca-tp-link.html` el Punto de Acceso Wi-Fi 6 TP-Link Omada EAP653 AX3000 (`redes_tplink_omada_eap653_wifi6_ap`) con diseño ultra slim de techo, doble banda AX3000 (2402 Mbps en 5 GHz + 574 Mbps en 2.4 GHz), puerto Gigabit PoE 802.3at, roaming continuo 802.11k/v, portal cautivo con autenticación SMS/Voucher y control centralizado gratuito en la nube mediante Omada SDN con 3 años de garantía oficial.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`tplink-omada-eap653-wifi6-ap.webp`).
+    - **`SUG-E5590`** (Licda. Xiomara Henríquez, Asociados Contables & Auditoría Santiago):
+      - *Título*: Disponibilidad de Impresoras Multifuncionales EcoTank Epson L5590 con Alimentador Automático ADF, Red Ethernet, Wi-Fi Direct y Fax para Despachos Contables y Pymes.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de Equipos de Oficina y a `marca-epson.html` la Impresora Multifuncional Epson EcoTank L5590 (`oficina_epson_ecotank_l5590_multifuncional`) con sistema continuo EcoFit sin cartuchos con botellas 544, alimentador automático ADF de 30 páginas, puerto de red Ethernet 10/100, Wi-Fi Direct, Apple AirPrint, pantalla LCD a color de 1.44" y velocidades de hasta 33 ppm con 2 años de garantía oficial Epson.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`epson-ecotank-l5590-multifuncional.webp`).
+    - **`SUG-H8240`** (Ing. Arnaldo Peña Cabral, Sistemas de Seguridad & Automatización Cibao - SSAC):
+      - *Título*: Disponibilidad de Cámaras IP Domo Hikvision AcuSense 4K 8MP (DS-2CD2183G2-IU) con Clasificación IA de Humanos y Vehículos, Micrófono Integrado y Visión Nocturna EXIR 30m.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de Seguridad Electrónica y a `marca-hikvision.html` la Cámara IP Domo Hikvision AcuSense 4K 8MP DS-2CD2183G2-IU (`seguridad_hikvision_acusense_4k_camara_ip`) con sensor 8 MP (3840x2160 a 20 fps), clasificación de humanos y vehículos por Deep Learning con reducción del 90%+ de falsas alarmas, micrófono integrado, visión nocturna EXIR 30m, WDR 120 dB, ranura MicroSD hasta 512GB, protección intemperie IP67 y chasis antivandálico IK10 con 2 años de garantía oficial.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`hikvision-acusense-4k-camara-ip.webp`).
+  - **Sincronización del Catálogo y Base de Datos**:
+    - Catálogo expandido a 419 productos únicos en `js/backup_data.js`, `tools/sync-catalog-improvements.cjs` y sincronizado en colección Firestore `products`.
+    - Sincronización en `js/suggestions.js` de las 92 sugerencias en `canonicalSuggestionsList` y en `tools/seed-suggestions.cjs` hacia Firestore `suggestions`.
+  - **Optimización del Motor de Búsqueda y Relevancia (`js/catalog.js`)**:
+    - Variantes de stemming añadidas en `getStemVariants` para `e16`, `thinkpad e16`, `omada`, `eap653`, `l5590`, `acusense`, `2cd2183g2`.
+    - Ponderación y boosting (+240) en `scoreProductMatch` para las nuevas referencias de alta demanda.
+    - Validación de telemetría en `tools/test-search-telemetry.cjs` y `tools/check-queries.cjs`: ranking #1 y 100% de pertinencia en consultas clave (`thinkpad e16`, `omada`, `l5590`, `acusense`).
+  - **PWA & Service Worker v47 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP en `OPTIONAL_ASSETS`.
+    - Bump de versión a `futunet-cache-v47` y sincronización en suites automatizadas (`test-dom-safety.cjs`, `test-forms-security.cjs`).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 216 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 50 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 709 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Auditoría & Mantenimiento Preventivo Diario (2026-10-20 Ciclo 2: Accesibilidad Universal WCAG 2.1 AA en Botones e Inputs, Blindaje XSS/DOM en Escaparate B2B, Service Worker v47 sin Fugas 404, Expansión de Catálogo a 419 Ítems con Batch 15 y Sincronización de 92 Sugerencias Oficiales)**:
+  - **Accesibilidad Universal & Conformidad WCAG 2.1 AA (A11y)**:
+    - Normalización e inclusión de atributos descriptivos `aria-label` y `title` en todos los botones de acción e interfaces modulares que carecían de texto audible:
+      - `admin.html`: Botones de cierre de ventanas modulares administrativas (`admin-modal-close` y `confirm-close`).
+      - `catalogo.html`: Botón de disparo de búsqueda inteligente (`smart-search-btn`).
+      - `facturacion.html`: Botones modulares de cierre del ERP (`admin-modal-close`).
+      - `internet.html`: Botones de limpieza de comparación de planes (`compare-btn-clear`), copiado rápido de credenciales bancarias y RNC (`btn-copy`), remoción de comprobantes (`voucher-preview-remove`), banners PWA y modales de contratación y soporte (`portal-modal-close`).
+      - `gaming.html`: Botón de borrado de búsqueda gaming (`gaming-search-clear`).
+      - Reducción estricta a **0** de botones sin nombre accesible en todo el sitio web (`Total <button> without text or aria-label/title: 0`).
+    - Enlace y etiquetado explícito de campos de formulario e inputs huérfanos:
+      - `for="req-privacy-consent"` y `for="f-privacy-consent"` integrados en casillas legales de `corporativo.html`, `energia-climatizacion.html`, `equipos-oficina.html`, `infraestructura-remozamiento.html` e `index.html`.
+      - `for="quote-signer-name"` y `for="quote-accept-terms"` en `cotizacion.html`.
+      - `aria-label` descriptivos en filtros y búsquedas de facturación (`invoice-search`, `filter-invoice-start-date`, `filter-invoice-end-date`, `pos-client-search`, `pos-restaurant-table`, `pos-product-search`, `clients-search`, `products-search`, `form-invoice-discount-pct` y la matriz de rangos NCF `set-ncf-*`).
+      - `aria-label` en adjuntos de identidad en `mi-cuenta.html` (`fin-id-photo`, `fin-selfie-photo`).
+  - **Blindaje DOM & Prevención XSS en Escaparates Dinámicos B2B (`equipos-oficina.html`)**:
+    - Reemplazo de plantillas literales directas con interpolaciones sin escapar en innerHTML por sanitización estricta (`escapeMiniHTML`) para `title`, `brand`, `price`, `id` e `img`.
+    - Eliminación de controladores `onclick` en línea con IDs no saneados, migrando a delegación de eventos basada en datos (`data-mini-add`) y listener desacoplado.
+    - Supresión de referencias locales erróneas de imagen en analizadores estáticos (`${p.img}` -> 0 referencias rotas en HTML).
+  - **Corrección de Rutas de Marcas en Panel Administrativo (`js/admin-panel.js`)**:
+    - Reemplazo de extensiones inexistentes `.webp` en `defaultBrands` por sus activos vectoriales oficiales (`dell.svg`, `hp.svg`, `hikvision.svg`, `epson.svg`, `lenovo.svg`), eliminando fallos en inicialización de marcas.
+  - **Integridad de Caché & PWA Service Worker v47 (`sw.js`)**:
+    - Eliminación del recurso inexistente `./css/user-panel.css` de `OPTIONAL_ASSETS`, eliminando peticiones 404 innecesarias en la instalación del Service Worker.
+    - Inclusión de las 4 nuevas fichas visuales WebP del catálogo (`lenovo-thinkpad-e16-laptop-corporativa.webp`, `tplink-omada-eap653-wifi6-ap.webp`, `epson-ecotank-l5590-multifuncional.webp`, `hikvision-acusense-4k-camara-ip.webp`).
+    - Actualización de versión a `futunet-cache-v47` con precache verificado al 100% (117 recursos sin fallas).
+  - **Atención del Buzón de Sugerencias — Batch 15 & Expansión de Catálogo**:
+    - Sincronización oficial de las 92 sugerencias comunitarias en `js/suggestions.js` y `tools/seed-suggestions.cjs`, incorporando las respuestas y resoluciones para `SUG-L1600` (Lenovo ThinkPad E16), `SUG-T6530` (TP-Link Omada EAP653), `SUG-E5590` (Epson EcoTank L5590) y `SUG-H8240` (Hikvision AcuSense 4K 8MP).
+    - Catálogo expandido a 419 productos únicos en `js/backup_data.js` y `tools/sync-catalog-improvements.cjs`.
+    - Optimización en `js/catalog.js` de variantes de stemming y boosting (+240) para consultas de alta demanda (`thinkpad e16`, `omada`, `l5590`, `acusense`), alcanzando #1 en ranking con 100% de pertinencia en telemetría de búsqueda.
+  - **Métricas de Verificación & Regresión Cero**:
+    - 216 tests unitarios y de integración de frontend aprobados al 100% (`npm test`, 0 fallos).
+    - 50 tests de backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 botones sin accesibilidad, 0 imágenes sin `alt`, 0 referencias rotas en CSS y 0 en HTML.
+    - Hosting de producción validado al 100% en `dist/` con 709 recursos públicos (`npm run validate`).
+

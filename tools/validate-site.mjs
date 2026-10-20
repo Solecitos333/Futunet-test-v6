@@ -40,7 +40,7 @@ for (const fileName of htmlFiles) {
       errors.push(`${fileName}: enlace target="_blank" sin rel="noopener" seguro (${match[0].slice(0, 80)})`);
     }
   }
-  if (/\b(?:src|href)\s*=\s*["']\s*["']/i.test(content)) errors.push(`${fileName}: referencia src/href vacía`);
+  if (/\b(?:src|href)\s*=\s*(["'])\s*\1/i.test(markupOnly)) errors.push(`${fileName}: referencia src/href vacía`);
 
   const ids = [...markupOnly.matchAll(/\bid\s*=\s*["']([^"']+)["']/gi)].map(match => match[1]);
   const duplicateIds = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
@@ -59,7 +59,7 @@ for (const fileName of htmlFiles) {
   if (formDepth !== 0) errors.push(`${fileName}: etiquetas form desbalanceadas`);
 
   const attributePattern = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
-  for (const match of content.matchAll(attributePattern)) {
+  for (const match of markupOnly.matchAll(attributePattern)) {
     await validateReference(fullPath, match[1]);
   }
 }

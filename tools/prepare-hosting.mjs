@@ -10,7 +10,7 @@ const publicRootFiles = new Set([
   'favicon.ico', 'favicon.png', 'BingSiteAuth.xml'
 ]);
 
-await fs.rm(output, { recursive: true, force: true });
+await fs.rm(output, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
 await fs.mkdir(output, { recursive: true });
 
 for (const directory of publicDirectories) {

@@ -1714,6 +1714,78 @@ test('Mejora demandada por usuarios: Sistema UPS APC Smart-UPS SMT1500C Onda Sen
   assert.ok(catJs.includes("/\\b(smt1500c|smt1500|smart-ups\\s*1500|smart\\s*ups\\s*1500|apc\\s*1500)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar APC Smart-UPS SMT1500C');
 });
 
+test('Mejora demandada por usuarios: Laptop Corporativa Lenovo ThinkPad E16 Gen 1 (SUG-L1600)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L1600'") && seedCjs.includes("status: 'implemented'"), 'SUG-L1600 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L1600') && sugJs.includes('ThinkPad E16 Gen 1'), 'SUG-L1600 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lenovo_thinkpad_e16_corporativa'), 'backup_data.js debe contener oficina_lenovo_thinkpad_e16_corporativa');
+
+  const lenovoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-thinkpad-e16-laptop-corporativa.webp');
+  assert.ok(fs.existsSync(lenovoImg), 'La imagen de la ThinkPad E16 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'e16'"), 'catalog.js debe incluir e16 en stem variants');
+  assert.ok(catJs.includes("/\\b(thinkpad\\s*e16|e16|lenovo\\s*16|e16\\s*gen)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo ThinkPad E16');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 TP-Link Omada EAP653 AX3000 (SUG-T6530)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T6530'") && seedCjs.includes("status: 'implemented'"), 'SUG-T6530 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T6530') && sugJs.includes('TP-Link Omada EAP653'), 'SUG-T6530 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_tplink_omada_eap653_wifi6_ap'), 'backup_data.js debe contener redes_tplink_omada_eap653_wifi6_ap');
+
+  const tplinkImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-omada-eap653-wifi6-ap.webp');
+  assert.ok(fs.existsSync(tplinkImg), 'La imagen del AP TP-Link Omada EAP653 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'omada'"), 'catalog.js debe incluir omada en stem variants');
+  assert.ok(catJs.includes("/\\b(omada|eap653|eap-653)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar TP-Link Omada EAP653');
+});
+
+test('Mejora demandada por usuarios: Impresora Multifuncional Epson EcoTank L5590 ADF (SUG-E5590)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E5590'") && seedCjs.includes("status: 'implemented'"), 'SUG-E5590 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E5590') && sugJs.includes('Epson EcoTank L5590'), 'SUG-E5590 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_epson_ecotank_l5590_multifuncional'), 'backup_data.js debe contener oficina_epson_ecotank_l5590_multifuncional');
+
+  const epsonImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'epson-ecotank-l5590-multifuncional.webp');
+  assert.ok(fs.existsSync(epsonImg), 'La imagen de la Epson EcoTank L5590 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'l5590'"), 'catalog.js debe incluir l5590 en stem variants');
+  assert.ok(catJs.includes("/\\b(l5590|epson\\s*l5590|ecotank\\s*l5590)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Epson EcoTank L5590');
+});
+
+test('Mejora demandada por usuarios: Cámara IP Domo Hikvision AcuSense 4K 8MP IA (SUG-H8240)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H8240'") && seedCjs.includes("status: 'implemented'"), 'SUG-H8240 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H8240') && sugJs.includes('Hikvision AcuSense 4K 8MP'), 'SUG-H8240 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_hikvision_acusense_4k_camara_ip'), 'backup_data.js debe contener seguridad_hikvision_acusense_4k_camara_ip');
+
+  const hikvisionImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hikvision-acusense-4k-camara-ip.webp');
+  assert.ok(fs.existsSync(hikvisionImg), 'La imagen de la cámara Hikvision AcuSense 4K debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'acusense'"), 'catalog.js debe incluir acusense en stem variants');
+  assert.ok(catJs.includes("/\\b(acusense|2cd2183g2|ds-2cd2183g2|2cd2183g2-iu)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Hikvision AcuSense 4K');
+});
+
 
 
 

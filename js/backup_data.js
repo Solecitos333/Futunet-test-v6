@@ -7981,6 +7981,102 @@ const mockDatabase = [
       "Ranura SmartSlot para instalación de tarjetas accesorias de administración de red (AP9630/AP9640/AP9641)",
       "Garantía oficial de 3 años para el equipo y 2 años para la batería con comprobante fiscal formal NCF en Santiago"
     ]
+  },
+  {
+    "id": "oficina_lenovo_thinkpad_e16_corporativa",
+    "department": "oficina",
+    "category": "Laptops y Portátiles",
+    "brand": "Lenovo",
+    "title": "Laptop Corporativa Lenovo ThinkPad E16 Gen 1 16\" WUXGA 16:10 Intel Core i7-1355U 16GB RAM 512GB SSD Teclado Numérico",
+    "desc": "Laptop corporativa de alto rendimiento Lenovo ThinkPad E16 Gen 1 diseñada para firmas contables, analistas financieros, despachos legales y gerencias en Santiago. Equipada con pantalla de 16 pulgadas IPS WUXGA (1920 x 1200) antirreflejo en formato de productividad 16:10 y procesador Intel Core i7-1355U de 13.ª generación (10 núcleos, 12 hilos, hasta 5.0 GHz con gráficos Intel Iris Xe). Cuenta con 16 GB de memoria RAM DDR4 a 3200 MHz (expandible hasta 40 GB) y almacenamiento ultra rápido de 512 GB SSD NVMe M.2 PCIe Gen4 con ranura M.2 libre adicional para expansión. Integra teclado ergonómico ThinkPad resistente a salpicaduras en español con bloque numérico completo independiente para digitación veloz de balances y comprobantes fiscales NCF, icónico botón de navegación TrackPoint rojo, cámara web FHD 1080p con obturador de privacidad ThinkShutter, lector de huella dactilar integrado en el botón de encendido y certificación militar MIL-STD-810H de durabilidad extrema.",
+    "price": "RD$ 62,500.00",
+    "img": "img/productos/catalogo/lenovo-thinkpad-e16-laptop-corporativa.webp",
+    "gallery": [
+      "img/productos/catalogo/lenovo-thinkpad-e16-laptop-corporativa.webp"
+    ],
+    "specs": [
+      "Pantalla IPS antirreflejo de 16 pulgadas WUXGA (1920 x 1200) formato 16:10 con 300 nits de brillo",
+      "Procesador Intel Core i7-1355U de 13.ª generación (10 núcleos, hasta 5.0 GHz con 12 MB Intel Smart Cache)",
+      "Memoria RAM de 16 GB DDR4 3200 MHz (expandible hasta 40 GB para multitarea pesada)",
+      "Almacenamiento de 512 GB SSD M.2 PCIe 4.0 NVMe con bahía libre secundaria M.2 para expansión futura",
+      "Teclado ergonómico retroiluminado en español con teclado numérico dedicado y TrackPoint",
+      "Seguridad corporativa: Chip dTPM 2.0, lector de huellas en botón y obturador físico ThinkShutter",
+      "Conectividad integral: USB-C Thunderbolt 4 / USB 3.2 Gen 2, HDMI 2.1, RJ-45 Gigabit Ethernet y Wi-Fi 6",
+      "Chasis reforzado con tapa de aluminio y certificación de resistencia militar MIL-STD-810H",
+      "Garantía oficial Lenovo de 1 año con soporte empresarial y comprobante fiscal formal NCF en Santiago"
+    ]
+  },
+  {
+    "id": "redes_tplink_omada_eap653_wifi6_ap",
+    "department": "redes",
+    "category": "Puntos de Acceso Wi-Fi",
+    "brand": "TP-Link",
+    "title": "Punto de Acceso Wi-Fi 6 TP-Link Omada EAP653 AX3000 de Techo Gigabit PoE+ con Gestión Cloud Centralizada SDN",
+    "desc": "Punto de acceso inalámbrico empresarial de montaje en techo o pared TP-Link Omada EAP653 con tecnología Wi-Fi 6 (802.11ax) de doble banda y diseño ultra delgado (ultra-slim) para hoteles, restaurantes, clínicas y oficinas corporativas en Santiago. Proporciona velocidades inalámbricas combinadas de hasta 2976 Mbps (2402 Mbps en 5 GHz y 574 Mbps en 2.4 GHz) con tecnologías avanzadas OFDMA, MU-MIMO y 1024-QAM para entornos de alta densidad de usuarios concurrentes. Cuenta con un puerto Gigabit Ethernet 10/100/1000 compatible con alimentación Power over Ethernet Plus (PoE+ 802.3at) o fuente directa 12V DC. Totalmente integrado en el ecosistema Omada SDN con gestión centralizada gratuita en la nube, portal cautivo personalizable para clientes e invitados con vouchers y autenticación por SMS, roaming continuo y transparente (802.11k/v) y seguridad empresarial WPA3.",
+    "price": "RD$ 8,950.00",
+    "img": "img/productos/catalogo/tplink-omada-eap653-wifi6-ap.webp",
+    "gallery": [
+      "img/productos/catalogo/tplink-omada-eap653-wifi6-ap.webp"
+    ],
+    "specs": [
+      "Velocidades Wi-Fi 6 ultra rápidas AX3000: 2402 Mbps simultáneos en 5 GHz y 574 Mbps en 2.4 GHz",
+      "Puerto de red Gigabit Ethernet 10/100/1000 Mbps con alimentación PoE+ 802.3at estándar",
+      "Diseño ultra compacto y elegante de perfil bajo para montaje estético en techos o muros",
+      "Integración total en plataforma Omada SDN para monitoreo y administración masiva remota en la nube",
+      "Capacidad de alta densidad con balanceo de carga automático, Band Steering y Airtime Fairness",
+      "Portal cautivo profesional multi-método (Voucher, SMS, Facebook Wi-Fi) para redes de invitados",
+      "Roaming fluido y transparente 802.11k/v que evita caídas al desplazarse entre áreas de cobertura",
+      "Cifrado de máxima seguridad empresarial WPA3-Personal y WPA3-Enterprise",
+      "Garantía oficial TP-Link de 3 años con comprobante fiscal formal NCF y entrega directa en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_epson_ecotank_l5590_multifuncional",
+    "department": "equipos",
+    "category": "Impresoras y Escáneres",
+    "brand": "Epson",
+    "title": "Impresora Multifuncional Epson EcoTank L5590 4-en-1 Tinta Continua con ADF 30 Hojas Red Ethernet y Wi-Fi Direct",
+    "desc": "Impresora multifuncional 4-en-1 de tanque de tinta continua original Epson EcoTank L5590 (impresora, copiadora, escáner y fax) de alta productividad para oficinas, consultorios médicos, notarías y departamentos contables en Santiago. Cuenta con un alimentador automático de documentos (ADF) de 30 páginas para digitalizar y copiar contratos, facturas y expedientes de múltiples hojas de forma desatendida. Incorpora conectividad de red por cable Ethernet 10/100 RJ-45 más Wi-Fi y Wi-Fi Direct para compartir en red local sin depender de una PC intermediaria, pantalla LCD a color de 1.44 pulgadas para manejo autónomo sin computadora y compatibilidad con botellas de tinta originales Epson serie 544 de llenado EcoFit antiderrame, con un rendimiento de hasta 4,500 páginas en negro y 7,500 páginas a color para un costo de impresión por página ultra reducido.",
+    "price": "RD$ 19,800.00",
+    "img": "img/productos/catalogo/epson-ecotank-l5590-multifuncional.webp",
+    "gallery": [
+      "img/productos/catalogo/epson-ecotank-l5590-multifuncional.webp"
+    ],
+    "specs": [
+      "Multifuncional 4-en-1 de tanque continuo: Imprime, copia, escanea y envía fax de forma profesional",
+      "Alimentador Automático de Documentos (ADF) de 30 hojas para copiado y digitalización continua",
+      "Conexión de red dual: Cableada Ethernet 10/100 Mbps y red inalámbrica Wi-Fi con Wi-Fi Direct",
+      "Pantalla LCD a color de 1.44 pulgadas con botonera intuitiva para copiado autónomo rápido",
+      "Velocidad de impresión de hasta 33 páginas por minuto (ppm) en negro y 15 ppm en color",
+      "Tecnología Heat-Free MicroPiezo que no requiere calentamiento, ahorrando energía y desgaste de piezas",
+      "Rendimiento extraordinario: Botellas EcoFit 544 para hasta 4,500 páginas en negro y 7,500 a color",
+      "Soporte completo de impresión móvil con Epson Smart Panel, Apple AirPrint y Mopria Print Service",
+      "Garantía oficial Epson de hasta 2 años registrando el equipo con factura formal NCF en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_hikvision_acusense_4k_camara_ip",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Hikvision",
+    "title": "Cámara IP Domo Hikvision AcuSense 4K 8MP (DS-2CD2183G2-IU) con Clasificación IA de Humanos y Vehículos y Micrófono Integrado",
+    "desc": "Cámara de seguridad IP formato domo antivandálico de ultra alta definición 4K (8 Megapíxeles) Hikvision AcuSense (modelo DS-2CD2183G2-IU) con Inteligencia Artificial basada en algoritmos de Deep Learning para clasificación precisa de objetivos humanos y vehiculares, filtrando más del 90% de falsas alarmas causadas por lluvia, viento, hojas, insectos o mascotas en condominios, naves industriales y plazas comerciales en Santiago. Ofrece una resolución cristalina de 3840 x 2160 píxeles a 20 cuadros por segundo con sensor CMOS de barrido progresivo de 1/2.8\", lente fijo gran angular de 2.8 mm (campo de visión de 107°), iluminación infrarroja avanzada EXIR 2.0 con alcance de hasta 30 metros, amplio rango dinámico WDR de 120 dB para compensar contraluces intensos, micrófono de alta fidelidad incorporado para audio ambiental en tiempo real, ranura para memoria microSD de hasta 512 GB para almacenamiento local autónomo, compresión inteligente H.265+ y robusto chasis metálico con certificación IP67 contra agua y polvo y protección antivandálica IK10.",
+    "price": "RD$ 10,950.00",
+    "img": "img/productos/catalogo/hikvision-acusense-4k-camara-ip.webp",
+    "gallery": [
+      "img/productos/catalogo/hikvision-acusense-4k-camara-ip.webp"
+    ],
+    "specs": [
+      "Sensor de imagen de 8 Megapíxeles (3840 x 2160) con calidad de video 4K Ultra HD de máxima nitidez",
+      "Tecnología AcuSense con Deep Learning para detección y clasificación selectiva de humanos y vehículos",
+      "Micrófono ambiental integrado de alta sensibilidad con filtro de ruido para evidencia de audio en directo",
+      "Lente fijo de 2.8 mm con cobertura panorámica de 107° en horizontal y 57° en vertical",
+      "Visión nocturna por infrarrojos EXIR 2.0 con alcance efectivo de hasta 30 metros en oscuridad total",
+      "Tecnología True WDR de 120 dB y 3D DNR para imágenes nítidas ante fuertes contraluces y reflejos",
+      "Ranura interna para tarjeta de memoria MicroSD / MicroSDHC / MicroSDXC de hasta 512 GB",
+      "Protección extrema para exteriores: Certificación IP67 intemperie y chasis antivandálico IK10",
+      "Garantía oficial Hikvision de 2 años con asesoría técnica y facturación formal con NCF en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;
