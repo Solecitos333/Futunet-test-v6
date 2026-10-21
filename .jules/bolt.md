@@ -1,0 +1,3 @@
+## 2024-10-24 - Lazily caching normalized search strings
+**Learning:** In string-heavy operations like searching/filtering over a catalog of products on every keystroke or search input, repeatedly calling regex-heavy string normalization (`normalizeSearch`) on the same fields is a major bottleneck.
+**Action:** Avoid redundant string normalization by lazily caching the normalized string representations of product properties on the object instances using `Object.defineProperty(obj, cacheKey, { value: ..., enumerable: false })`. This speeds up the process significantly and hides the cached fields from serialization/iteration.
