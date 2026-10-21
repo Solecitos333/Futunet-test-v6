@@ -1,0 +1,3 @@
+## 2024-10-27 - Inconsistent Accessibility Coverage in Conditional View Variants
+**Learning:** When applying UX or accessibility fixes (like adding `aria-label`s) to dynamically generated HTML components, conditional view variants (such as 'compact' vs 'regular' layouts) often use separate template literal branches. This can easily lead to inconsistent accessibility coverage where one variant has proper attributes but the other is missed.
+**Action:** Always check all code branches that generate variations of a UI component to ensure accessibility fixes are applied comprehensively across all conditional templates (e.g., both standard and compact views).
