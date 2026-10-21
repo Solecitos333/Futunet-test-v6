@@ -1,0 +1,3 @@
+## 2024-05-15 - Add ARIA Labels to Dynamically Generated Icon-Only Buttons
+**Learning:** In frontend components where HTML is dynamically generated using template literals (such as the cart and product quantity controls), it's easy to overlook screen reader accessibility for icon-only buttons (like `-` and `+` symbols). Without explicit `aria-label` attributes, screen readers cannot properly convey the action of these buttons to visually impaired users, leading to a degraded UX.
+**Action:** When creating or reviewing UI components, especially dynamically generated ones, consistently verify that all icon-only or visually ambiguous interactive elements include descriptive `aria-label`s. Ensure that testing includes an accessibility review pass for template literals.
