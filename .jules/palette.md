@@ -1,0 +1,3 @@
+## 2024-05-30 - ARIA Labels for Icon-Only Buttons
+**Learning:** Dynamically generated icon-only buttons using template literals in JS files (like in `js/cart.js` and `js/catalog.js`) often miss accessibility attributes because they aren't caught by static HTML linters. In this app, quantity adjustment buttons (`+` and `-`) were missing `aria-label`s, making them invisible to screen readers.
+**Action:** Always ensure that any button element constructed via JavaScript string templates includes descriptive `aria-label` attributes if its content is primarily visual (e.g., an icon or a symbol like `+`/`-`).
