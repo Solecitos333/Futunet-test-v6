@@ -1,0 +1,3 @@
+## 2026-06-26 - [Use WeakMap for Caching without mutating objects]
+**Learning:** When trying to lazily cache properties calculated over complex objects in large arrays (like normalized search strings over `mockDatabase` objects) to avoid expensive regex operations on every loop or keystroke, mutating the objects using `obj.cache = ...` or `Object.defineProperty` can be problematic. They might be frozen, or it could cause unwanted side effects or serialization issues.
+**Action:** Use a `WeakMap` to associate side-cache data keyed by object reference safely and lazily. This provides a measurable speedup for recurring operations without modifying the underlying application state.
