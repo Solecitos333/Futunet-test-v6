@@ -1,0 +1,3 @@
+## 2024-05-18 - Search Normalization Memoization
+**Learning:** Search performance was bottlenecked by repetitive string normalizations (Regex replacements and mapping) inside large nested iteration loops such as `scoreProductMatch` and `initSmartSearch`. Direct modification of object properties to cache values can leak into serialization causing unexpected side-effects if the object is stringified or iterated elsewhere.
+**Action:** Use `Object.defineProperty(obj, cacheKey, { value: ..., enumerable: false })` to lazily cache the output of expensive operations on the data objects themselves, preventing the new cache keys from leaking into `Object.keys()` iterations or JSON serialization while significantly speeding up subsequent property accesses.
