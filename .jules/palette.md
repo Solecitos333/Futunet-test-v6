@@ -1,0 +1,3 @@
+## 2024-05-24 - Accessibility gaps in conditional template literal variants
+**Learning:** When UI components (like cart controls) are rendered using JavaScript template literals with conditional branches (e.g., 'compact' vs 'regular' layouts), accessibility attributes (like `aria-label` for icon-only buttons) are often applied inconsistently across the variants. Fixing one branch doesn't guarantee the other is accessible.
+**Action:** When adding accessibility attributes to dynamically generated HTML, explicitly review all conditional branches in the rendering function to ensure complete coverage.
