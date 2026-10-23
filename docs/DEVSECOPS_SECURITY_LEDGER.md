@@ -1413,3 +1413,29 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), elevando Linksys, Netgear, Victron Energy y Panasonic a 3 productos cada una.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 713 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Auditoría & Mantenimiento Preventivo Diario (2026-10-23: Blindaje Numérico contra Precios NaN en Escaparates B2B y Panel Administrativo, Neutralización de Inyección de Selectores en Portal de Internet, Robustez Transaccional de Carrito Firestore, Accesibilidad WCAG 2.1 AA en Pestañas y Controles de Cantidad)**:
+  - **Blindaje Numérico de Precios en Escaparates Dinámicos B2B (`js/service-page.js`)**:
+    - Detección de anomalía: `renderProductsGrid` realizaba `parseFloat(p.price)` directamente sobre cadenas formateadas con el prefijo `"RD$"` (ej. `"RD$ 438.00"`), lo que evaluaba a `NaN` y generaba la etiqueta defectuosa `'RD$ NaN'` en las fichas de productos de servicios.
+    - Mitigación implementada: Extracción estricta de componentes numéricos mediante regex (`String(p.price).replace(/[^0-9.-]+/g, '')`) y formateo consistente con `Intl.NumberFormat` / `toLocaleString('es-DO')`, eliminando de raíz cualquier visualización `NaN`.
+  - **Corrección de Precios en Panel Administrativo (`js/admin-panel.js`)**:
+    - Normalización de precios de artículos en el modal de detalle de órdenes, exportador CSV y mensaje de WhatsApp mediante desinfección regex de prefijos de moneda, evitando que órdenes con montos formateados computen subtotal 0.
+    - Robustecimiento de `formatPrice(p)` para parsear montos formateados sin perder decimales ni formato corporativo.
+  - **Resiliencia & Prevención de Fallas DOM en Portal de Internet (`js/internet-portal.js`)**:
+    - Sanitización y escape del parámetro `type` (`urlParams.get('type')`) mediante `CSS.escape` y filtrado defensivo previo a la ejecución de `document.querySelector`, previniendo excepciones fatales de selector sintácticamente inválido ante parámetros URL maliciosos o caracteres especiales.
+    - Parseo seguro de precios en planes pendientes recuperados de `sessionStorage` y en ordenación/filtrado de tarjetas en catálogo de planes.
+  - **Robustez de Estado en Carrito de Compras (`js/cart.js`)**:
+    - Sincronización bidireccional resiliente con Firestore (`syncCartToFirestore`): normalización de valores primitivos u objetos `{ qty }` previniendo propagación de `NaN` a `cartState.items` y almacenamiento local.
+    - Blindaje de cómputo en `getCartItemCount` garantizando retorno de enteros seguros.
+  - **Soporte de URLs Limpias (Clean URLs) (`js/catalog.js` & `js/chatbot.js`)**:
+    - Flexibilización de validación de ruta mediante `path.includes('catalogo')` en lugar de requerir estrictamente `'catalogo.html'`, asegurando que visitantes en rutas canónicas de Firebase Hosting (`/catalogo`) mantengan el estado interactivo sin recargas innecesarias.
+  - **Accesibilidad Universal WCAG 2.1 AA & Interacción por Teclado**:
+    - `js/suggestions.js`: Sincronización dinámica de `aria-checked="true/false"` en tarjetas de categoría (`.sug-category-card`) y botones de audiencia (`.sug-audience-btn`), agregando soporte de teclado (`Enter` / `Space`) para navegación asistida sin mouse.
+    - `mi-cuenta.html` & `js/user-panel.js`: Asignación de roles semánticos `role="tablist"` y `role="tab"` con sincronización reactiva de `aria-selected` y atributos `hidden` en los paneles de pestañas.
+    - `js/producto.js`: Deshabilitación accesible (`disabled` y `aria-disabled="true"`) del botón de restar cantidad cuando el contador se encuentra en 1 unidad, junto con protección defensiva ante llamadas de carrito asíncronas.
+  - **Métricas de Verificación & Regresión Cero**:
+    - 221 tests automatizados aprobados al 100% en frontend (`npm test`, 0 fallos).
+    - 50 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - Validación de hosting de producción al 100% en `dist/` con 713 recursos públicos (`npm run validate`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes, 0 referencias rotas en 52 archivos HTML.
+
