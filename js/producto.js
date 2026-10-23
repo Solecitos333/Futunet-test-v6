@@ -62,6 +62,11 @@
     selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;
     const valueEl = document.getElementById('product-detail-qty-value');
     if (valueEl) valueEl.textContent = selectedQuantity;
+    const minusBtn = document.querySelector('[data-product-qty="-1"]');
+    if (minusBtn) {
+      minusBtn.disabled = selectedQuantity <= 1;
+      minusBtn.setAttribute('aria-disabled', String(selectedQuantity <= 1));
+    }
   }
 
   function getQuoteMessage(detail) {
@@ -540,6 +545,8 @@
         if (window.FutunetCart) {
           window.FutunetCart.add(detail.id, selectedQuantity);
           window.FutunetCart.openDrawer();
+        } else if (typeof window.showToast === 'function') {
+          window.showToast('Cargando carrito de compras...', 'info');
         }
       };
     }

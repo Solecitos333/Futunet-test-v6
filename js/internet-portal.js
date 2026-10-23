@@ -111,7 +111,15 @@
       // Aplicar filtros por parámetro de tipo si viene en la URL
       var typeParam = urlParams.get('type');
       if (typeParam) {
-        var checkbox = document.querySelector('input[name="filter-plan-type"][value="' + typeParam + '"]');
+        var safeType = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+          ? CSS.escape(typeParam)
+          : String(typeParam).replace(/["\\]/g, '');
+        var checkbox = null;
+        try {
+          checkbox = document.querySelector('input[name="filter-plan-type"][value="' + safeType + '"]');
+        } catch (e) {
+          checkbox = null;
+        }
         if (checkbox) {
           checkbox.checked = true;
           // Ajustar el radio de servicio según corresponda
@@ -254,7 +262,10 @@
         sessionStorage.removeItem('pending_hiring_plan_id');
         sessionStorage.removeItem('pending_hiring_plan_price');
         setTimeout(function () {
-          window.selectHiringPlan(pendingPlanName, pendingPlanId, parseFloat(pendingPlanPrice));
+          var safePendingPrice = typeof pendingPlanPrice === 'number'
+            ? pendingPlanPrice
+            : (parseFloat(String(pendingPlanPrice || '').replace(/[^0-9.-]+/g, '')) || 0);
+          window.selectHiringPlan(pendingPlanName, pendingPlanId, safePendingPrice);
         }, 100);
       }
     } catch (e) {
@@ -1490,7 +1501,10 @@
       }
       var cardService = card.getAttribute('data-service');
       var cardType = card.getAttribute('data-type');
-      var cardPrice = parseFloat(card.getAttribute('data-price') || 0);
+      var rawPrice = card.getAttribute('data-price') || 0;
+      var cardPrice = typeof rawPrice === 'number'
+        ? rawPrice
+        : (parseFloat(String(rawPrice).replace(/[^0-9.-]+/g, '')) || 0);
       var cardName = (card.getAttribute('data-name') || '').toLowerCase();
       var cardSpeed = (card.getAttribute('data-speed') || '').toLowerCase();
 
@@ -1548,10 +1562,12 @@
       });
     } else {
       cards.sort(function (a, b) {
-        var priceA = parseFloat(a.getAttribute('data-price') || 0);
-        var priceB = parseFloat(b.getAttribute('data-price') || 0);
-        var speedA = parseFloat(a.getAttribute('data-speed') || 0);
-        var speedB = parseFloat(b.getAttribute('data-speed') || 0);
+        var rawPriceA = a.getAttribute('data-price') || 0;
+        var rawPriceB = b.getAttribute('data-price') || 0;
+        var priceA = typeof rawPriceA === 'number' ? rawPriceA : (parseFloat(String(rawPriceA).replace(/[^0-9.-]+/g, '')) || 0);
+        var priceB = typeof rawPriceB === 'number' ? rawPriceB : (parseFloat(String(rawPriceB).replace(/[^0-9.-]+/g, '')) || 0);
+        var speedA = parseFloat(a.getAttribute('data-speed') || 0) || 0;
+        var speedB = parseFloat(b.getAttribute('data-speed') || 0) || 0;
 
         if (sortBy === 'price-asc') {
           return priceA - priceB;

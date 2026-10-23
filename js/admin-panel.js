@@ -1912,7 +1912,7 @@
       var items = o.items || [];
       
       items.forEach(function (item) {
-        var price = parseFloat(item.price) || 0;
+        var price = typeof item.price === 'number' ? item.price : (parseFloat(String(item.price || '').replace(/[^0-9.-]+/g, '')) || 0);
         var qty = parseInt(item.qty) || 1;
         var totalItem = price * qty;
         subtotal += totalItem;
@@ -1931,7 +1931,7 @@
       var discountLabel = '—';
       var discountVal = 0;
       if (o.discount) {
-        discountVal = parseFloat(o.discount.amount) || 0;
+        discountVal = typeof o.discount.amount === 'number' ? o.discount.amount : (parseFloat(String(o.discount.amount || '').replace(/[^0-9.-]+/g, '')) || 0);
         discountLabel = escapeHtml(o.discount.code) + ' (-' + formatPrice(discountVal) + ')';
       }
       
@@ -1952,7 +1952,7 @@
         '*Artículos:*\n';
       
       items.forEach(function(item) {
-        var price = parseFloat(item.price) || 0;
+        var price = typeof item.price === 'number' ? item.price : (parseFloat(String(item.price || '').replace(/[^0-9.-]+/g, '')) || 0);
         var qty = parseInt(item.qty) || 1;
         whatsappText += '- ' + item.title + ' (' + qty + 'x ' + formatPrice(price) + ')\n';
       });
@@ -3471,7 +3471,7 @@
   }
   function formatPrice(p) {
     if (p == null || p === '' || p === 'Contactar') return '<span style="color:#0A70A2;font-weight:600;">Contactar</span>';
-    var num = parseFloat(p);
+    var num = typeof p === 'number' ? p : (parseFloat(String(p).replace(/[^0-9.-]+/g, '')) || NaN);
     if (isNaN(num)) return '<span style="color:#0A70A2;font-weight:600;">' + p + '</span>';
     return 'RD$ ' + num.toLocaleString('es-DO', { minimumFractionDigits: 2 });
   }
@@ -3689,7 +3689,10 @@
       },
       function(o) {
         var sub = 0;
-        (o.items || []).forEach(function(it) { sub += (parseFloat(it.price) || 0) * (parseInt(it.qty) || 1); });
+        (o.items || []).forEach(function(it) {
+          var p = typeof it.price === 'number' ? it.price : (parseFloat(String(it.price || '').replace(/[^0-9.-]+/g, '')) || 0);
+          sub += p * (parseInt(it.qty) || 1);
+        });
         return sub;
       },
       function(o) { return o.discount ? o.discount.code : ''; },

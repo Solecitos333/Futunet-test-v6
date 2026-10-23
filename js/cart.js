@@ -280,10 +280,15 @@
         if (dbCart && dbCart.items) {
           let merged = { ...cartState.items };
           for (const [id, value] of Object.entries(dbCart.items)) {
-            if (merged[id]) {
-              merged[id].qty = Math.max(merged[id].qty, value.qty);
-            } else {
-              merged[id] = { qty: value.qty };
+            const rawVal = typeof value === 'object' && value !== null ? value.qty : value;
+            const parsedVal = parseInt(rawVal, 10);
+            if (!isNaN(parsedVal) && parsedVal > 0) {
+              if (merged[id]) {
+                const currentQty = parseInt(merged[id].qty, 10) || 1;
+                merged[id].qty = Math.max(currentQty, parsedVal);
+              } else {
+                merged[id] = { qty: parsedVal };
+              }
             }
           }
           cartState.items = merged;
@@ -306,7 +311,10 @@
   }
 
   function getCartItemCount() {
-    return Object.values(cartState.items).reduce((total, item) => total + (item.qty || 0), 0);
+    return Object.values(cartState.items).reduce((total, item) => {
+      const q = parseInt(typeof item === 'object' && item ? item.qty : item, 10);
+      return total + (!isNaN(q) && q > 0 ? q : 0);
+    }, 0);
   }
 
   function getCartItems() {

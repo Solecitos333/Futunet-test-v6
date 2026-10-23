@@ -8077,6 +8077,102 @@ const mockDatabase = [
       "Protección extrema para exteriores: Certificación IP67 intemperie y chasis antivandálico IK10",
       "Garantía oficial Hikvision de 2 años con asesoría técnica y facturación formal con NCF en Santiago"
     ]
+  },
+  {
+    "id": "redes_linksys_lrt224_dualwan_vpn_router",
+    "department": "redes",
+    "category": "Routers y Redes",
+    "brand": "Linksys",
+    "title": "Router VPN Empresarial Dual-WAN Gigabit Linksys LRT224 con Balanceo de Carga y Failover Automático",
+    "desc": "Router VPN de nivel empresarial Linksys LRT224 con doble puerto WAN Gigabit Ethernet para balanceo de carga y respaldo redundante con conmutación por error automática entre dos proveedores de internet (Claro y Altice) en empresas, despachos y oficinas de Santiago. Dispone de 4 puertos LAN Gigabit Ethernet 10/100/1000 con soporte de VLAN 802.1Q para segmentación de tráfico de red, servidor OpenVPN integrado con soporte para hasta 5 túneles de empleados remotos y hasta 50 túneles VPN IPSec de sitio a sitio acelerados por hardware con cifrado DES, 3DES y AES. Incorpora un avanzado cortafuegos SPI con inspección exhaustiva de paquetes (DoS/DDoS), filtrado web por URL y control de acceso por IP/MAC. Chasis metálico robusto y silencioso sin ventilador (fanless) ideal para montaje en pared o escritorio corporativo.",
+    "price": "RD$ 14,850.00",
+    "img": "img/productos/catalogo/linksys-lrt224-dualwan-vpn-router.webp",
+    "gallery": [
+      "img/productos/catalogo/linksys-lrt224-dualwan-vpn-router.webp"
+    ],
+    "specs": [
+      "Doble puerto WAN Gigabit Ethernet 10/100/1000 con balanceo de carga y failover automático Claro/Altice",
+      "4 puertos LAN Gigabit Ethernet con soporte de VLAN 802.1Q para segmentación departamental segura",
+      "Servidor VPN empresarial: Hasta 50 túneles IPSec sitio a sitio y 5 túneles OpenVPN concurrentes",
+      "Aceleración VPN por hardware con soporte de cifrado avanzado DES, 3DES, AES-128, AES-192 y AES-256",
+      "Cortafuegos SPI integrado con prevención contra ataques de denegación de servicio (DoS / DDoS)",
+      "Filtrado de contenidos URL por dominios y control de acceso seguro por direcciones IP y MAC",
+      "Gestión intuitiva mediante interfaz web HTTPS con estadísticas de tráfico en tiempo real y diagnóstico",
+      "Chasis metálico industrial Fanless silencioso para operación continua 24/7 en empresas y oficinas",
+      "Garantía corporativa oficial Linksys de 2 años con comprobante fiscal formal NCF en Santiago"
+    ]
+  },
+  {
+    "id": "redes_netgear_gs724tp_24p_gigabit_poe_switch",
+    "department": "redes",
+    "category": "Switches de Red",
+    "brand": "Netgear",
+    "title": "Switch Administrable Netgear Smart Managed Pro GS724TPv2 24 Puertos Gigabit PoE+ (190W) con 2 Puertos SFP para Rack",
+    "desc": "Switch administrable de 24 puertos Gigabit Ethernet Netgear Smart Managed Pro GS724TPv2 con alimentación PoE+ (802.3at) en todos los 24 puertos y un presupuesto total de energía de 190 Watts, ideal para alimentar cámaras de seguridad IP, domos PTZ, puntos de acceso Wi-Fi 6 y teléfonos VoIP en redes corporativas en Santiago. Incluye 2 puertos de fibra óptica SFP Gigabit 1000Base-X dedicados para enlaces troncales de largo alcance a centros de datos o racks secundarios. Ofrece amplias capacidades de capa 2/2+ (L2/L2+), incluyendo VLANs 802.1Q, priorización de tráfico QoS avanzada, snooping IGMP para transmisiones de video multicast, listas de control de acceso (ACL L2/L3/L4), autenticación de puertos 802.1X y prevención de tormentas. Chasis metálico de 1U para montaje en rack de 19 pulgadas con ventiladores inteligentes de enfriamiento silencioso.",
+    "price": "RD$ 26,500.00",
+    "img": "img/productos/catalogo/netgear-gs724tp-24p-gigabit-poe-switch.webp",
+    "gallery": [
+      "img/productos/catalogo/netgear-gs724tp-24p-gigabit-poe-switch.webp"
+    ],
+    "specs": [
+      "24 puertos Gigabit Ethernet 10/100/1000 con alimentación PoE+ 802.3at de hasta 30W por puerto",
+      "Presupuesto total de potencia PoE de 190 Watts con monitoreo de consumo en tiempo real",
+      "2 puertos SFP Gigabit 1000Base-X dedicados para enlaces de fibra óptica de larga distancia",
+      "Gestión inteligente Smart Pro Web GUI con soporte para VLAN 802.1Q, DiffServ QoS y LACP LAG",
+      "Seguridad empresarial avanzada: ACLs L2-L4, filtrado MAC/IP, 802.1X RADIUS y protección DoS",
+      "Capacidad de conmutación no bloqueante de 52 Gbps y tasa de reenvío de 38.6 Mpps",
+      "Enfriamiento inteligente con control térmico acústico ultra silencioso para entornos de oficina",
+      "Chasis metálico resistente estándar de 1U para rack de 19 pulgadas con kit de montaje incluido",
+      "Garantía limitada de por vida Netgear ProSAFE con reemplazo anticipado y factura formal NCF"
+    ]
+  },
+  {
+    "id": "energia_victron_smartshunt_500a_monitor_bateria",
+    "department": "energia",
+    "category": "Energía Solar y Respaldo",
+    "brand": "Victron Energy",
+    "title": "Monitor de Baterías Victron Energy SmartShunt 500A / 50mV con Bluetooth Integrado para Sistemas Solares y Respaldo",
+    "desc": "Monitor de baterías inteligente todo-en-uno Victron Energy SmartShunt 500A / 50mV con tecnología Bluetooth Smart integrada, diseñado para el monitoreo preciso del estado de bancos de baterías en sistemas solares fotovoltaicos, inversores de respaldo y telecomunicaciones en Santiago. El dispositivo mide continuamente la corriente que entra y sale de la batería mediante un shunt de manganina de 500A, calculando en tiempo real el Estado de Carga (SoC %) con precisión milimétrica, los amperios-hora consumidos, la tensión (voltios), la corriente neta (amperios), la potencia (vatios) y el tiempo restante de autonomía con la carga actual. Se conecta directamente a cualquier teléfono o tableta Android/iOS a través de la app gratuita VictronConnect sin cables adicionales ni pantallas secundarias. Cuenta además con una entrada auxiliar configurable para monitorear la tensión de una segunda batería (como la de arranque del generador), la temperatura del banco o el voltaje del punto medio, y un puerto de comunicación VE.Direct para integración con consolas Cerbo GX y el portal VRM.",
+    "price": "RD$ 9,800.00",
+    "img": "img/productos/catalogo/victron-smartshunt-500a-monitor-bateria.webp",
+    "gallery": [
+      "img/productos/catalogo/victron-smartshunt-500a-monitor-bateria.webp"
+    ],
+    "specs": [
+      "Shunt industrial de alta precisión de 500 Amperios / 50 mV con pernos terminales de latón M10",
+      "Cálculo exacto del Estado de Carga (SoC %) mediante algoritmo patentado de integración de amperios-hora",
+      "Bluetooth Smart integrado: Monitoreo completo y configuración inalámbrica con la app VictronConnect",
+      "Lecturas en tiempo real: Voltaje, corriente instantánea, potencia consumida y tiempo de autonomía restante",
+      "Entrada auxiliar versátil: Monitoreo de tensión de batería secundaria, punto medio o sensor de temperatura",
+      "Amplio rango de tensión de operación de 6.5 V a 70 V DC (bancos de 12V, 24V y 48V)",
+      "Compatibilidad química universal: Baterías de Litio LiFePO4, AGM, GEL, Plomo-Ácido y Ciclo Profundo",
+      "Puerto de comunicación VE.Direct para integración con centros de control Cerbo GX y monitoreo en la nube VRM",
+      "Garantía oficial Victron Energy de 5 años con soporte técnico especializado y NCF formal en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_panasonic_kxtgp600_dect_ip_inalambrico",
+    "department": "oficina",
+    "category": "Telefonía y Comunicaciones",
+    "brand": "Panasonic",
+    "title": "Sistema Telefónico Inalámbrico DECT IP Panasonic KX-TGP600 con Base y Terminal para 8 Líneas SIP Simultáneas",
+    "desc": "Sistema de telefonía inalámbrica corporativa DECT IP Panasonic KX-TGP600 compuesto por estación base PoE y terminal inalámbrico ergonómico para oficinas, consultorios médicos, almacenes, naves comerciales y restaurantes en Santiago. La base admite hasta 8 cuentas SIP simultáneas y permite gestionar hasta 8 llamadas de voz paralelas sin interferencias ni saturación. Cuenta con pantalla LCD a color de 1.8 pulgadas retroiluminada de fácil lectura, calidad de sonido superior HD Voice con códec de banda ancha G.722 y tecnología de reducción de ruido ambiental acústico. Ofrece un alcance inalámbrico de hasta 50 metros en interiores y hasta 300 metros en exteriores con tecnología DECT 6.0 segura. Es escalable hasta 8 auriculares inalámbricos (modelo KX-TPA60) o teléfonos de sobremesa DECT inalámbricos (KX-TPA65), y compatible con repetidores de señal Panasonic para coberturas de múltiples pisos.",
+    "price": "RD$ 11,250.00",
+    "img": "img/productos/catalogo/panasonic-kxtgp600-dect-ip-inalambrico.webp",
+    "gallery": [
+      "img/productos/catalogo/panasonic-kxtgp600-dect-ip-inalambrico.webp"
+    ],
+    "specs": [
+      "Estación base DECT IP con capacidad para hasta 8 líneas/cuentas SIP y 8 llamadas simultáneas",
+      "Terminal inalámbrico con pantalla gráfica LCD a color de 1.8 pulgadas con retroiluminación nítida",
+      "Audio HD Voice de banda ancha (códec G.722) con cancelación de eco y supresión de ruido ambiente",
+      "Gran cobertura inalámbrica: Hasta 50 metros en interiores y 300 metros en exteriores (DECT 6.0)",
+      "Capacidad de expansión: Admite hasta 8 terminales inalámbricos asociados a la misma base y repetidores",
+      "Puerto Ethernet 10/100 Mbps con alimentación Power over Ethernet (PoE 802.3af) en la estación base",
+      "Agenda telefónica compartida de hasta 500 registros con registro de las últimas 20 llamadas realizadas/recibidas",
+      "Autonomía de batería excepcional: Hasta 11 horas de conversación continua y 200 horas en espera",
+      "Garantía oficial Panasonic de 1 año con soporte de configuración SIP y comprobante fiscal formal NCF"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

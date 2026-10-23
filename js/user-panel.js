@@ -561,11 +561,21 @@
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
         var target = this.getAttribute('data-up-tab');
-        tabs.forEach(function (t) { t.classList.remove('is-active'); });
-        panels.forEach(function (p) { p.classList.remove('is-active'); });
+        tabs.forEach(function (t) {
+          t.classList.remove('is-active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        panels.forEach(function (p) {
+          p.classList.remove('is-active');
+          p.hidden = true;
+        });
         this.classList.add('is-active');
+        this.setAttribute('aria-selected', 'true');
         var panel = document.querySelector('[data-up-panel="' + target + '"]');
-        if (panel) panel.classList.add('is-active');
+        if (panel) {
+          panel.classList.add('is-active');
+          panel.hidden = false;
+        }
         try {
           var url = new URL(window.location.href);
           url.searchParams.set('tab', target);

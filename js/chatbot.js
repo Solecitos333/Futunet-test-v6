@@ -194,7 +194,7 @@ function initFutunetChatbot() {
   }
 
   function openCatalogSearch(query) {
-    const onCatalog = window.location.pathname.toLowerCase().includes('catalogo.html');
+    const onCatalog = window.location.pathname.toLowerCase().includes('catalogo');
     if (onCatalog && typeof window.executeSearch === 'function' && query) {
       window.executeSearch(query);
       closeChat();

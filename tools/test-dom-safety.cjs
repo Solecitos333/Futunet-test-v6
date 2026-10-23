@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v47';"), 'sw.js debe estar en la versión futunet-cache-v47');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v48';"), 'sw.js debe estar en la versión futunet-cache-v48');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -745,10 +745,77 @@ test('Estabilidad & Blindaje Numérico: producto.js, cart.js, user-panel.js y sw
   );
 });
 
+test('Resiliencia, Accesibilidad Universal y Blindaje de Precios: service-page, admin-panel, internet-portal, cart, suggestions y mi-cuenta', () => {
+  // 1. service-page.js extrae numPrice y previene 'RD$ NaN' ante cadenas con prefijo RD$
+  const srvJs = fs.readFileSync(path.join(projectRoot, 'js', 'service-page.js'), 'utf8');
+  assert.ok(
+    srvJs.includes("var numPrice = typeof p.price === 'number'") &&
+    srvJs.includes(".replace(/[^0-9.-]+/g, '')"),
+    'service-page.js debe sanitizar caracteres no numéricos en p.price para evitar RD$ NaN'
+  );
 
+  // 2. admin-panel.js extrae precios numéricos genuinos en órdenes, WhatsApp y CSV
+  const adminJs = fs.readFileSync(path.join(projectRoot, 'js', 'admin-panel.js'), 'utf8');
+  assert.ok(
+    adminJs.includes("var price = typeof item.price === 'number' ? item.price : (parseFloat(String(item.price || '').replace(/[^0-9.-]+/g, '')) || 0);"),
+    'admin-panel.js debe extraer precios numéricos de items en el modal de órdenes'
+  );
+  assert.ok(
+    adminJs.includes("var num = typeof p === 'number' ? p : (parseFloat(String(p).replace(/[^0-9.-]+/g, '')) || NaN);"),
+    'admin-panel.js formatPrice debe normalizar cadenas monetarias con replace'
+  );
 
+  // 3. internet-portal.js neutraliza selectores maliciosos en typeParam
+  const portalJs = fs.readFileSync(path.join(projectRoot, 'js', 'internet-portal.js'), 'utf8');
+  assert.ok(
+    portalJs.includes("CSS.escape(typeParam)") || portalJs.includes('CSS.escape'),
+    'internet-portal.js debe sanear o escapar typeParam para evitar DOMException en querySelector'
+  );
 
+  // 4. cart.js sincroniza Firestore de forma defensiva y previene NaN en getCartItemCount
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(
+    cartJs.includes("const rawVal = typeof value === 'object' && value !== null ? value.qty : value;") &&
+    cartJs.includes("const parsedVal = parseInt(rawVal, 10);"),
+    'cart.js debe parsear defensivamente cantidades numéricas u objetos en syncCartToFirestore'
+  );
+  assert.ok(
+    cartJs.includes("return total + (!isNaN(q) && q > 0 ? q : 0);"),
+    'cart.js getCartItemCount debe asegurar cómputo numérico sin NaN'
+  );
 
+  // 5. suggestions.js sincroniza aria-checked y teclado en selector de categorías y audiencias
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(
+    sugJs.includes("card.setAttribute('aria-checked', 'true');") &&
+    sugJs.includes("c.setAttribute('aria-checked', 'false');"),
+    'suggestions.js debe actualizar aria-checked dinámicamente en categorías'
+  );
+  assert.ok(
+    sugJs.includes("btn.setAttribute('aria-checked', 'true');") &&
+    sugJs.includes("b.setAttribute('aria-checked', 'false');"),
+    'suggestions.js debe actualizar aria-checked dinámicamente en audiencias'
+  );
 
+  // 6. producto.js deshabilita botón de decremento al llegar a 1 unidad
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(
+    prodJs.includes("minusBtn.disabled = selectedQuantity <= 1;") &&
+    prodJs.includes("minusBtn.setAttribute('aria-disabled', String(selectedQuantity <= 1));"),
+    'producto.js debe alternar disabled y aria-disabled en el botón de restar cantidad'
+  );
 
+  // 7. mi-cuenta.html y user-panel.js cuentan con soporte ARIA para tabs
+  const miCuentaHtml = fs.readFileSync(path.join(projectRoot, 'mi-cuenta.html'), 'utf8');
+  assert.ok(
+    miCuentaHtml.includes('role="tablist"') && miCuentaHtml.includes('role="tab"'),
+    'mi-cuenta.html debe definir role="tablist" y role="tab" para accesibilidad WCAG'
+  );
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    userPanelJs.includes("this.setAttribute('aria-selected', 'true');") &&
+    userPanelJs.includes("t.setAttribute('aria-selected', 'false');"),
+    'user-panel.js debe alternar dinámicamente aria-selected en las pestañas'
+  );
+});
 

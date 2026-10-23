@@ -1786,6 +1786,78 @@ test('Mejora demandada por usuarios: Cámara IP Domo Hikvision AcuSense 4K 8MP I
   assert.ok(catJs.includes("/\\b(acusense|2cd2183g2|ds-2cd2183g2|2cd2183g2-iu)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Hikvision AcuSense 4K');
 });
 
+test('Mejora demandada por usuarios: Router VPN Dual-WAN Gigabit Linksys LRT224 (SUG-L2240)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L2240'") && seedCjs.includes("status: 'implemented'"), 'SUG-L2240 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L2240') && sugJs.includes('Linksys LRT224'), 'SUG-L2240 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_lrt224_dualwan_vpn_router'), 'backup_data.js debe contener redes_linksys_lrt224_dualwan_vpn_router');
+
+  const linksysImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-lrt224-dualwan-vpn-router.webp');
+  assert.ok(fs.existsSync(linksysImg), 'La imagen del router Linksys LRT224 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'lrt224'"), 'catalog.js debe incluir lrt224 en stem variants');
+  assert.ok(catJs.includes("/\\b(lrt224|lrt-224|dualwan|dual-wan)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Linksys LRT224');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable Netgear ProSAFE GS724TPv2 24P PoE+ (SUG-N7240)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N7240'") && seedCjs.includes("status: 'implemented'"), 'SUG-N7240 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N7240') && sugJs.includes('Netgear Smart Managed Pro GS724TPv2'), 'SUG-N7240 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_netgear_gs724tp_24p_gigabit_poe_switch'), 'backup_data.js debe contener redes_netgear_gs724tp_24p_gigabit_poe_switch');
+
+  const netgearImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-gs724tp-24p-gigabit-poe-switch.webp');
+  assert.ok(fs.existsSync(netgearImg), 'La imagen del switch Netgear GS724TPv2 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'gs724tp'"), 'catalog.js debe incluir gs724tp en stem variants');
+  assert.ok(catJs.includes("/\\b(gs724tp|gs724tpv2|gs724)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Netgear GS724TPv2');
+});
+
+test('Mejora demandada por usuarios: Monitor de Baterías Victron Energy SmartShunt 500A Bluetooth (SUG-V5000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V5000'") && seedCjs.includes("status: 'implemented'"), 'SUG-V5000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V5000') && sugJs.includes('Victron Energy SmartShunt 500A'), 'SUG-V5000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_smartshunt_500a_monitor_bateria'), 'backup_data.js debe contener energia_victron_smartshunt_500a_monitor_bateria');
+
+  const victronImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-smartshunt-500a-monitor-bateria.webp');
+  assert.ok(fs.existsSync(victronImg), 'La imagen del monitor Victron SmartShunt 500A debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'smartshunt'"), 'catalog.js debe incluir smartshunt en stem variants');
+  assert.ok(catJs.includes("/\\b(smartshunt|shunt|500a)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron SmartShunt');
+});
+
+test('Mejora demandada por usuarios: Sistema Telefónico Inalámbrico DECT IP Panasonic KX-TGP600 (SUG-P6000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P6000'") && seedCjs.includes("status: 'implemented'"), 'SUG-P6000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P6000') && sugJs.includes('Panasonic KX-TGP600'), 'SUG-P6000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kxtgp600_dect_ip_inalambrico'), 'backup_data.js debe contener oficina_panasonic_kxtgp600_dect_ip_inalambrico');
+
+  const panasonicImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kxtgp600-dect-ip-inalambrico.webp');
+  assert.ok(fs.existsSync(panasonicImg), 'La imagen del teléfono Panasonic KX-TGP600 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tgp600'"), 'catalog.js debe incluir tgp600 en stem variants');
+  assert.ok(catJs.includes("/\\b(tgp600|kxtgp600|kx-tgp600)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Panasonic KX-TGP600');
+});
+
 
 
 

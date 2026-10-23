@@ -271,7 +271,8 @@
   function renderProductsGrid(products, container) {
     var html = '';
     products.forEach(function (p) {
-      var priceLabel = p.price ? 'RD$ ' + parseFloat(p.price).toLocaleString('es-DO', { minimumFractionDigits: 2 }) : 'A cotizar';
+      var numPrice = typeof p.price === 'number' ? p.price : (parseFloat(String(p.price || '').replace(/[^0-9.-]+/g, '')) || 0);
+      var priceLabel = numPrice > 0 ? 'RD$ ' + numPrice.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : (p.price && !String(p.price).toLowerCase().includes('cotizar') ? String(p.price) : 'A cotizar');
       var imgUrl = p.img || 'img/placeholder.svg';
       var escapedId = escapeHtml(p.id);
       var escapedImg = escapeHtml(imgUrl);

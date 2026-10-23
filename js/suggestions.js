@@ -76,9 +76,20 @@
   function initCategorySelector() {
     categoryCards.forEach(function (card) {
       card.addEventListener('click', function () {
-        categoryCards.forEach(function (c) { c.classList.remove('is-active'); });
+        categoryCards.forEach(function (c) {
+          c.classList.remove('is-active');
+          c.setAttribute('aria-checked', 'false');
+        });
         card.classList.add('is-active');
+        card.setAttribute('aria-checked', 'true');
         selectedCategory = card.getAttribute('data-cat') || 'web_platform';
+      });
+
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
       });
     });
   }
@@ -87,8 +98,12 @@
   function initAudienceSelector() {
     audienceBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        audienceBtns.forEach(function (b) { b.classList.remove('is-active'); });
+        audienceBtns.forEach(function (b) {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-checked', 'false');
+        });
         btn.classList.add('is-active');
+        btn.setAttribute('aria-checked', 'true');
         selectedAudience = btn.getAttribute('data-audience') || 'client';
       });
     });
@@ -1415,6 +1430,38 @@
       status: 'implemented',
       description: 'En condominios residenciales de Cerros de Gurabo, entradas de naves en zonas francas (PIVEM) y estacionamientos comerciales en Santiago requerimos cámaras IP domo antivandálicas Hikvision AcuSense 4K de 8 Megapíxeles (modelo DS-2CD2183G2-IU) con tecnología de Inteligencia Artificial Deep Learning para clasificación precisa de humanos y vehículos, eliminando las falsas alarmas ocasionadas por ramas, lluvias o gatos. Necesitamos este modelo con micrófono ambiental incorporado para registro sonoro de incidentes, lente gran angular de 2.8 mm (107° de visión), compresión H.265+, ranura para tarjeta microSD de hasta 512 GB, visión nocturna infrarroja EXIR de hasta 30 metros y certificación IP67 para intemperie con chasis antivandálico IK10.',
       officialResponse: '¡Saludos cordiales Ing. Arnaldo! Tu solicitud ha sido aprobada e integrada de inmediato. Ya incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-hikvision.html la Cámara IP Domo Hikvision AcuSense 4K 8MP DS-2CD2183G2-IU (resolución 3840x2160 a 20 fps, filtro de falsas alarmas mediante IA para humanos y vehículos, micrófono integrado de alta fidelidad, visión nocturna EXIR 30m, rango dinámico WDR 120 dB, ranura MicroSD hasta 512GB, protección intemperie IP67 y antivandálica IK10) con 2 años de garantía oficial Hikvision y soporte técnico de configuración en Santiago.'
+    },
+    {
+      refCode: 'SUG-L2240',
+      title: 'Disponibilidad de Routers VPN Empresariales Linksys LRT224 Dual-WAN Gigabit con Balanceo de Carga y Respaldo Automático para Conexiones Redundantes Claro/Altice',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En nuestras empresas, centros médicos y oficinas de consultoría en Santiago contratamos dos proveedores de internet simultáneos (fibra óptica Claro y Altice) y requerimos un router balanceador VPN Linksys LRT224 Dual-WAN Gigabit que gestione el balanceo de tráfico inteligente y conmute automáticamente (failover) si una de las líneas experimenta interrupciones. Necesitamos soporte para hasta 50 túneles IPSec sitio a sitio hacia sucursales remotas y 5 túneles OpenVPN para colaboradores en teletrabajo, junto con cortafuegos SPI y segmentación por VLANs 802.1Q en chasis metálico silencioso sin ventilador.',
+      officialResponse: '¡Hola Ing. David! Tu solicitud ha sido aprobada e implementada de inmediato. Incorporamos al catálogo de Redes de Datos y a la página oficial marca-linksys.html el Router VPN Empresarial Dual-WAN Gigabit Linksys LRT224 (balanceo de carga inteligente Claro/Altice, failover automático, 4 puertos LAN Gigabit con VLAN 802.1Q, hasta 50 túneles IPSec y 5 túneles OpenVPN con aceleración por hardware, cortafuegos SPI y chasis metálico silencioso) con 2 años de garantía corporativa y soporte de ingeniería en Santiago.'
+    },
+    {
+      refCode: 'SUG-N7240',
+      title: 'Disponibilidad de Switches Administrables Netgear Smart Managed Pro GS724TPv2 de 24 Puertos Gigabit PoE+ (190W) con 2 Puertos SFP Dedicados para Racks Corporativos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En proyectos de infraestructura de red en parques industriales y plazas corporativas en Santiago requerimos switches para montaje en rack de 19 pulgadas Netgear Smart Managed Pro GS724TPv2 de 24 puertos Gigabit Ethernet donde todos los puertos admitan PoE+ 802.3at con presupuesto de al menos 190 Watts para alimentar teléfonos IP, puntos de acceso Wi-Fi 6 y cámaras de videovigilancia sin requerir inyectores externos. Asimismo, requerimos 2 puertos SFP Gigabit dedicados para enlaces de subida de fibra óptica hacia switches de distribución y gestión web L2/L2+ con VLANs y ACLs.',
+      officialResponse: '¡Saludos cordiales Ing. Héctor Bienvenido! Nos complace informarte que tu requerimiento ha sido acogido e implementado de inmediato. Ya incorporamos al catálogo de Redes de Datos y a la página oficial marca-netgear.html el Switch Administrable Netgear Smart Managed Pro GS724TPv2 de 24 Puertos Gigabit PoE+ (190W de presupuesto PoE+, 2 puertos SFP de fibra dedicados, administración web L2/L2+, VLAN 802.1Q, ACL de seguridad, QoS avanzado y montaje en rack de 19" de 1U) con garantía oficial ProSAFE y factura fiscal formal en Santiago.'
+    },
+    {
+      refCode: 'SUG-V5000',
+      title: 'Disponibilidad de Monitores de Baterías Victron Energy SmartShunt 500A / 50mV con Bluetooth Integrado para Sistemas Solares y Bancos de Respaldo Inversor',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En instalaciones solares fotovoltaicas y sistemas de respaldo energético con inversores en residencias y empresas de Santiago requerimos monitores de corriente de alta precisión Victron Energy SmartShunt 500A / 50mV con Bluetooth Smart integrado para consultar desde el celular en la aplicación VictronConnect el porcentaje exacto de batería restante (SoC %), amperios-hora consumidos, voltaje del banco y tiempo restante de autonomía. Necesitamos que sea compatible con bancos de 12V, 24V y 48V tanto de Litio LiFePO4 como de baterías de ciclo profundo y que cuente con entrada auxiliar para medir temperatura o tensión de una batería de arranque.',
+      officialResponse: '¡Hola Ing. Carolina! Tu propuesta ha sido aprobada e integrada con éxito. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-victronenergy.html el Monitor de Baterías Inteligente Victron Energy SmartShunt 500A / 50mV (Bluetooth integrado para app VictronConnect, cálculo de SoC %, lectura de amperios consumidos y autonomía restante, entrada secundaria para temperatura o banco auxiliar, compatible con 12V/24V/48V Litio y Plomo-Ácido y puerto VE.Direct) con 5 años de garantía oficial Victron y disponibilidad inmediata en Santiago.'
+    },
+    {
+      refCode: 'SUG-P6000',
+      title: 'Disponibilidad de Sistemas Telefónicos Inalámbricos DECT IP Panasonic KX-TGP600 con 8 Líneas SIP para Clínicas, Naves Comerciales y Almacenes',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En almacenes de distribución, clínicas médicas, concesionarios y oficinas de múltiples departamentos en Santiago requerimos sistemas de telefonía inalámbrica corporativa DECT IP Panasonic KX-TGP600 con estación base PoE y terminales inalámbricos que admitan hasta 8 cuentas SIP simultáneas y 8 llamadas concurrentes. En marca-panasonic.html solo contaban con teléfonos de escritorio fijos por cable, requiriendo una solución de comunicación inalámbrica con sonido HD Voice, pantalla a color de 1.8 pulgadas y cobertura de hasta 300 metros para movilidad del personal dentro de las instalaciones.',
+      officialResponse: '¡Estimado Lic. José Luis! Nos alegra comunicarte que tu sugerencia ha sido implementada de inmediato. Hemos incorporado al catálogo corporativo de Equipos de Oficina y a la página oficial marca-panasonic.html el Sistema Telefónico Inalámbrico DECT IP Panasonic KX-TGP600 (soporta hasta 8 cuentas SIP y 8 llamadas simultáneas, pantalla LCD a color de 1.8", audio HD Voice con reducción de ruido, puerto Ethernet PoE y capacidad de expansión hasta 8 terminales para movilidad total en almacenes y clínicas) con 1 año de garantía oficial y soporte local en Santiago.'
     }
   ];
 

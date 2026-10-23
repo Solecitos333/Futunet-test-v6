@@ -175,7 +175,11 @@ const queries = [
   'thinkpad e16',
   'omada',
   'l5590',
-  'acusense'
+  'acusense',
+  'lrt224',
+  'gs724tp',
+  'smartshunt',
+  'tgp600'
 ];
 
 

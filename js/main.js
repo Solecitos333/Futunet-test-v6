@@ -477,9 +477,6 @@ document.addEventListener('keydown', (e) => {
 /* -------------------------------------------------------------
    3. SCROLL REVEAL — Animación de entrada
    ------------------------------------------------------------- */
-/* -------------------------------------------------------------
-   3. SCROLL REVEAL — Animación de entrada
-   ------------------------------------------------------------- */
 function initScrollReveal() {
   initNavigationBindings();
   initBrandImageFallbacks();

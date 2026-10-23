@@ -1371,3 +1371,45 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 botones sin accesibilidad, 0 imágenes sin `alt`, 0 referencias rotas en CSS y 0 en HTML.
     - Hosting de producción validado al 100% en `dist/` con 709 recursos públicos (`npm run validate`).
 
+- **Atención Autónoma del Buzón de Sugerencias — Batch 16 (2026-10-23: 96 Sugerencias Oficiales Implementadas, Catálogo Expandido a 423 Ítems, Router Dual-WAN Linksys LRT224, Switch Netgear GS724TPv2 24P PoE+ 190W, Monitor Shunt Victron 500A Bluetooth y Teléfono DECT IP Panasonic KX-TGP600)**:
+  - **Sugerencias de la Comunidad y Clientes Atendidas (96 en total, 100% implementadas con respuesta oficial y nota administrativa en Firestore)**:
+    - **`SUG-L2240`** (Ing. David Peralta, Telecomunicaciones & Conectividad del Norte):
+      - *Título*: Disponibilidad de Routers VPN Empresariales Linksys LRT224 Dual-WAN Gigabit con Balanceo de Carga y Respaldo Automático para Conexiones Redundantes Claro/Altice.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes de Datos y a la página oficial `marca-linksys.html` el Router VPN Empresarial Dual-WAN Gigabit Linksys LRT224 (`redes_linksys_lrt224_dualwan_vpn_router`) con balanceo de carga inteligente Claro/Altice, failover automático, 4 puertos LAN Gigabit con VLAN 802.1Q, hasta 50 túneles IPSec y 5 túneles OpenVPN con aceleración por hardware, cortafuegos SPI y chasis metálico silencioso con 2 años de garantía corporativa y soporte de ingeniería en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`linksys-lrt224-dualwan-vpn-router.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-N7240`** (Ing. Héctor Bienvenido Peña, Infraestructura de Redes & Datacenter Cibao):
+      - *Título*: Disponibilidad de Switches Administrables Netgear Smart Managed Pro GS724TPv2 de 24 Puertos Gigabit PoE+ (190W) con 2 Puertos SFP Dedicados para Racks Corporativos.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes de Datos y a la página oficial `marca-netgear.html` el Switch Administrable Netgear Smart Managed Pro GS724TPv2 de 24 Puertos Gigabit PoE+ (`redes_netgear_gs724tp_24p_gigabit_poe_switch`) con 190W de presupuesto PoE+, 2 puertos SFP de fibra dedicados, administración web L2/L2+, VLAN 802.1Q, ACL de seguridad, QoS avanzado y montaje en rack de 19" de 1U con garantía oficial ProSAFE y factura fiscal formal en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`netgear-gs724tp-24p-gigabit-poe-switch.webp`).
+    - **`SUG-V5000`** (Ing. Carolina Valerio, Energías Renovables del Norte - ERN Santiago):
+      - *Título*: Disponibilidad de Monitores de Baterías Victron Energy SmartShunt 500A / 50mV con Bluetooth Integrado para Sistemas Solares y Bancos de Respaldo Inversor.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo corporativo de Energía & Climatización y a la página oficial `marca-victronenergy.html` el Monitor de Baterías Inteligente Victron Energy SmartShunt 500A / 50mV (`energia_victron_smartshunt_500a_monitor_bateria`) con Bluetooth integrado para app VictronConnect, cálculo de SoC %, lectura de amperios consumidos y autonomía restante, entrada secundaria para temperatura o banco auxiliar, compatible con 12V/24V/48V Litio y Plomo-Ácido y puerto VE.Direct con 5 años de garantía oficial Victron y disponibilidad inmediata en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`victron-smartshunt-500a-monitor-bateria.webp`).
+    - **`SUG-P6000`** (Lic. José Luis Peralta, Telecomunicaciones & Gestión Corporativa Santiago):
+      - *Título*: Disponibilidad de Sistemas Telefónicos Inalámbricos DECT IP Panasonic KX-TGP600 con 8 Líneas SIP para Clínicas, Naves Comerciales y Almacenes.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo corporativo de Equipos de Oficina y a la página oficial `marca-panasonic.html` el Sistema Telefónico Inalámbrico DECT IP Panasonic KX-TGP600 (`oficina_panasonic_kxtgp600_dect_ip_inalambrico`) soportando hasta 8 cuentas SIP y 8 llamadas simultáneas, pantalla LCD a color de 1.8", audio HD Voice con reducción de ruido, puerto Ethernet PoE y capacidad de expansión hasta 8 terminales para movilidad total en almacenes y clínicas con 1 año de garantía oficial y soporte local en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`panasonic-kxtgp600-dect-ip-inalambrico.webp`).
+  - **Sincronización del Catálogo y Base de Datos**:
+    - Catálogo expandido a 423 productos únicos en `js/backup_data.js`, `tools/sync-catalog-improvements.cjs` y sincronizado en colección Firestore `products`.
+    - Sincronización en `js/suggestions.js` de las 96 sugerencias en `canonicalSuggestionsList` y en `tools/seed-suggestions.cjs` hacia Firestore `suggestions`.
+  - **Optimización del Motor de Búsqueda y Relevancia (`js/catalog.js`)**:
+    - Variantes de stemming añadidas en `getStemVariants` para `lrt224`, `lrt`, `dualwan`, `gs724tp`, `gs724`, `smartshunt`, `shunt`, `500a`, `tgp600`, `kxtgp600`.
+    - Ponderación y boosting (+240) en `scoreProductMatch` para las nuevas referencias de alta demanda.
+    - Validación de telemetría en `tools/test-search-telemetry.cjs` y `tools/check-queries.cjs`: ranking #1 y 100% de pertinencia en consultas clave (`lrt224`, `gs724tp`, `smartshunt`, `tgp600`).
+  - **PWA & Service Worker v48 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP en `OPTIONAL_ASSETS`.
+    - Bump de versión a `futunet-cache-v48` y sincronización en suites automatizadas (`test-dom-safety.cjs`, `test-forms-security.cjs`).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 220 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 50 tests unitarios en backend ejecutados y aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 imágenes ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 llamadas `window.open` sin `noopener` y `noreferrer` (`node tools/audit-security-deep.cjs`).
+    - 0 interpolaciones no escapadas en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), elevando Linksys, Netgear, Victron Energy y Panasonic a 3 productos cada una.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 713 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

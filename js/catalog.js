@@ -252,6 +252,10 @@ function getStemVariants(word) {
   if (word === 'omada' || word === 'eap653' || word === 'eap') variants.push('tplink', 'ap', 'wifi6', 'ax3000', 'sdn', 'poe', 'techo');
   if (word === 'l5590' || word === 'ecotank l5590') variants.push('epson', 'ecotank', 'impresora', 'multifuncional', 'adf', 'ethernet', 'tinta');
   if (word === 'acusense' || word === '2cd2183g2' || word === 'ds2cd2183g2') variants.push('hikvision', 'camara', 'domo', '4k', '8mp', 'ia', 'microfono');
+  if (word === 'lrt224' || word === 'lrt' || word === 'dualwan') variants.push('linksys', 'router', 'vpn', 'balanceador', 'failover', 'ipsec', 'openvpn');
+  if (word === 'gs724tp' || word === 'gs724' || word === 'gs724tpv2') variants.push('netgear', 'switch', 'poe', 'prosafe', 'gigabit', 'sfp', 'rack');
+  if (word === 'smartshunt' || word === 'shunt') variants.push('victron', 'bateria', 'monitor', 'bluetooth', 'soc', '500a', 'vedirect');
+  if (word === 'tgp600' || word === 'kxtgp600') variants.push('panasonic', 'telefono', 'inalambrico', 'dect', 'sip', 'ip', 'base');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1027,6 +1031,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(acusense|2cd2183g2|ds-2cd2183g2|2cd2183g2-iu)\b/i.test(normalizedQuery) || (/\b(acusense)\b/i.test(normalizedQuery) && /\b(4k|hikvision|domo|camara)\b/i.test(normalizedQuery)) || (/\b(hikvision)\b/i.test(normalizedQuery) && /\b(acusense|4k\s*8mp|domo\s*ia)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'hikvision') {
       if (/acusense|2cd2183g2/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Router VPN Dual-WAN Linksys LRT224 al buscar lrt224, linksys vpn, dual wan, router balanceador (SUG-L2240)
+  if (/\b(lrt224|lrt-224|dualwan|dual-wan)\b/i.test(normalizedQuery) || (/\b(balanceador|failover)\b/i.test(normalizedQuery) && /\b(linksys|router|vpn)\b/i.test(normalizedQuery)) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(vpn|lrt224|dual\s*wan)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'linksys') {
+      if (/lrt224|dual-wan/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Netgear Smart Pro GS724TPv2 24P PoE+ al buscar gs724tp, gs724, netgear 24, switch 24 puertos poe (SUG-N7240)
+  if (/\b(gs724tp|gs724tpv2|gs724)\b/i.test(normalizedQuery) || (/\b(switch|switches)\b/i.test(normalizedQuery) && /\b(netgear)\b/i.test(normalizedQuery) && /\b(24|poe|sfp)\b/i.test(normalizedQuery)) || (/\b(netgear)\b/i.test(normalizedQuery) && /\b(24\s*puertos|gs724|poe\+?)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'netgear') {
+      if (/gs724tp|24\s*puertos\s*gigabit\s*poe/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Monitor de Baterías Victron SmartShunt al buscar smartshunt, shunt victron, monitor bateria, shunt 500a (SUG-V5000)
+  if (/\b(smartshunt|shunt|500a)\b/i.test(normalizedQuery) || (/\b(monitor|medidor)\b/i.test(normalizedQuery) && /\b(bateria|baterias|victron|soc)\b/i.test(normalizedQuery)) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(shunt|smartshunt|bateria|soc)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('victron')) {
+      if (/smartshunt|shunt/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Teléfono Inalámbrico DECT IP Panasonic KX-TGP600 al buscar tgp600, kxtgp600, panasonic dect, telefono inalambrico ip (SUG-P6000)
+  if (/\b(tgp600|kxtgp600|kx-tgp600)\b/i.test(normalizedQuery) || (/\b(dect|inalambrico)\b/i.test(normalizedQuery) && /\b(panasonic|sip|ip|telefono)\b/i.test(normalizedQuery)) || (/\b(panasonic)\b/i.test(normalizedQuery) && /\b(tgp600|dect|inalambrico)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'panasonic') {
+      if (/tgp600|dect\s*ip/i.test(title)) {
         score += 240;
       } else {
         score += 170;
@@ -3093,7 +3141,7 @@ function executeSearch(query) {
 
   // Check if we are in Catalog Page
   const path = window.location.pathname.toLowerCase();
-  if (path.includes('catalogo.html')) {
+  if (path.includes('catalogo')) {
     // We are inside Catalog, just trigger state
     state.searchQuery = normalizedQuery;
     state.dept = 'all';

@@ -71,7 +71,11 @@ const testQueries = [
   'thinkpad e16',
   'omada',
   'l5590',
-  'acusense'
+  'acusense',
+  'lrt224',
+  'gs724tp',
+  'smartshunt',
+  'tgp600'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -369,6 +373,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /acusense|2cd2183g2/i.test(scored[0].p.title),
         'El producto top para "acusense" debe ser Hikvision AcuSense 4K'
+      );
+    }
+
+    if (q === 'lrt224') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Linksys',
+        'La búsqueda "lrt224" debe priorizar el Router VPN Dual-WAN Linksys LRT224'
+      );
+      assert.ok(
+        /lrt224|dual-wan/i.test(scored[0].p.title),
+        'El producto top para "lrt224" debe ser Linksys LRT224'
+      );
+    }
+
+    if (q === 'gs724tp') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Netgear',
+        'La búsqueda "gs724tp" debe priorizar el Switch Netgear ProSAFE GS724TPv2 24P PoE+'
+      );
+      assert.ok(
+        /gs724tp/i.test(scored[0].p.title),
+        'El producto top para "gs724tp" debe ser Netgear GS724TPv2'
+      );
+    }
+
+    if (q === 'smartshunt') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Victron Energy',
+        'La búsqueda "smartshunt" debe priorizar el Monitor Victron SmartShunt 500A'
+      );
+      assert.ok(
+        /smartshunt|shunt/i.test(scored[0].p.title),
+        'El producto top para "smartshunt" debe ser Victron Energy SmartShunt'
+      );
+    }
+
+    if (q === 'tgp600') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Panasonic',
+        'La búsqueda "tgp600" debe priorizar el Teléfono DECT IP Panasonic KX-TGP600'
+      );
+      assert.ok(
+        /tgp600|dect/i.test(scored[0].p.title),
+        'El producto top para "tgp600" debe ser Panasonic KX-TGP600'
       );
     }
   }
