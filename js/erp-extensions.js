@@ -91,8 +91,13 @@ window.ERPExtensions = (function () {
   }
 
   function openPanel(target) {
-    const nav = document.querySelector(`[data-nav="${target}"]`);
-    if (nav) nav.click();
+    const safeTarget = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+      ? CSS.escape(target)
+      : String(target || '').replace(/["\\]/g, '');
+    try {
+      const nav = document.querySelector(`[data-nav="${safeTarget}"]`);
+      if (nav) nav.click();
+    } catch (e) { }
   }
 
   async function loadReceivables() {

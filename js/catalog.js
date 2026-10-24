@@ -256,6 +256,10 @@ function getStemVariants(word) {
   if (word === 'gs724tp' || word === 'gs724' || word === 'gs724tpv2') variants.push('netgear', 'switch', 'poe', 'prosafe', 'gigabit', 'sfp', 'rack');
   if (word === 'smartshunt' || word === 'shunt') variants.push('victron', 'bateria', 'monitor', 'bluetooth', 'soc', '500a', 'vedirect');
   if (word === 'tgp600' || word === 'kxtgp600') variants.push('panasonic', 'telefono', 'inalambrico', 'dect', 'sip', 'ip', 'base');
+  if (word === 'ex2300c' || word === 'ex2300-c' || word === 'ex2300') variants.push('juniper', 'switch', 'poe', '12p', 'fanless', 'sfp', 'junos');
+  if (word === 'gl12' || word === 'msz-gl12' || word === 'mszgl12') variants.push('mitsubishi', 'aire', 'inverter', 'split', '12000', 'seer', 'silencioso');
+  if (word === 'mg5050' || word === 'magellan' || word === 'mg5050+') variants.push('paradox', 'alarma', 'inalambrico', 'panel', 'stayd', 'blueeye', '433mhz');
+  if (word === 'logo' || word === '230rce' || word === 'logo230rce') variants.push('siemens', 'plc', 'controlador', 'rele', 'ethernet', 'modbus', 'automatizacion');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1075,6 +1079,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(tgp600|kxtgp600|kx-tgp600)\b/i.test(normalizedQuery) || (/\b(dect|inalambrico)\b/i.test(normalizedQuery) && /\b(panasonic|sip|ip|telefono)\b/i.test(normalizedQuery)) || (/\b(panasonic)\b/i.test(normalizedQuery) && /\b(tgp600|dect|inalambrico)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'panasonic') {
       if (/tgp600|dect\s*ip/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Fanless Juniper Networks EX2300-C-12P al buscar ex2300-c, ex2300c, juniper 12, switch juniper poe (SUG-J2312)
+  if (/\b(ex2300-c|ex2300c|ex2300-c-12p)\b/i.test(normalizedQuery) || (/\b(juniper)\b/i.test(normalizedQuery) && /\b(12|fanless|poe|switch)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'juniper') {
+      if (/ex2300-c|12\s*puertos/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Aire Acondicionado Mitsubishi MSZ-GL 12,000 BTU al buscar msz-gl12, gl12, mitsubishi 12000, aire mitsubishi 12k (SUG-M1200)
+  if (/\b(msz-gl12|mszgl12|gl12)\b/i.test(normalizedQuery) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(12000|12k|gl12|gl-12)\b/i.test(normalizedQuery)) || (/\b(aire|inverter)\b/i.test(normalizedQuery) && /\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(12|12000|12k)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mitsubishi') {
+      if (/12000|12k|gl12|mszgl.*12/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Panel de Alarma Inalámbrico Paradox Magellan MG5050+ al buscar mg5050, magellan, paradox inalambrico (SUG-P5050)
+  if (/\b(mg5050|mg5050\+|magellan)\b/i.test(normalizedQuery) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(magellan|mg5050|inalambrico|alarma)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'paradox') {
+      if (/mg5050|magellan/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Micro-PLC Siemens LOGO! 230RCE al buscar logo 230rce, 230rce, siemens logo, plc siemens, controlador logo (SUG-S8300)
+  if (/\b(230rce|logo230rce)\b/i.test(normalizedQuery) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(logo|plc|controlador|automatizacion)\b/i.test(normalizedQuery)) || (/\b(logo)\b/i.test(normalizedQuery) && /\b(siemens|plc|controlador|rele)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'siemens') {
+      if (/logo!?|230rce|micro-plc/i.test(title)) {
         score += 240;
       } else {
         score += 170;

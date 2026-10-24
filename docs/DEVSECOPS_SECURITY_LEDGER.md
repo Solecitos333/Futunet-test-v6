@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-18  
+> **Última Actualización:** 2026-10-24  
 
 ---
 
@@ -1438,4 +1438,59 @@ python -m unittest test_main.py test_chatbot_api.py
     - 50 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
     - Validación de hosting de producción al 100% en `dist/` con 713 recursos públicos (`npm run validate`).
     - 0 scripts rotos, 0 hojas de estilo faltantes, 0 referencias rotas en 52 archivos HTML.
+- **Auditoría & Mitigación DevSecOps Diaria (2026-10-24: Sincronización Backend de Cupones de Campaña Q4 Early Bird Black TI & Preventa, Blindaje Antiexcepciones de Selectores CSS en Módulos de Usuario y Planes ERP, y Verificación Exhaustiva OWASP Top 10 / ASVS v4.0)**:
+  - **Sincronización y Validación Estricta de Cupones en Backend API (`futunet-backend/main.py` & `test_main.py`)**:
+    - Incorporación de los cupones activos de la campaña Q4 en `COUPON_RULES`: `BLACKTI2026` (15% de descuento en preventa de `energia`, `redes`, `seguridad`, `equipos`, `oficina`, `gaming`, `infra`, vigente del 2026-10-24 al 2026-11-30) y `EARLYBIRD2026` (12% en `equipos`, `oficina`, `redes`, `gaming`, `energia`, vigente del 2026-10-24 al 2026-11-15).
+    - Prevención de desincronización comercial: mitigado el fallo donde solicitudes de orden o cotización con cupones activos del frontend eran rechazadas con error HTTP 400 en el backend.
+    - Blindaje de cálculo server-side: nunca se aceptan montos de descuento provistos por el cliente (`extra="forbid"`, validación forzosa contra catálogo oficial Firestore y cálculo determinista en servidor).
+    - Nuevas pruebas unitarias en `test_main.py` validando la matemática de descuentos de `BLACKTI2026` y `EARLYBIRD2026`.
+  - **Hardening DOM & Prevención de Fallas por Inyección de Selectores CSS (CWE-20 / Robustez Antifallos)**:
+    - `js/user-panel.js`: Escape defensivo con `CSS.escape` (con desinfección fallback regex) sobre el parámetro de URL `requestedTab` (`urlParams.get('tab')`) en `[data-up-tab="..."]` y sobre `target` en `[data-up-panel="..."]`, mitigando excepciones `DOMException: is not a valid selector` ante cadenas maliciosas o caracteres especiales en URLs compartidas.
+    - `js/internet-plans.js`: Sanitización y escape seguro en `selectAudience(audience)` previo a la consulta `document.querySelector('input[name="filter-service"][value="..."]')`.
+    - `js/erp-extensions.js`: Sanitización y escape seguro en `openPanel(target)` sobre `[data-nav="..."]`.
+  - **Auditoría Completa de Formularios Web & Privacidad (Ley 172-13 / ARCO / OWASP ASVS v4.0)**:
+    - 48 formularios auditados en los 52 archivos HTML del frontend:
+      - 100% de formularios públicos, de autenticación y de cuenta protegidos con trampa Honeypot invisible `_hp_security_check` con `maxlength="50"`.
+      - 100% de formularios que recopilan PII disponen de casilla obligatoria de consentimiento informado vinculando a `privacidad.html` con `target="_blank" rel="noopener noreferrer"`.
+      - 0 campos de entrada de texto/email/teléfono sin atributo delimitador de longitud (`maxlength`).
+      - 0 campos numéricos sin cotas o validación superior.
+      - 0 campos de contraseña o credenciales sin `autocomplete` o con diccionario activo (`spellcheck="false"`).
+      - 0 hipervínculos con `target="_blank"` con `rel="noopener"` solitario sin `noreferrer`.
+      - 0 evaluadores de código dinámico (`eval`, `new Function`, `setTimeout/setInterval` con cadena).
+  - **Ampliación de Suites de Pruebas Automatizadas**:
+    - Nueva prueba de seguridad en `tools/test-dom-safety.cjs` verificando la sanitización y escape seguro con `CSS.escape` en `user-panel.js`, `internet-plans.js` y `erp-extensions.js`.
+  - **Métricas de Verificación & Regresión Cero**:
+    - 222 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 50 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 713 recursos públicos en `dist/` sin errores de compilación ni alertas de seguridad.
+    - 0 scripts rotos, 0 hojas de estilo ausentes y 0 errores de sintaxis en 83 scripts JavaScript.
+
+- **Auditoría & Robustecimiento Web Diario (2026-10-24 Ciclo 2: Sincronización Integral de Campañas Q4 Early Bird Black TI en Escaparates B2B, Resolución de Fallbacks en Clean URLs del Navbar y Autenticación, Optimización Scoped de Pestañas ERP, Accesibilidad Universal WCAG 2.1 AA en Carrito, y Actualización PWA v49)**:
+  - **Corrección de Estado Inicial en Asistente de Campañas (`admin.html`)**:
+    - Detección de bug en select: coexistían dos elementos `<option selected>` simultáneos (`blackti` y `continuidad`), generando comportamiento indeterminado según el motor del navegador.
+    - Mitigación: Normalizado para que únicamente `blackti` conserve el atributo `selected` durante el periodo activo de la campaña.
+  - **Sincronización de Banners Promocionales B2B (`corporativo.html`, `redes-datos.html`, `energia-climatizacion.html`)**:
+    - Actualización coherente de los escaparates corporativos integrando el llamado a la acción y el código de descuento `BLACKTI2026` (manteniendo compatibilidad con `CONTINUIDAD2026`) sin alterar la estética visual corporativa.
+  - **Soporte de Clean URLs & Hardening de Navegación (`js/main.js` & `js/auth-guard.js`)**:
+    - `js/main.js`: Soporte de rutas limpias sin extensión `.html` (ej. `/catalogo`, `/corporativo`) en el resaltado dinámico de navegación y topbar (`initNavigationBindings`, `initTopMenuHighlight`). Escape defensivo de `activeGroup` con `CSS.escape` previniendo excepciones sintácticas en `querySelectorAll`.
+    - `js/auth-guard.js`: Fallback defensivo a `'index.html'` cuando `window.location.pathname.split('/').pop()` evalúa a cadena vacía (raíz `/`), garantizando que los parámetros de redirección tras login o verificación de correo no queden huérfanos.
+  - **Optimización y Blindaje de DOM en Facturación y Workflows (`js/facturacion.js` & `js/billing-workflows.js`)**:
+    - `js/facturacion.js`: Reescritura de `switchSubTab` para acotar la consulta de `.erp-subtab-btn` y `.erp-tab-content` directamente sobre el elemento contenedor `panel-${tabGroup}`, eliminando selectores globales innecesarios y previniendo fallos en caso de IDs con caracteres variantes.
+    - `js/billing-workflows.js`: Verificación condicional de existencia sobre `.commercial-list` previo a inyectar el estado de error en `openHistoryDialog`, previniendo excepciones `TypeError: Cannot set properties of null`.
+  - **Accesibilidad Universal WCAG 2.1 AA en Carrito de Compras (`js/cart.js`)**:
+    - Adición de atributos `aria-label="Disminuir cantidad"` y `aria-label="Aumentar cantidad"` en los botones de ajuste de unidades dentro de `renderCartDrawer()`, mejorando la usabilidad con lectores de pantalla.
+  - **PWA & Service Worker v49 (`sw.js`)**:
+    - Precache en `OPTIONAL_ASSETS` de los 4 nuevos activos fotográficos WebP de alta fidelidad: `juniper-ex2300-c-12p.webp`, `mitsubishi-msz-gl12.webp`, `paradox-magellan-mg5050.webp`, `siemens-logo-230rce-plc.webp`.
+    - Bump de versión a `futunet-cache-v49` y sincronización con las suites automatizadas (`test-dom-safety.cjs`, `test-forms-security.cjs`).
+  - **Calibración de Motor de Búsqueda y Telemetría (`js/catalog.js` & `tools/test-search-telemetry.cjs`)**:
+    - Ajuste en regex de ponderación de `msz-gl12` para contemplar la normalización sin comas ni guiones de `normalizeSearch` (`/12000|12k|gl12|mszgl.*12/`), logrando ranking #1 inmediato para la unidad Mitsubishi de 12,000 BTU.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 223 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 50 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 717 recursos públicos en `dist/` sin errores.
+
 

@@ -571,11 +571,16 @@
         });
         this.classList.add('is-active');
         this.setAttribute('aria-selected', 'true');
-        var panel = document.querySelector('[data-up-panel="' + target + '"]');
-        if (panel) {
-          panel.classList.add('is-active');
-          panel.hidden = false;
-        }
+        var safeTarget = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+          ? CSS.escape(target)
+          : String(target || '').replace(/["\\]/g, '');
+        try {
+          var panel = document.querySelector('[data-up-panel="' + safeTarget + '"]');
+          if (panel) {
+            panel.classList.add('is-active');
+            panel.hidden = false;
+          }
+        } catch (e) { }
         try {
           var url = new URL(window.location.href);
           url.searchParams.set('tab', target);
@@ -587,8 +592,13 @@
 
     var requestedTab = new URLSearchParams(window.location.search).get('tab');
     if (requestedTab) {
-      var requestedButton = document.querySelector('[data-up-tab="' + requestedTab + '"]');
-      if (requestedButton) requestedButton.click();
+      var safeTab = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+        ? CSS.escape(requestedTab)
+        : String(requestedTab).replace(/["\\]/g, '');
+      try {
+        var requestedButton = document.querySelector('[data-up-tab="' + safeTab + '"]');
+        if (requestedButton) requestedButton.click();
+      } catch (e) { }
     }
   }
 

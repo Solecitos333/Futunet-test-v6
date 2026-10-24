@@ -94,6 +94,22 @@
       validFrom: '2026-10-12',
       validUntil: '2026-10-31',
       description: '15% de descuento en Continuidad Operativa, Respaldo Energético y Enlaces Redundantes (Semana 3 Octubre 2026)'
+    },
+    BLACKTI2026: {
+      code: 'BLACKTI2026',
+      discount: 0.15,
+      departments: ['energia', 'redes', 'seguridad', 'equipos', 'oficina', 'gaming', 'infra'],
+      validFrom: '2026-10-24',
+      validUntil: '2026-11-30',
+      description: '15% de descuento en Preventa Early Bird Black TI 2026 (Infraestructura, Fibra Óptica, Servidores y Respaldo)'
+    },
+    EARLYBIRD2026: {
+      code: 'EARLYBIRD2026',
+      discount: 0.12,
+      departments: ['equipos', 'oficina', 'redes', 'gaming', 'energia'],
+      validFrom: '2026-10-24',
+      validUntil: '2026-11-15',
+      description: '12% de descuento en Preventa Exclusiva Q4 y Equipamiento Tecnológico'
     }
   };
 
@@ -1723,9 +1739,9 @@
             <div class="cart-item__title">${escapeHTML(product.title)}</div>
             <div class="cart-item__meta">${escapeHTML(product.brand)} · ${escapeHTML(product.category)}</div>
             <div class="cart-item__qty">
-              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}">-</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="-1" data-product-id="${escapeHTML(product.id)}" aria-label="Disminuir cantidad">-</button>
               <span>${qty}</span>
-              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}">+</button>
+              <button type="button" class="cart-qty-btn" data-cart-change="1" data-product-id="${escapeHTML(product.id)}" aria-label="Aumentar cantidad">+</button>
             </div>
             <div class="cart-item__meta">Precio: ${escapeHTML(product.price)}</div>
           </div>

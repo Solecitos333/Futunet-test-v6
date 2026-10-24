@@ -8173,6 +8173,102 @@ const mockDatabase = [
       "Autonomía de batería excepcional: Hasta 11 horas de conversación continua y 200 horas en espera",
       "Garantía oficial Panasonic de 1 año con soporte de configuración SIP y comprobante fiscal formal NCF"
     ]
+  },
+  {
+    "id": "redes_juniper_ex2300_c_12p_switch",
+    "department": "redes",
+    "category": "Switches de Red",
+    "brand": "Juniper",
+    "title": "Switch Empresarial Juniper Networks EX2300-C-12P Gigabit Ethernet 12 Puertos PoE+ Fanless con 2 Uplinks 10GbE SFP+",
+    "desc": "Switch de capa de acceso empresarial compacto Juniper Networks EX2300-C-12P de alto rendimiento, diseñado para despliegues silenciosos en consultorios médicos, sucursales bancarias, oficinas corporativas y aulas en Santiago. Dispone de 12 puertos Gigabit Ethernet 10/100/1000 con alimentación PoE+ (802.3at) y un presupuesto total de potencia de 124 Watts para energizar teléfonos VoIP, puntos de acceso Wi-Fi 6 y cámaras de vigilancia, acompañado de 2 puertos uplink dedicados de 10GbE SFP+ para interconexión por fibra óptica de ultra alta velocidad al núcleo de red. Su arquitectura fanless 100% silenciosa sin ventiladores permite montaje en escritorio, pared o rack sin emitir ruido. Funciona con el sistema operativo de grado operador Junos OS, ofreciendo enrutamiento avanzado L2/L3 (RIP, OSPF, IPv6), calidad de servicio QoS y gestión unificada.",
+    "price": "RD$ 32,500.00",
+    "img": "img/productos/catalogo/juniper-ex2300-c-12p.webp",
+    "gallery": [
+      "img/productos/catalogo/juniper-ex2300-c-12p.webp"
+    ],
+    "specs": [
+      "12 puertos Gigabit Ethernet 10/100/1000 con alimentación PoE+ 802.3at hasta 30W por puerto (124W total)",
+      "2 puertos de fibra óptica dedicados 10GbE SFP+ / 1GbE SFP para uplinks troncales de alta velocidad",
+      "Diseño Fanless 100% silencioso y compacto sin partes móviles para oficinas y consultorios",
+      "Sistema operativo Junos OS con plano de control protegido y enrutamiento L2/L3 (OSPF, RIP, IPv6)",
+      "Capacidad de conmutación de 64 Gbps y tasa de reenvío de 47 Mpps para tráfico empresarial denso",
+      "Compatibilidad con tecnología Juniper Virtual Chassis para interconectar múltiples unidades",
+      "Seguridad integral de puertos: 802.1X, DAI (Dynamic ARP Inspection), DHCP Snooping y ACLs L2-L4",
+      "Opciones de instalación versátiles: Montaje en pared, sobremesa o rack de 19\" mediante adaptadores",
+      "Garantía corporativa oficial Juniper Networks con soporte técnico local y factura fiscal NCF en Santiago"
+    ]
+  },
+  {
+    "id": "energia_mitsubishi_msz_gl12_aire_inverter",
+    "department": "energia",
+    "category": "Energía y Climatización",
+    "brand": "Mitsubishi",
+    "title": "Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 12,000 BTU Ultra Silencioso 23.1 SEER con Filtro Nano-Platinum",
+    "desc": "Unidad de climatización Mini-Split de pared Inverter Mitsubishi Electric MSZ-GL de 12,000 BTU (conjunto MSZ-GL12NA / MUZ-GL12NA), referente mundial en eficiencia energética, durabilidad y confort acústico para residencias exclusivas, consultorios médicos, dormitorios y salas de telecomunicaciones en Santiago. Con una sobresaliente calificación de eficiencia de 23.1 SEER y refrigerante ecológico R-410A, reduce significativamente el consumo en la factura eléctrica. Su modo silencioso opera a tan solo 19 dB, emitiendo un sonido prácticamente inaudible. Cuenta con filtro desodorizante catalítico de Nano-Platino que descompone bacterias, moho y alérgenos microscópicos en suspensión, modo inteligente Econo Cool para ahorro adicional, control remoto ergonómico y compatibilidad con interfaces Wi-Fi Kumo Cloud para monitoreo remoto.",
+    "price": "RD$ 44,900.00",
+    "img": "img/productos/catalogo/mitsubishi-msz-gl12.webp",
+    "gallery": [
+      "img/productos/catalogo/mitsubishi-msz-gl12.webp"
+    ],
+    "specs": [
+      "Capacidad de enfriamiento de 12,000 BTU/h con compresor de velocidad variable Inverter de alta eficiencia",
+      "Eficiencia energética certificada de 23.1 SEER y 12.5 EER para ahorro drástico en consumo eléctrico",
+      "Operación ultra silenciosa a solo 19 dB(A) en velocidad mínima para descanso y trabajo sin distracciones",
+      "Filtro avanzado Nano-Platinum antibacteriano y desodorizante para purificación constante del aire interior",
+      "Modo Econo Cool con modulación automática de flujo de aire que optimiza la sensación térmica ahorrando energía",
+      "Control de aleta oscilante inteligente con amplia dispersión de aire en toda la habitación",
+      "Unidad exterior tratada con revestimiento anticorrosivo Blue Fin resistente a salinidad e intemperie",
+      "Compatibilidad con adaptador Wi-Fi Mitsubishi Kumo Cloud para control desde smartphone y automatizaciones",
+      "Garantía oficial directa Mitsubishi Electric de 5 años en compresor y soporte calificado en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_paradox_magellan_mg5050_panel",
+    "department": "seguridad",
+    "category": "Alarmas y Sensores",
+    "brand": "Paradox",
+    "title": "Panel de Alarma Híbrido Inalámbrico Paradox Magellan MG5050+ de 32 Zonas con Transceptor Integrado 433 MHz y Modo StayD",
+    "desc": "Panel central de control de alarma híbrido Paradox Magellan MG5050+ (MG5050 Plus) con transceptor de radiofrecuencia de 433 MHz integrado directamente en placa, ideal para residencias, negocios, plazas y almacenes en Santiago donde se requiere una instalación rápida y estética sin necesidad de canaletas ni cables expuestos. Admite hasta 32 zonas inalámbricas o cableadas (5 zonas cableadas en tarjeta ampliables mediante doblado de zonas o módulos expansores ZX82), 2 particiones independientes para controlar áreas separadas con una sola tarjeta, soporte para hasta 32 mandos a distancia (llaveros REM2/REM25) y hasta 15 teclados inalámbricos o cableados. Incorpora la exclusiva tecnología StayD que mantiene el sistema permanentemente armado protegiendo el perímetro 24 horas al día, y es 100% compatible con el comunicador IP150+ y la app móvil BlueEye para notificaciones push en tiempo real.",
+    "price": "RD$ 13,850.00",
+    "img": "img/productos/catalogo/paradox-magellan-mg5050.webp",
+    "gallery": [
+      "img/productos/catalogo/paradox-magellan-mg5050.webp"
+    ],
+    "specs": [
+      "Transceptor RF de 433 MHz integrado en placa base con supervisión de señal inalámbrica y batería baja",
+      "Capacidad para 32 zonas (inalámbricas o cableadas) con 5 zonas cableadas en tarjeta ampliables a 10/32",
+      "2 particiones independientes para seguridad perimetral y zonal separada (ej. almacén y oficinas)",
+      "Tecnología de protección perimetral continua StayD exclusiva de Paradox sin tiempos vulnerables",
+      "Soporta hasta 32 llaveros remotos bidireccionales, 15 teclados (LCD, táctil o LED) y sirenas inalámbricas",
+      "Memoria de eventos de hasta 256 registros con fecha y hora exactas para auditoría de seguridad",
+      "Salidas programables PGM en placa para disparo de luces, electroimanes, portones o estrobos",
+      "Conectividad total con comunicador IP150+ para alertas instantáneas y control desde app BlueEye",
+      "Garantía oficial Paradox de 2 años con soporte técnico e ingeniería de alarmas en Santiago"
+    ]
+  },
+  {
+    "id": "energia_siemens_logo_230rce_plc_controlador",
+    "department": "energia",
+    "category": "Automatización y Tableros",
+    "brand": "Siemens",
+    "title": "Micro-PLC y Controlador Lógico Programable Siemens LOGO! 230RCE (8 Entradas / 4 Salidas Relé) con Pantalla LCD y Servidor Web Ethernet",
+    "desc": "Módulo lógico programable inteligente Siemens LOGO! 230RCE (referencia 6ED1052-1FB08-0BA1) para automatización de cuadros eléctricos, transferencias automáticas de plantas eléctricas, sistemas de bombeo hidroneumático, iluminación programada y climatización en torres comerciales, industrias y residencias en Santiago. Alimentación directa a 115V / 230V AC sin requerir fuentes auxiliares externas. Cuenta con 8 entradas digitales, 4 salidas de relé de 10 Amperios para conmutación de cargas inductivas, pantalla gráfica LCD retroiluminada con tres colores de alerta seleccionables (blanco, naranja y rojo), teclado frontal para configuración local, puerto de red Ethernet RJ-45 con servidor web HTML5 integrado para monitoreo desde cualquier navegador o celular, soporte del protocolo industrial Modbus TCP/IP y ranura estándar para memoria MicroSD para almacenamiento de programas y datalogging.",
+    "price": "RD$ 16,900.00",
+    "img": "img/productos/catalogo/siemens-logo-230rce-plc.webp",
+    "gallery": [
+      "img/productos/catalogo/siemens-logo-230rce-plc.webp"
+    ],
+    "specs": [
+      "Alimentación directa 115V / 230V AC (rango amplio 85V - 265V AC) para conexión directa en tableros",
+      "8 entradas digitales AC (115V/230V) y 4 salidas a relé con capacidad de corte de hasta 10A inductivo/resistivo",
+      "Pantalla LCD gráfica integrada de 6 líneas con iluminación de fondo personalizable para diagnósticos",
+      "Servidor web HTML5 integrado: Monitoreo y control interactivo de variables desde computadoras o celulares",
+      "Puerto Ethernet RJ-45 integrado con comunicación S7, Modbus TCP/IP y conexión directa a la nube IoT",
+      "Ranura para tarjeta MicroSD estándar para respaldo de programas, clonación rápida y registro de datos",
+      "Reloj en tiempo real integrado con reserva de marcha para programación horaria y semanal autónoma",
+      "Montaje estándar en riel DIN de 35 mm (formato compacto de 4 módulos) para tableros eléctricos",
+      "Garantía oficial Siemens de fábrica con comprobante fiscal formal NCF y asesoría técnica en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

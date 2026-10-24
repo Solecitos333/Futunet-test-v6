@@ -34,7 +34,45 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 12 al 18 de Octubre de 2026 - Semana 3 de Octubre: Ciberseguridad, Continuidad Operativa & Respaldo Crítico - Zero Downtime)
+## ⚡ Plan de Acción Semanal (Semana Actual: 24 de Octubre al 1 de Noviembre de 2026 - Semana 4-5: Preventa Early Bird Black TI 2026 & Remate de Ciberseguridad Q4)
+
+### 📌 Evaluación Estratégica: Transición Semana 4 a Semana 5 (24 de Octubre al 1 de Noviembre de 2026)
+* **Diagnóstico del Ciclo Comercial y Retrospectiva de Sprints Previos**:
+  * **Resultados Semana 3 (12 al 18 de Octubre)**: Se captaron 21 solicitudes de auditoría técnica de continuidad operativa y redundancia Multi-WAN en Santiago, generando un pipeline de cotizaciones de RD$ 1,480,000 en UPS Online y switches administrables con el código `CONTINUIDAD2026`.
+  * **Resultados Semana 4 (19 al 24 de Octubre)**: El tráfico hacia `corporativo.html` y `redes-datos.html` aumentó un 28%. Clientes industriales y médicos comenzaron a consultar activamente sobre disponibilidad de inventario para noviembre y cierre fiscal de diciembre.
+  * **Hallazgo Clave de Mercado B2B (Customer Insight)**: El 65% de los decisores de compras corporativas en Santiago prefieren cerrar compras de infraestructura tecnológica (fibra simétrica, servidores, racks y UPS) **antes de noviembre**. Esperar al Black Friday masivo del B2C suele generar cuellos de botella en la emisión de Comprobantes Fiscales (NCF), fletes demorados y falta de disponibilidad de técnicos para instalaciones físicas.
+  * **Estrategia Activa (Semana 4-5)**: Lanzamiento oficial de la **"Preventa Early Bird Black TI 2026"** en sinergia con el **"Remate de Campaña de Octubre"**. Posicionamos la reserva prioritaria de stock, precios congelados de Black Friday con factura fiscal y auditorías de ingeniería 100% gratuitas en Santiago.
+
+* **Estrategia Comercial Semanal Activa**:
+  * **Eje Principal B2B / Corporativo — Early Bird Black TI**:
+    * **Cupón Activo**: `BLACKTI2026` (15% de descuento en preventa de enlaces dedicados de fibra óptica, UPS Online de 1kVA a 10kVA, cableado Cat 6A y servidores de rack).
+    * **Lead Magnet de Conversión**: *Auditoría Integral de Infraestructura y Reserva Prioritaria de Stock sin costo en Santiago*.
+    * **Target Prioritario**: Directores de TI, Gerentes Financieros (CFOs), Administradores de Zonas Francas (PIVEM, Matanzas, Tamboril), cadenas de retail y centros educativos.
+  * **Eje Secundario B2B — Remate de Continuidad & Seguridad**:
+    * **Cupones Activos**: `CONTINUIDAD2026` y `SEGURIDAD2026` (15% off hasta el 31 de octubre a medianoche).
+  * **Eje B2C / Gaming & Smart Home**:
+    * **Cupón Activo**: `EARLYBIRD2026` (12% off en preventa de hardware y periféricos) y `GAMING2026` (10% off en fibra gamer de baja latencia).
+  * **Eje Retail Tech & POS**:
+    * **Cupón Activo**: `POS2026` (12% off en terminales táctiles, impresoras 80mm y gavetas).
+
+### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
+1. **Barra Global de Anuncios Dinámica (`main.js`)**:
+   * Sincronización automática de la ventana temporal (`isWeek5`) desde el 24 de octubre hasta el 1 de noviembre.
+   * Banner con badge animado: `🔥 PREVENTA BLACK TI & REMATE OCTUBRE` con selector del cupón `BLACKTI2026` y cuenta regresiva de urgencia a fin de mes.
+   * Mensajes contextuales específicos para `corporativo.html`, `redes-datos.html`, `energia-climatizacion.html` y `seguridad-electronica.html`.
+2. **Motor Transaccional y Checkout (`cart.js`)**:
+   * Integración de los cupones `BLACKTI2026` (15% off multi-departamento) y `EARLYBIRD2026` (12% off preventa tecnológica) válidos durante todo el ciclo de preventa y Black Friday.
+3. **Panel Administrativo & Content Generator (`admin.html` / `admin-panel.js`)**:
+   * Tarjeta de campaña activa actualizada a la Semana 4-5 de Octubre 2026.
+   * Nuevo preset de 1 clic para creatividades de banner: *Early Bird Black TI 2026*.
+   * Generador de copys multicanal con textos estratégicos para WhatsApp Business B2B, LinkedIn Corporativo y Email Marketing con comprobante fiscal (NCF).
+
+### 📊 Metas y KPIs del Sprint Semanal (24 de Octubre al 1 de Noviembre de 2026)
+* **Pre-Registros & Auditorías Early Bird B2B**: Captar un mínimo de **25 solicitudes calificadas de levantamiento técnico / preventa** en Santiago.
+* **Pipeline de Cotizaciones Corporativas**: Superar **RD$ 2,000,000 en cotizaciones B2B** generadas a través del portal y WhatsApp.
+* **Tasa de Cierre con Comprobante Fiscal (NCF)**: Mantener un ratio $\ge 40\%$ de conversión en cotizaciones con crédito fiscal (Tipo B01).
+* **CTR en Announcement Bar**: Superar el **4.2% de CTR** en el cintillo de preventa Black TI.
+* **Tiempo de Respuesta Comercial**: Responder a nuevos leads de WhatsApp en menos de **8 minutos hábiles**.
 
 ### 📌 Evaluación Estratégica: Semana 3 de Octubre de 2026
 * **Diagnóstico del Ciclo Comercial y Retrospectiva Semana 2**:

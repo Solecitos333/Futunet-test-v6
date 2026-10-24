@@ -1463,7 +1463,39 @@
       description: 'En almacenes de distribución, clínicas médicas, concesionarios y oficinas de múltiples departamentos en Santiago requerimos sistemas de telefonía inalámbrica corporativa DECT IP Panasonic KX-TGP600 con estación base PoE y terminales inalámbricos que admitan hasta 8 cuentas SIP simultáneas y 8 llamadas concurrentes. En marca-panasonic.html solo contaban con teléfonos de escritorio fijos por cable, requiriendo una solución de comunicación inalámbrica con sonido HD Voice, pantalla a color de 1.8 pulgadas y cobertura de hasta 300 metros para movilidad del personal dentro de las instalaciones.',
       officialResponse: '¡Estimado Lic. José Luis! Nos alegra comunicarte que tu sugerencia ha sido implementada de inmediato. Hemos incorporado al catálogo corporativo de Equipos de Oficina y a la página oficial marca-panasonic.html el Sistema Telefónico Inalámbrico DECT IP Panasonic KX-TGP600 (soporta hasta 8 cuentas SIP y 8 llamadas simultáneas, pantalla LCD a color de 1.8", audio HD Voice con reducción de ruido, puerto Ethernet PoE y capacidad de expansión hasta 8 terminales para movilidad total en almacenes y clínicas) con 1 año de garantía oficial y soporte local en Santiago.'
     }
-  ];
+  ,
+    {
+      refCode: 'SUG-J2312',
+      title: 'Disponibilidad de Switches Compactos Fanless Juniper Networks EX2300-C-12P PoE+ con Uplinks 10GbE SFP+ para Oficinas y Racks Silenciosos',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En consultorios médicos, sucursales bancarias, oficinas abiertas y centros de monitoreo en Santiago requerimos switches de capa de acceso compactos y 100% silenciosos (sin ventilador / fanless) como el Juniper Networks EX2300-C-12P de 12 puertos Gigabit PoE+ con presupuesto de 124W para alimentar puntos de acceso Wi-Fi 6 y teléfonos VoIP, además de 2 puertos uplink dedicados de 10GbE SFP+ para conectarse por fibra a 10 Gigabits al núcleo de red central. En marca-juniper.html cuentan con el EX2300-24P de 24 puertos para rack grande, pero para espacios reducidos y silenciosos necesitamos el formato compacto fanless.',
+      officialResponse: '¡Saludos cordiales Ing. Marcos Antonio! Tu sugerencia ha sido implementada de inmediato. Incorporamos al catálogo corporativo de Redes y a la página oficial marca-juniper.html el Switch Compacto Fanless Juniper Networks EX2300-C-12P (12 puertos Gigabit Ethernet PoE+ 802.3at con 124W, 2 puertos uplink dedicados 10GbE SFP+, sistema operativo Junos OS, enrutamiento L2/L3, diseño fanless 100% silencioso y montaje en pared o escritorio) con garantía corporativa oficial y soporte técnico en Santiago.'
+    },
+    {
+      refCode: 'SUG-M1200',
+      title: 'Disponibilidad de Aires Acondicionados Inverter Mitsubishi Electric MSZ-GL 12,000 BTU Ultra Silenciosos (19 dB) para Dormitorios, Despachos y Racks de Telecomunicaciones',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En consultorios médicos, dormitorios de residencias de alto estándar y cuartos de telecomunicaciones en Santiago requerimos unidades de climatización ultra silenciosas y de altísima eficiencia como el aire acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 12,000 BTU (modelo MSZ-GL12NA / MUZ-GL12NA) con eficiencia de 23.1 SEER, nivel de ruido casi inaudible de solo 19 dB en modo silencioso, filtro nano-platino anti-alérgenos y compatibilidad con control Wi-Fi Kumo Cloud. En marca-mitsubishi.html disponían del modelo de 18k BTU y cassette de 36k BTU, requiriendo el de 12,000 BTU para áreas de hasta 20-25 metros cuadrados con ahorro extremo de energía eléctrica.',
+      officialResponse: '¡Hola Dra. Pamela! Nos complace comunicarte que tu solicitud ha sido aprobada e integrada con éxito. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-mitsubishi.html el Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 12,000 BTU 23.1 SEER (operación ultra silenciosa a 19 dB, compresor Inverter con gas ecológico R-410A, filtro catalítico Nano-Platinum antibacterial, modo Econo Cool y compatibilidad con Wi-Fi Kumo Cloud) con garantía oficial directa y facturación con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-P5050',
+      title: 'Disponibilidad de Paneles de Alarma Híbridos Inalámbricos Paradox Magellan MG5050+ de 32 Zonas con Transceptor Integrado 433 MHz para Residencias y Comercios',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En residencias de alto nivel, plazas comerciales y oficinas en Santiago donde no es factible perforar paredes o pasar canaletas para cables de sensores, requerimos el panel de alarma híbrido Paradox Magellan MG5050+ (MG5050 Plus) que incorpora un transceptor de radiofrecuencia de 433 MHz en la placa principal, admitiendo hasta 32 zonas inalámbricas o cableadas (5 zonas cableadas en tarjeta expandibles a 32), 2 particiones independientes, tecnología StayD para protección 24/7 sin desactivar perimetrales, y compatibilidad total con el módulo IP150+ y la app móvil BlueEye (Insite GOLD) para armado/desarmado y notificaciones push inmediatas.',
+      officialResponse: '¡Estimado Ing. José Ramón! Tu propuesta ha sido acogida e implementada de inmediato. Incorporamos al catálogo de Seguridad Electrónica y a la página oficial marca-paradox.html el Panel de Alarma Híbrido Inalámbrico Paradox Magellan MG5050+ (soporta hasta 32 zonas inalámbricas o cableadas, transceptor RF integrado de 433 MHz, 5 zonas en placa expandibles a 32, 2 particiones independientes, modo StayD y gestión por app móvil BlueEye con módulo IP150+) con 2 años de garantía oficial y soporte de configuración técnica en Santiago.'
+    },
+    {
+      refCode: 'SUG-S8300',
+      title: 'Disponibilidad de Controladores Lógicos Programables Siemens LOGO! 230RCE (8 Entradas / 4 Salidas Relé) con Pantalla LCD, Ethernet y Servidor Web para Automatización de Bombas y Generadores',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'En cuartos de máquinas, estaciones de bombeo de agua residencial y comercial, sistemas de conmutación de transferencias eléctricas de generadores y control de iluminación en edificios en Santiago requerimos micro-PLCs Siemens LOGO! 8.3 / 8.4 modelo 230RCE (alimentación directa 115V/230V AC) con pantalla frontal LCD con retroiluminación configurable, 8 entradas digitales, 4 salidas de relé de 10A, puerto Ethernet RJ-45 integrado con soporte Modbus TCP/IP, servidor web HTML5 integrado y ranura para tarjeta MicroSD para registro de datos (datalogging). En marca-siemens.html disponen de breakers y contactores, pero necesitamos el cerebro programable para automatizaciones industriales y comerciales.',
+      officialResponse: '¡Hola Ing. Carlos Eduardo! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-siemens.html el Micro-PLC y Controlador Lógico Siemens LOGO! 230RCE (alimentación 115V/230V AC, 8 entradas digitales, 4 salidas de relé 10A, pantalla LCD con teclado de navegación, puerto Ethernet con servidor web HTML5, Modbus TCP/IP y ranura MicroSD para registro) con garantía oficial Siemens y soporte especializado en Santiago.'
+    }];
 
   function getFallbackSuggestionByCode(code) {
     if (!code) return null;

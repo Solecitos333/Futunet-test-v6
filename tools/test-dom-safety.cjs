@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v48';"), 'sw.js debe estar en la versión futunet-cache-v48');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v49';"), 'sw.js debe estar en la versión futunet-cache-v49');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -816,6 +816,67 @@ test('Resiliencia, Accesibilidad Universal y Blindaje de Precios: service-page, 
     userPanelJs.includes("this.setAttribute('aria-selected', 'true');") &&
     userPanelJs.includes("t.setAttribute('aria-selected', 'false');"),
     'user-panel.js debe alternar dinámicamente aria-selected en las pestañas'
+  );
+});
+
+test('DOM Safety & Selector Hardening: prevención de excepciones por inyección de selectores CSS en user-panel.js, internet-plans.js y erp-extensions.js', () => {
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    userPanelJs.includes("safeTab = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')") &&
+    userPanelJs.includes("CSS.escape(requestedTab)") &&
+    userPanelJs.includes("safeTarget = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')"),
+    'user-panel.js debe escapar de forma segura requestedTab y target con CSS.escape'
+  );
+
+  const internetPlansJs = fs.readFileSync(path.join(projectRoot, 'js', 'internet-plans.js'), 'utf8');
+  assert.ok(
+    internetPlansJs.includes("safeAudience = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')") &&
+    internetPlansJs.includes("CSS.escape(audience)"),
+    'internet-plans.js debe escapar de forma segura audience con CSS.escape'
+  );
+
+  const erpExtJs = fs.readFileSync(path.join(projectRoot, 'js', 'erp-extensions.js'), 'utf8');
+  assert.ok(
+    erpExtJs.includes("safeTarget = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')") &&
+    erpExtJs.includes("CSS.escape(target)"),
+    'erp-extensions.js debe escapar de forma segura target con CSS.escape en openPanel'
+  );
+});
+
+test('Resiliencia, Accesibilidad y Campaña Q4 2026: Cupones Black TI, Clean URLs, Scoped Panels y Control ARIA en Carrito', () => {
+  const cartJs = fs.readFileSync(path.join(projectRoot, 'js', 'cart.js'), 'utf8');
+  assert.ok(cartJs.includes('BLACKTI2026'), 'cart.js debe incluir el cupón BLACKTI2026');
+  assert.ok(cartJs.includes('EARLYBIRD2026'), 'cart.js debe incluir el cupón EARLYBIRD2026');
+  assert.ok(
+    cartJs.includes('aria-label="Disminuir cantidad"') && cartJs.includes('aria-label="Aumentar cantidad"'),
+    'cart.js debe incluir etiquetas aria-label accesibles para botones de cantidad en el drawer'
+  );
+
+  const mainJs = fs.readFileSync(path.join(projectRoot, 'js', 'main.js'), 'utf8');
+  assert.ok(
+    mainJs.includes("safeActiveGroup = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')") &&
+    mainJs.includes("isCatalogPage = window.location.pathname.toLowerCase().includes('catalogo')"),
+    'main.js debe soportar Clean URLs y escapar selectores en activeGroup'
+  );
+
+  const facturacionJs = fs.readFileSync(path.join(projectRoot, 'js', 'facturacion.js'), 'utf8');
+  assert.ok(
+    facturacionJs.includes("const panel = document.getElementById(`panel-${tabGroup}`);") &&
+    facturacionJs.includes("panel.querySelectorAll('.erp-subtab-btn')"),
+    'facturacion.js debe acotar las consultas de sub-pestañas directamente sobre el panel'
+  );
+
+  const billingWorkflowsJs = fs.readFileSync(path.join(projectRoot, 'js', 'billing-workflows.js'), 'utf8');
+  assert.ok(
+    billingWorkflowsJs.includes("const errList = content.querySelector('.commercial-list');") &&
+    billingWorkflowsJs.includes("if (errList)"),
+    'billing-workflows.js debe verificar de forma defensiva la existencia de .commercial-list en catch'
+  );
+
+  const authGuardJs = fs.readFileSync(path.join(projectRoot, 'js', 'auth-guard.js'), 'utf8');
+  assert.ok(
+    authGuardJs.includes("(window.location.pathname.split('/').pop() || 'index.html')"),
+    'auth-guard.js debe asegurar fallback a index.html en currentPage y verificationRedirect'
   );
 });
 

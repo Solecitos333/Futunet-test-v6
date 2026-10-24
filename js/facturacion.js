@@ -4334,14 +4334,14 @@ window.ERPBilling = (function () {
 
   // Sub-tabs navigation & custom helper actions
   function switchSubTab(tabGroup, tabName) {
-    const btns = document.querySelectorAll(`#panel-${tabGroup} .erp-subtab-btn`);
-    btns.forEach(btn => btn.classList.remove('is-active'));
+    const panel = document.getElementById(`panel-${tabGroup}`);
+    if (panel) {
+      panel.querySelectorAll('.erp-subtab-btn').forEach(btn => btn.classList.remove('is-active'));
+      panel.querySelectorAll('.erp-tab-content').forEach(c => c.classList.remove('is-active'));
+    }
 
     const activeBtn = document.getElementById(`subtab-btn-${tabGroup}-${tabName}`);
     if (activeBtn) activeBtn.classList.add('is-active');
-
-    const contents = document.querySelectorAll(`#panel-${tabGroup} .erp-tab-content`);
-    contents.forEach(c => c.classList.remove('is-active'));
 
     const activeContent = document.getElementById(`subtab-${tabGroup}-${tabName}`);
     if (activeContent) activeContent.classList.add('is-active');

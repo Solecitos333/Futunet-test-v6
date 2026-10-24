@@ -806,7 +806,10 @@ window.ERPBillingWorkflows = (function () {
       const list = content.querySelector('.commercial-list');
       list.innerHTML = events.length ? events.map(item => `<article class="commercial-list-item"><div><strong>${escapeHTML(item.summary || item.action)}</strong><small>${escapeHTML(timeLabel(item.timestamp))} · ${escapeHTML(item.userEmail || item.userId)} · ${escapeHTML(item.action)}</small></div></article>`).join('') : '<div class="erp-empty-state">No hay eventos registrados para este documento.</div>';
     } catch (error) {
-      content.querySelector('.commercial-list').innerHTML = `<div class="erp-empty-state is-error">${escapeHTML(error.message)}</div>`;
+      const errList = content.querySelector('.commercial-list');
+      if (errList) {
+        errList.innerHTML = `<div class="erp-empty-state is-error">${escapeHTML(error.message)}</div>`;
+      }
     }
   }
 

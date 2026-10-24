@@ -148,7 +148,15 @@
       button.classList.toggle('is-active', selected);
       button.setAttribute('aria-selected', String(selected));
     });
-    var radio = document.querySelector('input[name="filter-service"][value="' + audience + '"]');
+    var safeAudience = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+      ? CSS.escape(audience)
+      : String(audience || '').replace(/["\\]/g, '');
+    var radio = null;
+    try {
+      radio = document.querySelector('input[name="filter-service"][value="' + safeAudience + '"]');
+    } catch (e) {
+      radio = null;
+    }
     if (radio) radio.checked = true;
     var grid = document.getElementById('claro-plans-grid');
     if (grid) grid.setAttribute('data-audience', audience);

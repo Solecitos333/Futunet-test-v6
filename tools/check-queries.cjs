@@ -179,7 +179,11 @@ const queries = [
   'lrt224',
   'gs724tp',
   'smartshunt',
-  'tgp600'
+  'tgp600',
+  'ex2300-c',
+  'msz-gl12',
+  'mg5050',
+  'logo 230rce'
 ];
 
 

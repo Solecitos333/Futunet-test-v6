@@ -369,7 +369,7 @@ function initNavigationBindings() {
   const mobileToggle = document.querySelector('[data-mobile-toggle]');
   const mobileCloseLinks = document.querySelectorAll('[data-close-mobile-menu]');
   const navLinks = document.querySelectorAll('.nav-menu a, .mobile-menu a');
-  const isCatalogPage = window.location.pathname.toLowerCase().includes('catalogo.html');
+  const isCatalogPage = window.location.pathname.toLowerCase().includes('catalogo');
 
   if (mobileToggle) {
     mobileToggle.addEventListener('click', toggleMobile);
@@ -840,7 +840,7 @@ function initTopMenuHighlight() {
     a.classList.remove('active');
   });
 
-  if (filename === 'corporativo.html') {
+  if (filename === 'corporativo.html' || filename === 'corporativo') {
     var corpLink = document.querySelector('.top-link-corporativo');
     if (corpLink) corpLink.classList.add('active');
   } else {
@@ -1182,17 +1182,23 @@ function normalizeSiteNavigation() {
     </a>
     <div class="navbar-auth-container mobile-auth-container"></div>`;
 
-  const filename = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const pathPart = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const filename = pathPart.endsWith('.html') ? pathPart : (pathPart ? pathPart + '.html' : 'index.html');
   const activeGroup = filename === 'internet.html' ? 'internet.html'
     : filename === 'catalogo.html' || filename === 'producto.html' || filename.startsWith('marca-') ? 'catalogo.html'
     : ['seguridad-electronica.html', 'redes-datos.html', 'energia-climatizacion.html', 'equipos-oficina.html', 'mobiliario-suministros.html', 'infraestructura-remozamiento.html', 'corporativo.html'].includes(filename) ? 'index.html#servicios'
     : filename === 'index.html' ? 'index.html' : '';
 
   if (activeGroup) {
-    document.querySelectorAll(`.nav-menu > li > a[href="${activeGroup}"], .mobile-menu > a[href="${activeGroup}"]`).forEach((link) => {
-      link.classList.add('active');
-      link.setAttribute('aria-current', 'page');
-    });
+    const safeActiveGroup = (typeof CSS !== 'undefined' && typeof CSS.escape === 'function')
+      ? CSS.escape(activeGroup)
+      : String(activeGroup).replace(/["\\]/g, '');
+    try {
+      document.querySelectorAll(`.nav-menu > li > a[href="${safeActiveGroup}"], .mobile-menu > a[href="${safeActiveGroup}"]`).forEach((link) => {
+        link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
+      });
+    } catch (_) {}
   }
 
   // Ensure navbar auth UI is rendered if auth session already initialized
@@ -1286,7 +1292,9 @@ function initAnnouncementBar() {
   const week3End = new Date('2026-10-18T23:59:59');
   const isWeek3 = now >= new Date('2026-10-12T00:00:00') && now <= week3End;
   const week4End = new Date('2026-10-25T23:59:59');
-  const isWeek4 = now >= new Date('2026-10-19T00:00:00') && now <= week4End;
+  const isWeek4 = now >= new Date('2026-10-19T00:00:00') && now < new Date('2026-10-24T00:00:00');
+  const week5End = new Date('2026-11-01T23:59:59');
+  const isWeek5 = now >= new Date('2026-10-24T00:00:00') && now <= week5End;
 
   if (currentPath.includes('gaming.html')) {
     campaign = {
@@ -1308,25 +1316,29 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('energia-climatizacion.html')) {
     campaign = {
-      badge: '⚡ CONTINUIDAD & ENERGÍA CRÍTICA',
+      badge: isWeek5 ? '⚡ ENERGÍA CRÍTICA & PREVENTA BLACK TI' : '⚡ CONTINUIDAD & ENERGÍA CRÍTICA',
       message: '15% de Descuento en UPS Online de Doble Conversión e Inversores con',
-      coupon: 'CONTINUIDAD2026',
-      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
+      coupon: isWeek5 ? 'BLACKTI2026' : 'CONTINUIDAD2026',
+      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
       ctaText: 'Proteger Servidores',
-      waMsg: 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.'
+      waMsg: isWeek5
+        ? 'Hola Futunet, quiero cotizar UPS Online de respaldo en Preventa Black TI con el código BLACKTI2026.'
+        : 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.'
     };
   } else if (currentPath.includes('redes-datos.html')) {
     campaign = {
-      badge: '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B',
+      badge: isWeek5 ? '🌐 REDES GIGABIT & PREVENTA BLACK TI' : '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B',
       message: '15% de Descuento en Switches Administrables y Enlaces Redundantes con',
-      coupon: 'CONTINUIDAD2026',
-      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
+      coupon: isWeek5 ? 'BLACKTI2026' : 'CONTINUIDAD2026',
+      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
       ctaText: 'Auditar Red',
-      waMsg: 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'
+      waMsg: isWeek5
+        ? 'Hola Futunet, quiero cotizar switches y enlaces de fibra en Preventa Black TI con el código BLACKTI2026.'
+        : 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'
     };
   } else if (currentPath.includes('seguridad-electronica.html')) {
     campaign = {
-      badge: '🛡️ PROTECCIÓN CORPORATIVA',
+      badge: isWeek5 ? '🛡️ REMATE DE OCTUBRE: SEGURIDAD TOTAL' : '🛡️ PROTECCIÓN CORPORATIVA',
       message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
       coupon: 'SEGURIDAD2026',
       endDate: new Date('2026-10-31T23:59:59'),
@@ -1335,16 +1347,32 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('corporativo.html')) {
     campaign = {
-      badge: isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B'),
-      message: isWeek3
-        ? '15% de Descuento en Respaldo Eléctrico, Enlaces Redundantes y Seguridad con'
-        : '15% de Descuento en Seguridad Corporativa y Enlaces con',
-      coupon: isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026',
-      endDate: isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')),
-      ctaText: 'Auditoría B2B Gratis',
-      waMsg: isWeek3
-        ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
-        : 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.'
+      badge: isWeek5
+        ? '🔥 EARLY BIRD BLACK TI: PREVENTA CORPORATIVA'
+        : (isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B')),
+      message: isWeek5
+        ? '15% de Descuento en Enlaces Dedicados, Servidores y Respaldo Crítico con'
+        : (isWeek3
+          ? '15% de Descuento en Respaldo Eléctrico, Enlaces Redundantes y Seguridad con'
+          : '15% de Descuento en Seguridad Corporativa y Enlaces con'),
+      coupon: isWeek5 ? 'BLACKTI2026' : (isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026'),
+      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
+      ctaText: 'Asegurar Precio VIP',
+      waMsg: isWeek5
+        ? 'Hola Futunet, me interesa la Preventa Early Bird Black TI corporativa con el código BLACKTI2026.'
+        : (isWeek3
+          ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
+          : 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.')
+    };
+  } else if (isWeek5) {
+    // Semana 5 / Transición: Early Bird Black TI + Remate Ciberseguridad & Infraestructura
+    campaign = {
+      badge: '🔥 PREVENTA BLACK TI & REMATE OCTUBRE',
+      message: '15% de Descuento en Fibra Óptica, Infraestructura TI y Respaldo con',
+      coupon: 'BLACKTI2026',
+      endDate: week5End,
+      ctaText: 'Bloquear Precio VIP',
+      waMsg: 'Hola Futunet, quiero aprovechar la Preventa Early Bird Black TI con el código BLACKTI2026.'
     };
   } else if (isWeek3) {
     // Semana 3 de Octubre: Continuidad Operativa & Zero Downtime Global

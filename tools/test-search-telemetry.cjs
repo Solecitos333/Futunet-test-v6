@@ -75,7 +75,11 @@ const testQueries = [
   'lrt224',
   'gs724tp',
   'smartshunt',
-  'tgp600'
+  'tgp600',
+  'ex2300-c',
+  'msz-gl12',
+  'mg5050',
+  'logo 230rce'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -421,6 +425,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /tgp600|dect/i.test(scored[0].p.title),
         'El producto top para "tgp600" debe ser Panasonic KX-TGP600'
+      );
+    }
+
+    if (q === 'ex2300-c') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Juniper',
+        'La búsqueda "ex2300-c" debe priorizar el Switch Fanless Juniper EX2300-C-12P'
+      );
+      assert.ok(
+        /ex2300-c|12\s*puertos/i.test(scored[0].p.title),
+        'El producto top para "ex2300-c" debe ser Juniper Networks EX2300-C-12P'
+      );
+    }
+
+    if (q === 'msz-gl12') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Mitsubishi',
+        'La búsqueda "msz-gl12" debe priorizar el Aire Inverter Mitsubishi MSZ-GL 12,000 BTU'
+      );
+      assert.ok(
+        /12,000\s*btu|msz-gl\s*12/i.test(scored[0].p.title),
+        'El producto top para "msz-gl12" debe ser Mitsubishi MSZ-GL 12,000 BTU'
+      );
+    }
+
+    if (q === 'mg5050') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Paradox',
+        'La búsqueda "mg5050" debe priorizar el Panel de Alarma Paradox Magellan MG5050+'
+      );
+      assert.ok(
+        /mg5050|magellan/i.test(scored[0].p.title),
+        'El producto top para "mg5050" debe ser Paradox Magellan MG5050+'
+      );
+    }
+
+    if (q === 'logo 230rce') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Siemens',
+        'La búsqueda "logo 230rce" debe priorizar el Micro-PLC Siemens LOGO! 230RCE'
+      );
+      assert.ok(
+        /logo!?|230rce/i.test(scored[0].p.title),
+        'El producto top para "logo 230rce" debe ser Siemens LOGO! 230RCE'
       );
     }
   }

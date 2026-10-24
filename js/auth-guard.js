@@ -13,13 +13,13 @@
     requireAuth: function (callback) {
       FutunetAuth.authReady.then(function () {
         if (!FutunetAuth.isLoggedIn()) {
-          var currentPage = window.location.pathname.split('/').pop() + window.location.search;
+          var currentPage = (window.location.pathname.split('/').pop() || 'index.html') + window.location.search;
           window.location.href = 'login.html?redirect=' + encodeURIComponent(currentPage);
           return;
         }
         var authUser = FutunetAuth.getCurrentUser();
         if (!authUser || authUser.emailVerified !== true) {
-          var verificationRedirect = window.location.pathname.split('/').pop() + window.location.search;
+          var verificationRedirect = (window.location.pathname.split('/').pop() || 'index.html') + window.location.search;
           FutunetAuth.signOut().finally(function () {
             window.location.href = 'login.html?reason=email-verification-required&redirect=' + encodeURIComponent(verificationRedirect);
           });
