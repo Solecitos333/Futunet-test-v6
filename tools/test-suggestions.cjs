@@ -1858,6 +1858,78 @@ test('Mejora demandada por usuarios: Sistema Telefónico Inalámbrico DECT IP Pa
   assert.ok(catJs.includes("/\\b(tgp600|kxtgp600|kx-tgp600)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Panasonic KX-TGP600');
 });
 
+test('Mejora demandada por usuarios: Switch Fanless Juniper Networks EX2300-C-12P PoE+ (SUG-J2312)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J2312'") && seedCjs.includes("status: 'implemented'"), 'SUG-J2312 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-J2312') && sugJs.includes('Juniper Networks EX2300-C-12P'), 'SUG-J2312 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_ex2300_c_12p_switch'), 'backup_data.js debe contener redes_juniper_ex2300_c_12p_switch');
+
+  const juniperImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-ex2300-c-12p.webp');
+  assert.ok(fs.existsSync(juniperImg), 'La imagen del switch Juniper EX2300-C-12P debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ex2300c'"), 'catalog.js debe incluir ex2300c en stem variants');
+  assert.ok(catJs.includes("/\\b(ex2300-c|ex2300c|ex2300-c-12p)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Juniper EX2300-C-12P');
+});
+
+test('Mejora demandada por usuarios: Aire Inverter Mitsubishi Electric MSZ-GL 12,000 BTU (SUG-M1200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M1200'") && seedCjs.includes("status: 'implemented'"), 'SUG-M1200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M1200') && sugJs.includes('Mitsubishi Electric MSZ-GL 12,000 BTU'), 'SUG-M1200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_msz_gl12_aire_inverter'), 'backup_data.js debe contener energia_mitsubishi_msz_gl12_aire_inverter');
+
+  const mitsubishiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-msz-gl12.webp');
+  assert.ok(fs.existsSync(mitsubishiImg), 'La imagen del aire Mitsubishi MSZ-GL 12k debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'msz-gl12'"), 'catalog.js debe incluir msz-gl12 en stem variants');
+  assert.ok(catJs.includes("/\\b(msz-gl12|mszgl12|gl12)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Mitsubishi MSZ-GL 12,000 BTU');
+});
+
+test('Mejora demandada por usuarios: Panel de Alarma Híbrido Paradox Magellan MG5050+ (SUG-P5050)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P5050'") && seedCjs.includes("status: 'implemented'"), 'SUG-P5050 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P5050') && sugJs.includes('Paradox Magellan MG5050+'), 'SUG-P5050 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_magellan_mg5050_panel'), 'backup_data.js debe contener seguridad_paradox_magellan_mg5050_panel');
+
+  const paradoxImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-magellan-mg5050.webp');
+  assert.ok(fs.existsSync(paradoxImg), 'La imagen del panel Paradox Magellan MG5050+ debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'mg5050'"), 'catalog.js debe incluir mg5050 en stem variants');
+  assert.ok(catJs.includes("/\\b(mg5050|mg5050\\+|magellan)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Paradox Magellan MG5050+');
+});
+
+test('Mejora demandada por usuarios: Micro-PLC Siemens LOGO! 230RCE Ethernet (SUG-S8300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S8300'") && seedCjs.includes("status: 'implemented'"), 'SUG-S8300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S8300') && sugJs.includes('Siemens LOGO! 230RCE'), 'SUG-S8300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_logo_230rce_plc_controlador'), 'backup_data.js debe contener energia_siemens_logo_230rce_plc_controlador');
+
+  const siemensImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-logo-230rce-plc.webp');
+  assert.ok(fs.existsSync(siemensImg), 'La imagen del micro-PLC Siemens LOGO! 230RCE debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'230rce'"), 'catalog.js debe incluir 230rce en stem variants');
+  assert.ok(catJs.includes("/\\b(230rce|logo230rce)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Siemens LOGO! 230RCE');
+});
+
 
 
 
