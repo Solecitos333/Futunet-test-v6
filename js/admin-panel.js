@@ -1973,8 +1973,17 @@
           '<div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Transferencia Bancaria</div>';
         if (o.paymentVoucherUrl) {
           var safeVoucherUrl = (o.paymentVoucherUrl || '').trim();
-          var isSafeUrl = !safeVoucherUrl.toLowerCase().startsWith('javascript:') && 
-                          !safeVoucherUrl.toLowerCase().startsWith('data:');
+          var isSafeUrl = false;
+          try {
+            var parsedVoucherUrl = new URL(safeVoucherUrl);
+            var vHost = (parsedVoucherUrl.hostname || '').toLowerCase();
+            if (parsedVoucherUrl.protocol === 'https:' && 
+                (vHost === 'firebasestorage.googleapis.com' || vHost.endsWith('.firebasestorage.app'))) {
+              isSafeUrl = true;
+            }
+          } catch (_) {
+            isSafeUrl = false;
+          }
           if (isSafeUrl) {
             var escapedVoucherUrl = escapeAttr(safeVoucherUrl);
             if (safeVoucherUrl.indexOf('.pdf') > -1) {
@@ -1994,7 +2003,9 @@
               'Descargar Comprobante</a>' +
               '</div>';
           } else {
-            voucherHtml += '<div style="color:#e74c3c; font-size:0.85rem; font-weight:600;">Enlace de comprobante inválido o potencialmente no seguro.</div>';
+            voucherHtml += '<div style="padding:10px 14px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; color:#b91c1c; font-size:0.82rem; line-height:1.4;">' +
+              '<strong>Aviso de seguridad DevSecOps:</strong> El origen del comprobante no pertenece a Firebase Storage y fue bloqueado para proteger la sesión del panel.' +
+              '</div>';
           }
         } else {
           voucherHtml += '<div style="color:#e74c3c; font-size:0.85rem; font-weight:600;">No se ha cargado comprobante de pago aún.</div>';

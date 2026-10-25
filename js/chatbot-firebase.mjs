@@ -54,8 +54,15 @@ async function getModel() {
 }
 
 async function publicContext(query, page, signal) {
+  let resolvedPage = 'index.html';
+  if (typeof page === 'string') {
+    const trimmed = page.trim().toLowerCase();
+    if (/^[a-z0-9-]+(?:\.html)?$/i.test(trimmed)) {
+      resolvedPage = trimmed.endsWith('.html') ? trimmed : `${trimmed}.html`;
+    }
+  }
   const context = { site: { name: 'Futunet', country: 'República Dominicana', whatsapp: '18297411041' },
-    products: [], catalog_available: false, page: /^[a-z0-9-]+\.html$/.test(page) ? page : 'index.html' };
+    products: [], catalog_available: false, page: resolvedPage };
   const base = 'https://firestore.googleapis.com/v1/projects/futunet-web/databases/(default)/documents';
   const controller = new AbortController();
   const abort = () => controller.abort();

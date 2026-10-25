@@ -1495,6 +1495,38 @@
       status: 'implemented',
       description: 'En cuartos de máquinas, estaciones de bombeo de agua residencial y comercial, sistemas de conmutación de transferencias eléctricas de generadores y control de iluminación en edificios en Santiago requerimos micro-PLCs Siemens LOGO! 8.3 / 8.4 modelo 230RCE (alimentación directa 115V/230V AC) con pantalla frontal LCD con retroiluminación configurable, 8 entradas digitales, 4 salidas de relé de 10A, puerto Ethernet RJ-45 integrado con soporte Modbus TCP/IP, servidor web HTML5 integrado y ranura para tarjeta MicroSD para registro de datos (datalogging). En marca-siemens.html disponen de breakers y contactores, pero necesitamos el cerebro programable para automatizaciones industriales y comerciales.',
       officialResponse: '¡Hola Ing. Carlos Eduardo! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya incorporamos al catálogo corporativo de Energía & Climatización y a la página oficial marca-siemens.html el Micro-PLC y Controlador Lógico Siemens LOGO! 230RCE (alimentación 115V/230V AC, 8 entradas digitales, 4 salidas de relé 10A, pantalla LCD con teclado de navegación, puerto Ethernet con servidor web HTML5, Modbus TCP/IP y ranura MicroSD para registro) con garantía oficial Siemens y soporte especializado en Santiago.'
+        },
+    {
+      refCode: 'SUG-U5400',
+      title: 'Puntos de Acceso Wi-Fi Exteriores Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra) IPX6',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Puntos de acceso versátiles ultracompactos resistentes a la intemperie (IPX6) con antenas internas y conectores RP-SMA para terrazas, patios y almacenes.',
+      officialResponse: '¡Implementado! Incorporamos el AP Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra) PoE IPX6 en catálogo y en marca-ubiquiti.html.'
+    },
+    {
+      refCode: 'SUG-D3449',
+      title: 'Cámaras IP Dahua TiOC 2.0 4MP con Disuasión Activa, Sirena 110dB y Full-Color 24/7',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámaras IP preventivas Dahua TiOC 2.0 con estrobos rojo/azul, sirena de 110 dB, visión a color 24/7 y filtrado de falsas alarmas IA WizSense.',
+      officialResponse: '¡Cumplido! Disponible la Cámara IP Dahua TiOC 2.0 WizSense 4MP (DH-IPC-HDW3449HP-AS-PV) con disuasión activa y soporte en Santiago.'
+    },
+    {
+      refCode: 'SUG-C3524',
+      title: 'Switches Administrables Cisco Business CBS350-24P-4G de 24 Puertos Gigabit PoE+ (195W) y 4x SFP',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switches de conmutación gestionable L3 Cisco Business CBS350 de 24 puertos Gigabit PoE+ con 4 enlaces de fibra SFP dedicados para racks corporativos.',
+      officialResponse: '¡Implementado! Integrado al catálogo el Switch Cisco Business CBS350-24P-4G con 195W PoE+, 4 SFP de fibra y garantía oficial de por vida.'
+    },
+    {
+      refCode: 'SUG-A2200',
+      title: 'Sistemas UPS para Rack APC Smart-UPS SMT2200RM2U de 2200VA / 1980W 2U Onda Senoidal Pura',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistemas de respaldo ininterrumpido en formato rack 2U APC Smart-UPS 2200VA con onda senoidal pura, pantalla LCD y monitoreo cloud SmartConnect.',
+      officialResponse: '¡Atendido! Se integró el Sistema UPS APC Smart-UPS SMT2200RM2U de 2200VA / 1980W con regulación AVR y gestión cloud en Energía y Climatización.'
     }];
 
   function getFallbackSuggestionByCode(code) {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v49';
+const CACHE_NAME = 'futunet-cache-v50';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -177,7 +177,8 @@ self.addEventListener('fetch', event => {
     '/admin', '/admin.html',
     '/mi-cuenta', '/mi-cuenta.html',
     '/facturacion', '/facturacion.html',
-    '/login', '/login.html'
+    '/login', '/login.html',
+    '/cotizacion', '/cotizacion.html'
   ]);
   const privateScripts = new Set([
     '/js/chatbot-settings.js',
@@ -195,7 +196,8 @@ self.addEventListener('fetch', event => {
     '/js/admin-panel.js',
     '/js/admin-financing.js',
     '/js/user-panel.js',
-    '/js/financing.js'
+    '/js/financing.js',
+    '/js/public-quote.js'
   ]);
 
   // Skip cross-origin requests, POST requests, and firebase/firestore API calls

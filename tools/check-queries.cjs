@@ -183,7 +183,15 @@ const queries = [
   'ex2300-c',
   'msz-gl12',
   'mg5050',
-  'logo 230rce'
+    'logo 230rce',
+  'uk-ultra',
+  'swiss army knife',
+  'tioc',
+  'dahua tioc',
+  'cbs350-24p',
+  'cisco 24 poe',
+  'smt2200',
+  'ups rack 2200'
 ];
 
 

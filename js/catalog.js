@@ -260,6 +260,10 @@ function getStemVariants(word) {
   if (word === 'gl12' || word === 'msz-gl12' || word === 'mszgl12') variants.push('mitsubishi', 'aire', 'inverter', 'split', '12000', 'seer', 'silencioso');
   if (word === 'mg5050' || word === 'magellan' || word === 'mg5050+') variants.push('paradox', 'alarma', 'inalambrico', 'panel', 'stayd', 'blueeye', '433mhz');
   if (word === 'logo' || word === '230rce' || word === 'logo230rce') variants.push('siemens', 'plc', 'controlador', 'rele', 'ethernet', 'modbus', 'automatizacion');
+  if (word === 'uk-ultra' || word === 'ukultra' || word === 'swiss' || word === 'knife') variants.push('ubiquiti', 'unifi', 'exterior', 'ap', 'ipx6', 'poe', 'wifi');
+  if (word === 'tioc' || word === '3449' || word === 'hdw3449' || word === 'disuasion') variants.push('dahua', 'camara', 'ip', 'alarma', 'sirena', 'estrobo', 'color');
+  if (word === 'cbs350-24p' || word === 'cbs350-24' || word === 'cbs3524') variants.push('cisco', 'switch', 'poe', '24p', 'gigabit', 'sfp', 'capa3');
+  if (word === 'smt2200' || word === 'smt2200rm2u' || word === 'smt2200rm' || word === '2200rm') variants.push('apc', 'ups', 'rack', '2200va', 'schneider', 'smartconnect', 'senoidal');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1123,6 +1127,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(230rce|logo230rce)\b/i.test(normalizedQuery) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(logo|plc|controlador|automatizacion)\b/i.test(normalizedQuery)) || (/\b(logo)\b/i.test(normalizedQuery) && /\b(siemens|plc|controlador|rele)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'siemens') {
       if (/logo!?|230rce|micro-plc/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Punto de Acceso Ubiquiti UniFi Swiss Army Knife Ultra al buscar uk-ultra, ukultra, swiss army knife (SUG-U5400)
+  if (/\b(uk-ultra|ukultra|swiss\s*army)\b/i.test(normalizedQuery) || (/\b(ubiquiti|unifi)\b/i.test(normalizedQuery) && /\b(ultra|exterior|ipx6|knife)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'ubiquiti') {
+      if (/uk-ultra|swiss\s*army/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara IP Dahua TiOC 2.0 4MP con Disuasión Activa al buscar tioc, 3449, hdw3449, disuasion activa (SUG-D3449)
+  if (/\b(tioc|3449|hdw3449)\b/i.test(normalizedQuery) || (/\b(dahua)\b/i.test(normalizedQuery) && /\b(tioc|disuasion|sirena|estrobo)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'dahua') {
+      if (/tioc|3449/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Cisco Business CBS350-24P-4G al buscar cbs350-24p, cbs350-24, cbs3524, cisco 24 poe (SUG-C3524)
+  if (/\b(cbs350-24p|cbs350-24|cbs3524)\b/i.test(normalizedQuery) || (/\b(cisco)\b/i.test(normalizedQuery) && /\b(24|24p)\b/i.test(normalizedQuery) && /\b(poe|switch)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'cisco') {
+      if (/cbs350-24p|24\s*puertos/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Sistema UPS para Rack APC Smart-UPS SMT2200RM2U al buscar smt2200, smt2200rm2u, smart-ups 2200, ups rack 2200 (SUG-A2200)
+  if (/\b(smt2200|smt2200rm2u|smart-ups\s*2200)\b/i.test(normalizedQuery) || (/\b(apc|schneider)\b/i.test(normalizedQuery) && /\b(2200|2200va|rack)\b/i.test(normalizedQuery) && /\b(ups|smart-ups)\b/i.test(normalizedQuery))) {
+    if (product.brand && (product.brand.toLowerCase() === 'schneider electric' || product.brand.toLowerCase() === 'apc')) {
+      if (/2200|smt2200/i.test(title)) {
         score += 240;
       } else {
         score += 170;

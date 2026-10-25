@@ -8269,6 +8269,102 @@ const mockDatabase = [
       "Montaje estándar en riel DIN de 35 mm (formato compacto de 4 módulos) para tableros eléctricos",
       "Garantía oficial Siemens de fábrica con comprobante fiscal formal NCF y asesoría técnica en Santiago"
     ]
+  },
+  {
+    "id": "redes_ubiquiti_uk_ultra_wifi_ap",
+    "department": "redes",
+    "category": "Routers y Repetidores WiFi",
+    "brand": "Ubiquiti",
+    "title": "Punto de Acceso Compacto para Exteriores e Interiores Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra) Resistente a la Intemperie IPX6 PoE",
+    "desc": "Punto de acceso Wi-Fi versátil y ultracompacto para interiores y exteriores Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra), diseñado para ofrecer cobertura inalámbrica de alto rendimiento en terrazas, patios residenciales, jardines, restaurantes y naves comerciales en Santiago. Cuenta con certificación de resistencia al agua IPX6 para soportar condiciones climáticas adversas y lluvia directa. Incorpora antenas omnidireccionales internas de alta eficiencia y dispone de 2 conectores RP-SMA protegidos para acoplar antenas externas directivas o sectoriales cuando se requiere alcance extendido. Alimentación mediante Power over Ethernet (PoE 802.3af) a través de su puerto Gigabit Ethernet, y montaje sumamente flexible en pared, poste o riel DIN. Se integra de forma nativa a la plataforma UniFi Network para gestión centralizada, roaming transparente y métricas avanzadas de tráfico.",
+    "price": "RD$ 6,850.00",
+    "img": "img/productos/catalogo/ubiquiti-uk-ultra-ap.webp",
+    "gallery": [
+      "img/productos/catalogo/ubiquiti-uk-ultra-ap.webp"
+    ],
+    "specs": [
+      "Certificación de impermeabilidad IPX6 para exteriores expuestos a lluvia directa y sol",
+      "Factor de forma ultra compacto con múltiples opciones de montaje: pared, mástil o riel DIN",
+      "Antenas internas omnidireccionales con cobertura optimizada para áreas abiertas y terrazas",
+      "2 conectores RP-SMA para acoplar antenas omnidireccionales o sectoriales de alta ganancia opcionales",
+      "Puerto Gigabit Ethernet 10/100/1000 Mbps con alimentación PoE 802.3af estándar",
+      "Capacidad para más de 200 dispositivos concurrentes y soporte multi-SSID con aislamiento VLAN",
+      "Integración nativa con UniFi Network Controller para configuración en un clic y roaming rápido",
+      "Bajo consumo energético de tan solo 8W para máxima eficiencia operativa",
+      "Garantía oficial Ubiquiti Networks de 1 año con respaldo y soporte técnico en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_dahua_tioc_4mp_camara_ip",
+    "department": "seguridad",
+    "category": "Cámaras de Seguridad",
+    "brand": "Dahua",
+    "title": "Cámara IP Domo Dahua TiOC 2.0 4MP (DH-IPC-HDW3449HP-AS-PV) con Disuasión Activa, Luces Estroboscópicas Rojo/Azul, Sirena 110dB y Full-Color 24/7",
+    "desc": "Cámara IP tipo domo/torreta Dahua TiOC 2.0 (Three-in-One Camera) de 4 Megapíxeles serie WizSense (modelo DH-IPC-HDW3449HP-AS-PV), la cúspide en videovigilancia preventiva para residencias, negocios, plazas y almacenes en Santiago. Combina tres tecnologías fundamentales: monitoreo a todo color 24/7 con apertura F1.0 de gran luminosidad y luz cálida inteligente, disuasión activa inmediata mediante luces estroboscópicas destellantes en rojo y azul junto a una potente sirena programable de hasta 110 dB para repeler intrusos antes de que consuman el delito, e inteligencia artificial WizSense SMD Plus que clasifica con precisión humanos y vehículos eliminando falsas alarmas provocadas por lluvia, animales o follaje. Incorpora además micrófono de alta sensibilidad y altavoz integrado para comunicación de audio bidireccional desde la app móvil DMSS.",
+    "price": "RD$ 8,450.00",
+    "img": "img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp",
+    "gallery": [
+      "img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp"
+    ],
+    "specs": [
+      "Resolución de 4 Megapíxeles (2688 x 1520 a 30 fps) con sensor CMOS de barrido progresivo de 1/2.7\"",
+      "Tecnología Full-Color 24/7 con lente de apertura F1.0 y LED cálido inteligente para imágenes nítidas a color",
+      "Disuasión activa con luces estroboscópicas intermitentes en rojo y azul y sirena disuasoria de 110 dB",
+      "Inteligencia Artificial WizSense con protección perimetral, cruce de línea y clasificación precisa humano/vehículo",
+      "Audio bidireccional integrado con micrófono dual anti-ruido y altavoz de alta potencia",
+      "Armado y desarmado de alarmas con un solo toque desde la app móvil DMSS o entradas de alarma",
+      "Compresión de video ultra eficiente Smart H.265+ para ahorrar hasta un 70% de ancho de banda y disco",
+      "Carcasa metálica antivandálica con protección IP67 para intemperie resistente a lluvia y polvo",
+      "Garantía oficial Dahua Technology de 2 años con soporte técnico e instalación en Santiago"
+    ]
+  },
+  {
+    "id": "redes_cisco_cbs350_24p_4g_switch",
+    "department": "redes",
+    "category": "Routers y Repetidores WiFi",
+    "brand": "Cisco",
+    "title": "Switch Administrable Cisco Business CBS350-24P-4G de 24 Puertos Gigabit PoE+ (195W) con 4 Puertos SFP Gigabit y Enrutamiento Capa 3",
+    "desc": "Switch de conmutación gestionable de alto rendimiento para montaje en rack Cisco Business CBS350-24P-4G (CBS350-24P-4G-NA), diseñado como la columna vertebral de red para corporaciones, clínicas, hoteles y centros educativos en Santiago. Equipado con 24 puertos Gigabit Ethernet 10/100/1000 PoE+ 802.3at con una potencia total disponible de 195W para energizar teléfonos VoIP, puntos de acceso Wi-Fi 6 y cámaras de seguridad IP, además de 4 puertos uplink dedicados SFP Gigabit para interconexiones por fibra óptica de alta velocidad hacia otros switches o servidores. Cuenta con capacidades avanzadas de enrutamiento estático de Capa 3 (L3), listas de control de acceso (ACL), seguridad de puertos IEEE 802.1X, VLANs de voz automáticas y una interfaz web moderna y ágil en español.",
+    "price": "RD$ 32,800.00",
+    "img": "img/productos/catalogo/cisco-cbs350-24p-4g.webp",
+    "gallery": [
+      "img/productos/catalogo/cisco-cbs350-24p-4g.webp"
+    ],
+    "specs": [
+      "24 puertos Gigabit Ethernet 10/100/1000 con soporte PoE+ 802.3at/af (presupuesto de 195W)",
+      "4 puertos de fibra SFP Gigabit dedicados para enlaces ascendentes a larga distancia sin cuellos de botella",
+      "Capacidad de conmutación de 56 Gbps y tasa de reenvío de 41.66 Mpps para tráfico empresarial continuo",
+      "Enrutamiento estático IPv4/IPv6 de Capa 3 para segmentación de red eficiente entre departamentos",
+      "VLANs de voz automáticas con priorización QoS para telefonía IP cristalina y sin cortes",
+      "Seguridad avanzada: Autenticación 802.1X, ACLs multicapa, DoS prevention y DHCP Snooping",
+      "Gestión simplificada: Interfaz gráfica web moderna, soporte SNMP, CLI y Cisco Business Dashboard",
+      "Formato estándar de montaje en rack de 19\" 1U con orejas de fijación incluidas",
+      "Garantía oficial Cisco de por vida limitada (Enhanced Limited Lifetime Warranty) y soporte local Futunet"
+    ]
+  },
+  {
+    "id": "energia_apc_smart_ups_2200_rack",
+    "department": "energia",
+    "category": "Energía y Climatización",
+    "brand": "Schneider Electric",
+    "title": "Sistema UPS para Rack APC Smart-UPS SMT2200RM2U de 2200VA / 1980W 2U Onda Senoidal Pura con LCD y Monitoreo Cloud SmartConnect",
+    "desc": "Sistema de alimentación ininterrumpida (UPS) de grado profesional y misión crítica en formato rack de 2U APC Smart-UPS SMT2200RM2U de Schneider Electric, diseñado para brindar protección eléctrica total a servidores, switches de red, sistemas de almacenamiento y equipos médicos en Santiago. Ofrece una potencia nominal de 2200VA / 1980 Watts con salida de onda senoidal pura garantizada, compatible con fuentes de alimentación de servidores con PFC activo. Cuenta con regulación automática de voltaje (AVR) Boost and Trim que corrige caídas y alzas de voltaje sin agotar la batería, pantalla gráfica LCD frontal con teclas de navegación para visualización en tiempo real de carga y autonomía, grupos de tomas de salida conmutables para reiniciar equipos de forma remota, ranura SmartSlot para tarjeta de gestión de red SNMP, y tecnología APC SmartConnect para supervisión y alertas proactivas en la nube.",
+    "price": "RD$ 58,900.00",
+    "img": "img/productos/catalogo/apc-smart-ups-2200-rack.webp",
+    "gallery": [
+      "img/productos/catalogo/apc-smart-ups-2200-rack.webp"
+    ],
+    "specs": [
+      "Potencia de salida continua de 2200 VA / 1980 Watts con salida de onda senoidal pura garantizada",
+      "Formato para montaje en rack de 2U (incluye kit de rieles para rack de 19\" de 4 postes)",
+      "Regulación Automática de Voltaje (AVR) Boost & Trim de doble etapa (rango 82V - 144V sin batería)",
+      "Pantalla LCD gráfica con retroiluminación y menú intuitivo para diagnósticos locales y consumo energético",
+      "APC SmartConnect: Monitoreo remoto automático en la nube desde cualquier dispositivo con alertas proactivas",
+      "Grupos de tomas de salida conmutadas independientes para reinicio secuencial o apagado de cargas no críticas",
+      "Baterías de plomo-ácido selladas libres de mantenimiento con cambio en caliente (Hot-Swap) por el frente",
+      "Ranura SmartSlot para tarjeta opcional de gestión de red (NMC AP9641 / AP9640)",
+      "Garantía oficial Schneider Electric de 3 años en electrónica y 2 años en baterías con factura formal NCF"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

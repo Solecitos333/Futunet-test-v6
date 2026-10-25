@@ -862,8 +862,16 @@ test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V
 test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
   const swJs = readJs('sw.js');
   assert.ok(
-    swJs.includes("const CACHE_NAME = 'futunet-cache-v49';"),
-    'sw.js debe estar en la versión futunet-cache-v49'
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v50';"),
+    'sw.js debe estar en la versión futunet-cache-v50'
+  );
+  assert.ok(
+    swJs.includes("'/cotizacion'") && swJs.includes("'/cotizacion.html'"),
+    'sw.js debe proteger cotización excluyéndola de la navegación en caché (privatePaths)'
+  );
+  assert.ok(
+    swJs.includes("'/js/public-quote.js'"),
+    'sw.js debe incluir public-quote.js en privateScripts'
   );
   // Verificar que firebase-config.js y auth.js NO están presentes en OPTIONAL_ASSETS
   const optionalAssetsMatch = swJs.match(/const OPTIONAL_ASSETS = \[([\s\S]*?)\];/);

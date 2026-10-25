@@ -1493,4 +1493,20 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 717 recursos públicos en `dist/` sin errores.
 
-
+- **Atención y Respuesta al Buzón de Sugerencias, Telemetría y Nuevas Mejoras Implementadas (2026-10-25 - Lote 18: Ubiquiti UK-Ultra IPX6, Dahua TiOC 2.0 4MP Disuasión Activa, Cisco CBS350-24P-4G PoE+ y APC Smart-UPS SMT2200RM2U 2U)**:
+  - **Revisión y Respuesta Oficial de Sugerencias (104/104 Implementadas y Respondidas)**:
+    - `SUG-U5400`: Punto de Acceso Wi-Fi Compacto para Exteriores e Interiores Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra) IPX6 PoE con opciones versátiles de montaje (pared, mástil, riel DIN), antenas omnidireccionales internas, conectores RP-SMA para antenas externas directivas o sectoriales y gestión centralizada UniFi Network.
+    - `SUG-D3449`: Cámara IP Domo Dahua TiOC 2.0 4MP (DH-IPC-HDW3449HP-AS-PV) con Disuasión Activa inmediata mediante luces estroboscópicas destellantes rojo/azul, sirena programable de 110 dB, visión nocturna a color Full-Color 24/7 con apertura F1.0, audio bidireccional y filtrado de falsas alarmas con IA WizSense SMD Plus.
+    - `SUG-C3524`: Switch Administrable Cisco Business CBS350-24P-4G de 24 Puertos Gigabit PoE+ (presupuesto 195W) con 4 enlaces de fibra dedicados SFP Gigabit, enrutamiento estático de Capa 3 (L3), VLANs de voz automáticas y seguridad empresarial 802.1X para racks corporativos.
+    - `SUG-A2200`: Sistema UPS para Rack APC Smart-UPS SMT2200RM2U de 2200VA / 1980W 2U de Schneider Electric con salida de onda senoidal pura para servidores, pantalla LCD multifunción, regulación automática de voltaje AVR Boost/Trim, grupos de tomas conmutables y monitoreo proactivo cloud APC SmartConnect.
+  - **Ampliación de Catálogo y Sincronización en la Nube**:
+    - Generación de tarjetas visuales WebP de alta fidelidad con especificaciones técnicas y sello de garantía oficial: `ubiquiti-uk-ultra-ap.webp`, `dahua-tioc-4mp-camara-ip.webp`, `cisco-cbs350-24p-4g.webp` y `apc-smart-ups-2200-rack.webp` en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - Sincronización en `backup_data.js` (elevando el total de productos a 431) y persistencia transaccional en la colección `products` de Firestore (`tools/sync-catalog-improvements.cjs`).
+    - Actualización de `suggestions.js` (muro comunitario y lista canónica) y persistencia en la colección `suggestions` de Firestore con respuestas oficiales y estado `implemented` (`tools/seed-suggestions.cjs`).
+  - **Optimización de Motor de Búsqueda y Telemetría Semántica (`js/catalog.js` & `tools/check-queries.cjs`)**:
+    - Variantes morfológicas y sinónimos stem agregados: `uk-ultra`, `ukultra`, `swiss army knife`, `tioc`, `hdw3449`, `disuasion activa`, `cbs350-24p`, `cbs3524`, `cisco 24 poe`, `smt2200`, `smt2200rm2u`, `smart-ups 2200`, `ups rack 2200`.
+    - Reglas de priorización de puntuación en `scoreProductMatch` asignando +240 puntos a modelos exactos y +170 puntos por coincidencia de marca, con cobertura del 100% de consultas en `check-queries.cjs` y cero resultados nulos.
+  - **Verificación Automatizada & Calidad**:
+    - 232 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 721 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

@@ -401,8 +401,17 @@
     var voucherHtml = '';
     if (order.paymentMethod === 'bank_transfer' && order.paymentVoucherUrl) {
       var safeVoucherUrl = (order.paymentVoucherUrl || '').trim();
-      var isSafeUrl = !safeVoucherUrl.toLowerCase().startsWith('javascript:') && 
-                      !safeVoucherUrl.toLowerCase().startsWith('data:');
+      var isSafeUrl = false;
+      try {
+        var parsedVoucherUrl = new URL(safeVoucherUrl);
+        var vHost = (parsedVoucherUrl.hostname || '').toLowerCase();
+        if (parsedVoucherUrl.protocol === 'https:' && 
+            (vHost === 'firebasestorage.googleapis.com' || vHost.endsWith('.firebasestorage.app'))) {
+          isSafeUrl = true;
+        }
+      } catch (_) {
+        isSafeUrl = false;
+      }
       if (isSafeUrl) {
         voucherHtml = '<div style="margin-top:16px; padding-top:16px; border-top:1px solid #e5eef8;">' +
           '  <div style="font-size:0.75rem; color:#76889e; text-transform:uppercase; font-weight:700; margin-bottom:8px;">Comprobante de Pago</div>' +
@@ -410,6 +419,10 @@
           '    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>' +
           '    Ver Comprobante Adjunto' +
           '  </a>' +
+          '</div>';
+      } else {
+        voucherHtml = '<div style="margin-top:16px; padding:10px 14px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; color:#b91c1c; font-size:0.82rem; line-height:1.4;">' +
+          '<strong>Aviso de seguridad DevSecOps:</strong> El enlace del comprobante no pertenece a Firebase Storage y fue bloqueado para proteger la sesión del usuario.' +
           '</div>';
       }
     }

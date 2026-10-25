@@ -1930,15 +1930,74 @@ test('Mejora demandada por usuarios: Micro-PLC Siemens LOGO! 230RCE Ethernet (SU
   assert.ok(catJs.includes("/\\b(230rce|logo230rce)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Siemens LOGO! 230RCE');
 });
 
+test('Mejora demandada por usuarios: Punto de Acceso Ubiquiti UniFi Swiss Army Knife Ultra (SUG-U5400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U5400'") && seedCjs.includes("status: 'implemented'"), 'SUG-U5400 debe figurar como implemented en seed-suggestions.cjs');
 
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U5400') && sugJs.includes('Swiss Army Knife Ultra'), 'SUG-U5400 debe figurar en el muro y lista canónica de suggestions.js');
 
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_uk_ultra_wifi_ap'), 'backup_data.js debe contener redes_ubiquiti_uk_ultra_wifi_ap');
 
+  const ubiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-uk-ultra-ap.webp');
+  assert.ok(fs.existsSync(ubiImg), 'La imagen del AP Ubiquiti UK-Ultra debe existir en disco');
 
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'uk-ultra'"), 'catalog.js debe incluir uk-ultra en stem variants');
+  assert.ok(catJs.includes("/\\b(uk-ultra|ukultra|swiss\\s*army)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Ubiquiti UK-Ultra');
+});
 
+test('Mejora demandada por usuarios: Cámara IP Dahua TiOC 2.0 4MP Disuasión Activa (SUG-D3449)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D3449'") && seedCjs.includes("status: 'implemented'"), 'SUG-D3449 debe figurar como implemented en seed-suggestions.cjs');
 
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D3449') && sugJs.includes('Dahua TiOC 2.0'), 'SUG-D3449 debe figurar en el muro y lista canónica de suggestions.js');
 
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_dahua_tioc_4mp_camara_ip'), 'backup_data.js debe contener seguridad_dahua_tioc_4mp_camara_ip');
 
+  const dahuaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-tioc-4mp-camara-ip.webp');
+  assert.ok(fs.existsSync(dahuaImg), 'La imagen de la cámara Dahua TiOC 2.0 4MP debe existir en disco');
 
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tioc'"), 'catalog.js debe incluir tioc en stem variants');
+  assert.ok(catJs.includes("/\\b(tioc|3449|hdw3449)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Dahua TiOC 2.0');
+});
 
+test('Mejora demandada por usuarios: Switch Administrable Cisco Business CBS350-24P-4G (SUG-C3524)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C3524'") && seedCjs.includes("status: 'implemented'"), 'SUG-C3524 debe figurar como implemented en seed-suggestions.cjs');
 
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C3524') && sugJs.includes('Cisco Business CBS350-24P-4G'), 'SUG-C3524 debe figurar en el muro y lista canónica de suggestions.js');
 
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_cbs350_24p_4g_switch'), 'backup_data.js debe contener redes_cisco_cbs350_24p_4g_switch');
+
+  const ciscoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-cbs350-24p-4g.webp');
+  assert.ok(fs.existsSync(ciscoImg), 'La imagen del switch Cisco CBS350-24P-4G debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cbs350-24p'"), 'catalog.js debe incluir cbs350-24p en stem variants');
+  assert.ok(catJs.includes("/\\b(cbs350-24p|cbs350-24|cbs3524)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Cisco CBS350-24P-4G');
+});
+
+test('Mejora demandada por usuarios: Sistema UPS para Rack APC Smart-UPS SMT2200RM2U 2200VA (SUG-A2200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A2200'") && seedCjs.includes("status: 'implemented'"), 'SUG-A2200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A2200') && sugJs.includes('APC Smart-UPS SMT2200RM2U'), 'SUG-A2200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_smart_ups_2200_rack'), 'backup_data.js debe contener energia_apc_smart_ups_2200_rack');
+
+  const apcImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-smart-ups-2200-rack.webp');
+  assert.ok(fs.existsSync(apcImg), 'La imagen del UPS APC Smart-UPS 2200RM2U debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'smt2200'"), 'catalog.js debe incluir smt2200 en stem variants');
+  assert.ok(catJs.includes("/\\b(smt2200|smt2200rm2u|smart-ups\\s*2200)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar APC Smart-UPS 2200RM2U');
+});

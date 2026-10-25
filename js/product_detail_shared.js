@@ -140,8 +140,21 @@
 
   function getSafeReturnUrl(candidate) {
     if (!candidate) return 'catalogo.html';
-    const decoded = normalizeCopy(candidate).trim();
-    if (/^[a-z0-9_-]+\.html(?:[?#].*)?$/i.test(decoded)) {
+    let decoded = normalizeCopy(candidate).trim();
+    try {
+      if (decoded.startsWith('http://') || decoded.startsWith('https://')) {
+        const parsed = new URL(decoded);
+        if (typeof window !== 'undefined' && window.location && parsed.origin === window.location.origin) {
+          decoded = parsed.pathname.replace(/^\/+/, '') + parsed.search + parsed.hash;
+        } else {
+          return 'catalogo.html';
+        }
+      }
+    } catch (_) {
+      return 'catalogo.html';
+    }
+    decoded = decoded.replace(/^\/+/, '');
+    if (/^[a-z0-9_-]+(?:\.html)?(?:[?#][a-zA-Z0-9_\-=&%#.]*)?$/i.test(decoded)) {
       return decoded;
     }
     return 'catalogo.html';

@@ -440,23 +440,32 @@ function loadInventoryDataScript() {
   if (window.inventoryDataPromise) return window.inventoryDataPromise;
   window.loadingInventoryData = true;
 
-  window.inventoryDataPromise = new Promise((resolve, reject) => {
+  const loadSingleScript = (src) => new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'js/inventory_data.js';
+    script.src = src;
     script.defer = true;
     script.fetchPriority = 'low';
-    script.onload = () => {
-      window.inventoryDataLoaded = true;
-      window.loadingInventoryData = false;
-      resolve();
-    };
-    script.onerror = () => {
-      window.loadingInventoryData = false;
-      window.inventoryDataPromise = null;
-      reject(new Error('Error cargando inventory_data.js'));
-    };
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Error cargando ' + src));
     document.body.appendChild(script);
   });
+
+  window.inventoryDataPromise = (async () => {
+    try {
+      if (!window.backupDatabase && !window.mockDatabase) {
+        await loadSingleScript('js/backup_data.js').catch((err) => {
+          console.warn('Fallback backup_data no cargado:', err);
+        });
+      }
+      await loadSingleScript('js/inventory_data.js');
+      window.inventoryDataLoaded = true;
+      window.loadingInventoryData = false;
+    } catch (err) {
+      window.loadingInventoryData = false;
+      window.inventoryDataPromise = null;
+      throw err;
+    }
+  })();
 
   return window.inventoryDataPromise;
 }

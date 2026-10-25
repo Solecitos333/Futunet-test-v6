@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v49';"), 'sw.js debe estar en la versión futunet-cache-v49');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v50';"), 'sw.js debe estar en la versión futunet-cache-v50');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -880,3 +880,71 @@ test('Resiliencia, Accesibilidad y Campaña Q4 2026: Cupones Black TI, Clean URL
   );
 });
 
+
+
+test('DevSecOps Hardening: getSafeReturnUrl previene Open Redirects / XSS y admin-panel valida Firebase Storage en comprobantes', () => {
+  const prodSharedPath = path.join(projectRoot, 'js', 'product_detail_shared.js');
+  const prodSharedCode = fs.readFileSync(prodSharedPath, 'utf8');
+
+  const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>', {
+    url: 'https://futunet.com.do/producto.html?id=item-1',
+    runScripts: 'outside-only'
+  });
+  const win = dom.window;
+  win.eval(prodSharedCode);
+
+  assert.ok(win.FutunetProductDetail, 'FutunetProductDetail debe existir');
+  const getSafeReturnUrl = win.FutunetProductDetail.getSafeReturnUrl;
+  assert.equal(typeof getSafeReturnUrl, 'function');
+
+  // 1. Valid URLs & Clean URLs
+  assert.equal(getSafeReturnUrl('catalogo.html'), 'catalogo.html');
+  assert.equal(getSafeReturnUrl('redes-datos'), 'redes-datos');
+  assert.equal(getSafeReturnUrl('catalogo.html?q=cisco#grid'), 'catalogo.html?q=cisco#grid');
+  assert.equal(getSafeReturnUrl('/redes-datos.html'), 'redes-datos.html');
+  assert.equal(getSafeReturnUrl('https://futunet.com.do/redes-datos.html?cat=switches'), 'redes-datos.html?cat=switches');
+
+  // 2. Open Redirect Attacks and Injections
+  assert.equal(getSafeReturnUrl('https://evil-attacker.com/login.html'), 'catalogo.html', 'Debe bloquear dominios externos');
+  assert.equal(getSafeReturnUrl('javascript:alert(1)'), 'catalogo.html', 'Debe bloquear esquema javascript:');
+  assert.equal(getSafeReturnUrl('data:text/html,<script>alert(1)</script>'), 'catalogo.html', 'Debe bloquear esquema data:');
+  assert.equal(getSafeReturnUrl('//evil.com/phish'), 'catalogo.html', 'Debe bloquear URLs relativas a protocolo');
+  assert.equal(getSafeReturnUrl('../../etc/passwd'), 'catalogo.html', 'Debe bloquear path traversal');
+
+  // 3. Admin Panel Voucher URL Security
+  const adminPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'admin-panel.js'), 'utf8');
+  assert.ok(
+    adminPanelJs.includes("vHost === 'firebasestorage.googleapis.com' || vHost.endsWith('.firebasestorage.app')"),
+    'admin-panel.js debe validar estrictamente que el comprobante pertenezca a Firebase Storage'
+  );
+  assert.ok(
+    adminPanelJs.includes("Aviso de seguridad DevSecOps"),
+    'admin-panel.js debe incluir aviso de seguridad cuando el origen del comprobante sea sospechoso'
+  );
+
+  // 4. User Panel Voucher URL Security & DevSecOps Notice
+  const userPanelJs = fs.readFileSync(path.join(projectRoot, 'js', 'user-panel.js'), 'utf8');
+  assert.ok(
+    userPanelJs.includes("vHost === 'firebasestorage.googleapis.com' || vHost.endsWith('.firebasestorage.app')"),
+    'user-panel.js debe validar estrictamente que el comprobante pertenezca a Firebase Storage'
+  );
+  assert.ok(
+    userPanelJs.includes("Aviso de seguridad DevSecOps"),
+    'user-panel.js debe incluir aviso de seguridad cuando el comprobante no pertenezca a Firebase Storage'
+  );
+
+  // 5. Dynamic Script Loading & Catalog Fallback Resilience
+  const mainJs = fs.readFileSync(path.join(projectRoot, 'js', 'main.js'), 'utf8');
+  assert.ok(
+    mainJs.includes("await loadSingleScript('js/backup_data.js')"),
+    'main.js loadInventoryDataScript debe cargar secuencialmente backup_data.js antes de inventory_data.js'
+  );
+
+  // 6. Chatbot Firebase Clean URLs Resolution
+  const chatbotFirebaseMjs = fs.readFileSync(path.join(projectRoot, 'js', 'chatbot-firebase.mjs'), 'utf8');
+  assert.ok(
+    chatbotFirebaseMjs.includes("resolvedPage") &&
+    chatbotFirebaseMjs.includes("trimmed.endsWith('.html')"),
+    'chatbot-firebase.mjs debe resolver rutas limpias sin extensión .html hacia su archivo canonical'
+  );
+});
