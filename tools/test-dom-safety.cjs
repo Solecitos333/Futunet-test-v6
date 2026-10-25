@@ -77,6 +77,10 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./js/backup_data.js'"), 'sw.js debe incluir backup_data.js en OPTIONAL_ASSETS para resiliencia offline');
   assert.ok(!swJs.includes("event.request.url.includes('backup_data.js')"), 'sw.js no debe excluir backup_data.js de la respuesta de caché');
   assert.ok(swJs.includes("'./img/gaming/componentes/cpu-amd-ryzen-7-7800x3d.jpg'"), 'sw.js debe incluir componentes gaming en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/apc-smart-ups-2200-rack.webp'"), 'sw.js debe incluir apc-smart-ups-2200-rack.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/cisco-cbs350-24p-4g.webp'"), 'sw.js debe incluir cisco-cbs350-24p-4g.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp'"), 'sw.js debe incluir dahua-tioc-4mp-camara-ip.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/ubiquiti-uk-ultra-ap.webp'"), 'sw.js debe incluir ubiquiti-uk-ultra-ap.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {

@@ -129,7 +129,11 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/juniper-ex2300-c-12p.webp',
   './img/productos/catalogo/mitsubishi-msz-gl12.webp',
   './img/productos/catalogo/paradox-magellan-mg5050.webp',
-  './img/productos/catalogo/siemens-logo-230rce-plc.webp'
+  './img/productos/catalogo/siemens-logo-230rce-plc.webp',
+  './img/productos/catalogo/apc-smart-ups-2200-rack.webp',
+  './img/productos/catalogo/cisco-cbs350-24p-4g.webp',
+  './img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp',
+  './img/productos/catalogo/ubiquiti-uk-ultra-ap.webp'
 ];
 
 // Install Event — cachear assets críticos
