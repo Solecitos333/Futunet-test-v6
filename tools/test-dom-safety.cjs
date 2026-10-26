@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v50';"), 'sw.js debe estar en la versión futunet-cache-v50');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v51';"), 'sw.js debe estar en la versión futunet-cache-v51');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -80,7 +80,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/apc-smart-ups-2200-rack.webp'"), 'sw.js debe incluir apc-smart-ups-2200-rack.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/cisco-cbs350-24p-4g.webp'"), 'sw.js debe incluir cisco-cbs350-24p-4g.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp'"), 'sw.js debe incluir dahua-tioc-4mp-camara-ip.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/ubiquiti-uk-ultra-ap.webp'"), 'sw.js debe incluir ubiquiti-uk-ultra-ap.webp en OPTIONAL_ASSETS');
+    assert.ok(swJs.includes("'./img/productos/catalogo/ubiquiti-uk-ultra-ap.webp'"), 'sw.js debe incluir ubiquiti-uk-ultra-ap.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/tesla-universal-wall-connector.webp'"), 'sw.js debe incluir tesla-universal-wall-connector.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp'"), 'sw.js debe incluir mikrotik-crs326-24g-2s-switch.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp'"), 'sw.js debe incluir ezviz-db2-pro-timbre-camara.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'"), 'sw.js debe incluir logitech-brio-4k-pro-webcam.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {

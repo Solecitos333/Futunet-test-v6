@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v50';
+const CACHE_NAME = 'futunet-cache-v51';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -67,23 +67,19 @@ const OPTIONAL_ASSETS = [
   './soporte.html',
   './sugerencias.html',
   './mi-cuenta.html',
-  './cotizacion.html',
   './gaming.html',
   './corporativo.html',
   './privacidad.html',
   './terminos.html',
   './css/suggestions.css',
+  './css/user-panel.css',
   './css/gaming.css',
   './js/user-panel.js',
-  './js/public-quote.js',
   './js/gaming.js',
   './js/suggestions.js',
   './js/backup_data.js',
   './js/chatbot-firebase.mjs',
   './css/support.css',
-  './js/support-core.js',
-  './js/support-service.js',
-  './js/support-ui.js',
   './img/gaming/componentes/case-lian-li-o11-dynamic-evo.jpg',
   './img/gaming/componentes/case-msi-mag-pano-100r.jpg',
   './img/gaming/componentes/cooler-nzxt-kraken-elite-360.jpg',
@@ -133,7 +129,11 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/apc-smart-ups-2200-rack.webp',
   './img/productos/catalogo/cisco-cbs350-24p-4g.webp',
   './img/productos/catalogo/dahua-tioc-4mp-camara-ip.webp',
-  './img/productos/catalogo/ubiquiti-uk-ultra-ap.webp'
+    './img/productos/catalogo/ubiquiti-uk-ultra-ap.webp',
+  './img/productos/catalogo/tesla-universal-wall-connector.webp',
+  './img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp',
+  './img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp',
+  './img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'
 ];
 
 // Install Event — cachear assets críticos
@@ -232,7 +232,7 @@ self.addEventListener('fetch', event => {
           return networkResponse;
         })
         .catch(async () => {
-          return (await caches.match(event.request)) || caches.match('./offline.html');
+          return (await caches.match(event.request)) || (await caches.match('./offline.html')) || (await caches.match('offline.html')) || caches.match('/offline.html');
         })
     );
     return;

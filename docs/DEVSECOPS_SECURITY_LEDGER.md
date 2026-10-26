@@ -1,7 +1,7 @@
 # 🛡️ Futunet — DevSecOps & Cybersecurity Master Ledger
 > **Rol:** Ingeniero DevSecOps & Especialista en Ciberseguridad Senior  
 > **Objetivo:** Auditoría continua de código fuente, frontend, formularios, OWASP Top 10, ASVS v4.0 y privacidad (Ley 172-13 / RGPD), aplicando mitigaciones seguras e incrementales con regresión cero.  
-> **Última Actualización:** 2026-10-24  
+> **Última Actualización:** 2026-10-26  
 
 ---
 
@@ -1493,6 +1493,37 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 717 recursos públicos en `dist/` sin errores.
 
+
+
+- **Auditoría DevSecOps & Ciberseguridad Diaria (2026-10-25: Hardening de Validación de Comprobantes Bancarios en Backend API y Panel Admin, Blindaje Anti-Open-Redirect en Retorno de Catálogo y Páginas de Producto, Protección Estricta de Confidencialidad de Cotizaciones en Service Worker PWA v50, y Verificación Exhaustiva OWASP Top 10 / ASVS v4.0)**:
+  - **Validación Estricta de Origen de Comprobantes Bancarios (CWE-601 / CWE-1021 / OWASP A01 & A03)**:
+    - `futunet-backend/main.py`: Se incorporaron validadores estrictos `@field_validator("payment_voucher_url")` y `@field_validator("payment_storage_path")` en el modelo Pydantic `OrderRequest`. Toda URL de comprobante (`payment_voucher_url`) debe usar exclusivamente el protocolo seguro HTTPS y pertenecer de manera forzosa a los dominios oficiales de Firebase Storage (`firebasestorage.googleapis.com` o subdominios `*.firebasestorage.app`), rechazando con `ValidationError` cualquier dominio no confiable o esquema no seguro (`http://`, `javascript:`, `data:`). La ruta de almacenamiento (`payment_storage_path`) queda acotada mediante expresión regular a `^vouchers/[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+$`, mitigando ataques de escalamiento o path traversal (`../`).
+    - `futunet-backend/test_main.py`: Nuevas pruebas unitarias (`test_payment_voucher_url_accepts_firebase_storage`, `test_payment_voucher_url_rejects_untrusted_external_domains`, `test_payment_storage_path_rejects_path_traversal`) verificando la aceptación de URLs legítimas y el rechazo estricto de URLs maliciosas.
+    - `js/admin-panel.js`: Enriquecimiento del módulo de visualización de pedidos en el Panel Administrativo para validar que `safeVoucherUrl` provenga obligatoriamente de Firebase Storage antes de renderizar un `<iframe>` (para PDFs) o una etiqueta `<img>` (para imágenes). Si la URL pertenece a un origen no autorizado o sospechoso, se bloquea la incrustación y se despliega una alerta visual DevSecOps advirtiendo al operador, previniendo posibles ataques de clickjacking, robo de sesión o iframing malicioso.
+  - **Hardening Anti-Open-Redirect & Soporte de Clean URLs (`js/product_detail_shared.js` & `tools/test-dom-safety.cjs`)**:
+    - `js/product_detail_shared.js`: Refactorización defensiva de la función `getSafeReturnUrl(candidate)`. Ahora analiza candidates mediante la API estándar `URL` verificando que el origen coincida estrictamente con `window.location.origin` (o sea relativo) antes de resolver la ruta de retorno, y aplica una expresión regular estricta `/^[a-z0-9_-]+(?:\.html)?(?:[?#][a-zA-Z0-9_\-=&%#.]*)?$/i`. Se neutralizan de forma absoluta vectores de open redirect (`https://evil.com`), esquemas de inyección (`javascript:`, `data:`), referencias relativas a protocolo (`//evil.com`) y path traversal (`../`), mientras se habilita el soporte seguro para URLs limpias (ej. `redes-datos`, `catalogo?q=cisco`).
+    - `tools/test-dom-safety.cjs`: Nueva prueba automatizada verificando la resolución de URLs limpias y el bloqueo riguroso de ataques de redirección abierta y XSS.
+  - **Confidencialidad de Cotizaciones y PWA Service Worker v50 (`sw.js` & `tools/test-forms-security.cjs`)**:
+    - `sw.js`: Se incorporaron las rutas `/cotizacion` y `/cotizacion.html` en `privatePaths` y `/js/public-quote.js` en `privateScripts` dentro del Service Worker. Esto asegura que la navegación y los documentos de cotización compartidos mediante token seguro nunca sean almacenados ni servidos desde la caché persistente offline (`CacheStorage`), garantizando el cumplimiento de la Ley 172-13 de Protección de Datos Personales de República Dominicana y OWASP ASVS V8 (Data Protection).
+    - Se incrementó la versión del Service Worker a `futunet-cache-v50` con sincronización en los tests de seguridad (`test-forms-security.cjs`, `test-dom-safety.cjs`).
+  - **Auditoría Completa de Formularios Web & Privacidad (Ley 172-13 / ARCO / OWASP ASVS v4.0)**:
+    - 48 formularios auditados en los 52 archivos HTML del frontend:
+      - 100% de formularios públicos, de autenticación y de cuenta protegidos con trampa Honeypot invisible `_hp_security_check` con `maxlength="50"`.
+      - 100% de formularios que recopilan PII disponen de casilla obligatoria de consentimiento informado vinculando a `privacidad.html` con `target="_blank" rel="noopener noreferrer"`.
+      - 0 campos de entrada de texto/email/teléfono sin atributo delimitador de longitud (`maxlength`).
+      - 0 campos numéricos sin cotas o validación superior.
+      - 0 campos de contraseña o credenciales sin `autocomplete` o con diccionario activo (`spellcheck="false"`).
+      - 0 hipervínculos con `target="_blank"` con `rel="noopener"` solitario sin `noreferrer`.
+      - 0 evaluadores de código dinámico (`eval`, `new Function`, `setTimeout/setInterval` con cadena).
+  - **Métricas de Verificación & Regresión Cero**:
+    - 228 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 53 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 717 recursos públicos en `dist/` sin errores.
+
 - **Atención y Respuesta al Buzón de Sugerencias, Telemetría y Nuevas Mejoras Implementadas (2026-10-25 - Lote 18: Ubiquiti UK-Ultra IPX6, Dahua TiOC 2.0 4MP Disuasión Activa, Cisco CBS350-24P-4G PoE+ y APC Smart-UPS SMT2200RM2U 2U)**:
   - **Revisión y Respuesta Oficial de Sugerencias (104/104 Implementadas y Respondidas)**:
     - `SUG-U5400`: Punto de Acceso Wi-Fi Compacto para Exteriores e Interiores Ubiquiti UniFi Swiss Army Knife Ultra (UK-Ultra) IPX6 PoE con opciones versátiles de montaje (pared, mástil, riel DIN), antenas omnidireccionales internas, conectores RP-SMA para antenas externas directivas o sectoriales y gestión centralizada UniFi Network.
@@ -1510,3 +1541,52 @@ python -m unittest test_main.py test_chatbot_api.py
     - 232 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
     - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 721 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Auditoría DevSecOps & Mantenimiento Proactivo Diario (2026-10-26: Resiliencia de Enrutamiento Clean URLs en Modo Mantenimiento, Purga de Precache Confidencial en PWA Service Worker v51, Expansión de Telemetría Semántica de Catálogo con Cobertura de Lote 18, Enrutamiento Dinámico de Marcas Aliadas en Detalle de Producto, y Verificación Exhaustiva OWASP Top 10 / ASVS v4.0)**:
+  - **Blindaje de Acceso Administrativo con Clean URLs (`js/config.js`)**:
+    - Detección de riesgo de bloqueo en modo mantenimiento: al operar bajo Firebase Hosting con `cleanUrls: true`, las rutas administrativas canónicas (`/admin`, `/login`, `/soporte`) no contienen la extensión `.html` en `window.location.pathname`. Ante una activación de `MAINTENANCE_MODE`, un operador administrativo sin sesión persistente quedaba bloqueado por evaluación negativa de `isAdmin`.
+    - Mitigación implementada: Normalización defensiva de la ruta (`normalizedFile = filePart.includes('.') ? filePart : filePart + '.html'`) verificando simultáneamente rutas canónicas y archivos `.html`, garantizando el acceso legítimo y seguro a los paneles de administración y login sin excepciones.
+  - **Hardening de Confidencialidad y Resiliencia Offline en PWA Service Worker v51 (`sw.js` & `tools/test-forms-security.cjs`)**:
+    - Purga de precache innecesario: se retiraron del arreglo de instalación `OPTIONAL_ASSETS` las rutas privadas y confidenciales de cotizaciones (`cotizacion.html`, `public-quote.js`) que ya se encuentran bajo la política estricta de `privatePaths` y `privateScripts`. Esto previene el desperdicio de cuota de almacenamiento, descargas de red redundantes y asegura el aislamiento total de documentos sensibles en navegadores compartidos.
+    - Cascada de fallback offline resiliente: se mejoró la resolución de pantalla offline en `fetch` de navegación (`(await caches.match(event.request)) || (await caches.match('./offline.html')) || (await caches.match('offline.html')) || caches.match('/offline.html')`), garantizando navegación sin conexión sin pantallas en blanco ante variaciones de resolución de ruta en navegadores móviles.
+    - Sincronización de versión de caché a `futunet-cache-v51` con aserciones automatizadas en `test-forms-security.cjs` y `test-dom-safety.cjs`.
+  - **Expansión y Calibración de Telemetría de Búsqueda (`tools/test-search-telemetry.cjs`)**:
+    - Integración formal de consultas del catálogo en `test-search-telemetry.cjs` para los productos de demanda reciente: `uk-ultra` (Ubiquiti UK-Ultra), `tioc` (Dahua TiOC 2.0 4MP), `cbs350-24p` (Cisco Business CBS350-24P-4G) y `smt2200` (APC Smart-UPS SMT2200RM2U).
+    - Aserciones de ranking #1 exacto validadas con 100% de efectividad y cero resultados nulos.
+  - **Enriquecimiento de Navegación de Marcas en Detalle de Producto (`js/producto.js`)**:
+    - Expansión del mapa de slugs `slugMap` para resolver marcas abreviadas o con variantes de nomenclatura comercial (`apc` y `apc by schneider electric` hacia `marca-schneiderelectric.html`, `unv` hacia `marca-uniview.html`, `tplink` hacia `marca-tp-link.html`), canalizando a los clientes hacia los escaparates oficiales dedicados en 1 clic.
+  - **Métricas de Verificación & Regresión Cero**:
+    - 236 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo ausentes y 0 enlaces rotos en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 725 recursos públicos en `dist/` sin errores de compilación ni alertas CSP.
+
+- **Atención y Respuesta al Buzón de Sugerencias, Telemetría y Nuevas Mejoras Implementadas (2026-10-26 - Lote 19: Tesla Universal Wall Connector 48A con Magic Dock, MikroTik CRS326-24G-2S+RM 10G SFP+, Timbre Inalámbrico 2K+ Ezviz DB2 Pro y Webcam Empresarial Logitech BRIO 4K Pro)**:
+  - **Revisión y Respuesta Oficial de Sugerencias (108/108 Implementadas y Respondidas)**:
+    - `SUG-T1150`: Cargador Universal de Vehículos Eléctricos Tesla Universal Wall Connector (48A / 11.5 kW) con adaptador integrado Magic Dock (compatible nativamente con vehículos Tesla NACS y cualquier vehículo eléctrico con conector J1772), conectividad Wi-Fi, gestión de carga compartida Power Sharing para hasta 6 unidades y cable ultra resistente de 24 pies con certificación IP55 para interior o intemperie en Santiago.
+    - `SUG-M3260`: Switch Administrable de Distribución MikroTik CRS326-24G-2S+RM de 24 Puertos Gigabit Ethernet + 2 Puertos 10G SFP+ en rack 1U con tecnología Dual Boot (SwOS / RouterOS Level 5), capacidad de conmutación sin bloqueo de 56 Gbps, enlaces troncales de fibra óptica 10 Gbps y consumo ultra eficiente para WISPs y redes corporativas.
+    - `SUG-E2500`: Timbre Inteligente Inalámbrico con Video 2K+ 5MP Ezviz DB2 Pro con batería de litio recargable de 5,200 mAh (hasta 115 días de autonomía), timbre acústico interior Wi-Fi (Chime) incluido, lente ultra panorámica de 176°, detección inteligente de personas con sensor PIR e IA, audio bidireccional y resistencia a la intemperie IP65 para control de acceso en residencias y oficinas.
+    - `SUG-L4000`: Cámara Web Empresarial 4K Ultra HD Logitech BRIO con HDR, tecnología RightLight 3, sensores infrarrojos compatibles con autenticación biométrica facial Microsoft Windows Hello, doble micrófono con supresión de ruido ambiental, campo de visión ajustable (65°, 78° y 90°) y obturador de privacidad integrado para puestos ejecutivos y salas de videoconferencia.
+  - **Ampliación de Catálogo y Sincronización en la Nube**:
+    - Generación y publicación de 4 nuevas tarjetas visuales WebP de alta fidelidad con especificaciones técnicas detalladas y sello de garantía oficial: `tesla-universal-wall-connector.webp`, `mikrotik-crs326-24g-2s-switch.webp`, `ezviz-db2-pro-timbre-camara.webp` y `logitech-brio-4k-pro-webcam.webp` en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - Cumplimiento de cobertura de marcas al 100%: elevación de `marca-tesla.html` a 3 productos y fortalecimiento de `marca-mikrotik.html`, `marca-ezviz.html` y `marca-logitech.html` a 4 productos cada una, asegurando que las 26 páginas de marca del catálogo dispongan de al menos 3 a 17 productos activos y verificados.
+    - Sincronización en `backup_data.js` (elevando el total de productos a 435) y persistencia transaccional en la colección `products` de Firestore (`tools/sync-catalog-improvements.cjs`).
+    - Actualización de `suggestions.js` (muro comunitario y lista canónica) y persistencia en la colección `suggestions` de Firestore con respuestas oficiales y estado `implemented` (`tools/seed-suggestions.cjs`), totalizando 108 sugerencias atendidas.
+  - **Optimización de Motor de Búsqueda y Telemetría Semántica (`js/catalog.js` & `tools/test-search-telemetry.cjs`)**:
+    - Variantes morfológicas y sinónimos stem agregados: `universal wall connector`, `wall connector universal`, `magic dock`, `cargador j1772`, `crs326`, `crs326-24g`, `switch mikrotik 24`, `mikrotik 10g`, `db2 pro`, `db2pro`, `timbre ezviz`, `videoportero ezviz`, `brio`, `brio 4k`, `logitech brio`, `webcam 4k`, `windows hello`.
+    - Reglas de priorización de puntuación en `scoreProductMatch` asignando +240 puntos a modelos exactos y +170 puntos por coincidencia de marca, con cobertura del 100% de consultas en `check-queries.cjs` y `test-search-telemetry.cjs` con ranking #1 y cero resultados nulos.
+  - **PWA & Service Worker v51 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP de catálogo en `OPTIONAL_ASSETS`.
+    - Bump de versión a `futunet-cache-v51` con sincronización en `test-dom-safety.cjs` y `test-forms-security.cjs`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 236 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 83 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar mínimo de ≥ 3 productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 725 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

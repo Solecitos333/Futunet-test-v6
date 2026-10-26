@@ -862,8 +862,8 @@ test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V
 test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
   const swJs = readJs('sw.js');
   assert.ok(
-    swJs.includes("const CACHE_NAME = 'futunet-cache-v50';"),
-    'sw.js debe estar en la versión futunet-cache-v50'
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v51';"),
+    'sw.js debe estar en la versión futunet-cache-v51'
   );
   assert.ok(
     swJs.includes("'/cotizacion'") && swJs.includes("'/cotizacion.html'"),
@@ -884,6 +884,14 @@ test('Seguridad de Service Worker & Protección de Credenciales en Caché', () =
   assert.ok(
     !optionalAssetsBody.includes('auth.js'),
     'sw.js NO debe cachear auth.js en OPTIONAL_ASSETS'
+  );
+  assert.ok(
+    !optionalAssetsBody.includes('public-quote.js'),
+    'sw.js NO debe cachear public-quote.js confidencial en OPTIONAL_ASSETS'
+  );
+  assert.ok(
+    !optionalAssetsBody.includes('cotizacion.html'),
+    'sw.js NO debe cachear cotizacion.html en OPTIONAL_ASSETS'
   );
 });
 

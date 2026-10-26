@@ -1527,6 +1527,38 @@
       status: 'implemented',
       description: 'Sistemas de respaldo ininterrumpido en formato rack 2U APC Smart-UPS 2200VA con onda senoidal pura, pantalla LCD y monitoreo cloud SmartConnect.',
       officialResponse: '¡Atendido! Se integró el Sistema UPS APC Smart-UPS SMT2200RM2U de 2200VA / 1980W con regulación AVR y gestión cloud en Energía y Climatización.'
+        },
+    {
+      refCode: 'SUG-T1150',
+      title: 'Cargadores Universales de Vehículos Eléctricos Tesla Universal Wall Connector (48A / 11.5 kW)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cargador universal EV Tesla con adaptador Magic Dock integrado (compatible con Tesla y J1772), 48A, Wi-Fi y cable de 24 pies.',
+      officialResponse: '¡Implementado! Integrado el Cargador Tesla Universal Wall Connector 48A con Magic Dock en marca-tesla.html y Energía.'
+    },
+    {
+      refCode: 'SUG-M3260',
+      title: 'Switches Administrables MikroTik CRS326-24G-2S+RM (24 Puertos Gigabit + 2 Puertos 10G SFP+)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switch de distribución en rack 1U con 24 puertos Gigabit, 2 jaulas SFP+ 10G y Dual Boot SwOS/RouterOS para WISPs y corporaciones.',
+      officialResponse: '¡Cumplido! Disponible el Switch MikroTik CRS326-24G-2S+RM de 24G + 2x 10G SFP+ en catálogo y en marca-mikrotik.html.'
+    },
+    {
+      refCode: 'SUG-E2500',
+      title: 'Timbres Inteligentes con Video 2K+ 5MP Ezviz DB2 Pro con Batería y Chime Interior',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Videoportero inalámbrico 2K+ (5MP) a batería con timbre interior incluido, visión ultra gran angular de 176° y detección PIR.',
+      officialResponse: '¡Implementado! Incorporado el Timbre Inalámbrico Ezviz DB2 Pro 2K+ a batería con chime interior en Seguridad Electrónica.'
+    },
+    {
+      refCode: 'SUG-L4000',
+      title: 'Cámaras Web Empresariales Logitech BRIO 4K Ultra HD con HDR y Reconocimiento Windows Hello',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámara web profesional 4K Ultra HD con HDR RightLight 3, sensores IR para Windows Hello y doble micrófono con cancelación de ruido.',
+      officialResponse: '¡Atendido! Se incorporó la Cámara Web Logitech BRIO 4K Pro Ultra HD con Windows Hello en Equipos y Oficina y marca-logitech.html.'
     }];
 
   function getFallbackSuggestionByCode(code) {

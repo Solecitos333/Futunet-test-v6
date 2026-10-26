@@ -264,6 +264,10 @@ function getStemVariants(word) {
   if (word === 'tioc' || word === '3449' || word === 'hdw3449' || word === 'disuasion') variants.push('dahua', 'camara', 'ip', 'alarma', 'sirena', 'estrobo', 'color');
   if (word === 'cbs350-24p' || word === 'cbs350-24' || word === 'cbs3524') variants.push('cisco', 'switch', 'poe', '24p', 'gigabit', 'sfp', 'capa3');
   if (word === 'smt2200' || word === 'smt2200rm2u' || word === 'smt2200rm' || word === '2200rm') variants.push('apc', 'ups', 'rack', '2200va', 'schneider', 'smartconnect', 'senoidal');
+  if (word === 'universal' || word === 'dock' || word === 'magic' || word === 'j1772') variants.push('tesla', 'cargador', 'wall', 'connector', 'ev', '48a');
+  if (word === 'crs326' || word === 'crs326-24g' || word === 'crs32624g' || word === 'swos') variants.push('mikrotik', 'switch', 'rack', '10g', 'sfp+', 'gigabit');
+  if (word === 'db2' || word === 'db2pro' || word === 'db2-pro' || word === 'timbre') variants.push('ezviz', 'videoportero', 'chime', 'bateria', '2k', 'puerta');
+  if (word === 'brio' || word === 'brio4k' || word === 'rightlight') variants.push('logitech', 'webcam', 'camara', '4k', 'hdr', 'hello', 'videoconferencia');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1171,6 +1175,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(smt2200|smt2200rm2u|smart-ups\s*2200)\b/i.test(normalizedQuery) || (/\b(apc|schneider)\b/i.test(normalizedQuery) && /\b(2200|2200va|rack)\b/i.test(normalizedQuery) && /\b(ups|smart-ups)\b/i.test(normalizedQuery))) {
     if (product.brand && (product.brand.toLowerCase() === 'schneider electric' || product.brand.toLowerCase() === 'apc')) {
       if (/2200|smt2200/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cargador Universal Tesla Universal Wall Connector al buscar universal wall connector, magic dock, cargador j1772 (SUG-T1150)
+  if (/\b(universal\s*wall\s*connector|magic\s*dock|j1772)\b/i.test(normalizedQuery) || (/\b(tesla)\b/i.test(normalizedQuery) && /\b(universal|magic|dock|j1772)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'tesla') {
+      if (/universal\s*wall|magic\s*dock/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch MikroTik CRS326-24G-2S+RM al buscar crs326, crs326-24g, switch mikrotik 24, mikrotik 10g (SUG-M3260)
+  if (/\b(crs326|crs326-24g|crs32624g)\b/i.test(normalizedQuery) || (/\b(mikrotik)\b/i.test(normalizedQuery) && /\b(24g|10g|crs|sfp\+)\b/i.test(normalizedQuery) && /\b(switch|rack)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mikrotik') {
+      if (/crs326/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Timbre Inteligente 2K+ 5MP Ezviz DB2 Pro al buscar db2, db2 pro, timbre ezviz, videoportero ezviz (SUG-E2500)
+  if (/\b(db2|db2\s*pro|db2pro)\b/i.test(normalizedQuery) || (/\b(ezviz)\b/i.test(normalizedQuery) && /\b(timbre|videoportero|chime)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'ezviz') {
+      if (/db2/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara Web Logitech BRIO 4K Pro al buscar brio, brio 4k, logitech brio, webcam 4k (SUG-L4000)
+  if (/\b(brio|brio\s*4k|brio4k)\b/i.test(normalizedQuery) || (/\b(logitech)\b/i.test(normalizedQuery) && /\b(brio|4k\s*pro|webcam\s*4k)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'logitech') {
+      if (/brio/i.test(title)) {
         score += 240;
       } else {
         score += 170;

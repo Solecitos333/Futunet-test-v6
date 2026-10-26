@@ -11,6 +11,7 @@ const publicRootFiles = new Set([
 ]);
 
 await fs.rm(output, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+await new Promise(resolve => setTimeout(resolve, 150));
 await fs.mkdir(output, { recursive: true });
 
 for (const directory of publicDirectories) {

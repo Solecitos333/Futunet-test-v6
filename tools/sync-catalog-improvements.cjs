@@ -2450,6 +2450,117 @@ const apcSmartUps2200Items = [
   }
 ];
 
+const teslaUniversalWallConnectorItems = [
+  {
+    id: 'energia_tesla_universal_wall_connector',
+    department: 'energia',
+    category: 'Energía y Climatización',
+    brand: 'Tesla',
+    title: 'Cargador Universal de Vehículos Eléctricos Tesla Universal Wall Connector (48A / 11.5 kW) con Adaptador J1772 Integrado (Magic Dock) y Wi-Fi',
+    desc: 'Cargador residencial y comercial de nivel 2 para vehículos eléctricos Tesla Universal Wall Connector, la solución definitiva de recarga eléctrica de alta velocidad compatible con el 100% de los autos eléctricos en Santiago y República Dominicana. Gracias a su revolucionario adaptador Magic Dock integrado, permite cargar de forma nativa tanto vehículos con conector NACS (Tesla) como cualquier vehículo eléctrico de otras marcas americanas, europeas o asiáticas con conector J1772 sin necesidad de adaptadores externos sueltos. Suministra hasta 48A (11.5 kW a 240V), proporcionando hasta 70 km de autonomía por cada hora de carga. Incorpora conectividad Wi-Fi para control en tiempo real desde la aplicación móvil Tesla, programación de horarios de carga para aprovechar tarifas eléctricas reducidas, tecnología Power Sharing para balancear la carga entre hasta 6 estaciones simultáneas sin sobrecargar la acometida eléctrica principal, y cable ultra flexible de 24 pies (7.3 metros) con sellado IP55 para instalación tanto bajo techo como a la intemperie.',
+    price: 'RD$ 54,900.00',
+    img: 'img/productos/catalogo/tesla-universal-wall-connector.webp',
+    gallery: [
+      'img/productos/catalogo/tesla-universal-wall-connector.webp'
+    ],
+    specs: [
+      'Potencia de carga rápida de hasta 48A / 11.5 kW a 240V monofásico (recupera hasta 70 km por hora)',
+      'Tecnología Magic Dock integrada: conector dual NACS nativo y J1772 para máxima compatibilidad universal',
+      'Conectividad Wi-Fi 2.4 GHz (802.11 b/g/n) para control remoto, estadísticas de consumo y actualizaciones OTA',
+      'Power Sharing inteligente entre hasta 6 cargadores conectados en paralelo para protección de la red eléctrica',
+      'Cable de carga ultra resistente y flexible de 24 pies (7.3 m) para fácil maniobra en cualquier plaza de parqueo',
+      'Certificación climática IP55 para operación continua bajo lluvia, humedad tropical y sol intenso',
+      'Barra luminosa LED frontal con códigos de estado dinámicos y diagnóstico automático',
+      'Compatible con instalaciones eléctricas residenciales y comerciales en 208V y 240V con interruptores de 60A',
+      'Garantía oficial residencial de 4 años y comercial de 2 años con soporte técnico e instalación certificada en Santiago'
+    ]
+  }
+];
+
+const mikrotikCrs326Items = [
+  {
+    id: 'redes_mikrotik_crs326_24g_2s_switch_rack',
+    department: 'redes',
+    category: 'Routers y Repetidores WiFi',
+    brand: 'MikroTik',
+    title: 'Switch Administrable de Distribución MikroTik CRS326-24G-2S+RM (24 Puertos Gigabit + 2 Puertos 10G SFP+) Montaje en Rack Dual Boot SwOS/RouterOS',
+    desc: 'Switch de conmutación gestionable empresarial para montaje en rack de 19 pulgadas 1U MikroTik Cloud Router Switch modelo CRS326-24G-2S+RM, diseñado para redes de distribución troncal en proveedores de internet (WISPs/ISPs), empresas de telecomunicaciones y campus corporativos en Santiago. Cuenta con 24 puertos Gigabit Ethernet 10/100/1000 Mbps y 2 jaulas de fibra óptica dedicadas SFP+ de 10 Gbps (10 Gigabit) para uplinks de ultra alta velocidad. Su arquitectura Dual Boot exclusiva le permite arrancar a elección del administrador en SwOS (un sistema operativo ligero optimizado para switching de capa 2 sin bloqueo con VLANs 802.1Q, Port Isolation, Port Mirroring, Link Aggregation LACP y snooping IGMP) o en el prestigioso RouterOS v7 con licencia Level 5 para enrutamiento estático, firewall y servicios avanzados. Su potente procesador y switch chip Marvell entregan un rendimiento sin bloqueo de 56 Gbps con un consumo excepcionalmente bajo de tan solo 24W.',
+    price: 'RD$ 16,850.00',
+    img: 'img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp',
+    gallery: [
+      'img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp'
+    ],
+    specs: [
+      '24 puertos Gigabit Ethernet 10/100/1000 Mbps con auto-negociación y compatibilidad PoE-In pasivo en puerto 1',
+      '2 jaulas dedicadas SFP+ de 10 Gbps para módulos de fibra óptica monomodo o multimodo de 10G y 1.25G',
+      'Tecnología Dual Boot: arranque flexible y conmutable entre SwOS (L2 puro) y RouterOS v7 Licencia Level 5',
+      'Capacidad de switching sin bloqueo de 56 Gbps, capacidad de conmutación de 102 Gbps y reenvío de 76 Mpps',
+      'Funciones L2 avanzadas: tabla de reenvío de 16K MACs, VLANs IEEE 802.1Q, broadcast storm control y aislamiento',
+      'Chasis metálico resistente para montaje en rack estándar de 19 pulgadas 1U (incluye orejas de rack)',
+      'Fuente de alimentación interna y doble entrada de alimentación redundante (jack DC 10-30V y PoE pasivo)',
+      'Operación silenciosa con disipación pasiva de calor y consumo energético ultra eficiente de 24W máx.',
+      'Garantía oficial MikroTik de 1 año con soporte técnico y configuración certificada por Futunet'
+    ]
+  }
+];
+
+const ezvizDb2ProItems = [
+  {
+    id: 'seguridad_ezviz_db2_pro_timbre_inteligente',
+    department: 'seguridad',
+    category: 'Cámaras de Seguridad',
+    brand: 'Ezviz',
+    title: 'Timbre Inteligente Inalámbrico con Video 2K+ 5MP Ezviz DB2 Pro con Batería Recargable, Chime Interior y Detección PIR de Personas',
+    desc: 'Kit de timbre inteligente con videoportero inalámbrico a batería Ezviz DB2 Pro 2K+ (5 Megapíxeles / 2544 x 1888), la solución más avanzada y conveniente para control de accesos residencial y comercial en Santiago. Su instalación 100% libre de cables permite colocarlo en minutos sobre cualquier puerta, marco o pared sin necesidad de perforaciones complicadas ni instalaciones eléctricas. Incorpora una potente batería de litio recargable de 5,200 mAh que ofrece hasta 115 días de funcionamiento ininterrumpido con una sola recarga. Equipado con óptica ultra gran angular de 176° de visión vertical completa para ver a los visitantes de pies a cabeza y los paquetes dejados en el suelo. Cuenta con sensor térmico PIR asistido por algoritmos de inteligencia artificial para detectar personas y enviar notificaciones instantáneas al móvil sin falsas alarmas. Incluye en la caja una campana interior Wi-Fi (Chime) con diversos tonos y ranura MicroSD de hasta 256GB para almacenamiento local seguro sin cuotas mensuales obligatorias.',
+    price: 'RD$ 8,450.00',
+    img: 'img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp',
+    gallery: [
+      'img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp'
+    ],
+    specs: [
+      'Resolución de video ultra nítida 2K+ de 5 Megapíxeles (2544 x 1888 a 15 fps) con compresión H.265',
+      'Campo visual ultra panorámico de 176° en diagonal para cobertura completa de la entrada y paquetes',
+      'Batería recargable integrada de 5,200 mAh con hasta 115 días de autonomía por recarga (modo eco)',
+      'Timbre acústico interior Wi-Fi (Chime) incluido en el empaque con tonos personalizables y altavoz potente',
+      'Detección inteligente de movimiento humano mediante sensor PIR y filtro de inteligencia artificial',
+      'Visión nocturna por infrarrojos de hasta 5 metros con activación automática al anochecer',
+      'Comunicación de audio bidireccional en tiempo real con micrófono anti-eco y función de modulador de voz',
+      'Diseño resistente al agua y polvo con certificación climática IP65 para exteriores',
+      'Almacenamiento dual: admite tarjetas MicroSD locales de hasta 256GB en el timbre interior y nube EZVIZ CloudPlay',
+      'Garantía oficial Ezviz de 1 año con respaldo y soporte técnico local en Santiago'
+    ]
+  }
+];
+
+const logitechBrio4kItems = [
+  {
+    id: 'equipos_logitech_brio_4k_pro_webcam',
+    department: 'oficina',
+    category: 'Monitores y Proyectores',
+    brand: 'Logitech',
+    title: 'Cámara Web Empresarial 4K Ultra HD Logitech BRIO con HDR, RightLight 3, Doble Micrófono con Cancelación de Ruido y Windows Hello',
+    desc: 'Cámara web ejecutiva de alta gama Logitech BRIO 4K Pro Ultra HD, el estándar de oro en videoconferencias profesionales para directores, ejecutivos, salas de juntas y creadores de contenido en Santiago. Capaz de transmitir y grabar en deslumbrante resolución 4K Ultra HD a 30 fps, Full HD 1080p a 60 fps fluidos o 720p hasta 90 fps. Integra la avanzada tecnología RightLight 3 con HDR (High Dynamic Range) que calibra automáticamente la exposición y el contraste para garantizar una imagen profesional impecable ante contraluces severos, oficinas con luz solar directa o salas con iluminación tenue. Equipada con sensores infrarrojos duales certificados para inicio de sesión biométrico ultrarrápido y seguro mediante Windows Hello de Microsoft sin necesidad de escribir contraseñas. Incorpora dos micrófonos omnidireccionales con tecnología de cancelación de ruido ambiental que capturan la voz con claridad cristalina hasta a 1 metro de distancia, tres configuraciones de campo visual seleccionables (65°, 78° y 90° con zoom digital 5x en HD), obturador de privacidad físico integrado y conexión versátil USB-C Plug and Play.',
+    price: 'RD$ 13,950.00',
+    img: 'img/productos/catalogo/logitech-brio-4k-pro-webcam.webp',
+    gallery: [
+      'img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'
+    ],
+    specs: [
+      'Resolución de video ultra nítida: 4K UHD (3840x2160 @ 30 fps), 1080p FHD (@ 30 o 60 fps) y 720p (@ hasta 90 fps)',
+      'Tecnología RightLight 3 con HDR para una iluminación perfecta en cualquier condición de luz y contraluz',
+      'Sensores óptico e infrarrojo compatibles con Microsoft Windows Hello para desbloqueo facial seguro',
+      'Campo visual ajustable de 65° (primer plano enfocado), 78° (estándar de oficina) y 90° (sala de reuniones amplia)',
+      'Zoom digital de 5x en resolución HD para enfocar detalles con nitidez mediante software Logi Tune',
+      'Dos micrófonos omnidireccionales con supresión acústica de ruido para captar la voz sin eco ambiental',
+      'Obturador de privacidad extraíble incluido para tapar la lente de forma física al terminar las llamadas',
+      'Conexión USB-C a USB-A desmontable de 2.2 metros y rosca universal de 1/4\" para montaje en trípodes',
+      'Certificación oficial para Microsoft Teams, Zoom, Google Meet y compatibilidad con OBS y Cisco Webex',
+      'Garantía oficial Logitech de 2 años con comprobante fiscal formal NCF y entrega inmediata en Santiago'
+    ]
+  }
+];
+
+
 
 const sillasItems = [
   {
@@ -2963,7 +3074,11 @@ async function updateBackupData() {
     ...ubiquitiUkUltraItems,
     ...dahuaTiocItems,
     ...ciscoCbs350_24pItems,
-    ...apcSmartUps2200Items
+    ...apcSmartUps2200Items,
+    ...teslaUniversalWallConnectorItems,
+    ...mikrotikCrs326Items,
+    ...ezvizDb2ProItems,
+    ...logitechBrio4kItems
   ];
 
   itemsToSync.forEach(item => {
@@ -3066,7 +3181,11 @@ async function updateFirestore() {
     ...ubiquitiUkUltraItems,
     ...dahuaTiocItems,
     ...ciscoCbs350_24pItems,
-    ...apcSmartUps2200Items
+    ...apcSmartUps2200Items,
+    ...teslaUniversalWallConnectorItems,
+    ...mikrotikCrs326Items,
+    ...ezvizDb2ProItems,
+    ...logitechBrio4kItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

@@ -80,7 +80,11 @@ var FUTUNET_CONFIG = {
 
   function handleMaintenance() {
     var path = window.location.pathname.toLowerCase();
-    var isAdmin = path.includes('admin.html') || path.includes('login.html') || path.includes('soporte.html');
+    var filePart = (path.split('/').pop() || 'index.html');
+    var normalizedFile = filePart.includes('.') ? filePart : (filePart ? filePart + '.html' : 'index.html');
+    var isAdmin = normalizedFile === 'admin.html' || normalizedFile === 'login.html' || normalizedFile === 'soporte.html' ||
+                  path.endsWith('/admin') || path.endsWith('/login') || path.endsWith('/soporte') ||
+                  path.includes('admin.html') || path.includes('login.html') || path.includes('soporte.html');
     
     if (FUTUNET_CONFIG.MAINTENANCE_MODE && !isAdmin) {
       var bypass = false;

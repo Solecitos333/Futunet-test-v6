@@ -2001,3 +2001,75 @@ test('Mejora demandada por usuarios: Sistema UPS para Rack APC Smart-UPS SMT2200
   assert.ok(catJs.includes("'smt2200'"), 'catalog.js debe incluir smt2200 en stem variants');
   assert.ok(catJs.includes("/\\b(smt2200|smt2200rm2u|smart-ups\\s*2200)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar APC Smart-UPS 2200RM2U');
 });
+
+test('Mejora demandada por usuarios: Cargador Universal de Vehículos Eléctricos Tesla Universal Wall Connector (SUG-T1150)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T1150'") && seedCjs.includes("status: 'implemented'"), 'SUG-T1150 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T1150') && sugJs.includes('Tesla Universal Wall Connector'), 'SUG-T1150 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_universal_wall_connector'), 'backup_data.js debe contener energia_tesla_universal_wall_connector');
+
+  const teslaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-universal-wall-connector.webp');
+  assert.ok(fs.existsSync(teslaImg), 'La imagen del cargador Tesla Universal Wall Connector debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'universal'") && catJs.includes("'magic'"), 'catalog.js debe incluir universal y magic en stem variants');
+  assert.ok(catJs.includes("/\\b(universal\\s*wall\\s*connector|magic\\s*dock|j1772)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Universal Wall Connector');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable MikroTik CRS326-24G-2S+RM (SUG-M3260)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M3260'") && seedCjs.includes("status: 'implemented'"), 'SUG-M3260 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M3260') && sugJs.includes('MikroTik CRS326-24G-2S+RM'), 'SUG-M3260 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_crs326_24g_2s_switch_rack'), 'backup_data.js debe contener redes_mikrotik_crs326_24g_2s_switch_rack');
+
+  const mikrotikImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-crs326-24g-2s-switch.webp');
+  assert.ok(fs.existsSync(mikrotikImg), 'La imagen del switch MikroTik CRS326-24G-2S+RM debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'crs326'"), 'catalog.js debe incluir crs326 en stem variants');
+  assert.ok(catJs.includes("/\\b(crs326|crs326-24g|crs32624g)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar MikroTik CRS326-24G-2S+RM');
+});
+
+test('Mejora demandada por usuarios: Timbre Inteligente 2K+ 5MP Ezviz DB2 Pro Batería (SUG-E2500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E2500'") && seedCjs.includes("status: 'implemented'"), 'SUG-E2500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E2500') && sugJs.includes('Ezviz DB2 Pro'), 'SUG-E2500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_ezviz_db2_pro_timbre_inteligente'), 'backup_data.js debe contener seguridad_ezviz_db2_pro_timbre_inteligente');
+
+  const ezvizImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-db2-pro-timbre-camara.webp');
+  assert.ok(fs.existsSync(ezvizImg), 'La imagen del timbre Ezviz DB2 Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'db2'"), 'catalog.js debe incluir db2 en stem variants');
+  assert.ok(catJs.includes("/\\b(db2|db2\\s*pro|db2pro)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Ezviz DB2 Pro');
+});
+
+test('Mejora demandada por usuarios: Cámara Web Empresarial Logitech BRIO 4K Pro Ultra HD (SUG-L4000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L4000'") && seedCjs.includes("status: 'implemented'"), 'SUG-L4000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L4000') && sugJs.includes('Logitech BRIO 4K Pro Ultra HD'), 'SUG-L4000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('equipos_logitech_brio_4k_pro_webcam'), 'backup_data.js debe contener equipos_logitech_brio_4k_pro_webcam');
+
+  const brioImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'logitech-brio-4k-pro-webcam.webp');
+  assert.ok(fs.existsSync(brioImg), 'La imagen de la webcam Logitech BRIO 4K Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'brio'"), 'catalog.js debe incluir brio en stem variants');
+  assert.ok(catJs.includes("/\\b(brio|brio\\s*4k|brio4k)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Logitech BRIO 4K Pro');
+});

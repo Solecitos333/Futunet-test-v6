@@ -79,7 +79,15 @@ const testQueries = [
   'ex2300-c',
   'msz-gl12',
   'mg5050',
-  'logo 230rce'
+  'logo 230rce',
+  'uk-ultra',
+  'tioc',
+  'cbs350-24p',
+  'smt2200',
+  'universal wall connector',
+  'crs326',
+  'db2 pro',
+  'brio 4k'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -475,6 +483,101 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
         'El producto top para "logo 230rce" debe ser Siemens LOGO! 230RCE'
       );
     }
+
+    if (q === 'uk-ultra') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ubiquiti',
+        'La búsqueda "uk-ultra" debe priorizar el AP Ubiquiti UK-Ultra'
+      );
+      assert.ok(
+        /uk-ultra|swiss\s*army\s*knife/i.test(scored[0].p.title),
+        'El producto top para "uk-ultra" debe ser Ubiquiti UniFi Swiss Army Knife Ultra'
+      );
+    }
+
+    if (q === 'tioc') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Dahua',
+        'La búsqueda "tioc" debe priorizar la Cámara Dahua TiOC 2.0 4MP'
+      );
+      assert.ok(
+        /tioc|disuasion\s*activa|3449/i.test(scored[0].p.title),
+        'El producto top para "tioc" debe ser Dahua TiOC 2.0'
+      );
+    }
+
+    if (q === 'cbs350-24p') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Cisco',
+        'La búsqueda "cbs350-24p" debe priorizar el Switch Cisco CBS350-24P-4G'
+      );
+      assert.ok(
+        /cbs350-24p|24\s*puertos\s*gigabit\s*poe/i.test(scored[0].p.title),
+        'El producto top para "cbs350-24p" debe ser Cisco CBS350-24P-4G'
+      );
+    }
+
+    if (q === 'smt2200') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Schneider Electric',
+        'La búsqueda "smt2200" debe priorizar el UPS APC Smart-UPS SMT2200RM2U'
+      );
+      assert.ok(
+        /smt2200|2200va/i.test(scored[0].p.title),
+        'El producto top para "smt2200" debe ser APC Smart-UPS SMT2200RM2U'
+      );
+    }
+
+    if (q === 'universal wall connector') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Tesla',
+        'La búsqueda "universal wall connector" debe priorizar el cargador Tesla Universal Wall Connector'
+      );
+      assert.ok(
+        /universal\s*wall\s*connector|magic\s*dock/i.test(scored[0].p.title),
+        'El producto top para "universal wall connector" debe ser Tesla Universal Wall Connector'
+      );
+    }
+
+    if (q === 'crs326') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'MikroTik',
+        'La búsqueda "crs326" debe priorizar el Switch MikroTik CRS326'
+      );
+      assert.ok(
+        /crs326/i.test(scored[0].p.title),
+        'El producto top para "crs326" debe ser MikroTik CRS326-24G-2S+RM'
+      );
+    }
+
+    if (q === 'db2 pro') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ezviz',
+        'La búsqueda "db2 pro" debe priorizar el timbre inteligente Ezviz DB2 Pro'
+      );
+      assert.ok(
+        /db2\s*pro/i.test(scored[0].p.title),
+        'El producto top para "db2 pro" debe ser Ezviz DB2 Pro'
+      );
+    }
+
+    if (q === 'brio 4k') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Logitech',
+        'La búsqueda "brio 4k" debe priorizar la cámara web Logitech BRIO 4K Pro'
+      );
+      assert.ok(
+        /brio/i.test(scored[0].p.title),
+        'El producto top para "brio 4k" debe ser Logitech BRIO 4K Pro'
+      );
+    }
   }
 });
-

@@ -191,7 +191,15 @@ const queries = [
   'cbs350-24p',
   'cisco 24 poe',
   'smt2200',
-  'ups rack 2200'
+  'ups rack 2200',
+  'universal wall connector',
+  'magic dock',
+  'crs326',
+  'mikrotik 10g',
+  'db2 pro',
+  'timbre ezviz',
+  'brio 4k',
+  'logitech brio'
 ];
 
 

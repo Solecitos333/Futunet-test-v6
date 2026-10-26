@@ -342,6 +342,8 @@
       const brandKey = String(detail.brand || '').toLowerCase().trim();
       const slugMap = {
         'cisco': 'marca-cisco.html',
+        'apc': 'marca-schneiderelectric.html',
+        'apc by schneider electric': 'marca-schneiderelectric.html',
         'dahua': 'marca-dahua.html',
         'dell': 'marca-dell.html',
         'epson': 'marca-epson.html',
@@ -363,8 +365,10 @@
         'siemens': 'marca-siemens.html',
         'tesla': 'marca-tesla.html',
         'tp-link': 'marca-tp-link.html',
+        'tplink': 'marca-tp-link.html',
         'ubiquiti': 'marca-ubiquiti.html',
         'uniview': 'marca-uniview.html',
+        'unv': 'marca-uniview.html',
         'victron energy': 'marca-victronenergy.html',
         'zkteco': 'marca-zkteco.html'
       };
