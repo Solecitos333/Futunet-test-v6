@@ -553,7 +553,7 @@
     }
 
     var taskMap = {
-      products: canReadInventory ? db.collection('products').limit(500).get() : Promise.resolve(null),
+      products: canReadInventory ? db.collection('products').limit(1000).get() : Promise.resolve(null),
       productCount: canReadInventory ? countDocuments(db.collection('products')) : Promise.resolve(null),
       users: canReadUsers ? countDocuments(db.collection('users')) : Promise.resolve(null),
       orders: canReadOrders ? db.collection('orders').orderBy('createdAt', 'desc').limit(500).get() : Promise.resolve(null),

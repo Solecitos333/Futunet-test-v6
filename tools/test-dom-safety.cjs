@@ -69,7 +69,10 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v52';"), 'sw.js debe estar en la versión futunet-cache-v52');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v53';"), 'sw.js debe estar en la versión futunet-cache-v53');
+  assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
+  assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -959,4 +962,31 @@ test('DevSecOps Hardening: getSafeReturnUrl previene Open Redirects / XSS y admi
     chatbotFirebaseMjs.includes("trimmed.endsWith('.html')"),
     'chatbot-firebase.mjs debe resolver rutas limpias sin extensión .html hacia su archivo canonical'
   );
+});
+
+test('Accessibility & Robustness: openProductModal trap, product_detail_shared module, y sugerencias limit', () => {
+  // 1. catalog.js implementa focus trap y navegación por teclado en miniaturas
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes('thumb.tabIndex = 0;'), 'catalog.js debe hacer navegables las miniaturas por teclado');
+  assert.ok(catJs.includes("thumb.setAttribute('role', 'button');"), 'catalog.js debe asignar role button a miniaturas');
+  assert.ok(catJs.includes('productModalCleanup'), 'catalog.js debe implementar limpieza de focus trap en modal de producto');
+
+  // 2. product_detail_shared.js es compatible con Node.js y exporta el módulo
+  const pd = require('../js/product_detail_shared.js');
+  assert.ok(typeof pd.getProductDetailData === 'function', 'product_detail_shared debe exportar getProductDetailData');
+  assert.ok(typeof pd.normalizeCopy === 'function', 'product_detail_shared debe exportar normalizeCopy');
+
+  // 3. suggestions.js consulta hasta 250 sugerencias en el muro comunitario
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('.limit(250)'), 'suggestions.js debe consultar con limit(250) para no truncar propuestas');
+
+  // 4. producto.js contiene alias de marcas Tapo, Victron y Mitsubishi Electric
+  const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
+  assert.ok(prodJs.includes("'tapo': 'marca-tp-link.html'"), 'producto.js debe rutear Tapo a marca-tp-link.html');
+  assert.ok(prodJs.includes("'victron': 'marca-victronenergy.html'"), 'producto.js debe rutear Victron a marca-victronenergy.html');
+  assert.ok(prodJs.includes("'mitsubishi electric': 'marca-mitsubishi.html'"), 'producto.js debe rutear Mitsubishi Electric');
+
+  // 5. admin-panel.js tiene límite de 1000 en lectura de inventario para dashboard
+  const adminJs = fs.readFileSync(path.join(projectRoot, 'js', 'admin-panel.js'), 'utf8');
+  assert.ok(adminJs.includes("products: canReadInventory ? db.collection('products').limit(1000).get()"), 'admin-panel.js debe consultar productos con limit 1000');
 });

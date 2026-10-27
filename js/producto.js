@@ -366,10 +366,16 @@
         'tesla': 'marca-tesla.html',
         'tp-link': 'marca-tp-link.html',
         'tplink': 'marca-tp-link.html',
+        'tp link': 'marca-tp-link.html',
+        'tapo': 'marca-tp-link.html',
         'ubiquiti': 'marca-ubiquiti.html',
         'uniview': 'marca-uniview.html',
         'unv': 'marca-uniview.html',
+        'victron': 'marca-victronenergy.html',
         'victron energy': 'marca-victronenergy.html',
+        'schneider': 'marca-schneiderelectric.html',
+        'apc by schneider': 'marca-schneiderelectric.html',
+        'mitsubishi electric': 'marca-mitsubishi.html',
         'zkteco': 'marca-zkteco.html'
       };
       if (slugMap[brandKey]) {

@@ -3043,13 +3043,20 @@ function openProductModal(id) {
         thumb.setAttribute('role', 'button');
         thumb.setAttribute('aria-label', `Ver imagen ${i + 1} de ${product.title}`);
         thumb.onerror = function () { this.style.display = 'none'; };
-        thumb.addEventListener('click', () => {
+        const selectThumb = () => {
           if (mainImg) {
             mainImg.src = url;
             mainImg.onerror = function () { this.onerror = null; this.src = 'img/placeholder.svg'; };
           }
           document.querySelectorAll('.thumb-img').forEach(t => t.classList.remove('active'));
           thumb.classList.add('active');
+        };
+        thumb.addEventListener('click', selectThumb);
+        thumb.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectThumb();
+          }
         });
         thumbsContainer.appendChild(thumb);
       });
@@ -3101,12 +3108,20 @@ function openProductModal(id) {
   setTimeout(() => modal.classList.add('show'), 10);
   const closeButton = modal.querySelector('[data-close-product-modal]');
   if (closeButton) closeButton.focus();
+  if (productModalCleanup) productModalCleanup();
+  if (window.FutunetFocusTrap) {
+    productModalCleanup = window.FutunetFocusTrap(modal, closeProductModal);
+  }
   syncCatalogScrollLock();
 }
 
 function closeProductModal() {
   const modal = document.getElementById('product-modal');
   if (!modal || modal.style.display === 'none') return;
+  if (productModalCleanup) {
+    productModalCleanup();
+    productModalCleanup = null;
+  }
   modal.classList.remove('show');
   setTimeout(() => {
     modal.style.display = 'none';
