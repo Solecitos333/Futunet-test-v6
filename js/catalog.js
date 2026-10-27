@@ -2977,6 +2977,7 @@ function setBrand(brandName) {
    ------------------------------------------------------------- */
 
 let lastModalTrigger = null;
+let productModalCleanup = null;
 
 function openProductModal(id) {
   const modal = document.getElementById('product-modal');
@@ -3038,6 +3039,9 @@ function openProductModal(id) {
         thumb.className = i === 0 ? 'thumb-img active' : 'thumb-img';
         thumb.src = url;
         thumb.alt = `${product.title} - Imagen ${i + 1}`;
+        thumb.tabIndex = 0;
+        thumb.setAttribute('role', 'button');
+        thumb.setAttribute('aria-label', `Ver imagen ${i + 1} de ${product.title}`);
         thumb.onerror = function () { this.style.display = 'none'; };
         thumb.addEventListener('click', () => {
           if (mainImg) {
