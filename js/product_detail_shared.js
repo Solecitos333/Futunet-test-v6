@@ -303,7 +303,8 @@
     };
   }
 
-  window.FutunetProductDetail = {
+  const root = typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this);
+  root.FutunetProductDetail = {
     normalizeCopy,
     getCatalogData,
     getDepartmentLabel,
@@ -314,5 +315,8 @@
     getSafeReturnUrl,
     getProductDetailData
   };
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = root.FutunetProductDetail;
+  }
 })();
 
