@@ -1559,6 +1559,38 @@
       status: 'implemented',
       description: 'Cámara web profesional 4K Ultra HD con HDR RightLight 3, sensores IR para Windows Hello y doble micrófono con cancelación de ruido.',
       officialResponse: '¡Atendido! Se incorporó la Cámara Web Logitech BRIO 4K Pro Ultra HD con Windows Hello en Equipos y Oficina y marca-logitech.html.'
+        },
+    {
+      refCode: 'SUG-S7320',
+      title: 'Monitores Inteligentes Samsung Smart Monitor M7 32" 4K UHD con USB-C 65W y Smart Hub',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Monitor inteligente 32" 4K UHD con puerto USB-C 65W Power Delivery, Smart TV Hub con Office 365, altavoces y VESA.',
+      officialResponse: '¡Implementado! Integrado el Samsung Smart Monitor M7 32" 4K UHD con USB-C 65W en marca-samsung.html y Monitores.'
+    },
+    {
+      refCode: 'SUG-L1100',
+      title: 'Tablets Corporativas Lenovo Tab M11 de 11" 90Hz WUXGA con Lápiz Lenovo Tab Pen',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Tablet empresarial de 11" WUXGA 90Hz con lápiz óptico Lenovo Tab Pen (4096 niveles), Helio G88, 128GB y 4 altavoces Dolby Atmos.',
+      officialResponse: '¡Cumplido! Disponible la Tablet Lenovo Tab M11 con lápiz Tab Pen incluido en catálogo y en marca-lenovo.html.'
+    },
+    {
+      refCode: 'SUG-L2788',
+      title: 'Monitores Profesionales Ergonómicos LG 27QN880-B Ergo 27" QHD IPS con Brazo C-Clamp',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Monitor ergonómico 27" QHD (2560x1440) con innovador brazo articulado Ergo C-Clamp, giro 280°, USB-C 60W y 99% sRGB.',
+      officialResponse: '¡Implementado! Incorporado el Monitor LG 27QN880-B Ergo con brazo articulado C-Clamp y USB-C en Monitores y marca-lg.html.'
+    },
+    {
+      refCode: 'SUG-N6500',
+      title: 'Routers Móviles Hotspot 5G / Wi-Fi 6E Netgear Nighthawk M6 Pro (MR6500) con Puerto 2.5G',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Hotspot móvil 5G empresarial con módem Qualcomm Snapdragon X65, Wi-Fi 6E tri-banda, puerto Ethernet 2.5G y pantalla táctil.',
+      officialResponse: '¡Atendido! Se incorporó el Hotspot 5G Netgear Nighthawk M6 Pro (MR6500) con puerto 2.5G en Redes y marca-netgear.html.'
     }];
 
   function getFallbackSuggestionByCode(code) {
@@ -1582,7 +1614,7 @@
     try {
       var snap = await db.collection('suggestions')
         .where('status', 'in', ['implemented', 'planned'])
-        .limit(100)
+        .limit(250)
         .get();
 
       if (snap.empty) {

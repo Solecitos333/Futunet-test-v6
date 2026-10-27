@@ -2560,6 +2560,119 @@ const logitechBrio4kItems = [
   }
 ];
 
+const samsungSmartMonitorM7Items = [
+  {
+    id: 'oficina_samsung_smart_monitor_m7_32_4k',
+    department: 'oficina',
+    category: 'Monitores y Proyectores',
+    brand: 'Samsung',
+    title: 'Monitor Inteligente Samsung Smart Monitor M7 32\" 4K UHD con USB-C, HDR10, Smart TV y Soporte VESA',
+    desc: 'Monitor inteligente de productividad y entretenimiento Samsung Smart Monitor M7 de 32 pulgadas (resolución 4K Ultra HD 3840x2160 con HDR10). Diseñado para directivos, puestos ejecutivos y oficinas modernas en Santiago que demandan máxima productividad sin saturar el escritorio con cables. Incorpora puerto USB-C multifunción con suministro de energía de 65W (Power Delivery) que permite cargar laptops modernas y transmitir video simultáneamente con un solo cable. Integra sistema operativo Tizen con Smart TV Hub (Netflix, YouTube, Prime Video) y aplicaciones nativas de productividad como Microsoft 365, navegación web e inicio de sesión remoto a servidores corporativos sin necesidad de encender una PC. Incluye altavoces estéreo integrados de alta claridad, control remoto ergonómico, conectividad Wi-Fi 5 de doble banda, Bluetooth 5.2, múltiples puertos HDMI y compatibilidad con montaje VESA 100x100 para brazos articulados.',
+    price: 'RD$ 23,900.00',
+    img: 'img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp',
+    gallery: [
+      'img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp'
+    ],
+    specs: [
+      'Pantalla VA de 32 pulgadas con resolución 4K Ultra HD (3840 x 2160) y compatibilidad con alto rango dinámico HDR10',
+      'Conectividad USB-C todo en uno con suministro de energía de 65W (carga tu laptop y transmite video 4K con 1 solo cable)',
+      'Hub de productividad integrado: acceso directo a Microsoft 365, navegación web y escritorio remoto sin encender una PC',
+      'Plataforma Smart TV Hub con aplicaciones de streaming y control por voz con control remoto recargable incluido',
+      'Altavoces estéreo integrados de 10W (2x 5W) para videollamadas claras y contenido multimedia sin parlantes externos',
+      'Conectividad inalámbrica: Wi-Fi 5 (802.11ac) de doble banda y Bluetooth 5.2 para teclado, mouse y auriculares',
+      'Puertos físicos: 1x USB-C (DisplayPort Alt Mode, 65W PD, datos), 2x HDMI 2.0 y 3x puertos USB-A 2.0 de bajada',
+      'Tecnología de confort visual: Flicker Free y modo Eye Saver con certificación TÜV Rheinland para largas jornadas',
+      'Soporte de inclinación ajustable y compatibilidad con montaje VESA estándar 100x100 mm para brazos de escritorio',
+      'Garantía oficial Samsung de 1 año con respaldo y soporte técnico autorizado en Santiago'
+    ]
+  }
+];
+
+const lenovoTabM11Items = [
+  {
+    id: 'oficina_lenovo_tab_m11_tablet_corporativa',
+    department: 'oficina',
+    category: 'Laptops y Computadoras',
+    brand: 'Lenovo',
+    title: 'Tablet Corporativa Lenovo Tab M11 de 11\" 90Hz WUXGA con Lápiz Lenovo Tab Pen y Cuatro Altavoces Dolby Atmos',
+    desc: 'Tablet empresarial Lenovo Tab M11 (pantalla IPS de 11 pulgadas WUXGA 1920x1200 a 90Hz fluidos), ideal para auditorías en almacén, firmas digitales de contratos, puntos de venta móviles y ejecutivos en movimiento en Santiago. Incluye de fábrica el lápiz óptico digital de alta precisión Lenovo Tab Pen (4096 niveles de presión) para anotaciones y firmas legales en PDF. Equipada con procesador MediaTek Helio G88 de 8 núcleos, 4GB de memoria RAM, 128GB de almacenamiento interno expandible mediante tarjeta MicroSD hasta 1TB, y potente batería de 7040 mAh con hasta 10 horas de reproducción continua. Integra cuatro altavoces optimizados con Dolby Atmos para videoconferencias cristalinas, cámaras frontal y trasera de 8 MP, conectividad Wi-Fi dual band, Bluetooth 5.1 y modo de lectura inmersivo con certificación TÜV Low Blue Light.',
+    price: 'RD$ 13,850.00',
+    img: 'img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp',
+    gallery: [
+      'img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp'
+    ],
+    specs: [
+      'Pantalla táctil IPS de 11 pulgadas con resolución WUXGA (1920 x 1200) y tasa de refresco ultra fluida de 90Hz',
+      'Lápiz óptico de alta precisión Lenovo Tab Pen incluido de serie (4096 niveles de presión para firmas y notas)',
+      'Procesador MediaTek Helio G88 Octa-Core de alto rendimiento y bajo consumo para multitarea corporativa',
+      'Memoria: 4GB RAM LPDDR4x y almacenamiento de 128GB expandible mediante MicroSD hasta 1TB',
+      'Cuatro altavoces estéreo frontales de 1W sintonizados con tecnología envolvente Dolby Atmos',
+      'Sistema de cámaras: cámara principal de 8 MP con autofoco y cámara frontal de 8 MP para videollamadas',
+      'Batería de larga duración de 7,040 mAh con hasta 10 horas de autonomía y carga rápida USB-C',
+      'Chasis metálico delgado de 7.15 mm con certificación IP52 resistente a salpicaduras y polvo',
+      'Modo lectura inmersivo con simulación cromática de papel y certificación TÜV Rheinland de baja emisión azul',
+      'Garantía oficial Lenovo de 1 año con soporte empresarial y entrega inmediata en Santiago'
+    ]
+  }
+];
+
+const lgErgo27qn880Items = [
+  {
+    id: 'oficina_lg_27qn880_ergo_qhd_monitor',
+    department: 'oficina',
+    category: 'Monitores y Proyectores',
+    brand: 'LG',
+    title: 'Monitor Profesional Ergonómico LG 27QN880-B Ergo 27\" QHD IPS con Brazo Articulado C-Clamp y USB-C 60W',
+    desc: 'Monitor ergonómico profesional de vanguardia LG Ergo modelo 27QN880-B de 27 pulgadas, diseñado para programadores, arquitectos, diseñadores gráficos y directores ejecutivos en Santiago. Incorpora un innovador brazo ergonómico articulado con mordaza C-Clamp de fácil montaje en el borde de cualquier escritorio, liberando el 100% del espacio de la mesa. El brazo Ergo permite extender, retraer, girar hasta 280°, pivotar 90° a orientación vertical, inclinar ±25° y ajustar la altura con suavidad milimétrica. Cuenta con panel IPS de resolución QHD (2560x1440 píxeles, 77% más resolución que Full HD), cobertura del 99% del espacio de color sRGB, HDR10 y conectividad USB-C con suministro de energía de 60W (Power Delivery) para cargar portátiles con un único cable. Dispone de dos altavoces estéreo MaxxAudio de 5W y organizador de cables integrado en el poste.',
+    price: 'RD$ 26,400.00',
+    img: 'img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp',
+    gallery: [
+      'img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp'
+    ],
+    specs: [
+      'Pantalla IPS de 27 pulgadas con resolución Quad HD (2560 x 1440 píxeles) con fidelidad cromática 99% sRGB y HDR10',
+      'Brazo ergonómico Ergo C-Clamp incluido: extensión/retracción de 180 mm, giro de ±280°, pivote 90° vertical y ajuste de altura 130 mm',
+      'Conectividad USB-C todo en uno con 60W Power Delivery para alimentar laptops ejecutivas con un único cable',
+      'Libera por completo la superficie de trabajo del escritorio gracias al montaje en borde por prensa C-Clamp o pasacables',
+      'Dos altavoces estéreo integrados de 5W con tecnología Waves MaxxAudio para audio balanceado sin parlantes externos',
+      'Puertos de conectividad: 1x USB-C (DisplayPort, 60W PD, datos), 2x HDMI, 1x DisplayPort 1.4 y hub de 2 puertos USB 3.0',
+      'Compatibilidad con AMD FreeSync, modo Dynamic Action Sync y Black Stabilizer para fluidez visual total',
+      'Calibración de color de fábrica y modos de imagen dedicados para diseño, lectura y oficina',
+      'Sistema de gestión de cables oculto dentro del poste para mantener el espacio de trabajo 100% limpio',
+      'Garantía oficial LG de 3 años con factura con crédito fiscal (NCF) y entrega corporativa en Santiago'
+    ]
+  }
+];
+
+const netgearNighthawkM6ProItems = [
+  {
+    id: 'redes_netgear_nighthawk_m6_pro_5g_router',
+    department: 'redes',
+    category: 'Routers y Repetidores WiFi',
+    brand: 'Netgear',
+    title: 'Router Móvil Hotspot 5G / Wi-Fi 6E Netgear Nighthawk M6 Pro (MR6500) con Puerto 2.5G Multigigabit y Pantalla Táctil',
+    desc: 'El router móvil hotspot más avanzado del mundo, Netgear Nighthawk M6 Pro (modelo MR6500), diseñado para respaldo de contingencia de conexión a internet para empresas, sucursales bancarias móviles, transmisiones en vivo y ejecutivos en República Dominicana. Equipado con el módem 5G mmWave y Sub-6GHz Qualcomm Snapdragon X65 que alcanza velocidades de descarga móviles de hasta 8 Gbps, liberado para todas las prestadoras telefónicas locales (Claro, Altice). Ofrece tecnología Wi-Fi 6E de triple banda con la nueva frecuencia de 6 GHz, capaz de brindar hasta 3.6 Gbps inalámbricos para conectar hasta 32 dispositivos simultáneamente con latencia ultra baja. Integra un puerto Ethernet 2.5G multigigabit para conectarlo directamente a switches corporativos o routers WAN como respaldo automático de internet, pantalla táctil LCD a color de 2.8 pulgadas para monitoreo de datos y batería recargable extraíble de 5,040 mAh con hasta 13 horas de uso continuo o funcionamiento sin batería conectado directamente a la corriente.',
+    price: 'RD$ 48,900.00',
+    img: 'img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp',
+    gallery: [
+      'img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'
+    ],
+    specs: [
+      'Módem 5G ultra rápido Qualcomm Snapdragon X65 con compatibilidad Sub-6 GHz y mmWave (hasta 8 Gbps de descarga celular)',
+      'Tecnología Wi-Fi 6E Tri-Banda (6 GHz, 5 GHz y 2.4 GHz) con velocidades inalámbricas combinadas de hasta 3.6 Gbps',
+      'Puerto Ethernet 2.5G Multigigabit (2.5 Gbps / 1 Gbps) para enlazar redes cableadas corporativas o routers balanceadores',
+      'Pantalla táctil LCD a color de 2.8 pulgadas para ver consumo de datos, calidad de señal celular y administrar la red',
+      'Soporte para conectar hasta 32 dispositivos simultáneos sin degradación de velocidad ni pérdida de paquetes',
+      'Batería de iones de litio de 5,040 mAh extraíble con hasta 13 horas de autonomía y modo Home Router (opera sin batería conectado a la pared)',
+      'Desbloqueado para todas las redes celulares 5G/4G LTE de República Dominicana (Claro, Altice) y operadoras internacionales',
+      'Conectores duales TS-9 para antenas externas 5G para maximizar la recepción en áreas de señal débil o soterradas',
+      'Seguridad empresarial WPA3, filtrado de direcciones MAC, aislamiento de invitados y servidor VPN integrado',
+      'Garantía oficial Netgear de 1 año con factura corporativa con valor fiscal NCF y soporte técnico en Santiago'
+    ]
+  }
+];
+
+
 
 
 const sillasItems = [
@@ -3078,7 +3191,11 @@ async function updateBackupData() {
     ...teslaUniversalWallConnectorItems,
     ...mikrotikCrs326Items,
     ...ezvizDb2ProItems,
-    ...logitechBrio4kItems
+    ...logitechBrio4kItems,
+    ...samsungSmartMonitorM7Items,
+    ...lenovoTabM11Items,
+    ...lgErgo27qn880Items,
+    ...netgearNighthawkM6ProItems
   ];
 
   itemsToSync.forEach(item => {
@@ -3185,7 +3302,11 @@ async function updateFirestore() {
     ...teslaUniversalWallConnectorItems,
     ...mikrotikCrs326Items,
     ...ezvizDb2ProItems,
-    ...logitechBrio4kItems
+    ...logitechBrio4kItems,
+    ...samsungSmartMonitorM7Items,
+    ...lenovoTabM11Items,
+    ...lgErgo27qn880Items,
+    ...netgearNighthawkM6ProItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

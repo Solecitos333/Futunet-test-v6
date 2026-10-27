@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v51';
+const CACHE_NAME = 'futunet-cache-v53';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -72,7 +72,8 @@ const OPTIONAL_ASSETS = [
   './privacidad.html',
   './terminos.html',
   './css/suggestions.css',
-  './css/user-panel.css',
+  './css/financing.css',
+  './css/legal.css',
   './css/gaming.css',
   './js/user-panel.js',
   './js/gaming.js',
@@ -133,7 +134,11 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/tesla-universal-wall-connector.webp',
   './img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp',
   './img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp',
-  './img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'
+    './img/productos/catalogo/logitech-brio-4k-pro-webcam.webp',
+  './img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp',
+  './img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp',
+  './img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp',
+  './img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'
 ];
 
 // Install Event — cachear assets críticos

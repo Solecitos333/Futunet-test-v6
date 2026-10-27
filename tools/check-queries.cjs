@@ -199,7 +199,15 @@ const queries = [
   'db2 pro',
   'timbre ezviz',
   'brio 4k',
-  'logitech brio'
+  'logitech brio',
+  'm7',
+  'smart monitor m7',
+  'tab m11',
+  'lenovo tab',
+  '27qn880',
+  'lg ergo',
+  'm6 pro',
+  'nighthawk m6'
 ];
 
 

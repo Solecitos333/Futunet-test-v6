@@ -2073,3 +2073,75 @@ test('Mejora demandada por usuarios: Cámara Web Empresarial Logitech BRIO 4K Pr
   assert.ok(catJs.includes("'brio'"), 'catalog.js debe incluir brio en stem variants');
   assert.ok(catJs.includes("/\\b(brio|brio\\s*4k|brio4k)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Logitech BRIO 4K Pro');
 });
+
+test('Mejora demandada por usuarios: Monitor Inteligente Samsung Smart Monitor M7 32" 4K UHD (SUG-S7320)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S7320'") && seedCjs.includes("status: 'implemented'"), 'SUG-S7320 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S7320') && sugJs.includes('Samsung Smart Monitor M7'), 'SUG-S7320 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_samsung_smart_monitor_m7_32_4k'), 'backup_data.js debe contener oficina_samsung_smart_monitor_m7_32_4k');
+
+  const samsungImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'samsung-smart-monitor-m7-32-4k.webp');
+  assert.ok(fs.existsSync(samsungImg), 'La imagen del Samsung Smart Monitor M7 32 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'m7'"), 'catalog.js debe incluir m7 en stem variants');
+  assert.ok(catJs.includes("/\\b(m7|smart\\s*monitor\\s*m7|ls32dm702)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Samsung Smart Monitor M7 32');
+});
+
+test('Mejora demandada por usuarios: Tablet Corporativa Lenovo Tab M11 11" 90Hz WUXGA + Tab Pen (SUG-L1100)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L1100'") && seedCjs.includes("status: 'implemented'"), 'SUG-L1100 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L1100') && sugJs.includes('Lenovo Tab M11'), 'SUG-L1100 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lenovo_tab_m11_tablet_corporativa'), 'backup_data.js debe contener oficina_lenovo_tab_m11_tablet_corporativa');
+
+  const lenovoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-tab-m11-tablet-corporativa.webp');
+  assert.ok(fs.existsSync(lenovoImg), 'La imagen de la tablet Lenovo Tab M11 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tabm11'") && catJs.includes("'tabpen'"), 'catalog.js debe incluir tabm11 y tabpen en stem variants');
+  assert.ok(catJs.includes("/\\b(tab\\s*m11|tabm11|m11)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Lenovo Tab M11');
+});
+
+test('Mejora demandada por usuarios: Monitor Profesional Ergonómico LG 27QN880-B Ergo 27" QHD IPS (SUG-L2788)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L2788'") && seedCjs.includes("status: 'implemented'"), 'SUG-L2788 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L2788') && sugJs.includes('LG 27QN880-B Ergo'), 'SUG-L2788 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lg_27qn880_ergo_qhd_monitor'), 'backup_data.js debe contener oficina_lg_27qn880_ergo_qhd_monitor');
+
+  const lgImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lg-27qn880-ergo-qhd-monitor.webp');
+  assert.ok(fs.existsSync(lgImg), 'La imagen del monitor LG Ergo 27QN880-B debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ergo'") && catJs.includes("'27qn880'"), 'catalog.js debe incluir ergo y 27qn880 en stem variants');
+  assert.ok(catJs.includes("/\\b(27qn880|27qn880-b|ergo)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar LG Ergo 27QN880-B');
+});
+
+test('Mejora demandada por usuarios: Router Móvil Hotspot 5G Wi-Fi 6E Netgear Nighthawk M6 Pro (SUG-N6500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N6500'") && seedCjs.includes("status: 'implemented'"), 'SUG-N6500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N6500') && sugJs.includes('Netgear Nighthawk M6 Pro'), 'SUG-N6500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_netgear_nighthawk_m6_pro_5g_router'), 'backup_data.js debe contener redes_netgear_nighthawk_m6_pro_5g_router');
+
+  const netgearImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-nighthawk-m6-pro-5g-router.webp');
+  assert.ok(fs.existsSync(netgearImg), 'La imagen del hotspot Netgear Nighthawk M6 Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'m6pro'") && catJs.includes("'mr6500'"), 'catalog.js debe incluir m6pro y mr6500 en stem variants');
+  assert.ok(catJs.includes("/\\b(m6\\s*pro|m6pro|mr6500)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Netgear Nighthawk M6 Pro');
+});

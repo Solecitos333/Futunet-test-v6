@@ -87,7 +87,11 @@ const testQueries = [
   'universal wall connector',
   'crs326',
   'db2 pro',
-  'brio 4k'
+  'brio 4k',
+  'm7',
+  'tab m11',
+  '27qn880',
+  'm6 pro'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -577,6 +581,53 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /brio/i.test(scored[0].p.title),
         'El producto top para "brio 4k" debe ser Logitech BRIO 4K Pro'
+      );
+    }
+    if (q === 'm7') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Samsung',
+        'La búsqueda "m7" debe priorizar el Samsung Smart Monitor M7 32"'
+      );
+      assert.ok(
+        /m7|smart\s*monitor/i.test(scored[0].p.title),
+        'El producto top para "m7" debe ser Samsung Smart Monitor M7 32"'
+      );
+    }
+
+    if (q === 'tab m11') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Lenovo',
+        'La búsqueda "tab m11" debe priorizar la Tablet Lenovo Tab M11'
+      );
+      assert.ok(
+        /tab\s*m11/i.test(scored[0].p.title),
+        'El producto top para "tab m11" debe ser Lenovo Tab M11'
+      );
+    }
+
+    if (q === '27qn880') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'LG',
+        'La búsqueda "27qn880" debe priorizar el Monitor LG Ergo 27QN880-B'
+      );
+      assert.ok(
+        /27qn880|ergo/i.test(scored[0].p.title),
+        'El producto top para "27qn880" debe ser LG Ergo 27QN880-B'
+      );
+    }
+
+    if (q === 'm6 pro') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Netgear',
+        'La búsqueda "m6 pro" debe priorizar el Router Móvil Netgear Nighthawk M6 Pro'
+      );
+      assert.ok(
+        /m6\s*pro|mr6500|nighthawk/i.test(scored[0].p.title),
+        'El producto top para "m6 pro" debe ser Netgear Nighthawk M6 Pro'
       );
     }
   }

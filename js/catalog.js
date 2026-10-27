@@ -268,6 +268,10 @@ function getStemVariants(word) {
   if (word === 'crs326' || word === 'crs326-24g' || word === 'crs32624g' || word === 'swos') variants.push('mikrotik', 'switch', 'rack', '10g', 'sfp+', 'gigabit');
   if (word === 'db2' || word === 'db2pro' || word === 'db2-pro' || word === 'timbre') variants.push('ezviz', 'videoportero', 'chime', 'bateria', '2k', 'puerta');
   if (word === 'brio' || word === 'brio4k' || word === 'rightlight') variants.push('logitech', 'webcam', 'camara', '4k', 'hdr', 'hello', 'videoconferencia');
+  if (word === 'm7' || word === 'smartmonitor' || word === 'ls32dm702' || word === 'ls32bm700') variants.push('samsung', 'monitor', '4k', 'smart', 'hub', '32');
+  if (word === 'tabm11' || word === 'm11' || word === 'tabpen') variants.push('lenovo', 'tablet', 'pen', 'wuxga', '90hz', 'helio');
+  if (word === 'ergo' || word === '27qn880' || word === '27qn880-b' || word === 'c-clamp') variants.push('lg', 'monitor', 'qhd', 'brazo', 'articulado', '27');
+  if (word === 'm6pro' || word === 'm6' || word === 'mr6500' || word === 'nighthawk') variants.push('netgear', 'hotspot', 'router', '5g', 'wifi6e', 'celular');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1219,6 +1223,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(brio|brio\s*4k|brio4k)\b/i.test(normalizedQuery) || (/\b(logitech)\b/i.test(normalizedQuery) && /\b(brio|4k\s*pro|webcam\s*4k)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'logitech') {
       if (/brio/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Samsung Smart Monitor M7 32" al buscar m7, smart monitor m7, samsung m7, monitor inteligente samsung (SUG-S7320)
+  if (/\b(m7|smart\s*monitor\s*m7|ls32dm702)\b/i.test(normalizedQuery) || (/\b(samsung)\b/i.test(normalizedQuery) && /\b(smart\s*monitor|m7|32\s*4k)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'samsung') {
+      if (/m7|smart\s*monitor/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Tablet Lenovo Tab M11 al buscar tab m11, lenovo tab m11, tablet lenovo, tab pen (SUG-L1100)
+  if (/\b(tab\s*m11|tabm11|m11)\b/i.test(normalizedQuery) || (/\b(lenovo)\b/i.test(normalizedQuery) && /\b(tab|tablet|tab\s*pen)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lenovo') {
+      if (/tab\s*m11/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Monitor LG Ergo 27QN880-B al buscar ergo, 27qn880, lg ergo, brazo ergo (SUG-L2788)
+  if (/\b(27qn880|27qn880-b|ergo)\b/i.test(normalizedQuery) || (/\b(lg)\b/i.test(normalizedQuery) && /\b(ergo|c-clamp|brazo)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lg') {
+      if (/27qn880|ergo/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Netgear Nighthawk M6 Pro 5G al buscar m6 pro, nighthawk m6, mr6500, hotspot 5g (SUG-N6500)
+  if (/\b(m6\s*pro|m6pro|mr6500)\b/i.test(normalizedQuery) || (/\b(netgear)\b/i.test(normalizedQuery) && /\b(nighthawk|hotspot|5g|m6)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'netgear') {
+      if (/m6\s*pro|mr6500|nighthawk/i.test(title)) {
         score += 240;
       } else {
         score += 170;

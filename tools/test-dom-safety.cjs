@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v51';"), 'sw.js debe estar en la versión futunet-cache-v51');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v52';"), 'sw.js debe estar en la versión futunet-cache-v52');
   assert.ok(swJs.includes("'./gaming.html'"), 'sw.js debe incluir gaming.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./corporativo.html'"), 'sw.js debe incluir corporativo.html en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./mi-cuenta.html'"), 'sw.js debe incluir mi-cuenta.html en OPTIONAL_ASSETS');
@@ -84,7 +84,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/tesla-universal-wall-connector.webp'"), 'sw.js debe incluir tesla-universal-wall-connector.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/mikrotik-crs326-24g-2s-switch.webp'"), 'sw.js debe incluir mikrotik-crs326-24g-2s-switch.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/ezviz-db2-pro-timbre-camara.webp'"), 'sw.js debe incluir ezviz-db2-pro-timbre-camara.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'"), 'sw.js debe incluir logitech-brio-4k-pro-webcam.webp en OPTIONAL_ASSETS');
+    assert.ok(swJs.includes("'./img/productos/catalogo/logitech-brio-4k-pro-webcam.webp'"), 'sw.js debe incluir logitech-brio-4k-pro-webcam.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp'"), 'sw.js debe incluir samsung-smart-monitor-m7-32-4k.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp'"), 'sw.js debe incluir lenovo-tab-m11-tablet-corporativa.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp'"), 'sw.js debe incluir lg-27qn880-ergo-qhd-monitor.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'"), 'sw.js debe incluir netgear-nighthawk-m6-pro-5g-router.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {
