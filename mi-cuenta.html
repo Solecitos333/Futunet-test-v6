@@ -766,12 +766,12 @@
  </main>
 
  <!-- Modal de Detalle de Pedido (Cliente) -->
- <div class="admin-modal" id="user-order-detail-modal" style="position:fixed; inset:0; background:rgba(10,16,29,0.5); backdrop-filter:blur(6px); z-index:100000; display:none; align-items:center; justify-content:center; padding:16px;">
+ <div class="admin-modal" id="user-order-detail-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="user-order-modal-title" style="position:fixed; inset:0; background:rgba(10,16,29,0.5); backdrop-filter:blur(6px); z-index:100000; display:none; align-items:center; justify-content:center; padding:16px;">
   <div class="admin-modal-overlay" style="position:absolute; inset:0;" onclick="closeUserOrderModal()"></div>
   <div class="admin-modal-card" style="position:relative; background:#fff; width:100%; max-width:540px; border-radius:20px; box-shadow:0 24px 64px rgba(10,112,162,0.12); display:flex; flex-direction:column; overflow:hidden; z-index:100001; animation: modalScaleUp 0.28s ease;">
    <div class="admin-modal-header" style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e5eef8;">
-    <h3 style="font-family:Space Grotesk, sans-serif; font-size:1.15rem; font-weight:700; color:#0a101d; margin:0;">Detalles de Pedido</h3>
-    <button onclick="closeUserOrderModal()" style="background:none; border:none; font-size:1.5rem; color:#76889e; cursor:pointer;">&times;</button>
+    <h3 id="user-order-modal-title" style="font-family:Space Grotesk, sans-serif; font-size:1.15rem; font-weight:700; color:#0a101d; margin:0;">Detalles de Pedido</h3>
+    <button type="button" aria-label="Cerrar detalles del pedido" onclick="closeUserOrderModal()" style="background:none; border:none; font-size:1.5rem; color:#76889e; cursor:pointer;">&times;</button>
    </div>
    <div id="user-order-detail-content" style="padding:20px; overflow-y:auto; max-height:70vh; font-family:Outfit, sans-serif;">
     <!-- Dinámico -->

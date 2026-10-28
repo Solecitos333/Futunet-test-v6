@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v53';"), 'sw.js debe estar en la versión futunet-cache-v53');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v54';"), 'sw.js debe estar en la versión futunet-cache-v54');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
@@ -91,7 +91,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp'"), 'sw.js debe incluir samsung-smart-monitor-m7-32-4k.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp'"), 'sw.js debe incluir lenovo-tab-m11-tablet-corporativa.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp'"), 'sw.js debe incluir lg-27qn880-ergo-qhd-monitor.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'"), 'sw.js debe incluir netgear-nighthawk-m6-pro-5g-router.webp en OPTIONAL_ASSETS');
+    assert.ok(swJs.includes("'./img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'"), 'sw.js debe incluir netgear-nighthawk-m6-pro-5g-router.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/victron-cerbo-gx-monitoreo-solar.webp'"), 'sw.js debe incluir victron-cerbo-gx-monitoreo-solar.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/linksys-velop-pro-7-wifi7-mesh.webp'"), 'sw.js debe incluir linksys-velop-pro-7-wifi7-mesh.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/siemens-sinamics-v20-variador-frecuencia.webp'"), 'sw.js debe incluir siemens-sinamics-v20-variador-frecuencia.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp'"), 'sw.js debe incluir panasonic-kx-ns500-central-pbx.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {
@@ -721,7 +725,7 @@ test('Estabilidad & Blindaje Numérico: producto.js, cart.js, user-panel.js y sw
   const prodJs = fs.readFileSync(path.join(projectRoot, 'js', 'producto.js'), 'utf8');
   assert.ok(
     prodJs.includes("const parsed = parseInt(nextValue, 10);") &&
-    prodJs.includes("selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;"),
+    (prodJs.includes("selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? Math.min(parsed, 999) : 1;") || prodJs.includes("selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;")),
     'producto.js debe parsear nextValue y prevenir propagación de NaN en cantidades'
   );
 

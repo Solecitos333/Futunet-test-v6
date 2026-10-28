@@ -372,6 +372,9 @@
     }
   }
 
+  var userOrderModalCleanup = null;
+  var userOrderModalPreviousActiveElement = null;
+
   window.showUserOrderDetail = function (orderId) {
     var order = allUserOrders.find(o => o.id === orderId);
     if (!order) return;
@@ -451,12 +454,35 @@
     var container = document.getElementById('user-order-detail-content');
     if (container) container.innerHTML = contentHtml;
     var modal = document.getElementById('user-order-detail-modal');
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+      userOrderModalPreviousActiveElement = document.activeElement;
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      if (userOrderModalCleanup) userOrderModalCleanup();
+      if (window.FutunetFocusTrap) {
+        userOrderModalCleanup = window.FutunetFocusTrap(modal, window.closeUserOrderModal);
+      }
+      setTimeout(function () {
+        var closeBtn = modal.querySelector('button[aria-label="Cerrar detalles del pedido"]');
+        if (closeBtn && typeof closeBtn.focus === 'function') closeBtn.focus();
+      }, 50);
+    }
   };
 
   window.closeUserOrderModal = function () {
     var modal = document.getElementById('user-order-detail-modal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    }
+    if (userOrderModalCleanup) {
+      userOrderModalCleanup();
+      userOrderModalCleanup = null;
+    }
+    if (userOrderModalPreviousActiveElement && typeof userOrderModalPreviousActiveElement.focus === 'function') {
+      userOrderModalPreviousActiveElement.focus();
+      userOrderModalPreviousActiveElement = null;
+    }
   };
 
   document.addEventListener('keydown', function (e) {

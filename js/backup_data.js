@@ -8563,6 +8563,106 @@ const mockDatabase = [
       "Seguridad empresarial WPA3, filtrado de direcciones MAC, aislamiento de invitados y servidor VPN integrado",
       "Garantía oficial Netgear de 1 año con factura corporativa con valor fiscal NCF y soporte técnico en Santiago"
     ]
+  },
+  {
+    "id": "energia_victron_cerbo_gx_comunicador",
+    "department": "energia",
+    "category": "Energía y Climatización",
+    "brand": "Victron Energy",
+    "title": "Centro de Comunicación y Monitoreo Victron Energy Cerbo GX con Portal VRM, Bluetooth y Soporte GX Touch",
+    "desc": "El Victron Cerbo GX es el centro de control y monitoreo definitivo para sistemas solares fotovoltaicos, bancos de baterías y respaldo energético de alta confiabilidad en República Dominicana. Permite supervisar y comandar en tiempo real inversores MultiPlus y Quattro, controladores de carga solar SmartSolar MPPT y monitores SmartShunt desde cualquier parte del mundo a través del portal en la nube VRM (Victron Remote Management) o localmente mediante pantallas táctiles GX Touch 50 y GX Touch 70. Cuenta con conectividad Wi-Fi, Ethernet y Bluetooth LE, 3 puertos VE.Direct, 2 puertos VE.Can / BMS-Can dedicados para baterías de litio inteligentes, 2 puertos VE.Bus, 4 entradas para sensores analógicos (temperatura y nivel de tanques de agua/combustible) y 2 salidas de relé programables para encendido y apagado automático de generadores eléctricos (plantas de emergencia).",
+    "price": "RD$ 24,850.00",
+    "img": "img/productos/catalogo/victron-cerbo-gx-monitoreo-solar.webp",
+    "gallery": [
+      "img/productos/catalogo/victron-cerbo-gx-monitoreo-solar.webp"
+    ],
+    "specs": [
+      "3 Puertos VE.Direct dedicados para controladores solares SmartSolar MPPT y monitores de batería",
+      "2 Puertos VE.Can / BMS-Can para interconexión digital con baterías de litio inteligentes y redes CAN-bus",
+      "2 Puertos VE.Bus para comunicación directa con inversores/cargadores MultiPlus y Quattro",
+      "Conectividad de red completa: Ethernet RJ45, Wi-Fi 2.4 GHz y Bluetooth Low Energy integrados",
+      "Integración total con el Portal en la Nube VRM (Victron Remote Management) gratuito para telemetría global",
+      "Compatibilidad nativa con pantallas táctiles a color montables en pared GX Touch 50 y GX Touch 70",
+      "4 Entradas analógicas para sensores de temperatura y niveles de tanques (resistivos)",
+      "2 Salidas de relé libres de potencial para control automatizado de generadores o alertas",
+      "Rango amplio de alimentación de 8V a 70V DC y montaje seguro en carril DIN o atornillado a pared",
+      "Garantía oficial Victron Energy de 5 años con respaldo técnico certificado en Santiago"
+    ]
+  },
+  {
+    "id": "redes_linksys_velop_pro_7_wifi7_mesh",
+    "department": "redes",
+    "category": "Routers y Repetidores WiFi",
+    "brand": "Linksys",
+    "title": "Sistema Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (Cognitive Mesh BE11000) con Puerto WAN 2.5G Multigigabit",
+    "desc": "El Linksys Velop Pro 7 introduce el nuevo estándar Wi-Fi 7 (802.11be) con tecnología Cognitive Mesh en República Dominicana, ofreciendo velocidades combinadas ultra rápidas de hasta 11 Gbps (BE11000). Diseñado para empresas, consultorías de diseño, creadores de video en 8K y residencias de alta densidad en Santiago que demandan mínima latencia y máximo ancho de banda. Incorpora la banda ultra ancha de 6 GHz con canales limpios de 320 MHz y modulación 4096-QAM, junto con tecnología Multi-Link Operation (MLO) que transmite y recibe paquetes simultáneamente a través de múltiples frecuencias para erradicar el buffering. Dispone de un puerto Ethernet WAN multigigabit de 2.5 Gbps para aprovechar conexiones de fibra óptica de ultra alta velocidad, 4 puertos LAN Gigabit, cobertura de hasta 3,000 pies cuadrados por nodo y soporte para conectar más de 200 dispositivos concurrentes sin degradación de señal.",
+    "price": "RD$ 26,950.00",
+    "img": "img/productos/catalogo/linksys-velop-pro-7-wifi7-mesh.webp",
+    "gallery": [
+      "img/productos/catalogo/linksys-velop-pro-7-wifi7-mesh.webp"
+    ],
+    "specs": [
+      "Estándar Wi-Fi 7 de Próxima Generación (802.11be) con tecnología de autooptimización Cognitive Mesh",
+      "Velocidad combinada Tri-Banda BE11000 de hasta 11 Gbps (6 GHz hasta 5765 Mbps, 5 GHz hasta 4324 Mbps, 2.4 GHz hasta 574 Mbps)",
+      "Banda ultra ancha de 6 GHz con canales de 320 MHz y modulación avanzada 4096-QAM",
+      "Multi-Link Operation (MLO): conexión simultánea en varias bandas para latencia ultrabaja en streaming y videoconferencias",
+      "1 Puerto Ethernet WAN 2.5G Multigigabit + 4 Puertos LAN Gigabit para conexiones cableadas de alto rendimiento",
+      "Cobertura inalámbrica de hasta 3,000 pies cuadrados por nodo y soporte para más de 200 clientes simultáneos",
+      "Configuración rápida e intuitiva desde la app móvil Linksys con red de invitados y controles parentales",
+      "Diseño en torre vertical premium con ventilación pasiva optimizada y LED superior indicador de estado",
+      "Seguridad avanzada WPA3 Personal/Enterprise y actualizaciones de firmware automáticas seguras",
+      "Garantía oficial Linksys de 3 años con factura con crédito fiscal NCF en República Dominicana"
+    ]
+  },
+  {
+    "id": "energia_siemens_sinamics_v20_variador_frecuencia",
+    "department": "energia",
+    "category": "Energía y Climatización",
+    "brand": "Siemens",
+    "title": "Variador de Frecuencia Industrial Siemens SINAMICS V20 de 2.2 kW / 3 HP 230V con Panel BOP y Modbus RTU",
+    "desc": "El convertidor de frecuencia industrial Siemens SINAMICS V20 (referencia 6SL3210-5BB22-2AV0) de 2.2 kW (3 HP) a 200V-240V monofásico/trifásico es la solución económica, robusta y eficiente para el control de velocidad y arranque suave de motores eléctricos trifásicos en Santiago y parques industriales de la región norte. Optimizado para sistemas de bombeo hidroneumático, compresores, torres de enfriamiento, ventilación forzada en parqueos y transportadores mecánicos. Incorpora panel básico de operador (BOP) integrado con visualizador digital y potenciómetro para ajuste intuitivo en campo, interfaz de comunicación serial RS485 nativa con protocolos Modbus RTU y USS para enlace con PLCs Siemens LOGO! o SIMATIC S7, modo ECO automático que reduce el consumo de energía en cargas variables de bombas y ventiladores, y tarjetas de circuito barnizadas según especificación 3C2/3S2 para resistir ambientes corrosivos, polvo y humedad tropical.",
+    "price": "RD$ 28,500.00",
+    "img": "img/productos/catalogo/siemens-sinamics-v20-variador-frecuencia.webp",
+    "gallery": [
+      "img/productos/catalogo/siemens-sinamics-v20-variador-frecuencia.webp"
+    ],
+    "specs": [
+      "Potencia nominal: 2.2 kW (3 HP) con sobrecarga de 150% durante 60 segundos",
+      "Tensión de entrada: 200V a 240V AC monofásica/trifásica (47 Hz a 63 Hz) con filtro integrado",
+      "Panel Básico de Operador (BOP) integrado en la carátula frontal con display LED y teclas de control directo",
+      "Modos de control: V/f lineal, cuadrático, configurable y Control de Compensación de Flujo de Corriente (FCC)",
+      "Comunicación serial RS485 nativa con compatibilidad directa para protocolos industriales Modbus RTU y USS",
+      "Modo ECO automático y modo de hibernación para reducción óptima del gasto eléctrico en bombas y sopladores",
+      "Entradas y Salidas: 4 entradas digitales, 2 entradas analógicas (0-10V / 4-20mA), 1 salida a transistor y 1 salida relé",
+      "Protección avanzada: sobrecorriente, sobretensión, subtensión, sobretemperatura y cortocircuito a tierra",
+      "Recubrimiento de barniz 3C2 y 3S2 en tarjetas electrónicas para máxima resistencia a la humedad del Cibao",
+      "Garantía oficial Siemens de 2 años con soporte técnico especializado para automatización en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_panasonic_kx_ns500_central_telefonica_pbx",
+    "department": "oficina",
+    "category": "Equipos de Oficina",
+    "brand": "Panasonic",
+    "title": "Central Telefónica IP PBX Híbrida Inteligente Panasonic KX-NS500 para Comunicaciones Unificadas Corporativas",
+    "desc": "El servidor de comunicaciones corporativas Panasonic KX-NS500 es el conmutador híbrido inteligente de referencia para centros médicos, clínicas, despachos jurídicos, colegios y empresas en Santiago que desean combinar telefonía tradicional analógica con enlaces IP VoIP modernos sin desperdiciar inversiones previas. Viene preconfigurado de fábrica con 6 líneas analógicas de entrada con identificación de llamadas y 18 extensiones (16 digitales para teléfonos ejecutivos de la serie KX-DT y 2 analógicas con soporte de fax), siendo expandible de manera modular hasta 288 extensiones y 128 troncales SIP. Dispone de operadora automática multinivel (DISA), buzón de voz integrado de alta capacidad con envío automático de mensajes de voz al correo electrónico (Voice Mail to Email) en formato WAV, servidor CTI integrado para enlace con sistemas CRM y chasis metálico para instalación en rack estándar de 19 pulgadas (2U) con máxima confiabilidad operativa.",
+    "price": "RD$ 49,900.00",
+    "img": "img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp",
+    "gallery": [
+      "img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp"
+    ],
+    "specs": [
+      "Capacidad inicial de fábrica: 6 Líneas Analógicas entrantes + 18 Extensiones (16 Digitales + 2 Analógicas)",
+      "Escalabilidad modular corporativa: expandible hasta 288 extensiones de usuario y 128 troncales SIP VoIP",
+      "Operadora Automática Multinivel (DISA de 2 canales preinstalada, ampliable a 24 canales)",
+      "Sistema de Mensajería Unificada: Correo de Voz Inteligente con reenvío de audios al email (Voice Mail to Email)",
+      "Compatibilidad total con teléfonos IP SIP Panasonic KX-HDV y sistemas inalámbricos DECT multizona KX-TGP600",
+      "Servidor de Comunicaciones CTI integrado con soporte para marcación desde PC y visualización de llamadas en CRM",
+      "Puertos de red: interfaz LAN Ethernet 10/100 Mbps para gestión web intuitiva y telefonía IP",
+      "Chasis metálico para montaje en rack de telecomunicaciones estándar de 19 pulgadas (altura 2U)",
+      "Funciones avanzadas: grupos de timbrado, desvío automático de llamadas, música en espera y conferencias múltiples",
+      "Garantía oficial Panasonic con respaldo, repuestos y servicio de programación profesional en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

@@ -1591,6 +1591,38 @@
       status: 'implemented',
       description: 'Hotspot móvil 5G empresarial con módem Qualcomm Snapdragon X65, Wi-Fi 6E tri-banda, puerto Ethernet 2.5G y pantalla táctil.',
       officialResponse: '¡Atendido! Se incorporó el Hotspot 5G Netgear Nighthawk M6 Pro (MR6500) con puerto 2.5G en Redes y marca-netgear.html.'
+        },
+    {
+      refCode: 'SUG-V9004',
+      title: 'Centros de Comunicación y Monitoreo Victron Energy Cerbo GX con Portal VRM',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Centro de comunicación y telemetría Victron Cerbo GX con puertos VE.Direct, VE.Can, VE.Bus, Wi-Fi, Ethernet, Bluetooth y soporte GX Touch.',
+      officialResponse: '¡Aprobado! Disponible el Centro de Comunicación Victron Cerbo GX en Energía y Climatización y marca-victronenergy.html.'
+    },
+    {
+      refCode: 'SUG-L7000',
+      title: 'Sistemas Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (Cognitive Mesh BE11000)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistema en malla Wi-Fi 7 de hasta 11 Gbps con canales de 320 MHz en 6 GHz, Multi-Link Operation MLO y puerto WAN 2.5G multigigabit.',
+      officialResponse: '¡Implementado! Incorporado el Sistema Wi-Fi 7 Linksys Velop Pro 7 en Redes y Conectividad y marca-linksys.html.'
+    },
+    {
+      refCode: 'SUG-S2022',
+      title: 'Variadores de Frecuencia Industriales Siemens SINAMICS V20 de 2.2 kW / 3 HP 230V',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Convertidor de frecuencia Siemens SINAMICS V20 para motores de 3 HP con panel BOP integrado, comunicación Modbus RTU RS485 y modo ECO.',
+      officialResponse: '¡Cumplido! Se sumó el Variador Siemens SINAMICS V20 2.2kW en Energía y Climatización y marca-siemens.html.'
+    },
+    {
+      refCode: 'SUG-P5500',
+      title: 'Centrales Telefónicas IP PBX Híbridas Panasonic KX-NS500 para Comunicaciones Unificadas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Central híbrida Panasonic KX-NS500 de 6 líneas analógicas + 18 extensiones expandible a 288 extensiones, 128 SIP y buzón de voz a email.',
+      officialResponse: '¡Atendido! Disponible la Central Telefónica IP PBX Panasonic KX-NS500 en Equipos de Oficina y marca-panasonic.html.'
     }];
 
   function getFallbackSuggestionByCode(code) {

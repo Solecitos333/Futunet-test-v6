@@ -76,7 +76,7 @@
   }
 
   function getCatalogData() {
-    if (window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
+    if (typeof window !== 'undefined' && window.supplierInventory && typeof window.supplierInventory.getMergedCatalog === 'function') {
       const merged = window.supplierInventory.getMergedCatalog();
       if (Array.isArray(merged) && merged.length > 0) return merged;
     }
@@ -259,7 +259,7 @@
 
     if (!product) return null;
 
-    const override = (window.FutunetProductOverrides && window.FutunetProductOverrides[product.id]) || {};
+    const override = ((typeof window !== 'undefined' && window.FutunetProductOverrides) || (typeof globalThis !== 'undefined' && globalThis.FutunetProductOverrides) || {})[product.id] || {};
     const serviceItem = isServiceItem(product);
     const quoteOnlyProduct = isQuoteOnlyProduct(product);
     const gallery = dedupe(

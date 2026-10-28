@@ -2145,3 +2145,75 @@ test('Mejora demandada por usuarios: Router Móvil Hotspot 5G Wi-Fi 6E Netgear N
   assert.ok(catJs.includes("'m6pro'") && catJs.includes("'mr6500'"), 'catalog.js debe incluir m6pro y mr6500 en stem variants');
   assert.ok(catJs.includes("/\\b(m6\\s*pro|m6pro|mr6500)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Netgear Nighthawk M6 Pro');
 });
+
+test('Mejora demandada por usuarios: Centro de Comunicación y Monitoreo Victron Energy Cerbo GX (SUG-V9004)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V9004'") && seedCjs.includes("status: 'implemented'"), 'SUG-V9004 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V9004') && sugJs.includes('Victron Energy Cerbo GX'), 'SUG-V9004 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_cerbo_gx_comunicador'), 'backup_data.js debe contener energia_victron_cerbo_gx_comunicador');
+
+  const victronImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-cerbo-gx-monitoreo-solar.webp');
+  assert.ok(fs.existsSync(victronImg), 'La imagen del Victron Cerbo GX debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cerbogx'") && catJs.includes("'cerbo'"), 'catalog.js debe incluir cerbogx y cerbo en stem variants');
+  assert.ok(catJs.includes("/\\b(cerbo|cerbo\\s*gx|cerbogx|vrm\\s*portal)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron Cerbo GX');
+});
+
+test('Mejora demandada por usuarios: Sistema Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (SUG-L7000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L7000'") && seedCjs.includes("status: 'implemented'"), 'SUG-L7000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L7000') && sugJs.includes('Linksys Velop Pro 7'), 'SUG-L7000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_velop_pro_7_wifi7_mesh'), 'backup_data.js debe contener redes_linksys_velop_pro_7_wifi7_mesh');
+
+  const linksysImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-velop-pro-7-wifi7-mesh.webp');
+  assert.ok(fs.existsSync(linksysImg), 'La imagen del Linksys Velop Pro 7 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'velop7'") && catJs.includes("'wifi7'"), 'catalog.js debe incluir velop7 y wifi7 en stem variants');
+  assert.ok(catJs.includes("/\\b(velop\\s*pro\\s*7|velop\\s*7|mbe7000|wifi\\s*7|wifi7)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Linksys Velop Pro 7');
+});
+
+test('Mejora demandada por usuarios: Variador de Frecuencia Industrial Siemens SINAMICS V20 2.2kW (SUG-S2022)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S2022'") && seedCjs.includes("status: 'implemented'"), 'SUG-S2022 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S2022') && sugJs.includes('Siemens SINAMICS V20'), 'SUG-S2022 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_sinamics_v20_variador_frecuencia'), 'backup_data.js debe contener energia_siemens_sinamics_v20_variador_frecuencia');
+
+  const siemensImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-sinamics-v20-variador-frecuencia.webp');
+  assert.ok(fs.existsSync(siemensImg), 'La imagen del Siemens SINAMICS V20 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'sinamics'") && catJs.includes("'v20'"), 'catalog.js debe incluir sinamics y v20 en stem variants');
+  assert.ok(catJs.includes("/\\b(sinamics|sinamics\\s*v20|v20|variador\\s*(de\\s*)?frecuencia)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Siemens SINAMICS V20');
+});
+
+test('Mejora demandada por usuarios: Central Telefónica IP PBX Híbrida Panasonic KX-NS500 (SUG-P5500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P5500'") && seedCjs.includes("status: 'implemented'"), 'SUG-P5500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P5500') && sugJs.includes('Panasonic KX-NS500'), 'SUG-P5500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kx_ns500_central_telefonica_pbx'), 'backup_data.js debe contener oficina_panasonic_kx_ns500_central_telefonica_pbx');
+
+  const panasonicImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kx-ns500-central-pbx.webp');
+  assert.ok(fs.existsSync(panasonicImg), 'La imagen de la central Panasonic KX-NS500 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ns500'") && catJs.includes("'kxns500'"), 'catalog.js debe incluir ns500 y kxns500 en stem variants');
+  assert.ok(catJs.includes("/\\b(ns500|kx\\s*ns500|kx-ns500|central\\s*telefonica|conmutador\\s*pbx)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Panasonic KX-NS500');
+});

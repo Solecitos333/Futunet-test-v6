@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v53';
+const CACHE_NAME = 'futunet-cache-v54';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -138,7 +138,11 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/samsung-smart-monitor-m7-32-4k.webp',
   './img/productos/catalogo/lenovo-tab-m11-tablet-corporativa.webp',
   './img/productos/catalogo/lg-27qn880-ergo-qhd-monitor.webp',
-  './img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp'
+    './img/productos/catalogo/netgear-nighthawk-m6-pro-5g-router.webp',
+  './img/productos/catalogo/victron-cerbo-gx-monitoreo-solar.webp',
+  './img/productos/catalogo/linksys-velop-pro-7-wifi7-mesh.webp',
+  './img/productos/catalogo/siemens-sinamics-v20-variador-frecuencia.webp',
+  './img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp'
 ];
 
 // Install Event — cachear assets críticos

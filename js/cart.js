@@ -110,6 +110,22 @@
       validFrom: '2026-10-24',
       validUntil: '2026-11-15',
       description: '12% de descuento en Preventa Exclusiva Q4 y Equipamiento Tecnológico'
+    },
+    NOVIEMBRE2026: {
+      code: 'NOVIEMBRE2026',
+      discount: 0.10,
+      departments: ['equipos', 'redes', 'oficina', 'energia', 'seguridad', 'gaming', 'infra'],
+      validFrom: '2026-11-01',
+      validUntil: '2026-11-30',
+      description: '10% de descuento en Soluciones Empresariales y Tecnología (Noviembre 2026)'
+    },
+    BLACKFRIDAY2026: {
+      code: 'BLACKFRIDAY2026',
+      discount: 0.18,
+      departments: ['equipos', 'redes', 'oficina', 'energia', 'seguridad', 'gaming', 'infra'],
+      validFrom: '2026-11-15',
+      validUntil: '2026-11-30',
+      description: '18% de descuento Especial Black Friday TI 2026 en Catálogo Completo'
     }
   };
 
@@ -382,7 +398,7 @@
     const currentQty = parseInt(cartState.items[productId]?.qty, 10) || 0;
     const parsedQty = parseInt(qty, 10);
     const safeQty = (!isNaN(parsedQty) && parsedQty > 0) ? parsedQty : 1;
-    cartState.items[productId] = { qty: currentQty + safeQty };
+    cartState.items[productId] = { qty: Math.min(currentQty + safeQty, 999) };
     saveCartState();
     updateCartCount();
     renderCartDrawer();
@@ -408,7 +424,7 @@
   function changeCartQuantity(productId, delta) {
     const current = parseInt(cartState.items[productId]?.qty, 10) || 0;
     const parsedDelta = parseInt(delta, 10) || 0;
-    const next = Math.max(0, current + parsedDelta);
+    const next = Math.min(999, Math.max(0, current + parsedDelta));
     if (next === 0) {
       removeFromCart(productId);
       return;
@@ -935,13 +951,13 @@
               <div class="bank-accounts-info">
                 <h5>Datos de Cuenta Oficial Futunet SRL:</h5>
                 <div class="bank-account-card">
-                  <div><strong>Titular:</strong> <span class="copyable" onclick="FutunetCart.copyText('FUTUNET.SRL')">FUTUNET.SRL</span></div>
+                  <div><strong>Titular:</strong> <span class="copyable" tabindex="0" role="button" aria-label="Copiar titular de cuenta" onclick="FutunetCart.copyText('FUTUNET.SRL')">FUTUNET.SRL</span></div>
                   <div><strong>Tipo:</strong> Corriente</div>
                   <div><strong>Banco:</strong> Banreservas</div>
-                  <div><strong>Cuenta:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('9605759674')">9605759674</span></div>
-                  <div><strong>RNC:</strong> <span class="copyable font-mono" onclick="FutunetCart.copyText('132702077')">132702077</span></div>
+                  <div><strong>Cuenta:</strong> <span class="copyable font-mono" tabindex="0" role="button" aria-label="Copiar número de cuenta Banreservas" onclick="FutunetCart.copyText('9605759674')">9605759674</span></div>
+                  <div><strong>RNC:</strong> <span class="copyable font-mono" tabindex="0" role="button" aria-label="Copiar número de RNC de Futunet" onclick="FutunetCart.copyText('132702077')">132702077</span></div>
                 </div>
-                <small class="click-to-copy-hint">Toca el titular, cuenta o RNC para copiarlos al portapapeles.</small>
+                <small class="click-to-copy-hint">Toca o presiona Enter sobre el titular, cuenta o RNC para copiarlos al portapapeles.</small>
               </div>
 
               <div class="checkout-upload-area" style="margin-top:16px;">
@@ -1149,6 +1165,13 @@
     // Submit handler
     const form = document.getElementById('cart-checkout-form');
     form.addEventListener('submit', handleCheckoutSubmit);
+
+    modal.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.classList && e.target.classList.contains('copyable')) {
+        e.preventDefault();
+        e.target.click();
+      }
+    });
 
     if (window.lucide) window.lucide.createIcons();
   }

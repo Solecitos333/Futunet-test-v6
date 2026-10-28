@@ -59,7 +59,7 @@
 
   function updateSelectedQuantity(nextValue) {
     const parsed = parseInt(nextValue, 10);
-    selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? parsed : 1;
+    selectedQuantity = (!isNaN(parsed) && parsed >= 1) ? Math.min(parsed, 999) : 1;
     const valueEl = document.getElementById('product-detail-qty-value');
     if (valueEl) valueEl.textContent = selectedQuantity;
     const minusBtn = document.querySelector('[data-product-qty="-1"]');
@@ -376,6 +376,10 @@
         'schneider': 'marca-schneiderelectric.html',
         'apc by schneider': 'marca-schneiderelectric.html',
         'mitsubishi electric': 'marca-mitsubishi.html',
+        'unifi': 'marca-ubiquiti.html',
+        'ubnt': 'marca-ubiquiti.html',
+        'omada': 'marca-tp-link.html',
+        'routerboard': 'marca-mikrotik.html',
         'zkteco': 'marca-zkteco.html'
       };
       if (slugMap[brandKey]) {
@@ -617,7 +621,10 @@
     if (emptyState) emptyState.hidden = true;
   }
 
+  let quantityControlsInitialized = false;
   function initQuantityControls() {
+    if (quantityControlsInitialized) return;
+    quantityControlsInitialized = true;
     document.addEventListener('click', (event) => {
       const qtyButton = event.target.closest('[data-product-qty]');
       if (!qtyButton) return;

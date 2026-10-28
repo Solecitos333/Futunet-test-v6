@@ -166,7 +166,8 @@
     var lastFin = sessionStorage.getItem(finCooldownKey);
     if (lastFin && (nowTs - Number(lastFin)) < 15000) {
       var waitSecs = Math.ceil((15000 - (nowTs - Number(lastFin))) / 1000);
-      throw new Error('Por favor espera ' + waitSecs + ' segundo(s) antes de reenviar el expediente.');
+      showToast('Por favor espera ' + waitSecs + ' segundo(s) antes de reenviar el expediente.', 'info');
+      return;
     }
 
     try {

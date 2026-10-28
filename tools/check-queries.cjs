@@ -207,7 +207,15 @@ const queries = [
   '27qn880',
   'lg ergo',
   'm6 pro',
-  'nighthawk m6'
+  'nighthawk m6',
+  'cerbo gx',
+  'victron cerbo',
+  'velop pro 7',
+  'wifi 7',
+  'sinamics v20',
+  'variador de frecuencia',
+  'kx-ns500',
+  'central telefonica'
 ];
 
 

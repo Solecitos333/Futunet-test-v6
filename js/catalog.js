@@ -272,6 +272,10 @@ function getStemVariants(word) {
   if (word === 'tabm11' || word === 'm11' || word === 'tabpen') variants.push('lenovo', 'tablet', 'pen', 'wuxga', '90hz', 'helio');
   if (word === 'ergo' || word === '27qn880' || word === '27qn880-b' || word === 'c-clamp') variants.push('lg', 'monitor', 'qhd', 'brazo', 'articulado', '27');
   if (word === 'm6pro' || word === 'm6' || word === 'mr6500' || word === 'nighthawk') variants.push('netgear', 'hotspot', 'router', '5g', 'wifi6e', 'celular');
+  if (word === 'cerbogx' || word === 'cerbo' || word === 'vrm' || word === 'gxtouch') variants.push('victron', 'comunicador', 'gateway', 'monitoreo', 'solar', 'touch');
+  if (word === 'velop7' || word === 'wifi7' || word === 'mbe7000' || word === 'velop') variants.push('linksys', 'mesh', 'cognitive', 'be11000', '6ghz', 'mlo');
+  if (word === 'sinamics' || word === 'v20' || word === 'variador') variants.push('siemens', 'frecuencia', 'inverter', 'motor', 'bop', 'modbus', '3hp');
+  if (word === 'ns500' || word === 'kxns500' || word === 'kx-ns500' || word === 'conmutador') variants.push('panasonic', 'central', 'telefonica', 'pbx', 'hibrida', 'disa');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1267,6 +1271,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(m6\s*pro|m6pro|mr6500)\b/i.test(normalizedQuery) || (/\b(netgear)\b/i.test(normalizedQuery) && /\b(nighthawk|hotspot|5g|m6)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'netgear') {
       if (/m6\s*pro|mr6500|nighthawk/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Victron Cerbo GX al buscar cerbo, cerbo gx, vrm portal (SUG-V9004)
+  if (/\b(cerbo|cerbo\s*gx|cerbogx|vrm\s*portal)\b/i.test(normalizedQuery) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(cerbo|monitoreo|gateway|touch)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('victron')) {
+      if (/cerbo/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Linksys Velop Pro 7 Wi-Fi 7 al buscar velop pro 7, velop 7, wifi 7, mbe7000 (SUG-L7000)
+  if (/\b(velop\s*pro\s*7|velop\s*7|mbe7000|wifi\s*7|wifi7)\b/i.test(normalizedQuery) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(velop|wifi\s*7|be11000)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'linksys') {
+      if (/velop\s*pro\s*7|wifi\s*7|mbe7000/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Variador Siemens SINAMICS V20 al buscar sinamics, sinamics v20, v20, variador de frecuencia (SUG-S2022)
+  if (/\b(sinamics|sinamics\s*v20|v20|variador\s*(de\s*)?frecuencia)\b/i.test(normalizedQuery) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(sinamics|variador|v20)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'siemens') {
+      if (/sinamics|v20|variador/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Central Telefónica Panasonic KX-NS500 al buscar ns500, kx-ns500, central telefonica, conmutador pbx (SUG-P5500)
+  if (/\b(ns500|kx\s*ns500|kx-ns500|central\s*telefonica|conmutador\s*pbx)\b/i.test(normalizedQuery) || (/\b(panasonic)\b/i.test(normalizedQuery) && /\b(ns500|central|pbx|conmutador)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'panasonic') {
+      if (/ns500|central|pbx/i.test(title)) {
         score += 240;
       } else {
         score += 170;

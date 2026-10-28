@@ -91,7 +91,11 @@ const testQueries = [
   'm7',
   'tab m11',
   '27qn880',
-  'm6 pro'
+  'm6 pro',
+  'cerbo gx',
+  'velop pro 7',
+  'sinamics v20',
+  'kx-ns500'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -628,6 +632,53 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /m6\s*pro|mr6500|nighthawk/i.test(scored[0].p.title),
         'El producto top para "m6 pro" debe ser Netgear Nighthawk M6 Pro'
+      );
+    }
+    if (q === 'cerbo gx') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Victron Energy',
+        'La búsqueda "cerbo gx" debe priorizar el Victron Cerbo GX'
+      );
+      assert.ok(
+        /cerbo/i.test(scored[0].p.title),
+        'El producto top para "cerbo gx" debe ser Victron Cerbo GX'
+      );
+    }
+
+    if (q === 'velop pro 7') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Linksys',
+        'La búsqueda "velop pro 7" debe priorizar el Linksys Velop Pro 7'
+      );
+      assert.ok(
+        /velop\s*pro\s*7|wifi\s*7/i.test(scored[0].p.title),
+        'El producto top para "velop pro 7" debe ser Linksys Velop Pro 7'
+      );
+    }
+
+    if (q === 'sinamics v20') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Siemens',
+        'La búsqueda "sinamics v20" debe priorizar el Siemens SINAMICS V20'
+      );
+      assert.ok(
+        /sinamics|v20|variador/i.test(scored[0].p.title),
+        'El producto top para "sinamics v20" debe ser Siemens SINAMICS V20'
+      );
+    }
+
+    if (q === 'kx-ns500') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Panasonic',
+        'La búsqueda "kx-ns500" debe priorizar la Central Telefónica Panasonic KX-NS500'
+      );
+      assert.ok(
+        /ns500|central|pbx/i.test(scored[0].p.title),
+        'El producto top para "kx-ns500" debe ser Panasonic KX-NS500'
       );
     }
   }
