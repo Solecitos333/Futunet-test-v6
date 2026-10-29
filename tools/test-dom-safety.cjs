@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v54';"), 'sw.js debe estar en la versión futunet-cache-v54');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v55';"), 'sw.js debe estar en la versión futunet-cache-v55');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
@@ -95,7 +95,15 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/victron-cerbo-gx-monitoreo-solar.webp'"), 'sw.js debe incluir victron-cerbo-gx-monitoreo-solar.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/linksys-velop-pro-7-wifi7-mesh.webp'"), 'sw.js debe incluir linksys-velop-pro-7-wifi7-mesh.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/siemens-sinamics-v20-variador-frecuencia.webp'"), 'sw.js debe incluir siemens-sinamics-v20-variador-frecuencia.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp'"), 'sw.js debe incluir panasonic-kx-ns500-central-pbx.webp en OPTIONAL_ASSETS');
+      assert.ok(swJs.includes("'./img/productos/catalogo/panasonic-kx-ns500-central-pbx.webp'"), 'sw.js debe incluir panasonic-kx-ns500-central-pbx.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/juniper-srx320-firewall-poe.webp'"), 'sw.js debe incluir juniper-srx320-firewall-poe.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mitsubishi-msz-gl24-aire-inverter.webp'"), 'sw.js debe incluir mitsubishi-msz-gl24-aire-inverter.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/paradox-tm70-teclado-tactil.webp'"), 'sw.js debe incluir paradox-tm70-teclado-tactil.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/tesla-backup-gateway-2.webp'"), 'sw.js debe incluir tesla-backup-gateway-2.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/juniper-ex3400-24t.webp'"), 'sw.js debe incluir juniper-ex3400-24t.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mitsubishi-msz-gl24.webp'"), 'sw.js debe incluir mitsubishi-msz-gl24.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/paradox-tm70-teclado-tactil.webp'"), 'sw.js debe incluir paradox-tm70-teclado-tactil.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/tesla-powerwall-3.webp'"), 'sw.js debe incluir tesla-powerwall-3.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {

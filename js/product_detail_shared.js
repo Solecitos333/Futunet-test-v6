@@ -81,7 +81,7 @@
       if (Array.isArray(merged) && merged.length > 0) return merged;
     }
 
-    if (typeof window.mockDatabase !== 'undefined' && Array.isArray(window.mockDatabase) && window.mockDatabase.length > 0) {
+    if (typeof window !== 'undefined' && Array.isArray(window.mockDatabase) && window.mockDatabase.length > 0) {
       return window.mockDatabase;
     }
 
@@ -89,15 +89,23 @@
       return mockDatabase;
     }
 
-    if (typeof window.backupDatabase !== 'undefined' && Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0) {
+    if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.mockDatabase) && globalThis.mockDatabase.length > 0) {
+      return globalThis.mockDatabase;
+    }
+
+    if (typeof window !== 'undefined' && Array.isArray(window.backupDatabase) && window.backupDatabase.length > 0) {
       return window.backupDatabase;
+    }
+
+    if (typeof globalThis !== 'undefined' && Array.isArray(globalThis.backupDatabase) && globalThis.backupDatabase.length > 0) {
+      return globalThis.backupDatabase;
     }
 
     if (typeof window !== 'undefined' && window.FutunetData && Array.isArray(window.FutunetData.products) && window.FutunetData.products.length > 0) {
       return window.FutunetData.products;
     }
 
-    if (typeof window.mockDatabase !== 'undefined' && Array.isArray(window.mockDatabase)) {
+    if (typeof window !== 'undefined' && Array.isArray(window.mockDatabase)) {
       return window.mockDatabase;
     }
 

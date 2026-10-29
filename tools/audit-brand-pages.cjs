@@ -17,6 +17,10 @@ function matchesBrandLocal(productBrand, targetBrand) {
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   if ((normP.includes('schneider') || normP.includes('apc')) && (normT.includes('schneider') || normT.includes('apc'))) return true;
   if ((normP === 'victron' && normT === 'victronenergy') || (normP === 'victronenergy' && normT === 'victron')) return true;
+  if ((normP === 'mitsubishi' && normT === 'mitsubishielectric') || (normP === 'mitsubishielectric' && normT === 'mitsubishi')) return true;
+  if ((normP === 'juniper' && normT === 'junipernetworks') || (normP === 'junipernetworks' && normT === 'juniper')) return true;
+  if ((normP === 'siemens' && normT === 'siemens') || (normP.includes('siemens') && normT.includes('siemens'))) return true;
+  if ((normP === 'tesla' && normT === 'tesla') || (normP.includes('tesla') && normT.includes('tesla'))) return true;
   return false;
 }
 

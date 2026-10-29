@@ -215,7 +215,23 @@ const queries = [
   'sinamics v20',
   'variador de frecuencia',
   'kx-ns500',
-  'central telefonica'
+  'central telefonica',
+  'srx320',
+  'juniper srx',
+  'msz-gl24',
+  'mitsubishi 24000',
+  'tm70',
+  'teclado paradox',
+  'backup gateway',
+  'tesla gateway',
+  'ex3400',
+  'switch juniper l3',
+  'msz-gl24',
+  'aire 24000 btu',
+  'tm70',
+  'teclado paradox',
+  'powerwall 3',
+  'tesla solar'
 ];
 
 

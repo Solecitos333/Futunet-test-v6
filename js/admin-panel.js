@@ -985,7 +985,7 @@
   }
 
   async function syncToFirebase() {
-    var backupItems = (typeof window.backupDatabase !== 'undefined' && Array.isArray(window.backupDatabase)) ? window.backupDatabase : [];
+    var backupItems = (typeof window !== 'undefined' && Array.isArray(window.backupDatabase)) ? window.backupDatabase : [];
     
     var selektronicItems = [];
     if (window.supplierInventory && window.supplierInventory.feeds && window.supplierInventory.feeds.selektronic) {

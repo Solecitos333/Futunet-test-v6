@@ -912,7 +912,7 @@ function bootstrapFutunetMain() {
   initTypingAnimation();
   
   // Inyección de Schemas SEO y metadatos
-  if (typeof window.FutunetConfigReady !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.FutunetConfigReady !== 'undefined') {
     window.FutunetConfigReady.then(handleLocalBusinessSchema);
   } else {
     handleLocalBusinessSchema();

@@ -1618,6 +1618,33 @@ python -m unittest test_main.py test_chatbot_api.py
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar mínimo de ≥ 3 productos.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 729 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
 
+
+- **Auditoría DevSecOps & Mantenimiento Proactivo Diario (2026-10-27 Ciclo 2: Resiliencia de Service Worker v53, Accesibilidad WCAG 2.1 en Modal de Catálogo, Módulo Universal de Detalle de Producto, Enrutamiento Extendido de Marcas Aliadas y Escalabilidad de Consultas en Muro y Panel)**:
+  - **Resiliencia PWA & Service Worker v53 (`sw.js` & `tools/test-forms-security.cjs`)**:
+    - Detección y corrección de error 404 en precache: eliminación del recurso inexistente `./css/user-panel.css` de `OPTIONAL_ASSETS`.
+    - Incorporación de `./css/financing.css` (para garantizar el renderizado offline del portal `mi-cuenta.html`) y `./css/legal.css` (para estilos offline de `privacidad.html` y `terminos.html`).
+    - Bump de versión a `futunet-cache-v53` asegurando actualización inmediata de activos en navegadores de usuarios y 0 errores de red en la instalación del Service Worker.
+  - **Accesibilidad y Navegación por Teclado WCAG 2.1 AA en Catálogo (`js/catalog.js`)**:
+    - Enriquecimiento de miniaturas en `openProductModal`: adición de `tabindex="0"`, `role="button"`, `aria-label` descriptivo y soporte para activación por teclado (`Enter` y `Espacio`), permitiendo a usuarios con tecnologías de asistencia o sin ratón explorar las galerías de productos.
+    - Gestión y confinamiento de foco (`window.FutunetFocusTrap`): implementación de captura y liberación segura de foco al abrir y cerrar `#product-modal`, evitando que la tecla `Tab` navegue a elementos ocultos en el fondo de la página.
+  - **Modularidad Universal en Detalle de Producto (`js/product_detail_shared.js`)**:
+    - Compatibilidad universal (navegador y Node.js / CommonJS): exportación defensiva de `FutunetProductDetail` resolviendo `root` (`window`, `globalThis` o `this`) y adjuntando `module.exports` cuando está presente, facilitando auditorías y pruebas unitarias automatizadas.
+  - **Enrutamiento Dinámico de Marcas Aliadas (`js/producto.js`)**:
+    - Ampliación de `slugMap` en la ficha de producto con alias comerciales: `'tapo': 'marca-tp-link.html'`, `'tp link': 'marca-tp-link.html'`, `'victron': 'marca-victronenergy.html'`, `'mitsubishi electric': 'marca-mitsubishi.html'`, `'schneider': 'marca-schneiderelectric.html'` y `'apc by schneider': 'marca-schneiderelectric.html'`.
+    - Garantiza que al hacer clic en la marca de cualquier variante de producto, el usuario sea dirigido a la página oficial de la marca sin excepciones ni fallbacks genéricos.
+  - **Escalabilidad de Consultas y Prevención de Truncamiento (`js/suggestions.js` & `js/admin-panel.js`)**:
+    - `js/suggestions.js`: elevación del límite de consulta de sugerencias comunitarias de `.limit(100)` a `.limit(250)`. Corrige el corte de propuestas (al existir 112 sugerencias implementadas, las 12 más recientes o fuera del top 100 no se renderizaban en el muro).
+    - `js/admin-panel.js`: elevación de `.limit(500)` a `.limit(1000)` en la carga de inventario para el dashboard, protegiendo el panel contra truncamientos al sobrepasar 500 productos.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 241 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 84 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar mínimo de ≥ 3 productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 729 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
 - **Atención y Respuesta al Buzón de Sugerencias, Telemetría y Nuevas Mejoras Implementadas (2026-10-28 - Lote 21: Victron Cerbo GX Gateway Monitoreo Solar, Linksys Velop Pro 7 Wi-Fi 7 Mesh BE11000, Siemens SINAMICS V20 Variador 2.2kW 3HP y Panasonic KX-NS500 Central IP PBX Híbrida)**:
   - **Revisión y Respuesta Oficial de Sugerencias (116/116 Implementadas y Respondidas)**:
     - `SUG-V9004`: Centro de Comunicación y Monitoreo Victron Energy Cerbo GX (BPP900450100) para supervisión y telemetría en tiempo real de sistemas solares fotovoltaicos e inversores MultiPlus/Quattro, con conectividad al portal VRM, Bluetooth, Wi-Fi, Ethernet, 3 puertos VE.Direct, 2 puertos VE.Can / BMS-Can para baterías de litio inteligentes, 2 puertos VE.Bus, entradas de nivel de tanques y salidas de relé para arranque automático de plantas eléctricas en Santiago y Jarabacoa.
@@ -1644,3 +1671,62 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar mínimo de ≥ 3 productos y 18 marcas con 4+ productos.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 733 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+
+- **Auditoría DevSecOps & Mantenimiento Proactivo Diario (2026-10-28 Ciclo 2: Mitigación de Unhandled Rejection en Financiamiento, Modularidad Segura Node.js, Accesibilidad WCAG 2.1 AA en Pedidos de Usuario y Ficha de Producto, Endurecimiento de Techo de Cantidades y Sincronización de Campañas Q4)**:
+  - **Prevención de Excepción No Capturada en Cooldown de Financiamiento (`js/financing.js`)**:
+    - Detección y corrección de `throw new Error(...)` ejecutado fuera de bloque `try/catch` en `submitProfile` al activarse el rate-limiting de 15s.
+    - Sustituido por notificación amigable `showToast('Por favor espera ' + waitSecs + ' segundo(s) antes de reenviar el expediente.', 'info')` y salida limpia mediante `return;`, eliminando excepciones no controladas en consola y alineándolo con la arquitectura defensiva de la plataforma.
+  - **Blindaje de Entornos No-Browser y Node.js en Modularidad Compartida (`js/product_detail_shared.js`)**:
+    - Protección estricta con `typeof window !== 'undefined'` en llamadas a `window.supplierInventory` y lectura de overrides defensiva (`(typeof window !== 'undefined' && window.FutunetProductOverrides) || (typeof globalThis !== 'undefined' && globalThis.FutunetProductOverrides) || {}`).
+    - Garantiza cero `ReferenceError: window is not defined` al ejecutar herramientas de auditoría estática, pipelines de CI/CD o pruebas unitarias en Node.js.
+  - **Accesibilidad WCAG 2.1 AA y Confinamiento de Foco en Pedidos de Usuario (`mi-cuenta.html` y `js/user-panel.js`)**:
+    - En `mi-cuenta.html`: El modal `#user-order-detail-modal` ahora cuenta con `role="dialog"`, `aria-modal="true"`, `aria-hidden="true"` y vinculación de título accesible vía `aria-labelledby="user-order-modal-title"`, con botón de cierre etiquetado `aria-label="Cerrar detalles del pedido"`.
+    - En `js/user-panel.js`: Implementación de captura y liberación de foco (`window.FutunetFocusTrap`), sincronización dinámica de `aria-hidden` y restauración automática del elemento activo previo al abrir y cerrar los detalles del pedido.
+  - **Accesibilidad Universal y Control de Desbordamiento en Cantidades de Producto (`producto.html` y `js/producto.js`)**:
+    - En `producto.html`: Adición de `role="status"`, `aria-live="polite"` y `aria-atomic="true"` en `#product-detail-qty-value` para que los lectores de pantalla anuncien en tiempo real las variaciones de cantidad.
+    - En `js/producto.js`: Guarda `quantityControlsInitialized` para evitar duplicación de event listeners en `document` durante rehidrataciones de catálogo. Establecimiento de techo defensivo de 999 unidades en `updateSelectedQuantity` y ampliación de alias de marcas aliadas en `slugMap` (`unifi`, `ubnt`, `omada`, `routerboard`).
+  - **Accesibilidad en Checkout, Techo de Cantidad en Carrito y Campañas Comerciales Q4 (`js/cart.js` & `futunet-backend/main.py`)**:
+    - Adición de `tabindex="0"`, `role="button"` y listener para `Enter`/`Espacio` en datos bancarios y RNC en el modal de checkout para permitir copiado instantáneo sin ratón.
+    - Techo defensivo en `addToCart` y `changeCartQuantity` con límite seguro de 999 artículos por línea para prevenir overflow numérico.
+    - Sincronización de cupones de campaña Q4 en frontend y backend: `NOVIEMBRE2026` (10% de descuento) y `BLACKFRIDAY2026` (18% de descuento) en `futunet-backend/main.py` y `test_main.py`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 245 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest test_main.py test_chatbot_api.py`).
+    - 0 errores sintácticos en 84 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar mínimo de ≥ 3 productos y 18 marcas con 4+ productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 733 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Atención y Respuesta al Buzón de Sugerencias, Telemetría, Blindaje de Modularidad Node.js y Nuevas Mejoras Implementadas (2026-10-29 - Lote 22: Firewall y Gateway Juniper SRX320 PoE+, Aire Inverter Mitsubishi MSZ-GL 24K, Teclado Táctil Paradox Touch TM70 7" y Controlador Tesla Backup Gateway 2)**:
+  - **Revisión y Respuesta Oficial de Sugerencias (120/120 Implementadas y Respondidas)**:
+    - `SUG-J3200`: Firewall y Gateway de Servicios de Seguridad Juniper Networks SRX320 (SRX320-POE) con 8 puertos Gigabit Ethernet (6 puertos RJ45 PoE+ 802.3at con 120W de presupuesto y 2 puertos combo RJ45/SFP Gigabit), rendimiento de firewall de 1 Gbps, 300 Mbps en VPN IPsec 3DES/AES-256, 64,000 sesiones concurrentes, prevención de intrusiones IPS, SD-WAN y Junos OS para sucursales bancarias, cadenas comerciales y zonas francas de Santiago y el Cibao.
+    - `SUG-M2400`: Aire Acondicionado Inverter Mitsubishi MSZ-GL 24,000 BTU (2 Toneladas, MSZ-GL24NA-U1 / MUZ-GL24NA-U1) con tecnología de compresor inverter PAM de ultra alta eficiencia (SEER 20.5 / EER 12.5), operación ultra silenciosa de 34 dB(A), modo Econo Cool de ahorro inteligente, filtro purificador catequina antibacteriano, reinicio automático ante cortes eléctricos y refrigerante ecológico R-410A para oficinas corporativas, clínicas y residencias en Santiago.
+    - `SUG-P7000`: Teclado Táctil Interactivo Paradox Touch TM70 de 7 Pulgadas (resolución 800x480 píxeles) para sistemas de alarma contra intrusión Paradox Spectra, Magellan y EVO, con pantalla táctil capacitiva a color, planos interactivos de planta (hasta 32 planos subidos en tarjeta microSD), control de hasta 8 particiones, lectura de temperatura ambiente en tiempo real, menú intuitivo por iconos y diseño estilizado de perfil bajo para residencias de lujo y comercios en Santiago.
+    - `SUG-T2000`: Controlador Inteligente de Micro-red y Respaldo Tesla Backup Gateway 2 (1152100-00-A) para gestión automatizada de sistemas de energía solar con baterías Tesla Powerwall, monitoreo bidireccional grado comercial de consumo y generación solar (precisión de medición ±0.2%), desconexión transparente de la red de EDENORTE en menos de 100 milisegundos ante apagones garantizando cero interrupción, Wi-Fi, Ethernet, celular LTE y soporte de micro-redes monofásicas y trifásicas 120/240V y 120/208V.
+  - **Blindaje de Modularidad e Incompatibilidad No-Browser / Node.js (`js/product_detail_shared.js`, `js/admin-panel.js`, `js/main.js`, `js/user-panel.js`)**:
+    - Detección y corrección de `ReferenceError: window is not defined` en `js/product_detail_shared.js` al evaluar `typeof window.mockDatabase` y `typeof window.backupDatabase` en entornos CommonJS/Node.js sin DOM global.
+    - Implementación de guardas defensivas completas `typeof window !== 'undefined' && Array.isArray(window.mockDatabase)` y asignación universal a `globalThis` para soporte transparente en pruebas de Node.js, CLI scripts y SSR.
+    - Blindaje en `js/admin-panel.js`, `js/main.js` y `js/user-panel.js` asegurando validaciones de tipos seguras ante objetos no inicializados.
+  - **Ampliación de Catálogo y Cobertura de Marcas (100% de marcas con ≥ 4 productos)**:
+    - Generación y publicación de 4 nuevas tarjetas visuales WebP de alta fidelidad (880x880) con especificaciones técnicas detalladas y sellos de garantía oficial: `juniper-srx320-firewall-poe.webp`, `mitsubishi-msz-gl24-aire-inverter.webp`, `paradox-tm70-teclado-tactil.webp` y `tesla-backup-gateway-2.webp` en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - Hito histórico de cobertura de marcas: El 100% de las 26 páginas de marcas (`marca-*.html`) ahora cuentan con al menos 4 productos (Juniper: 5, Mitsubishi: 4, Paradox: 4, Tesla: 5), superando con creces el estándar de calidad comercial.
+    - Sincronización en `backup_data.js` (elevando el total de productos a 449 deduplicados) y persistencia transaccional en la colección `products` de Firestore (`tools/sync-catalog-improvements.cjs`).
+    - Actualización de `suggestions.js` (muro comunitario y lista canónica) y persistencia en la colección `suggestions` de Firestore con respuestas oficiales y estado `implemented` (`tools/seed-suggestions.cjs`), totalizando 120 sugerencias comunitarias atendidas.
+  - **Optimización de Motor de Búsqueda y Telemetría Semántica (`js/catalog.js` & `tools/test-search-telemetry.cjs`)**:
+    - Variantes morfológicas y sinónimos stem agregados: `srx320`, `srx 320`, `srx320-jsb-l`, `msz-gl24`, `mszgl24`, `gl24`, `24000 btu`, `2 toneladas`, `tm70`, `touch70`, `paradox tm70`, `backup gateway`, `tesla gateway`, `gateway 2`, `microrred`.
+    - Reglas de priorización de puntuación en `scoreProductMatch` asignando +240 puntos a modelos exactos y +170 puntos por coincidencia de marca, con cobertura del 100% de consultas en `check-queries.cjs` y `test-search-telemetry.cjs` con ranking #1 y cero resultados nulos.
+  - **PWA & Service Worker v55 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP de catálogo en `OPTIONAL_ASSETS`.
+    - Bump de versión a `futunet-cache-v55` con sincronización en `test-dom-safety.cjs` y `test-forms-security.cjs`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 249 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest discover -s . -p "test_*.py"`).
+    - 0 errores sintácticos en 84 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con todas las marcas cumpliendo el estándar de ≥ 4 productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML y 737 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

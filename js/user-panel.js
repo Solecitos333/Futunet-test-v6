@@ -680,12 +680,14 @@
   // ─── Init ───
   function initUserPanel() {
     setupTabs();
-    FutunetGuard.requireAuth(function (user, data) {
+    if (typeof FutunetGuard !== 'undefined' && typeof FutunetGuard.requireAuth === 'function') {
+      FutunetGuard.requireAuth(function (user, data) {
       init(user, data);
       // Show page after auth
       var page = document.getElementById('user-panel-page');
       if (page) page.classList.add('is-loaded');
     });
+    }
   }
 
   if (typeof document !== 'undefined') {

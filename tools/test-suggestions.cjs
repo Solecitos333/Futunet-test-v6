@@ -2217,3 +2217,75 @@ test('Mejora demandada por usuarios: Central Telefónica IP PBX Híbrida Panason
   assert.ok(catJs.includes("'ns500'") && catJs.includes("'kxns500'"), 'catalog.js debe incluir ns500 y kxns500 en stem variants');
   assert.ok(catJs.includes("/\\b(ns500|kx\\s*ns500|kx-ns500|central\\s*telefonica|conmutador\\s*pbx)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Panasonic KX-NS500');
 });
+
+test('Mejora demandada por usuarios: Firewall y Gateway de Servicios Juniper Networks SRX320 (SUG-J3200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J3200'") && seedCjs.includes("status: 'implemented'"), 'SUG-J3200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-J3200') && sugJs.includes('Juniper Networks SRX320'), 'SUG-J3200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_srx320_security_gateway'), 'backup_data.js debe contener redes_juniper_srx320_security_gateway');
+
+  const juniperImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-srx320-firewall-poe.webp');
+  assert.ok(fs.existsSync(juniperImg), 'La imagen del Juniper SRX320 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'srx320'"), 'catalog.js debe incluir srx320 en stem variants');
+  assert.ok(catJs.includes("/\\b(srx320|srx\\s*320|srx320-jsb-l)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Juniper SRX320');
+});
+
+test('Mejora demandada por usuarios: Aire Inverter Mitsubishi MSZ-GL 24,000 BTU (SUG-M2400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M2400'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M2400') && sugJs.includes('Mitsubishi Electric MSZ-GL 24,000 BTU'), 'SUG-M2400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_msz_gl24_aire_inverter'), 'backup_data.js debe contener energia_mitsubishi_msz_gl24_aire_inverter');
+
+  const mitsubishiImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-msz-gl24-aire-inverter.webp');
+  assert.ok(fs.existsSync(mitsubishiImg), 'La imagen del Mitsubishi MSZ-GL 24K debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'gl24'") && catJs.includes("'msz-gl24'"), 'catalog.js debe incluir gl24 y msz-gl24 en stem variants');
+  assert.ok(catJs.includes("/\\b(msz-gl24|mszgl24|gl24|24000\\s*btu|2\\s*toneladas)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Mitsubishi MSZ-GL 24K');
+});
+
+test('Mejora demandada por usuarios: Teclado Táctil Interactivo Paradox Touch TM70 (SUG-P7000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P7000'") && seedCjs.includes("status: 'implemented'"), 'SUG-P7000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P7000') && sugJs.includes('Paradox Touch TM70'), 'SUG-P7000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_tm70_teclado_tactil'), 'backup_data.js debe contener seguridad_paradox_tm70_teclado_tactil');
+
+  const paradoxImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-tm70-teclado-tactil.webp');
+  assert.ok(fs.existsSync(paradoxImg), 'La imagen del Paradox TM70 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'tm70'") && catJs.includes("'touch70'"), 'catalog.js debe incluir tm70 y touch70 en stem variants');
+  assert.ok(catJs.includes("/\\b(tm70|touch70|paradox\\s*tm70|teclado\\s*tactil\\s*paradox)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Paradox TM70');
+});
+
+test('Mejora demandada por usuarios: Controlador Tesla Backup Gateway 2 (SUG-T2000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T2000'") && seedCjs.includes("status: 'implemented'"), 'SUG-T2000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T2000') && sugJs.includes('Tesla Backup Gateway 2'), 'SUG-T2000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_backup_gateway_2'), 'backup_data.js debe contener energia_tesla_backup_gateway_2');
+
+  const teslaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-backup-gateway-2.webp');
+  assert.ok(fs.existsSync(teslaImg), 'La imagen del Tesla Backup Gateway 2 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'backupgateway'") && catJs.includes("'gateway2'"), 'catalog.js debe incluir backupgateway y gateway2 en stem variants');
+  assert.ok(catJs.includes("/\\b(backup\\s*gateway|tesla\\s*gateway|gateway\\s*2|microrred)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Backup Gateway 2');
+});

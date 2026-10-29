@@ -1623,6 +1623,70 @@
       status: 'implemented',
       description: 'Central híbrida Panasonic KX-NS500 de 6 líneas analógicas + 18 extensiones expandible a 288 extensiones, 128 SIP y buzón de voz a email.',
       officialResponse: '¡Atendido! Disponible la Central Telefónica IP PBX Panasonic KX-NS500 en Equipos de Oficina y marca-panasonic.html.'
+        },
+    {
+      refCode: 'SUG-J3400',
+      title: 'Switches de Agregación Layer 3 Juniper Networks EX3400-24T (Virtual Chassis)',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switch L3 Juniper EX3400-24T con 24 puertos Gigabit, 4 uplinks 10GbE SFP+, 2 puertos 40GbE QSFP+ y Junos OS.',
+      officialResponse: '¡Aprobado! Disponible el Switch Juniper EX3400-24T en Switches de Red y marca-juniper.html.'
+    },
+    {
+      refCode: 'SUG-M2400',
+      title: 'Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Mini-split inverter Mitsubishi 24,000 BTU ultra silencioso a 34 dB, 20.5 SEER con filtro catalítico Nano-Platinum y Wi-Fi Kumo Cloud.',
+      officialResponse: '¡Implementado! Incorporado el Aire Inverter Mitsubishi MSZ-GL 24k en Energía y Climatización y marca-mitsubishi.html.'
+    },
+    {
+      refCode: 'SUG-P7000',
+      title: 'Teclados Táctiles Interactivos Paradox TM70 TouchScreen de 7 Pulgadas a Color',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Teclado táctil a color Paradox TM70 de 7" con menú intuitivo, planos de planta interactivos en microSD y sensor térmico integrado.',
+      officialResponse: '¡Cumplido! Se sumó el Teclado Táctil Paradox TM70 en Seguridad y Alarmas y marca-paradox.html.'
+    },
+    {
+      refCode: 'SUG-T3000',
+      title: 'Sistemas de Batería Solar Todo-en-Uno Tesla Powerwall 3 (13.5 kWh) con Inversor de 11.5 kW',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Batería solar Tesla Powerwall 3 con 13.5 kWh LFP, inversor fotovoltaico integrado de 11.5 kW, 6 entradas MPPT y protección IP67.',
+      officialResponse: '¡Atendido! Disponible el Tesla Powerwall 3 en Energía y Climatización y marca-tesla.html.'
+        },
+    {
+      refCode: 'SUG-J3200',
+      title: 'Firewalls y Gateways de Servicios Juniper Networks SRX320 con 8 Puertos PoE+ y SD-WAN',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Firewall empresarial Juniper SRX320 de 1 Gbps con 8 puertos GbE (4 PoE+), VPN IPsec 300 Mbps, 2 SFP y Junos OS.',
+      officialResponse: '¡Aprobado! Disponible el Firewall Juniper SRX320 en Redes y Datos y marca-juniper.html.'
+    },
+    {
+      refCode: 'SUG-M2400',
+      title: 'Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU 20.5 SEER',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Climatizador Inverter de 2 Toneladas (24,000 BTU) 20.5 SEER con filtro Nano-Platinum, ultra silencioso 34 dB y protección Blue Fin.',
+      officialResponse: '¡Implementado! Incorporado el Aire Inverter Mitsubishi 24,000 BTU en Energía y marca-mitsubishi.html.'
+    },
+    {
+      refCode: 'SUG-P7000',
+      title: 'Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas para Magellan y Spectra',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Teclado táctil a color de 7.0" con visualización de planos interactivos, ranura microSD, sensor de temperatura y 8 particiones.',
+      officialResponse: '¡Cumplido! Se sumó el Teclado Táctil Paradox TM70 en Seguridad Electrónica y marca-paradox.html.'
+    },
+    {
+      refCode: 'SUG-T2000',
+      title: 'Controladores Inteligentes de Energía y Microrred Tesla Backup Gateway 2',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Gestor de microrred y enlace eléctrico con conmutación < 100 ms ante apagones, interruptor 200A continuo y enlace con Tesla App.',
+      officialResponse: '¡Atendido! Disponible el Tesla Backup Gateway 2 en Energía y Climatización y marca-tesla.html.'
     }];
 
   function getFallbackSuggestionByCode(code) {

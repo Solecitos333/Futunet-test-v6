@@ -2784,6 +2784,119 @@ const panasonicKxNs500Items = [
   }
 ];
 
+const juniperSrx320Items = [
+  {
+    id: 'redes_juniper_srx320_security_gateway',
+    department: 'redes',
+    category: 'Routers y Repetidores WiFi',
+    brand: 'Juniper Networks',
+    title: 'Firewall y Gateway de Servicios Juniper Networks SRX320 con 8 Puertos Gigabit (PoE+), VPN IPsec y SD-WAN',
+    desc: 'El Juniper Networks SRX320 (SRX320-JSB-L) es la plataforma de seguridad, conectividad y conmutación unificada de referencia para sucursales corporativas, bancos, centros médicos y sedes empresariales en Santiago y la región del Cibao. Integra un firewall stateful de inspección profunda con rendimiento de hasta 1 Gbps, VPN IPsec acelerada por hardware de 300 Mbps y hasta 64,000 sesiones concurrentes. Incorpora 8 puertos Gigabit Ethernet: 6 puertos RJ45 10/100/1000 (con 4 puertos PoE 802.3at con presupuesto de energía integrado para alimentar teléfonos IP VoIP y puntos de acceso Wi-Fi sin cableado eléctrico adicional) más 2 puertos combo Gigabit SFP/RJ45 para enlaces troncales de fibra óptica de alta velocidad. Gestionado por el reconocido sistema operativo Junos OS, ofrece prevención de intrusiones, ruteo dinámico empresarial BGP/OSPF/MPLS, políticas de seguridad avanzadas y compatibilidad con Juniper Mist Cloud AI y redes SD-WAN seguras.',
+    price: 'RD$ 42,900.00',
+    img: 'img/productos/catalogo/juniper-srx320-firewall-poe.webp',
+    gallery: [
+      'img/productos/catalogo/juniper-srx320-firewall-poe.webp'
+    ],
+    specs: [
+      'Rendimiento de firewall Stateful: hasta 1 Gbps con inspección profunda de paquetes y políticas Junos OS',
+      '8 Puertos Gigabit Ethernet: 6x RJ45 10/100/1000 + 2x Combo SFP/RJ45 para enlaces troncales de fibra',
+      '4 Puertos PoE 802.3at integrados para alimentación directa de terminales VoIP y puntos de acceso inalámbricos',
+      'Rendimiento VPN IPsec: hasta 300 Mbps con cifrado AES-256 por hardware y hasta 256 túneles simultáneos',
+      'Capacidad corporativa: hasta 64,000 sesiones concurrentes para medianas empresas y clínicas',
+      'Sistema operativo de clase portadora Junos OS con CLI potente, scripting y configuración a prueba de fallos',
+      'Enrutamiento dinámico avanzado: soporte completo de protocolos BGP, OSPF, RIP, IS-IS y MPLS',
+      'Soporte nativo para SD-WAN seguro con dirección inteligente de tráfico por aplicación',
+      'Diseño compacto y silencioso para montaje en rack estándar de 19 pulgadas (altura 1U) o sobremesa',
+      'Garantía oficial Juniper Networks con soporte técnico de ingeniería calificada en Santiago'
+    ]
+  }
+];
+
+const mitsubishiMszGl24Items = [
+  {
+    id: 'energia_mitsubishi_msz_gl24_aire_inverter',
+    department: 'energia',
+    category: 'Aires Acondicionados',
+    brand: 'Mitsubishi Electric',
+    title: 'Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU Ultra Silencioso 20.5 SEER con Filtro Nano-Platinum',
+    desc: 'El mini-split inverter Mitsubishi Electric MSZ-GL24NA de 24,000 BTU (2 Toneladas de refrigeración) es el sistema de climatización de ultra alta eficiencia por excelencia para salas de juntas, oficinas ejecutivas amplias, auditorios, restaurantes y suites corporativas en Santiago que exigen máximo poder de enfriamiento continuo con consumo energético mínimo. Dotado de compresor inverter de velocidad variable certificado con 20.5 SEER y 12.5 EER, ahorra hasta un 50% de electricidad en comparación con equipos tradicionales. Dispone de tecnología Whisper-Quiet con nivel de ruido tan bajo como 34 dB en la unidad interior, filtro purificador avanzado Nano-Platinum lavable para atrapar partículas microscópicas y neutralizar bacterias, deflector motorizado Multi-Vane para distribución tridimensional homogénea del aire en espacios de hasta 60 metros cuadrados, modo EconoCool inteligente y recubrimiento anticorrosivo Blue Fin en el serpentín de la unidad exterior condensadora para máxima protección frente a la humedad tropical de República Dominicana.',
+    price: 'RD$ 68,500.00',
+    img: 'img/productos/catalogo/mitsubishi-msz-gl24-aire-inverter.webp',
+    gallery: [
+      'img/productos/catalogo/mitsubishi-msz-gl24-aire-inverter.webp'
+    ],
+    specs: [
+      'Capacidad nominal de enfriamiento: 24,000 BTU/h (2 Toneladas) con compresor Inverter de velocidad variable',
+      'Alta eficiencia energética con certificación 20.5 SEER y 12.5 EER para ahorro drástico de electricidad',
+      'Operación ultra silenciosa con tecnología Whisper-Quiet de hasta 34 dB en la unidad interior',
+      'Filtro purificador avanzado Nano-Platinum lavable con absorción de partículas microscópicas y olores',
+      'Función EconoCool que ajusta el flujo de aire basándose en la temperatura de salida ahorrando hasta 20%',
+      'Flujo de aire inteligente Multi-Vane con deflector amplio para distribución uniforme en áreas de hasta 60 m²',
+      'Revestimiento anticorrosivo Blue Fin en condensador exterior para resistencia al clima tropical dominicano',
+      'Control remoto inalámbrico inteligente con programación de temporizador semanal 24/7',
+      'Alimentación eléctrica: 208V/230V monofásica 60 Hz ideal para redes residenciales y comerciales del Cibao',
+      'Garantía oficial Mitsubishi Electric de 7 años en compresor y 5 años en piezas con soporte en Santiago'
+    ]
+  }
+];
+
+const paradoxTm70Items = [
+  {
+    id: 'seguridad_paradox_tm70_teclado_tactil',
+    department: 'seguridad',
+    category: 'Sistemas de Alarmas',
+    brand: 'Paradox',
+    title: 'Teclado Táctil Interactivo Paradox Touch TM70 de 7 Pulgadas a Color con Ranura microSD para Alarmas Magellan y Spectra',
+    desc: 'El teclado interactivo táctil Paradox TM70 es la interfaz de control de última generación para paneles de alarma de intrusión Paradox Magellan (MG5000, MG5050+, MG5075) y Spectra SP (SP4000, SP5500, SP6000) en República Dominicana. Incorpora una vibrante pantalla LCD táctil a color de 7.0 pulgadas con resolución de 800 x 480 píxeles y navegación completamente intuitiva basada en íconos gráficos y menús guiados paso a paso. Permite controlar hasta 8 particiones independientes y 64 zonas con armado instantáneo StayD, armado de noche Sleep y desarmado mediante código numérico de seguridad. Su función más innovadora es la visualización gráfica de planos interactivos de planta (Floor Plans) de la propiedad residencial o comercial, permitiendo al usuario identificar visualmente qué sensor de movimiento o contacto magnético ha sido activado. Incluye sensor de temperatura ambiental interior, entrada auxiliar de zona cableada, ranura para tarjetas de memoria microSD para carga personalizada de planos o fotos y chasis ultra delgado de montaje en pared con acabado elegante.',
+    price: 'RD$ 14,900.00',
+    img: 'img/productos/catalogo/paradox-tm70-teclado-tactil.webp',
+    gallery: [
+      'img/productos/catalogo/paradox-tm70-teclado-tactil.webp'
+    ],
+    specs: [
+      'Pantalla táctil a color brillante de 7.0 pulgadas (800 x 480 píxeles) con interfaz intuitiva basada en íconos',
+      'Compatibilidad total con paneles Paradox Magellan (MG5000, MG5050+, MG5075) y Spectra SP (SP4000, SP5500, SP6000)',
+      'Sensor de temperatura interior integrado con visualización en tiempo real en la pantalla de inicio',
+      'Visualización gráfica de planos interactivos de la instalación (Floor Plans) para identificar zonas activadas',
+      'Ranura para tarjeta microSD incluida para carga personalizada de planos de casas u oficinas y fotos protectoras',
+      'Control de hasta 8 particiones independientes y 64 zonas con armado rápido StayD y armados totales',
+      '1 Entrada de zona en teclado / sensor de temperatura exterior conmutable',
+      'Diseño ultra delgado y elegante de montaje en superficie sobre pared para residencias y comercios modernos',
+      'Actualización sencilla de firmware in situ mediante la tarjeta microSD',
+      'Garantía oficial Paradox con soporte técnico calificado y programación en Santiago y la región Norte'
+    ]
+  }
+];
+
+const teslaBackupGateway2Items = [
+  {
+    id: 'energia_tesla_backup_gateway_2',
+    department: 'energia',
+    category: 'Energía y Climatización',
+    brand: 'Tesla',
+    title: 'Controlador Inteligente de Energía y Microrred Tesla Backup Gateway 2 para Monitoreo y Conmutación Instantánea',
+    desc: 'El Tesla Backup Gateway 2 es el centro neurálgico inteligente para la gestión de microrredes, integración de energía solar fotovoltaica y sistemas de almacenamiento con baterías Tesla Powerwall en República Dominicana. Se instala como el punto de interconexión entre la red eléctrica comercial (Edenorte) y la propiedad residencial o empresarial, supervisando de forma continua la calidad del suministro. Ante un corte de energía, desconecta de manera segura el inmueble de la red comercial y conmuta al modo de respaldo de la batería en menos de 100 milisegundos, garantizando continuidad absoluta y cero apagado de equipos electrónicos sensibles, servidores o sistemas de refrigeración. Incorpora un interruptor de aislamiento de red de 200A continuo para respaldo total del hogar, medición bidireccional de consumo con precisión de Grado 1%, conectividad triple (Wi-Fi, Ethernet Gigabit y celular integrada para enlace constante con la Tesla App), gestión automática de reservas energéticas frente a alertas meteorológicas mediante la función Storm Watch y gabinete NEMA 3R sellado para intemperie.',
+    price: 'Cotizar',
+    img: 'img/productos/catalogo/tesla-backup-gateway-2.webp',
+    gallery: [
+      'img/productos/catalogo/tesla-backup-gateway-2.webp'
+    ],
+    specs: [
+      'Gestor inteligente de microrred y enlace con la red eléctrica comercial para sistemas Tesla Powerwall',
+      'Conmutación instantánea ante fallos eléctricos de la red (Grid Outage) en menos de 100 milisegundos sin microcortes',
+      'Medición de energía y monitoreo de consumo en tiempo real de toda la casa/edificio comercial con precisión Grado 1%',
+      'Conectividad integral: Wi-Fi, Ethernet Gigabit y conectividad celular integrada para telemetría continua en la Tesla App',
+      'Interruptor de aislamiento de red (Grid Disconnect Switch) de 200A continuo para respaldo total de la propiedad',
+      'Integración nativa con paneles solares, inversores fotovoltaicos y cargadores Tesla Wall Connector',
+      'Gabinete con clasificación NEMA 3R para instalación en exteriores o interiores resistente a lluvias y polvo',
+      'Gestión automática de reservas energéticas para tormentas mediante la función Storm Watch de Tesla',
+      'Voltaje de operación nominal: 120/240V AC monofásica 60 Hz compatible con la red eléctrica dominicana',
+      'Garantía oficial Tesla de 10 años con certificación de ingeniería de respaldo energético en Santiago'
+    ]
+  }
+];
+
+
 
 
 
@@ -3312,7 +3425,11 @@ async function updateBackupData() {
     ...victronCerboGxItems,
     ...linksysVelopPro7Items,
     ...siemensSinamicsV20Items,
-    ...panasonicKxNs500Items
+    ...panasonicKxNs500Items,
+    ...juniperSrx320Items,
+    ...mitsubishiMszGl24Items,
+    ...paradoxTm70Items,
+    ...teslaBackupGateway2Items
   ];
 
   itemsToSync.forEach(item => {
@@ -3427,7 +3544,11 @@ async function updateFirestore() {
     ...victronCerboGxItems,
     ...linksysVelopPro7Items,
     ...siemensSinamicsV20Items,
-    ...panasonicKxNs500Items
+    ...panasonicKxNs500Items,
+    ...juniperSrx320Items,
+    ...mitsubishiMszGl24Items,
+    ...paradoxTm70Items,
+    ...teslaBackupGateway2Items
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

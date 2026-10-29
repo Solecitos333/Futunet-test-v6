@@ -276,6 +276,14 @@ function getStemVariants(word) {
   if (word === 'velop7' || word === 'wifi7' || word === 'mbe7000' || word === 'velop') variants.push('linksys', 'mesh', 'cognitive', 'be11000', '6ghz', 'mlo');
   if (word === 'sinamics' || word === 'v20' || word === 'variador') variants.push('siemens', 'frecuencia', 'inverter', 'motor', 'bop', 'modbus', '3hp');
   if (word === 'ns500' || word === 'kxns500' || word === 'kx-ns500' || word === 'conmutador') variants.push('panasonic', 'central', 'telefonica', 'pbx', 'hibrida', 'disa');
+  if (word === 'srx320' || word === 'srx-320' || word === 'srx320-jsb-l') variants.push('juniper', 'firewall', 'gateway', 'poe', 'srx', 'sdwan', 'seguridad');
+  if (word === 'gl24' || word === 'msz-gl24' || word === 'mszgl24') variants.push('mitsubishi', 'aire', 'inverter', 'split', '24000', '24k', '2ton', 'silencioso');
+  if (word === 'tm70' || word === 'touch70' || word === 'touchscreen') variants.push('paradox', 'teclado', 'tactil', 'touch', 'pantalla', 'magellan', 'spectra', 'alarma');
+  if (word === 'backupgateway' || word === 'gateway2' || word === 'microrred') variants.push('tesla', 'gateway', 'powerwall', 'respaldo', 'conmutacion', 'solar', 'monitoreo');
+  if (word === 'ex3400' || word === 'ex3400-24t' || word === 'qsfp' || word === 'virtualchassis') variants.push('juniper', 'switch', 'agregacion', 'sfp', '40gbe', 'junos');
+  if (word === 'msz-gl24' || word === 'gl24' || word === 'gl24na' || word === '24000btu') variants.push('mitsubishi', 'aire', 'inverter', 'split', 'silencioso', 'seer');
+  if (word === 'tm70' || word === 'tm-70' || word === 'touchscreen') variants.push('paradox', 'teclado', 'tactil', 'pantalla', 'alarma', 'planos');
+  if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants.push('tesla', 'bateria', 'solar', 'inversor', 'lfp', 'respaldo');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1318,6 +1326,96 @@ function scoreProductMatch(product, normalizedQuery) {
         score += 240;
       } else {
         score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Layer 3 Juniper Networks EX3400-24T al buscar ex3400, ex 3400, switch l3 juniper, qsfp (SUG-J3400)
+  if (/\b(ex3400|ex\s*3400|ex3400-24t|switch\s*l3|virtual\s*chassis|qsfp)\b/i.test(normalizedQuery) || (/\b(juniper)\b/i.test(normalizedQuery) && /\b(ex3400|3400|l3|agregacion|40g|qsfp)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'juniper') {
+      if (/ex3400/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Aire Acondicionado Mitsubishi MSZ-GL 24,000 BTU al buscar msz-gl24, mitsubishi 24000, aire 24000, gl24 (SUG-M2400)
+  if (/\b(msz-gl24|gl24|gl24na|24000\s*btu|aire\s*24000)\b/i.test(normalizedQuery) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(24000|24k|msz-gl24|gl24)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'mitsubishi') {
+      if (/24,?000|gl24/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Teclado Táctil Paradox TM70 al buscar tm70, paradox tm70, teclado tactil paradox (SUG-P7000)
+  if (/\b(tm70|tm-70|teclado\s*tm70|teclado\s*tactil|touchscreen\s*paradox)\b/i.test(normalizedQuery) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(tm70|tactil|touch|pantalla|teclado)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'paradox') {
+      if (/tm70/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Batería Solar Tesla Powerwall 3 al buscar powerwall 3, powerwall3, tesla powerwall 3, bateria tesla 3 (SUG-T3000)
+  if (/\b(powerwall\s*3|powerwall3|tesla\s*powerwall\s*3|bateria\s*tesla\s*3)\b/i.test(normalizedQuery) || (/\b(tesla)\b/i.test(normalizedQuery) && /\b(powerwall\s*3|powerwall3|13\.5|inversor)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'tesla') {
+      if (/powerwall\s*3/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Firewall Juniper SRX320 al buscar srx320, srx 320, juniper srx, firewall poe (SUG-J3200)
+  if (/\b(srx320|srx\s*320|srx320-jsb-l)\b/i.test(normalizedQuery) || (/\b(juniper)\b/i.test(normalizedQuery) && /\b(srx|firewall|poe|gateway)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('juniper')) {
+      if (/srx320/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Aire Inverter Mitsubishi MSZ-GL 24K al buscar msz-gl24, gl24, mitsubishi 24000, aire 24000 btu inverter (SUG-M2400)
+  if (/\b(msz-gl24|mszgl24|gl24|24000\s*btu|2\s*toneladas)\b/i.test(normalizedQuery) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(24000|24k|gl24|2\s*ton)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('mitsubishi')) {
+      if (/24,000|gl24|gl 24/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Teclado Táctil Paradox TM70 al buscar tm70, touch70, teclado paradox, teclado tactil paradox (SUG-P7000)
+  if (/\b(tm70|touch70|paradox\s*tm70|teclado\s*tactil\s*paradox)\b/i.test(normalizedQuery) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(tm70|tactil|touch|teclado)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('paradox')) {
+      if (/tm70|tactil/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Tesla Backup Gateway 2 al buscar backup gateway, tesla gateway, tesla backup gateway, microrred (SUG-T2000)
+  if (/\b(backup\s*gateway|tesla\s*gateway|gateway\s*2|microrred)\b/i.test(normalizedQuery) || (/\b(tesla)\b/i.test(normalizedQuery) && /\b(gateway|conmutacion|microrred)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('tesla')) {
+      if (/controlador.*backup\s*gateway|backup\s*gateway\s*2/i.test(title)) {
+        score += 300;
+      } else if (/backup\s*gateway/i.test(title)) {
+        score += 180;
+      } else {
+        score += 120;
       }
     }
   }
