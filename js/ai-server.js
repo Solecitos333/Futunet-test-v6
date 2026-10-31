@@ -581,11 +581,14 @@
     }
 
     var model = selectedModel.startsWith('gemini-') ? selectedModel : 'gemini-3.6-flash';
-    var url = GEMINI_API_BASE + '/models/' + model + ':streamGenerateContent?alt=sse&key=' + apiKey;
+    var url = GEMINI_API_BASE + '/models/' + model + ':streamGenerateContent?alt=sse';
 
     var res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
       body: JSON.stringify({
         system_instruction: { parts: [{ text: systemPrompt }] },
         contents: contents,

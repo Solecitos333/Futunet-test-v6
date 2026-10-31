@@ -1963,20 +1963,20 @@ window.ERPBilling = (function () {
     tr.innerHTML = `
       <td>
         <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
-          <input type="text" class="form-input row-product-search" placeholder="Escribe para buscar..." data-erp-input="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
+          <input type="text" class="form-input row-product-search" maxlength="250" placeholder="Escribe para buscar..." data-erp-input="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
           <input type="hidden" class="row-product-id" value="${itemData ? itemData.productId : 'custom'}" />
           <input type="hidden" class="row-cost" value="${itemData && itemData.unitCost != null ? escapeAttr(String(itemData.unitCost)) : ''}" />
           <div class="autocomplete-dropdown row-autocomplete-list" style="display:none; position:absolute; left:0; right:0; z-index:100; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px;"></div>
         </div>
       </td>
       <td>
-        <input type="number" class="form-input row-price" step="0.01" min="0" value="${itemData ? itemData.price : '0.00'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
+        <input type="number" class="form-input row-price" step="0.01" min="0" max="999999999" value="${itemData ? itemData.price : '0.00'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-qty" min="1" value="${itemData ? itemData.qty : '1'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
+        <input type="number" class="form-input row-qty" min="1" max="999999" value="${itemData ? itemData.qty : '1'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-tax" step="0.01" min="0" value="${rowTaxAmount.toFixed(2)}" data-erp-input="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
+        <input type="number" class="form-input row-tax" step="0.01" min="0" max="999999999" value="${rowTaxAmount.toFixed(2)}" data-erp-input="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
       </td>
       <td>
         <input type="number" class="form-input row-discount" min="0" max="100" value="${itemData && itemData.discount ? itemData.discount : '0'}" data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />

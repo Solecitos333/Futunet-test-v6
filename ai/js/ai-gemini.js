@@ -86,11 +86,14 @@ Cuando no sepas algo, lo dices honestamente.`;
         }
       }
       
-      const url = `${GEMINI_API_BASE}/models/${geminiModel}:streamGenerateContent?alt=sse&key=${apiKey}`;
+      const url = `${GEMINI_API_BASE}/models/${geminiModel}:streamGenerateContent?alt=sse`;
       
       fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
         body: JSON.stringify({
           system_instruction: {
             parts: [{ text: SYSTEM_PROMPT }]

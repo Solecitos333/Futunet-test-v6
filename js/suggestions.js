@@ -1601,7 +1601,7 @@
       officialResponse: '¡Aprobado! Disponible el Centro de Comunicación Victron Cerbo GX en Energía y Climatización y marca-victronenergy.html.'
     },
     {
-      refCode: 'SUG-L7000',
+      refCode: 'SUG-L7007',
       title: 'Sistemas Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (Cognitive Mesh BE11000)',
       category: 'catalog_products',
       status: 'implemented',
@@ -1665,7 +1665,7 @@
       officialResponse: '¡Aprobado! Disponible el Firewall Juniper SRX320 en Redes y Datos y marca-juniper.html.'
     },
     {
-      refCode: 'SUG-M2400',
+      refCode: 'SUG-M2401',
       title: 'Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU 20.5 SEER',
       category: 'catalog_products',
       status: 'implemented',
@@ -1673,7 +1673,7 @@
       officialResponse: '¡Implementado! Incorporado el Aire Inverter Mitsubishi 24,000 BTU en Energía y marca-mitsubishi.html.'
     },
     {
-      refCode: 'SUG-P7000',
+      refCode: 'SUG-P7001',
       title: 'Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas para Magellan y Spectra',
       category: 'catalog_products',
       status: 'implemented',

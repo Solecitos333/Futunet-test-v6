@@ -210,7 +210,7 @@
       minute: '2-digit',
       second: '2-digit'
     }).format(new Date());
-    updated.innerHTML = '<span class="admin-live-dot" aria-hidden="true"></span> Datos actualizados a las ' + formatted;
+    updated.innerHTML = '<span class="admin-live-dot" aria-hidden="true"></span> Datos actualizados a las ' + escapeHtml(formatted);
   }
 
   function updateDashboardOperationalStatus() {
@@ -2206,12 +2206,12 @@
         <div style="display: flex; flex-direction: column; gap: 8px; ${sec.visible ? '' : 'display: none;'}">
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Título</label>
-            <input type="text" value="${escapeAttr(sec.title)}" oninput="AdminPanel.updateSectionTitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;" aria-label="Título de la sección ${escapeAttr(sec.name)}">
+            <input type="text" value="${escapeAttr(sec.title)}" maxlength="150" oninput="AdminPanel.updateSectionTitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; box-sizing: border-box;" aria-label="Título de la sección ${escapeAttr(sec.name)}">
           </div>
           ${sec.id !== 'inicio' && sec.id !== 'nosotros' ? `
           <div>
             <label style="font-size: 0.72rem; color: #76889e; font-weight: 600; text-transform: uppercase;">Subtítulo</label>
-            <textarea rows="2" oninput="AdminPanel.updateSectionSubtitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;" aria-label="Subtítulo de la sección ${escapeAttr(sec.name)}">${escapeHtml(sec.subtitle || '')}</textarea>
+            <textarea rows="2" maxlength="300" oninput="AdminPanel.updateSectionSubtitle('${escapeJs(sec.id)}', this.value)" style="width: 100%; padding: 6px 10px; border: 1px solid #e5eef8; border-radius: 8px; font-family: Outfit; font-size: 0.85rem; resize: vertical; box-sizing: border-box;" aria-label="Subtítulo de la sección ${escapeAttr(sec.name)}">${escapeHtml(sec.subtitle || '')}</textarea>
           </div>
           ` : ''}
         </div>
@@ -2971,7 +2971,7 @@
       }
     } catch (e) {
       console.error('Error loading user history:', e);
-      if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar historial: ' + e.message + '</td></tr>';
+      if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px;color:#e74c3c;">Error al cargar historial: ' + escapeHtml(e.message) + '</td></tr>';
     }
   }
 
@@ -3617,7 +3617,7 @@
     // Add header row
     function safeCsvCell(value) {
       var text = String(value == null ? '' : value);
-      if (/^\s*[=+\-@]/.test(text)) text = "'" + text;
+      if (/^\s*[=+\-@\t\r%]/.test(text)) text = "'" + text;
       return '"' + text.replace(/"/g, '""') + '"';
     }
 
@@ -5405,13 +5405,13 @@
       
       competitorsList.forEach(function (c) {
         html += '<tr>' +
-                  '<td>#' + c.rank + '</td>' +
-                  '<td><strong>' + c.name + '</strong></td>' +
-                  '<td>' + c.relevance + '</td>' +
-                  '<td>' + c.marketShare + '%</td>' +
-                  '<td>' + c.priceIndex + '/100</td>' +
-                  '<td>' + c.techIndex + '/100</td>' +
-                  '<td>' + c.serviceIndex + '/100</td>' +
+                  '<td>#' + escapeHtml(String(c.rank || '')) + '</td>' +
+                  '<td><strong>' + escapeHtml(c.name || '') + '</strong></td>' +
+                  '<td>' + escapeHtml(c.relevance || '') + '</td>' +
+                  '<td>' + escapeHtml(String(c.marketShare || '0')) + '%</td>' +
+                  '<td>' + escapeHtml(String(c.priceIndex || '0')) + '/100</td>' +
+                  '<td>' + escapeHtml(String(c.techIndex || '0')) + '/100</td>' +
+                  '<td>' + escapeHtml(String(c.serviceIndex || '0')) + '/100</td>' +
                 '</tr>';
       });
       html += '</tbody></table>';
@@ -5425,22 +5425,22 @@
         else if (c.relevance === "Baja") badgeColor = 'badge-low';
 
         html += '<div style="border-bottom: 1px solid #ccc; padding-bottom: 16px; margin-bottom: 16px;">';
-        html += '<h3>' + c.name + ' (Rango #' + c.rank + ' - <span class="badge ' + badgeColor + '">' + c.relevance + '</span>)</h3>';
-        html += '<p><strong>Diferenciador Clave:</strong> ' + c.differentiator + '</p>';
+        html += '<h3>' + escapeHtml(c.name || '') + ' (Rango #' + escapeHtml(String(c.rank || '')) + ' - <span class="badge ' + badgeColor + '">' + escapeHtml(c.relevance || '') + '</span>)</h3>';
+        html += '<p><strong>Diferenciador Clave:</strong> ' + escapeHtml(c.differentiator || '') + '</p>';
         
         html += '<table>';
         html += '<tr>';
         html += '<td style="width:50%; background-color:#f4fbf7;">';
-        html += '<strong>Fortalezas:</strong><ul>' + (c.strengths || '').split('\n').filter(Boolean).map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ul>';
+        html += '<strong>Fortalezas:</strong><ul>' + (c.strengths || '').split('\n').filter(Boolean).map(function(s){ return '<li>' + escapeHtml(s) + '</li>'; }).join('') + '</ul>';
         html += '</td>';
         html += '<td style="width:50%; background-color:#fff5f5;">';
-        html += '<strong>Debilidades:</strong><ul>' + (c.weaknesses || '').split('\n').filter(Boolean).map(function(w){ return '<li>' + w + '</li>'; }).join('') + '</ul>';
+        html += '<strong>Debilidades:</strong><ul>' + (c.weaknesses || '').split('\n').filter(Boolean).map(function(w){ return '<li>' + escapeHtml(w) + '</li>'; }).join('') + '</ul>';
         html += '</td>';
         html += '</tr>';
         html += '</table>';
 
         html += '<p style="background-color:#eaf2fb; padding: 10px; border-left: 4px solid #0b7eb5; border-radius: 4px;">';
-        html += '<strong>Estrategia de Mejora Futunet:</strong> ' + c.improvements;
+        html += '<strong>Estrategia de Mejora Futunet:</strong> ' + escapeHtml(c.improvements || '');
         html += '</p>';
         html += '</div>';
       });
@@ -5580,10 +5580,15 @@
       social: "Transforma los espacios de trabajo de tu empresa. 🏗️ En Futunet nos encargamos del remozamiento integral de oficinas y naves comerciales: tabiquería, falsos techos, iluminación eficiente, puestos de trabajo ergonómicos y cableado estructurado estético. Proyectos ejecutados sin frenar tu operación. #Remozamiento #OficinasModernas #SantiagoRD #FutunetInfraestructura",
       email: "Asunto: Proyectos Llave en Mano: Remozamiento e Infraestructura de Oficinas con Futunet\n\nEstimados gerentes administrativos y de compras:\n\nCrear ambientes de trabajo modernos y productivos incrementa la satisfacción del equipo y la imagen ante sus clientes. Diseñamos, canalizamos y adecuamos sus oficinas con cronogramas de entrega garantizados y facturación fiscal NCF."
     },
+    noviembre_blackti: {
+      whatsapp: "¡Hola! 🏢 En Futunet damos apertura oficial a BLACK MONTH TI 2026. Para directores de TI y gerentes de compras en Santiago y zonas francas: asegura disponibilidad de switches PoE+, cableado Cat 6A, enlaces dedicados de fibra y UPS Online con 15% de descuento usando el código BLACKTI2026 y facturación fiscal NCF. ¿Deseas coordinar un levantamiento técnico gratuito antes del colapso de inventario de fin de mes?",
+      social: "🚀 ¡Apertura Oficial de Black Month TI 2026 para Empresas! 🛑 Las demoras logísticas y el quiebre de stock de finales de noviembre ponen en riesgo proyectos críticos. En Futunet iniciamos el mes congelando precios de Black Friday para infraestructura corporativa: Enlaces de Fibra Simétrica Dedicada, Switches Administrables Layer 3, UPS Online Doble Conversión y Racks peinados con 15% de descuento (Cupón BLACKTI2026) y entrega prioritaria en Santiago y el Cibao. Solicita tu auditoría de red sin costo. #BlackMonthTI #InfraestructuraEmpresarial #SantiagoRD #FutunetB2B #FibraOptica #Ciberseguridad",
+      email: "Asunto: [Apertura Black Month TI] Reserva de Infraestructura, 15% OFF y Auditoría de Red en Santiago - Cupón BLACKTI2026\n\nEstimados Directores de TI, Operaciones y Finanzas:\n\nCon la llegada de noviembre, la demanda de equipamiento informático e infraestructura de telecomunicaciones alcanza su punto máximo del año, generando demoras en aduanas y saturación en agendas de instalación.\n\nPara garantizar la continuidad operativa de su organización, Futunet activa su programa exclusivo de Reserva Corporativa Black Month TI 2026 con tres beneficios fundamentales:\n\n1. Levantamiento Técnico y Auditoría de Infraestructura 100% GRATIS en sus instalaciones en Santiago.\n2. 15% de Descuento directo en enlaces dedicados de fibra óptica, UPS Online de 1kVA a 10kVA, cableado Cat 6A y switches administrables con el código BLACKTI2026.\n3. Emisión inmediata de Comprobante Fiscal (NCF Tipo B01 - Crédito Fiscal) y garantía local con respaldo directo de fábrica.\n\nEvite contratiempos de fin de año coordinando su visita técnica respondiendo a este mensaje o vía WhatsApp al 829-741-1041."
+    },
     noviembre: {
-      whatsapp: "¡Hola! Llegó el Black Month a Futunet. Descuentos increíbles en todo el catálogo de tecnología, laptops y seguridad. ¡Aprovecha ya!",
-      social: " ¡Llegó el Black Friday a Futunet! El mes con los descuentos más grandes del año en Santiago en cámaras, UPS, laptops y cableado. Visita nuestro catálogo e-commerce y cotiza antes de que se agoten. #BlackFridayRD #DescuentosTecnologia #Futunet",
-      email: "Asunto: Ofertas Exclusivas de Black Friday Futunet - Solo por esta semana\n\nEstimado cliente,\n\nNo dejes pasar la oportunidad de adquirir equipamiento tecnológico con hasta un 30% de descuento directo en nuestro catálogo online. Cotiza y asegura tu pedido hoy."
+      whatsapp: "¡Hola! 🚀 Llegó el Black Month 2026 a Futunet con los descuentos más esperados en Santiago: hasta 15% OFF en fibra óptica simétrica, laptops corporativas, UPS y sistemas de seguridad con el cupón NOVIEMBRE2026 o BLACKTI2026. ¿En qué solución te gustaría que te asesoremos hoy?",
+      social: "🔥 ¡BLACK MONTH 2026 EN FUTUNET! Disfruta de un mes completo de descuentos agresivos en conectividad de Fibra Óptica, laptops de alto rendimiento, cámaras de seguridad 4K ColorVu y periféricos gaming de ultra-baja latencia. Usa los cupones NOVIEMBRE2026 y BLACKTI2026 para equipar tu hogar o empresa con garantía local y servicio VIP en Santiago. #BlackMonthRD #DescuentosTecnologia #Futunet #SantiagoRD",
+      email: "Asunto: Apertura Black Month Futunet 2026: Descuentos Exclusivos en Tecnología y Conectividad\n\nEstimado cliente:\n\nLe damos la bienvenida a la temporada de Black Month en Futunet. Durante todo el mes de noviembre, acceda a condiciones preferenciales en nuestro catálogo de tecnología:\n\n- Internet de Fibra Óptica Residencial y Corporativa con instalación prioritaria.\n- 10% a 15% de descuento en cómputo, respaldo eléctrico (UPS) y seguridad electrónica con los cupones NOVIEMBRE2026 y BLACKTI2026.\n- Facilidades de pago, cotización digital instantánea y facturación formal con NCF.\n\nConsulte nuestras soluciones y cotice en línea en nuestro portal o al WhatsApp 829-741-1041."
     },
     diciembre: {
       whatsapp: "¡Hola! Cierra el año equipando tu negocio. Aprovecha el presupuesto anual y cotiza remozamiento, mobiliario o upgrades de redes con entrega rápida.",
@@ -5689,12 +5694,19 @@
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-09-01');
       setVal('banner-end-date', '2026-12-31');
-    } else if (presetName === 'Black Friday' || presetName === 'Black Month') {
-      setVal('banner-title', '🚀 <strong>Black Month Tecnológico 2026</strong>');
-      setVal('banner-subtitle', 'Descuentos de hasta 30% en tecnología, redes, laptops y seguridad para empresas y hogares.');
-      setVal('banner-link', 'catalogo.html');
+    } else if (presetName === 'Black Month TI' || presetName === 'Black Month' || presetName === 'Reserva Corporativa') {
+      setVal('banner-title', '🚀 Black Month TI 2026: <strong>Infraestructura & Telecomunicaciones</strong>');
+      setVal('banner-subtitle', 'Reserva prioritaria en fibra óptica dedicada, UPS Online y switches administrables con 15% de descuento y Comprobante Fiscal con el código BLACKTI2026.');
+      setVal('banner-link', 'corporativo.html');
       setVal('banner-order', 1);
       setVal('banner-start-date', '2026-11-01');
+      setVal('banner-end-date', '2026-11-30');
+    } else if (presetName === 'Black Friday' || presetName === 'Black Friday Masivo') {
+      setVal('banner-title', '💥 <strong>Black Friday Tecnológico 2026</strong>');
+      setVal('banner-subtitle', 'Descuentos históricos de hasta 30% en tecnología, redes, laptops y fibra óptica para empresas y hogares.');
+      setVal('banner-link', 'catalogo.html');
+      setVal('banner-order', 1);
+      setVal('banner-start-date', '2026-11-15');
       setVal('banner-end-date', '2026-11-30');
     } else if (presetName === 'Cierre de Año' || presetName === 'Proyectos 2027') {
       setVal('banner-title', '🎄 Cierra el Año con <strong>Infraestructura Renovada</strong>');

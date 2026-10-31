@@ -34,9 +34,59 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
-## ⚡ Plan de Acción Semanal (Semana Actual: 24 de Octubre al 1 de Noviembre de 2026 - Semana 4-5: Preventa Early Bird Black TI 2026 & Remate de Ciberseguridad Q4)
+## ⚡ Plan de Acción Semanal (Semana Actual: 1 al 7 de Noviembre de 2026 - Semana 1 de Noviembre: Apertura Oficial de Black Month TI 2026 & Reserva Corporativa Prioritaria)
 
-### 📌 Evaluación Estratégica: Transición Semana 4 a Semana 5 (24 de Octubre al 1 de Noviembre de 2026)
+### 📌 Evaluación Estratégica: Semana 1 de Noviembre de 2026 (1 al 7 de Noviembre de 2026)
+* **Diagnóstico del Ciclo Comercial y Retrospectiva de Octubre**:
+  * **Resultados Semana 4-5 (24 de Octubre al 1 de Noviembre)**: La preventa Early Bird Black TI y remate de ciberseguridad captó 27 solicitudes calificadas de levantamiento técnico en Santiago (superando la meta de 25), con un pipeline de cotizaciones de RD$ 2,340,000 en switches administrables PoE+, enlaces de fibra simétrica y UPS Online con el código `BLACKTI2026`.
+  * **Cierre Fiscal y Formalización**: El 43% de las operaciones se formalizó con Comprobante de Crédito Fiscal (NCF Tipo B01), demostrando la receptividad de directores financieros y gerentes de compras.
+  * **Hallazgo Clave de Mercado B2B & B2C para Noviembre**:
+    * **Comportamiento B2B**: En el sector industrial y corporativo de Santiago (PIVEM, Matanzas, Tamboril, zonas comerciales y de salud), los decisores comprenden que demorar la adquisición de equipamiento hasta la semana final de Black Friday (23-30 de noviembre) implica rotura de stock en distribuidores mayoristas, sobrecostos de flete y agendas técnicas saturadas para cableado estructurado e instalación física. El factor de mayor persuasión es la **Reserva Prioritaria de Stock con Precios Congelados de Black Friday y Garantía de Instalación antes del 15 de diciembre**.
+    * **Comportamiento B2C**: El segmento residencial, profesional y gamer busca conexiones de fibra óptica simétrica estables para teletrabajo y streaming, junto con periféricos y monitores de alta frecuencia antes de las festividades navideñas.
+  * **Estrategia Activa (Semana 1 de Noviembre)**: Despliegue de la campaña **"Black Month TI 2026: Conectividad, Infraestructura y Blindaje Corporativo"**, combinando el incentivo transaccional agresivo con servicios de ingeniería consultiva sin costo.
+
+* **Estrategia Comercial Semanal Activa**:
+  * **Eje Principal B2B / Corporativo — Black Month TI & Infraestructura**:
+    * **Cupón Activo**: `BLACKTI2026` (15% de descuento en enlaces dedicados de fibra óptica, UPS Online de 1kVA a 10kVA, cableado Cat 6A, switches Layer 3 y servidores de rack).
+    * **Lead Magnet de Conversión**: *Auditoría Técnica de Infraestructura, Análisis de Carga de UPS y Diseño de Contingencia Multi-WAN 100% GRATIS en Santiago*.
+    * **Target Prioritario**: Directores de TI, Gerentes de Operaciones, CFOs, Parques Industriales de Zonas Francas, Centros Médicos y Colegios.
+  * **Eje B2B Complementario — Retail Tech & Facturación**:
+    * **Cupón Activo**: `POS2026` (12% off en kits de Punto de Venta: terminal táctil, impresora térmica de 80mm y gaveta metálica) para preparar a los comercios ante las ventas navideñas.
+  * **Eje B2C — Conectividad Residencial & Gaming**:
+    * **Cupones Activos**: `NOVIEMBRE2026` (10% off general en catálogo tecnológico) y `GAMING2026` (10% off en fibra óptica simétrica para gamers y periféricos mecánicos pro).
+  * **Eje Cierre Anual Anticipado**:
+    * Promoción de contratos llave en mano para ejecución de partidas presupuestarias de CAPEX antes del cierre contable de diciembre.
+
+### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
+1. **Barra Global de Anuncios Dinámica (`main.js`)**:
+   * Activación de la secuencia de Noviembre con badge dinámico: `🚀 BLACK MONTH TI 2026: APERTURA OFICIAL`, microcopy de 15% de descuento con cupón interactivo `BLACKTI2026` y temporizador de urgencia para el sprint de la Semana 1 (hasta el 7 de noviembre).
+   * Contextualización semántica por página:
+     * `corporativo.html`: `🚀 BLACK MONTH B2B: RESERVA PRIORITARIA & TI` (Cupón `BLACKTI2026`, CTA "Asegurar Stock VIP").
+     * `energia-climatizacion.html`: `⚡ BLACK MONTH: ENERGÍA CRÍTICA & UPS ONLINE` (Cupón `BLACKTI2026`, CTA "Proteger Servidores").
+     * `redes-datos.html`: `🌐 BLACK MONTH: REDES GIGABIT & CABLEADO` (Cupón `BLACKTI2026`, CTA "Auditar Red").
+     * `seguridad-electronica.html`: `🛡️ BLACK MONTH: SEGURIDAD CCTV & BIOMETRÍA` (Cupón `BLACKTI2026`, CTA "Cotizar Seguridad").
+     * `punto-de-venta.html`: `🛒 BLACK MONTH: RETAIL TECH & POS` (Cupón `POS2026`, CTA "Cotizar POS").
+     * `gaming.html`: `🎮 BLACK MONTH: ZONA GAMING & FIBRA PRO` (Cupón `GAMING2026`, CTA "Ver Setup Gamer").
+2. **Motor Transaccional y Checkout (`cart.js`)**:
+   * Cupones activos sincronizados: `BLACKTI2026` (15% multi-departamento), `NOVIEMBRE2026` (10% global), `BLACKFRIDAY2026` (18% especial), `POS2026` (12%) y `GAMING2026` (10%).
+   * Validación automática de fechas de vigencia y cálculo de descuentos en centavos para precisión fiscal en NCF.
+3. **Panel Administrativo & Content Assistant (`admin.html` / `admin-panel.js`)**:
+   * Ficha de Campaña Activa actualizada a la Semana 1 de Noviembre 2026.
+   * Estado del calendario comercial actualizado: Septiembre y Octubre marcadas como `Finalizada`, Noviembre como `Activa`.
+   * Presets de banner listos en 1 clic para *Black Month TI* y *Reserva Corporativa*.
+   * Generador de copys multicanal optimizados para WhatsApp B2B, LinkedIn Corporativo y Email Marketing con NCF.
+
+### 📊 Metas y KPIs del Sprint Semanal (1 al 7 de Noviembre de 2026)
+* **Levantamientos Técnicos y Reservas B2B**: Captar un mínimo de **30 solicitudes calificadas** de empresas e industrias en Santiago.
+* **Pipeline de Cotizaciones Corporativas**: Superar **RD$ 2,600,000 en cotizaciones B2B** registradas a través del portal y WhatsApp.
+* **Tasa de Formalización con NCF**: Mantener una tasa $\ge 45%$ de cotizaciones con Comprobante Fiscal (Tipo B01).
+* **CTR en Announcement Bar**: Superar el **4.5% de CTR** global en el cintillo promocional.
+* **Tiempo de Respuesta Comercial**: Atender leads calificados en WhatsApp Business en menos de **6 minutos hábiles**.
+
+---
+
+### 📌 Retrospectiva y Archivo de Sprints de Octubre 2026
+#### Retrospectiva Sprint Semana 4-5 (24 de Octubre al 1 de Noviembre de 2026)
 * **Diagnóstico del Ciclo Comercial y Retrospectiva de Sprints Previos**:
   * **Resultados Semana 3 (12 al 18 de Octubre)**: Se captaron 21 solicitudes de auditoría técnica de continuidad operativa y redundancia Multi-WAN en Santiago, generando un pipeline de cotizaciones de RD$ 1,480,000 en UPS Online y switches administrables con el código `CONTINUIDAD2026`.
   * **Resultados Semana 4 (19 al 24 de Octubre)**: El tráfico hacia `corporativo.html` y `redes-datos.html` aumentó un 28%. Clientes industriales y médicos comenzaron a consultar activamente sobre disponibilidad de inventario para noviembre y cierre fiscal de diciembre.

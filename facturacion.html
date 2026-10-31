@@ -16,8 +16,8 @@
  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png" />
  <link rel="shortcut icon" href="favicon.ico" />
  <meta name="theme-color" content="#0f1923" />
- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
- <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f" crossorigin="anonymous"></script>
+ <script defer src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" integrity="sha384-ieG+IKD0d/ZPXyCBTMVAbqsQdns8QGJR/e26WMw7M4fkaI/rHcS/YIoi+ah9WGge" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -409,6 +409,11 @@
        </div>
       </div>
       <form id="invoice-editor-form" data-erp-submit="ERPBilling.saveInvoice(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="inv-editor-hp-check">No llenar este campo</label>
+      <input type="text" id="inv-editor-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
        <input type="hidden" id="form-invoice-id" />
 
        <div class="form-grid-3" style="grid-template-columns: 1fr 2fr; margin-bottom: 20px;">
@@ -1111,6 +1116,11 @@
     <div class="erp-tab-content" id="subtab-clients-form">
      <div class="invoice-form-container" style="max-width:600px;">
       <form id="client-editor-form" data-erp-submit="ERPBilling.saveClient(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="client-editor-hp-check">No llenar este campo</label>
+      <input type="text" id="client-editor-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
        <input type="hidden" id="form-client-id" />
        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:15px; line-height:1.4;">
         Los datos fiscales recopilados se procesan para emisión de comprobantes (DGII) bajo la Ley 11-92 y la <a href="privacidad.html" target="_blank" rel="noopener noreferrer" style="color:var(--primary); text-decoration:underline;">política de privacidad</a> (Ley 172-13).
@@ -1207,6 +1217,11 @@
     <div class="erp-tab-content" id="subtab-products-form">
      <div class="invoice-form-container" style="max-width:600px;">
       <form id="product-editor-form" data-erp-submit="ERPBilling.saveProduct(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="prod-editor-hp-check">No llenar este campo</label>
+      <input type="text" id="prod-editor-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
        <input type="hidden" id="form-product-id" />
        <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;" id="product-form-title">Detalles del Ítem</h3>
 
@@ -1386,6 +1401,11 @@
      <section class="admin-table-card erp-extension-card">
       <h3>Nueva compra</h3>
       <form id="erp-purchase-form" data-erp-submit="ERPExtensions.savePurchase(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="erp-purchase-hp-check">No llenar este campo</label>
+      <input type="text" id="erp-purchase-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
        <div class="form-grid-3">
         <div class="form-group"><label for="purchase-supplier-rnc">RNC/Cédula *</label><input class="form-input" id="purchase-supplier-rnc" required maxlength="11" inputmode="numeric" autocomplete="off" spellcheck="false" /></div>
         <div class="form-group"><label for="purchase-supplier-name">Proveedor *</label><input class="form-input" id="purchase-supplier-name" required maxlength="150" /></div>
@@ -1436,6 +1456,11 @@
      <section class="admin-table-card erp-extension-card">
       <h3>Nuevo movimiento bancario</h3>
       <form id="erp-bank-form" data-erp-submit="ERPExtensions.saveBankMovement(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="erp-bank-hp-check">No llenar este campo</label>
+      <input type="text" id="erp-bank-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
        <div class="form-grid-3">
         <div class="form-group"><label for="bank-date">Fecha *</label><input type="date" class="form-input" id="bank-date" required /></div>
         <div class="form-group"><label for="bank-account">Cuenta/Banco *</label><input class="form-input" id="bank-account" required maxlength="100" /></div>
@@ -1473,6 +1498,11 @@
 
     <div class="invoice-form-container" style="max-width:700px;">
      <form id="settings-editor-form" data-erp-submit="ERPBilling.saveSettings(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="settings-editor-hp-check">No llenar este campo</label>
+      <input type="text" id="settings-editor-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
       <h3 style="font-family:'Space Grotesk',sans-serif; margin-bottom: 20px; color:var(--primary); font-size:1.1rem; border-bottom:1.5px solid var(--border-color); padding-bottom:8px;">Datos de Identificación de la Empresa</h3>
 
       <div class="form-grid-3" style="grid-template-columns: 1fr 1fr;">
@@ -1757,6 +1787,11 @@
     </button>
    </div>
    <form id="payment-register-form" data-erp-submit="ERPBilling.registerPayment(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="pay-reg-hp-check">No llenar este campo</label>
+      <input type="text" id="pay-reg-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <input type="hidden" id="form-payment-invoice-id" />
     <div class="admin-modal-body">
      <div style="background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-color);">
@@ -1812,6 +1847,11 @@
     </button>
    </div>
    <form id="fiscal-adjustment-form" data-erp-submit="ERPBilling.saveFiscalAdjustment(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="fisc-adj-hp-check">No llenar este campo</label>
+      <input type="text" id="fisc-adj-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <input type="hidden" id="fiscal-adjustment-invoice-id" />
     <div class="admin-modal-body">
      <div id="fiscal-adjustment-summary" style="background:#f8fafc;padding:14px;border:1px solid var(--border-color);border-radius:12px;margin-bottom:18px;"></div>
@@ -1957,6 +1997,11 @@
     </button>
    </div>
    <form id="cash-open-form" data-erp-submit="ERPBilling.openCashSession(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="cash-open-hp-check">No llenar este campo</label>
+      <input type="text" id="cash-open-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <div class="admin-modal-body">
      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Antes de realizar ventas en el Punto de Venta, debes registrar la apertura de caja e indicar el efectivo base disponible en gaveta.</p>
      <div class="form-group">
@@ -1982,6 +2027,11 @@
     </button>
    </div>
    <form id="cash-close-form" data-erp-submit="ERPBilling.closeCashSession(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="cash-close-hp-check">No llenar este campo</label>
+      <input type="text" id="cash-close-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <div class="admin-modal-body">
      <div style="background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-color);">
       <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
@@ -2043,6 +2093,11 @@
     </button>
    </div>
    <form id="pos-cash-payment-form" data-erp-submit="ERPBilling.confirmPosCashPayment(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="pos-cash-hp-check">No llenar este campo</label>
+      <input type="text" id="pos-cash-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <div class="admin-modal-body">
      <div style="background:#f8fafc; padding:15px; border-radius:12px; margin-bottom:20px; font-size:0.85rem; border:1px solid var(--border-color); text-align:center;">
       <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">TOTAL A COBRAR</div>
@@ -2076,6 +2131,11 @@
     </button>
    </div>
    <form id="general-abono-form" data-erp-submit="ERPBilling.submitGeneralAbono(event)">
+     <!-- Trampa Honeypot anti-bots -->
+     <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;height:0;width:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+      <label for="gen-abono-hp-check">No llenar este campo</label>
+      <input type="text" id="gen-abono-hp-check" name="_hp_security_check" maxlength="50" tabindex="-1" autocomplete="off" />
+     </div>
     <input type="hidden" id="form-abono-client-id" />
     <div class="admin-modal-body">
      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
@@ -2124,13 +2184,13 @@
  <div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; max-width: 350px;"></div>
 
  <!-- html2pdf Library -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous"></script>
 
  <!-- Firebase SDK -->
- <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
- <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
- <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
- <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" integrity="sha384-sEVIly94UBRLKWdkYoPpSG7GD/e79YHMrxVyZaOk712Ga7+EAw6w1EFi+xBzBdd+" crossorigin="anonymous"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" integrity="sha384-EkqK+ezBWJuvO3hfrSx2iVqr3YQbhmnzn8kPhOpBZ+0GMVU5oGSgptwIu8D84HjE" crossorigin="anonymous"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" integrity="sha384-M481iNZJtbpypKgvlvZ+78Giq0BsewFLk5r2k+MOcGXlwKCc27DQRZ+WCV/zpmpC" crossorigin="anonymous"></script>
+ <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js" integrity="sha384-6I0gWsz4FIAr30c0TxIxJnPQuJiZ1FfILdZrgJdjxTH3R8dgPGTvexbyqTvReV6Z" crossorigin="anonymous"></script>
  <script defer src="js/firebase-config.js?v=20260628"></script>
  <script defer src="js/auth.js?v=20260802-session-fix"></script>
  <script defer src="js/auth-guard.js?v=20260802-session-fix"></script>

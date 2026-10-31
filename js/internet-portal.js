@@ -1370,7 +1370,7 @@
     currentRecommendedPlan = matchingPlan;
 
     var sugMegas = document.getElementById('calc-sug-megas');
-    if (sugMegas) sugMegas.innerHTML = matchingPlan.speed + ' <span>Mbps</span>';
+    if (sugMegas) sugMegas.innerHTML = escapeHtml(String(matchingPlan.speed || '')) + ' <span>Mbps</span>';
     
     var planName = document.getElementById('calc-plan-name');
     if (planName) planName.textContent = matchingPlan.name;

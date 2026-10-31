@@ -862,7 +862,7 @@ test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V
 test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
   const swJs = readJs('sw.js');
   assert.ok(
-    swJs.includes("const CACHE_NAME = 'futunet-cache-v55';"),
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v57';"),
     'sw.js debe estar en la versión futunet-cache-v55'
   );
   assert.ok(
@@ -960,3 +960,150 @@ test('Mitigación de Subdominio Efímero & Fuga de Red Privada (CWE-494 / CWE-11
   );
 });
 
+
+test('Seguridad DevSecOps: Cobertura Integral de Honeypots en Paneles Administrativo y de Facturación (OWASP OAT-007)', () => {
+  const adminHtml = readHtml('admin.html');
+  const factHtml = readHtml('facturacion.html');
+
+  const adminForms = [
+    'tech-map-hp-check', 'config-hp-check', 'banner-hp-check', 'cat-hp-check',
+    'brand-hp-check', 'prod-hp-check', 'edit-user-hp-check', 'fin-acc-hp-check',
+    'fin-pay-hp-check', 'disc-hp-check', 'inet-client-hp-check', 'comp-hp-check'
+  ];
+
+  for (const hpId of adminForms) {
+    assert.ok(adminHtml.includes(`id="${hpId}"`), `admin.html debe contener el campo honeypot ${hpId}`);
+    assert.ok(adminHtml.includes(`id="${hpId}" name="_hp_security_check" maxlength="50"`), `${hpId} debe usar name="_hp_security_check" y maxlength="50"`);
+  }
+
+  const factForms = [
+    'inv-editor-hp-check', 'client-editor-hp-check', 'prod-editor-hp-check',
+    'erp-purchase-hp-check', 'erp-bank-hp-check', 'settings-editor-hp-check',
+    'pay-reg-hp-check', 'fisc-adj-hp-check', 'cash-open-hp-check',
+    'cash-close-hp-check', 'pos-cash-hp-check', 'gen-abono-hp-check'
+  ];
+
+  for (const hpId of factForms) {
+    assert.ok(factHtml.includes(`id="${hpId}"`), `facturacion.html debe contener el campo honeypot ${hpId}`);
+    assert.ok(factHtml.includes(`id="${hpId}" name="_hp_security_check" maxlength="50"`), `${hpId} debe usar name="_hp_security_check" y maxlength="50"`);
+  }
+});
+
+test('Seguridad DevSecOps: Subresource Integrity (SRI) y Cero Fuga de Credenciales en URL (OWASP A08 & A02)', () => {
+  const adminHtml = readHtml('admin.html');
+  const factHtml = readHtml('facturacion.html');
+  const aiGeminiJs = readJs('ai/js/ai-gemini.js');
+  const aiServerJs = readJs('js/ai-server.js');
+  const adminPanelJs = readJs('js/admin-panel.js');
+  const factJs = readJs('js/facturacion.js');
+
+  // 1. Verificación SRI en scripts de terceros (Chart.js, SheetJS, html2pdf, Lucide)
+  assert.ok(
+    adminHtml.includes('integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f"') &&
+    adminHtml.includes('crossorigin="anonymous"'),
+    'admin.html debe proteger Chart.js con SRI hash y crossorigin="anonymous"'
+  );
+  assert.ok(
+    adminHtml.includes('integrity="sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw"') &&
+    adminHtml.includes('crossorigin="anonymous"'),
+    'admin.html debe proteger SheetJS (xlsx) con SRI hash y crossorigin="anonymous"'
+  );
+  assert.ok(
+    adminHtml.includes('integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc"') &&
+    adminHtml.includes('crossorigin="anonymous"'),
+    'admin.html debe proteger html2pdf con SRI hash y crossorigin="anonymous"'
+  );
+  assert.ok(
+    factHtml.includes('integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f"'),
+    'facturacion.html debe proteger Chart.js con SRI'
+  );
+  assert.ok(
+    factHtml.includes('integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc"'),
+    'facturacion.html debe proteger html2pdf con SRI'
+  );
+
+  // 2. Cero fuga de Gemini API Key en query string de la URL
+  assert.ok(
+    !aiGeminiJs.includes('alt=sse&key='),
+    'ai/js/ai-gemini.js no debe enviar la clave API en la URL como parámetro query'
+  );
+  assert.ok(
+    aiGeminiJs.includes("'x-goog-api-key': apiKey"),
+    'ai/js/ai-gemini.js debe enviar la clave API de forma segura en la cabecera x-goog-api-key'
+  );
+  assert.ok(
+    !aiServerJs.includes('alt=sse&key='),
+    'js/ai-server.js no debe enviar la clave API en la URL como parámetro query'
+  );
+  assert.ok(
+    aiServerJs.includes("'x-goog-api-key': apiKey"),
+    'js/ai-server.js debe enviar la clave API de forma segura en la cabecera x-goog-api-key'
+  );
+
+  // 3. Bounds en inputs dinámicos de facturación
+  assert.ok(
+    factJs.includes('class="form-input row-product-search" maxlength="250"'),
+    'facturacion.js debe acotar la búsqueda dinámica de ítems con maxlength="250"'
+  );
+  assert.ok(
+    factJs.includes('class="form-input row-price" step="0.01" min="0" max="999999999"'),
+    'facturacion.js debe acotar el precio dinámico con max="999999999"'
+  );
+  assert.ok(
+    factJs.includes('class="form-input row-qty" min="1" max="999999"'),
+    'facturacion.js debe acotar la cantidad dinámica con max="999999"'
+  );
+
+  // 4. Neutralización XSS en excepciones y exportaciones de reportes
+  assert.ok(
+    adminPanelJs.includes("escapeHtml(e.message)"),
+    'admin-panel.js debe escapar e.message antes de inyectarlo en el historial'
+  );
+  assert.ok(
+    adminPanelJs.includes("escapeHtml(c.differentiator || '')"),
+    'admin-panel.js debe escapar datos en la exportación de competidores'
+  );
+});
+
+
+test('DevSecOps & OWASP A08: Cobertura 100% de Subresource Integrity (SRI) en scripts externos y sanitizacion en portal', () => {
+  const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
+  assert.equal(htmlFiles.length, 52);
+
+  const LUCIDE_HASH = 'sha384-ieG+IKD0d/ZPXyCBTMVAbqsQdns8QGJR/e26WMw7M4fkaI/rHcS/YIoi+ah9WGge';
+  const FB_APP_HASH = 'sha384-sEVIly94UBRLKWdkYoPpSG7GD/e79YHMrxVyZaOk712Ga7+EAw6w1EFi+xBzBdd+';
+
+  for (const file of htmlFiles) {
+    const html = readHtml(file);
+    assert.ok(
+      !html.includes('lucide@latest'),
+      file + ' no debe incluir versiones flotantes no fijadas de lucide (@latest)'
+    );
+    if (html.includes('unpkg.com/lucide@0.460.0')) {
+      assert.ok(
+        html.includes(LUCIDE_HASH),
+        file + ' debe proteger Lucide con el hash SRI SHA-384 oficial'
+      );
+      assert.ok(
+        html.includes('crossorigin="anonymous"'),
+        file + ' debe definir crossorigin="anonymous" en scripts con SRI'
+      );
+    }
+    if (html.includes('firebasejs/10.12.0/firebase-app-compat.js')) {
+      assert.ok(
+        html.includes(FB_APP_HASH),
+        file + ' debe proteger Firebase App Compat con el hash SRI SHA-384'
+      );
+    }
+    assert.ok(
+      !html.includes('firebasejs/8.'),
+      file + ' no debe usar versiones obsoletas de Firebase 8.x'
+    );
+  }
+
+  const portalJs = readJs('js/internet-portal.js');
+  assert.ok(
+    portalJs.includes("escapeHtml(String(matchingPlan.speed || ''))"),
+    'internet-portal.js debe escapar matchingPlan.speed con escapeHtml al renderizar el plan sugerido'
+  );
+});

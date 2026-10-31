@@ -2164,12 +2164,12 @@ test('Mejora demandada por usuarios: Centro de Comunicación y Monitoreo Victron
   assert.ok(catJs.includes("/\\b(cerbo|cerbo\\s*gx|cerbogx|vrm\\s*portal)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron Cerbo GX');
 });
 
-test('Mejora demandada por usuarios: Sistema Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (SUG-L7000)', () => {
+test('Mejora demandada por usuarios: Sistema Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (SUG-L7007)', () => {
   const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
-  assert.ok(seedCjs.includes("refCode: 'SUG-L7000'") && seedCjs.includes("status: 'implemented'"), 'SUG-L7000 debe figurar como implemented en seed-suggestions.cjs');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L7007'") && seedCjs.includes("status: 'implemented'"), 'SUG-L7007 debe figurar como implemented en seed-suggestions.cjs');
 
   const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
-  assert.ok(sugJs.includes('SUG-L7000') && sugJs.includes('Linksys Velop Pro 7'), 'SUG-L7000 debe figurar en el muro y lista canónica de suggestions.js');
+  assert.ok(sugJs.includes('SUG-L7007') && sugJs.includes('Linksys Velop Pro 7'), 'SUG-L7007 debe figurar en el muro y lista canónica de suggestions.js');
 
   const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
   assert.ok(backupJs.includes('redes_linksys_velop_pro_7_wifi7_mesh'), 'backup_data.js debe contener redes_linksys_velop_pro_7_wifi7_mesh');
@@ -2288,4 +2288,20 @@ test('Mejora demandada por usuarios: Controlador Tesla Backup Gateway 2 (SUG-T20
   const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
   assert.ok(catJs.includes("'backupgateway'") && catJs.includes("'gateway2'"), 'catalog.js debe incluir backupgateway y gateway2 en stem variants');
   assert.ok(catJs.includes("/\\b(backup\\s*gateway|tesla\\s*gateway|gateway\\s*2|microrred)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Backup Gateway 2');
+});
+
+test('Mejora demandada por usuarios: Aire Inverter Mitsubishi MSZ-GL 24,000 BTU Hospitalario (SUG-M2401)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M2401'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2401 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M2401') && sugJs.includes('Mitsubishi Electric MSZ-GL 24,000 BTU'), 'SUG-M2401 debe figurar en el muro y lista canónica de suggestions.js');
+});
+
+test('Mejora demandada por usuarios: Teclado Táctil Interactivo Paradox Touch TM70 para Bancos y Residencias (SUG-P7001)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P7001'") && seedCjs.includes("status: 'implemented'"), 'SUG-P7001 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P7001') && sugJs.includes('Paradox Touch TM70'), 'SUG-P7001 debe figurar en el muro y lista canónica de suggestions.js');
 });

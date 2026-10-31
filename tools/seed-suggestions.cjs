@@ -2716,7 +2716,7 @@ const suggestions = [
     updatedAt: FieldValue.serverTimestamp()
   },
   {
-    refCode: 'SUG-L7000',
+    refCode: 'SUG-L7007',
     title: 'Disponibilidad de Sistemas Wi-Fi 7 Mesh Tri-Banda Linksys Velop Pro 7 (Cognitive Mesh BE11000) con Puerto WAN 2.5G Multigigabit',
     description: 'Para oficinas de alta exigencia, productoras de video, consultorías y residencias premium en Santiago que ya cuentan con conexiones de fibra óptica de ultra alta velocidad y dispositivos compatibles con Wi-Fi 7 (laptops, smartphones y tablets de última generación), solicitamos la disponibilidad del sistema en malla Linksys Velop Pro 7 (MBE7000). Opera bajo el estándar Wi-Fi 7 (802.11be) con tecnología Cognitive Mesh y velocidad combinada de hasta 11 Gbps (BE11000) distribuidos en tres bandas (2.4 GHz, 5 GHz y la banda pura de 6 GHz con canales ultra anchos de 320 MHz). Incorpora operación Multi-Link (MLO) para enviar y recibir datos simultáneamente a través de múltiples bandas reduciendo drásticamente la latencia, modulación 4096-QAM, puerto Ethernet WAN de 2.5G multigigabit más cuatro puertos LAN Gigabit, cobertura de hasta 3,000 pies cuadrados por nodo y soporte para más de 200 dispositivos simultáneos sin degradación de velocidad.',
     category: 'catalog_products',
@@ -2908,7 +2908,7 @@ const suggestions = [
     updatedAt: FieldValue.serverTimestamp()
   },
   {
-    refCode: 'SUG-M2400',
+    refCode: 'SUG-M2401',
     title: 'Disponibilidad de Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU Ultra Silenciosos 20.5 SEER con Filtro Nano-Platinum',
     description: 'Para salones de conferencias, áreas comerciales abiertas, oficinas ejecutivas amplias y clínicas en Santiago que requieren climatización de alta potencia sin sacrificar silencio ni incurrir en altos costos de electricidad, solicitamos el mini-split inverter Mitsubishi Electric MSZ-GL de 24,000 BTU (2 Toneladas, modelo MSZ-GL24NA). Cuenta con eficiencia certificada de 20.5 SEER y 12.5 EER con compresor inverter de velocidad variable, operación ultra silenciosa Whisper-Quiet de hasta 34 dB en unidad interior, filtro avanzado Nano-Platinum lavable para purificación de aire y absorción de alérgenos, deflector inteligente Multi-Vane para distribución uniforme en áreas de hasta 60 m², recubrimiento Blue Fin anticorrosión en condensador exterior para máxima durabilidad en el clima tropical de República Dominicana y función EconoCool de ahorro de energía.',
     category: 'catalog_products',
@@ -2932,7 +2932,7 @@ const suggestions = [
     updatedAt: FieldValue.serverTimestamp()
   },
   {
-    refCode: 'SUG-P7000',
+    refCode: 'SUG-P7001',
     title: 'Disponibilidad de Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas a Color con Ranura microSD para Alarmas Magellan y Spectra',
     description: 'Para proyectos residenciales de lujo, oficinas corporativas, bancos y comercios en Santiago que requieren una interfaz de usuario moderna, táctil e intuitiva para sus sistemas de alarma Paradox, solicitamos el teclado táctil Paradox Touch TM70 de 7.0 pulgadas (resolución 800 x 480). Compatible con paneles Magellan (MG5000, MG5050, MG5075) y Spectra SP (SP4000, SP5500, SP6000), permite armar y desarmar el sistema mediante íconos gráficos, visualizar planos interactivos de planta (Floor Plans) con localización de sensores activados, controlar hasta 8 particiones y 64 zonas, monitorear la temperatura ambiental interior gracias a su sensor integrado y cargar fotos o planos personalizados mediante su ranura para tarjetas microSD.',
     category: 'catalog_products',

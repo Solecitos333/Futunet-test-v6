@@ -1297,7 +1297,7 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
-  // Priorizar Linksys Velop Pro 7 Wi-Fi 7 al buscar velop pro 7, velop 7, wifi 7, mbe7000 (SUG-L7000)
+  // Priorizar Linksys Velop Pro 7 Wi-Fi 7 al buscar velop pro 7, velop 7, wifi 7, mbe7000 (SUG-L7007)
   if (/\b(velop\s*pro\s*7|velop\s*7|mbe7000|wifi\s*7|wifi7)\b/i.test(normalizedQuery) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(velop|wifi\s*7|be11000)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'linksys') {
       if (/velop\s*pro\s*7|wifi\s*7|mbe7000/i.test(title)) {
@@ -1385,7 +1385,7 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
-  // Priorizar Aire Inverter Mitsubishi MSZ-GL 24K al buscar msz-gl24, gl24, mitsubishi 24000, aire 24000 btu inverter (SUG-M2400)
+  // Priorizar Aire Inverter Mitsubishi MSZ-GL 24K al buscar msz-gl24, gl24, mitsubishi 24000, aire 24000 btu inverter (SUG-M2401)
   if (/\b(msz-gl24|mszgl24|gl24|24000\s*btu|2\s*toneladas)\b/i.test(normalizedQuery) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(24000|24k|gl24|2\s*ton)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('mitsubishi')) {
       if (/24,000|gl24|gl 24/i.test(title)) {
@@ -1396,7 +1396,7 @@ function scoreProductMatch(product, normalizedQuery) {
     }
   }
 
-  // Priorizar Teclado Táctil Paradox TM70 al buscar tm70, touch70, teclado paradox, teclado tactil paradox (SUG-P7000)
+  // Priorizar Teclado Táctil Paradox TM70 al buscar tm70, touch70, teclado paradox, teclado tactil paradox (SUG-P7001)
   if (/\b(tm70|touch70|paradox\s*tm70|teclado\s*tactil\s*paradox)\b/i.test(normalizedQuery) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(tm70|tactil|touch|teclado)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('paradox')) {
       if (/tm70|tactil/i.test(title)) {

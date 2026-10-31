@@ -1305,9 +1305,18 @@ function initAnnouncementBar() {
   const week5End = new Date('2026-11-01T23:59:59');
   const isWeek5 = now >= new Date('2026-10-24T00:00:00') && now <= week5End;
 
+  // Temporada Noviembre 2026 (Black Month TI & Black Friday)
+  const novStart = new Date('2026-11-01T00:00:00');
+  const novEnd = new Date('2026-11-30T23:59:59');
+  const isNov = now >= novStart && now <= novEnd;
+  const isWeek1Nov = now >= novStart && now <= new Date('2026-11-07T23:59:59');
+  const isWeek2Nov = now >= new Date('2026-11-08T00:00:00') && now <= new Date('2026-11-14T23:59:59');
+  const isWeek3Nov = now >= new Date('2026-11-15T00:00:00') && now <= new Date('2026-11-21T23:59:59');
+  const isBlackFridayWeek = now >= new Date('2026-11-22T00:00:00') && now <= novEnd;
+
   if (currentPath.includes('gaming.html')) {
     campaign = {
-      badge: '🎮 ZONA GAMING PRO',
+      badge: isBlackFridayWeek ? '🎮 BLACK FRIDAY: ZONA GAMING PRO' : (isNov ? '🎮 BLACK MONTH: ZONA GAMING PRO' : '🎮 ZONA GAMING PRO'),
       message: '10% de Descuento en Periféricos Pro y Enlaces de Baja Latencia con',
       coupon: 'GAMING2026',
       endDate: new Date('2026-12-31T23:59:59'),
@@ -1316,7 +1325,7 @@ function initAnnouncementBar() {
     };
   } else if (currentPath.includes('punto-de-venta.html')) {
     campaign = {
-      badge: '🛒 RETAIL TECH & POS',
+      badge: isBlackFridayWeek ? '🛒 BLACK FRIDAY: RETAIL TECH & POS' : (isNov ? '🛒 BLACK MONTH: RETAIL TECH & POS' : '🛒 RETAIL TECH & POS'),
       message: '12% de Descuento en Terminales Táctiles e Impresoras Térmicas con',
       coupon: 'POS2026',
       endDate: new Date('2026-12-31T23:59:59'),
@@ -1324,54 +1333,116 @@ function initAnnouncementBar() {
       waMsg: 'Hola Futunet, quiero cotizar un kit de Punto de Venta con el código POS2026.'
     };
   } else if (currentPath.includes('energia-climatizacion.html')) {
+    const isPromoBF = isBlackFridayWeek;
+    const isPromoNov = isNov || isWeek5;
     campaign = {
-      badge: isWeek5 ? '⚡ ENERGÍA CRÍTICA & PREVENTA BLACK TI' : '⚡ CONTINUIDAD & ENERGÍA CRÍTICA',
-      message: '15% de Descuento en UPS Online de Doble Conversión e Inversores con',
-      coupon: isWeek5 ? 'BLACKTI2026' : 'CONTINUIDAD2026',
-      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY: ENERGÍA CRÍTICA & UPS'
+        : (isNov ? '⚡ BLACK MONTH: ENERGÍA CRÍTICA & UPS ONLINE' : (isWeek5 ? '⚡ ENERGÍA CRÍTICA & PREVENTA BLACK TI' : '⚡ CONTINUIDAD & ENERGÍA CRÍTICA')),
+      message: isPromoBF
+        ? '18% de Descuento en UPS Online de Doble Conversión con'
+        : '15% de Descuento en UPS Online de Doble Conversión e Inversores con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isPromoNov ? 'BLACKTI2026' : 'CONTINUIDAD2026'),
+      endDate: isNov ? novEnd : (isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')))),
       ctaText: 'Proteger Servidores',
-      waMsg: isWeek5
-        ? 'Hola Futunet, quiero cotizar UPS Online de respaldo en Preventa Black TI con el código BLACKTI2026.'
-        : 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.'
+      waMsg: isPromoBF
+        ? 'Hola Futunet, quiero cotizar UPS Online de respaldo con oferta Black Friday y código BLACKFRIDAY2026.'
+        : (isPromoNov
+          ? 'Hola Futunet, quiero cotizar UPS Online de respaldo en Black TI con el código BLACKTI2026.'
+          : 'Hola Futunet, quiero cotizar UPS Online de respaldo con el código CONTINUIDAD2026.')
     };
   } else if (currentPath.includes('redes-datos.html')) {
+    const isPromoBF = isBlackFridayWeek;
+    const isPromoNov = isNov || isWeek5;
     campaign = {
-      badge: isWeek5 ? '🌐 REDES GIGABIT & PREVENTA BLACK TI' : '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B',
-      message: '15% de Descuento en Switches Administrables y Enlaces Redundantes con',
-      coupon: isWeek5 ? 'BLACKTI2026' : 'CONTINUIDAD2026',
-      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY: REDES GIGABIT & FIBRA'
+        : (isNov ? '🌐 BLACK MONTH: REDES GIGABIT & CABLEADO' : (isWeek5 ? '🌐 REDES GIGABIT & PREVENTA BLACK TI' : '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B')),
+      message: isPromoBF
+        ? '18% de Descuento en Switches Administrables y Enlaces Redundantes con'
+        : '15% de Descuento en Switches Administrables y Cableado Cat 6A con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isPromoNov ? 'BLACKTI2026' : 'CONTINUIDAD2026'),
+      endDate: isNov ? novEnd : (isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')))),
       ctaText: 'Auditar Red',
-      waMsg: isWeek5
-        ? 'Hola Futunet, quiero cotizar switches y enlaces de fibra en Preventa Black TI con el código BLACKTI2026.'
-        : 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'
+      waMsg: isPromoBF
+        ? 'Hola Futunet, quiero cotizar switches y cableado estructurado en Black Friday con el código BLACKFRIDAY2026.'
+        : (isPromoNov
+          ? 'Hola Futunet, quiero cotizar switches y enlaces de fibra en Black TI con el código BLACKTI2026.'
+          : 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.')
     };
   } else if (currentPath.includes('seguridad-electronica.html')) {
+    const isPromoBF = isBlackFridayWeek;
     campaign = {
-      badge: isWeek5 ? '🛡️ REMATE DE OCTUBRE: SEGURIDAD TOTAL' : '🛡️ PROTECCIÓN CORPORATIVA',
-      message: '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
-      coupon: 'SEGURIDAD2026',
-      endDate: new Date('2026-10-31T23:59:59'),
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY: SEGURIDAD CCTV 4K'
+        : (isNov ? '🛡️ BLACK MONTH: SEGURIDAD CCTV & BIOMETRÍA' : (isWeek5 ? '🛡️ REMATE DE OCTUBRE: SEGURIDAD TOTAL' : '🛡️ PROTECCIÓN CORPORATIVA')),
+      message: isPromoBF
+        ? '18% de Descuento en CCTV IP 4K y Control Biométrico con'
+        : '15% de Descuento en Seguridad CCTV IP y Biometría Facial con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isNov ? 'BLACKTI2026' : 'SEGURIDAD2026'),
+      endDate: isNov ? novEnd : new Date('2026-10-31T23:59:59'),
       ctaText: 'Cotizar Seguridad',
-      waMsg: 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.'
+      waMsg: isPromoBF
+        ? 'Hola Futunet, me interesa cotizar seguridad electrónica en Black Friday con el código BLACKFRIDAY2026.'
+        : (isNov
+          ? 'Hola Futunet, me interesa cotizar seguridad electrónica en Black Month con el código BLACKTI2026.'
+          : 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.')
     };
   } else if (currentPath.includes('corporativo.html')) {
+    const isPromoBF = isBlackFridayWeek;
     campaign = {
-      badge: isWeek5
-        ? '🔥 EARLY BIRD BLACK TI: PREVENTA CORPORATIVA'
-        : (isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B')),
-      message: isWeek5
-        ? '15% de Descuento en Enlaces Dedicados, Servidores y Respaldo Crítico con'
-        : (isWeek3
-          ? '15% de Descuento en Respaldo Eléctrico, Enlaces Redundantes y Seguridad con'
-          : '15% de Descuento en Seguridad Corporativa y Enlaces con'),
-      coupon: isWeek5 ? 'BLACKTI2026' : (isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026'),
-      endDate: isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59'))),
-      ctaText: 'Asegurar Precio VIP',
-      waMsg: isWeek5
-        ? 'Hola Futunet, me interesa la Preventa Early Bird Black TI corporativa con el código BLACKTI2026.'
-        : (isWeek3
-          ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
-          : 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.')
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY TI: OFERTAS HISTÓRICAS B2B'
+        : (isNov
+          ? (isWeek1Nov ? '🚀 BLACK MONTH B2B: RESERVA PRIORITARIA' : '🏢 BLACK MONTH B2B: INFRAESTRUCTURA & TI')
+          : (isWeek5
+            ? '🔥 EARLY BIRD BLACK TI: PREVENTA CORPORATIVA'
+            : (isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B')))),
+      message: isPromoBF
+        ? '18% de Descuento Especial en Enlaces Dedicados, Racks y Respaldo con'
+        : '15% de Descuento en Enlaces Dedicados, Servidores y Respaldo Crítico con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isNov || isWeek5 ? 'BLACKTI2026' : (isWeek3 ? 'CONTINUIDAD2026' : 'SEGURIDAD2026')),
+      endDate: isNov ? novEnd : (isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')))),
+      ctaText: isNov || isWeek5 ? 'Asegurar Stock VIP' : 'Auditoría B2B',
+      waMsg: isPromoBF
+        ? 'Hola Futunet, me interesa cotizar soluciones corporativas en Black Friday con el código BLACKFRIDAY2026.'
+        : (isNov
+          ? 'Hola Futunet, me interesa la reserva prioritaria de infraestructura y enlaces Black TI con el código BLACKTI2026.'
+          : (isWeek5
+            ? 'Hola Futunet, me interesa la Preventa Early Bird Black TI corporativa con el código BLACKTI2026.'
+            : (isWeek3
+              ? 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita de continuidad operativa y respaldo con el código CONTINUIDAD2026.'
+              : 'Hola Futunet, me interesa solicitar una auditoría técnica gratuita y cotizar servicios corporativos con el código SEGURIDAD2026.')))
+    };
+  } else if (isBlackFridayWeek) {
+    // Semana de Black Friday Global
+    campaign = {
+      badge: '💥 BLACK FRIDAY 2026: OFERTAS HISTÓRICAS',
+      message: '18% de Descuento Especial en todo el Catálogo Tecnológico con',
+      coupon: 'BLACKFRIDAY2026',
+      endDate: novEnd,
+      ctaText: 'Comprar con Descuento',
+      waMsg: 'Hola Futunet, quiero aprovechar las ofertas de Black Friday con el código BLACKFRIDAY2026.'
+    };
+  } else if (isWeek1Nov) {
+    // Semana 1 de Noviembre: Apertura Oficial Black Month TI 2026
+    campaign = {
+      badge: '🚀 BLACK MONTH TI 2026: APERTURA OFICIAL',
+      message: '15% de Descuento en Fibra Óptica, Servidores y Respaldo TI con',
+      coupon: 'BLACKTI2026',
+      endDate: new Date('2026-11-07T23:59:59'),
+      ctaText: 'Asegurar Stock VIP',
+      waMsg: 'Hola Futunet, quiero aprovechar la apertura oficial de Black Month TI con el código BLACKTI2026.'
+    };
+  } else if (isNov) {
+    // Noviembre general / Black Month
+    campaign = {
+      badge: '🔥 NOVIEMBRE: BLACK MONTH TECNOLÓGICO',
+      message: '15% de Descuento en Infraestructura TI, Redes y Respaldo con',
+      coupon: 'BLACKTI2026',
+      endDate: novEnd,
+      ctaText: 'Ver Ofertas Black TI',
+      waMsg: 'Hola Futunet, quiero cotizar equipamiento en Black Month con el código BLACKTI2026.'
     };
   } else if (isWeek5) {
     // Semana 5 / Transición: Early Bird Black TI + Remate Ciberseguridad & Infraestructura
