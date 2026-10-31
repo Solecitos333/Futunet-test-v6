@@ -8693,7 +8693,7 @@ const mockDatabase = [
     "id": "energia_mitsubishi_msz_gl24_aire_inverter",
     "department": "energia",
     "category": "Aires Acondicionados",
-    "brand": "Mitsubishi",
+    "brand": "Mitsubishi Electric",
     "title": "Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU Ultra Silencioso 20.5 SEER con Filtro Nano-Platinum",
     "desc": "El mini-split inverter Mitsubishi Electric MSZ-GL24NA de 24,000 BTU (2 Toneladas de refrigeración) es el sistema de climatización de ultra alta eficiencia por excelencia para salas de juntas, oficinas ejecutivas amplias, auditorios, restaurantes y suites corporativas en Santiago que exigen máximo poder de enfriamiento continuo con consumo energético mínimo. Dotado de compresor inverter de velocidad variable certificado con 20.5 SEER y 12.5 EER, ahorra hasta un 50% de electricidad en comparación con equipos tradicionales. Dispone de tecnología Whisper-Quiet con nivel de ruido tan bajo como 34 dB en la unidad interior, filtro purificador avanzado Nano-Platinum lavable para atrapar partículas microscópicas y neutralizar bacterias, deflector motorizado Multi-Vane para distribución tridimensional homogénea del aire en espacios de hasta 60 metros cuadrados, modo EconoCool inteligente y recubrimiento anticorrosivo Blue Fin en el serpentín de la unidad exterior condensadora para máxima protección frente a la humedad tropical de República Dominicana.",
     "price": "RD$ 68,500.00",
@@ -8768,7 +8768,7 @@ const mockDatabase = [
     "id": "redes_juniper_srx320_security_gateway",
     "department": "redes",
     "category": "Routers y Repetidores WiFi",
-    "brand": "Juniper",
+    "brand": "Juniper Networks",
     "title": "Firewall y Gateway de Servicios Juniper Networks SRX320 con 8 Puertos Gigabit (PoE+), VPN IPsec y SD-WAN",
     "desc": "El Juniper Networks SRX320 (SRX320-JSB-L) es la plataforma de seguridad, conectividad y conmutación unificada de referencia para sucursales corporativas, bancos, centros médicos y sedes empresariales en Santiago y la región del Cibao. Integra un firewall stateful de inspección profunda con rendimiento de hasta 1 Gbps, VPN IPsec acelerada por hardware de 300 Mbps y hasta 64,000 sesiones concurrentes. Incorpora 8 puertos Gigabit Ethernet: 6 puertos RJ45 10/100/1000 (con 4 puertos PoE 802.3at con presupuesto de energía integrado para alimentar teléfonos IP VoIP y puntos de acceso Wi-Fi sin cableado eléctrico adicional) más 2 puertos combo Gigabit SFP/RJ45 para enlaces troncales de fibra óptica de alta velocidad. Gestionado por el reconocido sistema operativo Junos OS, ofrece prevención de intrusiones, ruteo dinámico empresarial BGP/OSPF/MPLS, políticas de seguridad avanzadas y compatibilidad con Juniper Mist Cloud AI y redes SD-WAN seguras.",
     "price": "RD$ 42,900.00",
@@ -8812,6 +8812,56 @@ const mockDatabase = [
       "Gestión automática de reservas energéticas para tormentas mediante la función Storm Watch de Tesla",
       "Voltaje de operación nominal: 120/240V AC monofásica 60 Hz compatible con la red eléctrica dominicana",
       "Garantía oficial Tesla de 10 años con certificación de ingeniería de respaldo energético en Santiago"
+    ]
+  },
+  {
+    "id": "redes_mikrotik_crs328_24p_4s_switch_poe",
+    "department": "redes",
+    "category": "Switches de Red",
+    "brand": "MikroTik",
+    "title": "Switch Administrable PoE+ de Distribución MikroTik CRS328-24P-4S+RM (24 Puertos Gigabit PoE+ 500W con 4 Puertos 10G SFP+)",
+    "desc": "El conmutador administrable de alta densidad MikroTik CRS328-24P-4S+RM es la plataforma de conmutación y alimentación PoE por excelencia para cuartos de telecomunicaciones, sistemas de videovigilancia IP masiva, telefonía VoIP y redes corporativas de alto tráfico en Santiago y parques industriales de la región Norte. Cuenta con 24 puertos Gigabit Ethernet 10/100/1000BASE-T con salida PoE automática y configurable en cada puerto (soporta estándares 802.3af/at PoE/PoE+ y Passive PoE de 24V) respaldados por una fuente de alimentación masiva integrada de 500W, permitiendo alimentar cámaras de seguridad PTZ, puntos de acceso Wi-Fi 6 de alta potencia y teléfonos IP sin requerir inyectores individuales. Incorpora 4 puertos de enlace ascendente de ultra alta velocidad 10GbE SFP+ para fibra óptica que garantizan cero cuellos de botella en la distribución hacia el núcleo de la red. Viene equipado con arquitectura de arranque Dual Boot que permite al administrador seleccionar entre RouterOS v7 (para enrutamiento Layer 3 dinámico, cortafuegos con inspección de estado, VLANs avanzadas y túneles VPN) o SwOS (para administración web intuitiva y liviana de funciones de capa 2), chasis metálico para montaje en rack de 19 pulgadas (1U) y doble fuente de poder para redundancia de servicio.",
+    "price": "RD$ 34,900.00",
+    "img": "img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp",
+    "gallery": [
+      "img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp"
+    ],
+    "specs": [
+      "24 Puertos Gigabit Ethernet RJ45 con autodetección de salida PoE (802.3af/at PoE/PoE+ y Passive PoE 24V)",
+      "Presupuesto de potencia PoE total masivo de hasta 500W (hasta 30W por puerto 802.3at y 450mA en 24V)",
+      "4 Puertos Uplink dedicados de fibra óptica 10GbE SFP+ para enlaces troncales de 10 Gbps sin congestión",
+      "Selector Dual Boot: arranque flexible entre RouterOS v7 (enrutamiento L3, VPNs y firewall) y SwOS (conmutación L2)",
+      "Capacidad de conmutación sin bloqueo (Non-blocking throughput): 64 Gbps, con capacidad total de switching de 128 Gbps",
+      "Tasa de reenvío de paquetes: 95.2 Mpps para tráfico empresarial de alta densidad sin saturación",
+      "Doble fuente de alimentación interna redundante (100-240V AC) para máxima confiabilidad operativa y cero desconexión",
+      "Funciones Layer 2 y Layer 3 completas: Port Isolation, Storm Control, Mirroring, VLAN 802.1Q, IGMP Snooping y ACLs",
+      "Chasis metálico profesional para montaje en rack estándar de 19 pulgadas (altura 1U) con ventilación termo-regulada",
+      "Garantía oficial MikroTik con respaldo, soporte técnico especializado y configuración profesional en Santiago"
+    ]
+  },
+  {
+    "id": "energia_victron_lynx_distributor_1000a",
+    "department": "energia",
+    "category": "Energía y Respaldo",
+    "brand": "Victron Energy",
+    "title": "Bloque de Distribución Modular y Barra Colectora Victron Energy Lynx Distributor (1000A DC) con Monitoreo de Fusibles LED",
+    "desc": "El Victron Energy Lynx Distributor (M10) es una barra colectora modular de corriente continua (DC Busbar) de grado profesional diseñada para salas de energía solar, cuartos técnicos de baterías de litio LiFePO4 e instalaciones de inversores de alta potencia Victron MultiPlus o Quattro en Santiago y República Dominicana. Clasificada para manejar corrientes masivas continuas de hasta 1000A en sistemas de 9V a 60V DC (12V, 24V o 48V), permite conectar de forma limpia, segura y estandarizada hasta 4 conexiones de fusibles individuales tipo MEGA-fuse en los circuitos de inversores, controladores solares MPPT y bancos de baterías. Integra una placa de telemetría con 4 indicadores LED bicolores en el panel frontal que proporcionan monitoreo visual inmediato del estado de cada fusible (iluminación verde fija cuando el circuito está operativo y rojo intermitente cuando un fusible se ha fundido). Dispone de pernos de cobre estañado M10 de alta resistencia para terminales de cable de gran calibre y conector RJ10 para comunicación directa con módulos Lynx Shunt VE.Can o Lynx Smart BMS, logrando una instalación de energía solar certificada, modular y visualmente impecable.",
+    "price": "RD$ 18,500.00",
+    "img": "img/productos/catalogo/victron-lynx-distributor-1000a.webp",
+    "gallery": [
+      "img/productos/catalogo/victron-lynx-distributor-1000a.webp"
+    ],
+    "specs": [
+      "Barra colectora modular de alta capacidad de corriente continua (DC Busbar) clasificada hasta 1000A continuos",
+      "Rango de voltaje de operación amplio: de 9V a 60V DC (compatible con sistemas de 12V, 24V y 48V de litio y plomo)",
+      "Conexión para hasta 4 fusibles individuales de alta corriente tipo MEGA-fuse (de 40A hasta 500A por circuito)",
+      "Indicadores LED bicolores de monitoreo de estado para cada fusible (Verde = Operativo, Rojo = Fusible fundido)",
+      "Terminaciones de pernos de cobre estañado M10 de alta resistencia para terminales de cable de gran sección",
+      "Conexión RJ10 integrada para alimentación de telemetría y comunicación con módulos Lynx Shunt o Smart BMS",
+      "Diseño modular en gabinete sellado ABS autoextinguible para acoplamiento directo lado a lado sin cables intermedios",
+      "Simplifica drásticamente el cableado de corriente continua eliminando bornes desordenados y riesgos de cortocircuito",
+      "Ideal para integraciones con inversores Victron MultiPlus, Quattro y controladores solares SmartSolar MPPT",
+      "Garantía oficial Victron Energy de 5 años con respaldo de ingeniería y diagramado de conexión en Santiago"
     ]
   }
 ];

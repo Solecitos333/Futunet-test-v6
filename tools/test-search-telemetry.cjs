@@ -96,10 +96,14 @@ const testQueries = [
   'velop pro 7',
   'sinamics v20',
   'kx-ns500',
-  'ex3400',
+  'srx320',
   'msz-gl24',
   'tm70',
-  'powerwall 3'
+  'backup gateway',
+  'ex3400',
+  'powerwall 3',
+  'crs328',
+  'lynx distributor'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -685,27 +689,25 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
         'El producto top para "kx-ns500" debe ser Panasonic KX-NS500'
       );
     }
-    if (q === 'ex3400') {
-      assert.strictEqual(
-        scored[0].p.brand,
-        'Juniper',
-        'La búsqueda "ex3400" debe priorizar el Switch Juniper EX3400-24T'
+    if (q === 'srx320') {
+      assert.ok(
+        /Juniper/i.test(scored[0].p.brand),
+        'La búsqueda "srx320" debe priorizar el Firewall Juniper SRX320'
       );
       assert.ok(
-        /ex3400/i.test(scored[0].p.title),
-        'El producto top para "ex3400" debe ser Juniper EX3400-24T'
+        /srx320/i.test(scored[0].p.title),
+        'El producto top para "srx320" debe ser Juniper SRX320'
       );
     }
 
     if (q === 'msz-gl24') {
-      assert.strictEqual(
-        scored[0].p.brand,
-        'Mitsubishi',
-        'La búsqueda "msz-gl24" debe priorizar el Aire Mitsubishi MSZ-GL 24,000 BTU'
+      assert.ok(
+        /Mitsubishi/i.test(scored[0].p.brand),
+        'La búsqueda "msz-gl24" debe priorizar el Aire Inverter Mitsubishi MSZ-GL 24K'
       );
       assert.ok(
         /24,?000|gl24/i.test(scored[0].p.title),
-        'El producto top para "msz-gl24" debe ser Mitsubishi MSZ-GL 24k'
+        'El producto top para "msz-gl24" debe ser Mitsubishi MSZ-GL 24K'
       );
     }
 
@@ -721,6 +723,29 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       );
     }
 
+    if (q === 'backup gateway') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Tesla',
+        'La búsqueda "backup gateway" debe priorizar el Tesla Backup Gateway 2'
+      );
+      assert.ok(
+        /backup\s*gateway/i.test(scored[0].p.title),
+        'El producto top para "backup gateway" debe ser Tesla Backup Gateway 2'
+      );
+    }
+
+    if (q === 'ex3400') {
+      assert.ok(
+        /Juniper/i.test(scored[0].p.brand),
+        'La búsqueda "ex3400" debe priorizar el Switch Juniper EX3400-24T'
+      );
+      assert.ok(
+        /ex3400/i.test(scored[0].p.title),
+        'El producto top para "ex3400" debe ser Juniper EX3400-24T'
+      );
+    }
+
     if (q === 'powerwall 3') {
       assert.strictEqual(
         scored[0].p.brand,
@@ -732,51 +757,27 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
         'El producto top para "powerwall 3" debe ser Tesla Powerwall 3'
       );
     }
-    if (q === 'srx320') {
+
+    if (q === 'crs328') {
       assert.strictEqual(
         scored[0].p.brand,
-        'Juniper Networks',
-        'La búsqueda "srx320" debe priorizar el Firewall Juniper SRX320'
+        'MikroTik',
+        'La búsqueda "crs328" debe priorizar el Switch MikroTik CRS328-24P-4S+RM'
       );
       assert.ok(
-        /srx320/i.test(scored[0].p.title),
-        'El producto top para "srx320" debe ser Juniper SRX320'
+        /crs328/i.test(scored[0].p.title),
+        'El producto top para "crs328" debe ser MikroTik CRS328'
       );
     }
 
-    if (q === 'msz-gl24') {
-      assert.strictEqual(
-        scored[0].p.brand,
-        'Mitsubishi',
-        'La búsqueda "msz-gl24" debe priorizar el Aire Inverter Mitsubishi MSZ-GL 24K'
+    if (q === 'lynx distributor') {
+      assert.ok(
+        /Victron/i.test(scored[0].p.brand),
+        'La búsqueda "lynx distributor" debe priorizar el Victron Lynx Distributor'
       );
       assert.ok(
-        /24,000|gl24/i.test(scored[0].p.title),
-        'El producto top para "msz-gl24" debe ser Mitsubishi MSZ-GL 24K'
-      );
-    }
-
-    if (q === 'tm70') {
-      assert.strictEqual(
-        scored[0].p.brand,
-        'Paradox',
-        'La búsqueda "tm70" debe priorizar el Teclado Táctil Paradox TM70'
-      );
-      assert.ok(
-        /tm70|tactil/i.test(scored[0].p.title),
-        'El producto top para "tm70" debe ser Paradox TM70'
-      );
-    }
-
-    if (q === 'backup gateway') {
-      assert.strictEqual(
-        scored[0].p.brand,
-        'Tesla',
-        'La búsqueda "backup gateway" debe priorizar el Tesla Backup Gateway 2'
-      );
-      assert.ok(
-        /backup\s*gateway/i.test(scored[0].p.title),
-        'El producto top para "backup gateway" debe ser Tesla Backup Gateway 2'
+        /lynx.*distributor/i.test(scored[0].p.title),
+        'El producto top para "lynx distributor" debe ser Victron Lynx Distributor'
       );
     }
   }

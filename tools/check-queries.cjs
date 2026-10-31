@@ -231,7 +231,11 @@ const queries = [
   'tm70',
   'teclado paradox',
   'powerwall 3',
-  'tesla solar'
+  'tesla solar',
+  'crs328',
+  'switch mikrotik poe',
+  'lynx distributor',
+  'barra victron 1000a'
 ];
 
 

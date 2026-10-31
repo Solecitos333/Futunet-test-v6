@@ -1632,21 +1632,21 @@
       description: 'Switch L3 Juniper EX3400-24T con 24 puertos Gigabit, 4 uplinks 10GbE SFP+, 2 puertos 40GbE QSFP+ y Junos OS.',
       officialResponse: '¡Aprobado! Disponible el Switch Juniper EX3400-24T en Switches de Red y marca-juniper.html.'
     },
-    {
-      refCode: 'SUG-M2400',
-      title: 'Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU',
+        {
+      refCode: 'SUG-M3280',
+      title: 'Switches Administrables PoE+ de Distribución MikroTik CRS328-24P-4S+RM (PoE 500W)',
       category: 'catalog_products',
       status: 'implemented',
-      description: 'Mini-split inverter Mitsubishi 24,000 BTU ultra silencioso a 34 dB, 20.5 SEER con filtro catalítico Nano-Platinum y Wi-Fi Kumo Cloud.',
-      officialResponse: '¡Implementado! Incorporado el Aire Inverter Mitsubishi MSZ-GL 24k en Energía y Climatización y marca-mitsubishi.html.'
+      description: 'Switch PoE+ masivo de 500W MikroTik CRS328 con 24 puertos Gigabit (PoE+ y Passive 24V), 4 enlaces 10G SFP+, doble PSU y selector Dual Boot RouterOS/SwOS.',
+      officialResponse: '¡Aprobado! Disponible el Switch Administrable PoE+ MikroTik CRS328-24P-4S+RM en Switches de Red y marca-mikrotik.html.'
     },
     {
-      refCode: 'SUG-P7000',
-      title: 'Teclados Táctiles Interactivos Paradox TM70 TouchScreen de 7 Pulgadas a Color',
+      refCode: 'SUG-V1000',
+      title: 'Bloques de Distribución Modular y Barras Colectoras Victron Energy Lynx Distributor (1000A DC)',
       category: 'catalog_products',
       status: 'implemented',
-      description: 'Teclado táctil a color Paradox TM70 de 7" con menú intuitivo, planos de planta interactivos en microSD y sensor térmico integrado.',
-      officialResponse: '¡Cumplido! Se sumó el Teclado Táctil Paradox TM70 en Seguridad y Alarmas y marca-paradox.html.'
+      description: 'Barra colectora modular DC de 1000A Victron Lynx Distributor para hasta 4 fusibles MEGA-fuse con monitoreo LED bicolor y acoplamiento modular.',
+      officialResponse: '¡Cumplido! Se incorporó el Bloque de Distribución Victron Energy Lynx Distributor 1000A en Energía y Respaldo y marca-victronenergy.html.'
     },
     {
       refCode: 'SUG-T3000',
@@ -1665,7 +1665,7 @@
       officialResponse: '¡Aprobado! Disponible el Firewall Juniper SRX320 en Redes y Datos y marca-juniper.html.'
     },
     {
-      refCode: 'SUG-M2401',
+      refCode: 'SUG-M2400',
       title: 'Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU 20.5 SEER',
       category: 'catalog_products',
       status: 'implemented',
@@ -1673,7 +1673,7 @@
       officialResponse: '¡Implementado! Incorporado el Aire Inverter Mitsubishi 24,000 BTU en Energía y marca-mitsubishi.html.'
     },
     {
-      refCode: 'SUG-P7001',
+      refCode: 'SUG-P7000',
       title: 'Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas para Magellan y Spectra',
       category: 'catalog_products',
       status: 'implemented',

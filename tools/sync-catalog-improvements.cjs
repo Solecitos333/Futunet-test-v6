@@ -3328,6 +3328,119 @@ const securityAccessItems = [
   }
 ];
 
+
+const juniperEx3400Items = [
+  {
+    id: 'redes_juniper_ex3400_24t_switch',
+    department: 'redes',
+    category: 'Switches de Red',
+    brand: 'Juniper',
+    title: 'Switch de Agregación Layer 3 Juniper Networks EX3400-24T con 4 Puertos Uplink 10GbE SFP+ y 2 Puertos 40GbE QSFP+ (Virtual Chassis)',
+    desc: 'El conmutador empresarial de capa de agregación y núcleo Layer 3 Juniper Networks EX3400-24T es la plataforma de interconexión Ethernet de alto rendimiento ideal para salas de servidores, distribución de red en edificios corporativos y enlaces troncales en zonas francas de Santiago. Dispone de 24 puertos Gigabit Ethernet 10/100/1000BASE-T RJ45, 4 puertos uplink dedicados de 10GbE SFP+ para fibra óptica y 2 puertos de 40GbE QSFP+ para tecnología de apilamiento Virtual Chassis, permitiendo gestionar hasta 10 switches interconectados como un único dispositivo lógico con una sola IP de gestión. Ejecuta el sistema operativo Junos OS con arquitectura de alta disponibilidad, enrutamiento L3 dinámico completo IPv4 e IPv6 (OSPF, RIP, BGP y VRRP), calidad de servicio QoS granular, fuentes de alimentación modulares y ventiladores redundantes con capacidad de conmutación total de 144 Gbps.',
+    price: 'RD$ 58,900.00',
+    img: 'img/productos/catalogo/juniper-ex3400-24t.webp',
+    gallery: [
+      'img/productos/catalogo/juniper-ex3400-24t.webp'
+    ],
+    specs: [
+      '24 Puertos Gigabit Ethernet 10/100/1000BASE-T RJ45 para distribución y acceso empresarial',
+      '4 Puertos Uplink dedicados 10GbE SFP+ para enlaces de fibra óptica de alta capacidad',
+      '2 Puertos de alta velocidad 40GbE QSFP+ para tecnología de apilamiento Virtual Chassis (hasta 10 conmutadores)',
+      'Capacidad de conmutación de 144 Gbps y rendimiento de reenvío de 108 Mpps',
+      'Enrutamiento Layer 3 completo: IPv4/IPv6, OSPF, RIP v1/v2, BGP, VRRP y rutas estáticas avanzadas',
+      'Sistema Operativo Junos OS con arquitectura modular resistente a fallos y actualizaciones sin caída de servicio',
+      'Gestión centralizada mediante CLI Junos, interfaz Web J-Web y compatibilidad con Juniper Mist Cloud AI',
+      'Fuentes de alimentación y ventiladores modulares redundantes con flujo de aire optimizado',
+      'Chasis metálico para montaje en rack de 19 pulgadas estándar (altura 1U)',
+      'Garantía oficial corporativa Juniper Networks con soporte técnico y configuración en Santiago'
+    ]
+  }
+];
+
+const teslaPowerwall3Items = [
+  {
+    id: 'energia_tesla_powerwall_3_bateria_solar_inversor',
+    department: 'energia',
+    category: 'Energía y Climatización',
+    brand: 'Tesla',
+    title: 'Sistema de Batería Solar Todo-en-Uno Tesla Powerwall 3 (13.5 kWh) con Inversor Solar Integrado de 11.5 kW y 6 Entradas MPPT',
+    desc: 'El Tesla Powerwall 3 es la solución integrada de almacenamiento y energía solar de próxima generación para residencias, fincas de descanso y negocios en Santiago y toda República Dominicana. Combina en una sola estructura compacta y elegante una batería de litio ferrofosfato (LFP) de 13.5 kWh de capacidad neta y un potente inversor solar fotovoltaico de 11.5 kW de potencia continua, eliminando por completo la compra de inversores solares adicionales. Incorpora 6 seguidores de máxima potencia (MPPT) para conectar hasta 20 kW de módulos solares con captación óptima ante sombras parciales, capacidad de arranque de motores y acondicionadores de aire sin requerir soft-starters (LRA alto), conmutación instantánea a respaldo en menos de 100 ms ante cortes de la red eléctrica, diseño sellado con clasificación IP67 resistente a intemperie extrema y gestión inteligente total desde la aplicación móvil oficial de Tesla.',
+    price: 'Cotizar',
+    img: 'img/productos/catalogo/tesla-powerwall-3.webp',
+    gallery: [
+      'img/productos/catalogo/tesla-powerwall-3.webp'
+    ],
+    specs: [
+      'Capacidad de energía almacenable neta: 13.5 kWh con química de celdas de Litio Ferro-Fosfato (LFP) de máxima seguridad y vida útil',
+      'Inversor solar fotovoltaico integrado de 11.5 kW continuos: no requiere inversor solar externo, instalación todo-en-uno',
+      '6 Entradas y seguidores independientes de máxima potencia (MPPT) para conectar hasta 20 kW DC de módulos fotovoltaicos',
+      'Potencia de salida continua: 11.5 kW en red y fuera de red (backup) con capacidad de sobrecarga pico para arranque de motores',
+      'Arranque de acondicionadores de aire de hasta 5 toneladas sin necesidad de kit soft-starter adicional (capacidad LRA ultra alta)',
+      'Tiempo de transferencia ante corte eléctrico: respaldo automático instantáneo en menos de 100 milisegundos',
+      'Eficiencia solar-a-batería-a-red del 97.5% líder en la industria de energías renovables',
+      'Protección climática IP67 certificada: apto para instalación interior o exterior resistente a inundaciones y polvo',
+      'Monitoreo 24/7 y gestión inteligente de tarifas, tormentas (Storm Watch) y autoconsumo desde la aplicación móvil oficial Tesla',
+      'Garantía oficial Tesla de 10 años con retención de capacidad y servicio técnico certificado por Futunet en República Dominicana'
+    ]
+  }
+];
+
+const mikrotikCrs328Items = [
+  {
+    id: 'redes_mikrotik_crs328_24p_4s_switch_poe',
+    department: 'redes',
+    category: 'Switches de Red',
+    brand: 'MikroTik',
+    title: 'Switch Administrable PoE+ de Distribución MikroTik CRS328-24P-4S+RM (24 Puertos Gigabit PoE+ 500W con 4 Puertos 10G SFP+)',
+    desc: 'El conmutador administrable de alta densidad MikroTik CRS328-24P-4S+RM es la plataforma de conmutación y alimentación PoE por excelencia para cuartos de telecomunicaciones, sistemas de videovigilancia IP masiva, telefonía VoIP y redes corporativas de alto tráfico en Santiago y parques industriales de la región Norte. Cuenta con 24 puertos Gigabit Ethernet 10/100/1000BASE-T con salida PoE automática y configurable en cada puerto (soporta estándares 802.3af/at PoE/PoE+ y Passive PoE de 24V) respaldados por una fuente de alimentación masiva integrada de 500W, permitiendo alimentar cámaras de seguridad PTZ, puntos de acceso Wi-Fi 6 de alta potencia y teléfonos IP sin requerir inyectores individuales. Incorpora 4 puertos de enlace ascendente de ultra alta velocidad 10GbE SFP+ para fibra óptica que garantizan cero cuellos de botella en la distribución hacia el núcleo de la red. Viene equipado con arquitectura de arranque Dual Boot que permite al administrador seleccionar entre RouterOS v7 (para enrutamiento Layer 3 dinámico, cortafuegos con inspección de estado, VLANs avanzadas y túneles VPN) o SwOS (para administración web intuitiva y liviana de funciones de capa 2), chasis metálico para montaje en rack de 19 pulgadas (1U) y doble fuente de poder para redundancia de servicio.',
+    price: 'RD$ 34,900.00',
+    img: 'img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp',
+    gallery: [
+      'img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp'
+    ],
+    specs: [
+      '24 Puertos Gigabit Ethernet RJ45 con autodetección de salida PoE (802.3af/at PoE/PoE+ y Passive PoE 24V)',
+      'Presupuesto de potencia PoE total masivo de hasta 500W (hasta 30W por puerto 802.3at y 450mA en 24V)',
+      '4 Puertos Uplink dedicados de fibra óptica 10GbE SFP+ para enlaces troncales de 10 Gbps sin congestión',
+      'Selector Dual Boot: arranque flexible entre RouterOS v7 (enrutamiento L3, VPNs y firewall) y SwOS (conmutación L2)',
+      'Capacidad de conmutación sin bloqueo (Non-blocking throughput): 64 Gbps, con capacidad total de switching de 128 Gbps',
+      'Tasa de reenvío de paquetes: 95.2 Mpps para tráfico empresarial de alta densidad sin saturación',
+      'Doble fuente de alimentación interna redundante (100-240V AC) para máxima confiabilidad operativa y cero desconexión',
+      'Funciones Layer 2 y Layer 3 completas: Port Isolation, Storm Control, Mirroring, VLAN 802.1Q, IGMP Snooping y ACLs',
+      'Chasis metálico profesional para montaje en rack estándar de 19 pulgadas (altura 1U) con ventilación termo-regulada',
+      'Garantía oficial MikroTik con respaldo, soporte técnico especializado y configuración profesional en Santiago'
+    ]
+  }
+];
+
+const victronLynxItems = [
+  {
+    id: 'energia_victron_lynx_distributor_1000a',
+    department: 'energia',
+    category: 'Energía y Respaldo',
+    brand: 'Victron Energy',
+    title: 'Bloque de Distribución Modular y Barra Colectora Victron Energy Lynx Distributor (1000A DC) con Monitoreo de Fusibles LED',
+    desc: 'El Victron Energy Lynx Distributor (M10) es una barra colectora modular de corriente continua (DC Busbar) de grado profesional diseñada para salas de energía solar, cuartos técnicos de baterías de litio LiFePO4 e instalaciones de inversores de alta potencia Victron MultiPlus o Quattro en Santiago y República Dominicana. Clasificada para manejar corrientes masivas continuas de hasta 1000A en sistemas de 9V a 60V DC (12V, 24V o 48V), permite conectar de forma limpia, segura y estandarizada hasta 4 conexiones de fusibles individuales tipo MEGA-fuse en los circuitos de inversores, controladores solares MPPT y bancos de baterías. Integra una placa de telemetría con 4 indicadores LED bicolores en el panel frontal que proporcionan monitoreo visual inmediato del estado de cada fusible (iluminación verde fija cuando el circuito está operativo y rojo intermitente cuando un fusible se ha fundido). Dispone de pernos de cobre estañado M10 de alta resistencia para terminales de cable de gran calibre y conector RJ10 para comunicación directa con módulos Lynx Shunt VE.Can o Lynx Smart BMS, logrando una instalación de energía solar certificada, modular y visualmente impecable.',
+    price: 'RD$ 18,500.00',
+    img: 'img/productos/catalogo/victron-lynx-distributor-1000a.webp',
+    gallery: [
+      'img/productos/catalogo/victron-lynx-distributor-1000a.webp'
+    ],
+    specs: [
+      'Barra colectora modular de alta capacidad de corriente continua (DC Busbar) clasificada hasta 1000A continuos',
+      'Rango de voltaje de operación amplio: de 9V a 60V DC (compatible con sistemas de 12V, 24V y 48V de litio y plomo)',
+      'Conexión para hasta 4 fusibles individuales de alta corriente tipo MEGA-fuse (de 40A hasta 500A por circuito)',
+      'Indicadores LED bicolores de monitoreo de estado para cada fusible (Verde = Operativo, Rojo = Fusible fundido)',
+      'Terminaciones de pernos de cobre estañado M10 de alta resistencia para terminales de cable de gran sección',
+      'Conexión RJ10 integrada para alimentación de telemetría y comunicación con módulos Lynx Shunt o Smart BMS',
+      'Diseño modular en gabinete sellado ABS autoextinguible para acoplamiento directo lado a lado sin cables intermedios',
+      'Simplifica drásticamente el cableado de corriente continua eliminando bornes desordenados y riesgos de cortocircuito',
+      'Ideal para integraciones con inversores Victron MultiPlus, Quattro y controladores solares SmartSolar MPPT',
+      'Garantía oficial Victron Energy de 5 años con respaldo de ingeniería y diagramado de conexión en Santiago'
+    ]
+  }
+];
+
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
   const code = fs.readFileSync(backupPath, 'utf8');
@@ -3429,7 +3542,11 @@ async function updateBackupData() {
     ...juniperSrx320Items,
     ...mitsubishiMszGl24Items,
     ...paradoxTm70Items,
-    ...teslaBackupGateway2Items
+    ...teslaBackupGateway2Items,
+    ...juniperEx3400Items,
+    ...teslaPowerwall3Items,
+    ...mikrotikCrs328Items,
+    ...victronLynxItems
   ];
 
   itemsToSync.forEach(item => {
@@ -3548,7 +3665,11 @@ async function updateFirestore() {
     ...juniperSrx320Items,
     ...mitsubishiMszGl24Items,
     ...paradoxTm70Items,
-    ...teslaBackupGateway2Items
+    ...teslaBackupGateway2Items,
+    ...juniperEx3400Items,
+    ...teslaPowerwall3Items,
+    ...mikrotikCrs328Items,
+    ...victronLynxItems
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

@@ -2290,18 +2290,74 @@ test('Mejora demandada por usuarios: Controlador Tesla Backup Gateway 2 (SUG-T20
   assert.ok(catJs.includes("/\\b(backup\\s*gateway|tesla\\s*gateway|gateway\\s*2|microrred)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Backup Gateway 2');
 });
 
-test('Mejora demandada por usuarios: Aire Inverter Mitsubishi MSZ-GL 24,000 BTU Hospitalario (SUG-M2401)', () => {
+test('Mejora demandada por usuarios: Switch Layer 3 Juniper Networks EX3400-24T Virtual Chassis (SUG-J3400)', () => {
   const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
-  assert.ok(seedCjs.includes("refCode: 'SUG-M2401'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2401 debe figurar como implemented en seed-suggestions.cjs');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J3400'") && seedCjs.includes("status: 'implemented'"), 'SUG-J3400 debe figurar como implemented en seed-suggestions.cjs');
 
   const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
-  assert.ok(sugJs.includes('SUG-M2401') && sugJs.includes('Mitsubishi Electric MSZ-GL 24,000 BTU'), 'SUG-M2401 debe figurar en el muro y lista canónica de suggestions.js');
+  assert.ok(sugJs.includes('SUG-J3400') && sugJs.includes('Juniper Networks EX3400-24T'), 'SUG-J3400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_ex3400_24t_switch'), 'backup_data.js debe contener redes_juniper_ex3400_24t_switch');
+
+  const juniperImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-ex3400-24t.webp');
+  assert.ok(fs.existsSync(juniperImg), 'La imagen del Juniper EX3400 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ex3400'") && catJs.includes("'virtualchassis'"), 'catalog.js debe incluir ex3400 y virtualchassis en stem variants');
+  assert.ok(catJs.includes("/\\b(ex3400|ex\\s*3400|ex3400-24t|switch\\s*l3|virtual\\s*chassis|qsfp)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Juniper EX3400-24T');
 });
 
-test('Mejora demandada por usuarios: Teclado Táctil Interactivo Paradox Touch TM70 para Bancos y Residencias (SUG-P7001)', () => {
+test('Mejora demandada por usuarios: Sistema de Batería Solar Todo-en-Uno Tesla Powerwall 3 (SUG-T3000)', () => {
   const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
-  assert.ok(seedCjs.includes("refCode: 'SUG-P7001'") && seedCjs.includes("status: 'implemented'"), 'SUG-P7001 debe figurar como implemented en seed-suggestions.cjs');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T3000'") && seedCjs.includes("status: 'implemented'"), 'SUG-T3000 debe figurar como implemented en seed-suggestions.cjs');
 
   const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
-  assert.ok(sugJs.includes('SUG-P7001') && sugJs.includes('Paradox Touch TM70'), 'SUG-P7001 debe figurar en el muro y lista canónica de suggestions.js');
+  assert.ok(sugJs.includes('SUG-T3000') && sugJs.includes('Tesla Powerwall 3'), 'SUG-T3000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_powerwall_3_bateria_solar_inversor'), 'backup_data.js debe contener energia_tesla_powerwall_3_bateria_solar_inversor');
+
+  const teslaImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-powerwall-3.webp');
+  assert.ok(fs.existsSync(teslaImg), 'La imagen del Tesla Powerwall 3 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'powerwall3'") && catJs.includes("'mppt'"), 'catalog.js debe incluir powerwall3 y mppt en stem variants');
+  assert.ok(catJs.includes("/\\b(powerwall\\s*3|powerwall3|tesla\\s*powerwall\\s*3|bateria\\s*tesla\\s*3)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Tesla Powerwall 3');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable PoE+ MikroTik CRS328-24P-4S+RM (SUG-M3280)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M3280'") && seedCjs.includes("status: 'implemented'"), 'SUG-M3280 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M3280') && sugJs.includes('MikroTik CRS328'), 'SUG-M3280 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_crs328_24p_4s_switch_poe'), 'backup_data.js debe contener redes_mikrotik_crs328_24p_4s_switch_poe');
+
+  const mikrotikImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-crs328-24p-4s-switch-poe.webp');
+  assert.ok(fs.existsSync(mikrotikImg), 'La imagen del MikroTik CRS328 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'crs328'") && catJs.includes("'poe500w'"), 'catalog.js debe incluir crs328 y poe500w en stem variants');
+  assert.ok(catJs.includes("/\\b(crs328|crs\\s*328|crs328-24p|mikrotik\\s*poe|switch\\s*mikrotik\\s*poe|poe\\s*500w)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar MikroTik CRS328');
+});
+
+test('Mejora demandada por usuarios: Bloque de Distribución Modular Victron Energy Lynx Distributor 1000A (SUG-V1000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V1000'") && seedCjs.includes("status: 'implemented'"), 'SUG-V1000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V1000') && sugJs.includes('Victron Energy Lynx Distributor'), 'SUG-V1000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_lynx_distributor_1000a'), 'backup_data.js debe contener energia_victron_lynx_distributor_1000a');
+
+  const victronImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-lynx-distributor-1000a.webp');
+  assert.ok(fs.existsSync(victronImg), 'La imagen del Victron Lynx Distributor debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'lynx'") && catJs.includes("'lynxdistributor'"), 'catalog.js debe incluir lynx y lynxdistributor en stem variants');
+  assert.ok(catJs.includes("/\\b(lynx\\s*distributor|lynx\\s*dist|lynx\\s*1000a|distribuidor\\s*victron|megafuse\\s*victron|barra\\s*colectora\\s*victron)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron Lynx Distributor');
 });

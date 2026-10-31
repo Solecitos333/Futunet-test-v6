@@ -283,7 +283,9 @@ function getStemVariants(word) {
   if (word === 'ex3400' || word === 'ex3400-24t' || word === 'qsfp' || word === 'virtualchassis') variants.push('juniper', 'switch', 'agregacion', 'sfp', '40gbe', 'junos');
   if (word === 'msz-gl24' || word === 'gl24' || word === 'gl24na' || word === '24000btu') variants.push('mitsubishi', 'aire', 'inverter', 'split', 'silencioso', 'seer');
   if (word === 'tm70' || word === 'tm-70' || word === 'touchscreen') variants.push('paradox', 'teclado', 'tactil', 'pantalla', 'alarma', 'planos');
-  if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants.push('tesla', 'bateria', 'solar', 'inversor', 'lfp', 'respaldo');
+    if (word === 'crs328' || word === 'crs328-24p' || word === 'poe500w') variants.push('mikrotik', 'switch', 'poe', 'sfp', 'dualboot', 'routeros', 'swos');
+  if (word === 'lynx' || word === 'lynxdistributor' || word === 'megafuse') variants.push('victron', 'distribuidor', 'barra', 'colectora', 'fusible', 'litio', 'bateria', '1000a');
+if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants.push('tesla', 'bateria', 'solar', 'inversor', 'lfp', 'respaldo');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1416,6 +1418,28 @@ function scoreProductMatch(product, normalizedQuery) {
         score += 180;
       } else {
         score += 120;
+      }
+    }
+  }
+
+  // Priorizar Switch Administrable PoE+ MikroTik CRS328 al buscar crs328, crs 328, crs328-24p, mikrotik poe, switch mikrotik poe (SUG-M3280)
+  if (/\b(crs328|crs\s*328|crs328-24p|mikrotik\s*poe|switch\s*mikrotik\s*poe|poe\s*500w)\b/i.test(normalizedQuery) || (/\b(mikrotik)\b/i.test(normalizedQuery) && /\b(crs328|328|poe\+|500w|24p)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('mikrotik')) {
+      if (/crs328/i.test(title)) {
+        score += 240;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Bloque de Distribución Victron Lynx Distributor al buscar lynx distributor, lynx dist, lynx 1000a, distribuidor victron, megafuse victron (SUG-V1000)
+  if (/\b(lynx\s*distributor|lynx\s*dist|lynx\s*1000a|distribuidor\s*victron|megafuse\s*victron|barra\s*colectora\s*victron)\b/i.test(normalizedQuery) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(lynx|distributor|distribuidor|megafuse|colectora)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('victron')) {
+      if (/lynx.*distributor/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
       }
     }
   }

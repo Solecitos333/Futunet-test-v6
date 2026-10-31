@@ -69,7 +69,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v57';"), 'sw.js debe estar en la versión futunet-cache-v57');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v58';"), 'sw.js debe estar en la versión futunet-cache-v57');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
@@ -104,6 +104,8 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/mitsubishi-msz-gl24.webp'"), 'sw.js debe incluir mitsubishi-msz-gl24.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/paradox-tm70-teclado-tactil.webp'"), 'sw.js debe incluir paradox-tm70-teclado-tactil.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/tesla-powerwall-3.webp'"), 'sw.js debe incluir tesla-powerwall-3.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp'"), 'sw.js debe incluir mikrotik-crs328-24p-4s-switch-poe.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/victron-lynx-distributor-1000a.webp'"), 'sw.js debe incluir victron-lynx-distributor-1000a.webp en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {
