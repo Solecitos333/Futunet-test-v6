@@ -96,6 +96,9 @@ redirectIssues.slice(0, 15).forEach(i => console.log(`[${i.file}:${i.line}] ${i.
 // 5. Audit Subresource Integrity (SRI) on external scripts & styles
 console.log('\n--- 5. Subresource Integrity (SRI) Audit ---');
 const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
+if (fs.existsSync(path.join(rootDir, 'ai', 'index.html'))) {
+  htmlFiles.push(path.join('ai', 'index.html'));
+}
 let externalScripts = [];
 let externalStyles = [];
 

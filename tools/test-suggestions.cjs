@@ -2361,3 +2361,75 @@ test('Mejora demandada por usuarios: Bloque de Distribución Modular Victron Ene
   assert.ok(catJs.includes("'lynx'") && catJs.includes("'lynxdistributor'"), 'catalog.js debe incluir lynx y lynxdistributor en stem variants');
   assert.ok(catJs.includes("/\\b(lynx\\s*distributor|lynx\\s*dist|lynx\\s*1000a|distribuidor\\s*victron|megafuse\\s*victron|barra\\s*colectora\\s*victron)\\b/i.test(normalizedQuery)"), 'catalog.js debe priorizar Victron Lynx Distributor');
 });
+
+test('Mejora demandada por usuarios: Cámara de Seguridad Solar 4G LTE PTZ Ezviz EB8 4G (SUG-E8000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E8000'") && seedCjs.includes("status: 'implemented'"), 'SUG-E8000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E8000') && sugJs.includes('Ezviz EB8'), 'SUG-E8000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_ezviz_eb8_4g_camara_solar_ptz'), 'backup_data.js debe contener seguridad_ezviz_eb8_4g_camara_solar_ptz');
+
+  const ezvizImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-eb8-4g-camara-solar-ptz.webp');
+  assert.ok(fs.existsSync(ezvizImg), 'La imagen de la cámara Ezviz EB8 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'eb8'") && catJs.includes("'eb8-4g'"), 'catalog.js debe incluir eb8 en stem variants');
+  assert.ok(catJs.includes('/\\b(eb8|eb8\\s*4g|camara\\s*solar\\s*4g|camara\\s*ezviz\\s*solar|ezviz\\s*4g|ezviz\\s*eb8)\\b/i.test(normalizedQuery)'), 'catalog.js debe priorizar Cámara Ezviz EB8');
+});
+
+test('Mejora demandada por usuarios: Sistema Modular de Videoconferencia Premium Logitech Rally Plus (SUG-L8500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L8500'") && seedCjs.includes("status: 'implemented'"), 'SUG-L8500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L8500') && sugJs.includes('Logitech Rally Plus'), 'SUG-L8500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('equipos_logitech_rally_plus_videoconferencia_4k'), 'backup_data.js debe contener equipos_logitech_rally_plus_videoconferencia_4k');
+
+  const logitechImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'logitech-rally-plus-videoconferencia-4k.webp');
+  assert.ok(fs.existsSync(logitechImg), 'La imagen del sistema Logitech Rally Plus debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'rallyplus'") && catJs.includes("'rightsense'"), 'catalog.js debe incluir rallyplus y rightsense en stem variants');
+  assert.ok(catJs.includes('/\\b(rally\\s*plus|rallyplus|logitech\\s*rally\\s*plus|videoconferencia\\s*4k\\s*logitech)\\b/i.test(normalizedQuery)'), 'catalog.js debe priorizar Logitech Rally Plus');
+});
+
+test('Mejora demandada por usuarios: Pantalla Profesional QLED 4K Samsung The Frame Pro 55" (SUG-S8500)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S8500'") && seedCjs.includes("status: 'implemented'"), 'SUG-S8500 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S8500') && sugJs.includes('Samsung The Frame Pro'), 'SUG-S8500 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_samsung_the_frame_pro_55_qled_4k'), 'backup_data.js debe contener oficina_samsung_the_frame_pro_55_qled_4k');
+
+  const samsungImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'samsung-the-frame-pro-55-qled-4k.webp');
+  assert.ok(fs.existsSync(samsungImg), 'La imagen de la pantalla Samsung The Frame Pro debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'theframe'") && catJs.includes("'framepro'"), 'catalog.js debe incluir theframe y framepro en stem variants');
+  assert.ok(catJs.includes('/\\b(the\\s*frame|samsung\\s*the\\s*frame|theframe|frame\\s*pro|pantalla\\s*arte)\\b/i.test(normalizedQuery)'), 'catalog.js debe priorizar Samsung The Frame Pro');
+});
+
+test('Mejora demandada por usuarios: Barrera Vehicular Automática ZKTeco CMP200 Brushless (SUG-Z6000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-Z6000'") && seedCjs.includes("status: 'implemented'"), 'SUG-Z6000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-Z6000') && sugJs.includes('ZKTeco CMP200'), 'SUG-Z6000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_zkteco_cmp200_barrera_vehicular_automatica'), 'backup_data.js debe contener seguridad_zkteco_cmp200_barrera_vehicular_automatica');
+
+  const zktecoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'zkteco-cmp200-barrera-vehicular-automatica.webp');
+  assert.ok(fs.existsSync(zktecoImg), 'La imagen de la barrera ZKTeco CMP200 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'cmp200'") && catJs.includes("'cmp-200'"), 'catalog.js debe incluir cmp200 en stem variants');
+  assert.ok(catJs.includes('/\\b(cmp200|cmp\\s*200|barrera\\s*zkteco|barrera\\s*vehicular|brazo\\s*vehicular|zkteco\\s*cmp)\\b/i.test(normalizedQuery)'), 'catalog.js debe priorizar ZKTeco CMP200');
+});

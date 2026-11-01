@@ -862,8 +862,8 @@ test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V
 test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
   const swJs = readJs('sw.js');
   assert.ok(
-    swJs.includes("const CACHE_NAME = 'futunet-cache-v58';"),
-    'sw.js debe estar en la versión futunet-cache-v58'
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v59';"),
+    'sw.js debe estar en la versión futunet-cache-v59'
   );
   assert.ok(
     swJs.includes("'/cotizacion'") && swJs.includes("'/cotizacion.html'"),
@@ -1106,4 +1106,48 @@ test('DevSecOps & OWASP A08: Cobertura 100% de Subresource Integrity (SRI) en sc
     portalJs.includes("escapeHtml(String(matchingPlan.speed || ''))"),
     'internet-portal.js debe escapar matchingPlan.speed con escapeHtml al renderizar el plan sugerido'
   );
+});
+
+test('DevSecOps & OWASP A01/A08: Hardening y Subresource Integrity (SRI) en AI Hub (ai/index.html), control de acceso y rate limiting', () => {
+  const aiHtml = fs.readFileSync(path.join(rootDir, 'ai', 'index.html'), 'utf8');
+  const aiAppJs = fs.readFileSync(path.join(rootDir, 'ai', 'js', 'ai-app.js'), 'utf8');
+  const authGuardJs = readJs('js/auth-guard.js');
+  const loginHtml = readHtml('login.html');
+  const swJs = readJs('sw.js');
+
+  // 1. Verificación de Subresource Integrity (SRI) y SDK moderno en ai/index.html
+  const FB_APP_HASH = 'sha384-sEVIly94UBRLKWdkYoPpSG7GD/e79YHMrxVyZaOk712Ga7+EAw6w1EFi+xBzBdd+';
+  const FB_AUTH_HASH = 'sha384-EkqK+ezBWJuvO3hfrSx2iVqr3YQbhmnzn8kPhOpBZ+0GMVU5oGSgptwIu8D84HjE';
+  const FB_FS_HASH = 'sha384-M481iNZJtbpypKgvlvZ+78Giq0BsewFLk5r2k+MOcGXlwKCc27DQRZ+WCV/zpmpC';
+  assert.ok(aiHtml.includes(FB_APP_HASH), 'ai/index.html debe proteger firebase-app-compat con SRI SHA-384');
+  assert.ok(aiHtml.includes(FB_AUTH_HASH), 'ai/index.html debe proteger firebase-auth-compat con SRI SHA-384');
+  assert.ok(aiHtml.includes(FB_FS_HASH), 'ai/index.html debe proteger firebase-firestore-compat con SRI SHA-384');
+  assert.ok(aiHtml.includes('crossorigin="anonymous"'), 'ai/index.html debe configurar crossorigin anonymous en scripts');
+  assert.ok(!aiHtml.includes('firebasejs/10.12.2'), 'ai/index.html no debe tener dependencias no fijadas o sin hash');
+
+  // 2. Límites de entrada y campos sensibles en ai/index.html
+  assert.ok(aiHtml.includes('id="search-input"') && aiHtml.includes('maxlength="100"'), 'ai/index.html debe limitar search-input con maxlength="100"');
+  assert.ok(aiHtml.includes('id="chat-input"') && aiHtml.includes('maxlength="4000"'), 'ai/index.html debe limitar chat-input con maxlength="4000"');
+  assert.ok(aiHtml.includes('id="ollama-url"') && aiHtml.includes('maxlength="250"'), 'ai/index.html debe limitar ollama-url con maxlength="250"');
+  assert.ok(aiHtml.includes('id="gemini-key"') && aiHtml.includes('maxlength="128"'), 'ai/index.html debe limitar gemini-key con maxlength="128"');
+  assert.ok(aiHtml.includes('id="gemini-key"') && aiHtml.includes('autocomplete="new-password"') && aiHtml.includes('spellcheck="false"'), 'gemini-key debe tener autocomplete y spellcheck seguro');
+
+  // 3. Control de acceso RBAC estricto en ai-app.js
+  assert.ok(aiAppJs.includes('FutunetGuard.requireSuperAdmin'), 'ai-app.js debe proteger la inicialización con FutunetGuard.requireSuperAdmin');
+  assert.ok(aiAppJs.includes('futunet_last_ai_msg_ts'), 'ai-app.js debe implementar rate limiting con futunet_last_ai_msg_ts');
+  assert.ok(aiAppJs.includes('1500'), 'ai-app.js debe aplicar un cooldown de 1.5s entre mensajes');
+  assert.ok(aiAppJs.includes('.replace(/[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]/g'), 'ai-app.js debe sanitizar caracteres de control ASCII');
+
+  // 4. Protección contra Broken Access Control y Redirección en login.html
+  assert.ok(loginHtml.includes('isAiPath'), 'login.html debe identificar peticiones de redirección hacia ai');
+  assert.ok(loginHtml.includes('isSuperAdmin'), 'login.html debe exigir rol superadmin para acceder a rutas de ai');
+  assert.ok(loginHtml.includes("!pathname.includes('/') || pathname === redirectFile"), 'login.html debe mitigar path traversal en redirecciones locales');
+
+  // 5. Exclusión de caché en Service Worker (sw.js)
+  assert.ok(swJs.includes("'/ai'") && swJs.includes("'/ai/index.html'"), 'sw.js debe excluir /ai y /ai/index.html en privatePaths');
+  assert.ok(swJs.includes("'/ai/js/ai-app.js'") && swJs.includes("'/ai/js/ai-gemini.js'"), 'sw.js debe excluir scripts de AI en privateScripts');
+
+  // 6. Enrutamiento relativo en auth-guard.js
+  assert.ok(authGuardJs.includes('function resolveTarget('), 'auth-guard.js debe implementar resolveTarget para subdirectorios');
+  assert.ok(authGuardJs.includes('function getRedirectParam('), 'auth-guard.js debe normalizar el parámetro de redirección');
 });

@@ -812,7 +812,7 @@
       }
 
       html += '<tr>' +
-        '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.src=\'img/logo.webp\'"></td>' +
+        '<td data-label="Imagen"><img src="' + escapeAttr(img) + '" style="width:48px;height:48px;object-fit:cover;border-radius:10px;" alt="" onerror="this.onerror=null;this.src=\'img/logo.webp\'"></td>' +
         '<td data-label="Nombre"><strong style="color:#0a101d;">' + escapeHtml(p.title || 'Sin nombre') + '</strong>' + (p._isCreaticos ? '' : statusBadge) + codeInfo + '</td>' +
         '<td data-label="Categoría" class="col-hide-mobile">' + escapeHtml(p.category || p.department || '-') + '</td>' +
         '<td data-label="Precio">' + formatPrice(p.price) + '</td>' +
@@ -1919,7 +1919,7 @@
         
         var img = item.img || 'img/logo.webp';
         itemsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #e5eef8;">' +
-          '<img src="' + escapeAttr(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.webp\'">' +
+          '<img src="' + escapeAttr(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.onerror=null;this.src=\'img/logo.webp\'">' +
           '<div style="flex-grow:1;">' +
           '<div style="font-weight:600; color:#0a101d; font-size:0.88rem;">' + escapeHtml(item.title) + '</div>' +
           '<div style="font-size:0.78rem; color:#76889e;">' + formatPrice(price) + ' x ' + qty + '</div>' +

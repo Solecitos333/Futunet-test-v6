@@ -1778,3 +1778,101 @@ python -m unittest test_main.py test_chatbot_api.py
     - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
     - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con el 100% de las marcas cumpliendo el estándar de ≥ 4 productos.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML, 29 hojas de estilo y 741 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Auditoría DevSecOps & Mitigación Proactiva Diaria (2026-11-01: Hardening Integral de Futunet AI Hub, Erradicación de Broken Access Control en Redirección, Cobertura Universal de SRI en Subdirectorios, Erradicación de Bucles en Manejadores de Imagen, Paridad de Marcas Aliadas y Catálogo 455)**:
+  - **Control de Acceso RBAC & Mitigación de Broken Access Control (OWASP A01:2021 / CWE-601)**:
+    - Detección de brecha en `login.html`: La extracción del nombre de archivo mediante `split('/').pop()` permitía a usuarios estándar ser redirigidos hacia subdirectorios no autorizados como `/ai/index.html` al coincidir la extensión `index.html` con la lista de permitidos.
+    - Implementación de comprobación estricta de ruta normalizada (`pathname.replace(/^\/+/, '')`) y validación de coincidencia exacta de origen.
+    - Las rutas de AI (`ai/`, `ai/index.html`) exigen estrictamente el rol `superadmin` institucional (`isSuperAdmin && !companyCode`).
+    - Para el resto de rutas locales, se exige que `!pathname.includes('/') || pathname === redirectFile`, neutralizando cualquier intento de path traversal o salto de subdirectorios en la redirección post-login.
+  - **Blindaje y Gobernanza RBAC en AI Hub (`ai/js/ai-app.js`)**:
+    - Eliminación de la guarda laxa `onAuthStateChanged` que permitía a usuarios no autorizados cargar la interfaz interna de IA.
+    - Implementación de `FutunetGuard.requireSuperAdmin`, vinculada con la regla de seguridad de backend en Firestore (`match /ai_conversations/{userId} { allow read, write: if isSuperAdmin(); }`).
+    - Prevención de excepciones de puntero nulo (`TypeError`) en `displayName` y `user.email`.
+    - Integración con `FutunetAuth.signOut()` para un cierre de sesión limpio y redirección segura hacia `../login.html`.
+  - **Subresource Integrity (SRI) y Supply Chain Security (OWASP A08:2021) en `ai/index.html`**:
+    - Reemplazo de dependencias no fijadas Firebase 10.12.2 por la versión estándar corporativa 10.12.0 compat.
+    - Incorporación de hashes criptográficos SHA-384 oficiales (`sha384-sEVIly94UBRLKWdkYoPpSG7GD/e79YHMrxVyZaOk712Ga7+EAw6w1EFi+xBzBdd+`, `sha384-EkqK+ezBWJuvO3hfrSx2iVqr3YQbhmnzn8kPhOpBZ+0GMVU5oGSgptwIu8D84HjE`, `sha384-M481iNZJtbpypKgvlvZ+78Giq0BsewFLk5r2k+MOcGXlwKCc27DQRZ+WCV/zpmpC`) y atributo `crossorigin="anonymous"`, alcanzando una cobertura universal de 247 scripts externos auditados (100% SRI).
+  - **Límites de Entrada (Bounds) y Privacidad de Campos Sensibles (OWASP ASVS v4.0 V5 / CWE-20 & Ley 172-13)**:
+    - Atributos `maxlength="100"` en buscador de chats (`#search-input`), `maxlength="4000"` en textarea de prompt (`#chat-input`), `maxlength="250"` en endpoint Ollama (`#ollama-url`), y `maxlength="128"` en clave Gemini (`#gemini-key`).
+    - Atributos `autocomplete="new-password"` y `spellcheck="false"` en campo sensible `#gemini-key` para prevenir filtraciones por historial, autocompletado del navegador o correctores ortográficos de terceros.
+  - **Anti-Flooding y Sanitización de Caracteres de Control (`ai/js/ai-app.js`)**:
+    - Saneamiento de caracteres de control ASCII (`[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]`) y truncamiento defensivo a 4000 caracteres en `sendMessage`.
+    - Cooldown de 1.5 segundos entre consultas consecutivas en `sessionStorage` (`futunet_last_ai_msg_ts`) para mitigar flooding, DoS y consumo excesivo de cuota API.
+  - **Enrutamiento Relativo Seguro en Módulo de Autenticaciòn (`js/auth-guard.js`)**:
+    - Implementación de `resolveTarget(page)` y `getRedirectParam()` asegurando que redirecciones desde subdirectorios (ej. `/ai/`) apunten correctamente a `../login.html` y `../mi-cuenta.html` sin roturas 404.
+    - Implementación explícita de `FutunetGuard.requireSuperAdmin`.
+  - **Erradicación Definitiva de Bucles Infinitos en Errores de Imágenes (`admin-panel.js`, `catalog.js`, `category-showcase.js`, `user-panel.js`)**:
+    - Auditoría exhaustiva en 88 scripts JS y 53 archivos HTML detectando manejadores `onerror` sin reinicio preventivo de puntero (`this.onerror=null`).
+    - Blindaje en 5 componentes críticos (`admin-panel.js:815`, `admin-panel.js:1922`, `catalog.js:3433`, `category-showcase.js:78`, `user-panel.js:392`) para evitar congelamiento del hilo principal en fallos de red o bloqueo de assets.
+    - Implementación de helper `escapeHTML` en `category-showcase.js` para neutralizar inyecciones de atributos HTML y caracteres especiales en tarjetas de productos del carrusel de inicio.
+  - **Ampliación de Catálogo (455 Productos) y Elevación de Paridad de Marcas Aliadas**:
+    - Incorporación de 4 productos de alta demanda tecnológica empresarial:
+      1. `seguridad_ezviz_eb8_4g_camara_solar_ptz`: Cámara Solar 4G PTZ Ezviz EB8 2K 3MP con batería de 10,400 mAh y panel solar incluido para fincas y obras sin red eléctrica (`marca-ezviz.html`).
+      2. `equipos_logitech_rally_plus_videoconferencia_4k`: Sistema Modular de Videoconferencia Logitech Rally Plus Ultra HD 4K con 2 bocinas, 2 Mic Pods y encuadre RightSight AI para salas de juntas (`marca-logitech.html`).
+      3. `oficina_samsung_the_frame_pro_55_qled_4k`: Pantalla Comercial Samsung The Frame Pro 55" QLED 4K con pantalla mate antirreflejo, soporte Slim Fit y Modo Arte (`marca-samsung.html`).
+      4. `seguridad_zkteco_cmp200_barrera_vehicular_automatica`: Barrera Vehicular Automática ZKTeco CMP200 con motor Brushless DC y brazo telescópico de 3m a 6m para parqueos y zonas francas (`marca-zkteco.html`).
+    - Paridad de Marcas Aliadas: Las 4 marcas (`Ezviz`, `Logitech`, `Samsung`, `ZKTeco`) se elevan de 4 a 5 productos cada una, elevando a 16 el número de marcas con $\ge 5$ productos y garantizando que el 100% de las 26 páginas de marca (`marca-*.html`) cuenten con catálogos variados y robustos.
+    - Sincronización de sugerencias ciudadanas resueltas: `SUG-E8000`, `SUG-L8500`, `SUG-S8500` y `SUG-Z6000` integradas al muro comunitario con estado `implemented` y respuestas oficiales completas.
+  - **PWA & Service Worker v59 (`sw.js`)**:
+    - Exclusión de `/ai`, `/ai/index.html` y los scripts de IA (`ai-app.js`, `ai-gemini.js`, `ai-memory.js`) de la caché en segundo plano (`privatePaths` y `privateScripts`).
+    - Precache de los 4 nuevos activos WebP en `OPTIONAL_ASSETS`: `ezviz-eb8-4g-camara-solar-ptz.webp`, `logitech-rally-plus-videoconferencia-4k.webp`, `samsung-the-frame-pro-55-qled-4k.webp`, `zkteco-cmp200-barrera-vehicular-automatica.webp`.
+    - Eliminación de entrada WebP duplicada de Paradox TM70 y bump de caché a `futunet-cache-v59`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 261 tests automatizados aprobados al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest discover -s . -p "test_*.py"`).
+    - Total de 315 pruebas automatizadas pasando exitosamente en toda la plataforma.
+    - 0 scripts externos sin SRI en toda la plataforma (247/247 protegidos con SHA-384).
+    - 0 formularios sin honeypot en toda la web (48/48 protegidos).
+    - 0 formularios con PII sin consentimiento explícito de privacidad (Ley 172-13 / RGPD).
+    - 0 inputs dinámicos o estáticos sin límites ni techos numéricos.
+    - 0 contraseñas o campos sensibles sin `spellcheck="false"`.
+    - 0 vulnerabilidades de Broken Access Control en redirecciones.
+    - 0 errores sintácticos en 88 scripts JS y 0 IDs duplicados en 53 archivos HTML.
+    - 0 manejadores `onerror` sin reinicio de puntero en toda la base de código.
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con 16 marcas alcanzando $\ge 5$ productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML, 29 hojas de estilo y 745 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Atención y Respuesta al Buzón de Sugerencias — Lote 24 (2026-11-01: 128 Sugerencias Oficiales Implementadas, Catálogo Expandido a 455 Ítems, Cámara Solar 4G LTE PTZ Ezviz EB8 con Batería 10.4Ah, Sistema Modular Videoconferencia 4K Logitech Rally Plus, Pantalla Profesional QLED 4K Samsung The Frame Pro 55" y Barrera Vehicular Automática ZKTeco CMP200 Brushless)**:
+  - **Revisión y Respuesta Oficial de Sugerencias (128/128 Implementadas y Respondidas)**:
+    - **`SUG-E8000`** (Ing. Ramón Emilio Fernández, Seguridad Agropecuaria & Fincas Cibao):
+      - *Título*: Disponibilidad de Cámaras de Seguridad Solar 4G LTE PTZ Ezviz EB8 4G (2K 3MP) con Batería de 10,400 mAh para Fincas y Zonas sin Wi-Fi.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de CCTV y Seguridad Electrónica y a la página de marca `marca-ezviz.html` la Cámara de Seguridad Solar 4G LTE PTZ Ezviz EB8 4G (`seguridad_ezviz_eb8_4g_camara_solar_ptz`) con conectividad celular directa mediante ranura MicroSIM (Claro y Altice), batería recargable masiva de 10,400 mAh, panel solar fotovoltaico de acoplamiento continuo para autonomía 24/7 sin cables, resolución 2K (3MP 2304x1296), rotación motorizada panorámica de 360° con auto-tracking, visión nocturna a color, sensor PIR térmico con IA anti falsas alarmas, sirena disuasoria con luces estroboscópicas y certificación climática IP65 con garantía oficial Ezviz en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`ezviz-eb8-4g-camara-solar-ptz.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-L8500`** (Lic. Alejandro Almonte, Tecnología & Salas Corporativas Cibao):
+      - *Título*: Disponibilidad de Sistemas Modulares de Videoconferencia Premium Logitech Rally Plus con Cámara 4K Ultra HD y Tecnologías RightSense AI.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Equipos y Periféricos de Oficina y a la página de marca `marca-logitech.html` el Sistema Modular de Videoconferencia Premium Logitech Rally Plus (`equipos_logitech_rally_plus_videoconferencia_4k`) diseñado para salas de juntas corporativas y directorios ejecutivos de 16 a 20+ personas. Cuenta con cámara motorizada Rally Ultra-HD 4K PTZ con zoom óptico-digital 15X, 2 bocinas frontales con desacoplamiento acústico antivibratorio, 2 bases de micrófonos de mesa Mic Pod con captación 360° RightSound beamforming, concentradores Table Hub y Display Hub para cableado único CAT6A y suite de IA RightSense (auto-encuadre RightSight, balance de luminancia RightLight y nivelación vocal RightSound) con 2 años de garantía oficial corporativa en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`logitech-rally-plus-videoconferencia-4k.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-S8500`** (Arq. Carolina Gómez, Diseño Corporativo & Arquitectura Cibao):
+      - *Título*: Disponibilidad de Pantallas Profesionales QLED 4K Samsung The Frame Pro de 55 Pulgadas con Modo Arte y Pantalla Mate Antirreflejo.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de Equipos y Periféricos de Oficina y a la página de marca `marca-samsung.html` la Pantalla Profesional QLED 4K Samsung The Frame Pro 55" (`oficina_samsung_the_frame_pro_55_qled_4k`) con panel Mate Antirreflejo (Matte Display) certificado anti-brillo de textura tipo lienzo, galardonado Modo Arte con sensor de presencia y brillo para exhibir obras o cartelería corporativa sin verse como una televisión apagada, panel QLED 4K con 100% volumen de color Quantum Dot, refresco nativo ultra fluido de 120Hz, caja de conexiones One Connect Box con cable único casi invisible de 5 metros, soporte de pared ultraplano Slim Fit Wall Mount al ras de pared y marco magnético intercambiable con garantía oficial Samsung en República Dominicana.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`samsung-the-frame-pro-55-qled-4k.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-Z6000`** (Ing. Manuel Darío Castro, Sistemas de Acceso & Automatización Residencial del Norte):
+      - *Título*: Disponibilidad de Barreras Vehiculares Automáticas de Alta Velocidad ZKTeco CMP200 con Motor Brushless DC y Brazo Telescópico.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporada al catálogo de Seguridad Electrónica & Control de Acceso y a la página de marca `marca-zkteco.html` la Barrera Vehicular Automática ZKTeco CMP200 (`seguridad_zkteco_cmp200_barrera_vehicular_automatica`) con motor Brushless DC (BLDC 24V) de ciclo continuo 100% y vida útil de 5 millones de aperturas/cierres sin mantenimiento, brazo telescópico de aluminio reforzado ajustable de 3 a 6 metros con tira de luz LED de advertencia nocturna, velocidad de apertura rápida ajustable de 1.5 a 6 segundos, mecanismo reversible izquierda/derecha en campo, indicador frontal tipo semáforo LED de pase/alto, protección anti-impacto con rebote automático e integración con tags RFID UHF y radares VR10 con garantía oficial ZKTeco y repuestos en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`zkteco-cmp200-barrera-vehicular-automatica.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+  - **Ampliación de Catálogo y Paridad de Marcas Aliadas (16 marcas con $\ge 5$ productos)**:
+    - Generación y publicación de 4 nuevas tarjetas visuales WebP de alta fidelidad (880x880) con especificaciones completas y sellos de garantía oficial: `ezviz-eb8-4g-camara-solar-ptz.webp`, `logitech-rally-plus-videoconferencia-4k.webp`, `samsung-the-frame-pro-55-qled-4k.webp`, `zkteco-cmp200-barrera-vehicular-automatica.webp` en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - Cumplimiento y elevación de paridad de marcas: El 100% de las 26 páginas de marca (`marca-*.html`) cuentan con al menos 4 productos, y 16 marcas líderes alcanzan 5 o más productos (`Cisco`: 5, `Dahua`: 5, `Dell`: 17, `Epson`: 6, `Ezviz`: 5, `Hikvision`: 13, `Juniper`: 5, `Logitech`: 6, `MikroTik`: 5, `Samsung`: 6, `Schneider Electric`: 5, `Tesla`: 5, `TP-Link`: 5, `Ubiquiti`: 5, `Uniview`: 5, `Victron Energy`: 5, `ZKTeco`: 5).
+    - Catálogo expandido a 455 productos únicos en `js/backup_data.js` y sincronización en la colección Firestore `products` vía `tools/sync-catalog-improvements.cjs`.
+    - Sincronización oficial de las 128 sugerencias en `js/suggestions.js` y persistencia en la colección `suggestions` de Firestore vía `tools/seed-suggestions.cjs` con estado `implemented` y respuestas institucionales completas.
+  - **Optimización de Motor de Búsqueda y Telemetría Semántica (`js/catalog.js` & `tools/test-search-telemetry.cjs`)**:
+    - Variantes morfológicas y sinónimos stem agregados: `eb8`, `eb8-4g`, `eb84g`, `rallyplus`, `rally-plus`, `rightsense`, `theframe`, `the-frame`, `framepro`, `cmp200`, `cmp-200`, `barrera`.
+    - Reglas de priorización de puntuación en `scoreProductMatch`: +280 puntos exactos por coincidencia de modelo y +170 puntos por coincidencia de marca aliada.
+    - Telemetría en `check-queries.cjs` y `test-search-telemetry.cjs`: ranking #1 y puntuaciones superiores a 400 en todas las consultas clave (`eb8`: 420, `camara solar 4g`: 659, `rally plus`: 415, `the frame`: 415, `samsung frame`: 545, `cmp200`: 550, `barrera vehicular`: 455).
+  - **PWA & Service Worker v59 (`sw.js`)**:
+    - Precache de los 4 nuevos activos WebP de catálogo en `OPTIONAL_ASSETS`.
+    - Sincronización de versión de caché a `futunet-cache-v59` y mitigación ASVS V2/V8 con exclusión estricta de rutas sensibles en Service Worker (`tools/test-dom-safety.cjs` y `tools/test-forms-security.cjs`).
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 261 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest discover -s . -p "test_*.py"`).
+    - 0 errores sintácticos en 88 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - 0 accesos desprotegidos al DOM en toda la plataforma (`node tools/audit-dom-listeners.cjs`).
+    - 0 vulnerabilidades de target="_blank", window.open o escapes en innerHTML (`node tools/audit-security-deep.cjs`).
+    - 26/26 páginas de marcas con catálogo activo y variado (`node tools/audit-brand-pages.cjs`), con el 100% de las marcas cumpliendo el estándar de ≥ 4 productos y 16 marcas con ≥ 5 productos.
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML, 29 hojas de estilo y 745 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

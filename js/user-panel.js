@@ -389,7 +389,7 @@
       var img = item.img || 'img/logo.webp';
       
       itemsHtml += '<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid #e5eef8;">' +
-        '  <img src="' + escapeHtml(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.src=\'img/logo.webp\'">' +
+        '  <img src="' + escapeHtml(img) + '" style="width:40px; height:40px; object-fit:cover; border-radius:6px;" onerror="this.onerror=null;this.src=\'img/logo.webp\'">' +
         '  <div style="flex-grow:1;">' +
         '    <div style="font-weight:600; color:#0a101d; font-size:0.85rem;">' + escapeHtml(item.title) + '</div>' +
         '    <div style="font-size:0.75rem; color:#76889e;">' + priceFormatted + ' x ' + numQty + '</div>' +

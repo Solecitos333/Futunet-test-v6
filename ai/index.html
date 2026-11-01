@@ -21,9 +21,9 @@
   <link rel="stylesheet" href="css/ai-hub.css">
   
   <!-- Firebase Compat SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js" integrity="sha384-sEVIly94UBRLKWdkYoPpSG7GD/e79YHMrxVyZaOk712Ga7+EAw6w1EFi+xBzBdd+" crossorigin="anonymous"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js" integrity="sha384-EkqK+ezBWJuvO3hfrSx2iVqr3YQbhmnzn8kPhOpBZ+0GMVU5oGSgptwIu8D84HjE" crossorigin="anonymous"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js" integrity="sha384-M481iNZJtbpypKgvlvZ+78Giq0BsewFLk5r2k+MOcGXlwKCc27DQRZ+WCV/zpmpC" crossorigin="anonymous"></script>
 </head>
 <body>
   <div id="loading-screen" class="loading-screen">
@@ -46,7 +46,7 @@
       </button>
       
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="Buscar chats..." autocomplete="off">
+        <input type="text" id="search-input" placeholder="Buscar chats..." autocomplete="off" maxlength="100">
       </div>
       
       <div class="chat-list-container">
@@ -114,7 +114,7 @@
           <button id="attach-btn" class="icon-btn" title="Adjuntar imagen">📎</button>
           <input type="file" id="file-input" accept="image/*" style="display: none;">
           
-          <textarea id="chat-input" placeholder="Escribe un mensaje... (Shift+Enter para nueva línea)"></textarea>
+          <textarea id="chat-input" placeholder="Escribe un mensaje... (Shift+Enter para nueva línea)" maxlength="4000"></textarea>
           
           <button id="send-btn" class="icon-btn send-btn" disabled>➤</button>
           <button id="stop-btn" class="icon-btn stop-btn" style="display: none;">🛑</button>
@@ -135,7 +135,7 @@
       <div class="settings-group">
         <label for="ollama-url">Servidor Ollama URL</label>
         <div class="input-with-button">
-          <input type="text" id="ollama-url" placeholder="Ej: http://localhost:11434">
+          <input type="text" id="ollama-url" placeholder="Ej: http://localhost:11434" maxlength="250" autocomplete="off" spellcheck="false">
           <button id="test-ollama-btn">Probar</button>
         </div>
       </div>
@@ -143,7 +143,7 @@
       <div class="settings-group">
         <label for="gemini-key">API Key Gemini</label>
         <div class="password-input">
-          <input type="password" id="gemini-key" placeholder="AIzaSy...">
+          <input type="password" id="gemini-key" placeholder="AIzaSy..." maxlength="128" autocomplete="new-password" spellcheck="false">
           <button id="toggle-key-vis" class="icon-btn">👁️</button>
         </div>
       </div>
@@ -160,9 +160,11 @@
     </div>
   </div>
 
-  <script src="../js/firebase-config.js"></script>
-  <script src="js/ai-memory.js"></script>
-  <script src="js/ai-gemini.js"></script>
-  <script src="js/ai-app.js"></script>
+  <script defer src="../js/firebase-config.js"></script>
+  <script defer src="../js/auth.js"></script>
+  <script defer src="../js/auth-guard.js"></script>
+  <script defer src="js/ai-memory.js"></script>
+  <script defer src="js/ai-gemini.js"></script>
+  <script defer src="js/ai-app.js"></script>
 </body>
 </html>

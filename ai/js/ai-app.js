@@ -401,8 +401,20 @@
   }
 
   async function sendMessage(text) {
-    text = text.trim();
+    if (!text || typeof text !== 'string') return;
+    // Sanitizar caracteres de control ASCII invisibles y limitar longitud
+    text = text.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/g, '').trim();
+    if (text.length > 4000) text = text.slice(0, 4000);
     if (!text || state.isGenerating) return;
+
+    // Cooldown temporal de 1.5s entre consultas (OWASP Anti-Flooding / DoS)
+    const now = Date.now();
+    const lastSend = parseInt(sessionStorage.getItem('futunet_last_ai_msg_ts') || '0', 10);
+    if (now - lastSend < 1500) {
+      alert('Por favor espera un momento antes de enviar otra consulta.');
+      return;
+    }
+    sessionStorage.setItem('futunet_last_ai_msg_ts', String(now));
 
     els.chatInput.value = '';
     autoResizeTextarea();
@@ -726,10 +738,15 @@
   els.logoutBtn.addEventListener('click', async () => {
     if (confirm('¿Cerrar sesión?')) {
       try {
-        await firebase.auth().signOut();
+        if (typeof FutunetAuth !== 'undefined') {
+          await FutunetAuth.signOut();
+        } else if (typeof firebase !== 'undefined' && firebase.auth) {
+          await firebase.auth().signOut();
+        }
       } catch (e) {
-        window.location.href = '/';
+        console.warn('Error al cerrar sesión:', e);
       }
+      window.location.href = '../login.html';
     }
   });
 
@@ -750,24 +767,18 @@
 
   // --- Init ---
   async function init() {
-    // Check if firebase is available
-    if (typeof firebase === 'undefined' || !firebase.auth) {
-      console.error('Firebase not loaded. Make sure firebase-config.js is loaded first.');
-      els.loadingScreen.innerHTML = '<p style="color:red;padding:2rem">Error: Firebase no disponible. Verifica la configuración.</p>';
+    if (typeof FutunetGuard === 'undefined') {
+      console.error('FutunetGuard no disponible.');
+      els.loadingScreen.innerHTML = '<p style="color:red;padding:2rem">Error: Módulo de seguridad FutunetGuard no disponible.</p>';
       return;
     }
 
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (!user) {
-        // Not logged in - redirect to login
-        window.location.href = '/?redirect=ai';
-        return;
-      }
-
-      // Set user info in UI
-      const displayName = user.displayName || user.email.split('@')[0];
+    // Control de acceso RBAC estricto: Superadmin institucional únicamente
+    FutunetGuard.requireSuperAdmin(async function (user, userData) {
+      // Set user info in UI con protección contra null/undefined
+      const displayName = (userData && userData.name) || (user && user.displayName) || (user && user.email ? user.email.split('@')[0] : 'Superadmin');
       els.userName.textContent = displayName;
-      els.userAvatar.textContent = displayName[0].toUpperCase();
+      els.userAvatar.textContent = (displayName[0] || 'S').toUpperCase();
 
       // Load settings from Firestore
       let userSettings = {};

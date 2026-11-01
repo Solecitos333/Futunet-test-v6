@@ -286,6 +286,10 @@ function getStemVariants(word) {
     if (word === 'crs328' || word === 'crs328-24p' || word === 'poe500w') variants.push('mikrotik', 'switch', 'poe', 'sfp', 'dualboot', 'routeros', 'swos');
   if (word === 'lynx' || word === 'lynxdistributor' || word === 'megafuse') variants.push('victron', 'distribuidor', 'barra', 'colectora', 'fusible', 'litio', 'bateria', '1000a');
 if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants.push('tesla', 'bateria', 'solar', 'inversor', 'lfp', 'respaldo');
+  if (word === 'eb8' || word === 'eb8-4g' || word === 'eb84g') variants.push('ezviz', 'camara', 'solar', '4g', 'lte', 'ptz', 'bateria');
+  if (word === 'rallyplus' || word === 'rally-plus' || word === 'rightsense') variants.push('logitech', 'rally', 'videoconferencia', 'camara', '4k', 'ptz', 'mic');
+  if (word === 'theframe' || word === 'the-frame' || word === 'framepro') variants.push('samsung', 'frame', 'pantalla', 'qled', '4k', 'arte', 'mate', 'antirreflejo');
+  if (word === 'cmp200' || word === 'cmp-200' || word === 'barrera') variants.push('zkteco', 'barrera', 'vehicular', 'brazo', 'telescopico', 'brushless', 'acceso');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1437,6 +1441,50 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(lynx\s*distributor|lynx\s*dist|lynx\s*1000a|distribuidor\s*victron|megafuse\s*victron|barra\s*colectora\s*victron)\b/i.test(normalizedQuery) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(lynx|distributor|distribuidor|megafuse|colectora)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('victron')) {
       if (/lynx.*distributor/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Cámara Solar 4G PTZ Ezviz EB8 al buscar eb8, eb8 4g, camara solar ezviz, camara 4g (SUG-E8000)
+  if (/\b(eb8|eb8\s*4g|camara\s*solar\s*4g|camara\s*ezviz\s*solar|ezviz\s*4g|ezviz\s*eb8)\b/i.test(normalizedQuery) || (/\b(ezviz)\b/i.test(normalizedQuery) && /\b(eb8|4g|solar|ptz)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'ezviz') {
+      if (/eb8/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Sistema Logitech Rally Plus al buscar rally plus, rallyplus, logitech rally plus, videoconferencia 4k logitech (SUG-L8500)
+  if (/\b(rally\s*plus|rallyplus|logitech\s*rally\s*plus|videoconferencia\s*4k\s*logitech)\b/i.test(normalizedQuery) || (/\b(logitech)\b/i.test(normalizedQuery) && /\b(rally\s*plus|rally|plus|rightsense)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'logitech') {
+      if (/rally\s*plus/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Pantalla Samsung The Frame Pro 55" al buscar the frame, samsung the frame, frame pro, pantalla arte (SUG-S8500)
+  if (/\b(the\s*frame|samsung\s*the\s*frame|theframe|frame\s*pro|pantalla\s*arte)\b/i.test(normalizedQuery) || (/\b(samsung)\b/i.test(normalizedQuery) && /\b(the\s*frame|frame|arte|qled\s*55)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'samsung') {
+      if (/the\s*frame/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Barrera Vehicular ZKTeco CMP200 al buscar cmp200, cmp 200, barrera zkteco, barrera vehicular, brazo vehicular (SUG-Z6000)
+  if (/\b(cmp200|cmp\s*200|barrera\s*zkteco|barrera\s*vehicular|brazo\s*vehicular|zkteco\s*cmp)\b/i.test(normalizedQuery) || (/\b(zkteco)\b/i.test(normalizedQuery) && /\b(cmp200|cmp|barrera|vehicular|brushless)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'zkteco') {
+      if (/cmp200/i.test(title)) {
         score += 280;
       } else {
         score += 170;
@@ -3430,7 +3478,7 @@ function initSmartSearch(inputId, dropdownId) {
       html += `<div class="search-group-title">Modelos Específicos</div>`;
       resultModels.slice(0, 5).forEach(m => {
         html += `<div class="search-item search-item--product" data-product-id="${escapeHTML(m.id)}" data-search="${escapeHTML(m.title)}" role="option" tabindex="0">` +
-                `  <img src="${escapeHTML(m.img || 'img/placeholder.svg')}" class="search-item-thumb" alt="" onerror="this.src='img/placeholder.svg'" />` +
+                `  <img src="${escapeHTML(m.img || 'img/placeholder.svg')}" class="search-item-thumb" alt="" onerror="this.onerror=null;this.src='img/placeholder.svg'" />` +
                 `  <div class="search-item-info">` +
                 `    <span class="search-item-name">${escapeHTML(m.title)}</span>` +
                 `    <span class="search-item-brand">${escapeHTML(m.brand)}</span>` +

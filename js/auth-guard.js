@@ -4,6 +4,18 @@
  */
 (function () {
   'use strict';
+  function resolveTarget(page) {
+    var inSubdir = window.location.pathname.includes('/ai/') || (window.location.pathname.replace(/^\/+/, '').split('/').length > 1);
+    return inSubdir ? '../' + page : page;
+  }
+
+  function getRedirectParam() {
+    var pathname = window.location.pathname.replace(/^\/+/, '');
+    if (pathname.startsWith('ai/')) {
+      return pathname + window.location.search;
+    }
+    return (window.location.pathname.split('/').pop() || 'index.html') + window.location.search;
+  }
 
   window.FutunetGuard = {
     /**
@@ -13,22 +25,22 @@
     requireAuth: function (callback) {
       FutunetAuth.authReady.then(function () {
         if (!FutunetAuth.isLoggedIn()) {
-          var currentPage = (window.location.pathname.split('/').pop() || 'index.html') + window.location.search;
-          window.location.href = 'login.html?redirect=' + encodeURIComponent(currentPage);
+          var currentPage = getRedirectParam();
+          window.location.href = resolveTarget('login.html') + '?redirect=' + encodeURIComponent(currentPage);
           return;
         }
         var authUser = FutunetAuth.getCurrentUser();
         if (!authUser || authUser.emailVerified !== true) {
-          var verificationRedirect = (window.location.pathname.split('/').pop() || 'index.html') + window.location.search;
+          var verificationRedirect = getRedirectParam();
           FutunetAuth.signOut().finally(function () {
-            window.location.href = 'login.html?reason=email-verification-required&redirect=' + encodeURIComponent(verificationRedirect);
+            window.location.href = resolveTarget('login.html') + '?reason=email-verification-required&redirect=' + encodeURIComponent(verificationRedirect);
           });
           return;
         }
         var userData = FutunetAuth.getUserData();
         if (userData && userData.status === 'disabled') {
           FutunetAuth.signOut().then(function () {
-            window.location.href = 'login.html';
+            window.location.href = resolveTarget('login.html');
           });
           return;
         }
@@ -50,7 +62,7 @@
     requireRole: function (minRole, callback) {
       this.requireAuth(function (user, userData) {
         if (!FutunetAuth.hasRole(minRole)) {
-          window.location.href = 'mi-cuenta.html';
+          window.location.href = resolveTarget('mi-cuenta.html');
           return;
         }
         callback(user, userData);
@@ -64,7 +76,7 @@
       this.requireAuth(function (user, userData) {
         if (userData && userData.companyCode) {
           // Tenant ERP users cannot access global platform admin panel
-          window.location.href = 'mi-cuenta.html';
+          window.location.href = resolveTarget('mi-cuenta.html');
           return;
         }
         var roles = Array.from(new Set([
@@ -76,7 +88,7 @@
           'support_agent', 'billing_clerk', 'marketing_manager'
         ];
         if (!roles.some(function (role) { return platformRoles.includes(role); })) {
-          window.location.href = 'mi-cuenta.html';
+          window.location.href = resolveTarget('mi-cuenta.html');
           return;
         }
         callback(user, userData);
@@ -99,7 +111,7 @@
         const supportedCompanies = ['creaticos', 'futunetsrl', 'panitas'];
 
         if (!supportedCompanies.includes(activeCompany)) {
-          window.location.href = 'mi-cuenta.html';
+          window.location.href = resolveTarget('mi-cuenta.html');
           return;
         }
         if (assignedCompany) sessionStorage.setItem('active_company_code', activeCompany.toUpperCase());
@@ -112,7 +124,7 @@
 
         // Tenant users must have a company code to access the ERP
         if (userData && !userData.companyCode) {
-          window.location.href = 'mi-cuenta.html';
+          window.location.href = resolveTarget('mi-cuenta.html');
           return;
         }
 
@@ -138,18 +150,18 @@
 
         if (minRole === 'erp_admin') {
           if (!hasAdminPrivilege) {
-            window.location.href = 'mi-cuenta.html';
+            window.location.href = resolveTarget('mi-cuenta.html');
             return;
           }
         } else if (minRole === 'erp_operator') {
           if (!hasOperatorPrivilege) {
-            window.location.href = 'mi-cuenta.html';
+            window.location.href = resolveTarget('mi-cuenta.html');
             return;
           }
         } else {
           // General fallback
           if (!hasOperatorPrivilege) {
-            window.location.href = 'mi-cuenta.html';
+            window.location.href = resolveTarget('mi-cuenta.html');
             return;
           }
         }
@@ -160,6 +172,18 @@
 
     requireEditor: function (callback) { this.requireRole('editor', callback); },
     requireAdmin: function (callback) { this.requireRole('admin', callback); },
-    requireSuperAdmin: function (callback) { this.requireRole('superadmin', callback); }
+    requireSuperAdmin: function (callback) {
+          this.requireAuth(function (user, userData) {
+            var roles = Array.from(new Set([
+              userData ? (userData.role || 'user') : 'user',
+              ...((userData && Array.isArray(userData.roles)) ? userData.roles : [])
+            ]));
+            if (!roles.includes('superadmin') || (userData && userData.companyCode)) {
+              window.location.href = resolveTarget('mi-cuenta.html');
+              return;
+            }
+            callback(user, userData);
+          });
+        }
   };
 })();

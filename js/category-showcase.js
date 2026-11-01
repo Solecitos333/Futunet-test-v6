@@ -42,6 +42,16 @@
     return [];
   }
 
+  function escapeHTML(str) {
+    if (str === undefined || str === null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function normalizeText(value) {
     return String(value || '')
       .replace(/Ã¡/g, 'á').replace(/Ã©/g, 'é').replace(/Ã­/g, 'í')
@@ -67,15 +77,17 @@
   }
 
   function buildProductCard(item) {
-    const title = normalizeText(item.title);
-    const brand = normalizeText(item.brand || item.category || 'Catálogo');
-    const price = isQuoteOnly(item) ? 'Consultar precio' : normalizeText(item.price || 'Cotizar');
+    const title = escapeHTML(normalizeText(item.title));
+    const brand = escapeHTML(normalizeText(item.brand || item.category || 'Catálogo'));
+    const price = escapeHTML(isQuoteOnly(item) ? 'Consultar precio' : normalizeText(item.price || 'Cotizar'));
+    const imgSrc = escapeHTML(item.img || 'img/placeholder.svg');
+    const itemId = encodeURIComponent(item.id || '');
 
     return `
-      <a class="catshowcase-card" href="producto.html?id=${encodeURIComponent(item.id)}" aria-label="Ver ${title}">
+      <a class="catshowcase-card" href="producto.html?id=${itemId}" aria-label="Ver ${title}">
         <div class="catshowcase-card__media">
-          <img src="${item.img}" alt="${title}" loading="lazy" decoding="async"
-               onerror="this.src='img/placeholder.svg'" />
+          <img src="${imgSrc}" alt="${title}" loading="lazy" decoding="async"
+               onerror="this.onerror=null;this.src='img/placeholder.svg'" />
         </div>
         <div class="catshowcase-card__body">
           <span class="catshowcase-card__brand">${brand}</span>

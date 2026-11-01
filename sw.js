@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v58';
+const CACHE_NAME = 'futunet-cache-v59';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -149,10 +149,13 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/tesla-backup-gateway-2.webp',
   './img/productos/catalogo/juniper-ex3400-24t.webp',
   './img/productos/catalogo/mitsubishi-msz-gl24.webp',
-  './img/productos/catalogo/paradox-tm70-teclado-tactil.webp',
   './img/productos/catalogo/tesla-powerwall-3.webp',
   './img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp',
-  './img/productos/catalogo/victron-lynx-distributor-1000a.webp'
+  './img/productos/catalogo/victron-lynx-distributor-1000a.webp',
+  './img/productos/catalogo/ezviz-eb8-4g-camara-solar-ptz.webp',
+  './img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp',
+  './img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp',
+  './img/productos/catalogo/zkteco-cmp200-barrera-vehicular-automatica.webp'
 ];
 
 // Install Event — cachear assets críticos
@@ -201,7 +204,8 @@ self.addEventListener('fetch', event => {
     '/mi-cuenta', '/mi-cuenta.html',
     '/facturacion', '/facturacion.html',
     '/login', '/login.html',
-    '/cotizacion', '/cotizacion.html'
+    '/cotizacion', '/cotizacion.html',
+    '/ai', '/ai/index.html'
   ]);
   const privateScripts = new Set([
     '/js/chatbot-settings.js',
@@ -220,7 +224,10 @@ self.addEventListener('fetch', event => {
     '/js/admin-financing.js',
     '/js/user-panel.js',
     '/js/financing.js',
-    '/js/public-quote.js'
+    '/js/public-quote.js',
+    '/ai/js/ai-app.js',
+    '/ai/js/ai-gemini.js',
+    '/ai/js/ai-memory.js'
   ]);
 
   // Skip cross-origin requests, POST requests, and firebase/firestore API calls

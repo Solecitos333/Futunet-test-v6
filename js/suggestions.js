@@ -1687,6 +1687,38 @@
       status: 'implemented',
       description: 'Gestor de microrred y enlace eléctrico con conmutación < 100 ms ante apagones, interruptor 200A continuo y enlace con Tesla App.',
       officialResponse: '¡Atendido! Disponible el Tesla Backup Gateway 2 en Energía y Climatización y marca-tesla.html.'
+    },
+    {
+      refCode: 'SUG-E8000',
+      title: 'Cámaras de Seguridad Solar 4G LTE PTZ Ezviz EB8 4G (2K 3MP) para Fincas',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Cámara 4G LTE 100% inalámbrica Ezviz EB8 con rotación 360°, batería 10,400 mAh, panel solar, visión nocturna en color y detección IA.',
+      officialResponse: '¡Aprobado! Incorporada la Cámara Solar 4G Ezviz EB8 en Seguridad y marca-ezviz.html.'
+    },
+    {
+      refCode: 'SUG-L8500',
+      title: 'Sistemas Modulares de Videoconferencia Premium Logitech Rally Plus 4K con RightSense AI',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Sistema modular para salas grandes Logitech Rally Plus con cámara 4K PTZ 15X, 2 altavoces, 2 Mic Pods y encuadre RightSight AI.',
+      officialResponse: '¡Implementado! Disponible el kit Logitech Rally Plus 4K en Oficina y marca-logitech.html.'
+    },
+    {
+      refCode: 'SUG-S8500',
+      title: 'Pantallas Profesionales QLED 4K Samsung The Frame Pro 55" con Modo Arte y Pantalla Mate',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Pantalla 4K 120Hz Samsung The Frame Pro 55" con pantalla mate antirreflejo, soporte Slim Fit, One Connect y Modo Arte corporativo.',
+      officialResponse: '¡Cumplido! Disponible la Pantalla Samsung The Frame Pro 55" en Oficina y marca-samsung.html.'
+    },
+    {
+      refCode: 'SUG-Z6000',
+      title: 'Barreras Vehiculares Automáticas ZKTeco CMP200 con Motor Brushless DC y Brazo 3-6m',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Barrera vehicular de alta velocidad ZKTeco CMP200 con motor Brushless DC, brazo telescópico de 3m a 6m, semáforo LED y compatibilidad RFID UHF.',
+      officialResponse: '¡Atendido! Disponible la Barrera Vehicular ZKTeco CMP200 en Control de Acceso y marca-zkteco.html.'
     }];
 
   function getFallbackSuggestionByCode(code) {

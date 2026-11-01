@@ -3,6 +3,9 @@ const path = require('path');
 
 const rootDir = path.resolve(__dirname, '..');
 const htmlFiles = fs.readdirSync(rootDir).filter(f => f.endsWith('.html'));
+if (fs.existsSync(path.join(rootDir, 'ai', 'index.html'))) {
+  htmlFiles.push(path.join('ai', 'index.html'));
+}
 
 console.log('=== AUDIT REPORT: FORMS & INPUTS ===');
 console.log('Total HTML files:', htmlFiles.length);

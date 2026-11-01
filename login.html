@@ -340,6 +340,7 @@
       if (!redirectFile.endsWith('.html') && !redirectFile.includes('.')) {
         redirectFile += '.html';
       }
+      var pathname = redirectTarget.pathname.replace(/^\/+/, '');
       var allowedRedirects = [
        'index.html', 'internet.html', 'mi-cuenta.html', 'catalogo.html', 'producto.html',
        'gaming.html', 'corporativo.html', 'seguridad-electronica.html', 'redes-datos.html',
@@ -351,16 +352,25 @@
 
       var staffRoles = ['superadmin', 'admin', 'editor', 'billing_clerk', 'support_agent'];
       var isStaff = staffRoles.includes(userData.role) || (Array.isArray(userData.roles) && userData.roles.some(function (r) { return staffRoles.includes(r); }));
+      var isSuperAdmin = (userData.role === 'superadmin' || (Array.isArray(userData.roles) && userData.roles.includes('superadmin'))) && !userData.companyCode;
       var adminRedirects = ['admin.html', 'facturacion.html'];
+      var isAiPath = pathname === 'ai' || pathname === 'ai/' || pathname === 'ai/index.html';
 
       if (redirectTarget.origin === window.location.origin) {
-       if (allowedRedirects.includes(redirectFile) || (redirectFile.startsWith('marca-') && redirectFile.endsWith('.html'))) {
-        window.location.assign(redirectTarget.href);
-        return;
-       }
-       if (isStaff && adminRedirects.includes(redirectFile)) {
-        window.location.assign(redirectTarget.href);
-        return;
+       if (isAiPath) {
+        if (isSuperAdmin) {
+         window.location.assign(new URL('ai/index.html', window.location.origin).href);
+         return;
+        }
+       } else if (!pathname.includes('/') || pathname === redirectFile) {
+        if (allowedRedirects.includes(redirectFile) || (redirectFile.startsWith('marca-') && redirectFile.endsWith('.html'))) {
+         window.location.assign(redirectTarget.href);
+         return;
+        }
+        if (isStaff && adminRedirects.includes(redirectFile)) {
+         window.location.assign(redirectTarget.href);
+         return;
+        }
        }
       }
      } catch (redirectError) {

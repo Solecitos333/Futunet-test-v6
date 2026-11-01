@@ -235,7 +235,15 @@ const queries = [
   'crs328',
   'switch mikrotik poe',
   'lynx distributor',
-  'barra victron 1000a'
+  'barra victron 1000a',
+  'eb8',
+  'camara solar 4g',
+  'rally plus',
+  'videoconferencia 4k',
+  'the frame',
+  'samsung frame',
+  'cmp200',
+  'barrera vehicular'
 ];
 
 

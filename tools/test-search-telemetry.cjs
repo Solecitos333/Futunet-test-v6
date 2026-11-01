@@ -103,7 +103,11 @@ const testQueries = [
   'ex3400',
   'powerwall 3',
   'crs328',
-  'lynx distributor'
+  'lynx distributor',
+  'eb8',
+  'rally plus',
+  'the frame',
+  'cmp200'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
@@ -778,6 +782,54 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /lynx.*distributor/i.test(scored[0].p.title),
         'El producto top para "lynx distributor" debe ser Victron Lynx Distributor'
+      );
+    }
+
+    if (q === 'eb8') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ezviz',
+        'La búsqueda "eb8" debe priorizar la Cámara Solar Ezviz EB8 4G'
+      );
+      assert.ok(
+        /eb8/i.test(scored[0].p.title),
+        'El producto top para "eb8" debe ser Ezviz EB8 4G'
+      );
+    }
+
+    if (q === 'rally plus') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Logitech',
+        'La búsqueda "rally plus" debe priorizar el Sistema Logitech Rally Plus'
+      );
+      assert.ok(
+        /rally\s*plus/i.test(scored[0].p.title),
+        'El producto top para "rally plus" debe ser Logitech Rally Plus'
+      );
+    }
+
+    if (q === 'the frame') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Samsung',
+        'La búsqueda "the frame" debe priorizar la Pantalla Samsung The Frame Pro'
+      );
+      assert.ok(
+        /the\s*frame/i.test(scored[0].p.title),
+        'El producto top para "the frame" debe ser Samsung The Frame Pro'
+      );
+    }
+
+    if (q === 'cmp200') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'ZKTeco',
+        'La búsqueda "cmp200" debe priorizar la Barrera Vehicular ZKTeco CMP200'
+      );
+      assert.ok(
+        /cmp200/i.test(scored[0].p.title),
+        'El producto top para "cmp200" debe ser ZKTeco CMP200'
       );
     }
   }

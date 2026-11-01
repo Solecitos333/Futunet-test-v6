@@ -8863,6 +8863,158 @@ const mockDatabase = [
       "Ideal para integraciones con inversores Victron MultiPlus, Quattro y controladores solares SmartSolar MPPT",
       "Garantía oficial Victron Energy de 5 años con respaldo de ingeniería y diagramado de conexión en Santiago"
     ]
+  },
+  {
+    "id": "seguridad_ezviz_eb8_4g_camara_solar_ptz",
+    "department": "seguridad",
+    "category": "CCTV y Seguridad Electrónica",
+    "brand": "Ezviz",
+    "title": "Cámara de Seguridad Solar 4G LTE PTZ Ezviz EB8 4G (2K 3MP) con Batería Recargable de 10,400 mAh y Panel Solar",
+    "desc": "La cámara de seguridad motorizada exterior Ezviz EB8 4G con panel solar es la solución definitiva de videovigilancia 100% inalámbrica y autónoma para fincas, casas de campo en Jarabacoa y San José de las Matas, proyectos en construcción y zonas agrícolas del Cibao donde no llega la red eléctrica ni cobertura Wi-Fi. Incorpora módem celular 4G LTE compatible con tarjetas microSIM de Claro y Altice en República Dominicana, batería de litio recargable masiva de 10,400 mAh y panel solar fotovoltaico de acoplamiento continuo para funcionamiento ininterrumpido 24/7 sin recargas manuales. Ofrece resolución 2K cristalina (2304x1296), rotación motorizada panorámica de 360° con inclinación de 80°, visión nocturna a todo color con focos LED integrados, sensor PIR y algoritmo de inteligencia artificial para detección y seguimiento automático de figuras humanas sin falsas alarmas, sirena disuasoria con luz estroboscópica, audio bidireccional de alta fidelidad, GPS integrado para localización del dispositivo en campo y certificación climática IP65 resistente a lluvias tropicales.",
+    "price": "RD$ 13,900.00",
+    "img": "img/productos/catalogo/ezviz-eb8-4g-camara-solar-ptz.webp",
+    "gallery": [
+      "img/productos/catalogo/ezviz-eb8-4g-camara-solar-ptz.webp"
+    ],
+    "specs": [
+      "Conectividad celular directa 4G LTE: funciona con tarjeta MicroSIM (Claro/Altice) sin necesidad de Wi-Fi ni enrutadores",
+      "Batería recargable integrada de 10,400 mAh con panel solar incluido para energía solar limpia e ininterrumpida",
+      "Resolución 2K (3 Megapíxeles 2304x1296) a 15 fps con compresión ultra eficiente H.265 / H.264",
+      "Cobertura visual total de 360°: rotación panorámica motorizada de 340° e inclinación vertical de 80° con auto-tracking",
+      "Doble sistema de visión nocturna: infrarroja de largo alcance (hasta 15m) y visión nocturna a todo color con reflectores LED",
+      "Detección inteligente de siluetas humanas asistida por IA y sensor PIR térmico para eliminar falsas alertas por vegetación",
+      "Defensa activa automática: activa potente sirena sonora y dos reflectores estroboscópicos ante intrusiones no autorizadas",
+      "Audio bidireccional en vivo con micrófono y altavoz de alta potencia para comunicación remota y advertencias de voz",
+      "Ranura para tarjeta microSD de hasta 512 GB y almacenamiento cifrado en la nube EZVIZ CloudPlay",
+      "Gabinete para intemperie con certificación IP65 y garantía oficial Ezviz en República Dominicana"
+    ]
+  },
+  {
+    "id": "equipos_logitech_rally_plus_videoconferencia_4k",
+    "department": "equipos",
+    "category": "Computadoras",
+    "brand": "Logitech",
+    "title": "Sistema Modular de Videoconferencia Empresarial Logitech Rally Plus Ultra HD 4K con 2 Bocinas y 2 Mic Pods",
+    "desc": "El Logitech Rally Plus es el sistema insignia de videoconferencia modular de ultra alta definición diseñado para salas de juntas ejecutivas, auditorios corporativos, salas de conferencias y salones de consejo en empresas e instituciones de Santiago y República Dominicana. Su avanzada cámara Rally PTZ motorizada cuenta con lente de cristal con óptica ultra nítida 4K UHD, zoom digital y óptico combinado de 15X y tecnología de encuadre automático RightSight de Logitech que ajusta el encuadre dinámicamente para incluir a todos los participantes en la mesa de forma elegante. Incluye 2 bocinas frontales independientes de alta fidelidad que proyectan voces claras y naturales con tecnología antivibración RightSound, y 2 bases de micrófonos Rally Mic Pod de mesa con matrices beamforming de captación omnidireccional de 360 grados que nivelan automáticamente las voces y suprimen el ruido ambiental. Su arquitectura de cableado simplificada mediante concentrador de mesa (Table Hub) y concentrador de pantalla (Display Hub) interconectados por un único cable Cat 6A elimina el desorden de cables en la mesa de juntas, siendo compatible nativo con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Cisco Webex.",
+    "price": "RD$ 145,000.00",
+    "img": "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp",
+    "gallery": [
+      "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp"
+    ],
+    "specs": [
+      "Cámara Ultra-HD 4K PTZ motorizada con movimiento horizontal ±90°, inclinación +50°/-90° y zoom 15X HD",
+      "Tecnología RightSight de encuadre automático por IA que detecta y centra a los participantes en la sala",
+      "Tecnología RightLight con amplio rango dinámico (WDR) para optimizar el tono de piel y rostros en contraluz",
+      "Sistema de audio modular de alta fidelidad: incluye 2 bocinas Rally frontales de 76 mm con suspensión anti-vibración",
+      "Incluye 2 bases de micrófonos Rally Mic Pod de mesa con 4 micrófonos beamforming cada uno (ampliable hasta 7 Mic Pods)",
+      "Tecnología RightSound con nivelación automática de voces suaves/altas y supresión activa de ruido y eco",
+      "Concentrador de mesa (Table Hub) y Concentrador de pantalla (Display Hub) conectados por un único cable Cat 6A",
+      "Compatibilidad certificada Plug-and-Play USB con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Webex",
+      "Control remoto por radiofrecuencia (RF) de largo alcance con botones de preajustes de cámara y silenciamiento",
+      "Diseño prémium en acabados de aluminio y tela acústica gris carbón para salas de consejo corporativas",
+      "Garantía oficial Logitech de 2 años con soporte técnico e instalación certificada en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_samsung_the_frame_pro_55_qled_4k",
+    "department": "equipos",
+    "category": "Computadoras",
+    "brand": "Samsung",
+    "title": "Pantalla Comercial Profesional Samsung The Frame Pro de 55 Pulgadas QLED 4K UHD con Acabado Mate y Modo Arte",
+    "desc": "La pantalla comercial Samsung The Frame Pro de 55 pulgadas combina la tecnología de visualización más avanzada con una estética de galería de arte contemporáneo para oficinas de alta dirección, salas de juntas ejecutivas, lobbies corporativos, centros médicos y suites de hotel en Santiago de los Caballeros. Diseñada para lucir como un cuadro artístico en la pared cuando no se utiliza para presentaciones o videoconferencias, incorpora la innovadora pantalla mate antirreflejo (Matte Display) con certificación antideslumbrante que dispersa la luz ambiental eliminando por completo los reflejos de ventanas y luminarias de techo. Su panel Quantum Dot QLED 4K (3840 x 2160) con tasa de refresco nativa de 120Hz reproduce el 100% del volumen de color cinematográfico con precisión validada por Pantone. Cuenta con la caja de conexiones externa One Connect Box y cable casi invisible de un solo hilo que transmite energía y señal 4K ocultando los cables, soporte de pared ultrafino Slim Fit Wall-Mount incluido para un montaje completamente pegado a la pared, sensores inteligentes de movimiento y brillo que activan el Modo Arte en presencia de personas, y plataforma empresarial Samsung Tizen OS con protección de seguridad Knox.",
+    "price": "RD$ 68,500.00",
+    "img": "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp",
+    "gallery": [
+      "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp"
+    ],
+    "specs": [
+      "Pantalla de 55 pulgadas QLED 4K Ultra HD (3840 x 2160) con tasa de refresco nativa ultra fluida de 120Hz",
+      "Acabado Matte Display Antirreflejo certificado por UL que elimina reflejos de lámparas y luz solar directa",
+      "Modo Arte Profesional (Art Mode): exhibe obras de arte, cuadros o señalización digital corporativa al suspenderse",
+      "Sensor de brillo ambiental y sensor de movimiento que apaga la pantalla cuando la habitación está vacía",
+      "Caja de conexión externa One Connect Box con cable único casi invisible de 5 metros para energía y datos 4K",
+      "Soporte de pared ultrafino Slim Fit Wall-Mount incluido que adhiere la pantalla al ras de la pared sin separación",
+      "Tecnología Quantum Dot con 100% de volumen de color DCI-P3 y validación oficial de fidelidad de color Pantone",
+      "Procesador Quantum 4K con escalado inteligente por inteligencia artificial y sonido en movimiento OTS",
+      "Marcos magnéticos personalizables intercambiables (estilo teca, nogal, blanco o bronce) disponibles",
+      "Plataforma inteligente Tizen para presentaciones inalámbricas desde laptops Windows/Mac (AirPlay 2 / Miracast)",
+      "Garantía oficial Samsung de 1 año con servicio de instalación y montaje profesional en Santiago"
+    ]
+  },
+  {
+    "id": "seguridad_zkteco_cmp200_barrera_vehicular_automatica",
+    "department": "seguridad",
+    "category": "Seguridad Electrónica & Control de Acceso",
+    "brand": "ZKTeco",
+    "title": "Barrera Vehicular Automática de Alta Velocidad ZKTeco CMP200 con Brazo Telescópico de 3 a 6 Metros y Motor Brushless DC",
+    "desc": "La barrera electromecánica de acceso vehicular ZKTeco CMP200 es la solución líder de alta confiabilidad y respuesta ultra rápida para control de tránsito y acceso vehicular en residenciales cerrados, torres departamentales, centros comerciales, zonas francas y estacionamientos corporativos en Santiago y toda la región Norte. Equipada con motor sin escobillas Brushless DC (BLDC) de 24V de alta eficiencia energética y estructura mecánica de fundición a presión, soporta ciclos de trabajo intensivo continuo 24/7 sin sobrecalentamiento y con una vida útil superior a 5 millones de aperturas y cierres (MCBF). Cuenta con brazo telescópico de aleación de aluminio reforzado con longitud ajustable desde 3 hasta 6 metros y tira de iluminación LED indicadora integrada, permitiendo programar velocidades de apertura ultra rápidas desde 1.5 segundos (para carriles de 3m) hasta 6 segundos (para carriles anchos de 6m). Su mecanismo reversible permite intercambiar fácilmente la dirección de apertura del brazo (izquierda o derecha) directamente en obra sin necesidad de sustituir piezas. Dispone de indicador visual frontal tipo semáforo LED (cruz roja de alto y flecha verde de pase), soporte para detección de vehículos mediante lazo magnético o radar anti-impacto VR10, y compatibilidad nativa con lectores RFID de largo alcance UHF ZKTeco y paneles de control de acceso IP inBio y C3.",
+    "price": "RD$ 52,500.00",
+    "img": "img/productos/catalogo/zkteco-cmp200-barrera-vehicular-automatica.webp",
+    "gallery": [
+      "img/productos/catalogo/zkteco-cmp200-barrera-vehicular-automatica.webp"
+    ],
+    "specs": [
+      "Motor Brushless DC (BLDC 24V) de alto torque y libre de mantenimiento: ciclo de trabajo continuo 100% y vida útil de 5 millones de ciclos",
+      "Brazo telescópico de aluminio reforzado extensible de 3 a 6 metros con tira de luz LED de advertencia nocturna incorporada",
+      "Velocidad de apertura y cierre rápida programable: de 1.5 a 6 segundos según la longitud configurada del brazo vehicular",
+      "Dirección de brazo intercambiable en campo: convertible a mano izquierda o mano derecha según la disposición del carril",
+      "Gabinete robusto de acero galvanizado con pintura en polvo horneada electrostática apta para lluvia tropical y sol exterior (IP54)",
+      "Indicador luminoso frontal integrado tipo semáforo LED: luz verde indicadora de acceso permitido y luz roja de detención",
+      "Función de protección anti-impacto y rebote automático: retroceso inmediato al entrar en contacto con un obstáculo o vehículo",
+      "Compatibilidad universal con radar de detección vehicular ZKTeco VR10, sensores fotoeléctricos infrarrojos y lazos inductivos",
+      "Apertura manual mediante llave de emergencia en caso de corte del suministro eléctrico",
+      "Garantía oficial ZKTeco con repuestos originales, asesoría de instalación y soporte técnico en Santiago"
+    ]
+  },
+  {
+    "id": "equipos_logitech_rally_plus_videoconferencia_4k",
+    "department": "oficina",
+    "category": "Equipos y Periféricos de Oficina",
+    "brand": "Logitech",
+    "title": "Sistema Modular de Videoconferencia Premium Logitech Rally Plus con Cámara 4K Ultra HD y Tecnologías RightSense AI",
+    "desc": "El sistema de videoconferencia modular de clase mundial Logitech Rally Plus es la solución premier para salas de conferencias corporativas, salones de capacitación y salas de juntas ejecutivas en zonas francas y centros de negocios de Santiago. Diseñado para salas grandes y extra grandes de 16 a 20 o más participantes, incluye una cámara motorizada Rally Ultra-HD 4K PTZ con óptica prémium, zoom HD de 15X (5x óptico + 3x digital) y campo visual diagonal de 90°. El sistema de audio profesional desacoplado cuenta con 2 altavoces frontales antivibración de distorsión ultra baja y 2 bases de micrófonos de mesa Mic Pod con tecnología de conformación de haces acústicos adaptativos RightSound (capta voces con claridad cristalina hasta a 4.5 metros y suprime ecos y ruido ambiental). Integra el paquete de tecnologías de inteligencia artificial Logitech RightSense: RightSight encuadra automáticamente a los asistentes ajustando el zoom dinámicamente; RightLight optimiza la exposición y balance de color en rostros sin importar contraluces de ventanas; y RightSound nivela la intensidad de voces suaves y fuertes para una acústica perfecta. Incluye concentradores Display Hub y Table Hub interconectados por un único cable CAT6A para una instalación limpia sin cables cruzando la sala de reuniones.",
+    "price": "RD$ 145,000.00",
+    "img": "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp",
+    "gallery": [
+      "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp"
+    ],
+    "specs": [
+      "Cámara PTZ motorizada con sensor 4K Ultra HD, panorámica ±90°, inclinación +50°/-90° y zoom óptico-digital 15X",
+      "Tecnología RightSight AI: detecta participantes y ajusta el encuadre y zoom automáticamente durante toda la sesión",
+      "Tecnología RightLight AI: balance de color y luminancia facial natural incluso en salas con iluminación deficiente o contraluz",
+      "Tecnología RightSound AI: cancelación avanzada de eco acústico, supresión de ruidos y nivelación automática de volumen de voz",
+      "Sistema de sonido desacoplado: 2 altavoces de alta fidelidad con carcasa antivibratoria que no interfiere con la cámara",
+      "Captación de voz 360°: 2 bases de micrófonos Mic Pod con 8 micrófonos beamforming (ampliable hasta 7 Mic Pods para 46 personas)",
+      "Conexión simplificada mediante Table Hub y Display Hub interconectados por un solo cable de red CAT6A",
+      "Compatibilidad nativa Plug and Play vía USB con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Cisco Webex",
+      "Mando a distancia por radiofrecuencia con 3 preajustes programables de cámara que funciona sin apuntar directamente",
+      "Garantía oficial empresarial Logitech de 2 años con soporte técnico corporativo en República Dominicana"
+    ]
+  },
+  {
+    "id": "oficina_samsung_the_frame_pro_55_qled_4k",
+    "department": "oficina",
+    "category": "Equipos y Periféricos de Oficina",
+    "brand": "Samsung",
+    "title": "Pantalla Profesional QLED 4K Samsung The Frame Pro 55\" (Modo Arte, Antirreflejo Mate, Slim Fit y One Connect)",
+    "desc": "La pantalla profesional comercial Samsung The Frame Pro de 55 pulgadas es el televisor y monitor de cartelería digital de diseño más exclusivo del mercado para despachos ejecutivos, salas de juntas premium, recepciones corporativas, consultorios médicos y estudios de arquitectura en Santiago y República Dominicana. Gracias a su pantalla con acabado Matte Display antirreflejo patentado, neutraliza por completo los reflejos de luces de oficina y ventanas soleadas, logrando una textura idéntica al lienzo de una pintura tradicional. Cuando no está en uso para presentaciones corporativas o videoconferencias, activa su galardonado Modo Arte con sensor de brillo y presencia humana integrado para exhibir más de 2,500 obras de arte internacionales o la identidad gráfica de su empresa con consumo energético ultra bajo. Su panel QLED 4K UHD ofrece 100% de volumen de color con tecnología Quantum Dot, frecuencia de actualización nativa de 120Hz con Motion Xcelerator Turbo+ y procesador Quantum 4K con escalado mediante IA. Incluye la caja de conexiones externa One Connect Box con un cable casi transparente que transporta tanto la alimentación eléctrica como la señal de video, marco magnético personalizable y el soporte de pared ultraplano Slim Fit Wall Mount que deja la pantalla completamente pegada a la pared sin separación.",
+    "price": "RD$ 78,900.00",
+    "img": "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp",
+    "gallery": [
+      "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp"
+    ],
+    "specs": [
+      "Pantalla QLED 4K UHD de 55 pulgadas (3840 x 2160) con panel Mate Antirreflejo (Matte Display) certificado anti-brillo",
+      "Modo Arte con sensor de iluminación y presencia: exhibe cuadros y cartelería corporativa ahorrando energía cuando la sala está vacía",
+      "Tecnología Quantum Dot con 100% de volumen de color validado por Pantone para una precisión cromática absoluta",
+      "Frecuencia de actualización nativa ultra fluida de 120Hz con soporte HDMI 2.1 y tecnología Motion Xcelerator Turbo Pro",
+      "Caja de conexiones externa One Connect Box con cable único casi invisible de 5 metros para datos y electricidad",
+      "Soporte de pared Slim Fit Wall Mount incluido: instalación al ras de la pared como un cuadro de galería de arte real",
+      "Marcos magnéticos biselados intercambiables (teca, nogal, blanco o bronce) para armonizar con el diseño arquitectónico",
+      "Sistema operativo Tizen con plataforma comercial Samsung VXT CMS, modo de seguridad multicapa Samsung Knox y Wi-Fi 5",
+      "Potente sistema de audio 2.0.2 canales de 40W con Object Tracking Sound (OTS) y sincronización Q-Symphony",
+      "Garantía oficial Samsung corporativa con respaldo y homologación técnica en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;
