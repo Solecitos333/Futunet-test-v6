@@ -2816,7 +2816,8 @@ window.ERPBilling = (function () {
     setVal('fiscal-adjustment-amount', remainingCredit.toFixed(2));
     setVal('fiscal-adjustment-reason', '');
     setVal('fiscal-adjustment-resolution', 'credit_balance');
-    document.getElementById('fiscal-adjustment-restock').checked = false;
+    const restockEl = document.getElementById('fiscal-adjustment-restock');
+    if (restockEl) restockEl.checked = false;
     setHTML('fiscal-adjustment-summary', `
       <strong>${escapeHTML(invoice.invoiceNumber)}</strong><br>
       <span style="color:var(--text-muted);font-size:0.84rem;">NCF ${escapeHTML(invoice.ncf)} · ${escapeHTML(invoice.clientName)} · Total ${escapeHTML(formatMoney(invoice.total))}</span>
@@ -4210,7 +4211,7 @@ window.ERPBilling = (function () {
       minimumCostCoveragePct: Number(getVal('set-cost-coverage')),
       maxOperatorDiscountPct: Number(getVal('set-max-operator-discount')),
       collectionReminderDays: Number(getVal('set-collection-reminder-days')) || 3,
-      commercialApprovalEnabled: document.getElementById('set-commercial-approval-enabled').checked,
+      commercialApprovalEnabled: Boolean(document.getElementById('set-commercial-approval-enabled')?.checked),
 
       ticketSlogan: sanitizeErpInput(getVal('set-ticket-slogan'), 200),
       ticketInstagram: sanitizeErpInput(getVal('set-ticket-instagram'), 100),

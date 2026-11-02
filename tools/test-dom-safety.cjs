@@ -50,7 +50,7 @@ test('DOM Safety: checkout y renderStep3Summary en cart.js manejan ausencia de r
   );
 });
 
-test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excepción', () => {
+test('DOM Safety: facturacion.js, workflows y ai-app manejan elementos nulos y portapapeles de forma defensiva', () => {
   const factJsPath = path.join(projectRoot, 'js', 'facturacion.js');
   const factJsCode = fs.readFileSync(factJsPath, 'utf8');
 
@@ -58,6 +58,27 @@ test('DOM Safety: facturacion.js maneja contenedor de paginación null sin excep
     factJsCode.includes("const container = document.getElementById('invoices-pagination');") &&
     factJsCode.includes("if (!container) return;"),
     'renderPaginationControls debe verificar que invoices-pagination exista antes de manipularlo'
+  );
+  assert.ok(
+    factJsCode.includes("const restockEl = document.getElementById('fiscal-adjustment-restock');") &&
+    factJsCode.includes("if (restockEl) restockEl.checked = false;"),
+    'facturacion.js debe verificar fiscal-adjustment-restock antes de modificar checked'
+  );
+  assert.ok(
+    factJsCode.includes("Boolean(document.getElementById('set-commercial-approval-enabled')?.checked)"),
+    'facturacion.js debe usar optional chaining o verificación segura para set-commercial-approval-enabled'
+  );
+
+  const bwJsCode = fs.readFileSync(path.join(projectRoot, 'js', 'billing-workflows.js'), 'utf8');
+  assert.ok(
+    bwJsCode.includes('safeCopyText'),
+    'billing-workflows.js debe implementar safeCopyText para evitar fallos de portapapeles'
+  );
+
+  const aiAppCode = fs.readFileSync(path.join(projectRoot, 'ai', 'js', 'ai-app.js'), 'utf8');
+  assert.ok(
+    aiAppCode.includes('safeCopyClipboard'),
+    'ai-app.js debe implementar safeCopyClipboard con fallback defensivo'
   );
 });
 
@@ -69,7 +90,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v59';"), 'sw.js debe estar en la versión futunet-cache-v59');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v60';"), 'sw.js debe estar en la versión futunet-cache-v60');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
@@ -104,8 +125,11 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/mitsubishi-msz-gl24.webp'"), 'sw.js debe incluir mitsubishi-msz-gl24.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/paradox-tm70-teclado-tactil.webp'"), 'sw.js debe incluir paradox-tm70-teclado-tactil.webp en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/tesla-powerwall-3.webp'"), 'sw.js debe incluir tesla-powerwall-3.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp'"), 'sw.js debe incluir mikrotik-crs328-24p-4s-switch-poe.webp en OPTIONAL_ASSETS');
-  assert.ok(swJs.includes("'./img/productos/catalogo/victron-lynx-distributor-1000a.webp'"), 'sw.js debe incluir victron-lynx-distributor-1000a.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mikrotik-crs328-24p-4s-switch-poe.webp'"), 'sw.js debe incluir mikrotik-crs328-24p-4s-switch-poe.webp en OPTIONAL_ASSETS');  assert.ok(swJs.includes("'./img/productos/catalogo/victron-lynx-distributor-1000a.webp'"), 'sw.js debe incluir victron-lynx-distributor-1000a.webp en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp'"), 'sw.js debe incluir hp-elitebook-840-g10 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp'"), 'sw.js debe incluir lenovo-thinkpad-t14-gen4 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp'"), 'sw.js debe incluir lg-ultrafine-32un650 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp'"), 'sw.js debe incluir netgear-wax630 en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {

@@ -290,6 +290,10 @@ if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants
   if (word === 'rallyplus' || word === 'rally-plus' || word === 'rightsense') variants.push('logitech', 'rally', 'videoconferencia', 'camara', '4k', 'ptz', 'mic');
   if (word === 'theframe' || word === 'the-frame' || word === 'framepro') variants.push('samsung', 'frame', 'pantalla', 'qled', '4k', 'arte', 'mate', 'antirreflejo');
   if (word === 'cmp200' || word === 'cmp-200' || word === 'barrera') variants.push('zkteco', 'barrera', 'vehicular', 'brazo', 'telescopico', 'brushless', 'acceso');
+  if (word === 'elitebook' || word === '840g10' || word === '840-g10') variants.push('hp', 'elitebook', '840', 'laptop', 'aluminio', 'wolf', 'security', 'corporativa');
+  if (word === 't14' || word === 't14gen4' || word === 't14-gen4') variants.push('lenovo', 'thinkpad', 't14', 'laptop', 'vpro', 'magnesio', 'mil-std', 'corporativa');
+  if (word === 'ultrafine' || word === '32un650' || word === '32un650-w') variants.push('lg', 'ultrafine', 'monitor', '4k', 'ips', '32', 'dci-p3', 'hdr10');
+  if (word === 'wax630' || word === 'wax-630' || word === 'insight') variants.push('netgear', 'access', 'point', 'ap', 'wifi6', 'tri-banda', 'multigigabit', 'poe');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1480,11 +1484,54 @@ function scoreProductMatch(product, normalizedQuery) {
       }
     }
   }
-
   // Priorizar Barrera Vehicular ZKTeco CMP200 al buscar cmp200, cmp 200, barrera zkteco, barrera vehicular, brazo vehicular (SUG-Z6000)
   if (/\b(cmp200|cmp\s*200|barrera\s*zkteco|barrera\s*vehicular|brazo\s*vehicular|zkteco\s*cmp)\b/i.test(normalizedQuery) || (/\b(zkteco)\b/i.test(normalizedQuery) && /\b(cmp200|cmp|barrera|vehicular|brushless)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase() === 'zkteco') {
       if (/cmp200/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Laptop HP EliteBook 840 G10 al buscar elitebook, 840 g10, hp elitebook, laptop hp i7 (SUG-H8400)
+  if (/\b(elitebook|840\s*g10|hp\s*elitebook|elitebook\s*840|hp\s*wolf)\b/i.test(normalizedQuery) || (/\b(hp)\b/i.test(normalizedQuery) && /\b(elitebook|840|wolf)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'hp') {
+      if (/elitebook/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Laptop Lenovo ThinkPad T14 Gen 4 al buscar thinkpad t14, t14 gen 4, lenovo t14, thinkpad vpro (SUG-L1400)
+  if (/\b(thinkpad\s*t14|t14\s*gen\s*4|lenovo\s*t14|thinkpad\s*vpro|t14)\b/i.test(normalizedQuery) || (/\b(lenovo|thinkpad)\b/i.test(normalizedQuery) && /\b(t14|vpro|magnesio)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lenovo') {
+      if (/t14/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar Monitor LG UltraFine 32UN650-W al buscar ultrafine, 32un650, lg 4k, monitor lg 32 (SUG-L3200)
+  if (/\b(ultrafine|32un650|lg\s*ultrafine|monitor\s*lg\s*32|lg\s*4k)\b/i.test(normalizedQuery) || (/\b(lg)\b/i.test(normalizedQuery) && /\b(ultrafine|32un650|4k\s*ips)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'lg') {
+      if (/32un650|ultrafine/i.test(title)) {
+        score += 280;
+      } else {
+        score += 170;
+      }
+    }
+  }
+
+  // Priorizar AP Netgear Insight WAX630 al buscar wax630, wax 630, ap netgear, access point netgear (SUG-N6300)
+  if (/\b(wax630|wax\s*630|ap\s*netgear|access\s*point\s*netgear|netgear\s*insight)\b/i.test(normalizedQuery) || (/\b(netgear)\b/i.test(normalizedQuery) && /\b(wax630|wax|insight|ap)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'netgear') {
+      if (/wax630/i.test(title)) {
         score += 280;
       } else {
         score += 170;

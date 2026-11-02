@@ -241,9 +241,16 @@ const queries = [
   'rally plus',
   'videoconferencia 4k',
   'the frame',
-  'samsung frame',
-  'cmp200',
-  'barrera vehicular'
+  'samsung frame',  'cmp200',
+  'barrera vehicular',
+  'elitebook',
+  'hp elitebook',
+  'thinkpad t14',
+  'lenovo t14',
+  'ultrafine',
+  'lg 4k',
+  'wax630',
+  'netgear insight'
 ];
 
 

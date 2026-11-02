@@ -2433,3 +2433,75 @@ test('Mejora demandada por usuarios: Barrera Vehicular Automática ZKTeco CMP200
   assert.ok(catJs.includes("'cmp200'") && catJs.includes("'cmp-200'"), 'catalog.js debe incluir cmp200 en stem variants');
   assert.ok(catJs.includes('/\\b(cmp200|cmp\\s*200|barrera\\s*zkteco|barrera\\s*vehicular|brazo\\s*vehicular|zkteco\\s*cmp)\\b/i.test(normalizedQuery)'), 'catalog.js debe priorizar ZKTeco CMP200');
 });
+
+test('Mejora demandada por usuarios: Laptop Corporativa Premium HP EliteBook 840 G10 (SUG-H8400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H8400'") && seedCjs.includes("status: 'implemented'"), 'SUG-H8400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H8400') && sugJs.includes('HP EliteBook 840 G10'), 'SUG-H8400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_hp_elitebook_840_g10_laptop'), 'backup_data.js debe contener oficina_hp_elitebook_840_g10_laptop');
+
+  const hpImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hp-elitebook-840-g10-laptop-corporativa.webp');
+  assert.ok(fs.existsSync(hpImg), 'La imagen de la laptop HP EliteBook 840 G10 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'elitebook'") && catJs.includes("'840g10'"), 'catalog.js debe incluir elitebook y 840g10 en stem variants');
+  assert.ok(catJs.includes('elitebook'), 'catalog.js debe priorizar HP EliteBook 840 G10');
+});
+
+test('Mejora demandada por usuarios: Laptop Corporativa Lenovo ThinkPad T14 Gen 4 vPro (SUG-L1400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L1400'") && seedCjs.includes("status: 'implemented'"), 'SUG-L1400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L1400') && sugJs.includes('Lenovo ThinkPad T14 Gen 4'), 'SUG-L1400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lenovo_thinkpad_t14_gen4_laptop'), 'backup_data.js debe contener oficina_lenovo_thinkpad_t14_gen4_laptop');
+
+  const lenovoImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-thinkpad-t14-gen4-laptop-corporativa.webp');
+  assert.ok(fs.existsSync(lenovoImg), 'La imagen de la laptop Lenovo ThinkPad T14 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'t14'") && catJs.includes("'t14gen4'"), 'catalog.js debe incluir t14 y t14gen4 en stem variants');
+  assert.ok(catJs.includes('t14'), 'catalog.js debe priorizar Lenovo ThinkPad T14 Gen 4');
+});
+
+test('Mejora demandada por usuarios: Monitor Profesional 4K UHD LG UltraFine 32UN650-W 31.5" IPS (SUG-L3200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L3200'") && seedCjs.includes("status: 'implemented'"), 'SUG-L3200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L3200') && sugJs.includes('LG UltraFine 32UN650'), 'SUG-L3200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lg_ultrafine_32un650_4k_monitor'), 'backup_data.js debe contener oficina_lg_ultrafine_32un650_4k_monitor');
+
+  const lgImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lg-ultrafine-32un650-monitor-4k-ips.webp');
+  assert.ok(fs.existsSync(lgImg), 'La imagen del monitor LG UltraFine 32UN650 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ultrafine'") && catJs.includes("'32un650'"), 'catalog.js debe incluir ultrafine y 32un650 en stem variants');
+  assert.ok(catJs.includes('ultrafine'), 'catalog.js debe priorizar LG UltraFine 32UN650');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Tri-Banda Wi-Fi 6 Netgear Insight WAX630 AX6000 (SUG-N6300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N6300'") && seedCjs.includes("status: 'implemented'"), 'SUG-N6300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N6300') && sugJs.includes('Netgear Insight WAX630'), 'SUG-N6300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_netgear_wax630_access_point_wifi6_multigigabit'), 'backup_data.js debe contener redes_netgear_wax630_access_point_wifi6_multigigabit');
+
+  const netgearImg = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-wax630-access-point-wifi6-multigigabit.webp');
+  assert.ok(fs.existsSync(netgearImg), 'La imagen del AP Netgear WAX630 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'wax630'") && catJs.includes("'wax-630'"), 'catalog.js debe incluir wax630 y wax-630 en stem variants');
+  assert.ok(catJs.includes('wax630'), 'catalog.js debe priorizar Netgear Insight WAX630');
+});

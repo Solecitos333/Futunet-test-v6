@@ -3554,6 +3554,119 @@ const zktecoCmp200Items = [
   }
 ];
 
+
+const hpEliteBook840Items = [
+  {
+    id: 'oficina_hp_elitebook_840_g10_laptop',
+    department: 'oficina',
+    category: 'Laptops & Computadoras Corporativas',
+    brand: 'HP',
+    title: 'Laptop Corporativa HP EliteBook 840 G10 14" WUXGA Intel Core i7-1355U 16GB RAM DDR5 512GB SSD NVMe Chasis Aluminio HP Wolf Security',
+    desc: 'La laptop corporativa de alta gama HP EliteBook 840 G10 de 14 pulgadas es la herramienta insignia para directores, ejecutivos de finanzas y consultores empresariales en Santiago y la región Norte. Fabricada en un chasis unibody ultrafino de aluminio aeroespacial mecanizado por CNC, ofrece máxima rigidez estructural y elegancia corporativa. Equipada con procesador Intel Core i7-1355U de 10 núcleos (2 Performance-cores y 8 Efficient-cores con frecuencias turbo de hasta 5.0 GHz), 16 GB de memoria RAM DDR5-5200 MHz de alta velocidad, unidad de estado sólido de 512 GB PCIe 4.0 x4 NVMe ultrarrápida y pantalla IPS Full HD+ WUXGA (1920 x 1200) antirreflejo de 14 pulgadas en relación de aspecto 16:10 para máxima productividad vertical. Incorpora dos puertos Thunderbolt 4 con USB4 Type-C (40 Gbps, Power Delivery y DisplayPort 1.4), dos puertos USB 3.2 Gen 1 Type-A, salida HDMI 2.1, conectividad inalámbrica Intel Wi-Fi 6E AX211 y Bluetooth 5.3. Ofrece teclado retroiluminado HP Premium resistente a salpicaduras con drenaje interior, cámara web IR de 5 MP con encuadre automático por IA y obturador físico de privacidad, sistema de audio firmado por Bang & Olufsen con micrófonos duales de reducción de ruido ambiental y la suite de seguridad multicapa por hardware HP Wolf Pro Security Edition con HP Sure Start autocurable de BIOS.',
+    price: 'RD$ 68,500.00',
+    img: 'img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp',
+    gallery: [
+      'img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp'
+    ],
+    specs: [
+      'Procesador Intel Core i7-1355U de 13.ª Generación (10 núcleos / 12 hilos hasta 5.0 GHz con 12 MB Intel Smart Cache)',
+      '16 GB de memoria RAM DDR5 a 5200 MHz (ampliable hasta 64 GB en dos ranuras SO-DIMM accesibles)',
+      '512 GB SSD PCIe Gen4 NVMe M.2 de máxima velocidad de lectura y arranque instantáneo',
+      'Pantalla IPS antirreflejo de 14" WUXGA (1920x1200) en formato profesional 16:10 con 300 nits y panel de bajo consumo',
+      'Chasis unibody premium de aluminio de grado aeroespacial probado bajo rigurosos estándares militares MIL-STD-810H',
+      'Doble puerto Thunderbolt 4 / USB4 a 40 Gbps con soporte para carga rápida USB-PD y conexión de múltiples monitores 4K',
+      'Cámara web infrarroja de 5 MP con encuadre facial automático por IA, obturador mecánico de privacidad y sensor IR para Windows Hello',
+      'Sistema de sonido Bang & Olufsen de alta definición con amplificadores dedicados y micrófonos duales con cancelación de ruido',
+      'Protección avanzada por hardware HP Wolf Pro Security con BIOS autorreparable HP Sure Start Gen7 y lector de huellas biométrico',
+      'Garantía oficial HP ProSupport en sitio con facturación fiscal autorizada con NCF en Santiago'
+    ]
+  }
+];
+
+const lenovoThinkPadT14Items = [
+  {
+    id: 'oficina_lenovo_thinkpad_t14_gen4_laptop',
+    department: 'oficina',
+    category: 'Laptops & Computadoras Corporativas',
+    brand: 'Lenovo',
+    title: 'Laptop Corporativa Lenovo ThinkPad T14 Gen 4 14" WUXGA Intel Core i7-1365U vPro 32GB RAM DDR5 1TB SSD NVMe Chasis Magnesio MIL-STD-810H',
+    desc: 'La laptop corporativa de resistencia extrema Lenovo ThinkPad T14 Gen 4 es el estándar indiscutible para ingenieros de infraestructura, desarrolladores de software, directores de tecnología y administradores bancarios en Santiago y todo el Cibao. Diseñada y certificada bajo doce estrictos métodos militares MIL-STD-810H y más de 200 pruebas de durabilidad extrema en chasis híbrido de aleación de magnesio y fibra de carbono. Está impulsada por el potente procesador empresarial Intel Core i7-1365U vPro de 10 núcleos (hasta 5.2 GHz con tecnología Intel vPro Enterprise para gestión remota out-of-band), 32 GB de memoria RAM DDR5-5200 MHz para compilación ágil y virtualización de servidores locales, y 1 TB de almacenamiento ultrarrápido en disco SSD PCIe 4.0 x4 NVMe con cifrado Opal 2.0 por hardware. Presenta una pantalla antirreflejo de 14 pulgadas WUXGA (1920x1200) IPS de bajo consumo con brillo de 400 nits y calibración 100% sRGB. Incluye puerto Gigabit Ethernet nativo RJ-45 para diagnóstico y administración física de redes, dos puertos Thunderbolt 4 / USB4 de 40 Gbps, dos puertos USB 3.2 Gen 1, HDMI 2.1, conectividad Intel Wi-Fi 6E AX211, el legendario teclado ergonómico ThinkPad resistente a derrames con el icónico TrackPoint rojo, lector biométrico de huellas dactilares Power-on Touch y lector de tarjetas inteligentes Smart Card para autenticación corporativa.',
+    price: 'RD$ 74,900.00',
+    img: 'img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp',
+    gallery: [
+      'img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp'
+    ],
+    specs: [
+      'Procesador empresarial Intel Core i7-1365U vPro de 13.ª Gen (10 núcleos hasta 5.2 GHz con soporte de gestión Intel vPro Enterprise)',
+      '32 GB de memoria RAM DDR5 de alta velocidad optimizada para multitarea masiva, máquinas virtuales y desarrollo',
+      '1 TB SSD M.2 2280 PCIe 4.0 x4 Performance NVMe con cifrado Opal 2.0 por hardware para seguridad de datos confidenciales',
+      'Pantalla IPS de 14" WUXGA (1920x1200) 16:10 de 400 nits Low Power, 100% sRGB y tecnología Eyesafe de reducción de luz azul',
+      'Construcción de grado militar MIL-STD-810H con chasis de aleación de magnesio y base reforzada con fibra de vidrio',
+      'Puerto Gigabit Ethernet RJ-45 nativo integrado para conexión de red por cable directa sin necesidad de dongles o adaptadores',
+      'Doble puerto Thunderbolt 4 (40 Gbps, USB-PD 3.0 y DisplayPort 1.4) más 2x USB 3.2 Gen 1 y HDMI 2.1 hasta 4K@60Hz',
+      'Teclado ergonómico ThinkPad legendario con TrackPoint central, teclas de acceso rápido a llamadas y resistencia a líquidos',
+      'Autenticación biométrica dual: cámara web FHD 1080p + IR para reconocimiento facial Windows Hello y lector de huella dactilar',
+      'Garantía oficial Lenovo Premier Support con cobertura en República Dominicana y factura formal con NCF'
+    ]
+  }
+];
+
+const lgUltraFine32Items = [
+  {
+    id: 'oficina_lg_ultrafine_32un650_4k_monitor',
+    department: 'oficina',
+    category: 'Monitores & Pantallas Comerciales',
+    brand: 'LG',
+    title: 'Monitor Profesional 4K UHD LG UltraFine 32UN650-W 31.5" IPS HDR10 95% DCI-P3 con Altavoces Waves MaxxAudio y Soporte Ajustable',
+    desc: 'El monitor profesional de gran formato LG UltraFine 32UN650-W de 31.5 pulgadas ofrece una experiencia visual de ultra alta definición 4K UHD (3840 x 2160 píxeles) con cuatro veces la densidad de píxeles de un monitor Full HD estándar. Concebido especialmente para arquitectos, diseñadores gráficos, editores de video 4K, directores de proyectos y salas de control financiero en Santiago que necesitan un espacio de pantalla inmenso sin perder nitidez. Su panel IPS de última generación proporciona ángulos de visión amplios de 178 grados y una cobertura extraordinaria del 95% del espacio de color cinematográfico DCI-P3 con calibración de fábrica y compatibilidad con el estándar de alto rango dinámico HDR10. Para una acústica superior en escritorios ejecutivos sin cables adicionales, incorpora un potente sistema de bocinas estéreo Waves MaxxAudio de 5W x 2 con graves enriquecidos. Su conectividad incluye dos puertos HDMI 2.0, una entrada DisplayPort 1.4 y salida de audio de 3.5 mm. Cuenta con tecnología AMD FreeSync para fluidez sin tearing, modos dedicados Dynamic Action Sync y Black Stabilizer, y una base ergonómica de diseño curvo ArcLine con regulación suave de altura e inclinación.',
+    price: 'RD$ 29,800.00',
+    img: 'img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp',
+    gallery: [
+      'img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp'
+    ],
+    specs: [
+      'Pantalla IPS de gran formato de 31.5 pulgadas con resolución nativa 4K UHD (3840 x 2160) y acabado antirreflejo 3H',
+      'Cobertura profesional de color del 95% DCI-P3 (típico) y soporte de alto rango dinámico HDR10 para gradaciones de color impecables',
+      'Calibración de color certificada de fábrica para máxima fidelidad cromática en modelado 3D, arquitectura y edición gráfica',
+      'Sistema de sonido estéreo envolvente integrado con dos altavoces Waves MaxxAudio de 5W cada uno',
+      'Soporte ergonómico con ajuste de altura de hasta 110 mm e inclinación de -5° a +20° con montaje compatible VESA 100x100 mm',
+      'Conectividad audiovisual versátil: 2 puertos HDMI 2.0, 1 DisplayPort 1.4 y salida de auriculares estéreo de 3.5 mm',
+      'Tecnología AMD FreeSync con frecuencia de actualización fluida y tiempo de respuesta de 5 ms con Overdrive',
+      'Funciones para productividad: OnScreen Control para dividir la pantalla en múltiples cuadrículas y modo lectura Flicker Safe',
+      'Diseño sin bordes en 3 lados (Virtually Borderless) para configuraciones de múltiples monitores continuas y elegantes',
+      'Garantía oficial LG con respaldo técnico directo y comprobante fiscal NCF en República Dominicana'
+    ]
+  }
+];
+
+const netgearWax630Items = [
+  {
+    id: 'redes_netgear_wax630_access_point_wifi6_multigigabit',
+    department: 'redes',
+    category: 'Equipos de Red & Conectividad',
+    brand: 'Netgear',
+    title: 'Punto de Acceso Tri-Banda Wi-Fi 6 Multi-Gigabit Netgear Insight WAX630 AX6000 con Puerto 2.5G PoE++ y Gestión Cloud',
+    desc: 'El punto de acceso inalámbrico empresarial Netgear Insight WAX630 es la cúspide en conectividad Wi-Fi 6 Tri-Banda (AX6000) diseñada para entornos de densidad ultra alta en el Cibao, tales como auditorios universitarios, clínicas médicas, salas de convenciones corporativas, restaurantes y almacenes logísticos con más de 100 usuarios activos concurrentes por punto de acceso. Ofrece un ancho de banda masivo agregado de hasta 6.0 Gbps distribuido en tres frecuencias de radio simultáneas: 1,200 Mbps en la banda de 2.4 GHz (4x4), 2,400 Mbps en la banda de 5 GHz baja (4x4) y 2,400 Mbps en la banda de 5 GHz alta (4x4). Está equipado con un puerto Ethernet Multi-Gigabit de 2.5 Gbps (2.5GBASE-T) con soporte de alimentación por PoE++ Ultra60 (802.3bt / 802.3at) para eliminar cualquier cuello de botella en el enlace de subida de red, además de un segundo puerto Gigabit Ethernet 1G para puente o redundancia. Admite hasta 600 dispositivos clientes asociados simultáneamente, hasta 8 SSIDs independientes con mapeo de VLAN 802.1Q para segmentación estricta de tráfico de invitados, personal y terminales IoT, roaming continuo transparente con estándares 802.11k/v/r, seguridad de vanguardia WPA3 Enterprise de 192 bits y gestión centralizada remota a través de la plataforma en la nube Netgear Insight desde app móvil o portal web.',
+    price: 'RD$ 21,500.00',
+    img: 'img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp',
+    gallery: [
+      'img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp'
+    ],
+    specs: [
+      'Tecnología Wi-Fi 6 Tri-Banda simultánea AX6000: 1,200 Mbps en 2.4 GHz (4x4) + 2,400 Mbps en 5 GHz-1 (4x4) + 2,400 Mbps en 5 GHz-2 (4x4)',
+      'Puerto Ethernet Multi-Gigabit 2.5GBASE-T con alimentación Power over Ethernet PoE++ (802.3bt / 802.3at) de alta potencia',
+      'Segundo puerto Gigabit Ethernet 10/100/1000 Mbps para conexión en cascada de conmutadores u otros equipos de red',
+      'Capacidad ultra densa: admite hasta 600 clientes concurrentes conectados y hasta 100 conexiones activas por radiofrecuencia',
+      'Soporte de hasta 8 SSIDs individuales con aislamiento de clientes, aislamiento de radio y etiquetado de VLAN 802.1Q',
+      'Roaming rápido y sin interrupciones con protocolos 802.11k, 802.11v y 802.11r para movilidad continua en voz sobre Wi-Fi',
+      'Seguridad inalámbrica corporativa avanzada con cifrado WPA3 Enterprise, detección de APs intrusos y filtrado MAC',
+      'Gestión centralizada flexible: administración en la nube mediante Netgear Insight o servidor web local autónomo (Standalone)',
+      'Kit de montaje profesional incluido para techo en cielo raso (Drop Ceiling) o pared sólida con cerradura Kensington',
+      'Garantía oficial limitada de hardware Netgear Insight con soporte técnico corporativo en Santiago'
+    ]
+  }
+];
+
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
   const code = fs.readFileSync(backupPath, 'utf8');
@@ -3663,7 +3776,11 @@ async function updateBackupData() {
     ...ezvizEb8Items,
     ...logitechRallyPlusItems,
     ...samsungTheFrameProItems,
-    ...zktecoCmp200Items
+    ...zktecoCmp200Items,
+    ...hpEliteBook840Items,
+    ...lenovoThinkPadT14Items,
+    ...lgUltraFine32Items,
+    ...netgearWax630Items,
   ];
 
   itemsToSync.forEach(item => {
@@ -3790,7 +3907,11 @@ async function updateFirestore() {
     ...ezvizEb8Items,
     ...logitechRallyPlusItems,
     ...samsungTheFrameProItems,
-    ...zktecoCmp200Items
+    ...zktecoCmp200Items,
+    ...hpEliteBook840Items,
+    ...lenovoThinkPadT14Items,
+    ...lgUltraFine32Items,
+    ...netgearWax630Items,
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

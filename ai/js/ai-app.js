@@ -130,12 +130,47 @@
     return html;
   }
 
+  function safeCopyClipboard(text, onSuccess, onError) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        if (typeof onSuccess === 'function') onSuccess();
+      }).catch(() => {
+        if (fallbackCopy(text) && typeof onSuccess === 'function') onSuccess();
+        else if (typeof onError === 'function') onError();
+      });
+    } else {
+      if (fallbackCopy(text) && typeof onSuccess === 'function') onSuccess();
+      else if (typeof onError === 'function') onError();
+    }
+  }
+
+  function fallbackCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const res = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return res;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Global copy code helper (used inline in code blocks)
   window.copyCode = function(btn) {
-    const code = btn.closest('.code-block-wrapper').querySelector('code').innerText;
-    navigator.clipboard.writeText(code).then(() => {
+    if (!btn) return;
+    const wrapper = btn.closest('.code-block-wrapper');
+    const codeEl = wrapper ? wrapper.querySelector('code') : null;
+    const code = codeEl ? codeEl.innerText : '';
+    if (!code) return;
+    safeCopyClipboard(code, () => {
       btn.textContent = '✅ Copiado';
-      setTimeout(() => btn.textContent = '📋 Copiar', 2000);
+      setTimeout(() => { if (btn) btn.textContent = '📋 Copiar'; }, 2000);
     });
   };
 
@@ -206,9 +241,9 @@
     const copyBtn = msgDiv.querySelector('.copy-btn');
     if (copyBtn) {
       copyBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(msg.content).then(() => {
+        safeCopyClipboard(msg.content, () => {
           copyBtn.textContent = '✅';
-          setTimeout(() => copyBtn.textContent = '📋', 2000);
+          setTimeout(() => { if (copyBtn) copyBtn.textContent = '📋'; }, 2000);
         });
       });
     }

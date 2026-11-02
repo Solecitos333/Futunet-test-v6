@@ -106,8 +106,11 @@ const testQueries = [
   'lynx distributor',
   'eb8',
   'rally plus',
-  'the frame',
-  'cmp200'
+  'the frame',  'cmp200',
+  'elitebook',
+  'thinkpad t14',
+  'ultrafine',
+  'wax630'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {

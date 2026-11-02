@@ -56,6 +56,30 @@ window.ERPBillingWorkflows = (function () {
     }
   }
   function notify(message, type = 'info') { window.ERPBilling.showToast(message, type); }
+  async function safeCopyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch (e) {
+        // Fallback a selección de DOM
+      }
+    }
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      return false;
+    }
+  }
   function collection(name) { return db().collection(`${prefix}_${name}`); }
   function currentSettings() { return billing().settings || {}; }
   function currentInvoices() { return billing().invoices || []; }
@@ -482,8 +506,8 @@ window.ERPBillingWorkflows = (function () {
     content.querySelectorAll('[data-share-channel]').forEach(button => button.addEventListener('click', async () => {
       const channel = button.dataset.shareChannel;
       if (channel === 'copy') {
-        await navigator.clipboard.writeText(link.url);
-        notify('Enlace copiado.', 'success');
+        const ok = await safeCopyText(link.url);
+        notify(ok ? 'Enlace copiado.' : 'No se pudo copiar automáticamente al portapapeles.', ok ? 'success' : 'warning');
       } else if (channel === 'whatsapp') {
         const waUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
         safeOpenWhatsApp(waUrl);
@@ -604,7 +628,7 @@ window.ERPBillingWorkflows = (function () {
       safeOpenWhatsApp(waUrl);
     }
     if (reminder.channel === 'email') window.location.href = `mailto:${encodeURIComponent(client.email || '')}?subject=${encodeURIComponent(`Recordatorio ${invoice.invoiceNumber}`)}&body=${encodeURIComponent(message)}`;
-    if (reminder.channel === 'phone') await navigator.clipboard.writeText(message);
+    if (reminder.channel === 'phone') await safeCopyText(message);
     await collection('collection_reminders').doc(id).update({ status: 'prepared', preparedAt: serverTime(), preparedBy: user.uid, updatedAt: serverTime() });
     await recordEvent(invoice.id, 'collection_message_prepared', `Recordatorio preparado por ${reminder.channel}.`, { channel: reminder.channel });
     await loadReminders();

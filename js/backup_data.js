@@ -8891,54 +8891,52 @@ const mockDatabase = [
   },
   {
     "id": "equipos_logitech_rally_plus_videoconferencia_4k",
-    "department": "equipos",
-    "category": "Computadoras",
+    "department": "oficina",
+    "category": "Equipos y Periféricos de Oficina",
     "brand": "Logitech",
-    "title": "Sistema Modular de Videoconferencia Empresarial Logitech Rally Plus Ultra HD 4K con 2 Bocinas y 2 Mic Pods",
-    "desc": "El Logitech Rally Plus es el sistema insignia de videoconferencia modular de ultra alta definición diseñado para salas de juntas ejecutivas, auditorios corporativos, salas de conferencias y salones de consejo en empresas e instituciones de Santiago y República Dominicana. Su avanzada cámara Rally PTZ motorizada cuenta con lente de cristal con óptica ultra nítida 4K UHD, zoom digital y óptico combinado de 15X y tecnología de encuadre automático RightSight de Logitech que ajusta el encuadre dinámicamente para incluir a todos los participantes en la mesa de forma elegante. Incluye 2 bocinas frontales independientes de alta fidelidad que proyectan voces claras y naturales con tecnología antivibración RightSound, y 2 bases de micrófonos Rally Mic Pod de mesa con matrices beamforming de captación omnidireccional de 360 grados que nivelan automáticamente las voces y suprimen el ruido ambiental. Su arquitectura de cableado simplificada mediante concentrador de mesa (Table Hub) y concentrador de pantalla (Display Hub) interconectados por un único cable Cat 6A elimina el desorden de cables en la mesa de juntas, siendo compatible nativo con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Cisco Webex.",
+    "title": "Sistema Modular de Videoconferencia Premium Logitech Rally Plus con Cámara 4K Ultra HD y Tecnologías RightSense AI",
+    "desc": "El sistema de videoconferencia modular de clase mundial Logitech Rally Plus es la solución premier para salas de conferencias corporativas, salones de capacitación y salas de juntas ejecutivas en zonas francas y centros de negocios de Santiago. Diseñado para salas grandes y extra grandes de 16 a 20 o más participantes, incluye una cámara motorizada Rally Ultra-HD 4K PTZ con óptica prémium, zoom HD de 15X (5x óptico + 3x digital) y campo visual diagonal de 90°. El sistema de audio profesional desacoplado cuenta con 2 altavoces frontales antivibración de distorsión ultra baja y 2 bases de micrófonos de mesa Mic Pod con tecnología de conformación de haces acústicos adaptativos RightSound (capta voces con claridad cristalina hasta a 4.5 metros y suprime ecos y ruido ambiental). Integra el paquete de tecnologías de inteligencia artificial Logitech RightSense: RightSight encuadra automáticamente a los asistentes ajustando el zoom dinámicamente; RightLight optimiza la exposición y balance de color en rostros sin importar contraluces de ventanas; y RightSound nivela la intensidad de voces suaves y fuertes para una acústica perfecta. Incluye concentradores Display Hub y Table Hub interconectados por un único cable CAT6A para una instalación limpia sin cables cruzando la sala de reuniones.",
     "price": "RD$ 145,000.00",
     "img": "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp",
     "gallery": [
       "img/productos/catalogo/logitech-rally-plus-videoconferencia-4k.webp"
     ],
     "specs": [
-      "Cámara Ultra-HD 4K PTZ motorizada con movimiento horizontal ±90°, inclinación +50°/-90° y zoom 15X HD",
-      "Tecnología RightSight de encuadre automático por IA que detecta y centra a los participantes en la sala",
-      "Tecnología RightLight con amplio rango dinámico (WDR) para optimizar el tono de piel y rostros en contraluz",
-      "Sistema de audio modular de alta fidelidad: incluye 2 bocinas Rally frontales de 76 mm con suspensión anti-vibración",
-      "Incluye 2 bases de micrófonos Rally Mic Pod de mesa con 4 micrófonos beamforming cada uno (ampliable hasta 7 Mic Pods)",
-      "Tecnología RightSound con nivelación automática de voces suaves/altas y supresión activa de ruido y eco",
-      "Concentrador de mesa (Table Hub) y Concentrador de pantalla (Display Hub) conectados por un único cable Cat 6A",
-      "Compatibilidad certificada Plug-and-Play USB con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Webex",
-      "Control remoto por radiofrecuencia (RF) de largo alcance con botones de preajustes de cámara y silenciamiento",
-      "Diseño prémium en acabados de aluminio y tela acústica gris carbón para salas de consejo corporativas",
-      "Garantía oficial Logitech de 2 años con soporte técnico e instalación certificada en Santiago"
+      "Cámara PTZ motorizada con sensor 4K Ultra HD, panorámica ±90°, inclinación +50°/-90° y zoom óptico-digital 15X",
+      "Tecnología RightSight AI: detecta participantes y ajusta el encuadre y zoom automáticamente durante toda la sesión",
+      "Tecnología RightLight AI: balance de color y luminancia facial natural incluso en salas con iluminación deficiente o contraluz",
+      "Tecnología RightSound AI: cancelación avanzada de eco acústico, supresión de ruidos y nivelación automática de volumen de voz",
+      "Sistema de sonido desacoplado: 2 altavoces de alta fidelidad con carcasa antivibratoria que no interfiere con la cámara",
+      "Captación de voz 360°: 2 bases de micrófonos Mic Pod con 8 micrófonos beamforming (ampliable hasta 7 Mic Pods para 46 personas)",
+      "Conexión simplificada mediante Table Hub y Display Hub interconectados por un solo cable de red CAT6A",
+      "Compatibilidad nativa Plug and Play vía USB con Microsoft Teams Rooms, Zoom Rooms, Google Meet y Cisco Webex",
+      "Mando a distancia por radiofrecuencia con 3 preajustes programables de cámara que funciona sin apuntar directamente",
+      "Garantía oficial empresarial Logitech de 2 años con soporte técnico corporativo en República Dominicana"
     ]
   },
   {
     "id": "oficina_samsung_the_frame_pro_55_qled_4k",
-    "department": "equipos",
-    "category": "Computadoras",
+    "department": "oficina",
+    "category": "Equipos y Periféricos de Oficina",
     "brand": "Samsung",
-    "title": "Pantalla Comercial Profesional Samsung The Frame Pro de 55 Pulgadas QLED 4K UHD con Acabado Mate y Modo Arte",
-    "desc": "La pantalla comercial Samsung The Frame Pro de 55 pulgadas combina la tecnología de visualización más avanzada con una estética de galería de arte contemporáneo para oficinas de alta dirección, salas de juntas ejecutivas, lobbies corporativos, centros médicos y suites de hotel en Santiago de los Caballeros. Diseñada para lucir como un cuadro artístico en la pared cuando no se utiliza para presentaciones o videoconferencias, incorpora la innovadora pantalla mate antirreflejo (Matte Display) con certificación antideslumbrante que dispersa la luz ambiental eliminando por completo los reflejos de ventanas y luminarias de techo. Su panel Quantum Dot QLED 4K (3840 x 2160) con tasa de refresco nativa de 120Hz reproduce el 100% del volumen de color cinematográfico con precisión validada por Pantone. Cuenta con la caja de conexiones externa One Connect Box y cable casi invisible de un solo hilo que transmite energía y señal 4K ocultando los cables, soporte de pared ultrafino Slim Fit Wall-Mount incluido para un montaje completamente pegado a la pared, sensores inteligentes de movimiento y brillo que activan el Modo Arte en presencia de personas, y plataforma empresarial Samsung Tizen OS con protección de seguridad Knox.",
-    "price": "RD$ 68,500.00",
+    "title": "Pantalla Profesional QLED 4K Samsung The Frame Pro 55\" (Modo Arte, Antirreflejo Mate, Slim Fit y One Connect)",
+    "desc": "La pantalla profesional comercial Samsung The Frame Pro de 55 pulgadas es el televisor y monitor de cartelería digital de diseño más exclusivo del mercado para despachos ejecutivos, salas de juntas premium, recepciones corporativas, consultorios médicos y estudios de arquitectura en Santiago y República Dominicana. Gracias a su pantalla con acabado Matte Display antirreflejo patentado, neutraliza por completo los reflejos de luces de oficina y ventanas soleadas, logrando una textura idéntica al lienzo de una pintura tradicional. Cuando no está en uso para presentaciones corporativas o videoconferencias, activa su galardonado Modo Arte con sensor de brillo y presencia humana integrado para exhibir más de 2,500 obras de arte internacionales o la identidad gráfica de su empresa con consumo energético ultra bajo. Su panel QLED 4K UHD ofrece 100% de volumen de color con tecnología Quantum Dot, frecuencia de actualización nativa de 120Hz con Motion Xcelerator Turbo+ y procesador Quantum 4K con escalado mediante IA. Incluye la caja de conexiones externa One Connect Box con un cable casi transparente que transporta tanto la alimentación eléctrica como la señal de video, marco magnético personalizable y el soporte de pared ultraplano Slim Fit Wall Mount que deja la pantalla completamente pegada a la pared sin separación.",
+    "price": "RD$ 78,900.00",
     "img": "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp",
     "gallery": [
       "img/productos/catalogo/samsung-the-frame-pro-55-qled-4k.webp"
     ],
     "specs": [
-      "Pantalla de 55 pulgadas QLED 4K Ultra HD (3840 x 2160) con tasa de refresco nativa ultra fluida de 120Hz",
-      "Acabado Matte Display Antirreflejo certificado por UL que elimina reflejos de lámparas y luz solar directa",
-      "Modo Arte Profesional (Art Mode): exhibe obras de arte, cuadros o señalización digital corporativa al suspenderse",
-      "Sensor de brillo ambiental y sensor de movimiento que apaga la pantalla cuando la habitación está vacía",
-      "Caja de conexión externa One Connect Box con cable único casi invisible de 5 metros para energía y datos 4K",
-      "Soporte de pared ultrafino Slim Fit Wall-Mount incluido que adhiere la pantalla al ras de la pared sin separación",
-      "Tecnología Quantum Dot con 100% de volumen de color DCI-P3 y validación oficial de fidelidad de color Pantone",
-      "Procesador Quantum 4K con escalado inteligente por inteligencia artificial y sonido en movimiento OTS",
-      "Marcos magnéticos personalizables intercambiables (estilo teca, nogal, blanco o bronce) disponibles",
-      "Plataforma inteligente Tizen para presentaciones inalámbricas desde laptops Windows/Mac (AirPlay 2 / Miracast)",
-      "Garantía oficial Samsung de 1 año con servicio de instalación y montaje profesional en Santiago"
+      "Pantalla QLED 4K UHD de 55 pulgadas (3840 x 2160) con panel Mate Antirreflejo (Matte Display) certificado anti-brillo",
+      "Modo Arte con sensor de iluminación y presencia: exhibe cuadros y cartelería corporativa ahorrando energía cuando la sala está vacía",
+      "Tecnología Quantum Dot con 100% de volumen de color validado por Pantone para una precisión cromática absoluta",
+      "Frecuencia de actualización nativa ultra fluida de 120Hz con soporte HDMI 2.1 y tecnología Motion Xcelerator Turbo Pro",
+      "Caja de conexiones externa One Connect Box con cable único casi invisible de 5 metros para datos y electricidad",
+      "Soporte de pared Slim Fit Wall Mount incluido: instalación al ras de la pared como un cuadro de galería de arte real",
+      "Marcos magnéticos biselados intercambiables (teca, nogal, blanco o bronce) para armonizar con el diseño arquitectónico",
+      "Sistema operativo Tizen con plataforma comercial Samsung VXT CMS, modo de seguridad multicapa Samsung Knox y Wi-Fi 5",
+      "Potente sistema de audio 2.0.2 canales de 40W con Object Tracking Sound (OTS) y sincronización Q-Symphony",
+      "Garantía oficial Samsung corporativa con respaldo y homologación técnica en Santiago"
     ]
   },
   {
@@ -9014,6 +9012,106 @@ const mockDatabase = [
       "Sistema operativo Tizen con plataforma comercial Samsung VXT CMS, modo de seguridad multicapa Samsung Knox y Wi-Fi 5",
       "Potente sistema de audio 2.0.2 canales de 40W con Object Tracking Sound (OTS) y sincronización Q-Symphony",
       "Garantía oficial Samsung corporativa con respaldo y homologación técnica en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_hp_elitebook_840_g10_laptop",
+    "department": "oficina",
+    "category": "Laptops & Computadoras Corporativas",
+    "brand": "HP",
+    "title": "Laptop Corporativa HP EliteBook 840 G10 14\" WUXGA Intel Core i7-1355U 16GB RAM DDR5 512GB SSD NVMe Chasis Aluminio HP Wolf Security",
+    "desc": "La laptop corporativa de alta gama HP EliteBook 840 G10 de 14 pulgadas es la herramienta insignia para directores, ejecutivos de finanzas y consultores empresariales en Santiago y la región Norte. Fabricada en un chasis unibody ultrafino de aluminio aeroespacial mecanizado por CNC, ofrece máxima rigidez estructural y elegancia corporativa. Equipada con procesador Intel Core i7-1355U de 10 núcleos (2 Performance-cores y 8 Efficient-cores con frecuencias turbo de hasta 5.0 GHz), 16 GB de memoria RAM DDR5-5200 MHz de alta velocidad, unidad de estado sólido de 512 GB PCIe 4.0 x4 NVMe ultrarrápida y pantalla IPS Full HD+ WUXGA (1920 x 1200) antirreflejo de 14 pulgadas en relación de aspecto 16:10 para máxima productividad vertical. Incorpora dos puertos Thunderbolt 4 con USB4 Type-C (40 Gbps, Power Delivery y DisplayPort 1.4), dos puertos USB 3.2 Gen 1 Type-A, salida HDMI 2.1, conectividad inalámbrica Intel Wi-Fi 6E AX211 y Bluetooth 5.3. Ofrece teclado retroiluminado HP Premium resistente a salpicaduras con drenaje interior, cámara web IR de 5 MP con encuadre automático por IA y obturador físico de privacidad, sistema de audio firmado por Bang & Olufsen con micrófonos duales de reducción de ruido ambiental y la suite de seguridad multicapa por hardware HP Wolf Pro Security Edition con HP Sure Start autocurable de BIOS.",
+    "price": "RD$ 68,500.00",
+    "img": "img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp",
+    "gallery": [
+      "img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp"
+    ],
+    "specs": [
+      "Procesador Intel Core i7-1355U de 13.ª Generación (10 núcleos / 12 hilos hasta 5.0 GHz con 12 MB Intel Smart Cache)",
+      "16 GB de memoria RAM DDR5 a 5200 MHz (ampliable hasta 64 GB en dos ranuras SO-DIMM accesibles)",
+      "512 GB SSD PCIe Gen4 NVMe M.2 de máxima velocidad de lectura y arranque instantáneo",
+      "Pantalla IPS antirreflejo de 14\" WUXGA (1920x1200) en formato profesional 16:10 con 300 nits y panel de bajo consumo",
+      "Chasis unibody premium de aluminio de grado aeroespacial probado bajo rigurosos estándares militares MIL-STD-810H",
+      "Doble puerto Thunderbolt 4 / USB4 a 40 Gbps con soporte para carga rápida USB-PD y conexión de múltiples monitores 4K",
+      "Cámara web infrarroja de 5 MP con encuadre facial automático por IA, obturador mecánico de privacidad y sensor IR para Windows Hello",
+      "Sistema de sonido Bang & Olufsen de alta definición con amplificadores dedicados y micrófonos duales con cancelación de ruido",
+      "Protección avanzada por hardware HP Wolf Pro Security con BIOS autorreparable HP Sure Start Gen7 y lector de huellas biométrico",
+      "Garantía oficial HP ProSupport en sitio con facturación fiscal autorizada con NCF en Santiago"
+    ]
+  },
+  {
+    "id": "oficina_lenovo_thinkpad_t14_gen4_laptop",
+    "department": "oficina",
+    "category": "Laptops & Computadoras Corporativas",
+    "brand": "Lenovo",
+    "title": "Laptop Corporativa Lenovo ThinkPad T14 Gen 4 14\" WUXGA Intel Core i7-1365U vPro 32GB RAM DDR5 1TB SSD NVMe Chasis Magnesio MIL-STD-810H",
+    "desc": "La laptop corporativa de resistencia extrema Lenovo ThinkPad T14 Gen 4 es el estándar indiscutible para ingenieros de infraestructura, desarrolladores de software, directores de tecnología y administradores bancarios en Santiago y todo el Cibao. Diseñada y certificada bajo doce estrictos métodos militares MIL-STD-810H y más de 200 pruebas de durabilidad extrema en chasis híbrido de aleación de magnesio y fibra de carbono. Está impulsada por el potente procesador empresarial Intel Core i7-1365U vPro de 10 núcleos (hasta 5.2 GHz con tecnología Intel vPro Enterprise para gestión remota out-of-band), 32 GB de memoria RAM DDR5-5200 MHz para compilación ágil y virtualización de servidores locales, y 1 TB de almacenamiento ultrarrápido en disco SSD PCIe 4.0 x4 NVMe con cifrado Opal 2.0 por hardware. Presenta una pantalla antirreflejo de 14 pulgadas WUXGA (1920x1200) IPS de bajo consumo con brillo de 400 nits y calibración 100% sRGB. Incluye puerto Gigabit Ethernet nativo RJ-45 para diagnóstico y administración física de redes, dos puertos Thunderbolt 4 / USB4 de 40 Gbps, dos puertos USB 3.2 Gen 1, HDMI 2.1, conectividad Intel Wi-Fi 6E AX211, el legendario teclado ergonómico ThinkPad resistente a derrames con el icónico TrackPoint rojo, lector biométrico de huellas dactilares Power-on Touch y lector de tarjetas inteligentes Smart Card para autenticación corporativa.",
+    "price": "RD$ 74,900.00",
+    "img": "img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp",
+    "gallery": [
+      "img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp"
+    ],
+    "specs": [
+      "Procesador empresarial Intel Core i7-1365U vPro de 13.ª Gen (10 núcleos hasta 5.2 GHz con soporte de gestión Intel vPro Enterprise)",
+      "32 GB de memoria RAM DDR5 de alta velocidad optimizada para multitarea masiva, máquinas virtuales y desarrollo",
+      "1 TB SSD M.2 2280 PCIe 4.0 x4 Performance NVMe con cifrado Opal 2.0 por hardware para seguridad de datos confidenciales",
+      "Pantalla IPS de 14\" WUXGA (1920x1200) 16:10 de 400 nits Low Power, 100% sRGB y tecnología Eyesafe de reducción de luz azul",
+      "Construcción de grado militar MIL-STD-810H con chasis de aleación de magnesio y base reforzada con fibra de vidrio",
+      "Puerto Gigabit Ethernet RJ-45 nativo integrado para conexión de red por cable directa sin necesidad de dongles o adaptadores",
+      "Doble puerto Thunderbolt 4 (40 Gbps, USB-PD 3.0 y DisplayPort 1.4) más 2x USB 3.2 Gen 1 y HDMI 2.1 hasta 4K@60Hz",
+      "Teclado ergonómico ThinkPad legendario con TrackPoint central, teclas de acceso rápido a llamadas y resistencia a líquidos",
+      "Autenticación biométrica dual: cámara web FHD 1080p + IR para reconocimiento facial Windows Hello y lector de huella dactilar",
+      "Garantía oficial Lenovo Premier Support con cobertura en República Dominicana y factura formal con NCF"
+    ]
+  },
+  {
+    "id": "oficina_lg_ultrafine_32un650_4k_monitor",
+    "department": "oficina",
+    "category": "Monitores & Pantallas Comerciales",
+    "brand": "LG",
+    "title": "Monitor Profesional 4K UHD LG UltraFine 32UN650-W 31.5\" IPS HDR10 95% DCI-P3 con Altavoces Waves MaxxAudio y Soporte Ajustable",
+    "desc": "El monitor profesional de gran formato LG UltraFine 32UN650-W de 31.5 pulgadas ofrece una experiencia visual de ultra alta definición 4K UHD (3840 x 2160 píxeles) con cuatro veces la densidad de píxeles de un monitor Full HD estándar. Concebido especialmente para arquitectos, diseñadores gráficos, editores de video 4K, directores de proyectos y salas de control financiero en Santiago que necesitan un espacio de pantalla inmenso sin perder nitidez. Su panel IPS de última generación proporciona ángulos de visión amplios de 178 grados y una cobertura extraordinaria del 95% del espacio de color cinematográfico DCI-P3 con calibración de fábrica y compatibilidad con el estándar de alto rango dinámico HDR10. Para una acústica superior en escritorios ejecutivos sin cables adicionales, incorpora un potente sistema de bocinas estéreo Waves MaxxAudio de 5W x 2 con graves enriquecidos. Su conectividad incluye dos puertos HDMI 2.0, una entrada DisplayPort 1.4 y salida de audio de 3.5 mm. Cuenta con tecnología AMD FreeSync para fluidez sin tearing, modos dedicados Dynamic Action Sync y Black Stabilizer, y una base ergonómica de diseño curvo ArcLine con regulación suave de altura e inclinación.",
+    "price": "RD$ 29,800.00",
+    "img": "img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp",
+    "gallery": [
+      "img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp"
+    ],
+    "specs": [
+      "Pantalla IPS de gran formato de 31.5 pulgadas con resolución nativa 4K UHD (3840 x 2160) y acabado antirreflejo 3H",
+      "Cobertura profesional de color del 95% DCI-P3 (típico) y soporte de alto rango dinámico HDR10 para gradaciones de color impecables",
+      "Calibración de color certificada de fábrica para máxima fidelidad cromática en modelado 3D, arquitectura y edición gráfica",
+      "Sistema de sonido estéreo envolvente integrado con dos altavoces Waves MaxxAudio de 5W cada uno",
+      "Soporte ergonómico con ajuste de altura de hasta 110 mm e inclinación de -5° a +20° con montaje compatible VESA 100x100 mm",
+      "Conectividad audiovisual versátil: 2 puertos HDMI 2.0, 1 DisplayPort 1.4 y salida de auriculares estéreo de 3.5 mm",
+      "Tecnología AMD FreeSync con frecuencia de actualización fluida y tiempo de respuesta de 5 ms con Overdrive",
+      "Funciones para productividad: OnScreen Control para dividir la pantalla en múltiples cuadrículas y modo lectura Flicker Safe",
+      "Diseño sin bordes en 3 lados (Virtually Borderless) para configuraciones de múltiples monitores continuas y elegantes",
+      "Garantía oficial LG con respaldo técnico directo y comprobante fiscal NCF en República Dominicana"
+    ]
+  },
+  {
+    "id": "redes_netgear_wax630_access_point_wifi6_multigigabit",
+    "department": "redes",
+    "category": "Equipos de Red & Conectividad",
+    "brand": "Netgear",
+    "title": "Punto de Acceso Tri-Banda Wi-Fi 6 Multi-Gigabit Netgear Insight WAX630 AX6000 con Puerto 2.5G PoE++ y Gestión Cloud",
+    "desc": "El punto de acceso inalámbrico empresarial Netgear Insight WAX630 es la cúspide en conectividad Wi-Fi 6 Tri-Banda (AX6000) diseñada para entornos de densidad ultra alta en el Cibao, tales como auditorios universitarios, clínicas médicas, salas de convenciones corporativas, restaurantes y almacenes logísticos con más de 100 usuarios activos concurrentes por punto de acceso. Ofrece un ancho de banda masivo agregado de hasta 6.0 Gbps distribuido en tres frecuencias de radio simultáneas: 1,200 Mbps en la banda de 2.4 GHz (4x4), 2,400 Mbps en la banda de 5 GHz baja (4x4) y 2,400 Mbps en la banda de 5 GHz alta (4x4). Está equipado con un puerto Ethernet Multi-Gigabit de 2.5 Gbps (2.5GBASE-T) con soporte de alimentación por PoE++ Ultra60 (802.3bt / 802.3at) para eliminar cualquier cuello de botella en el enlace de subida de red, además de un segundo puerto Gigabit Ethernet 1G para puente o redundancia. Admite hasta 600 dispositivos clientes asociados simultáneamente, hasta 8 SSIDs independientes con mapeo de VLAN 802.1Q para segmentación estricta de tráfico de invitados, personal y terminales IoT, roaming continuo transparente con estándares 802.11k/v/r, seguridad de vanguardia WPA3 Enterprise de 192 bits y gestión centralizada remota a través de la plataforma en la nube Netgear Insight desde app móvil o portal web.",
+    "price": "RD$ 21,500.00",
+    "img": "img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp",
+    "gallery": [
+      "img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp"
+    ],
+    "specs": [
+      "Tecnología Wi-Fi 6 Tri-Banda simultánea AX6000: 1,200 Mbps en 2.4 GHz (4x4) + 2,400 Mbps en 5 GHz-1 (4x4) + 2,400 Mbps en 5 GHz-2 (4x4)",
+      "Puerto Ethernet Multi-Gigabit 2.5GBASE-T con alimentación Power over Ethernet PoE++ (802.3bt / 802.3at) de alta potencia",
+      "Segundo puerto Gigabit Ethernet 10/100/1000 Mbps para conexión en cascada de conmutadores u otros equipos de red",
+      "Capacidad ultra densa: admite hasta 600 clientes concurrentes conectados y hasta 100 conexiones activas por radiofrecuencia",
+      "Soporte de hasta 8 SSIDs individuales con aislamiento de clientes, aislamiento de radio y etiquetado de VLAN 802.1Q",
+      "Roaming rápido y sin interrupciones con protocolos 802.11k, 802.11v y 802.11r para movilidad continua en voz sobre Wi-Fi",
+      "Seguridad inalámbrica corporativa avanzada con cifrado WPA3 Enterprise, detección de APs intrusos y filtrado MAC",
+      "Gestión centralizada flexible: administración en la nube mediante Netgear Insight o servidor web local autónomo (Standalone)",
+      "Kit de montaje profesional incluido para techo en cielo raso (Drop Ceiling) o pared sólida con cerradura Kensington",
+      "Garantía oficial limitada de hardware Netgear Insight con soporte técnico corporativo en Santiago"
     ]
   }
 ];

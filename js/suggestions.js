@@ -1711,15 +1711,47 @@
       status: 'implemented',
       description: 'Pantalla 4K 120Hz Samsung The Frame Pro 55" con pantalla mate antirreflejo, soporte Slim Fit, One Connect y Modo Arte corporativo.',
       officialResponse: '¡Cumplido! Disponible la Pantalla Samsung The Frame Pro 55" en Oficina y marca-samsung.html.'
-    },
-    {
+    },    {
       refCode: 'SUG-Z6000',
       title: 'Barreras Vehiculares Automáticas ZKTeco CMP200 con Motor Brushless DC y Brazo 3-6m',
       category: 'catalog_products',
       status: 'implemented',
       description: 'Barrera vehicular de alta velocidad ZKTeco CMP200 con motor Brushless DC, brazo telescópico de 3m a 6m, semáforo LED y compatibilidad RFID UHF.',
       officialResponse: '¡Atendido! Disponible la Barrera Vehicular ZKTeco CMP200 en Control de Acceso y marca-zkteco.html.'
-    }];
+    },
+    {
+      refCode: 'SUG-H8400',
+      title: 'Disponibilidad de Laptops Corporativas Premium HP EliteBook 840 G10 Intel Core i7 de 14 Pulgadas en Chasis de Aluminio con HP Wolf Security',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Laptops corporativas HP EliteBook 840 G10 con procesador Intel Core i7-1355U, 16 GB RAM DDR5, 512 GB SSD NVMe, chasis de aluminio MIL-STD-810H y seguridad biométrica HP Wolf Pro Security.',
+      officialResponse: '¡Saludos estimado Lic. Roberto! Tu requerimiento ha sido aprobado e implementado en su totalidad. Incorporamos al catálogo de Equipos de Oficina y a la página oficial marca-hp.html la Laptop Corporativa Premium HP EliteBook 840 G10 (Intel Core i7-1355U, 16 GB RAM DDR5, 512 GB SSD NVMe, pantalla 14" WUXGA 16:10, chasis de aluminio, Thunderbolt 4, cámara 5MP y suite de protección biométrica HP Wolf Pro Security) con 3 años de garantía oficial HP ProSupport y facturación fiscal con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-L1400',
+      title: 'Disponibilidad de Laptops Ejecutivas de Alta Durabilidad Lenovo ThinkPad T14 Gen 4 Intel Core i7 vPro con 32 GB RAM y Chasis de Magnesio',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Laptops empresariales de alta resistencia Lenovo ThinkPad T14 Gen 4 con procesador Intel Core i7-1365U vPro, 32 GB RAM DDR5, 1 TB SSD NVMe, chasis de magnesio MIL-STD-810H y puerto Ethernet RJ45 nativo.',
+      officialResponse: '¡Hola Ing. Marcos Aurelio! Nos alegra comunicarte que tu propuesta ha sido implementada con total éxito. Ya se encuentra disponible en Equipos de Oficina y en la página oficial marca-lenovo.html la Laptop Corporativa Lenovo ThinkPad T14 Gen 4 (Intel Core i7-1365U vPro, 32 GB RAM DDR5, 1 TB SSD NVMe, pantalla 14" WUXGA 400 nits, chasis militar de magnesio MIL-STD-810H, puerto RJ45 nativo y doble Thunderbolt 4) con garantía corporativa oficial Lenovo Premier Support en República Dominicana.'
+    },
+    {
+      refCode: 'SUG-L3200',
+      title: 'Disponibilidad de Monitores Profesionales 4K UHD LG UltraFine 32UN650-W de 31.5 Pulgadas IPS con HDR10 y Cobertura 95% DCI-P3',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Monitores profesionales 4K UHD de gran formato LG UltraFine 32UN650-W de 31.5 pulgadas con panel IPS, 95% DCI-P3, HDR10, altavoces Waves MaxxAudio y base ergonómica regulable en altura.',
+      officialResponse: '¡Hola Arq. Fernando! Tu sugerencia ha sido aprobada e implementada en su totalidad. Incorporamos al catálogo de Equipos de Oficina y a la página de marca marca-lg.html el Monitor Profesional 4K UHD LG UltraFine 32UN650-W de 31.5 Pulgadas (panel IPS 3840x2160, 95% DCI-P3, HDR10, altavoces Waves MaxxAudio 5Wx2, doble HDMI + DisplayPort y soporte regulable en altura) con garantía oficial LG y entrega con comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-N6300',
+      title: 'Disponibilidad de Puntos de Acceso Tri-Banda Wi-Fi 6 Multi-Gigabit Netgear Insight WAX630 (AX6000) con Puerto 2.5G y PoE++ para Alta Densidad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Puntos de acceso inalámbricos para alta densidad Netgear Insight WAX630 AX6000 Tri-Banda con puerto Multi-Gigabit 2.5G PoE++, capacidad para 600 dispositivos y gestión centralizada en la nube Insight.',
+      officialResponse: '¡Saludos estimado Ing. Kelvin! Tu propuesta ha sido aprobada e implementada en su totalidad. Ya se encuentra disponible en el catálogo de Redes de Datos y en marca-netgear.html el Punto de Acceso Tri-Banda Wi-Fi 6 Multi-Gigabit Netgear Insight WAX630 AX6000 (puerto 2.5G PoE++, velocidad de 6 Gbps en 3 bandas simultáneas, soporte de hasta 600 dispositivos y gestión centralizada Cloud Insight) con garantía corporativa oficial Netgear en Santiago.'
+    }
+  ];
 
   function getFallbackSuggestionByCode(code) {
     if (!code) return null;
