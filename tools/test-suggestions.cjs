@@ -2505,3 +2505,93 @@ test('Mejora demandada por usuarios: Punto de Acceso Tri-Banda Wi-Fi 6 Netgear I
   assert.ok(catJs.includes("'wax630'") && catJs.includes("'wax-630'"), 'catalog.js debe incluir wax630 y wax-630 en stem variants');
   assert.ok(catJs.includes('wax630'), 'catalog.js debe priorizar Netgear Insight WAX630');
 });
+
+test('Mejora demandada por usuarios: Switch Smart Managed Gigabit PoE+ Linksys LGS328PC (SUG-L3280)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L3280'") && seedCjs.includes("status: 'implemented'"), 'SUG-L3280 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L3280') && sugJs.includes('Linksys LGS328PC'), 'SUG-L3280 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_lgs328pc_smart_poe_switch'), 'backup_data.js debe contener redes_linksys_lgs328pc_smart_poe_switch');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-lgs328pc-switch-smart-poe.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Linksys LGS328PC debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'lgs328pc'") && catJs.includes("'lgs328'"), 'catalog.js debe incluir lgs328pc en stem variants');
+  assert.ok(catJs.includes('lgs328pc'), 'catalog.js debe priorizar Switch Linksys LGS328PC');
+});
+
+test('Mejora demandada por usuarios: Aire Inverter Mitsubishi Electric MSZ-GL 9,000 BTU Ultra Silencioso (SUG-M9000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M9000'") && seedCjs.includes("status: 'implemented'"), 'SUG-M9000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M9000') && sugJs.includes('Mitsubishi Electric MSZ-GL 9,000 BTU'), 'SUG-M9000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_msz_gl09_aire_inverter'), 'backup_data.js debe contener energia_mitsubishi_msz_gl09_aire_inverter');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-msz-gl09-aire-inverter.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Aire Mitsubishi MSZ-GL09 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'msz-gl09'") && catJs.includes("'gl09'"), 'catalog.js debe incluir gl09 en stem variants');
+  assert.ok(catJs.includes('gl09'), 'catalog.js debe priorizar Aire Mitsubishi 9,000 BTU');
+});
+
+test('Mejora demandada por usuarios: Teléfono IP Ejecutivo con Videollamada Panasonic KX-HDV430 (SUG-P4300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P4300'") && seedCjs.includes("status: 'implemented'"), 'SUG-P4300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P4300') && sugJs.includes('Panasonic KX-HDV430'), 'SUG-P4300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kx_hdv430_telefono_ip_video'), 'backup_data.js debe contener oficina_panasonic_kx_hdv430_telefono_ip_video');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kx-hdv430-telefono-ip-video.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Teléfono IP Panasonic KX-HDV430 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'kx-hdv430'") && catJs.includes("'hdv430'"), 'catalog.js debe incluir hdv430 en stem variants');
+  assert.ok(catJs.includes('hdv430'), 'catalog.js debe priorizar Panasonic KX-HDV430');
+});
+
+test('Mejora demandada por usuarios: Panel de Seguridad y Control de Acceso Paradox EVO192 Grado 3 (SUG-P1920)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P1920'") && seedCjs.includes("status: 'implemented'"), 'SUG-P1920 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P1920') && sugJs.includes('Paradox EVO192'), 'SUG-P1920 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_evo192_panel_alarma'), 'backup_data.js debe contener seguridad_paradox_evo192_panel_alarma');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-evo192-panel-seguridad-alarma.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Panel Paradox EVO192 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'evo192'") && catJs.includes("'digiplex'"), 'catalog.js debe incluir evo192 en stem variants');
+  assert.ok(catJs.includes('evo192'), 'catalog.js debe priorizar Panel Paradox EVO192');
+});
+
+test('Mejora demandada por usuarios: Arrancador Suave Electrónico Siemens Sirius 3RW30 15 kW (SUG-S3032)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S3032'") && seedCjs.includes("status: 'implemented'"), 'SUG-S3032 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S3032') && sugJs.includes('Siemens Sirius 3RW30'), 'SUG-S3032 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_sirius_3rw30_arrancador_suave'), 'backup_data.js debe contener energia_siemens_sirius_3rw30_arrancador_suave');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-sirius-3rw30-arrancador-suave.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Arrancador Suave Siemens Sirius 3RW30 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'3rw30'") && catJs.includes("'sirius3rw30'"), 'catalog.js debe incluir 3rw30 en stem variants');
+  assert.ok(catJs.includes('3rw30'), 'catalog.js debe priorizar Arrancador Siemens Sirius 3RW30');
+});

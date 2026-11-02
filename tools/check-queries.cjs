@@ -250,7 +250,17 @@ const queries = [
   'ultrafine',
   'lg 4k',
   'wax630',
-  'netgear insight'
+  'netgear insight',
+  'lgs328pc',
+  'switch linksys poe',
+  'mitsubishi 9000',
+  'aire mitsubishi 9k',
+  'hdv430',
+  'telefono video panasonic',
+  'evo192',
+  'paradox evo',
+  '3rw30',
+  'arrancador suave siemens'
 ];
 
 

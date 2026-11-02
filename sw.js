@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v60';
+const CACHE_NAME = 'futunet-cache-v61';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -158,7 +158,12 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/hp-elitebook-840-g10-laptop-corporativa.webp',
   './img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp',
   './img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp',
-  './img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp'
+  './img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp',
+  './img/productos/catalogo/linksys-lgs328pc-switch-smart-poe.webp',
+  './img/productos/catalogo/mitsubishi-msz-gl09-aire-inverter.webp',
+  './img/productos/catalogo/panasonic-kx-hdv430-telefono-ip-video.webp',
+  './img/productos/catalogo/paradox-evo192-panel-seguridad-alarma.webp',
+  './img/productos/catalogo/siemens-sirius-3rw30-arrancador-suave.webp'
 ];
 
 // Install Event — cachear assets críticos

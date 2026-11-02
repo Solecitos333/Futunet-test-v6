@@ -9113,6 +9113,131 @@ const mockDatabase = [
       "Kit de montaje profesional incluido para techo en cielo raso (Drop Ceiling) o pared sólida con cerradura Kensington",
       "Garantía oficial limitada de hardware Netgear Insight con soporte técnico corporativo en Santiago"
     ]
+  },
+  {
+    "id": "redes_linksys_lgs328pc_smart_poe_switch",
+    "department": "redes",
+    "category": "Redes y Conectividad",
+    "brand": "Linksys",
+    "title": "Switch Administrable Gigabit Smart PoE+ Linksys LGS328PC de 24 Puertos Gigabit + 4 Puertos 10G SFP+",
+    "desc": "Switch gestionable para empresas con 24 puertos Gigabit Ethernet PoE+ (presupuesto total de 250W) y 4 enlaces ascendentes SFP+ de 10 Gbps para uplink de alta velocidad. Diseñado para soportar telefonía IP, cámaras de vigilancia y puntos de acceso Wi-Fi 6 con enrutamiento estático L2+/L3 Lite, VLAN 802.1Q, QoS avanzado, snooping IGMP y administración web protegida con HTTPS en Santiago, República Dominicana.",
+    "price": "RD$ 22,850.00",
+    "img": "img/productos/catalogo/linksys-lgs328pc-switch-smart-poe.webp",
+    "gallery": [
+      "img/productos/catalogo/linksys-lgs328pc-switch-smart-poe.webp"
+    ],
+    "specs": [
+      "24 puertos Gigabit Ethernet RJ-45 compatibles con Power over Ethernet PoE+ (802.3at / 802.3af)",
+      "Presupuesto total de energía PoE dedicado de 250 Watts con asignación inteligente y monitoreo de consumo",
+      "4 puertos de enlace ascendente (Uplink) 10G SFP+ para conexiones troncales a 10 Gbps hacia servidores o core",
+      "Capacidad de conmutación de 128 Gbps y tasa de reenvío de paquetes sin bloqueo de 95.23 Mpps",
+      "Enrutamiento estático IPv4/IPv6 de capa 3 Lite para segmentación de tráfico interna sin saturar el router principal",
+      "Soporte completo de VLANs basadas en puerto y 802.1Q (hasta 256 grupos VLAN simultáneos)",
+      "Seguridad corporativa: autenticación 802.1X, Port Security, enlace IP-MAC-Puerto y filtrado ACL L2/L3/L4",
+      "Priorización de tráfico QoS avanzada por hardware con 8 colas de prioridad y mapeo estricto o WRR",
+      "Compatibilidad con Spanning Tree Protocol (STP, RSTP, MSTP) y detección y prevención de bucles de red",
+      "Chasis metálico de 1U para montaje en rack estándar de 19 pulgadas con soportes angulares incluidos y garantía Linksys"
+    ]
+  },
+  {
+    "id": "energia_mitsubishi_msz_gl09_aire_inverter",
+    "department": "energia",
+    "category": "Energía y Climatización",
+    "brand": "Mitsubishi Electric",
+    "title": "Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 9,000 BTU Ultra Silencioso 24.6 SEER con Filtro Nano-Platinum",
+    "desc": "Sistema de climatización de ultra alta eficiencia Inverter Mitsubishi Electric de 9,000 BTU diseñado para cuartos de servidores, oficinas técnicas y despachos ejecutivos en República Dominicana. Certificación de eficiencia 24.6 SEER, operación ultra silenciosa de tan solo 19 dB, gas ecológico R410A, filtro catalítico Nano-Platinum antibacterial y auto-reinicio automático sin pérdida de configuración tras contingencias eléctricas en Santiago.",
+    "price": "RD$ 38,900.00",
+    "img": "img/productos/catalogo/mitsubishi-msz-gl09-aire-inverter.webp",
+    "gallery": [
+      "img/productos/catalogo/mitsubishi-msz-gl09-aire-inverter.webp"
+    ],
+    "specs": [
+      "Capacidad nominal de enfriamiento de 9,000 BTU/h (rango dinámico inverter de 3,100 a 10,000 BTU/h)",
+      "Eficiencia estacional energética certificada de 24.6 SEER y 12.8 EER para un ahorro de electricidad de hasta 65%",
+      "Tecnología de compresor Rotary Inverter impulsado por corriente directa (DC Inverter) de bajo desgaste mecánico",
+      "Modo de funcionamiento ultra silencioso Quiet Mode de apenas 19 dB(A) para máxima concentración en cabinas técnicas",
+      "Filtro de purificación de aire Nano-Platinum con partículas cerámicas de platino que neutralizan bacterias y malos olores",
+      "Función Smart Auto-Restart: reinicio automático instantáneo con los mismos parámetros tras apagones o bajas de tensión",
+      "Función Econo Cool con sensor de temperatura que ajusta el caudal de aire ahorrando hasta un 20% adicional de energía",
+      "Control remoto infrarrojo ergonómico con programación semanal y compatibilidad con interfaz Wi-Fi Kumo Cloud",
+      "Unidad exterior tratada con recubrimiento anticorrosivo Blue Fin en serpentín para prolongar la vida útil en climas tropicales",
+      "Garantía oficial de 5 años en compresor y 1 año en piezas por Mitsubishi Electric Dominicana"
+    ]
+  },
+  {
+    "id": "oficina_panasonic_kx_hdv430_telefono_ip_video",
+    "department": "oficina",
+    "category": "Equipos de Oficina",
+    "brand": "Panasonic",
+    "title": "Teléfono IP Ejecutivo con Videollamada Panasonic KX-HDV430 de 16 Líneas SIP con Pantalla Táctil Color y Cámara HD",
+    "desc": "Teléfono IP ejecutivo multimedia de alta gama con videocámara HD integrada y pantalla táctil LCD a color de 4.3 pulgadas. Soporta hasta 16 cuentas SIP simultáneas, calidad de voz acústica HD Sonic con altavoz full-duplex de banda ancha, 2 puertos de red Gigabit Ethernet 10/100/1000 con soporte Power over Ethernet (PoE), Bluetooth integrado e interoperabilidad probada con conmutadores Panasonic KX-NS500 y videoporteros IP en Santiago.",
+    "price": "RD$ 15,900.00",
+    "img": "img/productos/catalogo/panasonic-kx-hdv430-telefono-ip-video.webp",
+    "gallery": [
+      "img/productos/catalogo/panasonic-kx-hdv430-telefono-ip-video.webp"
+    ],
+    "specs": [
+      "Pantalla táctil LCD TFT retroiluminada a color de 4.3 pulgadas (resolución 480 x 272 píxeles) con interfaz intuitiva",
+      "Cámara de video de alta definición HD integrada en el marco superior para videollamadas directas punto a punto SIP",
+      "Capacidad para registrar y gestionar hasta 16 cuentas SIP corporativas independientes con teclas flexibles en pantalla",
+      "Voz de banda ancha HD Sonic de fidelidad superior con cancelación de eco acústico y altavoz manos libres full duplex",
+      "Doble puerto de red Gigabit Ethernet 10/100/1000 Mbps con soporte de alimentación a través de red PoE (IEEE 802.3af)",
+      "Conectividad inalámbrica Bluetooth integrada para emparejamiento con audífonos inalámbricos de manos libres",
+      "Compatibilidad e integración nativa con sistemas de videoportero IP y cámaras IP de seguridad de la red",
+      "Agenda telefónica local de hasta 2,500 contactos corporativos y soporte de directorios remotos LDAP / XML",
+      "Soporte de códecs de video H.264 / H.263 y códecs de audio G.722, G.711a/u, G.729a para compresión eficiente",
+      "Garantía oficial de fábrica Panasonic con soporte de configuración e integración PBX en Santiago, RD"
+    ]
+  },
+  {
+    "id": "seguridad_paradox_evo192_panel_alarma",
+    "department": "seguridad",
+    "category": "Sistemas de Seguridad CCTV",
+    "brand": "Paradox",
+    "title": "Panel de Alarma y Control de Acceso Paradox EVO192 de 192 Zonas Multiplexado Grado 3 para Alta Seguridad",
+    "desc": "Central de intrusión y control de accesos de máxima seguridad Paradox Digiplex EVO192 expandible hasta 192 zonas direccionables multiplexadas y 8 particiones independientes. Diseñada para sucursales bancarias, naves industriales y residencias de alto nivel en República Dominicana. Soporta 32 puertas con lectoras de proximidad, 999 usuarios, memoria de 2048 eventos inmutables y compatibilidad total con módulos IP150+ y teclados táctiles TM70.",
+    "price": "RD$ 18,500.00",
+    "img": "img/productos/catalogo/paradox-evo192-panel-seguridad-alarma.webp",
+    "gallery": [
+      "img/productos/catalogo/paradox-evo192-panel-seguridad-alarma.webp"
+    ],
+    "specs": [
+      "Capacidad de supervisión de hasta 192 zonas direccionables multiplexadas (8 zonas en placa con doblado ATZ a 16 zonas)",
+      "Soporte de 8 particiones de seguridad completamente independientes con armado perimetral, instantáneo y total",
+      "Sistema de control de accesos corporativo integrado con control y registro de hasta 32 puertas con lectoras Wiegand",
+      "Capacidad de asignación de hasta 999 usuarios con códigos de acceso individuales, tarjetas de proximidad y niveles de permiso",
+      "Memoria de auditoría inmutable de 2,048 eventos de alarma, armado, desarmado y aperturas de acceso con fecha y hora exacta",
+      "Bus de comunicación supervisado de 4 hilos de alta velocidad multiplexado para sensores, teclados y expansores",
+      "Cumplimiento de estándares internacionales de seguridad Grado 3 según norma europea EN 50131 para banca e industria",
+      "Compatibilidad total con módulo de red IP150+ para monitoreo desde aplicación móvil BlueEye / Insite GOLD",
+      "Fuente de alimentación conmutada de 1.7A integrada con circuito de carga inteligente para batería de respaldo de 7Ah a 18Ah",
+      "Garantía oficial Paradox Security Systems con respaldo técnico calificado en Santiago y zona norte"
+    ]
+  },
+  {
+    "id": "energia_siemens_sirius_3rw30_arrancador_suave",
+    "department": "energia",
+    "category": "Automatización y Tableros",
+    "brand": "Siemens",
+    "title": "Arrancador Suave Electrónico Siemens Sirius 3RW30 de 15 kW / 20 HP 32A para Motores Trifásicos 200-480V",
+    "desc": "Arrancador suave de estado sólido Siemens Sirius 3RW3027-1BB14 de 32A para control suave de aceleración y desaceleración en motores eléctricos trifásicos asíncronos de hasta 15 kW (20 HP) a 400V / 230V. Incorpora contactos de bypass integrados que eliminan la disipación térmica tras el arranque, suprimiendo golpes de ariete en bombas de agua y caídas de tensión en redes industriales y comerciales del Cibao.",
+    "price": "RD$ 19,850.00",
+    "img": "img/productos/catalogo/siemens-sirius-3rw30-arrancador-suave.webp",
+    "gallery": [
+      "img/productos/catalogo/siemens-sirius-3rw30-arrancador-suave.webp"
+    ],
+    "specs": [
+      "Potencia nominal para motores trifásicos de hasta 15 kW a 400V o 20 HP a 230V con corriente nominal de operación de 32 Amperios",
+      "Rango de tensión de empleo en fuerza de 200V a 480V AC trifásica (50/60 Hz) con tolerancia ante fluctuaciones de red",
+      "Tensión de circuito de mando y control universal de 110V a 230V AC/DC para fácil adaptación a tableros existentes",
+      "Sistema de contactos de derivación (Bypass) de estado sólido integrados que minimizan el calentamiento en régimen permanente",
+      "Reducción de hasta un 60% en el pico de corriente de arranque protegiendo transformadores y generadores de emergencia",
+      "Potenciómetros rotativos frontales de ajuste preciso para rampa de arranque (0 a 20 s) y tensión inicial (40% a 100%)",
+      "Eliminación de choques mecánicos y golpes de ariete en tuberías de agua y sistemas de bombeo centrífugo continuo",
+      "Formato compacto tamaño S0 (45 mm de ancho) para montaje directo sobre riel DIN estándar de 35 mm o atornillado",
+      "Certificaciones industriales globales IEC/EN 60947-4-2, UL, CSA y marcado CE para alta exigencia operacional",
+      "Garantía original de fábrica Siemens con asistencia técnica especializada en tableros eléctricos en Santiago"
+    ]
   }
 ];
 if (typeof module !== 'undefined') module.exports = mockDatabase;

@@ -110,7 +110,17 @@ const testQueries = [
   'elitebook',
   'thinkpad t14',
   'ultrafine',
-  'wax630'
+  'wax630',
+  'lgs328pc',
+  'switch linksys poe',
+  'mitsubishi 9000',
+  'aire mitsubishi 9k',
+  'hdv430',
+  'telefono video panasonic',
+  'evo192',
+  'paradox evo',
+  '3rw30',
+  'arrancador suave siemens'
 ];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {

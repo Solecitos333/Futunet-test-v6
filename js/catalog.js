@@ -294,6 +294,11 @@ if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants
   if (word === 't14' || word === 't14gen4' || word === 't14-gen4') variants.push('lenovo', 'thinkpad', 't14', 'laptop', 'vpro', 'magnesio', 'mil-std', 'corporativa');
   if (word === 'ultrafine' || word === '32un650' || word === '32un650-w') variants.push('lg', 'ultrafine', 'monitor', '4k', 'ips', '32', 'dci-p3', 'hdr10');
   if (word === 'wax630' || word === 'wax-630' || word === 'insight') variants.push('netgear', 'access', 'point', 'ap', 'wifi6', 'tri-banda', 'multigigabit', 'poe');
+  if (word === 'lgs328pc' || word === 'lgs328' || word === 'lgs-328') variants.push('linksys', 'switch', 'poe', 'gigabit', 'smart', 'sfp', 'redes');
+  if (word === 'msz-gl09' || word === 'gl09' || word === 'mszgl09') variants.push('mitsubishi', 'electric', 'aire', 'inverter', '9000', 'btu', 'climatizacion', 'nano-platinum');
+  if (word === 'kx-hdv430' || word === 'hdv430' || word === 'kxhdv430') variants.push('panasonic', 'telefono', 'ip', 'video', 'videollamada', 'sip', 'tactil');
+  if (word === 'evo192' || word === 'digiplex' || word === 'evo-192') variants.push('paradox', 'evo', 'alarma', 'panel', 'seguridad', 'acceso', 'grado3');
+  if (word === '3rw30' || word === '3rw3027' || word === 'sirius3rw30') variants.push('siemens', 'sirius', 'arrancador', 'suave', 'motor', 'trifasico', 'automatizacion');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1535,6 +1540,61 @@ function scoreProductMatch(product, normalizedQuery) {
         score += 280;
       } else {
         score += 170;
+      }
+    }
+  }
+
+  // Priorizar Switch Linksys LGS328PC al buscar lgs328pc, switch linksys poe, linksys switch 24 (SUG-L3280)
+  if (/\b(lgs328pc|lgs328|switch\s*linksys|linksys\s*switch)\b/i.test(normalizedQuery) || (/\b(linksys)\b/i.test(normalizedQuery) && /\b(switch|poe|24|sfp)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'linksys') {
+      if (/lgs328pc/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Mini-Split Mitsubishi Electric MSZ-GL 9,000 BTU al buscar gl09, mitsubishi 9000, aire mitsubishi 9k (SUG-M9000)
+  if (/\b(gl09|msz-gl09|mitsubishi\s*9000|aire\s*mitsubishi\s*9k|mitsubishi\s*9k)\b/i.test(normalizedQuery) || (/\b(mitsubishi)\b/i.test(normalizedQuery) && /\b(9000|9k|gl09)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('mitsubishi')) {
+      if (/9,?000\s*btu|gl\s*9/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Teléfono IP Panasonic KX-HDV430 al buscar hdv430, kx-hdv430, telefono video panasonic (SUG-P4300)
+  if (/\b(hdv430|kx-hdv430|kxhdv430|telefono\s*video\s*panasonic|panasonic\s*video)\b/i.test(normalizedQuery) || (/\b(panasonic)\b/i.test(normalizedQuery) && /\b(hdv430|video|tactil|camara)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'panasonic') {
+      if (/hdv430/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Panel Paradox EVO192 al buscar evo192, digiplex, paradox evo, alarma paradox grado 3 (SUG-P1920)
+  if (/\b(evo192|digiplex|paradox\s*evo|panel\s*paradox\s*192|alarma\s*paradox\s*grado\s*3)\b/i.test(normalizedQuery) || (/\b(paradox)\b/i.test(normalizedQuery) && /\b(evo|192|digiplex|grado\s*3)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'paradox') {
+      if (/evo192/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Arrancador Suave Siemens Sirius 3RW30 al buscar 3rw30, sirius 3rw30, arrancador suave siemens (SUG-S3032)
+  if (/\b(3rw30|sirius\s*3rw30|arrancador\s*suave\s*siemens|siemens\s*soft\s*starter|siemens\s*32a)\b/i.test(normalizedQuery) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(3rw30|sirius|arrancador|suave|32a)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('siemens')) {
+      if (/3rw30/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
       }
     }
   }

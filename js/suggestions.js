@@ -1750,6 +1750,46 @@
       status: 'implemented',
       description: 'Puntos de acceso inalámbricos para alta densidad Netgear Insight WAX630 AX6000 Tri-Banda con puerto Multi-Gigabit 2.5G PoE++, capacidad para 600 dispositivos y gestión centralizada en la nube Insight.',
       officialResponse: '¡Saludos estimado Ing. Kelvin! Tu propuesta ha sido aprobada e implementada en su totalidad. Ya se encuentra disponible en el catálogo de Redes de Datos y en marca-netgear.html el Punto de Acceso Tri-Banda Wi-Fi 6 Multi-Gigabit Netgear Insight WAX630 AX6000 (puerto 2.5G PoE++, velocidad de 6 Gbps en 3 bandas simultáneas, soporte de hasta 600 dispositivos y gestión centralizada Cloud Insight) con garantía corporativa oficial Netgear en Santiago.'
+    },
+    {
+      refCode: 'SUG-L3280',
+      title: 'Disponibilidad de Switches Smart Administrables PoE+ Linksys LGS328PC de 24 Puertos Gigabit con 4 Enlaces 10G SFP+',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Switches administrables para empresas Linksys LGS328PC de 24 puertos Gigabit PoE+ (250W) y 4 puertos uplink 10G SFP+, con enrutamiento estático L2+/L3 Lite, VLAN 802.1Q y QoS avanzado.',
+      officialResponse: '¡Saludos estimado Ing. Ramón! Tu propuesta ha sido aprobada e implementada en su totalidad. Ya se encuentra disponible en el catálogo de Redes y Conectividad y en marca-linksys.html el Switch Administrable Gigabit Smart PoE+ Linksys LGS328PC (24 puertos Gigabit PoE+ con presupuesto de 250W, 4 puertos de enlace ascendente 10G SFP+, enrutamiento estático IPv4/IPv6 y gestión web segura) con garantía oficial Linksys Business ProSupport y entrega con comprobante fiscal NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-M9000',
+      title: 'Disponibilidad de Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 9,000 BTU Ultra Silenciosos 24.6 SEER con Filtro Nano-Platinum',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Aires acondicionados inverter de alta eficiencia Mitsubishi Electric MSZ-GL 9,000 BTU con 24.6 SEER, nivel de ruido ultra bajo de 19 dB, filtro Nano-Platinum y auto-reinicio tras cortes eléctricos para cuartos de servidores y oficinas.',
+      officialResponse: '¡Hola estimado Lic. Manuel! Tu sugerencia ha sido aprobada e implementada al 100%. Incorporamos al catálogo de Energía y Climatización y a marca-mitsubishi.html el Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL de 9,000 BTU (24.6 SEER, nivel sonoro ultra silencioso de 19 dB, filtro Nano-Platinum, auto-reinicio tras fallas eléctricas y 5 años de garantía en compresor) con entrega e instalación calificada con NCF en Santiago.'
+    },
+    {
+      refCode: 'SUG-P4300',
+      title: 'Disponibilidad de Teléfonos IP Ejecutivos con Videollamada Panasonic KX-HDV430 de 16 Líneas SIP con Cámara HD y Pantalla Táctil',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Teléfonos IP multimedia Panasonic KX-HDV430 con videocámara HD integrada, pantalla táctil color de 4.3 pulgadas, 16 líneas SIP, doble puerto Gigabit PoE, Bluetooth y soporte Sonic HD.',
+      officialResponse: '¡Saludos Lic. Carolina! Nos alegra comunicarte que tu solicitud ha sido implementada. Ya se encuentra en el catálogo de Equipos de Oficina y en marca-panasonic.html el Teléfono IP Ejecutivo con Videollamada Panasonic KX-HDV430 (pantalla táctil a color 4.3", videocámara HD integrada, 16 líneas SIP simultáneas, doble Gigabit PoE y Bluetooth) con garantía de fábrica Panasonic y asistencia técnica de integración telefónica en Santiago.'
+    },
+    {
+      refCode: 'SUG-P1920',
+      title: 'Disponibilidad de Paneles de Seguridad y Control de Acceso Paradox EVO192 de 192 Zonas Multiplexado Grado 3 para Alta Seguridad',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Centrales de seguridad y control de acceso corporativo Paradox Digiplex EVO192 expandible hasta 192 zonas, 8 particiones, 32 puertas de acceso, 999 usuarios y certificación Grado 3 para bancos e industrias.',
+      officialResponse: '¡Hola estimado Ing. David! Tu requerimiento ha sido aprobado e implementado en su totalidad. Incorporamos al catálogo de Sistemas de Seguridad y a marca-paradox.html el Panel de Alarma y Control de Acceso Paradox EVO192 de 192 Zonas (8 particiones, control de acceso integrado para 32 puertas, memoria de 2,048 eventos y certificación Grado 3 EN 50131) con garantía oficial Paradox y soporte especializado en Santiago.'
+    },
+    {
+      refCode: 'SUG-S3032',
+      title: 'Disponibilidad de Arrancadores Suaves Electrónicos Siemens Sirius 3RW30 de 15 kW / 20 HP 32A para Motores Trifásicos Industriales',
+      category: 'catalog_products',
+      status: 'implemented',
+      description: 'Arrancadores suaves Siemens Sirius 3RW30 de 32A para motores trifásicos de hasta 15 kW (20 HP) a 400V/230V con bypass integrado, eliminación de golpes de ariete y reducción del 60% en corriente de arranque.',
+      officialResponse: '¡Saludos estimado Ing. Rafael! Tu propuesta técnica ha sido aprobada e implementada. Hemos integrado al catálogo de Automatización y Tableros y a marca-siemens.html el Arrancador Suave Electrónico Siemens Sirius 3RW30 de 15 kW / 20 HP 32A (contactos de bypass integrados, tensión universal 200-480V, montaje en riel DIN y supresión de golpe de ariete) con garantía oficial Siemens y entrega formal con NCF en Santiago.'
     }
   ];
 
