@@ -137,7 +137,8 @@
     select.innerHTML = '<option value="">Selecciona un cliente</option>' + profiles.filter(function (profile) {
       return profile.status === 'approved';
     }).map(function (profile) {
-      return '<option value="' + escapeHtml(profile.id) + '">' + escapeHtml((profile.displayName || profile.email) + ' · ' + profile.documentNumber) + '</option>';
+      var label = (profile.displayName || profile.email || 'Cliente') + (profile.documentNumber ? ' · ' + profile.documentNumber : '');
+      return '<option value="' + escapeHtml(profile.id) + '">' + escapeHtml(label) + '</option>';
     }).join('');
   }
 

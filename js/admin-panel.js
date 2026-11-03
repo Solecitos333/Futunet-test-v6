@@ -5395,7 +5395,7 @@
       html += '</style></head><body>';
 
       html += '<h1>REPORTE DE ANÁLISIS DE MERCADOTECNIA Y COMPETENCIA</h1>';
-      html += '<p><strong>Fecha del reporte:</strong> ' + new Date().toLocaleDateString('es-ES') + '</p>';
+      html += '<p><strong>Fecha del reporte:</strong> ' + new Date().toLocaleDateString('es-DO') + '</p>';
       html += '<p>Este informe detalla las características competitivas del mercado tecnológico, internet y seguridad en República Dominicana. Contiene las dimensiones de posicionamiento de cada competidor clave y las estrategias recomendadas para Futunet.</p>';
 
       html += '<h2>1. Resumen Tabular de Competencia</h2>';
@@ -5473,7 +5473,7 @@
     var printTitle = document.createElement('div');
     printTitle.id = "temp-pdf-header";
     printTitle.style.cssText = "margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #0a7ab0; display: flex; justify-content: space-between; align-items: center;";
-    printTitle.innerHTML = '<div><img src="img/logo-navbar.webp" style="height: 36px; filter: brightness(0) invert(0.1);"><h1 style="font-family:\'Space Grotesk\', sans-serif; font-size: 1.5rem; color: #0a101d; margin: 4px 0 0 0;">Reporte Ejecutivo: Posicionamiento y Competencia</h1></div><div style="text-align: right;"><span style="font-size:0.75rem; color:#76889e; font-weight:700; font-family:\'Outfit\';">FUTUNET SRL</span><br><span style="font-size:0.75rem; color:#76889e; font-family:\'Outfit\';">Fecha: ' + new Date().toLocaleDateString('es-ES') + '</span></div>';
+    printTitle.innerHTML = '<div><img src="img/logo-navbar.webp" style="height: 36px; filter: brightness(0) invert(0.1);"><h1 style="font-family:\'Space Grotesk\', sans-serif; font-size: 1.5rem; color: #0a101d; margin: 4px 0 0 0;">Reporte Ejecutivo: Posicionamiento y Competencia</h1></div><div style="text-align: right;"><span style="font-size:0.75rem; color:#76889e; font-weight:700; font-family:\'Outfit\';">FUTUNET SRL</span><br><span style="font-size:0.75rem; color:#76889e; font-family:\'Outfit\';">Fecha: ' + new Date().toLocaleDateString('es-DO') + '</span></div>';
     element.insertBefore(printTitle, element.firstChild);
 
     var opt = {

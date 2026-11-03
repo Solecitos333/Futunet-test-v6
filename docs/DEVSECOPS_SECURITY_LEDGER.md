@@ -1961,3 +1961,59 @@ python -m unittest test_main.py test_chatbot_api.py
     - Total de 324 pruebas automatizadas pasando con cero fallos en toda la plataforma.
     - 0 errores sintácticos en scripts JS y 0 IDs duplicados en 52 archivos HTML.
     - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML, 29 hojas de estilo y 755 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.
+
+- **Atención y Respuesta al Buzón de Sugerencias — Lote 27 (2026-11-03: 144 Sugerencias Oficiales Implementadas, Catálogo Expandido a 471 Ítems, 10 Marcas Tier-1 con ≥ 6 Productos para Schneider Electric, Cisco, Ubiquiti, Dahua y TP-Link: Interruptor de Caja Moldeada Schneider Electric Compact NSX100F 100A 3P3D con Micrologic 2.2, Punto de Acceso Empresarial Wi-Fi 6 Cisco Catalyst 9105AX Dual Band MU-MIMO PoE, Switch Administrable Layer 3 Ubiquiti UniFi Switch Pro 24 PoE 400W con 2x 10G SFP+ y LCM Táctil AR, Grabador NVR Dahua WizSense 4K de 16 Canales con 16 Puertos PoE e Inteligencia Artificial SMD Plus, y Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 con Balanceo SDN en la Nube)**:
+  - **Revisión y Respuesta Oficial de Sugerencias (144/144 Implementadas y Respondidas)**:
+    - **`SUG-M2401`** (Ing. Carlos David Tavárez, Climatización & Proyectos Hospitalarios Santiago):
+      - *Título*: Disponibilidad de Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU Ultra Silenciosos 20.5 SEER con Filtro Nano-Platinum.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Aprobado e integrado al catálogo de Energía y Climatización y a la página oficial `marca-mitsubishi.html` el Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU (20.5 SEER, 2 Toneladas, filtro purificador Nano-Platinum, ultra silencioso 34 dB y protección Blue Fin) con garantía oficial Mitsubishi de 7 años en compresor y soporte en Santiago.
+    - **`SUG-P7001`** (Lic. Roberto Gómez, Sistemas de Seguridad Integral Cibao):
+      - *Título*: Disponibilidad de Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas a Color con Ranura microSD para Alarmas Magellan y Spectra.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Aprobado e integrado al catálogo de Sistemas de Seguridad y a `marca-paradox.html` el Teclado Táctil Interactivo Paradox Touch TM70 de 7.0 pulgadas a color (planos de planta interactivos, ranura microSD, sensor de temperatura interior y control de 8 particiones para Magellan y Spectra) con garantía oficial Paradox y asesoría técnica en Santiago.
+    - **`SUG-S100F`** (Ing. Héctor Bienvenido Rosario, Instalaciones Eléctricas Industriales Santiago & Zona Franca):
+      - *Título*: Disponibilidad de Interruptores de Caja Moldeada Schneider Electric Compact NSX100F de 100A 3P3D 36kA con Micrologic 2.2 para Tableros Industriales.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Automatización y Tableros y a la página oficial `marca-schneiderelectric.html` el Interruptor de Caja Moldeada Schneider Electric Compact NSX100F de 100A tripolar 3P3D (`energia_schneider_compact_nsx100f_interruptor`) con poder de corte Icu de 36 kA a 415V, unidad electrónica Micrologic 2.2 con ajuste LSoI de 40A a 100A, visibilidad positiva de contactos y garantía oficial Schneider Electric con entrega y NCF en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`schneider-compact-nsx100f-interruptor.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-C9105`** (Ing. Mario De Jesús Fernández, Infraestructura de Redes & Telecomunicaciones Santiago):
+      - *Título*: Disponibilidad de Puntos de Acceso Empresariales Wi-Fi 6 Cisco Catalyst 9105AX Dual Band MU-MIMO 2x2 PoE para Alta Densidad Corporativa.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes y Conectividad y a la página de marca `marca-cisco.html` el Punto de Acceso Empresarial Wi-Fi 6 Cisco Catalyst 9105AX (`redes_cisco_catalyst_9105ax_access_point`) con estándar 802.11ax (AX1800), velocidad agregada de 1.77 Gbps, tecnología Cisco CleanAir para mitigación automática de interferencias RF, uplink Gigabit PoE 802.3af y gestión flexible vía Cisco Catalyst Center o clúster EWC autónomo con garantía de por vida Cisco LLW en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`cisco-catalyst-9105ax-access-point.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-U2400`** (Ing. Nelson Peralta, Sistemas & Redes Metropolitanas del Cibao):
+      - *Título*: Disponibilidad de Switches Administrables Layer 3 Ubiquiti UniFi Switch Pro 24 PoE (400W) con 2 Enlaces 10G SFP+ y Pantalla LCM Táctil.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes y a `marca-ubiquiti.html` el Switch Administrable Layer 3 Ubiquiti UniFi Switch Pro 24 PoE (`redes_ubiquiti_usw_pro_24_poe_switch`) con 16 puertos PoE+ 802.3at y 8 puertos PoE++ 802.3bt (presupuesto masivo de 400W), 2 enlaces 10G SFP+, enrutamiento Layer 3, pantalla táctil LCM de 1.3 pulgadas con soporte de realidad aumentada AR y refrigeración silenciosa con garantía oficial Ubiquiti en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`ubiquiti-usw-pro-24-poe-switch.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-D4216`** (Lic. Fernando Almonte, Seguridad Electrónica & Videovigilancia del Norte):
+      - *Título*: Disponibilidad de Grabadores NVR Dahua WizSense 4K de 16 Canales con 16 Puertos PoE Integrados e Inteligencia Artificial SMD Plus.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Sistemas de Seguridad y a `marca-dahua.html` el Grabador NVR Dahua WizSense NVR4216 4K de 16 Canales con switch PoE de 16 puertos independiente (`seguridad_dahua_nvr4216_16p_wizsense_4k`), Inteligencia Artificial con reconocimiento facial en vivo, protección perimetral SMD Plus, 2 bahías para discos duros SATA de hasta 10TB c/u (20TB total) y salidas duales HDMI 4K / VGA con garantía oficial Dahua en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`dahua-nvr4216-16p-wizsense-4k.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+    - **`SUG-T7206`** (Ing. Carlos Manuel Santana, Consultoría TI & Enlaces Corporativos Cibao):
+      - *Título*: Disponibilidad de Routers VPN Gigabit Multi-WAN TP-Link Omada ER7206 con Balanceo de Carga y Gestión Cloud SDN.
+      - *Estado*: `implemented`.
+      - *Respuesta Oficial*: Incorporado al catálogo de Redes y a `marca-tp-link.html` el Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 (`redes_tplink_er7206_omada_vpn_router`) con hasta 4 puertos WAN concurrentes (1 SFP WAN + 3 RJ45 WAN), balanceo inteligente de carga y failover sin caídas, servidor/cliente VPN con soporte para hasta 100 túneles IPsec simultáneos e integración 100% centralizada Omada SDN en la nube con garantía de por vida TP-Link Business en Santiago.
+      - *Activo Visual*: Generada y verificada ficha visual WebP optimizada (`tplink-er7206-omada-vpn-router.webp`) en `img/productos/catalogo/` y `dist/img/productos/catalogo/`.
+  - **Sincronización Bidireccional de Catálogo y Base de Datos (471 Ítems en Local, 170 en Firestore)**:
+    - Sincronizados `energia_schneider_compact_nsx100f_interruptor`, `redes_cisco_catalyst_9105ax_access_point`, `redes_ubiquiti_usw_pro_24_poe_switch`, `seguridad_dahua_nvr4216_16p_wizsense_4k` y `redes_tplink_er7206_omada_vpn_router` en `js/backup_data.js` (471 productos totales) y subidos a la colección `products` de Firestore (170 productos gestionados).
+    - Generadas 5 tarjetas de producto WebP 880x880 con ilustraciones vectoriales, especificaciones técnicas detalladas y sellos de garantía mediante `tools/generate-catalog-card-images-lote27.cjs` tanto en `img/productos/catalogo/` como en `dist/img/productos/catalogo/`.
+  - **10 Marcas con ≥ 6 Productos y Paridad 100% de Marca (26 de 26 Marcas en Nivel Tier-1)**:
+    - Auditoría `node tools/audit-brand-pages.cjs` confirma que 10 marcas aliadas alcanzan 6 o más productos en catálogo oficial (Dell: 17, Hikvision: 13, Epson: 6, Logitech: 6, Samsung: 6, Schneider Electric: 6, Cisco: 6, Ubiquiti: 6, Dahua: 6, TP-Link: 6), y las 16 marcas restantes cuentan con un mínimo de 5 productos activos, consolidando la oferta corporativa multimarca más completa de República Dominicana.
+  - **Telemetría de Búsqueda y Puntuación Contextual en `catalog.js`**:
+    - Agregadas variantes stem para términos clave (`nsx100f`, `compact nsx`, `c9105ax`, `catalyst 9105`, `usw-pro-24`, `unifi switch pro`, `nvr4216`, `dahua wizsense`, `er7206`, `omada er7206`).
+    - Configurado impulso de relevancia (+280 puntos para concordancia de modelo, +150 puntos para marca/categoría) en `scoreProductMatch`.
+    - Todas las consultas prioritarias probadas en `tools/check-queries.cjs` y `tools/test-search-telemetry.cjs` se posicionan en el lugar #1 con puntajes de 450 a 877.
+  - **Resiliencia de Service Worker y Caché Offline PWA (`futunet-cache-v62` en `sw.js`)**:
+    - Incrementada la versión de caché del Service Worker a `futunet-cache-v62` en `sw.js`.
+    - Agregados los 5 nuevos activos WebP de catálogo al array `OPTIONAL_ASSETS` garantizando disponibilidad offline fluida.
+    - Sincronizadas las aserciones de integridad en `tools/test-dom-safety.cjs` y `tools/test-forms-security.cjs`.
+  - **Aseguramiento de Calidad & Métricas de Verificación (Regresión Zero)**:
+    - 275 tests automatizados pasando al 100% en frontend (`npm test`, 0 fallos en 12 suites de prueba).
+    - 54 tests unitarios en backend aprobados al 100% (`python -m unittest discover -s . -p "test_*.py"`).
+    - Total de 329 pruebas automatizadas pasando con cero fallos en toda la plataforma.
+    - 0 errores sintácticos en 91 scripts JS y 0 IDs duplicados en 52 archivos HTML (`node tools/audit-js-quality.cjs`).
+    - 0 scripts rotos, 0 hojas de estilo faltantes y 0 referencias ausentes en 52 páginas HTML (`node tools/audit-codebase.cjs`).
+    - Validación completa de hosting de producción (`npm run validate`): 52 páginas HTML, 29 hojas de estilo y 760 recursos públicos en `dist/` sin enlaces rotos ni alertas CSP.

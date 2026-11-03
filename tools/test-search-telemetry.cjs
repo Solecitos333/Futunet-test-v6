@@ -121,7 +121,12 @@ const testQueries = [
   'paradox evo',
   '3rw30',
   'arrancador suave siemens'
-];
+,
+  'nsx100f',
+  'c9105ax',
+  'usw-pro-24',
+  'nvr4216',
+  'er7206'];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
   for (const q of testQueries) {
@@ -843,6 +848,65 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /cmp200/i.test(scored[0].p.title),
         'El producto top para "cmp200" debe ser ZKTeco CMP200'
+      );
+    }
+  
+    if (q === 'nsx100f') {
+      assert.ok(
+        /Schneider/i.test(scored[0].p.brand),
+        'La búsqueda "nsx100f" debe priorizar el Interruptor Schneider Compact NSX100F'
+      );
+      assert.ok(
+        /nsx100f/i.test(scored[0].p.title),
+        'El producto top para "nsx100f" debe ser Schneider Compact NSX100F'
+      );
+    }
+
+    if (q === 'c9105ax') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Cisco',
+        'La búsqueda "c9105ax" debe priorizar el Cisco Catalyst 9105AX'
+      );
+      assert.ok(
+        /9105ax/i.test(scored[0].p.title),
+        'El producto top para "c9105ax" debe ser Cisco Catalyst 9105AX'
+      );
+    }
+
+    if (q === 'usw-pro-24') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ubiquiti',
+        'La búsqueda "usw-pro-24" debe priorizar el Ubiquiti UniFi Switch Pro 24 PoE'
+      );
+      assert.ok(
+        /pro\s*24/i.test(scored[0].p.title),
+        'El producto top para "usw-pro-24" debe ser Ubiquiti UniFi Switch Pro 24 PoE'
+      );
+    }
+
+    if (q === 'nvr4216') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Dahua',
+        'La búsqueda "nvr4216" debe priorizar el Grabador Dahua WizSense NVR4216'
+      );
+      assert.ok(
+        /nvr4216/i.test(scored[0].p.title),
+        'El producto top para "nvr4216" debe ser Dahua NVR4216 WizSense'
+      );
+    }
+
+    if (q === 'er7206') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'TP-Link',
+        'La búsqueda "er7206" debe priorizar el Router TP-Link Omada ER7206'
+      );
+      assert.ok(
+        /er7206/i.test(scored[0].p.title),
+        'El producto top para "er7206" debe ser TP-Link Omada ER7206'
       );
     }
   }

@@ -2595,3 +2595,93 @@ test('Mejora demandada por usuarios: Arrancador Suave Electrónico Siemens Siriu
   assert.ok(catJs.includes("'3rw30'") && catJs.includes("'sirius3rw30'"), 'catalog.js debe incluir 3rw30 en stem variants');
   assert.ok(catJs.includes('3rw30'), 'catalog.js debe priorizar Arrancador Siemens Sirius 3RW30');
 });
+
+test('Mejora demandada por usuarios: Interruptor de Caja Moldeada Schneider Electric Compact NSX100F (SUG-S100F)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S100F'") && seedCjs.includes("status: 'implemented'"), 'SUG-S100F debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S100F') && sugJs.includes('Schneider Electric Compact NSX100F'), 'SUG-S100F debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_schneider_compact_nsx100f_interruptor'), 'backup_data.js debe contener energia_schneider_compact_nsx100f_interruptor');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'schneider-compact-nsx100f-interruptor.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Interruptor Schneider Compact NSX100F debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'nsx100f'") && catJs.includes("'compact-nsx'"), 'catalog.js debe incluir nsx100f en stem variants');
+  assert.ok(catJs.includes('nsx100f'), 'catalog.js debe priorizar Schneider Compact NSX100F');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 Cisco Catalyst 9105AX (SUG-C9105)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C9105'") && seedCjs.includes("status: 'implemented'"), 'SUG-C9105 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C9105') && sugJs.includes('Cisco Catalyst 9105AX'), 'SUG-C9105 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_catalyst_9105ax_access_point'), 'backup_data.js debe contener redes_cisco_catalyst_9105ax_access_point');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-catalyst-9105ax-access-point.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del AP Cisco Catalyst 9105AX debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'c9105'") && catJs.includes("'9105ax'"), 'catalog.js debe incluir c9105 en stem variants');
+  assert.ok(catJs.includes('c9105ax'), 'catalog.js debe priorizar Cisco Catalyst 9105AX');
+});
+
+test('Mejora demandada por usuarios: Switch Layer 3 Ubiquiti UniFi Switch Pro 24 PoE 400W (SUG-U2400)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U2400'") && seedCjs.includes("status: 'implemented'"), 'SUG-U2400 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U2400') && sugJs.includes('UniFi Switch Pro 24 PoE'), 'SUG-U2400 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_usw_pro_24_poe_switch'), 'backup_data.js debe contener redes_ubiquiti_usw_pro_24_poe_switch');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-usw-pro-24-poe-switch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Ubiquiti USW-Pro-24-POE debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'usw-pro-24'") && catJs.includes("'uswpro24'"), 'catalog.js debe incluir usw-pro-24 en stem variants');
+  assert.ok(catJs.includes('usw-pro-24'), 'catalog.js debe priorizar Ubiquiti USW-Pro-24-POE');
+});
+
+test('Mejora demandada por usuarios: Grabador NVR Dahua WizSense 4K 16P PoE con Inteligencia Artificial (SUG-D4216)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-D4216'") && seedCjs.includes("status: 'implemented'"), 'SUG-D4216 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-D4216') && sugJs.includes('Dahua WizSense'), 'SUG-D4216 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_dahua_nvr4216_16p_wizsense_4k'), 'backup_data.js debe contener seguridad_dahua_nvr4216_16p_wizsense_4k');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'dahua-nvr4216-16p-wizsense-4k.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del NVR Dahua WizSense NVR4216 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'nvr4216'") && catJs.includes("'wizsense'"), 'catalog.js debe incluir nvr4216 en stem variants');
+  assert.ok(catJs.includes('nvr4216'), 'catalog.js debe priorizar Dahua WizSense NVR4216');
+});
+
+test('Mejora demandada por usuarios: Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 (SUG-T7206)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T7206'") && seedCjs.includes("status: 'implemented'"), 'SUG-T7206 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T7206') && sugJs.includes('TP-Link Omada ER7206'), 'SUG-T7206 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_tplink_er7206_omada_vpn_router'), 'backup_data.js debe contener redes_tplink_er7206_omada_vpn_router');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-er7206-omada-vpn-router.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Router TP-Link Omada ER7206 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'er7206'") && catJs.includes("'omada7206'"), 'catalog.js debe incluir er7206 en stem variants');
+  assert.ok(catJs.includes('er7206'), 'catalog.js debe priorizar TP-Link Omada ER7206');
+});

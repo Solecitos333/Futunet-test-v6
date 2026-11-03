@@ -1289,12 +1289,12 @@ function initAnnouncementBar() {
 
   // Campaña activa dinámica según vertical o calendario comercial 2026
   let campaign = {
-    badge: '🛡️ OCTUBRE: SEGURIDAD & TECNOLOGÍA',
-    message: '10% de Descuento en Equipamiento y Soluciones Tecnológicas con',
-    coupon: 'OCTUBRE2026',
-    endDate: new Date('2026-10-31T23:59:59'),
-    ctaText: 'Aprovechar Ofertas Q4',
-    waMsg: 'Hola Futunet, quiero cotizar equipamiento tecnológico corporativo con el código OCTUBRE2026.'
+    badge: '🚀 BLACK MONTH TI 2026: APERTURA OFICIAL',
+    message: '15% de Descuento en Fibra Óptica, Servidores y Respaldo TI con',
+    coupon: 'BLACKTI2026',
+    endDate: new Date('2026-11-07T23:59:59'),
+    ctaText: 'Asegurar Stock VIP',
+    waMsg: 'Hola Futunet, quiero aprovechar la apertura oficial de Black Month TI con el código BLACKTI2026.'
   };
 
   // Contextualización inteligente por página y calendario comercial semanal
@@ -1474,7 +1474,7 @@ function initAnnouncementBar() {
       ctaText: 'Auditoría B2B Gratis',
       waMsg: 'Hola Futunet, me interesa la auditoría técnica y cotizar infraestructura y seguridad con el código SEGURIDAD2026.'
     };
-  } else if (currentMonth === 9 || now > q3End) {
+  } else if (currentMonth === 9) {
     // Octubre general: Campaña de Seguridad Corporativa Global
     campaign = {
       badge: '🛡️ OCTUBRE: SEGURIDAD CORPORATIVA',

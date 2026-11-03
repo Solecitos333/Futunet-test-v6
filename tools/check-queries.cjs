@@ -261,7 +261,17 @@ const queries = [
   'paradox evo',
   '3rw30',
   'arrancador suave siemens'
-];
+,
+  'nsx100f',
+  'schneider nsx',
+  'c9105ax',
+  'ap cisco wifi 6',
+  'usw-pro-24',
+  'unifi switch pro 24',
+  'nvr4216',
+  'dahua 16 canales',
+  'er7206',
+  'omada er7206'];
 
 
 for (const q of queries) {

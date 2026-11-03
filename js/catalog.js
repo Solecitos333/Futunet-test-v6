@@ -299,6 +299,11 @@ if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants
   if (word === 'kx-hdv430' || word === 'hdv430' || word === 'kxhdv430') variants.push('panasonic', 'telefono', 'ip', 'video', 'videollamada', 'sip', 'tactil');
   if (word === 'evo192' || word === 'digiplex' || word === 'evo-192') variants.push('paradox', 'evo', 'alarma', 'panel', 'seguridad', 'acceso', 'grado3');
   if (word === '3rw30' || word === '3rw3027' || word === 'sirius3rw30') variants.push('siemens', 'sirius', 'arrancador', 'suave', 'motor', 'trifasico', 'automatizacion');
+  if (word === 'nsx100f' || word === 'nsx100' || word === 'compact-nsx') variants.push('schneider', 'electric', 'compact', 'nsx', 'interruptor', 'caja', 'moldeada', '100a', 'micrologic', 'automatizacion');
+  if (word === 'c9105' || word === '9105ax' || word === 'c9105ax' || word === 'c9105axi') variants.push('cisco', 'catalyst', 'ap', 'access', 'point', 'wifi6', 'ax1800', 'poe', 'redes');
+  if (word === 'usw-pro-24' || word === 'uswpro24' || word === 'usw-pro-24-poe') variants.push('ubiquiti', 'unifi', 'switch', 'pro', '24', 'poe', '400w', 'sfp', 'redes');
+  if (word === 'nvr4216' || word === 'nvr4216-16p' || word === 'wizsense') variants.push('dahua', 'nvr', '16', 'canales', 'poe', '4k', 'wizsense', 'ia', 'smd', 'seguridad');
+  if (word === 'er7206' || word === 'tl-er7206' || word === 'omada7206') variants.push('tp-link', 'omada', 'router', 'vpn', 'multi-wan', 'gigabit', 'sdn', 'redes');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1592,6 +1597,61 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(3rw30|sirius\s*3rw30|arrancador\s*suave\s*siemens|siemens\s*soft\s*starter|siemens\s*32a)\b/i.test(normalizedQuery) || (/\b(siemens)\b/i.test(normalizedQuery) && /\b(3rw30|sirius|arrancador|suave|32a)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('siemens')) {
       if (/3rw30/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Interruptor Schneider Compact NSX100F al buscar nsx100f, compact nsx, schneider nsx (SUG-S100F)
+  if (/\b(nsx100f|nsx100|compact\s*nsx|schneider\s*nsx|schneider\s*100a|micrologic)\b/i.test(normalizedQuery) || (/\b(schneider)\b/i.test(normalizedQuery) && /\b(nsx|100a|micrologic|caja\s*moldeada)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('schneider')) {
+      if (/nsx100f/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Cisco Catalyst 9105AX al buscar c9105, catalyst 9105, 9105ax, ap cisco wifi 6 (SUG-C9105)
+  if (/\b(c9105ax|c9105|9105ax|catalyst\s*9105|cisco\s*9105|ap\s*cisco|catalyst\s*ap)\b/i.test(normalizedQuery) || (/\b(cisco)\b/i.test(normalizedQuery) && /\b(9105|catalyst|wifi\s*6|ap|access\s*point)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase() === 'cisco') {
+      if (/9105ax/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Ubiquiti UniFi Switch Pro 24 PoE al buscar usw-pro-24, unifi switch pro 24, unifi poe 400w (SUG-U2400)
+  if (/\b(usw-pro-24|usw\s*pro\s*24|unifi\s*switch\s*pro|unifi\s*poe\s*400w|ubiquiti\s*24\s*poe)\b/i.test(normalizedQuery) || (/\b(ubiquiti|unifi)\b/i.test(normalizedQuery) && /\b(pro\s*24|switch\s*pro|400w|poe\+\+)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('ubiquiti')) {
+      if (/pro\s*24\s*poe/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Dahua WizSense NVR 16P 4K al buscar nvr4216, dahua 16 canales, dahua wizsense (SUG-D4216)
+  if (/\b(nvr4216|nvr\s*dahua\s*16|dahua\s*16\s*canales|dahua\s*wizsense|wizsense\s*4k)\b/i.test(normalizedQuery) || (/\b(dahua)\b/i.test(normalizedQuery) && /\b(16\s*canales|nvr|wizsense|16p)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('dahua')) {
+      if (/nvr4216|wizsense.*16|dahua.*nvr/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar TP-Link Omada ER7206 al buscar er7206, omada er7206, router omada, router vpn tp-link (SUG-T7206)
+  if (/\b(er7206|omada\s*er7206|router\s*omada|tp-link\s*er7206|router\s*vpn\s*tp-link|router\s*multi-wan)\b/i.test(normalizedQuery) || (/\b(tp-link)\b/i.test(normalizedQuery) && /\b(er7206|omada|multi-wan|vpn\s*router)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('tp-link')) {
+      if (/er7206/i.test(title)) {
         score += 280;
       } else {
         score += 150;

@@ -3807,6 +3807,147 @@ const siemensSirius3rw30Items = [
   }
 ];
 
+const schneiderNsx100fItems = [
+  {
+    id: 'energia_schneider_compact_nsx100f_interruptor',
+    department: 'energia',
+    category: 'Automatización y Tableros',
+    brand: 'Schneider Electric',
+    title: 'Interruptor de Caja Moldeada Schneider Electric Compact NSX100F 100A 3P3D 36kA con Micrologic 2.2',
+    desc: 'Interruptor termomagnético de caja moldeada Schneider Electric Compact NSX100F de 100A tripolar (3P3D) con capacidad de ruptura de 36 kA a 380/415V AC y unidad de control electrónica Micrologic 2.2. Diseñado para acometidas principales, subestaciones y tableros de distribución en industrias, zonas francas y edificios comerciales de Santiago y República Dominicana.',
+    price: 'RD$ 19,450.00',
+    img: 'img/productos/catalogo/schneider-compact-nsx100f-interruptor.webp',
+    gallery: [
+      'img/productos/catalogo/schneider-compact-nsx100f-interruptor.webp'
+    ],
+    specs: [
+      'Corriente nominal de 100A regulable de 40A a 100A mediante selectores rotativos frontales en unidad Micrologic 2.2',
+      'Poder de corte en cortocircuito Icu de 36 kA a 380/415V AC (50/60 Hz) según norma internacional IEC 60947-2',
+      'Configuración tripolar de 3 polos protegidos (3P 3D) con aislamiento nominal Ui de 800V y choque térmico 8 kV',
+      'Unidad de control electrónica avanzada Micrologic 2.2 con protección de sobrecarga L (Ir) y cortocircuito instantáneo SoI (Isd)',
+      'Indicador visual de estado de disparo mediante LED frontal y palanca frontal de accionamiento ergonómica',
+      'Montaje en placa de fondo o riel DIN con accesorios opcionales, compatible con mando rotativo extendido y motorizado',
+      'Bornes de conexión directa para cables de cobre o aluminio con cubrebornes de protección IP40',
+      'Apto para seccionamiento de seguridad según IEC 60947-2 con visibilidad positiva de los contactos principales',
+      'Diseño optimizado para tableros Prisma, barras de distribución y centros de control de motores industriales',
+      'Garantía oficial Schneider Electric con soporte técnico de ingeniería eléctrica en Santiago de los Caballeros'
+    ]
+  }
+];
+
+const ciscoCatalyst9105Items = [
+  {
+    id: 'redes_cisco_catalyst_9105ax_access_point',
+    department: 'redes',
+    category: 'Puntos de Acceso Wi-Fi',
+    brand: 'Cisco',
+    title: 'Punto de Acceso Empresarial Wi-Fi 6 Cisco Catalyst 9105AX (AX1800) Dual Band MU-MIMO PoE',
+    desc: 'Punto de acceso empresarial de próxima generación Cisco Catalyst 9105AX (C9105AXI-A) con tecnología Wi-Fi 6 (802.11ax), antenas omnidireccionales internas, MU-MIMO 2x2:2 y velocidad agregada de hasta 1.77 Gbps. Ideal para despliegues corporativos de alta densidad, oficinas, hoteles y centros educativos con gestión flexible vía Cisco Catalyst Center, nube Meraki o modo autónomo EWC (Embedded Wireless Controller).',
+    price: 'RD$ 24,900.00',
+    img: 'img/productos/catalogo/cisco-catalyst-9105ax-access-point.webp',
+    gallery: [
+      'img/productos/catalogo/cisco-catalyst-9105ax-access-point.webp'
+    ],
+    specs: [
+      'Estándar Wi-Fi 6 (802.11ax) con modulación 1024-QAM, canales de 80 MHz y soporte de tecnologías OFDMA y BSS Coloring',
+      'Rendimiento de doble banda concurrente: hasta 1.2 Gbps en 5 GHz (2x2 MU-MIMO) y 574 Mbps en 2.4 GHz (2x2 MU-MIMO)',
+      'Puerto de enlace ascendente Gigabit Ethernet RJ45 10/100/1000 Mbps con soporte de alimentación PoE estándar (IEEE 802.3af)',
+      'Modos de operación versátiles: gestionado por Cisco Catalyst Center (DNA Spaces), controlador local o clúster EWC sin hardware adicional',
+      'Target Wake Time (TWT) que reduce hasta un 70% el consumo de batería en dispositivos móviles y sensores IoT corporativos',
+      'Seguridad inalámbrica de grado militar con cifrado WPA3 Enterprise, Cisco Trustworthy Systems y Secure Boot por hardware',
+      'Tecnología Cisco CleanAir que detecta interferencias de RF y conmuta canales automáticamente para mantener la calidad de enlace',
+      'Diseño de bajo perfil estético y compacto para montaje en techo o pared en salas de juntas y espacios ejecutivos',
+      'Soporte de Bluetooth Low Energy (BLE 5.0) integrado para servicios de localización en interiores y analítica de presencia',
+      'Garantía oficial Cisco Limited Lifetime Warranty (LLW) con asistencia técnica de configuración en Santiago y Cibao'
+    ]
+  }
+];
+
+const ubiquitiUswPro24Items = [
+  {
+    id: 'redes_ubiquiti_usw_pro_24_poe_switch',
+    department: 'redes',
+    category: 'Switches Administrables',
+    brand: 'Ubiquiti',
+    title: 'Switch Administrable Layer 3 Ubiquiti UniFi Switch Pro 24 PoE (400W) con 2 Enlaces 10G SFP+',
+    desc: 'Switch corporativo administrable Layer 3 de alto rendimiento Ubiquiti UniFi Switch Pro 24 PoE (USW-Pro-24-POE) con 24 puertos Gigabit Ethernet (16 PoE+ 802.3at y 8 PoE++ 802.3bt de alta potencia) con un presupuesto PoE total de 400 Watts, 2 puertos de enlace ascendente 10G SFP+ y pantalla táctil a color LCM de 1.3 pulgadas con soporte de realidad aumentada AR para visualización de puertos.',
+    price: 'RD$ 41,500.00',
+    img: 'img/productos/catalogo/ubiquiti-usw-pro-24-poe-switch.webp',
+    gallery: [
+      'img/productos/catalogo/ubiquiti-usw-pro-24-poe-switch.webp'
+    ],
+    specs: [
+      '16 Puertos Gigabit Ethernet RJ45 con PoE+ 802.3at (hasta 32W por puerto) y 8 Puertos con PoE++ 802.3bt (hasta 64W por puerto)',
+      'Presupuesto de potencia PoE total masivo de 400 Watts para alimentar cámaras PTZ, domos exteriores, puntos de acceso Wi-Fi 6 y teléfonos IP',
+      '2 Puertos de enlace ascendente 10G SFP+ para interconexión troncal de ultra alta velocidad y agregación a servidores',
+      'Capacidades de enrutamiento estático Layer 3 (inter-VLAN routing, enrutamiento estático IPv4/IPv6 y servidor DHCP)',
+      'Pantalla táctil LCM a color de 1.3 pulgadas integrada que muestra estado de puertos, consumo PoE, caudal de datos y alertas de sistema',
+      'Tecnología UniFi AR (Realidad Aumentada) para escaneo interactivo de puertos con la cámara del smartphone mediante la App UniFi',
+      'Capacidad de conmutación total sin bloqueo de 88 Gbps y tasa de reenvío de 65.472 Mpps',
+      'Chasis metálico de montaje en rack de 19 pulgadas (1U) con orejas incluidas y diseño térmico de enfriamiento silencioso con ventilación regulada',
+      'Entrada redundante de alimentación DC mediante sistema UniFi SmartPower RPS (USP-RPS) para protección ante fallos de energía',
+      'Gestión centralizada mediante UniFi Network Controller con configuración de VLANs, aislamiento de puertos y QoS avanzado'
+    ]
+  }
+];
+
+const dahuaNvr4216Items = [
+  {
+    id: 'seguridad_dahua_nvr4216_16p_wizsense_4k',
+    department: 'seguridad',
+    category: 'Grabadores NVR',
+    brand: 'Dahua',
+    title: 'Grabador NVR Dahua WizSense NVR4216 4K de 16 Canales con 16 Puertos PoE Integrados e Inteligencia Artificial',
+    desc: 'Grabador de video en red (NVR) Dahua Serie WizSense NVR4216-16P-4KS2/I de 16 canales IP hasta resolución Ultra HD 4K (12 Megapíxeles) con conmutador PoE de 16 puertos independientes plug-and-play integrado (130W presupuesto). Incorpora algoritmos de Inteligencia Artificial para reconocimiento facial en tiempo real, protección perimetral con clasificación de humanos y vehículos (SMD Plus) y soporte para 2 discos duros SATA de hasta 10 TB cada uno.',
+    price: 'RD$ 26,750.00',
+    img: 'img/productos/catalogo/dahua-nvr4216-16p-wizsense-4k.webp',
+    gallery: [
+      'img/productos/catalogo/dahua-nvr4216-16p-wizsense-4k.webp'
+    ],
+    specs: [
+      '16 Canales de entrada para cámaras IP con ancho de banda de grabación de hasta 256 Mbps y soporte de resolución hasta 4K (12 MP)',
+      'Switch PoE independiente de 16 puertos 10/100 Mbps (IEEE 802.3af/at) integrado en el panel trasero con detección automática',
+      'Inteligencia Artificial Dahua WizSense con protección perimetral avanzada: cruce de línea e intrusión con filtro de falsas alarmas (SMD Plus)',
+      'Reconocimiento y comparación facial en hasta 2 canales simultáneos con gestión de bases de datos de hasta 20,000 rostros',
+      'Soporte para 2 bahías de disco duro SATA III internas de hasta 10 TB por disco (capacidad total máxima de almacenamiento de 20 TB)',
+      'Salidas de video simultáneas e independientes: HDMI en resolución 4K UHD (3840 x 2160) y VGA Full HD 1080p para monitoreo dual',
+      'Compresión de video inteligente Smart H.265+ / H.264+ que ahorra hasta un 70% de ancho de banda y espacio en disco duro',
+      'Audio bidireccional (1 entrada / 1 salida RCA) y puertos de alarma físicos (4 entradas / 2 salidas de relé)',
+      'Acceso remoto multiplataforma mediante aplicación móvil Dahua DMSS (iOS/Android) y software para PC SmartPSS sin costo de suscripción',
+      'Garantía oficial Dahua Technology Dominicana con soporte técnico calificado y entrega formal con NCF en Santiago'
+    ]
+  }
+];
+
+const tplinkEr7206Items = [
+  {
+    id: 'redes_tplink_er7206_omada_vpn_router',
+    department: 'redes',
+    category: 'Routers y Gateways',
+    brand: 'TP-Link',
+    title: 'Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 con Balanceo de Carga y Gestión SDN',
+    desc: 'Gateway y router VPN empresarial Gigabit TP-Link Omada ER7206 (TL-ER7206) equipado con hasta 4 puertos WAN (1 puerto WAN SFP Gigabit, 1 puerto WAN RJ45 Gigabit y 2 puertos WAN/LAN Gigabit intercambiables). Ofrece balanceo de carga multi-línea, failover de contingencia, firewall por hardware de alta velocidad, soporte para hasta 100 túneles VPN IPsec simultáneos e integración 100% centralizada con el ecosistema en la nube Omada SDN.',
+    price: 'RD$ 9,850.00',
+    img: 'img/productos/catalogo/tplink-er7206-omada-vpn-router.webp',
+    gallery: [
+      'img/productos/catalogo/tplink-er7206-omada-vpn-router.webp'
+    ],
+    specs: [
+      'Hasta 4 Puertos WAN Gigabit simultáneos: 1 WAN SFP 1000BASE-X, 1 WAN RJ45 Gigabit, 2 WAN/LAN RJ45 y 2 LAN Gigabit fijos',
+      'Balanceo de carga inteligente multi-WAN con distribución de tráfico por ancho de banda o aplicación y conmutación por error (Failover)',
+      'Servidor y cliente VPN de alta seguridad: soporte para hasta 100 túneles IPsec, 50 túneles OpenVPN, 50 L2TP y 50 PPTP VPN concurrentes',
+      'Cifrado por hardware de alto rendimiento para IPsec (DES, 3DES, AES128, AES192, AES256) garantizando enlaces corporativos seguros',
+      'Integración nativa con la plataforma Omada SDN (Software-Defined Networking) con aprovisionamiento Zero-Touch y gestión vía nube o app',
+      'Firewall robusto con inspección de paquetes con estado (SPI), defensa contra ataques DoS/DDoS, filtrado IP/MAC/URL y enlace IP-MAC',
+      'Soporte de autenticación de portal cautivo para redes de invitados y comercios (SMS, Facebook Wi-Fi, voucher y servidor RADIUS)',
+      'Soporte para múltiples VLANs (802.1Q) con enrutamiento entre VLANs para segmentación segura de departamentos y tráfico corporativo',
+      'Chasis metálico resistente y compacto para montaje en rack de 19 pulgadas o sobremesa con protección contra sobretensiones eléctricas de 4 kV',
+      'Garantía oficial limitada de por vida TP-Link Business con soporte técnico calificado en Santiago y República Dominicana'
+    ]
+  }
+];
+
+
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
   const code = fs.readFileSync(backupPath, 'utf8');
@@ -3926,6 +4067,11 @@ async function updateBackupData() {
     ...panasonicHdv430Items,
     ...paradoxEvo192Items,
     ...siemensSirius3rw30Items,
+    ...schneiderNsx100fItems,
+    ...ciscoCatalyst9105Items,
+    ...ubiquitiUswPro24Items,
+    ...dahuaNvr4216Items,
+    ...tplinkEr7206Items,
   ];
 
   itemsToSync.forEach(item => {
@@ -4062,6 +4208,11 @@ async function updateFirestore() {
     ...panasonicHdv430Items,
     ...paradoxEvo192Items,
     ...siemensSirius3rw30Items,
+    ...schneiderNsx100fItems,
+    ...ciscoCatalyst9105Items,
+    ...ubiquitiUswPro24Items,
+    ...dahuaNvr4216Items,
+    ...tplinkEr7206Items,
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

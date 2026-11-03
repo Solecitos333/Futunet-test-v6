@@ -1791,6 +1791,57 @@
       description: 'Arrancadores suaves Siemens Sirius 3RW30 de 32A para motores trifásicos de hasta 15 kW (20 HP) a 400V/230V con bypass integrado, eliminación de golpes de ariete y reducción del 60% en corriente de arranque.',
       officialResponse: '¡Saludos estimado Ing. Rafael! Tu propuesta técnica ha sido aprobada e implementada. Hemos integrado al catálogo de Automatización y Tableros y a marca-siemens.html el Arrancador Suave Electrónico Siemens Sirius 3RW30 de 15 kW / 20 HP 32A (contactos de bypass integrados, tensión universal 200-480V, montaje en riel DIN y supresión de golpe de ariete) con garantía oficial Siemens y entrega formal con NCF en Santiago.'
     }
+  ,
+    {
+      "refCode": "SUG-M2401",
+      "title": "Disponibilidad de Aires Acondicionados Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU Ultra Silenciosos 20.5 SEER con Filtro Nano-Platinum",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Para salones de conferencias, áreas comerciales abiertas, oficinas ejecutivas amplias y clínicas en Santiago que requieren climatización de alta potencia sin sacrificar silencio ni incurrir en altos costos de electricidad, solicitamos el mini-split inverter Mitsubishi Electric MSZ-GL de 24,000 BTU (2 Toneladas, modelo MSZ-GL24NA).",
+      "officialResponse": "¡Hola Ing. Carlos David! Tu requerimiento ha sido aprobado e implementado exitosamente. Incorporamos al catálogo de Energía y Climatización y a la página oficial marca-mitsubishi.html el Aire Acondicionado Mini-Split Inverter Mitsubishi Electric MSZ-GL 24,000 BTU (20.5 SEER, 2 Toneladas, filtro purificador Nano-Platinum, ultra silencioso 34 dB y protección Blue Fin) con garantía oficial Mitsubishi de 7 años en compresor y soporte en Santiago."
+    },    {
+      "refCode": "SUG-P7001",
+      "title": "Disponibilidad de Teclados Táctiles Interactivos Paradox Touch TM70 de 7 Pulgadas a Color con Ranura microSD para Alarmas Magellan y Spectra",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Para proyectos residenciales de lujo, oficinas corporativas, bancos y comercios en Santiago que requieren una interfaz de usuario moderna, táctil e intuitiva para sus sistemas de alarma Paradox, solicitamos el teclado táctil Paradox Touch TM70 de 7.0 pulgadas (resolución 800 x 480).",
+      "officialResponse": "¡Estimado Lic. Roberto! Nos complace informarte que tu propuesta ha sido aprobada e implementada en el catálogo oficial. Ya se encuentra disponible en Seguridad Electrónica y en marca-paradox.html el Teclado Táctil Interactivo Paradox Touch TM70 de 7.0 pulgadas a color (planos de planta interactivos, ranura microSD, sensor de temperatura interior y control de 8 particiones para Magellan y Spectra) con garantía oficial Paradox y asesoría técnica en Santiago."
+    },    {
+      "refCode": "SUG-S100F",
+      "title": "Disponibilidad de Interruptores de Caja Moldeada Schneider Electric Compact NSX100F de 100A 3P3D 36kA con Micrologic 2.2 para Tableros Industriales",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Interruptor termomagnético de caja moldeada Schneider Electric Compact NSX100F de 100A tripolar (3P3D) con poder de corte de 36 kA a 415V y unidad de disparo electrónica Micrologic 2.2 para acometidas principales de naves industriales y subestaciones.",
+      "officialResponse": "¡Saludos estimado Ing. Héctor! Tu propuesta ha sido aprobada e implementada. Hemos integrado al catálogo de Automatización y Tableros y a marca-schneiderelectric.html el Interruptor de Caja Moldeada Schneider Electric Compact NSX100F de 100A 3P3D 36kA con unidad Micrologic 2.2 regulable (40A-100A) con garantía oficial Schneider Electric y entrega con NCF en Santiago."
+    },    {
+      "refCode": "SUG-C9105",
+      "title": "Disponibilidad de Puntos de Acceso Empresariales Wi-Fi 6 Cisco Catalyst 9105AX Dual Band MU-MIMO 2x2 PoE para Alta Densidad Corporativa",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Punto de acceso empresarial de próxima generación Cisco Catalyst 9105AX (AX1800) con estándar Wi-Fi 6 (802.11ax), antenas omnidireccionales, MU-MIMO 2x2, PoE 802.3af y tecnología CleanAir para entornos corporativos y educativos de alta densidad.",
+      "officialResponse": "¡Hola Ing. Mario! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya se encuentra en el catálogo de Redes y en marca-cisco.html el Punto de Acceso Empresarial Wi-Fi 6 Cisco Catalyst 9105AX (AX1800, MU-MIMO 2x2, PoE 802.3af y CleanAir) con garantía de por vida Cisco LLW y soporte de ingeniería en Santiago."
+    },    {
+      "refCode": "SUG-U2400",
+      "title": "Disponibilidad de Switches Administrables Layer 3 Ubiquiti UniFi Switch Pro 24 PoE (400W) con 2 Enlaces 10G SFP+ y Pantalla LCM Táctil",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Switch corporativo administrable Layer 3 Ubiquiti UniFi Switch Pro 24 PoE con 16 puertos PoE+, 8 puertos PoE++ (400W presupuesto total), 2 enlaces 10G SFP+, enrutamiento Layer 3 y pantalla táctil LCM de 1.3\" con Realidad Aumentada.",
+      "officialResponse": "¡Saludos estimado Ing. Nelson! Nos complace informarte que tu requerimiento ha sido implementado. Incorporamos al catálogo de Redes y a marca-ubiquiti.html el Switch Layer 3 Ubiquiti UniFi Switch Pro 24 PoE (16 PoE+ y 8 PoE++ con 400W, 2x 10G SFP+ y LCM táctil) con garantía oficial Ubiquiti y despacho garantizado en Santiago."
+    },    {
+      "refCode": "SUG-D4216",
+      "title": "Disponibilidad de Grabadores NVR Dahua WizSense 4K de 16 Canales con 16 Puertos PoE Integrados e Inteligencia Artificial SMD Plus",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Grabador NVR Dahua Serie WizSense NVR4216-16P-4KS2/I de 16 canales IP hasta 4K UHD con conmutador PoE de 16 puertos independiente, Inteligencia Artificial con reconocimiento facial, protección perimetral SMD Plus y 2 bahías SATA hasta 20TB.",
+      "officialResponse": "¡Hola Lic. Fernando! Tu propuesta de seguridad ha sido aprobada e implementada. Hemos integrado al catálogo de Sistemas de Seguridad y a marca-dahua.html el Grabador NVR Dahua WizSense 4K de 16 Canales con 16 Puertos PoE (reconocimiento facial, 2 bahías SATA de hasta 20TB y app DMSS) con garantía oficial Dahua y entrega formal con NCF."
+    },    {
+      "refCode": "SUG-T7206",
+      "title": "Disponibilidad de Routers VPN Gigabit Multi-WAN TP-Link Omada ER7206 con Balanceo de Carga y Gestión Cloud SDN",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Gateway y router VPN empresarial Gigabit TP-Link Omada ER7206 con hasta 4 puertos WAN Gigabit, balanceo inteligente multi-WAN, failover de contingencia, soporte para 100 túneles VPN IPsec y gestión 100% centralizada Omada SDN en la nube.",
+      "officialResponse": "¡Saludos Ing. Carlos! Tu requerimiento ha sido aprobado e implementado al 100%. Incorporamos al catálogo de Redes y a marca-tp-link.html el Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 (hasta 4 WAN, 100 túneles VPN IPsec, balanceo inteligente y Omada Cloud) con garantía de por vida TP-Link y soporte técnico en Santiago."
+    }
   ];
 
   function getFallbackSuggestionByCode(code) {

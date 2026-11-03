@@ -90,7 +90,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v61';"), 'sw.js debe estar en la versión futunet-cache-v61');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v62';"), 'sw.js debe estar en la versión futunet-cache-v62');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');
@@ -130,6 +130,16 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   assert.ok(swJs.includes("'./img/productos/catalogo/lenovo-thinkpad-t14-gen4-laptop-corporativa.webp'"), 'sw.js debe incluir lenovo-thinkpad-t14-gen4 en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/lg-ultrafine-32un650-monitor-4k-ips.webp'"), 'sw.js debe incluir lg-ultrafine-32un650 en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./img/productos/catalogo/netgear-wax630-access-point-wifi6-multigigabit.webp'"), 'sw.js debe incluir netgear-wax630 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/linksys-lgs328pc-switch-smart-poe.webp'"), 'sw.js debe incluir linksys-lgs328pc en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/mitsubishi-msz-gl09-aire-inverter.webp'"), 'sw.js debe incluir mitsubishi-msz-gl09 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/panasonic-kx-hdv430-telefono-ip-video.webp'"), 'sw.js debe incluir panasonic-kx-hdv430 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/paradox-evo192-panel-seguridad-alarma.webp'"), 'sw.js debe incluir paradox-evo192 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/siemens-sirius-3rw30-arrancador-suave.webp'"), 'sw.js debe incluir siemens-sirius-3rw30 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/schneider-compact-nsx100f-interruptor.webp'"), 'sw.js debe incluir schneider-compact-nsx100f en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/cisco-catalyst-9105ax-access-point.webp'"), 'sw.js debe incluir cisco-catalyst-9105ax en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/ubiquiti-usw-pro-24-poe-switch.webp'"), 'sw.js debe incluir ubiquiti-usw-pro-24 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/dahua-nvr4216-16p-wizsense-4k.webp'"), 'sw.js debe incluir dahua-nvr4216 en OPTIONAL_ASSETS');
+  assert.ok(swJs.includes("'./img/productos/catalogo/tplink-er7206-omada-vpn-router.webp'"), 'sw.js debe incluir tplink-er7206 en OPTIONAL_ASSETS');
 });
 
 test('Cart & Bundle: custom_office_bundle incluye department oficina y sincronización reactiva de eventos', () => {

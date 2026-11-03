@@ -60,8 +60,8 @@
       discount: 0.15,
       departments: ['seguridad', 'redes', 'equipos'],
       validFrom: '2026-09-27',
-      validUntil: '2026-10-31',
-      description: '15% de descuento en Seguridad Electrónica, CCTV y Control de Acceso (Octubre 2026)'
+      validUntil: '2026-11-30',
+      description: '15% de descuento en Seguridad Electrónica, CCTV y Control de Acceso (Octubre / Noviembre 2026)'
     },
     GAMING2026: {
       code: 'GAMING2026',
@@ -92,8 +92,8 @@
       discount: 0.15,
       departments: ['energia', 'redes', 'seguridad', 'equipos'],
       validFrom: '2026-10-12',
-      validUntil: '2026-10-31',
-      description: '15% de descuento en Continuidad Operativa, Respaldo Energético y Enlaces Redundantes (Semana 3 Octubre 2026)'
+      validUntil: '2026-11-30',
+      description: '15% de descuento en Continuidad Operativa, Respaldo Energético y Enlaces Redundantes (Octubre / Noviembre 2026)'
     },
     BLACKTI2026: {
       code: 'BLACKTI2026',
@@ -101,7 +101,7 @@
       departments: ['energia', 'redes', 'seguridad', 'equipos', 'oficina', 'gaming', 'infra'],
       validFrom: '2026-10-24',
       validUntil: '2026-11-30',
-      description: '15% de descuento en Preventa Early Bird Black TI 2026 (Infraestructura, Fibra Óptica, Servidores y Respaldo)'
+      description: '15% de descuento en Black Month TI 2026 (Infraestructura, Fibra Óptica, Servidores y Respaldo)'
     },
     EARLYBIRD2026: {
       code: 'EARLYBIRD2026',
@@ -881,7 +881,7 @@
               <div class="checkout-form-group full-width" style="margin-top: 8px;">
                 <label for="chk-coupon">Código de Descuento (Opcional)</label>
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="chk-coupon" placeholder="Ej. OCTUBRE2026" maxlength="50" autocomplete="off" spellcheck="false" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
+                  <input type="text" id="chk-coupon" placeholder="Ej. BLACKTI2026" maxlength="50" autocomplete="off" spellcheck="false" style="flex: 1; text-transform: uppercase; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; font-family:inherit;">
                   <button type="button" class="btn btn-ghost" id="btn-apply-coupon" style="min-width: 90px; padding: 0 12px; height: 42px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight:600; background:#f8fafc;">Aplicar</button>
                 </div>
                 <small id="coupon-feedback" style="display: block; margin-top: 4px; font-weight: 600; font-size: 0.8rem;"></small>
