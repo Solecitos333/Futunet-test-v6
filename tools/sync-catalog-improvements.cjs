@@ -3947,6 +3947,146 @@ const tplinkEr7206Items = [
   }
 ];
 
+const mikrotikCrs305Items = [
+  {
+    id: 'redes_mikrotik_crs305_1g_4s_switch_fibra',
+    department: 'redes',
+    category: 'Switches Administrables',
+    brand: 'MikroTik',
+    title: 'Switch Administrable de Fibra Óptica 10G MikroTik CRS305-1G-4S+IN (4 Puertos SFP+ 10Gbps + 1 GbE PoE)',
+    desc: 'Switch de fibra óptica ultracompacto para escritorio MikroTik CRS305-1G-4S+IN con 4 jaulas SFP+ de 10 Gbps independientes, 1 puerto Gigabit Ethernet con entrada PoE (802.3af/at), doble conector DC para redundancia eléctrica, chasis metálico fanless totalmente silencioso y arquitectura Dual Boot SwOS/RouterOS con licencia Level 5.',
+    price: 'RD$ 13,800.00',
+    img: 'img/productos/catalogo/mikrotik-crs305-switch-fibra-10g.webp',
+    gallery: [
+      'img/productos/catalogo/mikrotik-crs305-switch-fibra-10g.webp'
+    ],
+    specs: [
+      '4 Jaulas SFP+ de 10 Gbps para módulos de fibra óptica o cables de conexión directa DAC SFP+ de ultra alta velocidad',
+      '1 Puerto Gigabit Ethernet RJ45 10/100/1000 Mbps con soporte de entrada PoE pasivo o estándar IEEE 802.3af/at',
+      'Rendimiento de conmutación sin bloqueo de 41 Gbps y capacidad de conmutación total de 82 Gbps (Tasa de reenvío 61 Mpps)',
+      'Doble conector de alimentación DC conmutada (redundancia 12V-57V) y consumo ultraeficiente de tan solo 10W (18W máx)',
+      'Diseño Fanless en chasis metálico compacto para sobremesa sin ventiladores, 100% silencioso para oficinas y estudios',
+      'Arquitectura Dual Boot: arranque flexible entre SwOS (conmutación web ligera) o RouterOS v7 con licencia Level 5',
+      'Soporte completo de VLANs (802.1Q), aislamiento de puertos, control de tormentas de broadcast y agregación de enlaces LACP',
+      'Monitoreo por hardware de temperatura, voltajes y estado de enlaces SFP+ en tiempo real',
+      'Ideal para interconexión SAN, servidores NAS 10G, estaciones de edición 4K y distribución de fibra en racks',
+      'Garantía oficial MikroTik Enterprise con soporte técnico especializado de configuración en Santiago y Cibao'
+    ]
+  }
+];
+
+const victronMultiplusIiItems = [
+  {
+    id: 'energia_victron_multiplus_ii_48_5000_inversor',
+    department: 'energia',
+    category: 'Inversores y Baterías',
+    brand: 'Victron Energy',
+    title: 'Inversor/Cargador Solar Victron Energy MultiPlus-II 48/5000/70-50 Senoidal Puro 48V con ESS y Función UPS',
+    desc: 'Inversor/cargador profesional de onda senoidal pura Victron Energy MultiPlus-II 48/5000/70-50 (48V / 5000VA / 70A) con función UPS de conmutación ultrarrápida (< 20 ms), soporte nativo para sistemas de almacenamiento ESS con autoconsumo solar, doble salida de corriente alterna AC y monitoreo avanzado mediante Cerbo GX y portal VRM.',
+    price: 'RD$ 115,000.00',
+    img: 'img/productos/catalogo/victron-multiplus-ii-48-5000-inversor.webp',
+    gallery: [
+      'img/productos/catalogo/victron-multiplus-ii-48-5000-inversor.webp'
+    ],
+    specs: [
+      'Potencia nominal continua de 5000 VA (4000 W) a 25°C con potencia pico de arranque de hasta 9000 W para cargas inductivas',
+      'Onda senoidal pura a 120V AC / 60 Hz con distorsión armónica THD menor al 2% para equipos electrónicos delicados',
+      'Cargador de baterías adaptativo de 4 etapas de 70A compatible con bancos de baterías de Litio LiFePO4, AGM y Gel',
+      'Función UPS de transferencia ultrarrápida sin interrupción en menos de 20 milisegundos ante caídas de la red eléctrica pública',
+      'Soporte de sistemas ESS (Energy Storage System) con inyección cero o programada y optimización de autoconsumo solar',
+      'Tecnologías PowerControl y PowerAssist que evitan sobrecargas en generadores eléctricos o acometidas comerciales limitadas',
+      'Doble salida AC: salida principal con respaldo ininterrumpido y salida auxiliar que desconecta cargas pesadas en corte de luz',
+      'Capacidad de operación en paralelo de hasta 6 unidades (30 kVA) o configuración trifásica para naves industriales y fincas',
+      'Conectividad VE.Bus integrada para sincronización directa con Cerbo GX, pantallas GX Touch y portal en la nube VRM',
+      'Garantía oficial Victron Energy de 5 años con asesoría técnica de ingeniería solar en Santiago de los Caballeros'
+    ]
+  }
+];
+
+const zktecoSpeedfaceItems = [
+  {
+    id: 'seguridad_zkteco_speedface_v5l_terminal_facial',
+    department: 'seguridad',
+    category: 'Control de Acceso',
+    brand: 'ZKTeco',
+    title: 'Terminal Biométrica de Reconocimiento Facial Visible Light y Palma ZKTeco SpeedFace-V5L para Acceso y Asistencia',
+    desc: 'Terminal biométrica multifuncional ZKTeco SpeedFace-V5L con algoritmo de reconocimiento facial Visible Light de alta velocidad (< 0.3 s a 2 metros), lector biométrico de palma 3-en-1 sin contacto, pantalla táctil LCD a color de 5 pulgadas, capacidad para 6,000 rostros, 3,000 palmas y 10,000 tarjetas RFID, y comunicación TCP/IP, Wi-Fi y Wiegand para control de acceso y tiempo y asistencia.',
+    price: 'RD$ 26,500.00',
+    img: 'img/productos/catalogo/zkteco-speedface-v5l-terminal-biometrica.webp',
+    gallery: [
+      'img/productos/catalogo/zkteco-speedface-v5l-terminal-biometrica.webp'
+    ],
+    specs: [
+      'Reconocimiento facial Visible Light ultrarrápido en menos de 0.3 segundos a distancias de 0.3 a 2 metros sin detener el paso',
+      'Autenticación biométrica de palma 3-en-1 sin contacto (forma de palma, huella palmar y patrón vascular de venas en 0.35s)',
+      'Algoritmo anti-falsificación con doble cámara y luz infrarroja contra fraudes con fotos impresas, videos HD o máscaras 3D',
+      'Capacidad de memoria masiva: hasta 6,000 plantillas faciales, 3,000 patrones de palma, 10,000 tarjetas RFID y 200,000 eventos',
+      'Pantalla táctil IPS capacitiva a color de 5 pulgadas (resolución 720x1280) con brillo ajustable y cámara dual de 2 MP',
+      'Interfaces de control de acceso completas: relé para cerradura electromagnética, sensor de puerta, botón de salida y alarma',
+      'Conectividad versátil: Ethernet TCP/IP, Wi-Fi integrado, RS485 y entrada/salida Wiegand para controladores de terceros',
+      'Integración nativa con software corporativo ZKBioAccess, ZKBioSecurity y BioTime para reportes de nómina y asistencia',
+      'Diseño ergonómico y estilizado apto para montaje en pared, pedestales o torniquetes en oficinas, clínicas e industrias',
+      'Garantía oficial ZKTeco con soporte técnico especializado de instalación y puesta en marcha en Santiago y República Dominicana'
+    ]
+  }
+];
+
+const ezvizH8ProItems = [
+  {
+    id: 'seguridad_ezviz_h8_pro_3k_camara_ptz',
+    department: 'seguridad',
+    category: 'Cámaras de Seguridad CCTV',
+    brand: 'Ezviz',
+    title: 'Cámara de Seguridad Wi-Fi PTZ Exterior Ezviz H8 Pro 3K (5MP) con Visión Nocturna en Color y Defensa Activa',
+    desc: 'Cámara de seguridad panorámica motorizada para exterior Ezviz H8 Pro 3K con resolución Ultra HD de 5 Megapíxeles (2880 x 1620), rotación 360° con seguimiento inteligente de personas y vehículos mediante IA, visión nocturna a todo color de hasta 30 metros con focos LED integrados, defensa activa con sirena de 100 dB y luz estroboscópica, y protección IP65.',
+    price: 'RD$ 7,950.00',
+    img: 'img/productos/catalogo/ezviz-h8-pro-3k-camara-ptz.webp',
+    gallery: [
+      'img/productos/catalogo/ezviz-h8-pro-3k-camara-ptz.webp'
+    ],
+    specs: [
+      'Resolución Ultra HD 3K de 5 Megapíxeles (2880 x 1620 a 30 fps) ofreciendo imágenes nítidas con zoom digital de alta definición',
+      'Cobertura visual panorámica motorizada de 360° en paneo horizontal y 80° en inclinación vertical eliminando puntos ciegos',
+      'Inteligencia Artificial integrada en chip para detección precisa de humanos y vehículos con seguimiento automático inteligente',
+      'Visión nocturna en color de hasta 30 metros mediante reflectores LED integrados y visión infrarroja de largo alcance',
+      'Defensa activa automática: al detectar intrusos activa sirena potente de 100 dB y emite destellos con dos luces estroboscópicas',
+      'Comunicación de audio bidireccional en tiempo real con micrófono y altavoz de alta potencia y cancelación de ruido ambiental',
+      'Diseño resistente a la intemperie con certificación IP65 para lluvia, calor y humedad tropical extrema de República Dominicana',
+      'Conectividad de doble antena Wi-Fi de alta ganancia y puerto Ethernet RJ45 10/100 para conexión por cable de red',
+      'Almacenamiento flexible: ranura para tarjeta microSD de hasta 512 GB o almacenamiento cifrado en la nube Ezviz CloudPlay',
+      'Garantía oficial Ezviz con entrega inmediata, factura con valor fiscal (NCF) y soporte técnico en Santiago'
+    ]
+  }
+];
+
+const lenovoNeo50sItems = [
+  {
+    id: 'oficina_lenovo_thinkcentre_neo_50s_gen4_desktop',
+    department: 'oficina',
+    category: 'Computadoras y Servidores',
+    brand: 'Lenovo',
+    title: 'Computadora Corporativa Lenovo ThinkCentre Neo 50s Gen 4 SFF (Intel Core i7-13700, 16GB RAM, 512GB SSD NVMe)',
+    desc: 'Computadora de escritorio empresarial Small Form Factor (SFF) Lenovo ThinkCentre Neo 50s Gen 4 equipada con procesador Intel Core i7-13700 de 13ª generación (16 núcleos hasta 5.2 GHz), 16 GB de memoria RAM DDR4, unidad SSD M.2 PCIe 4.0 NVMe de 512 GB, gráficos Intel UHD 770 con salidas HDMI, DisplayPort y VGA, seguridad por hardware dTPM 2.0 y Windows 11 Pro.',
+    price: 'RD$ 52,900.00',
+    img: 'img/productos/catalogo/lenovo-thinkcentre-neo-50s-gen4-desktop.webp',
+    gallery: [
+      'img/productos/catalogo/lenovo-thinkcentre-neo-50s-gen4-desktop.webp'
+    ],
+    specs: [
+      'Procesador Intel Core i7-13700 de 13ª generación (16 núcleos: 8 de rendimiento + 8 de eficiencia, 24 hilos, hasta 5.2 GHz con Intel Turbo Boost)',
+      '16 GB de memoria RAM DDR4 a 3200 MHz en configuración de doble canal (expandible hasta 64 GB en dos ranuras UDIMM)',
+      'Unidad de estado sólido SSD M.2 PCIe 4.0 x4 NVMe Opal 2.0 de 512 GB para arranque instantáneo y transferencias ultrarrápidas',
+      'Gráficos Intel UHD Graphics 770 integrados con soporte para hasta tres monitores independientes simultáneos (HDMI 1.4b, DisplayPort 1.4 y VGA)',
+      'Conectividad completa: Wi-Fi 6 (802.11ax 2x2) + Bluetooth 5.1 y puerto de red Ethernet Gigabit RJ45 Realtek RTL8111HN',
+      'Puertos frontales de acceso rápido: 2x USB 3.2 Gen 1, 1x USB-C 3.2 Gen 1 (datos), conector combinado auriculares/micrófono de 3.5 mm',
+      'Puertos traseros: 2x USB 2.0, 2x USB 3.2 Gen 1, salidas de video HDMI, DisplayPort, VGA, puerto serie COM y salida de audio',
+      'Seguridad corporativa: chip TPM 2.0 discreto certificado, Smart Cable Clip, ranura Kensington y protección Smart USB Protection en BIOS',
+      'Chasis ultracompacto SFF de 7.4 litros con materiales reciclados postconsumo, certificación ecológica EPEAT Gold y Energy Star 8.0',
+      'Garantía oficial Lenovo Premier Support de 3 años on-site en Santiago y República Dominicana con factura fiscal formal'
+    ]
+  }
+];
+
 
 async function updateBackupData() {
   const backupPath = path.join(projectRoot, 'js', 'backup_data.js');
@@ -4072,6 +4212,11 @@ async function updateBackupData() {
     ...ubiquitiUswPro24Items,
     ...dahuaNvr4216Items,
     ...tplinkEr7206Items,
+    ...mikrotikCrs305Items,
+    ...victronMultiplusIiItems,
+    ...zktecoSpeedfaceItems,
+    ...ezvizH8ProItems,
+    ...lenovoNeo50sItems,
   ];
 
   itemsToSync.forEach(item => {
@@ -4213,6 +4358,11 @@ async function updateFirestore() {
     ...ubiquitiUswPro24Items,
     ...dahuaNvr4216Items,
     ...tplinkEr7206Items,
+    ...mikrotikCrs305Items,
+    ...victronMultiplusIiItems,
+    ...zktecoSpeedfaceItems,
+    ...ezvizH8ProItems,
+    ...lenovoNeo50sItems,
   ];
 
   console.log(`[Firestore] Sincronizando ${allProducts.length} productos en la colección 'products'...`);

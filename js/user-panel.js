@@ -12,7 +12,7 @@
   function init(user, data) {
     db = window.FutunetFirebase ? window.FutunetFirebase.db : null;
     currentUser = user;
-    userData = data;
+    userData = data || {};
 
     renderProfile();
     loadSavedCarts();
@@ -143,7 +143,7 @@
           identityProfileComplete: !!(identity.documentNumber && identity.documentType),
           termsAccepted: true
         };
-        if (userData.termsAccepted !== true) {
+        if (userData && userData.termsAccepted !== true) {
           updateData.termsAcceptedAt = firebase.firestore.FieldValue.serverTimestamp();
           updateData.termsVersion = '2026-08-01';
         }
@@ -287,7 +287,7 @@
     var container = document.getElementById('favorites-list');
     if (!container) return;
 
-    var favs = userData.favorites || [];
+    var favs = (userData && userData.favorites) || [];
     if (favs.length === 0) {
       container.innerHTML = '<div class="up-empty"><p>No tienes productos favoritos</p></div>';
       return;

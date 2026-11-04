@@ -862,8 +862,8 @@ test('Protección de Credenciales e Identificadores Sensibles (OWASP ASVS V2 / V
 test('Seguridad de Service Worker & Protección de Credenciales en Caché', () => {
   const swJs = readJs('sw.js');
   assert.ok(
-    swJs.includes("const CACHE_NAME = 'futunet-cache-v62';"),
-    'sw.js debe estar en la versión futunet-cache-v61'
+    swJs.includes("const CACHE_NAME = 'futunet-cache-v63';"),
+    'sw.js debe estar en la versión futunet-cache-v63'
   );
   assert.ok(
     swJs.includes("'/cotizacion'") && swJs.includes("'/cotizacion.html'"),

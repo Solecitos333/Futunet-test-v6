@@ -1388,6 +1388,34 @@ function initAnnouncementBar() {
           ? 'Hola Futunet, me interesa cotizar seguridad electrónica en Black Month con el código BLACKTI2026.'
           : 'Hola Futunet, me interesa cotizar seguridad electrónica con el código SEGURIDAD2026.')
     };
+  } else if (currentPath.includes('equipos-oficina.html')) {
+    const isPromoBF = isBlackFridayWeek;
+    campaign = {
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY: CÓMPUTO & WORKSTATIONS'
+        : (isNov ? '💻 BLACK MONTH: LAPTOPS, CÓMPUTO & OFICINA' : (isWeek5 ? '💻 PREVENTA BLACK TI: CÓMPUTO EMPRESARIAL' : '💻 PRODUCTIVIDAD & CÓMPUTO CORPORATIVO')),
+      message: isPromoBF
+        ? '15% de Descuento en Laptops Corporativas, Servidores y Monitores con'
+        : '12% de Descuento en Laptops Corporativas, Impresión y Cómputo con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isNov ? 'BLACKTI2026' : 'NOVIEMBRE2026'),
+      endDate: isNov ? novEnd : new Date('2026-11-30T23:59:59'),
+      ctaText: 'Cotizar Laptops',
+      waMsg: isPromoBF
+        ? 'Hola Futunet, quiero cotizar laptops corporativas en Black Friday con el código BLACKFRIDAY2026.'
+        : 'Hola Futunet, quiero cotizar laptops y computadoras de oficina en Black Month con el código BLACKTI2026.'
+    };
+  } else if (currentPath.includes('mobiliario-suministros.html')) {
+    const isPromoBF = isBlackFridayWeek;
+    campaign = {
+      badge: isPromoBF
+        ? '💥 BLACK FRIDAY: MOBILIARIO EJECUTIVO & SILLAS'
+        : (isNov ? '🏢 BLACK MONTH: MOBILIARIO Y ESPACIOS' : '🏢 MOBILIARIO CORPORATIVO & ERGONOMÍA'),
+      message: '10% de Descuento en Escritorios Ejecutivos, Sillas y Archivos con',
+      coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isNov ? 'BLACKTI2026' : 'NOVIEMBRE2026'),
+      endDate: isNov ? novEnd : new Date('2026-11-30T23:59:59'),
+      ctaText: 'Cotizar Mobiliario',
+      waMsg: 'Hola Futunet, quiero cotizar mobiliario ejecutivo y suministros con el código BLACKTI2026.'
+    };
   } else if (currentPath.includes('corporativo.html')) {
     const isPromoBF = isBlackFridayWeek;
     campaign = {

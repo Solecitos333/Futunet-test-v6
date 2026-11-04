@@ -2685,3 +2685,93 @@ test('Mejora demandada por usuarios: Router VPN Gigabit Multi-WAN TP-Link Omada 
   assert.ok(catJs.includes("'er7206'") && catJs.includes("'omada7206'"), 'catalog.js debe incluir er7206 en stem variants');
   assert.ok(catJs.includes('er7206'), 'catalog.js debe priorizar TP-Link Omada ER7206');
 });
+
+test('Mejora demandada por usuarios: Switch de Fibra Óptica 10G MikroTik CRS305-1G-4S+IN (SUG-M3050)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M3050'") && seedCjs.includes("status: 'implemented'"), 'SUG-M3050 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M3050') && sugJs.includes('MikroTik CRS305-1G-4S+IN'), 'SUG-M3050 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_crs305_1g_4s_switch_fibra'), 'backup_data.js debe contener redes_mikrotik_crs305_1g_4s_switch_fibra');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-crs305-switch-fibra-10g.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch MikroTik CRS305 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'crs305'") && catJs.includes("'crs305-1g-4s'"), 'catalog.js debe incluir crs305 en stem variants');
+  assert.ok(catJs.includes('crs305'), 'catalog.js debe priorizar MikroTik CRS305');
+});
+
+test('Mejora demandada por usuarios: Inversor/Cargador Solar Victron Energy MultiPlus-II 48/5000 (SUG-V4850)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-V4850'") && seedCjs.includes("status: 'implemented'"), 'SUG-V4850 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-V4850') && sugJs.includes('MultiPlus-II 48/5000'), 'SUG-V4850 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_victron_multiplus_ii_48_5000_inversor'), 'backup_data.js debe contener energia_victron_multiplus_ii_48_5000_inversor');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'victron-multiplus-ii-48-5000-inversor.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Inversor Victron MultiPlus-II debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'multiplusii'") && catJs.includes("'multiplus-ii'"), 'catalog.js debe incluir multiplusii en stem variants');
+  assert.ok(catJs.includes('multiplusii'), 'catalog.js debe priorizar Victron MultiPlus-II');
+});
+
+test('Mejora demandada por usuarios: Terminal Biométrica Facial y Palma ZKTeco SpeedFace-V5L (SUG-Z5050)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-Z5050'") && seedCjs.includes("status: 'implemented'"), 'SUG-Z5050 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-Z5050') && sugJs.includes('ZKTeco SpeedFace-V5L'), 'SUG-Z5050 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_zkteco_speedface_v5l_terminal_facial'), 'backup_data.js debe contener seguridad_zkteco_speedface_v5l_terminal_facial');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'zkteco-speedface-v5l-terminal-biometrica.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Terminal ZKTeco SpeedFace-V5L debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'speedface'") && catJs.includes("'speedface-v5l'"), 'catalog.js debe incluir speedface en stem variants');
+  assert.ok(catJs.includes('speedface'), 'catalog.js debe priorizar ZKTeco SpeedFace-V5L');
+});
+
+test('Mejora demandada por usuarios: Cámara de Seguridad Wi-Fi PTZ Exterior Ezviz H8 Pro 3K (SUG-E8300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E8300'") && seedCjs.includes("status: 'implemented'"), 'SUG-E8300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E8300') && sugJs.includes('Ezviz H8 Pro 3K'), 'SUG-E8300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_ezviz_h8_pro_3k_camara_ptz'), 'backup_data.js debe contener seguridad_ezviz_h8_pro_3k_camara_ptz');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ezviz-h8-pro-3k-camara-ptz.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Cámara Ezviz H8 Pro 3K debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'h8pro'") && catJs.includes("'h8-pro'"), 'catalog.js debe incluir h8pro en stem variants');
+  assert.ok(catJs.includes('h8 pro'), 'catalog.js debe priorizar Ezviz H8 Pro 3K');
+});
+
+test('Mejora demandada por usuarios: Computadora Corporativa Lenovo ThinkCentre Neo 50s Gen 4 SFF (SUG-L5040)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L5040'") && seedCjs.includes("status: 'implemented'"), 'SUG-L5040 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L5040') && sugJs.includes('Lenovo ThinkCentre Neo 50s'), 'SUG-L5040 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lenovo_thinkcentre_neo_50s_gen4_desktop'), 'backup_data.js debe contener oficina_lenovo_thinkcentre_neo_50s_gen4_desktop');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lenovo-thinkcentre-neo-50s-gen4-desktop.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del ThinkCentre Neo 50s debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'neo50s'") && catJs.includes("'neo-50s'"), 'catalog.js debe incluir neo50s en stem variants');
+  assert.ok(catJs.includes('neo 50s'), 'catalog.js debe priorizar Lenovo ThinkCentre Neo 50s');
+});

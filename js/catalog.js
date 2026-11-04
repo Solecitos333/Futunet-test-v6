@@ -304,6 +304,11 @@ if (word === 'powerwall3' || word === 'powerwall-3' || word === 'mppt') variants
   if (word === 'usw-pro-24' || word === 'uswpro24' || word === 'usw-pro-24-poe') variants.push('ubiquiti', 'unifi', 'switch', 'pro', '24', 'poe', '400w', 'sfp', 'redes');
   if (word === 'nvr4216' || word === 'nvr4216-16p' || word === 'wizsense') variants.push('dahua', 'nvr', '16', 'canales', 'poe', '4k', 'wizsense', 'ia', 'smd', 'seguridad');
   if (word === 'er7206' || word === 'tl-er7206' || word === 'omada7206') variants.push('tp-link', 'omada', 'router', 'vpn', 'multi-wan', 'gigabit', 'sdn', 'redes');
+  if (word === 'crs305' || word === 'crs305-1g-4s' || word === 'crs-305') variants.push('mikrotik', 'switch', 'fibra', 'sfp+', '10g', 'redes', 'fanless');
+  if (word === 'multiplusii' || word === 'multiplus-ii' || word === 'multiplus2' || word === 'multiplus-2') variants.push('victron', 'energy', 'inversor', 'cargador', '48v', '5000va', 'ess', 'ups', 'solar');
+  if (word === 'speedface' || word === 'speedface-v5l' || word === 'v5l') variants.push('zkteco', 'terminal', 'biometrica', 'facial', 'palma', 'visible', 'light', 'acceso', 'asistencia');
+  if (word === 'h8pro' || word === 'h8-pro' || word === 'h8pro3k') variants.push('ezviz', 'camara', 'ptz', '3k', '5mp', 'wifi', 'exterior', 'nocturna', 'color', 'cctv');
+  if (word === 'neo50s' || word === 'neo-50s' || word === 'thinkcentre-neo') variants.push('lenovo', 'thinkcentre', 'neo', '50s', 'desktop', 'computadora', 'sff', 'i7', 'oficina');
   if (word.endsWith('es') && word.length > 3) variants.push(word.slice(0, -2));
   if (word.endsWith('s') && word.length > 2) variants.push(word.slice(0, -1));
   if (word.endsWith('a') && word.length > 2) variants.push(word.slice(0, -1) + 'o');
@@ -1652,6 +1657,61 @@ function scoreProductMatch(product, normalizedQuery) {
   if (/\b(er7206|omada\s*er7206|router\s*omada|tp-link\s*er7206|router\s*vpn\s*tp-link|router\s*multi-wan)\b/i.test(normalizedQuery) || (/\b(tp-link)\b/i.test(normalizedQuery) && /\b(er7206|omada|multi-wan|vpn\s*router)\b/i.test(normalizedQuery))) {
     if (product.brand && product.brand.toLowerCase().includes('tp-link')) {
       if (/er7206/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar MikroTik CRS305 10G SFP+ al buscar crs305, switch 10g mikrotik, mikrotik fibra (SUG-M3050)
+  if (/\b(crs305|crs305-1g-4s|switch\s*10g\s*mikrotik|mikrotik\s*fibra|switch\s*sfp\+)\b/i.test(normalizedQuery) || (/\b(mikrotik)\b/i.test(normalizedQuery) && /\b(crs305|10g|sfp\+|fibra)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('mikrotik')) {
+      if (/crs305/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Victron MultiPlus-II 48/5000 al buscar multiplus-ii, multiplusii, multiplus 48, victron 5000, inversor victron 48v (SUG-V4850)
+  if (/\b(multiplusii|multiplus-ii|multiplus\s*48|victron\s*5000|inversor\s*victron\s*48v|multiplus\s*5000va|inversor\s*ess)\b/i.test(normalizedQuery) || (/\b(victron)\b/i.test(normalizedQuery) && /\b(multiplusii|multiplus|5000va|48v|ess)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('victron')) {
+      if (/multiplusii|multiplus.*ii/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar ZKTeco SpeedFace-V5L al buscar speedface, speedface-v5l, v5l, zkteco facial (SUG-Z5050)
+  if (/\b(speedface|speedface-v5l|v5l|zkteco\s*facial|zkteco\s*speedface|reconocimiento\s*palma|biometrico\s*facial\s*zkteco)\b/i.test(normalizedQuery) || (/\b(zkteco)\b/i.test(normalizedQuery) && /\b(speedface|v5l|facial|palma|visible\s*light)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('zkteco')) {
+      if (/speedface-v5l|speedface/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Ezviz H8 Pro 3K al buscar h8 pro, h8 pro 3k, ezviz 3k, camara 3k ezviz (SUG-E8300)
+  if (/\b(h8\s*pro|h8\s*pro\s*3k|ezviz\s*3k|camara\s*3k\s*ezviz|ezviz\s*ptz\s*5mp|h8pro)\b/i.test(normalizedQuery) || (/\b(ezviz)\b/i.test(normalizedQuery) && /\b(h8\s*pro|3k|5mp|ptz)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('ezviz')) {
+      if (/h8\s*pro\s*3k|h8\s*pro/i.test(title)) {
+        score += 280;
+      } else {
+        score += 150;
+      }
+    }
+  }
+
+  // Priorizar Lenovo ThinkCentre Neo 50s SFF al buscar neo 50s, thinkcentre neo, lenovo neo, desktop lenovo i7 (SUG-L5040)
+  if (/\b(neo\s*50s|thinkcentre\s*neo|lenovo\s*neo|thinkcentre\s*neo\s*50s|desktop\s*lenovo\s*i7|sff\s*lenovo)\b/i.test(normalizedQuery) || (/\b(lenovo)\b/i.test(normalizedQuery) && /\b(neo\s*50s|neo|thinkcentre\s*sff|i7-13700)\b/i.test(normalizedQuery))) {
+    if (product.brand && product.brand.toLowerCase().includes('lenovo')) {
+      if (/neo\s*50s/i.test(title)) {
         score += 280;
       } else {
         score += 150;

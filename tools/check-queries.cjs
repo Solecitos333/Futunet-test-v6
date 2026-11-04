@@ -271,7 +271,17 @@ const queries = [
   'nvr4216',
   'dahua 16 canales',
   'er7206',
-  'omada er7206'];
+  'omada er7206',
+  'crs305',
+  'switch 10g mikrotik',
+  'multiplus-ii',
+  'inversor victron 48v',
+  'speedface',
+  'zkteco facial',
+  'h8 pro',
+  'camara 3k ezviz',
+  'neo 50s',
+  'lenovo neo'];
 
 
 for (const q of queries) {

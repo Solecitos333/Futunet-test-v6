@@ -126,7 +126,12 @@ const testQueries = [
   'c9105ax',
   'usw-pro-24',
   'nvr4216',
-  'er7206'];
+  'er7206',
+  'crs305',
+  'multiplus-ii',
+  'speedface',
+  'h8 pro',
+  'neo 50s'];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
   for (const q of testQueries) {
@@ -907,6 +912,66 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /er7206/i.test(scored[0].p.title),
         'El producto top para "er7206" debe ser TP-Link Omada ER7206'
+      );
+    }
+
+    if (q === 'crs305') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'MikroTik',
+        'La búsqueda "crs305" debe priorizar el Switch MikroTik CRS305'
+      );
+      assert.ok(
+        /crs305/i.test(scored[0].p.title),
+        'El producto top para "crs305" debe ser MikroTik CRS305'
+      );
+    }
+
+    if (q === 'multiplus-ii') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Victron Energy',
+        'La búsqueda "multiplus-ii" debe priorizar el Inversor Victron MultiPlus-II'
+      );
+      assert.ok(
+        /multiplus-ii/i.test(scored[0].p.title),
+        'El producto top para "multiplus-ii" debe ser Victron MultiPlus-II'
+      );
+    }
+
+    if (q === 'speedface') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'ZKTeco',
+        'La búsqueda "speedface" debe priorizar la Terminal ZKTeco SpeedFace-V5L'
+      );
+      assert.ok(
+        /speedface/i.test(scored[0].p.title),
+        'El producto top para "speedface" debe ser ZKTeco SpeedFace-V5L'
+      );
+    }
+
+    if (q === 'h8 pro') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ezviz',
+        'La búsqueda "h8 pro" debe priorizar la Cámara Ezviz H8 Pro 3K'
+      );
+      assert.ok(
+        /h8\s*pro/i.test(scored[0].p.title),
+        'El producto top para "h8 pro" debe ser Ezviz H8 Pro 3K'
+      );
+    }
+
+    if (q === 'neo 50s') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Lenovo',
+        'La búsqueda "neo 50s" debe priorizar la Computadora Lenovo ThinkCentre Neo 50s'
+      );
+      assert.ok(
+        /neo\s*50s/i.test(scored[0].p.title),
+        'El producto top para "neo 50s" debe ser Lenovo ThinkCentre Neo 50s'
       );
     }
   }

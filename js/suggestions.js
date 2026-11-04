@@ -1841,6 +1841,46 @@
       "status": "implemented",
       "description": "Gateway y router VPN empresarial Gigabit TP-Link Omada ER7206 con hasta 4 puertos WAN Gigabit, balanceo inteligente multi-WAN, failover de contingencia, soporte para 100 túneles VPN IPsec y gestión 100% centralizada Omada SDN en la nube.",
       "officialResponse": "¡Saludos Ing. Carlos! Tu requerimiento ha sido aprobado e implementado al 100%. Incorporamos al catálogo de Redes y a marca-tp-link.html el Router VPN Gigabit Multi-WAN TP-Link Omada ER7206 (hasta 4 WAN, 100 túneles VPN IPsec, balanceo inteligente y Omada Cloud) con garantía de por vida TP-Link y soporte técnico en Santiago."
+    },
+    {
+      "refCode": "SUG-M3050",
+      "title": "Disponibilidad de Switches de Fibra Óptica 10G MikroTik CRS305-1G-4S+IN de 4 Puertos SFP+ y 1 Puerto Gigabit Ethernet con Refrigeración Silenciosa",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Switch de fibra óptica ultracompacto para escritorio MikroTik CRS305-1G-4S+IN con 4 jaulas SFP+ de 10 Gbps independientes, 1 puerto Gigabit Ethernet con entrada PoE (802.3af/at), doble conector DC para redundancia eléctrica, chasis metálico fanless totalmente silencioso y arquitectura Dual Boot SwOS/RouterOS con licencia Level 5.",
+      "officialResponse": "¡Hola estimado Ing. Edwin! Tu sugerencia ha sido aprobada e implementada en su totalidad. Ya se encuentra en el catálogo de Redes y en marca-mikrotik.html el Switch de Fibra Óptica 10G MikroTik CRS305-1G-4S+IN (4 jaulas SFP+ de 10 Gbps, 1 puerto GbE con PoE In, doble fuente DC y Dual Boot RouterOS/SwOS) con garantía oficial MikroTik y despacho inmediato en Santiago."
+    },
+    {
+      "refCode": "SUG-V4850",
+      "title": "Disponibilidad de Inversores/Cargadores Solares Victron Energy MultiPlus-II 48/5000/70-50 Senoidal Puro 48V con ESS y Función UPS Ultrarrápida",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Inversor/cargador profesional de onda senoidal pura Victron Energy MultiPlus-II 48/5000/70-50 (48V / 5000VA / 70A) con función UPS de conmutación ultrarrápida (< 20 ms), soporte nativo para sistemas de almacenamiento ESS con autoconsumo solar, doble salida de corriente alterna AC y monitoreo avanzado mediante Cerbo GX y portal VRM.",
+      "officialResponse": "¡Saludos estimado Ing. Manuel! Tu requerimiento ha sido aprobado e implementado. Incorporamos al catálogo de Energía y Climatización y a marca-victronenergy.html el Inversor/Cargador Victron Energy MultiPlus-II 48/5000/70-50 (5000VA / 48V / 70A, función UPS sin interrupción, soporte ESS y doble salida AC) con 5 años de garantía oficial Victron Energy y asistencia técnica en Santiago."
+    },
+    {
+      "refCode": "SUG-Z5050",
+      "title": "Disponibilidad de Terminales Biométricas de Reconocimiento Facial Visible Light y Palma ZKTeco SpeedFace-V5L para Control de Acceso y Asistencia",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Terminal biométrica multifuncional ZKTeco SpeedFace-V5L con algoritmo de reconocimiento facial Visible Light de alta velocidad (< 0.3 s a 2 metros), lector biométrico de palma 3-en-1 sin contacto, pantalla táctil LCD a color de 5 pulgadas, capacidad para 6,000 rostros, 3,000 palmas y 10,000 tarjetas RFID, y comunicación TCP/IP, Wi-Fi y Wiegand para control de acceso y tiempo y asistencia.",
+      "officialResponse": "¡Hola Lic. Patricia! Tu propuesta corporativa ha sido aprobada e implementada. Hemos integrado al catálogo de Seguridad Electrónica y a marca-zkteco.html la Terminal Biométrica ZKTeco SpeedFace-V5L (reconocimiento facial Visible Light <0.3s, lectura de palma 3-en-1, 6,000 rostros, pantalla táctil de 5\", TCP/IP y Wi-Fi) con garantía oficial ZKTeco e integración con software de nómina en Santiago."
+    },
+    {
+      "refCode": "SUG-E8300",
+      "title": "Disponibilidad de Cámaras de Seguridad Wi-Fi PTZ Exterior Ezviz H8 Pro 3K (5 Megapíxeles) con Visión Nocturna en Color y Defensa Activa",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Cámara de seguridad panorámica motorizada para exterior Ezviz H8 Pro 3K con resolución Ultra HD de 5 Megapíxeles (2880 x 1620), rotación 360° con seguimiento inteligente de personas y vehículos mediante IA, visión nocturna a todo color de hasta 30 metros con focos LED integrados, defensa activa con sirena de 100 dB y luz estroboscópica, y protección IP65.",
+      "officialResponse": "¡Saludos Ing. Ramón! Tu requerimiento ha sido aprobado e implementado con éxito. Ya puedes cotizar y adquirir en el catálogo de Seguridad y en marca-ezviz.html la Cámara Wi-Fi PTZ Exterior Ezviz H8 Pro 3K (5MP, rotación 360°, seguimiento IA de humanos/vehículos, visión nocturna a color y defensa activa de 100 dB) con garantía oficial Ezviz y entrega con NCF en Santiago."
+    },
+    {
+      "refCode": "SUG-L5040",
+      "title": "Disponibilidad de Computadoras Corporativas de Escritorio Lenovo ThinkCentre Neo 50s Gen 4 SFF (Intel Core i7-13700, 16GB RAM, 512GB SSD NVMe)",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Computadora de escritorio empresarial Small Form Factor (SFF) Lenovo ThinkCentre Neo 50s Gen 4 equipada con procesador Intel Core i7-13700 de 13ª generación (16 núcleos hasta 5.2 GHz), 16 GB de memoria RAM DDR4, unidad SSD M.2 PCIe 4.0 NVMe de 512 GB, gráficos Intel UHD 770 con salidas HDMI, DisplayPort y VGA, seguridad por hardware dTPM 2.0 y Windows 11 Pro.",
+      "officialResponse": "¡Hola Lic. Marcos! Nos complace informarte que tu solicitud fue aprobada e implementada en su totalidad. Incorporamos al catálogo de Oficina y Cómputo y a marca-lenovo.html la Computadora Corporativa Lenovo ThinkCentre Neo 50s Gen 4 SFF (Intel Core i7-13700, 16GB RAM, 512GB NVMe, triple salida de monitor y dTPM 2.0) con garantía oficial Lenovo Premier Support de 3 años on-site en Santiago."
     }
   ];
 
