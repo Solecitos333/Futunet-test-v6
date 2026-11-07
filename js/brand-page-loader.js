@@ -170,6 +170,9 @@ function enrichBrandHero(brandName) {
   productImg.alt = `Productos ${brandName}`;
   productImg.loading = 'eager';
   productImg.decoding = 'async';
+  productImg.onerror = function () {
+    imgWrapper.style.display = 'none';
+  };
   productImg.style.cssText = `
     width: 100%;
     height: 180px;
@@ -187,6 +190,9 @@ function enrichBrandHero(brandName) {
     logoImg.alt = `Logo ${brandName}`;
     logoImg.loading = 'eager';
     logoImg.decoding = 'async';
+    logoImg.onerror = function () {
+      this.style.display = 'none';
+    };
     logoImg.style.cssText = `
       height: 36px;
       width: auto;
@@ -250,6 +256,7 @@ function matchesBrandLocal(productBrand, targetBrand) {
   if (normP === normT) return true;
   if ((normP === 'unv' && normT === 'uniview') || (normP === 'uniview' && normT === 'unv')) return true;
   if (normP === 'tplink' && normT === 'tplink') return true;
+  if ((normP === 'hp' && normT === 'hewlettpackard') || (normP === 'hewlettpackard' && normT === 'hp')) return true;
   if ((normP === 'tapo' && normT === 'tplink') || (normP === 'tplink' && normT === 'tapo')) return true;
   if ((normP === 'zkteco' && normT === 'zk') || (normP === 'zk' && normT === 'zkteco')) return true;
   if ((normP === 'westerndigital' && normT === 'wd') || (normP === 'wd' && normT === 'westerndigital')) return true;

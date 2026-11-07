@@ -2775,3 +2775,93 @@ test('Mejora demandada por usuarios: Computadora Corporativa Lenovo ThinkCentre 
   assert.ok(catJs.includes("'neo50s'") && catJs.includes("'neo-50s'"), 'catalog.js debe incluir neo50s en stem variants');
   assert.ok(catJs.includes('neo 50s'), 'catalog.js debe priorizar Lenovo ThinkCentre Neo 50s');
 });
+
+test('Mejora demandada por usuarios: Computadora Corporativa HP Pro SFF 400 G9 (SUG-H4090)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-H4090'") && seedCjs.includes("status: 'implemented'"), 'SUG-H4090 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-H4090') && sugJs.includes('HP Pro SFF 400 G9'), 'SUG-H4090 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_hp_pro_sff_400_g9_desktop'), 'backup_data.js debe contener oficina_hp_pro_sff_400_g9_desktop');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'hp-pro-sff-400-g9-desktop.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del HP Pro SFF 400 G9 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'pro400'") && catJs.includes("'sff400'"), 'catalog.js debe incluir pro400 en stem variants');
+  assert.ok(catJs.includes('pro sff 400'), 'catalog.js debe priorizar HP Pro SFF 400');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Empresarial Wi-Fi 6 Juniper Mist AP43 (SUG-J4300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-J4300'") && seedCjs.includes("status: 'implemented'"), 'SUG-J4300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-J4300') && sugJs.includes('Juniper Mist AP43'), 'SUG-J4300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_juniper_ap43_access_point_wifi6_mist_ai'), 'backup_data.js debe contener redes_juniper_ap43_access_point_wifi6_mist_ai');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'juniper-ap43-access-point-wifi6-mist.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Juniper Mist AP43 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ap43'") && catJs.includes("'mistap43'"), 'catalog.js debe incluir ap43 en stem variants');
+  assert.ok(catJs.includes('mist ap43'), 'catalog.js debe priorizar Juniper Mist AP43');
+});
+
+test('Mejora demandada por usuarios: Monitor Profesional Ergonómico 4K LG UltraFine 32UN880-B Ergo (SUG-L8800)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L8800'") && seedCjs.includes("status: 'implemented'"), 'SUG-L8800 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L8800') && sugJs.includes('LG UltraFine 32UN880-B'), 'SUG-L8800 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_lg_32un880_ergo_4k_monitor'), 'backup_data.js debe contener oficina_lg_32un880_ergo_4k_monitor');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'lg-32un880-ergo-4k-monitor.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Monitor LG 32UN880 Ergo debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'32un880'") && catJs.includes("'ergo32'"), 'catalog.js debe incluir 32un880 en stem variants');
+  assert.ok(catJs.includes('32un880'), 'catalog.js debe priorizar LG UltraFine 32UN880');
+});
+
+test('Mejora demandada por usuarios: Switch Smart Managed PoE+ Linksys LGS352MPC 48P (SUG-L3520)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-L3520'") && seedCjs.includes("status: 'implemented'"), 'SUG-L3520 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-L3520') && sugJs.includes('Linksys LGS352MPC'), 'SUG-L3520 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_linksys_lgs352mpc_smart_poe_switch_48p'), 'backup_data.js debe contener redes_linksys_lgs352mpc_smart_poe_switch_48p');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'linksys-lgs352mpc-smart-poe-switch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Linksys LGS352MPC debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'lgs352mpc'") && catJs.includes("'lgs352'"), 'catalog.js debe incluir lgs352mpc en stem variants');
+  assert.ok(catJs.includes('lgs352mpc'), 'catalog.js debe priorizar Linksys LGS352MPC');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable AV Line Netgear Pro AV M4250-10G2F-PoE+ (SUG-N4250)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-N4250'") && seedCjs.includes("status: 'implemented'"), 'SUG-N4250 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-N4250') && sugJs.includes('Netgear Pro AV M4250'), 'SUG-N4250 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_netgear_m4250_10g2f_poe_switch_av'), 'backup_data.js debe contener redes_netgear_m4250_10g2f_poe_switch_av');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'netgear-m4250-10g2f-poe-switch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Netgear M4250 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'m4250'") && catJs.includes("'gsm4212p'"), 'catalog.js debe incluir m4250 en stem variants');
+  assert.ok(catJs.includes('m4250'), 'catalog.js debe priorizar Netgear Pro AV M4250');
+});

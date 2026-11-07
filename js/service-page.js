@@ -412,7 +412,7 @@
       
       // Validaciones de formato
       var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      var phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+      var phoneRegex = /^\+?[0-9\s\-().]{7,25}$/;
       
       if (!emailRegex.test(email)) {
         showToast('Por favor introduce un correo electrónico válido.', 'error');

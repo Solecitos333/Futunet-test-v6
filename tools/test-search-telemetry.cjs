@@ -131,7 +131,12 @@ const testQueries = [
   'multiplus-ii',
   'speedface',
   'h8 pro',
-  'neo 50s'];
+  'neo 50s',
+  'pro sff 400',
+  'mist ap43',
+  '32un880',
+  'lgs352mpc',
+  'm4250'];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
   for (const q of testQueries) {
@@ -972,6 +977,66 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /neo\s*50s/i.test(scored[0].p.title),
         'El producto top para "neo 50s" debe ser Lenovo ThinkCentre Neo 50s'
+      );
+    }
+
+    if (q === 'pro sff 400') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'HP',
+        'La búsqueda "pro sff 400" debe priorizar la Computadora HP Pro SFF 400 G9'
+      );
+      assert.ok(
+        /pro\s*sff\s*400/i.test(scored[0].p.title),
+        'El producto top para "pro sff 400" debe ser HP Pro SFF 400 G9'
+      );
+    }
+
+    if (q === 'mist ap43') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Juniper',
+        'La búsqueda "mist ap43" debe priorizar el Punto de Acceso Juniper Mist AP43'
+      );
+      assert.ok(
+        /ap43|mist/i.test(scored[0].p.title),
+        'El producto top para "mist ap43" debe ser Juniper Mist AP43'
+      );
+    }
+
+    if (q === '32un880') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'LG',
+        'La búsqueda "32un880" debe priorizar el Monitor LG UltraFine 32UN880-B Ergo'
+      );
+      assert.ok(
+        /32un880/i.test(scored[0].p.title),
+        'El producto top para "32un880" debe ser LG UltraFine 32UN880-B Ergo'
+      );
+    }
+
+    if (q === 'lgs352mpc') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Linksys',
+        'La búsqueda "lgs352mpc" debe priorizar el Switch Linksys LGS352MPC 48P'
+      );
+      assert.ok(
+        /lgs352mpc/i.test(scored[0].p.title),
+        'El producto top para "lgs352mpc" debe ser Linksys LGS352MPC 48P'
+      );
+    }
+
+    if (q === 'm4250') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Netgear',
+        'La búsqueda "m4250" debe priorizar el Switch Netgear Pro AV M4250'
+      );
+      assert.ok(
+        /m4250/i.test(scored[0].p.title),
+        'El producto top para "m4250" debe ser Netgear Pro AV M4250'
       );
     }
   }

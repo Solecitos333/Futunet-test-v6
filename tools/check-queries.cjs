@@ -281,7 +281,17 @@ const queries = [
   'h8 pro',
   'camara 3k ezviz',
   'neo 50s',
-  'lenovo neo'];
+  'lenovo neo',
+  'pro sff 400',
+  'hp 400 g9',
+  'mist ap43',
+  'juniper mist',
+  '32un880',
+  'lg ergo 32',
+  'lgs352mpc',
+  'linksys 48',
+  'm4250',
+  'netgear av'];
 
 
 for (const q of queries) {

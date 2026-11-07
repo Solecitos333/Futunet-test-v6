@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  const token = new URLSearchParams(window.location.search).get('token') || '';
+  const token = (new URLSearchParams(window.location.search).get('token') || '').trim().toLowerCase();
   const loading = document.getElementById('quote-loading');
   const errorState = document.getElementById('quote-error');
   const documentView = document.getElementById('quote-document');
@@ -145,7 +145,7 @@
   }
 
   async function init() {
-    if (!/^[a-f0-9]{48}$/.test(token)) { fail('El enlace no contiene un token válido.'); return; }
+    if (!/^[a-f0-9]{48}$/i.test(token)) { fail('El enlace no contiene un token válido.'); return; }
     try {
       const database = db();
       if (!database) {

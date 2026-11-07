@@ -126,6 +126,14 @@
       validFrom: '2026-11-15',
       validUntil: '2026-11-30',
       description: '18% de descuento Especial Black Friday TI 2026 en Catálogo Completo'
+    },
+    CYBERTI2026: {
+      code: 'CYBERTI2026',
+      discount: 0.15,
+      departments: ['equipos', 'redes', 'oficina', 'energia', 'seguridad', 'gaming', 'infra'],
+      validFrom: '2026-11-25',
+      validUntil: '2026-12-05',
+      description: '15% de descuento Especial Cyber Week TI 2026 en Catálogo Completo'
     }
   };
 
@@ -1501,7 +1509,7 @@
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+    const phoneRegex = /^\+?[0-9\s\-().]{7,25}$/;
     
     if (!emailRegex.test(email) || email.length > 100) {
       showCartToast('Por favor introduce un correo electrónico válido (máx. 100 caracteres).', 'error');

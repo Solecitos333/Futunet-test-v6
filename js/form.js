@@ -96,7 +96,7 @@ function sendForm(event) {
   }
 
   // Validación de formato del teléfono (E.164 o local dominicano)
-  const phoneRegex = /^\+?[0-9\s-]{7,20}$/;
+  const phoneRegex = /^\+?[0-9\s\-().]{7,25}$/;
   if (!phoneRegex.test(tel)) {
     notify('Por favor introduce un número de teléfono válido (mín. 7 dígitos).', 'error');
     return;
