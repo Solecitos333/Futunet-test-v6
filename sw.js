@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v64';
+const CACHE_NAME = 'futunet-cache-v65';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -180,6 +180,12 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/lg-32un880-ergo-4k-monitor.webp',
   './img/productos/catalogo/linksys-lgs352mpc-smart-poe-switch.webp',
   './img/productos/catalogo/netgear-m4250-10g2f-poe-switch.webp',
+  './img/productos/catalogo/mitsubishi-pca-m36-piso-techo-inverter.webp',
+  './img/productos/catalogo/panasonic-kx-hdv800-conferencia-sip.webp',
+  './img/productos/catalogo/paradox-nvx80-detector-exterior.webp',
+  './img/productos/catalogo/siemens-sentron-3va11-breaker-125a.webp',
+  './img/productos/catalogo/tesla-solar-inverter-76kw.webp',
+  './img/productos/catalogo/uniview-ptz-4mp-33x-lighthunter.webp',
   './marca-cisco.html',
   './marca-dahua.html',
   './marca-dell.html',

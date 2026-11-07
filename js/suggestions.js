@@ -1921,6 +1921,54 @@
       "status": "implemented",
       "description": "Switch administrable de la línea Netgear AV Line M4250-10G2F-PoE+ optimizado de fábrica para audio y video sobre IP (AV over IP), Dante, NDI y AES67 con 8 puertos Gigabit PoE+ (125W), 2 puertos Gigabit de cobre, 2 bahías SFP 1G y chasis reversible ultrasilencioso.",
       "officialResponse": "Aprobado e integrado al catálogo de Redes y a marca-netgear.html el Switch Administrable AV Line Netgear Pro AV M4250-10G2F-PoE+ con perfiles automatizados para Dante y NDI, 8 puertos PoE+ (125W) y garantía de por vida Netgear ProSAFE en Santiago."
+    },
+    {
+      "refCode": "SUG-M3600",
+      "title": "Disponibilidad de Aires Acondicionados Comerciales Tipo Piso-Techo Inverter Mitsubishi Electric PCA-M 36,000 BTU de Alta Eficiencia",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Consola comercial tipo Piso-Techo Inverter Mitsubishi Electric PCA-M de 36,000 BTU/h (3 Toneladas) para montaje en cielo raso o sobre piso, ideal para oficinas, bancos y centros de cómputo con flujo de aire horizontal de 12 metros, operación ultra silenciosa desde 37 dB y compresor Inverter de larga duración.",
+      "officialResponse": "Aprobado e integrado al catálogo de Energía/Climatización y a marca-mitsubishi.html la Consola Comercial Tipo Piso-Techo Inverter Mitsubishi Electric PCA-M 36,000 BTU con flujo de aire extendido, operación ultrasilenciosa de 37 dB y 5 años de garantía oficial en compresor con soporte técnico en Santiago."
+    },
+    {
+      "refCode": "SUG-P8000",
+      "title": "Disponibilidad de Teléfonos SIP para Salas de Conferencia Panasonic KX-HDV800 con Micrófonos 360° y Audio HD Full Duplex",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Teléfono empresarial para conferencias SIP Panasonic KX-HDV800 con arreglo de 3 micrófonos 360° OmniSound con cobertura hasta 30 m², cancelación de eco, puente de conferencia de 5 vías integrado, pantalla LCD y ranura SD para grabación de llamadas.",
+      "officialResponse": "Aprobado e integrado al catálogo de Oficina y a marca-panasonic.html el Teléfono de Conferencia SIP Panasonic KX-HDV800 con tecnología OmniSound HD Full Duplex, micrófonos omnidireccionales de 360° (alcance hasta 30 m²), grabación directa en SD y garantía oficial Panasonic en República Dominicana."
+    },
+    {
+      "refCode": "SUG-P8080",
+      "title": "Disponibilidad de Detectores de Movimiento Exterior Grado Comercial Paradox NVX80 con 8 Canales de Detección y Tecnología SeeTrue",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Detector perimetral exterior Paradox NVX80 con 8 canales independientes (4x PIR dobles + 2x Microondas + 2x Anti-spray), procesador SeeTrue antimascotas de hasta 20 kg, pantalla OLED a color integrada y gabinete hermético IP55 con protección antienmascaramiento activo.",
+      "officialResponse": "Aprobado e integrado al catálogo de Seguridad y a marca-paradox.html el Detector Exterior Grado Comercial Paradox NVX80 con 8 canales de sensado, procesador SeeTrue antimascotas, pantalla OLED a color, antienmascaramiento activo IR y garantía oficial Paradox en Santiago."
+    },
+    {
+      "refCode": "SUG-S3125",
+      "title": "Disponibilidad de Interruptores Automáticos de Caja Moldeada Siemens Sentron 3VA11 de 3 Polos 125A 25kA para Protección de Tableros Eléctricos",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Interruptor termomagnético industrial de caja moldeada Siemens Sentron 3VA11 de 3 polos 125A con capacidad de ruptura de 25 kA a 415V, disparador termomagnético fijo TM210 y bornas frontales para protección de tableros eléctricos y transformadores bajo norma IEC 60947-2.",
+      "officialResponse": "Aprobado e integrado al catálogo de Energía e Industrial y a marca-siemens.html el Interruptor Automático de Caja Moldeada Siemens Sentron 3VA11 de 3 Polos 125A (25 kA a 415V) con unidad de disparo TM210, certificación IEC 60947-2 y garantía oficial Siemens en Santiago."
+    },
+    {
+      "refCode": "SUG-T7600",
+      "title": "Disponibilidad de Inversores Solares Residenciales y Comerciales Tesla Solar Inverter 7.6 kW con 4 Entradas MPPT y Gestión Inteligente por App",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Inversor solar fotovoltaico de conexión a red Tesla Solar Inverter de 7.6 kW con 4 seguidores MPPT independientes, eficiencia del 98%, conectividad Wi-Fi/celular con actualizaciones OTA e integración nativa con sistemas de batería Tesla Powerwall.",
+      "officialResponse": "Aprobado e integrado al catálogo de Energía Solar y a marca-tesla.html el Inversor Solar Tesla Solar Inverter 7.6 kW con 4 entradas MPPT independientes, eficiencia del 98%, monitoreo OTA por la Tesla App y 10 años de garantía oficial Tesla Energy con soporte certificado en Santiago."
+    },
+    {
+      "refCode": "SUG-U4330",
+      "title": "Disponibilidad de Cámaras PTZ IP Uniview LightHunter 4MP con Zoom Óptico 33x, Infrarrojos de 150m y Analítica Inteligente Deep Learning",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Cámara domo PTZ de exterior Uniview LightHunter 4MP con potente zoom óptico motorizado 33x, iluminación infrarroja adaptativa de 150 metros, analítica Deep Learning con clasificación humana/vehicular, autoseguimiento inteligente (Auto-tracking) y chasis antivandálico IP66/IK10.",
+      "officialResponse": "Aprobado e integrado al catálogo de Seguridad y a marca-uniview.html la Cámara PTZ IP Uniview LightHunter 4MP con Zoom Óptico 33x (IPC6854SR-X33-VF), iluminación IR inteligente de 150 metros, analítica Deep Learning con autoseguimiento, chasis antivandálico IP66/IK10 y garantía oficial Uniview en Santiago."
     }
   ];
 

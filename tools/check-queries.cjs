@@ -291,7 +291,19 @@ const queries = [
   'lgs352mpc',
   'linksys 48',
   'm4250',
-  'netgear av'];
+  'netgear av',
+  'pca-m36',
+  'mitsubishi piso techo',
+  'hdv800',
+  'panasonic conferencia',
+  'nvx80',
+  'paradox nvx80',
+  '3va11',
+  'breaker siemens 125a',
+  'tesla solar inverter',
+  'inversor tesla',
+  'ipc6854',
+  'uniview ptz'];
 
 
 for (const q of queries) {

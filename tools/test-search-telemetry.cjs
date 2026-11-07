@@ -136,7 +136,13 @@ const testQueries = [
   'mist ap43',
   '32un880',
   'lgs352mpc',
-  'm4250'];
+  'm4250',
+  'pca-m36',
+  'hdv800',
+  'nvx80',
+  '3va11',
+  'tesla solar inverter',
+  'ipc6854'];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
   for (const q of testQueries) {
@@ -1037,6 +1043,78 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /m4250/i.test(scored[0].p.title),
         'El producto top para "m4250" debe ser Netgear Pro AV M4250'
+      );
+    }
+
+    if (q === 'pca-m36') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Mitsubishi Electric',
+        'La búsqueda "pca-m36" debe priorizar la Consola Mitsubishi PCA-M 36K'
+      );
+      assert.ok(
+        /pca-m|piso-techo/i.test(scored[0].p.title),
+        'El producto top para "pca-m36" debe ser Mitsubishi PCA-M 36K'
+      );
+    }
+
+    if (q === 'hdv800') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Panasonic',
+        'La búsqueda "hdv800" debe priorizar el Teléfono Panasonic KX-HDV800'
+      );
+      assert.ok(
+        /hdv800|conferencia/i.test(scored[0].p.title),
+        'El producto top para "hdv800" debe ser Panasonic KX-HDV800'
+      );
+    }
+
+    if (q === 'nvx80') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Paradox',
+        'La búsqueda "nvx80" debe priorizar el Sensor Paradox NVX80'
+      );
+      assert.ok(
+        /nvx80/i.test(scored[0].p.title),
+        'El producto top para "nvx80" debe ser Paradox NVX80'
+      );
+    }
+
+    if (q === '3va11') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Siemens',
+        'La búsqueda "3va11" debe priorizar el Interruptor Siemens Sentron 3VA11'
+      );
+      assert.ok(
+        /3va11/i.test(scored[0].p.title),
+        'El producto top para "3va11" debe ser Siemens Sentron 3VA11'
+      );
+    }
+
+    if (q === 'tesla solar inverter') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Tesla',
+        'La búsqueda "tesla solar inverter" debe priorizar el Tesla Solar Inverter 7.6 kW'
+      );
+      assert.ok(
+        /solar\s*inverter|7\.6\s*kw/i.test(scored[0].p.title),
+        'El producto top para "tesla solar inverter" debe ser Tesla Solar Inverter'
+      );
+    }
+
+    if (q === 'ipc6854') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Uniview',
+        'La búsqueda "ipc6854" debe priorizar la Cámara Uniview LightHunter PTZ 33x'
+      );
+      assert.ok(
+        /ptz|33x|ipc6854/i.test(scored[0].p.title),
+        'El producto top para "ipc6854" debe ser Uniview PTZ 33x'
       );
     }
   }

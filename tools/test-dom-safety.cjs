@@ -90,7 +90,7 @@ test('Anchor & PWA: soporte.html contiene ancla estática #sp-cases y sw.js est�
   );
 
   const swJs = fs.readFileSync(path.join(projectRoot, 'sw.js'), 'utf8');
-  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v64';"), 'sw.js debe estar en la versión futunet-cache-v64');
+  assert.ok(swJs.includes("const CACHE_NAME = 'futunet-cache-v65';"), 'sw.js debe estar en la versión futunet-cache-v64');
   assert.ok(swJs.includes("'./css/financing.css'"), 'sw.js debe incluir financing.css en OPTIONAL_ASSETS');
   assert.ok(swJs.includes("'./css/legal.css'"), 'sw.js debe incluir legal.css en OPTIONAL_ASSETS');
   assert.ok(!swJs.includes("'./css/user-panel.css'"), 'sw.js no debe incluir archivo inexistente user-panel.css');

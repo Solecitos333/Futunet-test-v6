@@ -2865,3 +2865,111 @@ test('Mejora demandada por usuarios: Switch Administrable AV Line Netgear Pro AV
   assert.ok(catJs.includes("'m4250'") && catJs.includes("'gsm4212p'"), 'catalog.js debe incluir m4250 en stem variants');
   assert.ok(catJs.includes('m4250'), 'catalog.js debe priorizar Netgear Pro AV M4250');
 });
+
+test('Mejora demandada por usuarios: Consola Comercial Inverter Tipo Piso-Techo Mitsubishi Electric PCA-M 36,000 BTU (SUG-M3600)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M3600'") && seedCjs.includes("status: 'implemented'"), 'SUG-M3600 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M3600') && sugJs.includes('Mitsubishi Electric PCA-M'), 'SUG-M3600 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_mitsubishi_pca_m36_piso_techo_inverter'), 'backup_data.js debe contener energia_mitsubishi_pca_m36_piso_techo_inverter');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mitsubishi-pca-m36-piso-techo-inverter.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Mitsubishi PCA-M 36K debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'pcam36'") && catJs.includes("'pca-m36'"), 'catalog.js debe incluir pcam36 en stem variants');
+  assert.ok(catJs.includes('pca-m36'), 'catalog.js debe priorizar Mitsubishi PCA-M 36K');
+});
+
+test('Mejora demandada por usuarios: Teléfono SIP para Salas de Conferencia Panasonic KX-HDV800 (SUG-P8000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P8000'") && seedCjs.includes("status: 'implemented'"), 'SUG-P8000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P8000') && sugJs.includes('Panasonic KX-HDV800'), 'SUG-P8000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_panasonic_kx_hdv800_conferencia_sip'), 'backup_data.js debe contener oficina_panasonic_kx_hdv800_conferencia_sip');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'panasonic-kx-hdv800-conferencia-sip.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Panasonic KX-HDV800 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'hdv800'") && catJs.includes("'kx-hdv800'"), 'catalog.js debe incluir hdv800 en stem variants');
+  assert.ok(catJs.includes('hdv800'), 'catalog.js debe priorizar Panasonic KX-HDV800');
+});
+
+test('Mejora demandada por usuarios: Detector Exterior Grado Comercial Paradox NVX80 SeeTrue (SUG-P8080)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-P8080'") && seedCjs.includes("status: 'implemented'"), 'SUG-P8080 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-P8080') && sugJs.includes('Paradox NVX80'), 'SUG-P8080 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_paradox_nvx80_detector_exterior'), 'backup_data.js debe contener seguridad_paradox_nvx80_detector_exterior');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'paradox-nvx80-detector-exterior.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Paradox NVX80 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'nvx80'") && catJs.includes("'nvx-80'"), 'catalog.js debe incluir nvx80 en stem variants');
+  assert.ok(catJs.includes('nvx80'), 'catalog.js debe priorizar Paradox NVX80');
+});
+
+test('Mejora demandada por usuarios: Interruptor Automático de Caja Moldeada Siemens Sentron 3VA11 125A (SUG-S3125)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-S3125'") && seedCjs.includes("status: 'implemented'"), 'SUG-S3125 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-S3125') && sugJs.includes('Siemens Sentron 3VA11'), 'SUG-S3125 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_siemens_sentron_3va11_breaker_125a'), 'backup_data.js debe contener energia_siemens_sentron_3va11_breaker_125a');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'siemens-sentron-3va11-breaker-125a.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Siemens Sentron 3VA11 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'3va11'") && catJs.includes("'3va1'"), 'catalog.js debe incluir 3va11 en stem variants');
+  assert.ok(catJs.includes('3va11'), 'catalog.js debe priorizar Siemens Sentron 3VA11');
+});
+
+test('Mejora demandada por usuarios: Inversor Solar Residencial y Comercial Tesla Solar Inverter 7.6 kW (SUG-T7600)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T7600'") && seedCjs.includes("status: 'implemented'"), 'SUG-T7600 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T7600') && sugJs.includes('Tesla Solar Inverter'), 'SUG-T7600 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_tesla_solar_inverter_76kw'), 'backup_data.js debe contener energia_tesla_solar_inverter_76kw');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tesla-solar-inverter-76kw.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Tesla Solar Inverter debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'solarinverter'") && catJs.includes("'tesla-solar'"), 'catalog.js debe incluir solarinverter en stem variants');
+  assert.ok(catJs.includes('tesla solar inverter'), 'catalog.js debe priorizar Tesla Solar Inverter');
+});
+
+test('Mejora demandada por usuarios: Cámara PTZ IP Uniview LightHunter 4MP 33x Zoom (SUG-U4330)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U4330'") && seedCjs.includes("status: 'implemented'"), 'SUG-U4330 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U4330') && sugJs.includes('Uniview LightHunter 4MP'), 'SUG-U4330 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('seguridad_uniview_ptz_4mp_33x_lighthunter'), 'backup_data.js debe contener seguridad_uniview_ptz_4mp_33x_lighthunter');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'uniview-ptz-4mp-33x-lighthunter.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen de la Cámara Uniview PTZ 33x debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ipc6854'") && catJs.includes("'ptz33x'"), 'catalog.js debe incluir ipc6854 en stem variants');
+  assert.ok(catJs.includes('ipc6854'), 'catalog.js debe priorizar Uniview PTZ 33x');
+});
