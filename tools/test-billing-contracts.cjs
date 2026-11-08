@@ -196,8 +196,19 @@ test('facturación solo permite Creaticos y Futunet', () => {
   const switcher = billingHtml.match(/<select id="superadmin-company-select"[\s\S]*?<\/select>/)?.[0] || '';
   assert.match(switcher, /value="CREATICOS"/);
   assert.match(switcher, /value="FUTUNETSRL"/);
+  assert.match(switcher, />Futunet<\/option>/);
+  assert.doesNotMatch(switcher, /Futunet Suministros/);
   assert.doesNotMatch(switcher, /PANITAS|Los Panitas/);
   assert.doesNotMatch(extensions, /companyCode === 'PANITAS'/);
+  assert.doesNotMatch(billing, /settings\.name = 'Futunet Suministros'/);
+  assert.match(billing, /La Tecnología del Futuro/);
+  assert.match(billingHtml, /id="view-company-slogan"/);
+  assert.doesNotMatch(billing, /getVal\(['"]form-invoice-due-date['"]\)\s*=/);
+  assert.match(billing, /setVal\(['"]form-invoice-due-date['"], options\.refreshDates/);
+
+  assert.match(publicQuoteHtml, /id="quote-company-slogan"/);
+  assert.match(publicQuote, /quote-company-slogan/);
+  assert.match(publicQuote, /La Tecnología del Futuro/);
 });
 
 test('los módulos ERP visibles registran compras, banco, alertas y auditoría', () => {

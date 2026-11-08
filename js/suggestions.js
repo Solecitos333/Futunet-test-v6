@@ -1969,6 +1969,54 @@
       "status": "implemented",
       "description": "Cámara domo PTZ de exterior Uniview LightHunter 4MP con potente zoom óptico motorizado 33x, iluminación infrarroja adaptativa de 150 metros, analítica Deep Learning con clasificación humana/vehicular, autoseguimiento inteligente (Auto-tracking) y chasis antivandálico IP66/IK10.",
       "officialResponse": "Aprobado e integrado al catálogo de Seguridad y a marca-uniview.html la Cámara PTZ IP Uniview LightHunter 4MP con Zoom Óptico 33x (IPC6854SR-X33-VF), iluminación IR inteligente de 150 metros, analítica Deep Learning con autoseguimiento, chasis antivandálico IP66/IK10 y garantía oficial Uniview en Santiago."
+    },
+    {
+      "refCode": "SUG-C9200",
+      "title": "Disponibilidad de Switches Administrables Layer 3 Cisco Catalyst 9200L de 24 Puertos Gigabit PoE+ (370W) con 4 Enlaces 10G SFP+",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Switch administrable corporativo Layer 3 Cisco Catalyst 9200L-24P-4X-E con 24 puertos Gigabit Ethernet PoE+ (presupuesto total de 370W), 4 enlaces ascendentes fijos de 10 Gbps SFP+, enrutamiento estático, RIP, OSPF y EIGRP Stub, ventiladores y fuentes redundantes de alta resiliencia.",
+      "officialResponse": "Aprobado e integrado al catálogo de Redes y a marca-cisco.html el Switch Administrable Layer 3 Cisco Catalyst 9200L de 24 Puertos Gigabit PoE+ (370W) con 4 Uplinks 10G SFP+ (C9200L-24P-4X-E), enrutamiento dinámico avanzado y garantía oficial Cisco Enhanced Limited Lifetime (E-LLW) en Santiago."
+    },
+    {
+      "refCode": "SUG-U6ENT",
+      "title": "Disponibilidad de Puntos de Acceso Wi-Fi 6E Tri-Banda de Ultra Alta Densidad Ubiquiti UniFi U6 Enterprise con Puerto 2.5 GbE PoE+",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Punto de acceso empresarial de ultra alta densidad Ubiquiti UniFi U6 Enterprise (U6-Enterprise) con tecnología tri-banda Wi-Fi 6E (bandas de 2.4 GHz, 5 GHz y 6 GHz sin interferencias), throughput agregado de 10.2 Gbps, puerto de subida RJ45 de 2.5 Gbps PoE+ y soporte para más de 600 clientes concurrentes.",
+      "officialResponse": "Aprobado e integrado al catálogo de Redes y a marca-ubiquiti.html el Punto de Acceso Wi-Fi 6E Tri-Banda Ubiquiti UniFi U6 Enterprise con espectro limpio de 6 GHz, tasa agregada de 10.2 Gbps, puerto 2.5 GbE PoE+ y garantía oficial Ubiquiti Networks en Santiago."
+    },
+    {
+      "refCode": "SUG-M2004",
+      "title": "Disponibilidad de Cloud Core Routers MikroTik CCR2004-16G-2S+PC con 16 Puertos Gigabit y 2 Bahías 10G SFP+ Silenciosos",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Router de borde y agregación de alta densidad MikroTik CCR2004-16G-2S+PC con procesador Annapurna Labs AL32400 Quad-Core a 1.7 GHz, 16 puertos Gigabit Ethernet, 2 bahías de fibra 10G SFP+, chasis disipador de aluminio con refrigeración pasiva de 0 dB (completamente silencioso) y licencia RouterOS Nivel 6.",
+      "officialResponse": "Aprobado e integrado al catálogo de Redes y a marca-mikrotik.html el Cloud Core Router MikroTik CCR2004-16G-2S+PC con 16 puertos Gigabit, 2 enlaces 10G SFP+, arquitectura silenciosa de 0 dB por refrigeración pasiva y garantía oficial MikroTik en Santiago."
+    },
+    {
+      "refCode": "SUG-T6700",
+      "title": "Disponibilidad de Puntos de Acceso Wi-Fi 6 AX5400 de Techo TP-Link Omada EAP670 con Puerto 2.5 GbE PoE+ y Canal de 160 MHz",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Punto de acceso Wi-Fi 6 de montaje en techo o pared TP-Link Omada EAP670 con velocidades simultáneas de hasta 4804 Mbps en 5 GHz y 574 Mbps en 2.4 GHz (AX5400), canal extendido HE160 de 160 MHz, puerto 2.5 Gbps PoE+, roaming continuo 802.11k/v y gestión cloud SDN centralizada.",
+      "officialResponse": "Aprobado e integrado al catálogo de Redes y a marca-tp-link.html el Punto de Acceso Wi-Fi 6 TP-Link Omada EAP670 AX5400 con ancho de banda de 160 MHz, puerto de alta velocidad 2.5 GbE PoE+, integración a Omada Cloud SDN y garantía oficial TP-Link en República Dominicana."
+    },
+    {
+      "refCode": "SUG-E5300",
+      "title": "Disponibilidad de Proyectores Láser Corporativos Full HD WUXGA Epson PowerLite L530U de 5,200 Lúmenes con Fuente Láser de 20,000 Horas",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Proyector láser empresarial de alta luminosidad Epson PowerLite L530U con tecnología 3LCD de 3 chips, 5,200 lúmenes de brillo en color y blanco, resolución nativa WUXGA Full HD (1920x1200 en formato 16:10), fuente de luz láser de estado sólido con 20,000 horas de vida útil libre de mantenimiento, zoom óptico 1.6x y proyección de hasta 500 pulgadas.",
+      "officialResponse": "Aprobado e integrado al catálogo de Equipos de Oficina y a marca-epson.html el Proyector Láser Corporativo Epson PowerLite L530U de 5,200 Lúmenes WUXGA con fuente de luz láser de 20,000 horas, tecnología 3LCD de colores vivos y 3 años de garantía oficial Epson en Santiago."
+    },
+    {
+      "refCode": "SUG-A6000",
+      "title": "Disponibilidad de UPS Online Doble Conversión en Rack APC by Schneider Electric Easy UPS SRV 6kVA / 6000VA 208/240V con Tarjeta SNMP",
+      "category": "catalog_products",
+      "status": "implemented",
+      "description": "Sistema de alimentación ininterrumpida de grado crítico para telecomunicaciones y servidores APC by Schneider Electric Easy UPS SRV 6000VA / 6000W 208/240V Online de doble conversión con cero tiempo de transferencia (0 ms), factor de potencia unitario (1.0), formato rack 4U con rieles incluidos, bypass automático y tarjeta de gestión de red SNMP/Web incorporada.",
+      "officialResponse": "Aprobado e integrado al catálogo de Energía y Climatización y a marca-schneiderelectric.html el UPS Online Doble Conversión en Rack APC Easy UPS SRV 6kVA / 6kW (SRV6KRILRK) con factor de potencia 1.0, 0 ms de transferencia, tarjeta de monitoreo de red SNMP y garantía oficial Schneider Electric en Santiago."
     }
   ];
 

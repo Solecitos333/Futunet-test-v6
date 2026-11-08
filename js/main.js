@@ -1289,12 +1289,12 @@ function initAnnouncementBar() {
 
   // Campaña activa dinámica según vertical o calendario comercial 2026
   let campaign = {
-    badge: '🚀 BLACK MONTH TI 2026: APERTURA OFICIAL',
-    message: '15% de Descuento en Fibra Óptica, Servidores y Respaldo TI con',
+    badge: '⚡ BLACK MONTH TI: FIBRA DEDICADA & REDES',
+    message: '15% de Descuento en Enlaces Simétricos, Wi-Fi 6 y Switches PoE+ con',
     coupon: 'BLACKTI2026',
-    endDate: new Date('2026-11-07T23:59:59'),
-    ctaText: 'Asegurar Stock VIP',
-    waMsg: 'Hola Futunet, quiero aprovechar la apertura oficial de Black Month TI con el código BLACKTI2026.'
+    endDate: new Date('2026-11-14T23:59:59'),
+    ctaText: 'Auditar Conectividad',
+    waMsg: 'Hola Futunet, me interesa aprovechar la Semana de Conectividad Crítica y Fibra Dedicada en Black Month con el código BLACKTI2026.'
   };
 
   // Contextualización inteligente por página y calendario comercial semanal
@@ -1357,18 +1357,22 @@ function initAnnouncementBar() {
     campaign = {
       badge: isPromoBF
         ? '💥 BLACK FRIDAY: REDES GIGABIT & FIBRA'
-        : (isNov ? '🌐 BLACK MONTH: REDES GIGABIT & CABLEADO' : (isWeek5 ? '🌐 REDES GIGABIT & PREVENTA BLACK TI' : '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B')),
+        : (isNov
+          ? (isWeek2Nov ? '⚡ BLACK MONTH: FIBRA DEDICADA & REDES' : '🌐 BLACK MONTH: REDES GIGABIT & CABLEADO')
+          : (isWeek5 ? '🌐 REDES GIGABIT & PREVENTA BLACK TI' : '🌐 ALTA DISPONIBILIDAD & FAILOVER B2B')),
       message: isPromoBF
         ? '18% de Descuento en Switches Administrables y Enlaces Redundantes con'
-        : '15% de Descuento en Switches Administrables y Cableado Cat 6A con',
+        : (isWeek2Nov ? '15% de Descuento en Enlaces Simétricos, Wi-Fi 6 y Switches PoE+ con' : '15% de Descuento en Switches Administrables y Cableado Cat 6A con'),
       coupon: isPromoBF ? 'BLACKFRIDAY2026' : (isPromoNov ? 'BLACKTI2026' : 'CONTINUIDAD2026'),
-      endDate: isNov ? novEnd : (isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')))),
-      ctaText: 'Auditar Red',
+      endDate: isNov ? (isWeek2Nov ? new Date('2026-11-14T23:59:59') : novEnd) : (isWeek5 ? week5End : (isWeek3 ? week3End : (isWeek4 ? week4End : new Date('2026-10-31T23:59:59')))),
+      ctaText: isWeek2Nov ? 'Auditar Conectividad' : 'Auditar Red',
       waMsg: isPromoBF
         ? 'Hola Futunet, quiero cotizar switches y cableado estructurado en Black Friday con el código BLACKFRIDAY2026.'
-        : (isPromoNov
-          ? 'Hola Futunet, quiero cotizar switches y enlaces de fibra en Black TI con el código BLACKTI2026.'
-          : 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.')
+        : (isWeek2Nov
+          ? 'Hola Futunet, me interesa aprovechar la Semana de Conectividad Crítica y Fibra Dedicada en Black Month con el código BLACKTI2026.'
+          : (isPromoNov
+            ? 'Hola Futunet, quiero cotizar switches y enlaces de fibra en Black TI con el código BLACKTI2026.'
+            : 'Hola Futunet, quiero cotizar switches y redundancia de red con el código CONTINUIDAD2026.'))
     };
   } else if (currentPath.includes('seguridad-electronica.html')) {
     const isPromoBF = isBlackFridayWeek;
@@ -1422,7 +1426,7 @@ function initAnnouncementBar() {
       badge: isPromoBF
         ? '💥 BLACK FRIDAY TI: OFERTAS HISTÓRICAS B2B'
         : (isNov
-          ? (isWeek1Nov ? '🚀 BLACK MONTH B2B: RESERVA PRIORITARIA' : '🏢 BLACK MONTH B2B: INFRAESTRUCTURA & TI')
+          ? (isWeek1Nov ? '🚀 BLACK MONTH B2B: RESERVA PRIORITARIA' : (isWeek2Nov ? '⚡ BLACK MONTH B2B: CONECTIVIDAD & FIBRA DEDICADA' : '🏢 BLACK MONTH B2B: INFRAESTRUCTURA & TI'))
           : (isWeek5
             ? '🔥 EARLY BIRD BLACK TI: PREVENTA CORPORATIVA'
             : (isWeek3 ? '⚡ SEMANA DE CONTINUIDAD: ZERO DOWNTIME' : (isWeek4 ? '🏢 SEMANA DE INFRAESTRUCTURA & REDES B2B' : '🏢 Q4: BLINDAJE & REDES B2B')))),
@@ -1461,6 +1465,16 @@ function initAnnouncementBar() {
       endDate: new Date('2026-11-07T23:59:59'),
       ctaText: 'Asegurar Stock VIP',
       waMsg: 'Hola Futunet, quiero aprovechar la apertura oficial de Black Month TI con el código BLACKTI2026.'
+    };
+  } else if (isWeek2Nov) {
+    // Semana 2 de Noviembre: Conectividad Crítica, Fibra Óptica Dedicada & Wi-Fi 6 de Alta Densidad
+    campaign = {
+      badge: '⚡ BLACK MONTH TI: FIBRA DEDICADA & REDES',
+      message: '15% de Descuento en Enlaces Simétricos, Wi-Fi 6 y Switches PoE+ con',
+      coupon: 'BLACKTI2026',
+      endDate: new Date('2026-11-14T23:59:59'),
+      ctaText: 'Auditar Conectividad',
+      waMsg: 'Hola Futunet, me interesa aprovechar la Semana de Conectividad Crítica y Fibra Dedicada en Black Month con el código BLACKTI2026.'
     };
   } else if (isNov) {
     // Noviembre general / Black Month

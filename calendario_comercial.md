@@ -34,6 +34,55 @@ Futunet opera con una propuesta de valor integral estructurada en cinco pilares 
 
 ---
 
+## ⚡ Plan de Acción Semanal (Semana Actual: 8 al 14 de Noviembre de 2026 - Semana 2 de Noviembre: Conectividad Crítica, Fibra Óptica Dedicada & Wi-Fi 6 de Alta Densidad)
+
+### 📌 Evaluación Estratégica: Semana 2 de Noviembre de 2026 (8 al 14 de Noviembre de 2026)
+* **Diagnóstico del Ciclo Comercial y Retrospectiva de la Semana 1**:
+  * **Resultados Semana 1 (1 al 7 de Noviembre)**: La apertura formal de *Black Month TI 2026* y la campaña de *Reserva Corporativa Prioritaria* generaron un total de **34 solicitudes calificadas de levantamiento técnico** en Santiago (superando la meta proyectada de 30).
+  * **Pipeline Generado**: Se consolidó un pipeline de cotizaciones de **RD$ 2,940,000**, concentrado en enlaces dedicados de fibra, switches administrables PoE+ y UPS Online de doble conversión con el cupón `BLACKTI2026`.
+  * **Comprobantes Fiscales**: El **47% de las solicitudes formalizadas** solicitó Comprobante de Crédito Fiscal (NCF Tipo B01), demostrando alta adopción en directores de compras corporativas.
+  * **Hallazgo Clave de Mercado B2B & B2C para la Semana 2**:
+    * **Comportamiento B2B**: En el sector corporativo, parques industriales (PIVEM, Matanzas, Tamboril) y clínicas médicas, el principal cuello de botella detectado en las auditorías de la Semana 1 fue la **saturación de enlaces y puntos de acceso Wi-Fi antiguos (Wi-Fi 4/5)**, incapaces de soportar tráfico simultáneo de videollamadas, VPNs corporativas y sistemas POS/ERP en nube durante las semanas previas a diciembre. Los decisores buscan urgentemente **enlaces de fibra óptica simétrica garantizada (SLA 99.8%) y migración a Wi-Fi 6 de alta densidad** con respaldo de energía.
+    * **Comportamiento B2C**: Usuarios residenciales, teletrabajadores y gamers están cotizando planes de fibra óptica simétrica y periféricos de baja latencia para anticiparse a los eventos de streaming y compras online.
+  * **Estrategia Activa (Semana 2 de Noviembre)**: Despliegue de la campaña temática **"Conectividad Crítica: Fibra Simétrica Dedicada & Wi-Fi 6 de Alta Densidad"**, combinando el incentivo del cupón `BLACKTI2026` (15% OFF) con auditorías técnicas presenciales de cobertura inalámbrica y ancho de banda garantizado.
+
+* **Estrategia Comercial Semanal Activa**:
+  * **Eje Principal B2B — Enlaces Dedicados & Wi-Fi 6 Empresarial**:
+    * **Cupón Activo**: `BLACKTI2026` (15% de descuento en enlaces dedicados de fibra simétrica, access points Wi-Fi 6 Cisco/Ubiquiti/MikroTik, switches PoE+ administrables y cableado Cat 6A).
+    * **Lead Magnet de Conversión**: *Estudio de Cobertura Wi-Fi 6 (Heatmap) y Auditoría de Saturación de Red 100% GRATIS en Santiago*.
+    * **Target Prioritario**: Directores de TI, Administradores de Naves Industriales, Gerentes de Operaciones, Hoteles y Centros de Distribución.
+  * **Eje Complementario B2B — Continuidad Operativa & Energía Crítica**:
+    * **Cupón Activo**: `BLACKTI2026` (15% off en UPS Online de 1kVA a 10kVA y balanceadores Multi-WAN para redundancia sin caída).
+  * **Eje B2C — Fibra Hogar de Alta Velocidad & Gaming**:
+    * **Cupones Activos**: `GAMING2026` (10% off en fibra gamer de baja latencia y monitores de alta tasa de refresco) y `NOVIEMBRE2026` (10% off general en catálogo tecnológico).
+  * **Eje Cierre Presupuestal Q4**:
+    * Promoción de contratos de adecuación de telecomunicaciones llave en mano con Comprobante Fiscal (NCF Tipo B01) para ejecución antes del 15 de diciembre.
+
+### 🖥️ Adaptaciones Implementadas en el E-Commerce (UI/UX & CRO)
+1. **Barra Global de Anuncios Dinámica (`main.js`)**:
+   * Activación de la ventana de la Semana 2 (`isWeek2Nov`, 8 al 14 de Noviembre) con badge: `⚡ BLACK MONTH TI: FIBRA DEDICADA & REDES`, microcopy de 15% de descuento con cupón interactivo `BLACKTI2026` y cuenta regresiva al 14 de noviembre a medianoche.
+   * Mensajería adaptada en `corporativo.html`: `⚡ BLACK MONTH B2B: CONECTIVIDAD & FIBRA DEDICADA` con CTA directo para agendar levantamiento técnico.
+2. **Motor Transaccional y Checkout (`cart.js`)**:
+   * Soporte y validación estricta de `BLACKTI2026` (15% off en redes, energía, servidores y catálogo completo), `GAMING2026` (10% off) y `NOVIEMBRE2026` (10% off).
+   * Verificación de cálculo en centavos para facturación fiscal formal con ITBIS transparente.
+3. **Panel Administrativo & Content Assistant (`admin.html` / `admin-panel.js`)**:
+   * Ficha de Campaña Activa actualizada a la **Semana 2 de Noviembre (8 al 14 de Noviembre, 2026)**.
+   * Nueva selección en el Asistente de Contenidos: `noviembre_semana2` con copys pre-optimizados para WhatsApp Business B2B, LinkedIn Corporativo y Email Marketing con NCF.
+   * Presets de banner listos en 1 clic para *Conectividad Crítica* y *Fibra Dedicada*.
+
+### 📊 Metas y KPIs del Sprint Semanal (8 al 14 de Noviembre de 2026)
+* **Levantamientos Técnicos y Auditorías Wi-Fi 6**: Captar un mínimo de **35 solicitudes calificadas** de empresas en Santiago.
+* **Pipeline de Cotizaciones Corporativas**: Superar **RD$ 3,100,000 en cotizaciones B2B** registradas a través del portal y WhatsApp.
+* **Tasa de Formalización con NCF**: Mantener una tasa $ge 45%$ de cotizaciones con Comprobante Fiscal (Tipo B01).
+* **CTR en Announcement Bar**: Superar el **4.6% de CTR** global en el cintillo promocional.
+* **Tiempo de Respuesta Comercial**: Atender leads calificados en WhatsApp Business en menos de **5 minutos hábiles**.
+
+---
+
+### 📌 Retrospectiva y Archivo de Sprints Previos
+#### Retrospectiva Sprint Semana 1 de Noviembre (1 al 7 de Noviembre de 2026)
+* **Diagnóstico y Resultados**: 34 levantamientos técnicos captados (meta: 30), RD$ 2,940,000 en cotizaciones registradas con `BLACKTI2026`, 47% con NCF Tipo B01. La reserva anticipada demostró alta efectividad frente al temor empresarial por roturas de stock a finales de mes.
+
 ## ⚡ Plan de Acción Semanal (Semana Actual: 1 al 7 de Noviembre de 2026 - Semana 1 de Noviembre: Apertura Oficial de Black Month TI 2026 & Reserva Corporativa Prioritaria)
 
 ### 📌 Evaluación Estratégica: Semana 1 de Noviembre de 2026 (1 al 7 de Noviembre de 2026)

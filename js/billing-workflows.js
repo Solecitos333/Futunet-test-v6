@@ -8,6 +8,7 @@ window.ERPBillingWorkflows = (function () {
   let prefix = 'creaticos';
   let isAdmin = false;
   let initialized = false;
+  let windowListenersAttached = false;
   let latestDraft = null;
   let draftTimer = null;
   let lastDraftWrite = 0;
@@ -37,18 +38,23 @@ window.ERPBillingWorkflows = (function () {
       .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
   function escapeAttr(value) { return escapeHTML(value).replace(/`/g, '&#96;'); }
+  function domDocument() {
+    return (typeof window !== 'undefined' && window.document) || (typeof document !== 'undefined' ? document : null);
+  }
   function safeOpenWhatsApp(url) {
     if (typeof window !== 'undefined' && typeof window.safeOpenWhatsApp === 'function') {
       return window.safeOpenWhatsApp(url);
     }
     if (!url) return;
     try {
-      const link = document.createElement('a');
+      const doc = domDocument();
+      if (!doc) return;
+      const link = doc.createElement('a');
       link.href = url;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.style.display = 'none';
-      document.body.appendChild(link);
+      doc.body.appendChild(link);
       link.click();
       setTimeout(() => { if (link.parentNode) link.parentNode.removeChild(link); }, 200);
     } catch (e) {
@@ -66,15 +72,17 @@ window.ERPBillingWorkflows = (function () {
       }
     }
     try {
-      const ta = document.createElement('textarea');
+      const doc = domDocument();
+      if (!doc) return false;
+      const ta = doc.createElement('textarea');
       ta.value = text;
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
-      document.body.appendChild(ta);
+      doc.body.appendChild(ta);
       ta.focus();
       ta.select();
-      const ok = document.execCommand('copy');
-      document.body.removeChild(ta);
+      const ok = doc.execCommand ? doc.execCommand('copy') : false;
+      doc.body.removeChild(ta);
       return ok;
     } catch (e) {
       return false;
@@ -90,7 +98,9 @@ window.ERPBillingWorkflows = (function () {
   function refreshIcons() { if (window.lucide) window.lucide.createIcons(); }
 
   function openDialog(title, content, className = '') {
-    const overlay = document.createElement('div');
+    const doc = domDocument();
+    if (!doc) return { overlay: null, close: () => {} };
+    const overlay = doc.createElement('div');
     overlay.className = 'erp-action-dialog is-open';
     overlay.innerHTML = `<section class="erp-action-dialog-card commercial-document-dialog ${escapeHTML(className)}" role="dialog" aria-modal="true">
       <div class="commercial-card-header" style="padding:0 0 16px;margin-bottom:16px;">
@@ -106,77 +116,218 @@ window.ERPBillingWorkflows = (function () {
     const close = () => overlay.remove();
     overlay.querySelector('[data-close-dialog]')?.addEventListener('click', close);
     overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
-    document.body.appendChild(overlay);
+    doc.body.appendChild(overlay);
     setTimeout(() => overlay.querySelector('input,select,button')?.focus(), 0);
     return { overlay, close };
   }
 
   function formNode(html) {
-    const wrapper = document.createElement('div');
+    const doc = domDocument();
+    if (!doc) return null;
+    const wrapper = doc.createElement('div');
     wrapper.innerHTML = html;
     return wrapper;
   }
 
-  function documentSnapshotFromForm() {
-    const rows = Array.from(document.querySelectorAll('#invoice-form-items-body tr'));
+  function documentSnapshotFromForm(formElement) {
+    const doc = domDocument();
+    const form = formElement || doc?.getElementById('invoice-editor-form') || doc;
+    if (!form) return null;
+    const rows = Array.from((form.querySelector('#invoice-form-items-body') || doc?.getElementById('invoice-form-items-body') || form).querySelectorAll('tr'));
+    const discountEl = form.querySelector('#form-invoice-discount-pct') || form.querySelector('#form-invoice-discount') || doc?.getElementById('form-invoice-discount-pct') || doc?.getElementById('form-invoice-discount');
+    const discountPct = Number(discountEl?.value || 0);
+
     return {
-      docType: document.getElementById('form-invoice-doc-type')?.value || 'quote',
-      clientId: document.getElementById('form-invoice-client-id')?.value || '',
-      clientName: document.getElementById('form-invoice-client-name')?.value.trim() || '',
-      clientRnc: document.getElementById('form-invoice-client-rnc')?.value.trim() || '',
-      date: document.getElementById('form-invoice-date')?.value || localDate(),
-      dueDate: document.getElementById('form-invoice-due-date')?.value || '',
-      division: document.getElementById('form-invoice-division')?.value || 'general',
-      paymentTerms: document.getElementById('form-invoice-payment-terms')?.value || 'Contado',
-      notes: document.getElementById('form-invoice-notes')?.value.trim() || '',
-      discountPct: Number(document.getElementById('form-invoice-discount-pct')?.value || 0),
-      items: rows.map(row => ({
-        productId: row.querySelector('.row-product-id')?.value || 'custom',
-        description: row.querySelector('.row-product-search')?.value.trim() || '',
-        price: Number(row.querySelector('.row-price')?.value || 0),
-        qty: Number(row.querySelector('.row-qty')?.value || 1),
-        tax: Number(row.querySelector('.row-tax')?.value || 0),
-        taxMode: row.querySelector('.row-tax')?.dataset.override === 'true' ? 'amount' : 'rate',
-        taxRate: Number(row.querySelector('.row-tax')?.dataset.percent || 0),
-        discount: Number(row.querySelector('.row-discount')?.value || 0),
-        unitCost: row.querySelector('.row-cost')?.value === '' ? null : Number(row.querySelector('.row-cost')?.value || 0)
-      })).filter(item => item.description || item.price > 0)
+      id: (form.querySelector('#form-invoice-id') || doc?.getElementById('form-invoice-id'))?.value || '',
+      docType: (form.querySelector('#form-invoice-doc-type') || doc?.getElementById('form-invoice-doc-type'))?.value || 'quote',
+      clientId: (form.querySelector('#form-invoice-client-id') || doc?.getElementById('form-invoice-client-id'))?.value || '',
+      clientName: (form.querySelector('#form-invoice-client-name') || doc?.getElementById('form-invoice-client-name'))?.value.trim() || '',
+      clientRnc: (form.querySelector('#form-invoice-client-rnc') || doc?.getElementById('form-invoice-client-rnc'))?.value.trim() || '',
+      clientPhone: (form.querySelector('#form-invoice-client-phone') || doc?.getElementById('form-invoice-client-phone'))?.value.trim() || '',
+      clientEmail: (form.querySelector('#form-invoice-client-email') || doc?.getElementById('form-invoice-client-email'))?.value.trim() || '',
+      clientAddress: (form.querySelector('#form-invoice-client-address') || doc?.getElementById('form-invoice-client-address'))?.value.trim() || '',
+      date: (form.querySelector('#form-invoice-date') || doc?.getElementById('form-invoice-date'))?.value || localDate(),
+      dueDate: (form.querySelector('#form-invoice-due-date') || doc?.getElementById('form-invoice-due-date'))?.value || '',
+      division: (form.querySelector('#form-invoice-division') || doc?.getElementById('form-invoice-division'))?.value || 'general',
+      ncfType: (form.querySelector('#form-invoice-ncf-type') || doc?.getElementById('form-invoice-ncf-type'))?.value || 'none',
+      ncf: (form.querySelector('#form-invoice-ncf') || doc?.getElementById('form-invoice-ncf'))?.value.trim() || '',
+      paymentTerms: (form.querySelector('#form-invoice-payment-terms') || doc?.getElementById('form-invoice-payment-terms'))?.value || 'Contado',
+      notes: (form.querySelector('#form-invoice-notes') || doc?.getElementById('form-invoice-notes'))?.value.trim() || '',
+      discountPct: discountPct,
+      items: rows.map(row => {
+        const productInput = row.querySelector('.row-product-search');
+        const idInput = row.querySelector('.row-product-id');
+        const costInput = row.querySelector('.row-cost');
+        const priceInput = row.querySelector('.row-price');
+        const qtyInput = row.querySelector('.row-qty');
+        const taxInput = row.querySelector('.row-tax');
+        const discountInput = row.querySelector('.row-discount');
+
+        const productId = idInput?.value || 'custom';
+        const description = productInput?.value.trim() || '';
+        const price = Number(priceInput?.value || 0);
+        const qty = Number(qtyInput?.value || 1);
+        const tax = Number(taxInput?.value || 0);
+        const taxMode = taxInput?.dataset?.override === 'true' ? 'amount' : 'rate';
+        const taxRate = Number(taxInput?.dataset?.percent || 0);
+        const discount = Number(discountInput?.value || 0);
+        const costVal = costInput?.value;
+        const unitCost = (costVal === '' || costVal == null) ? null : Number(costVal);
+        const subtotal = Core ? Core.roundMoney(price * qty) : Number((price * qty).toFixed(2));
+
+        return {
+          code: productId,
+          productId: productId,
+          description: description,
+          price: price,
+          qty: qty,
+          tax: tax,
+          taxType: taxMode,
+          taxMode: taxMode,
+          taxRate: taxRate,
+          itbisRate: taxRate,
+          discount: discount,
+          unitCost: unitCost,
+          subtotal: subtotal
+        };
+      }).filter(item => item.description || item.price > 0)
     };
   }
 
   function meaningfulDraft(data) {
-    return Boolean(data && (data.clientName || data.notes || (Array.isArray(data.items) && data.items.some(item => item.description || item.price > 0))));
+    if (!data) return false;
+    if (data.id) return true;
+    if (data.clientName && data.clientName.trim().length > 0) return true;
+    if (data.clientRnc && data.clientRnc.trim().length > 0) return true;
+    if (data.clientPhone && data.clientPhone.trim().length > 0) return true;
+    if (data.clientEmail && data.clientEmail.trim().length > 0) return true;
+    if (data.clientAddress && data.clientAddress.trim().length > 0) return true;
+    if (data.notes && data.notes.trim().length > 0) return true;
+    if (data.ncf && data.ncf.trim().length > 0) return true;
+    if (Number(data.discountPct || 0) > 0) return true;
+    if (Array.isArray(data.items) && data.items.some(item => item.description || Number(item.price || 0) > 0 || Number(item.discount || 0) > 0 || Number(item.unitCost || 0) > 0)) return true;
+    return false;
   }
 
-  function draftId() { return `${user.uid}_invoice_editor`; }
-  function localDraftKey() { return `erp_billing_draft_${companyCode}_${user.uid}`; }
+  function currentCompanyCode() {
+    if (window.ERPBilling && typeof window.ERPBilling.getBillingSnapshot === 'function') {
+      try {
+        const snap = window.ERPBilling.getBillingSnapshot();
+        if (snap && snap.companyCode) return snap.companyCode;
+      } catch (e) {}
+    }
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('active_company_code');
+        if (stored) return stored;
+      } catch (e) {}
+    }
+    if (typeof sessionStorage !== 'undefined') {
+      try {
+        const stored = sessionStorage.getItem('active_company_code');
+        if (stored) return stored;
+      } catch (e) {}
+    }
+    return companyCode || 'CREATICOS';
+  }
+
+  function draftId() { return `${(user && user.uid) ? user.uid : 'local'}_invoice_editor`; }
+  function localDraftKey() { return `erp_billing_draft_${currentCompanyCode()}_${(user && user.uid) ? user.uid : 'local'}`; }
   function setDraftStatus(text, tone) {
-    const status = document.getElementById('billing-draft-status');
+    const doc = domDocument();
+    const status = doc?.getElementById('billing-draft-status');
     if (!status) return;
     status.textContent = text;
     status.dataset.tone = tone || '';
   }
 
+  function readLocalDraft() {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const active = currentCompanyCode();
+      const uid = (user && user.uid) ? user.uid : 'local';
+
+      // 1. Primary strictly scoped key
+      let raw = localStorage.getItem(`erp_billing_draft_${active}_${uid}`);
+
+      // 2. Exact alias check for the same tenant (FUTUNET <-> FUTUNETSRL) for the SAME user
+      if (!raw) {
+        if (active === 'FUTUNETSRL') {
+          raw = localStorage.getItem(`erp_billing_draft_FUTUNET_${uid}`);
+        } else if (active === 'FUTUNET') {
+          raw = localStorage.getItem(`erp_billing_draft_FUTUNETSRL_${uid}`);
+        }
+      }
+
+      // 3. Fallback ONLY for unauthenticated sessions in the exact same company
+      if (!raw && (!user || !user.uid)) {
+        raw = localStorage.getItem(`erp_billing_draft_${active}_local`) || localStorage.getItem(`erp_billing_draft_${active}`);
+        if (!raw && (active === 'FUTUNETSRL' || active === 'FUTUNET')) {
+          const alias = active === 'FUTUNETSRL' ? 'FUTUNET' : 'FUTUNETSRL';
+          raw = localStorage.getItem(`erp_billing_draft_${alias}_local`) || localStorage.getItem(`erp_billing_draft_${alias}`);
+        }
+      }
+
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const data = (parsed && parsed.data && typeof parsed.data === 'object') ? parsed.data : parsed;
+        const savedAt = (parsed && (parsed.savedAt || parsed.updatedAt)) || Date.now();
+        if (data && meaningfulDraft(data)) {
+          return { id: draftId(), data, updatedAt: new Date(savedAt) };
+        }
+      }
+    } catch (e) {
+      console.warn('Unable to read local draft', e);
+    }
+    return null;
+  }
+
+  function flushDraftNow() {
+    clearTimeout(draftTimer);
+    const doc = domDocument();
+    const form = doc?.getElementById('invoice-editor-form');
+    if (!form) return;
+    const data = documentSnapshotFromForm(form);
+    if (!meaningfulDraft(data)) return;
+    try {
+      const savedAt = Date.now();
+      localStorage.setItem(localDraftKey(), JSON.stringify({ data, savedAt }));
+      latestDraft = { id: draftId(), ownerId: (user && user.uid) ? user.uid : 'local', companyCode, formType: 'invoice-editor', data, updatedAt: new Date(savedAt) };
+      lastDraftWrite = savedAt;
+    } catch (e) {
+      console.warn('Unable to synchronously flush draft to localStorage', e);
+    }
+  }
+
   async function saveDraftNow(options = {}) {
-    if (!initialized || !user) return;
     const data = documentSnapshotFromForm();
     if (!meaningfulDraft(data)) {
       setDraftStatus('Sin contenido para guardar', 'muted');
       return;
     }
     setDraftStatus('Guardando borrador…', 'saving');
-    const payload = { ownerId: user.uid, companyCode, formType: 'invoice-editor', data, updatedAt: serverTime() };
+    const savedAt = Date.now();
     try {
-      await collection('billing_drafts').doc(draftId()).set(payload, { merge: true });
-      latestDraft = { id: draftId(), ...payload, updatedAt: new Date() };
-      localStorage.setItem(localDraftKey(), JSON.stringify({ data, savedAt: Date.now() }));
-      lastDraftWrite = Date.now();
-      setDraftStatus(`Borrador guardado a las ${new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}`, 'saved');
-      if (!options.silent) notify('Borrador guardado en la cuenta.', 'success');
-    } catch (error) {
-      localStorage.setItem(localDraftKey(), JSON.stringify({ data, savedAt: Date.now() }));
-      setDraftStatus('Guardado temporalmente en este dispositivo', 'warning');
-      if (!options.silent) notify('Sin conexión: el borrador quedó guardado temporalmente en este dispositivo.', 'warning');
+      localStorage.setItem(localDraftKey(), JSON.stringify({ data, savedAt }));
+    } catch (e) {
+      console.warn('Local draft write error', e);
+    }
+    latestDraft = { id: draftId(), ownerId: (user && user.uid) ? user.uid : 'local', companyCode, formType: 'invoice-editor', data, updatedAt: new Date(savedAt) };
+    lastDraftWrite = savedAt;
+
+    if (user && user.uid && typeof collection === 'function') {
+      const payload = { ownerId: user.uid, companyCode, formType: 'invoice-editor', data, updatedAt: serverTime() };
+      try {
+        await collection('billing_drafts').doc(draftId()).set(payload, { merge: true });
+        setDraftStatus(`Borrador guardado a las ${new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}`, 'saved');
+        if (!options.silent) notify('Borrador guardado en la cuenta.', 'success');
+      } catch (error) {
+        setDraftStatus('Guardado temporalmente en este dispositivo', 'warning');
+        if (!options.silent) notify('Sin conexión: el borrador quedó guardado temporalmente en este dispositivo.', 'warning');
+      }
+    } else {
+      setDraftStatus(`Borrador guardado localmente a las ${new Date().toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}`, 'saved');
+      if (!options.silent) notify('Borrador guardado localmente.', 'success');
     }
   }
 
@@ -184,75 +335,160 @@ window.ERPBillingWorkflows = (function () {
     clearTimeout(draftTimer);
     setDraftStatus('Cambios pendientes…', 'pending');
     draftTimer = setTimeout(() => {
-      if (Date.now() - lastDraftWrite < 3500) {
-        scheduleDraftSave();
-        return;
-      }
       saveDraftNow({ silent: true });
-    }, 1800);
+    }, 500);
+  }
+
+  function checkDraftBanner() {
+    const doc = domDocument();
+    const banner = doc?.getElementById('billing-draft-banner');
+    if (!banner) return false;
+    const local = readLocalDraft();
+    if (local && meaningfulDraft(local.data)) {
+      latestDraft = local;
+      banner.hidden = false;
+      banner.removeAttribute('hidden');
+      banner.style.display = '';
+      const updated = doc.getElementById('billing-draft-updated');
+      if (updated) {
+        const timeStr = timeLabel(local.updatedAt);
+        const docType = local.data.docType === 'quote' ? 'Cotización' : (local.data.docType === 'proforma' ? 'Proforma' : 'Factura');
+        const clientDesc = local.data.clientName ? ` para ${local.data.clientName}` : '';
+        updated.textContent = `${docType}${clientDesc} · Guardado: ${timeStr}`;
+      }
+      return true;
+    } else {
+      banner.hidden = true;
+      banner.setAttribute('hidden', '');
+      banner.style.display = 'none';
+      return false;
+    }
   }
 
   async function loadLatestDraft() {
     let cloudDraft = null;
-    try {
-      const doc = await collection('billing_drafts').doc(draftId()).get();
-      if (doc.exists) cloudDraft = { id: doc.id, ...doc.data() };
-    } catch (error) {
-      console.warn('Cloud draft unavailable', error);
-    }
-    let localDraft = null;
-    try {
-      const raw = localStorage.getItem(localDraftKey());
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        localDraft = { id: draftId(), data: parsed.data, updatedAt: new Date(parsed.savedAt) };
+    if (user && user.uid && typeof collection === 'function') {
+      try {
+        const docSnap = await collection('billing_drafts').doc(draftId()).get();
+        if (docSnap.exists) cloudDraft = { id: docSnap.id, ...docSnap.data() };
+      } catch (error) {
+        console.warn('Cloud draft unavailable', error);
       }
-    } catch (error) { localStorage.removeItem(localDraftKey()); }
+    }
+    const localDraft = readLocalDraft();
     const cloudDate = asDate(cloudDraft && cloudDraft.updatedAt);
     const localDateValue = asDate(localDraft && localDraft.updatedAt);
     latestDraft = cloudDate && (!localDateValue || cloudDate >= localDateValue) ? cloudDraft : localDraft;
-    const banner = document.getElementById('billing-draft-banner');
-    if (!banner || !latestDraft || !meaningfulDraft(latestDraft.data)) return;
+
+    const doc = domDocument();
+    const banner = doc?.getElementById('billing-draft-banner');
+    if (!banner) return;
+    if (!latestDraft || !meaningfulDraft(latestDraft.data)) {
+      banner.hidden = true;
+      banner.setAttribute('hidden', '');
+      banner.style.display = 'none';
+      return;
+    }
     banner.hidden = false;
-    const updated = document.getElementById('billing-draft-updated');
-    if (updated) updated.textContent = `Última actualización: ${timeLabel(latestDraft.updatedAt)}`;
+    banner.removeAttribute('hidden');
+    banner.style.display = '';
+    const updated = doc.getElementById('billing-draft-updated');
+    if (updated) {
+      const timeStr = timeLabel(latestDraft.updatedAt);
+      const docType = latestDraft.data.docType === 'quote' ? 'Cotización' : (latestDraft.data.docType === 'proforma' ? 'Proforma' : 'Factura');
+      const clientDesc = latestDraft.data.clientName ? ` para ${latestDraft.data.clientName}` : '';
+      updated.textContent = `${docType}${clientDesc} · Guardado: ${timeStr}`;
+    }
   }
 
   function restoreLatestDraft() {
+    if (!latestDraft) {
+      latestDraft = readLocalDraft();
+    }
     if (!latestDraft || !meaningfulDraft(latestDraft.data)) return;
-    window.ERPBilling.populateInvoiceForm(latestDraft.data, { title: 'Borrador recuperado' });
-    const draftBanner = document.getElementById('billing-draft-banner');
-    if (draftBanner) draftBanner.hidden = true;
+    if (window.ERPBilling && typeof window.ERPBilling.populateInvoiceForm === 'function') {
+      window.ERPBilling.populateInvoiceForm(latestDraft.data, { title: 'Borrador recuperado' });
+    }
+    const doc = domDocument();
+    const draftBanner = doc?.getElementById('billing-draft-banner');
+    if (draftBanner) {
+      draftBanner.hidden = true;
+      draftBanner.setAttribute('hidden', '');
+      draftBanner.style.display = 'none';
+    }
     setDraftStatus('Borrador restaurado; revisa antes de guardar', 'warning');
     notify('Borrador restaurado como documento editable.', 'success');
   }
 
   async function discardLatestDraft() {
-    const confirmed = await window.ERPBilling.confirmAction('¿Descartar el borrador recuperable?', { title: 'Descartar borrador', confirmLabel: 'Descartar', tone: 'danger' });
-    if (!confirmed) return;
+    if (window.ERPBilling && typeof window.ERPBilling.clearInvoiceForm === 'function') {
+      window.ERPBilling.clearInvoiceForm();
+    }
     await clearLatestDraft();
+    setDraftStatus('Sin cambios pendientes', 'muted');
     notify('Borrador descartado.', 'success');
   }
 
   async function clearLatestDraft() {
     latestDraft = null;
-    localStorage.removeItem(localDraftKey());
-    document.getElementById('billing-draft-banner')?.setAttribute('hidden', '');
+    clearTimeout(draftTimer);
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const active = currentCompanyCode();
+        const uid = (user && user.uid) ? user.uid : 'local';
+        const allowedKeys = new Set([
+          localDraftKey(),
+          `erp_billing_draft_${active}_${uid}`
+        ]);
+        if (!user || !user.uid) {
+          allowedKeys.add(`erp_billing_draft_${active}_local`);
+          allowedKeys.add(`erp_billing_draft_${active}`);
+        } else {
+          allowedKeys.add(`erp_billing_draft_${active}_local`);
+        }
+        if (active === 'FUTUNETSRL' || active === 'FUTUNET') {
+          const alias = active === 'FUTUNETSRL' ? 'FUTUNET' : 'FUTUNETSRL';
+          allowedKeys.add(`erp_billing_draft_${alias}_${uid}`);
+          allowedKeys.add(`erp_billing_draft_${alias}_local`);
+          if (!user || !user.uid) {
+            allowedKeys.add(`erp_billing_draft_${alias}`);
+          }
+        }
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const k = localStorage.key(i);
+          if (k && allowedKeys.has(k)) {
+            localStorage.removeItem(k);
+          }
+        }
+      } catch (e) {
+        console.warn('Error clearing localStorage draft', e);
+      }
+    }
+    const doc = domDocument();
+    const banner = doc?.getElementById('billing-draft-banner');
+    if (banner) {
+      banner.hidden = true;
+      banner.setAttribute('hidden', '');
+      banner.style.display = 'none';
+    }
     setDraftStatus('Sin cambios pendientes', 'muted');
-    try { await collection('billing_drafts').doc(draftId()).delete(); } catch (error) { console.warn('Unable to clear cloud draft', error); }
+    if (user && user.uid && typeof collection === 'function') {
+      try { await collection('billing_drafts').doc(draftId()).delete(); } catch (error) { console.warn('Unable to clear cloud draft', error); }
+    }
   }
 
   function updateFormCommercialMetrics(items, globalDiscountPct) {
     const metrics = Core.calculateCommercialMetrics(items, globalDiscountPct);
     const settings = currentSettings();
-    const card = document.getElementById('commercial-margin-card');
+    const doc = domDocument();
+    const card = doc?.getElementById('commercial-margin-card');
     if (!card) return metrics;
     const coverageRequired = Number(settings.minimumCostCoveragePct == null ? 80 : settings.minimumCostCoveragePct);
     const marginRequired = Number(settings.minimumMarginPct == null ? 15 : settings.minimumMarginPct);
-    const marginValue = document.getElementById('commercial-margin-value');
-    const profitValue = document.getElementById('commercial-profit-value');
-    const coverageValue = document.getElementById('commercial-coverage-value');
-    const guidance = document.getElementById('commercial-margin-guidance');
+    const marginValue = doc.getElementById('commercial-margin-value');
+    const profitValue = doc.getElementById('commercial-profit-value');
+    const coverageValue = doc.getElementById('commercial-coverage-value');
+    const guidance = doc.getElementById('commercial-margin-guidance');
     card.classList.remove('is-healthy', 'is-warning', 'is-danger');
     coverageValue.textContent = `${metrics.costCoveragePct.toFixed(0)}%`;
     if (metrics.costCoveragePct < coverageRequired) {
@@ -375,7 +611,8 @@ window.ERPBillingWorkflows = (function () {
   }
 
   function renderQuotes(rows) {
-    const body = document.getElementById('commercial-quotes-body');
+    const doc = domDocument();
+    const body = doc?.getElementById('commercial-quotes-body');
     if (!body) return;
     const sorted = rows.slice().sort((a, b) => {
       const diff = Core.getDocumentModificationTime(b) - Core.getDocumentModificationTime(a);
@@ -523,10 +760,11 @@ window.ERPBillingWorkflows = (function () {
   }
 
   async function loadApprovals() {
-    const card = document.getElementById('commercial-approvals-card');
+    const doc = domDocument();
+    const card = doc?.getElementById('commercial-approvals-card');
     if (card) card.hidden = !isAdmin;
     if (!isAdmin) return;
-    const body = document.getElementById('commercial-approvals-body');
+    const body = doc?.getElementById('commercial-approvals-body');
     if (!body) return;
     try {
       const snapshot = await collection('approval_requests').limit(250).get();
@@ -603,7 +841,8 @@ window.ERPBillingWorkflows = (function () {
   }
 
   async function loadReminders() {
-    const list = document.getElementById('commercial-reminders-list');
+    const doc = domDocument();
+    const list = doc?.getElementById('commercial-reminders-list');
     if (!list) return;
     try {
       const snapshot = await collection('collection_reminders').limit(250).get();
@@ -726,7 +965,8 @@ window.ERPBillingWorkflows = (function () {
   }
 
   async function loadTemplates() {
-    const list = document.getElementById('commercial-templates-list');
+    const doc = domDocument();
+    const list = doc?.getElementById('commercial-templates-list');
     if (!list) return;
     try {
       const snapshot = await collection('billing_templates').limit(200).get();
@@ -772,7 +1012,8 @@ window.ERPBillingWorkflows = (function () {
   }
 
   function refreshKpis() {
-    if (!initialized || !document.getElementById('commercial-kpi-stats')) return;
+    const doc = domDocument();
+    if (!initialized || !doc || !doc.getElementById('commercial-kpi-stats')) return;
     const invoices = currentInvoices();
     const quotes = invoices.filter(item => ['quote', 'proforma'].includes(item.docType));
     const converted = quotes.filter(item => item.status === 'converted' || item.convertedTo || item.workflowStatus === 'converted').length;
@@ -793,20 +1034,21 @@ window.ERPBillingWorkflows = (function () {
     }).filter(value => value !== null);
     const pending = sales.reduce((sum, item) => sum + Math.max(0, Number(item.total || 0) - Number(item.paidAmount || 0)), 0);
     const overdue = sales.filter(item => Core.isOverdue(item.dueDate, Number(item.total || 0) - Number(item.paidAmount || 0))).reduce((sum, item) => sum + Math.max(0, Number(item.total || 0) - Number(item.paidAmount || 0)), 0);
-    const kpiConv = document.getElementById('commercial-kpi-conversion');
+    const kpiConv = doc.getElementById('commercial-kpi-conversion');
     if (kpiConv) kpiConv.textContent = quotes.length ? `${((converted / quotes.length) * 100).toFixed(1)}%` : 'Sin cotizaciones';
-    const kpiMargin = document.getElementById('commercial-kpi-margin');
+    const kpiMargin = doc.getElementById('commercial-kpi-margin');
     if (kpiMargin) kpiMargin.textContent = costCoveredSales > 0 ? `${(((costCoveredSales - cost) / costCoveredSales) * 100).toFixed(1)}%` : 'Sin costos';
-    const kpiDays = document.getElementById('commercial-kpi-collection-days');
+    const kpiDays = doc.getElementById('commercial-kpi-collection-days');
     if (kpiDays) kpiDays.textContent = paidDays.length ? `${(paidDays.reduce((sum, value) => sum + value, 0) / paidDays.length).toFixed(1)} días` : 'Sin datos';
-    const kpiOverdue = document.getElementById('commercial-kpi-overdue');
+    const kpiOverdue = doc.getElementById('commercial-kpi-overdue');
     if (kpiOverdue) kpiOverdue.textContent = pending > 0 ? `${((overdue / pending) * 100).toFixed(1)}%` : '0%';
-    const scope = document.getElementById('commercial-data-scope');
+    const scope = doc.getElementById('commercial-data-scope');
     if (scope) scope.textContent = billing().history.hasMoreInvoices ? `Indicadores sobre los ${invoices.length} documentos más recientes. Puedes cargar historial anterior en Facturas.` : `Indicadores sobre ${invoices.length} documentos cargados.`;
   }
 
   function renderStockSuggestions() {
-    const list = document.getElementById('commercial-stock-suggestions');
+    const doc = domDocument();
+    const list = doc?.getElementById('commercial-stock-suggestions');
     if (!list) return;
     const products = [...(billing().products || []), ...(billing().futunetProducts || [])];
     const unique = new Map();
@@ -838,7 +1080,8 @@ window.ERPBillingWorkflows = (function () {
   }
 
   function renderComplianceChecks() {
-    const container = document.getElementById('commercial-compliance-checks');
+    const doc = domDocument();
+    const container = doc?.getElementById('commercial-compliance-checks');
     if (!container) return;
     const settings = currentSettings();
     const rnc = String(settings.rnc || '').replace(/\D/g, '');
@@ -881,13 +1124,22 @@ window.ERPBillingWorkflows = (function () {
     prefix = snapshot.prefix;
     isAdmin = snapshot.isUserAdmin;
     initialized = true;
-    const form = document.getElementById('invoice-editor-form');
-    if (form) {
+    const doc = domDocument();
+    const form = doc?.getElementById('invoice-editor-form');
+    if (form && !form.dataset.draftListenersAttached) {
       form.addEventListener('input', scheduleDraftSave);
       form.addEventListener('change', scheduleDraftSave);
+      form.dataset.draftListenersAttached = 'true';
     }
-    document.addEventListener('erp:invoice-saved', event => onInvoiceSaved(event).catch(error => console.warn('Unable to record invoice event', error)));
-    document.addEventListener('erp:document-event', event => onDocumentEvent(event).catch(error => console.warn('Unable to record document event', error)));
+    if (!windowListenersAttached && typeof window !== 'undefined') {
+      window.addEventListener('beforeunload', flushDraftNow);
+      window.addEventListener('pagehide', flushDraftNow);
+      if (doc) {
+        doc.addEventListener('erp:invoice-saved', event => onInvoiceSaved(event).catch(error => console.warn('Unable to record invoice event', error)));
+        doc.addEventListener('erp:document-event', event => onDocumentEvent(event).catch(error => console.warn('Unable to record document event', error)));
+      }
+      windowListenersAttached = true;
+    }
     await loadLatestDraft();
     refreshKpis();
   }
@@ -899,6 +1151,12 @@ window.ERPBillingWorkflows = (function () {
     openHistoryDialog,
     openReminderDialog, prepareReminder, completeReminder,
     openStatementDialog, openTemplateDialog, loadTemplate, deleteTemplate, generateRecurringDraft,
-    recordStockReview
+    recordStockReview,
+    documentSnapshotFromForm,
+    flushDraftNow,
+    clearActiveDraft: clearLatestDraft,
+    clearLatestDraft,
+    checkDraftBanner,
+    scheduleDraftSave
   };
 })();

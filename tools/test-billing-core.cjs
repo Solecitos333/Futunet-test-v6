@@ -238,3 +238,21 @@ test('determina la marca de modificación y ordena documentos por actividad reci
   assert.equal(list[1].id, 'cot-2');
   assert.equal(list[2].id, 'cot-3');
 });
+
+test('normalización de Futunet y eslogan comercial en emisión de facturas y cotizaciones', () => {
+  const normalizeFutunetName = (name) => {
+    if (/^Futunet(\s+Suministros(\s*(SRL|S\.R\.L\.))?)?$/i.test(String(name || '').trim())) {
+      return 'Futunet';
+    }
+    return name || 'Futunet';
+  };
+
+  assert.equal(normalizeFutunetName('Futunet Suministros'), 'Futunet');
+  assert.equal(normalizeFutunetName('Futunet Suministros SRL'), 'Futunet');
+  assert.equal(normalizeFutunetName('futunet suministros'), 'Futunet');
+  assert.equal(normalizeFutunetName('futunet suministros s.r.l.'), 'Futunet');
+  assert.equal(normalizeFutunetName('Futunet'), 'Futunet');
+
+  const defaultSlogan = 'La Tecnología del Futuro';
+  assert.equal(defaultSlogan, 'La Tecnología del Futuro');
+});

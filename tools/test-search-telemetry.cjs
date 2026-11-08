@@ -142,7 +142,13 @@ const testQueries = [
   'nvx80',
   '3va11',
   'tesla solar inverter',
-  'ipc6854'];
+  'ipc6854',
+  'c9200',
+  'u6-enterprise',
+  'ccr2004',
+  'eap670',
+  'l530u',
+  'srv6k'];
 
 test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consultas clave tienen resultados pertinentes', () => {
   for (const q of testQueries) {
@@ -1115,6 +1121,78 @@ test('Telemetría y Relevancia de Búsquedas en Catálogo Real: todas las consul
       assert.ok(
         /ptz|33x|ipc6854/i.test(scored[0].p.title),
         'El producto top para "ipc6854" debe ser Uniview PTZ 33x'
+      );
+    }
+
+    if (q === 'c9200') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Cisco',
+        'La búsqueda "c9200" debe priorizar el Switch Cisco Catalyst 9200L'
+      );
+      assert.ok(
+        /9200|catalyst/i.test(scored[0].p.title),
+        'El producto top para "c9200" debe ser Cisco Catalyst 9200L'
+      );
+    }
+
+    if (q === 'u6-enterprise') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Ubiquiti',
+        'La búsqueda "u6-enterprise" debe priorizar el AP Ubiquiti UniFi U6 Enterprise'
+      );
+      assert.ok(
+        /enterprise|u6/i.test(scored[0].p.title),
+        'El producto top para "u6-enterprise" debe ser Ubiquiti UniFi U6 Enterprise'
+      );
+    }
+
+    if (q === 'ccr2004') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'MikroTik',
+        'La búsqueda "ccr2004" debe priorizar el Cloud Core Router MikroTik CCR2004'
+      );
+      assert.ok(
+        /ccr2004|cloud\s*core/i.test(scored[0].p.title),
+        'El producto top para "ccr2004" debe ser MikroTik CCR2004'
+      );
+    }
+
+    if (q === 'eap670') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'TP-Link',
+        'La búsqueda "eap670" debe priorizar el Punto de Acceso TP-Link Omada EAP670'
+      );
+      assert.ok(
+        /eap670|ax5400/i.test(scored[0].p.title),
+        'El producto top para "eap670" debe ser TP-Link Omada EAP670'
+      );
+    }
+
+    if (q === 'l530u') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Epson',
+        'La búsqueda "l530u" debe priorizar el Proyector Láser Epson PowerLite L530U'
+      );
+      assert.ok(
+        /l530u|laser/i.test(scored[0].p.title),
+        'El producto top para "l530u" debe ser Epson PowerLite L530U'
+      );
+    }
+
+    if (q === 'srv6k') {
+      assert.strictEqual(
+        scored[0].p.brand,
+        'Schneider Electric',
+        'La búsqueda "srv6k" debe priorizar el UPS Online en Rack APC Easy UPS SRV 6kVA'
+      );
+      assert.ok(
+        /srv\s*6kva|6000va|srv6k/i.test(scored[0].p.title),
+        'El producto top para "srv6k" debe ser APC Easy UPS SRV 6kVA'
       );
     }
   }

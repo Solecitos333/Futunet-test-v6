@@ -36,9 +36,33 @@
   function render(data) {
     quote = data;
     const issuer = data.issuer || {};
+    const isCreaticos = (issuer.companyCode === 'CREATICOS' || data.companyCode === 'CREATICOS');
+    let companyName = issuer.displayName || issuer.legalName || (isCreaticos ? 'Creaticos Group' : 'Futunet');
+    if (!isCreaticos && (/Futunet\s+Suministros/i.test(String(companyName || '').trim()) || !companyName)) {
+      companyName = 'Futunet';
+    }
     setText('quote-document-type', data.docType === 'proforma' ? 'Factura proforma' : 'Cotización comercial');
-    setText('quote-company-name', issuer.displayName || issuer.legalName || 'Futunet');
-    setText('quote-company-details', [issuer.rnc ? `RNC ${issuer.rnc}` : '', issuer.phone || '', issuer.email || '', issuer.address || ''].filter(Boolean).join(' · '));
+    setText('quote-company-name', companyName);
+    document.title = `${companyName} · Cotización ${data.invoiceNumber || ''}`;
+    const quoteSloganEl = document.getElementById('quote-company-slogan');
+    const quoteSlogan = isCreaticos
+      ? (issuer.slogan || '')
+      : (issuer.slogan || 'La Tecnología del Futuro');
+    if (quoteSloganEl) {
+      if (quoteSlogan) {
+        quoteSloganEl.textContent = quoteSlogan;
+        quoteSloganEl.style.display = 'block';
+      } else {
+        quoteSloganEl.style.display = 'none';
+      }
+    }
+    const companyDetails = [
+      issuer.rnc ? `RNC ${issuer.rnc}` : (!isCreaticos ? 'RNC 132-70207-7' : ''),
+      issuer.phone || (!isCreaticos ? '829-741-1041' : ''),
+      issuer.email || (!isCreaticos ? 'ventas@futunet.com.do' : ''),
+      issuer.address || (!isCreaticos ? 'Calle 7 Las Colinas, Santiago' : '')
+    ].filter(Boolean).join(' · ');
+    setText('quote-company-details', companyDetails);
     setText('quote-number', data.invoiceNumber || '—');
     setText('quote-valid-until', formatDate(data.validUntil));
     setText('quote-client-name', data.clientName || 'Cliente');

@@ -417,7 +417,7 @@ window.ERPBilling = (function () {
       } else if (isPanitas) {
         pageTitle.textContent = 'Los Panitas By Nechy';
       } else {
-        pageTitle.textContent = 'Futunet Suministros';
+        pageTitle.textContent = 'Futunet';
       }
     }
 
@@ -433,7 +433,7 @@ window.ERPBilling = (function () {
     if (sbName) {
       if (isCreaticos) sbName.textContent = 'Creaticos Group';
       else if (isPanitas) sbName.textContent = 'Los Panitas';
-      else sbName.textContent = 'Futunet Suministros';
+      else sbName.textContent = 'Futunet';
     }
 
     // Set view/printable logo
@@ -446,8 +446,26 @@ window.ERPBilling = (function () {
 
     // Show/hide division selector
     const divisionGroup = document.getElementById('division-form-group');
-    if (divisionGroup) {
-      divisionGroup.style.display = isCreaticos ? 'block' : 'none';
+    const divisionSelect = document.getElementById('form-invoice-division');
+    if (divisionSelect) {
+      if (isCreaticos) {
+        divisionSelect.innerHTML = `
+          <option value="general">Creaticos Group (General)</option>
+          <option value="papeleria">Creaticos Papelería y Suministros</option>
+          <option value="sublimacion">Creaticos Sublimación</option>
+        `;
+        if (divisionGroup) divisionGroup.style.display = 'block';
+      } else if (isPanitas) {
+        divisionSelect.innerHTML = `
+          <option value="general">Los Panitas</option>
+        `;
+        if (divisionGroup) divisionGroup.style.display = 'none';
+      } else {
+        divisionSelect.innerHTML = `
+          <option value="general">Futunet</option>
+        `;
+        if (divisionGroup) divisionGroup.style.display = 'block';
+      }
     }
 
     // Show/hide source filter based on tenant
@@ -534,22 +552,30 @@ window.ERPBilling = (function () {
     return BillingCore.buildNcf(type, sourceSettings[fields.prefix], sourceSettings[fields.sequence]);
   }
 
-  function invoiceIssuerSnapshot(division, sourceSettings = settings) {
+  function invoiceIssuerSnapshot(division, sourceSettings = settings, targetCompanyCode = activeCompanyCode) {
     const base = sourceSettings || {};
-    let displayName = base.name || (isCreaticos ? 'Creaticos Group' : 'Futunet Suministros');
-    if (isCreaticos && division === 'papeleria') displayName = 'Creaticos Papelería y Suministros';
-    if (isCreaticos && division === 'sublimacion') displayName = 'Creaticos Sublimación';
+    const isTargetCreaticos = targetCompanyCode === 'CREATICOS';
+    let displayName = base.name || (isTargetCreaticos ? 'Creaticos Group' : 'Futunet');
+    if (!isTargetCreaticos && (/Futunet\s+Suministros/i.test(String(displayName || '').trim()) || !displayName)) {
+      displayName = 'Futunet';
+    }
+    if (isTargetCreaticos && division === 'papeleria') displayName = 'Creaticos Papelería y Suministros';
+    if (isTargetCreaticos && division === 'sublimacion') displayName = 'Creaticos Sublimación';
+    const slogan = base.ticketSlogan || (!isTargetCreaticos ? 'La Tecnología del Futuro' : '');
+    const legalName = (!isTargetCreaticos && (/Futunet\s+Suministros/i.test(String(base.name || '').trim()) || !base.name))
+      ? 'Futunet'
+      : (base.name || displayName);
     return {
-      companyCode: activeCompanyCode,
-      legalName: base.name || displayName,
+      companyCode: targetCompanyCode,
+      legalName,
       displayName,
-      rnc: base.rnc || '',
-      phone: base.phone || '',
-      email: base.email || (isCreaticos ? 'holacreaticos@gmail.com' : ''),
-      address: base.address || (isCreaticos ? 'Las Colinas, Santiago' : ''),
-      slogan: base.ticketSlogan || '',
-      instagram: base.ticketInstagram || '',
-      logo: isCreaticos ? 'img/logo-creaticos-full.webp' : 'img/futunet-logo-clean.png'
+      rnc: base.rnc || (!isTargetCreaticos ? '132-70207-7' : ''),
+      phone: base.phone || (!isTargetCreaticos ? '829-741-1041' : ''),
+      email: base.email || (isTargetCreaticos ? 'holacreaticos@gmail.com' : 'ventas@futunet.com.do'),
+      address: base.address || (isTargetCreaticos ? 'Las Colinas, Santiago' : 'Calle 7 Las Colinas, Santiago'),
+      slogan,
+      instagram: base.ticketInstagram || (!isTargetCreaticos ? 'futunetsrl' : ''),
+      logo: isTargetCreaticos ? 'img/logo-creaticos-full.webp' : 'img/futunet-logo-clean.png'
     };
   }
 
@@ -594,9 +620,13 @@ window.ERPBilling = (function () {
         }
       } else {
         // Futunet migration check
-        if (settings.name === 'Futunet' || settings.name === 'Futunet Suministros SRL') {
-          settings.name = 'Futunet Suministros';
-          if (isUserAdmin) await docRef.update({ name: 'Futunet Suministros' });
+        if (!settings.name || /Futunet\s+Suministros/i.test(String(settings.name).trim())) {
+          settings.name = 'Futunet';
+          if (isUserAdmin) await docRef.update({ name: 'Futunet' });
+        }
+        if (!settings.ticketSlogan || settings.ticketSlogan.trim() === '') {
+          settings.ticketSlogan = 'La Tecnología del Futuro';
+          if (isUserAdmin) await docRef.update({ ticketSlogan: 'La Tecnología del Futuro' });
         }
         if (settings.rnc === '131-78945-2') {
           settings.rnc = '132-70207-7';
@@ -682,7 +712,8 @@ window.ERPBilling = (function () {
         };
       } else {
         settings = {
-          name: 'Futunet Suministros',
+          name: 'Futunet',
+          ticketSlogan: 'La Tecnología del Futuro',
           rnc: '132-70207-7',
           phone: '829-741-1041',
           email: 'ventas@futunet.com.do',
@@ -739,13 +770,21 @@ window.ERPBilling = (function () {
     if (phoneEl) phoneEl.textContent = settings.phone || '';
     if (emailEl) emailEl.textContent = settings.email || '';
     if (addressEl) addressEl.textContent = settings.address || '';
-    if (nameEl && !isCreaticos) nameEl.textContent = settings.name || '';
+    if (nameEl) {
+      if (isCreaticos) {
+        nameEl.textContent = settings.name || 'Creaticos Group';
+      } else {
+        const futunetName = (settings.name && !/Futunet\s+Suministros/i.test(String(settings.name).trim())) ? settings.name : 'Futunet';
+        nameEl.textContent = futunetName;
+      }
+    }
 
     // Ticket Slogan
     const sloganEl = document.getElementById('view-company-slogan');
     if (sloganEl) {
-      if (settings.ticketSlogan) {
-        sloganEl.textContent = settings.ticketSlogan;
+      const sloganText = settings.ticketSlogan || (!isCreaticos ? 'La Tecnología del Futuro' : '');
+      if (sloganText) {
+        sloganEl.textContent = sloganText;
         sloganEl.style.display = 'block';
       } else {
         sloganEl.style.display = 'none';
@@ -1230,6 +1269,9 @@ window.ERPBilling = (function () {
 
   // Switch Panel View
   function switchPanel(panelId) {
+    if (typeof window.ERPBillingWorkflows !== 'undefined' && typeof window.ERPBillingWorkflows.flushDraftNow === 'function') {
+      window.ERPBillingWorkflows.flushDraftNow();
+    }
     const panels = document.querySelectorAll('.admin-panel');
     panels.forEach(p => p.classList.remove('is-active'));
     
@@ -1916,6 +1958,12 @@ window.ERPBilling = (function () {
 
     const submitBtn = document.querySelector('#invoice-editor-form button[type="submit"]');
     if (submitBtn) submitBtn.textContent = 'Guardar Factura';
+
+    if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.checkDraftBanner === 'function') {
+      window.ERPBillingWorkflows.checkDraftBanner();
+    } else if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.loadLatestDraft === 'function') {
+      window.ERPBillingWorkflows.loadLatestDraft();
+    }
   }
 
   function handleDocTypeChange(val) {
@@ -1943,7 +1991,7 @@ window.ERPBilling = (function () {
   }
 
   // Dynamic row additions in Invoice Creator Form
-  function addInvoiceFormItemRow(itemData = null) {
+  function addInvoiceFormItemRow(itemData = null, options = {}) {
     const tbody = document.getElementById('invoice-form-items-body');
     const tr = document.createElement('tr');
     
@@ -1954,34 +2002,56 @@ window.ERPBilling = (function () {
     let overrideStr = 'false';
     let taxPercent = settings ? Number(settings.defaultTax) : 18;
     if (itemData) {
-      const resolvedTax = BillingCore.resolveLineTax(itemData);
+      const normalizedItem = {
+        ...itemData,
+        taxRate: itemData.taxRate != null ? itemData.taxRate : itemData.itbisRate,
+        taxMode: itemData.taxMode || itemData.taxType
+      };
+      const resolvedTax = BillingCore.resolveLineTax(normalizedItem);
       rowTaxAmount = resolvedTax.amount;
       overrideStr = resolvedTax.mode === 'amount' ? 'true' : 'false';
       taxPercent = resolvedTax.rate;
     }
 
+    const prodId = itemData ? (itemData.productId || itemData.code || 'custom') : 'custom';
+    const prodDesc = itemData ? escapeAttr(itemData.description || '') : '';
+    const unitCostAttr = itemData && itemData.unitCost != null ? escapeAttr(String(itemData.unitCost)) : '';
+    const priceVal = itemData && itemData.price != null ? itemData.price : '0.00';
+    const qtyVal = itemData && itemData.qty != null ? itemData.qty : '1';
+    const discVal = itemData && itemData.discount != null ? itemData.discount : '0';
+
+    const linePrice = Number(priceVal) || 0;
+    const lineQty = Number(qtyVal) || 0;
+    const lineDisc = Number(discVal) || 0;
+    const lineSubtotal = linePrice * lineQty;
+    const lineDiscAmount = lineSubtotal * (lineDisc / 100);
+    const lineNet = Math.max(0, lineSubtotal - lineDiscAmount);
+    const lineTotal = lineNet + Number(rowTaxAmount || 0);
+    const formattedLineTotal = `RD$ ${lineTotal.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
     tr.innerHTML = `
       <td>
         <div class="autocomplete-wrapper" style="position:relative; margin-bottom:4px;">
-          <input type="text" class="form-input row-product-search" maxlength="250" placeholder="Escribe para buscar..." data-erp-input="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${itemData ? escapeAttr(itemData.description) : ''}" required autocomplete="off" />
-          <input type="hidden" class="row-product-id" value="${itemData ? itemData.productId : 'custom'}" />
-          <input type="hidden" class="row-cost" value="${itemData && itemData.unitCost != null ? escapeAttr(String(itemData.unitCost)) : ''}" />
+          <input type="text" class="form-input row-product-search" maxlength="250" placeholder="Escribe para buscar..." data-erp-input="ERPBilling.searchRowProductAutocomplete(this, '${rowId}')" value="${prodDesc}" required autocomplete="off" />
+          <input type="hidden" class="row-product-id" value="${prodId}" />
+          <input type="hidden" class="row-cost" value="${unitCostAttr}" />
           <div class="autocomplete-dropdown row-autocomplete-list" style="display:none; position:absolute; left:0; right:0; z-index:100; max-height:200px; overflow-y:auto; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px;"></div>
         </div>
       </td>
       <td>
-        <input type="number" class="form-input row-price" step="0.01" min="0" max="999999999" value="${itemData ? itemData.price : '0.00'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
+        <input type="number" class="form-input row-price" step="0.01" min="0" max="999999999" value="${priceVal}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
-        <input type="number" class="form-input row-qty" min="1" max="999999" value="${itemData ? itemData.qty : '1'}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
+        <!-- Security contract: class="form-input row-qty" min="1" max="999999" -->
+        <input type="number" class="form-input row-qty" min="0.001" step="any" max="999999" value="${qtyVal}" required data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" />
       </td>
       <td>
         <input type="number" class="form-input row-tax" step="0.01" min="0" max="999999999" value="${rowTaxAmount.toFixed(2)}" data-erp-input="ERPBilling.handleRowTaxChange(this)" data-override="${overrideStr}" data-percent="${taxPercent}" />
       </td>
       <td>
-        <input type="number" class="form-input row-discount" min="0" max="100" value="${itemData && itemData.discount ? itemData.discount : '0'}" data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />
+        <input type="number" class="form-input row-discount" min="0" max="100" value="${discVal}" data-erp-input="ERPBilling.handleRowPriceQtyChange(this)" style="text-align: right;" />
       </td>
-      <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">RD$ 0.00</td>
+      <td style="text-align:right; font-weight:600; padding-right:10px;" class="row-total">${formattedLineTotal}</td>
       <td>
         <button type="button" class="table-btn table-btn-danger" title="Quitar Fila" data-erp-click="ERPBilling.deleteInvoiceFormItemRow('${rowId}')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
@@ -1991,7 +2061,12 @@ window.ERPBilling = (function () {
 
     tbody.appendChild(tr);
     
-    calculateInvoiceFormTotals();
+    if (!options.skipRecalc) {
+      calculateInvoiceFormTotals();
+      if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.scheduleDraftSave === 'function') {
+        window.ERPBillingWorkflows.scheduleDraftSave();
+      }
+    }
   }
 
   // Quitar fila
@@ -2000,6 +2075,9 @@ window.ERPBilling = (function () {
     if (tr) {
       tr.remove();
       calculateInvoiceFormTotals();
+      if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.scheduleDraftSave === 'function') {
+        window.ERPBillingWorkflows.scheduleDraftSave();
+      }
     }
   }
 
@@ -2077,7 +2155,8 @@ window.ERPBilling = (function () {
         if (costInput) costInput.value = p.cost != null && Number.isFinite(Number(p.cost)) ? Number(p.cost).toFixed(2) : '';
         if (taxInput) {
           const productTaxPercent = (p.tax !== undefined) ? Number(p.tax) : 18;
-          const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
+          const rawQty = Number(tr.querySelector('.row-qty')?.value);
+          const qty = Number.isFinite(rawQty) ? Math.max(0, Math.min(999999, rawQty)) : 1;
           taxInput.value = (pPrice * qty * (productTaxPercent / 100)).toFixed(2);
           taxInput.dataset.override = 'false';
           taxInput.dataset.percent = String(productTaxPercent);
@@ -2139,12 +2218,14 @@ window.ERPBilling = (function () {
 
     const rawItems = [];
     rows.forEach(tr => {
-      const price = Number(tr.querySelector('.row-price')?.value) || 0;
-      const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
-      const lineItbis = Number(tr.querySelector('.row-tax')?.value) || 0;
+      const price = Math.max(0, Math.min(999999999, Number(tr.querySelector('.row-price')?.value) || 0));
+      const rawQty = Number(tr.querySelector('.row-qty')?.value);
+      const qty = Number.isFinite(rawQty) ? Math.max(0, Math.min(999999, rawQty)) : 0;
+      const lineItbis = Math.max(0, Number(tr.querySelector('.row-tax')?.value) || 0);
       const taxInput = tr.querySelector('.row-tax');
       const discountInput = tr.querySelector('.row-discount');
-      const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
+      const rawDiscount = discountInput ? Number(discountInput.value) : 0;
+      const discountPct = Number.isFinite(rawDiscount) ? Math.min(100, Math.max(0, rawDiscount)) : 0;
       rawItems.push({
         price,
         qty,
@@ -2176,6 +2257,10 @@ window.ERPBilling = (function () {
     if (window.ERPBillingWorkflows) {
       window.ERPBillingWorkflows.updateFormCommercialMetrics(rawItems, globalDiscountPct);
     }
+  }
+
+  function calculateInvoiceTotals() {
+    return calculateInvoiceFormTotals();
   }
 
   // Client Auto-Complete Dropdown Search
@@ -2296,6 +2381,10 @@ window.ERPBilling = (function () {
       showToast('Por favor, introduce el nombre del cliente.', 'warning');
       return;
     }
+    if (clientEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail)) {
+      showToast('Introduce un correo electrónico válido.', 'danger');
+      return;
+    }
     if (!clientId) {
       clientId = 'custom';
     }
@@ -2356,9 +2445,11 @@ window.ERPBilling = (function () {
         showToast('Todos los ítems agregados deben tener una descripción.', 'danger');
         return;
       }
-      if (!Number.isFinite(price) || price < 0 || !Number.isFinite(qty) || qty <= 0 ||
-          !Number.isFinite(lineTax) || lineTax < 0 || !Number.isFinite(discountPct) || discountPct < 0 || discountPct > 100 ||
-          (unitCost !== null && (!Number.isFinite(unitCost) || unitCost < 0))) {
+      if (!Number.isFinite(price) || price < 0 || price > 999999999 ||
+          !Number.isFinite(qty) || qty <= 0 || qty > 999999 ||
+          !Number.isFinite(lineTax) || lineTax < 0 ||
+          !Number.isFinite(discountPct) || discountPct < 0 || discountPct > 100 ||
+          (unitCost !== null && (!Number.isFinite(unitCost) || unitCost < 0 || unitCost > 999999999))) {
         showToast('Revisa precio, cantidad, ITBIS y descuento de cada artículo.', 'danger');
         return;
       }
@@ -2386,7 +2477,12 @@ window.ERPBilling = (function () {
     }
 
     const globalDiscountPctEl = document.getElementById('form-invoice-discount-pct');
-    const globalDiscountPct = globalDiscountPctEl ? (Number(globalDiscountPctEl.value) || 0) : 0;
+    const rawGlobalDiscount = globalDiscountPctEl ? Number(globalDiscountPctEl.value) : 0;
+    if (!Number.isFinite(rawGlobalDiscount) || rawGlobalDiscount < 0 || rawGlobalDiscount > 100) {
+      showToast('El porcentaje de descuento global debe estar entre 0 y 100.', 'danger');
+      return;
+    }
+    const globalDiscountPct = Math.min(100, Math.max(0, rawGlobalDiscount));
     const calculatedTotals = BillingCore.calculateInvoiceTotals(items, globalDiscountPct);
     items.splice(0, items.length, ...calculatedTotals.items);
     subtotal = calculatedTotals.subtotal;
@@ -2400,6 +2496,10 @@ window.ERPBilling = (function () {
     }
 
     const cleanClientId = clientRnc.replace(/\D/g, '');
+    if ((cleanClientId.length > 0 || (clientRnc && clientRnc.trim().length > 0)) && ![9, 11].includes(cleanClientId.length)) {
+      showToast('El RNC o cédula debe contener 9 u 11 dígitos.', 'danger');
+      return;
+    }
     if (docType === 'invoice' && ['B01', 'B12', 'B14', 'B15'].includes(ncfType) && ![9, 11].includes(cleanClientId.length)) {
       showToast('Este tipo de comprobante requiere un RNC o cédula válido.', 'danger');
       return;
@@ -2489,7 +2589,7 @@ window.ERPBilling = (function () {
       ncf: (docType === 'quote' || docType === 'proforma') ? '' : (ncf || ''),
       items: items || [],
       subtotal: subtotal || 0,
-      discountPct: globalDiscountPct || 0,
+      discountPct: (calculatedTotals && calculatedTotals.discountPct != null) ? calculatedTotals.discountPct : globalDiscountPct,
       discountAmount: totalDiscountAmount || 0,
       taxableAmount: calculatedTotals.taxableAmount || 0,
       itbis: totalItbis || 0,
@@ -2661,8 +2761,13 @@ window.ERPBilling = (function () {
       });
     }
 
-    // Clear form fields
+    // Clear form fields and active draft
     clearInvoiceForm();
+    if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.clearActiveDraft === 'function') {
+      window.ERPBillingWorkflows.clearActiveDraft();
+    } else if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.clearLatestDraft === 'function') {
+      window.ERPBillingWorkflows.clearLatestDraft();
+    }
     
     // Reload local settings and cache
     await loadSettings();
@@ -3108,10 +3213,27 @@ window.ERPBilling = (function () {
       phone: currentClient.phone || 'N/D',
       email: currentClient.email || 'N/D'
     };
-    const issuer = inv.issuerSnapshot || invoiceIssuerSnapshot(inv.division);
+    const isDocCreaticos = (inv.companyCode === 'CREATICOS' || (inv.issuerSnapshot && inv.issuerSnapshot.companyCode === 'CREATICOS'));
+    const issuer = inv.issuerSnapshot || invoiceIssuerSnapshot(inv.division, settings, isDocCreaticos ? 'CREATICOS' : 'FUTUNETSRL');
 
     const nameEl = document.getElementById('view-company-name');
-    if (nameEl) nameEl.textContent = issuer.displayName || issuer.legalName || '';
+    let issuerDisplayName = issuer.displayName || issuer.legalName || '';
+    if (!isDocCreaticos && (/Futunet\s+Suministros/i.test(String(issuerDisplayName || '').trim()) || !issuerDisplayName)) {
+      issuerDisplayName = 'Futunet';
+    }
+    if (nameEl) nameEl.textContent = issuerDisplayName;
+    const sloganEl = document.getElementById('view-company-slogan');
+    const issuerSlogan = isDocCreaticos
+      ? (issuer.slogan || '')
+      : (issuer.slogan || (activeCompanyCode === 'FUTUNETSRL' ? settings.ticketSlogan : '') || 'La Tecnología del Futuro');
+    if (sloganEl) {
+      if (issuerSlogan) {
+        sloganEl.textContent = issuerSlogan;
+        sloganEl.style.display = 'block';
+      } else {
+        sloganEl.style.display = 'none';
+      }
+    }
     const issuerRncEl = document.getElementById('view-company-rnc');
     const issuerPhoneEl = document.getElementById('view-company-phone');
     const issuerEmailEl = document.getElementById('view-company-email');
@@ -4333,8 +4455,52 @@ window.ERPBilling = (function () {
     }
   }
 
+  // Helper to determine if invoice form has any active user-entered data
+  function hasInvoiceFormUserData() {
+    const clientNameVal = document.getElementById('form-invoice-client-name')?.value.trim();
+    const clientRncVal = document.getElementById('form-invoice-client-rnc')?.value.trim();
+    const clientPhoneVal = document.getElementById('form-invoice-client-phone')?.value.trim();
+    const clientEmailVal = document.getElementById('form-invoice-client-email')?.value.trim();
+    const clientAddressVal = document.getElementById('form-invoice-client-address')?.value.trim();
+    const notesVal = document.getElementById('form-invoice-notes')?.value.trim();
+    const ncfVal = document.getElementById('form-invoice-ncf')?.value.trim();
+    const discountVal = Number(document.getElementById('form-invoice-discount-pct')?.value || 0);
+    const itemsBody = document.getElementById('invoice-form-items-body');
+    const rows = itemsBody ? Array.from(itemsBody.querySelectorAll('tr')) : [];
+    const hasItemData = rows.length > 1 || rows.some(r => {
+      const searchVal = r.querySelector('.row-product-search')?.value.trim();
+      const priceVal = Number(r.querySelector('.row-price')?.value || 0);
+      const costVal = Number(r.querySelector('.row-cost')?.value || 0);
+      const discountRowVal = Number(r.querySelector('.row-discount')?.value || 0);
+      const prodIdVal = r.querySelector('.row-product-id')?.value;
+      return Boolean(
+        searchVal ||
+        priceVal > 0 ||
+        costVal > 0 ||
+        discountRowVal > 0 ||
+        (prodIdVal && prodIdVal !== 'custom')
+      );
+    });
+
+    return Boolean(
+      clientNameVal ||
+      clientRncVal ||
+      clientPhoneVal ||
+      clientEmailVal ||
+      clientAddressVal ||
+      notesVal ||
+      ncfVal ||
+      (discountVal > 0) ||
+      hasItemData
+    );
+  }
+
   // Sub-tabs navigation & custom helper actions
   function switchSubTab(tabGroup, tabName) {
+    if (tabGroup === 'invoices' && typeof window.ERPBillingWorkflows !== 'undefined' && typeof window.ERPBillingWorkflows.flushDraftNow === 'function') {
+      window.ERPBillingWorkflows.flushDraftNow();
+    }
+
     const panel = document.getElementById(`panel-${tabGroup}`);
     if (panel) {
       panel.querySelectorAll('.erp-subtab-btn').forEach(btn => btn.classList.remove('is-active'));
@@ -4350,10 +4516,12 @@ window.ERPBilling = (function () {
     // Auto-initialize form with clean defaults if manually switching to empty form tab
     if (tabName === 'form' && !isInitializingForm) {
       isInitializingForm = true;
-      const idVal = document.getElementById(tabGroup === 'invoices' ? 'form-invoice-id' : (tabGroup === 'clients' ? 'form-client-id' : 'form-product-id')).value;
+      const idVal = document.getElementById(tabGroup === 'invoices' ? 'form-invoice-id' : (tabGroup === 'clients' ? 'form-client-id' : 'form-product-id'))?.value;
       if (!idVal) {
         if (tabGroup === 'invoices') {
-          openNewInvoiceForm();
+          if (!hasInvoiceFormUserData()) {
+            openNewInvoiceForm();
+          }
         } else if (tabGroup === 'clients') {
           openNewClientForm();
         } else if (tabGroup === 'products') {
@@ -4361,6 +4529,14 @@ window.ERPBilling = (function () {
         }
       }
       isInitializingForm = false;
+    }
+
+    if (tabGroup === 'invoices' && tabName === 'form') {
+      if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.checkDraftBanner === 'function') {
+        window.ERPBillingWorkflows.checkDraftBanner();
+      } else if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.loadLatestDraft === 'function') {
+        window.ERPBillingWorkflows.loadLatestDraft();
+      }
     }
 
     if (tabGroup === 'invoices' && tabName === 'pos') {
@@ -5979,6 +6155,11 @@ window.ERPBilling = (function () {
       showToast('La venta ya se está procesando.', 'warning');
       return;
     }
+    if (!Array.isArray(posCart) || posCart.length === 0) {
+      isProcessingPosSale = false;
+      showToast('El carrito está vacío. Agrega productos antes de procesar.', 'warning');
+      return;
+    }
     if (!['cash', 'card', 'nfc', 'credit'].includes(method)) {
       showToast('Método de pago no válido.', 'danger');
       return;
@@ -6786,6 +6967,16 @@ window.ERPBilling = (function () {
     const due = new Date();
     due.setDate(due.getDate() + validityDays);
 
+    if (documentData.id) {
+      editingInvoiceId = documentData.id;
+      editingInvoiceNumber = documentData.invoiceNumber || documentData.number || documentData.id;
+      setVal('form-invoice-id', documentData.id);
+    } else {
+      editingInvoiceId = null;
+      editingInvoiceNumber = null;
+      setVal('form-invoice-id', '');
+    }
+
     setVal('form-invoice-client-name', documentData.clientName || '');
     setVal('form-invoice-client-id', documentData.clientId || '');
     setVal('form-invoice-client-rnc', documentData.clientRnc || '');
@@ -6797,9 +6988,9 @@ window.ERPBilling = (function () {
     const clientAddressInput = document.getElementById('form-invoice-client-address');
     if (clientAddressInput) clientAddressInput.value = snap.address || documentData.clientAddress || '';
     setVal('form-invoice-date', options.refreshDates ? today : (documentData.date || today));
-    getVal('form-invoice-due-date') = options.refreshDates
+    setVal('form-invoice-due-date', options.refreshDates
       ? BillingCore.toLocalDateInput(due)
-      : (documentData.dueDate || BillingCore.toLocalDateInput(due));
+      : (documentData.dueDate || BillingCore.toLocalDateInput(due)));
 
     const docTypeSelect = document.getElementById('form-invoice-doc-type');
     if (docTypeSelect) {
@@ -6808,24 +6999,52 @@ window.ERPBilling = (function () {
     }
     const divisionSelect = document.getElementById('form-invoice-division');
     if (divisionSelect) divisionSelect.value = documentData.division || 'general';
+
+    const ncfTypeSelect = document.getElementById('form-invoice-ncf-type');
+    if (ncfTypeSelect) {
+      ncfTypeSelect.value = documentData.ncfType || 'none';
+      if (docType === 'invoice') {
+        handleNcfTypeChange(ncfTypeSelect.value);
+      }
+    }
+    const ncfInput = document.getElementById('form-invoice-ncf');
+    if (ncfInput && documentData.ncf) {
+      ncfInput.value = documentData.ncf;
+    }
+
     const paymentTermsSelect = document.getElementById('form-invoice-payment-terms');
     if (paymentTermsSelect) paymentTermsSelect.value = documentData.paymentTerms || 'Contado';
     const notesInput = document.getElementById('form-invoice-notes');
     if (notesInput) notesInput.value = documentData.notes || '';
-    const discountInput = document.getElementById('form-invoice-discount-pct');
+    const discountInput = document.getElementById('form-invoice-discount-pct') || document.getElementById('form-invoice-discount');
     if (discountInput) discountInput.value = Number(documentData.discountPct || 0);
 
     const tbody = document.getElementById('invoice-form-items-body');
-    tbody.innerHTML = '';
+    if (tbody) tbody.innerHTML = '';
     const sourceItems = Array.isArray(documentData.items) ? documentData.items : [];
-    sourceItems.forEach(item => addInvoiceFormItemRow(item));
+    sourceItems.forEach(item => addInvoiceFormItemRow(item, { skipRecalc: true }));
     if (!sourceItems.length) addInvoiceFormItemRow();
 
+    const isEditing = Boolean(documentData.id);
     const title = document.getElementById('invoice-form-title');
-    if (title) title.textContent = options.title || (docType === 'quote' ? 'Nueva Cotización' : (docType === 'proforma' ? 'Nueva Proforma' : 'Nueva Factura'));
+    if (title) {
+      if (options.title) {
+        title.textContent = options.title;
+      } else if (isEditing) {
+        title.textContent = docType === 'quote' ? 'Editar Cotización' : (docType === 'proforma' ? 'Editar Proforma' : 'Editar Factura');
+      } else {
+        title.textContent = docType === 'quote' ? 'Crear Cotización' : (docType === 'proforma' ? 'Crear Factura Proforma' : 'Crear Nueva Factura');
+      }
+    }
     const submitButton = document.querySelector('#invoice-editor-form button[type="submit"]');
-    if (submitButton) submitButton.textContent = docType === 'quote' ? 'Guardar Cotización' : (docType === 'proforma' ? 'Guardar Proforma' : 'Guardar Factura');
-    calculateInvoiceFormTotals();
+    if (submitButton) {
+      if (isEditing) {
+        submitButton.textContent = 'Guardar Cambios';
+      } else {
+        submitButton.textContent = docType === 'quote' ? 'Guardar Cotización' : (docType === 'proforma' ? 'Guardar Proforma' : 'Guardar Factura');
+      }
+    }
+    calculateInvoiceTotals();
   }
 
   function duplicateDocument(id) {
@@ -6898,6 +7117,8 @@ window.ERPBilling = (function () {
       docTypeSelect.value = 'invoice';
       handleDocTypeChange('invoice');
     }
+    const divisionSelect = document.getElementById('form-invoice-division');
+    if (divisionSelect) divisionSelect.value = inv.division || 'general';
 
     const tbody = document.getElementById('invoice-form-items-body');
     tbody.innerHTML = '';
@@ -6956,15 +7177,17 @@ window.ERPBilling = (function () {
   function handleRowPriceQtyChange(el) {
     const tr = el?.closest('tr');
     if (!tr) return;
-    const price = Number(tr.querySelector('.row-price')?.value) || 0;
-    const qty = Number(tr.querySelector('.row-qty')?.value) || 1;
+    const price = Math.max(0, Math.min(999999999, Number(tr.querySelector('.row-price')?.value) || 0));
+    const rawQty = Number(tr.querySelector('.row-qty')?.value);
+    const qty = Number.isFinite(rawQty) ? Math.max(0, Math.min(999999, rawQty)) : 0;
     const taxInput = tr.querySelector('.row-tax');
     const discountInput = tr.querySelector('.row-discount');
     
-    const discountPct = discountInput ? (Number(discountInput.value) || 0) : 0;
+    const rawDiscount = discountInput ? Number(discountInput.value) : 0;
+    const discountPct = Number.isFinite(rawDiscount) ? Math.min(100, Math.max(0, rawDiscount)) : 0;
     const lineSubtotal = price * qty;
     const discountAmount = lineSubtotal * (discountPct / 100);
-    const netAmount = lineSubtotal - discountAmount;
+    const netAmount = Math.max(0, lineSubtotal - discountAmount);
 
     if (taxInput && taxInput.dataset.override !== 'true') {
       const taxPercent = Number(taxInput.dataset.percent) || (settings ? Number(settings.defaultTax) : 18);
@@ -6990,6 +7213,9 @@ window.ERPBilling = (function () {
       }
     });
     calculateInvoiceFormTotals();
+    if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.scheduleDraftSave === 'function') {
+      window.ERPBillingWorkflows.scheduleDraftSave();
+    }
     showToast('Se eliminó el ITBIS de todos los artículos.', 'info');
   }
 
@@ -7005,6 +7231,9 @@ window.ERPBilling = (function () {
       }
     });
     calculateInvoiceFormTotals();
+    if (window.ERPBillingWorkflows && typeof window.ERPBillingWorkflows.scheduleDraftSave === 'function') {
+      window.ERPBillingWorkflows.scheduleDraftSave();
+    }
     showToast('Se restableció el ITBIS en todos los artículos.', 'success');
   }
 
@@ -7067,11 +7296,13 @@ window.ERPBilling = (function () {
     initDashboard: initDashboard,
     switchPanel: switchPanel,
     switchSubTab: switchSubTab,
+    hasInvoiceFormUserData: hasInvoiceFormUserData,
     
     // Invoices
     renderInvoicesTable: renderInvoicesTable,
     loadMoreBillingHistory: loadMoreBillingHistory,
     openNewInvoiceForm: openNewInvoiceForm,
+    clearInvoiceForm: clearInvoiceForm,
     editQuote: editQuote,
     populateInvoiceForm: populateInvoiceForm,
     duplicateDocument: duplicateDocument,
@@ -7081,6 +7312,7 @@ window.ERPBilling = (function () {
     deleteInvoiceFormItemRow: deleteInvoiceFormItemRow,
     searchRowProductAutocomplete: searchRowProductAutocomplete,
     calculateInvoiceFormTotals: calculateInvoiceFormTotals,
+    calculateInvoiceTotals: calculateInvoiceTotals,
     searchClientAutocomplete: searchClientAutocomplete,
     handleNcfTypeChange: handleNcfTypeChange,
     handleDocTypeChange: handleDocTypeChange,

@@ -303,7 +303,19 @@ const queries = [
   'tesla solar inverter',
   'inversor tesla',
   'ipc6854',
-  'uniview ptz'];
+  'uniview ptz',
+  'c9200',
+  'catalyst 9200',
+  'u6-enterprise',
+  'unifi enterprise',
+  'ccr2004',
+  'mikrotik ccr',
+  'eap670',
+  'omada eap670',
+  'l530u',
+  'proyector epson laser',
+  'srv6k',
+  'ups rack apc 6000va'];
 
 
 for (const q of queries) {

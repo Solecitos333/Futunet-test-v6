@@ -1297,6 +1297,14 @@ body.erp-modal-open {
   margin-bottom: 2px !important;
 }
 
+.printable-invoice-wrapper.print-format-ticket #view-company-slogan {
+  color: #000 !important;
+  font-size: 7.5pt !important;
+  margin-top: -2px !important;
+  margin-bottom: 4px !important;
+  font-style: italic !important;
+}
+
 .printable-invoice-wrapper.print-format-ticket .billing-meta-box {
   width: 100% !important;
   text-align: center !important;
@@ -2550,6 +2558,10 @@ body.erp-modal-open {
   .printable-invoice-wrapper:not(.print-format-ticket) .invoice-signatures-area {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
+  }
+  #view-company-slogan {
+    color: #475569 !important;
+    font-style: italic !important;
   }
 }
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'futunet-cache-v65';
+const CACHE_NAME = 'futunet-cache-v66';
 
 // Assets críticos que deben cachearse (verificados como existentes)
 const CRITICAL_ASSETS = [
@@ -186,6 +186,12 @@ const OPTIONAL_ASSETS = [
   './img/productos/catalogo/siemens-sentron-3va11-breaker-125a.webp',
   './img/productos/catalogo/tesla-solar-inverter-76kw.webp',
   './img/productos/catalogo/uniview-ptz-4mp-33x-lighthunter.webp',
+  './img/productos/catalogo/cisco-catalyst-9200l-24p-4x-switch.webp',
+  './img/productos/catalogo/ubiquiti-unifi-u6-enterprise-ap.webp',
+  './img/productos/catalogo/mikrotik-ccr2004-16g-2s-router.webp',
+  './img/productos/catalogo/tplink-omada-eap670-wifi6-ap.webp',
+  './img/productos/catalogo/epson-powerlite-l530u-proyector-laser.webp',
+  './img/productos/catalogo/apc-easy-ups-srv-6kva-rack-online.webp',
   './marca-cisco.html',
   './marca-dahua.html',
   './marca-dell.html',

@@ -2973,3 +2973,219 @@ test('Mejora demandada por usuarios: Cámara PTZ IP Uniview LightHunter 4MP 33x 
   assert.ok(catJs.includes("'ipc6854'") && catJs.includes("'ptz33x'"), 'catalog.js debe incluir ipc6854 en stem variants');
   assert.ok(catJs.includes('ipc6854'), 'catalog.js debe priorizar Uniview PTZ 33x');
 });
+
+test('Mejora demandada por usuarios: Switch Administrable Cisco Catalyst 9200L 24P PoE+ (SUG-C9200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C9200'") && seedCjs.includes("status: 'implemented'"), 'SUG-C9200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C9200') && sugJs.includes('Cisco Catalyst 9200L'), 'SUG-C9200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_catalyst_9200l_24p_4x_poe'), 'backup_data.js debe contener redes_cisco_catalyst_9200l_24p_4x_poe');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-catalyst-9200l-24p-4x-switch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Cisco Catalyst 9200L debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'c9200'") && catJs.includes("'c9200l'"), 'catalog.js debe incluir c9200 en stem variants');
+  assert.ok(catJs.includes('9200'), 'catalog.js debe priorizar Cisco Catalyst 9200L');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6E Tri-Banda Ubiquiti UniFi U6 Enterprise (SUG-U6ENT)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U6ENT'") && seedCjs.includes("status: 'implemented'"), 'SUG-U6ENT debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U6ENT') && sugJs.includes('Ubiquiti UniFi U6 Enterprise'), 'SUG-U6ENT debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_unifi_u6_enterprise_ap'), 'backup_data.js debe contener redes_ubiquiti_unifi_u6_enterprise_ap');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-unifi-u6-enterprise-ap.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del AP Ubiquiti U6 Enterprise debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'u6ent'") && catJs.includes("'u6-enterprise'"), 'catalog.js debe incluir u6ent en stem variants');
+  assert.ok(catJs.includes('u6-enterprise'), 'catalog.js debe priorizar Ubiquiti UniFi U6 Enterprise');
+});
+
+test('Mejora demandada por usuarios: Cloud Core Router MikroTik CCR2004-16G-2S+PC Silencioso (SUG-M2004)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M2004'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2004 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M2004') && sugJs.includes('CCR2004-16G-2S+PC'), 'SUG-M2004 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_ccr2004_16g_2s_cloud_core_router'), 'backup_data.js debe contener redes_mikrotik_ccr2004_16g_2s_cloud_core_router');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-ccr2004-16g-2s-router.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del MikroTik CCR2004 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ccr2004'"), 'catalog.js debe incluir ccr2004 en stem variants');
+  assert.ok(catJs.includes('ccr2004'), 'catalog.js debe priorizar MikroTik CCR2004');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 TP-Link Omada EAP670 AX5400 (SUG-T6700)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T6700'") && seedCjs.includes("status: 'implemented'"), 'SUG-T6700 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T6700') && sugJs.includes('Omada EAP670'), 'SUG-T6700 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_tplink_omada_eap670_wifi6_ap'), 'backup_data.js debe contener redes_tplink_omada_eap670_wifi6_ap');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-omada-eap670-wifi6-ap.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del TP-Link EAP670 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'eap670'"), 'catalog.js debe incluir eap670 en stem variants');
+  assert.ok(catJs.includes('eap670'), 'catalog.js debe priorizar TP-Link EAP670');
+});
+
+test('Mejora demandada por usuarios: Proyector Láser Corporativo Epson PowerLite L530U 5,200 Lúmenes (SUG-E5300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E5300'") && seedCjs.includes("status: 'implemented'"), 'SUG-E5300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E5300') && sugJs.includes('PowerLite L530U'), 'SUG-E5300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_epson_powerlite_l530u_proyector_laser'), 'backup_data.js debe contener oficina_epson_powerlite_l530u_proyector_laser');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'epson-powerlite-l530u-proyector-laser.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Proyector Epson L530U debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'l530u'"), 'catalog.js debe incluir l530u en stem variants');
+  assert.ok(catJs.includes('l530u'), 'catalog.js debe priorizar Epson PowerLite L530U');
+});
+
+test('Mejora demandada por usuarios: UPS Online Doble Conversión en Rack APC Easy UPS SRV 6kVA (SUG-A6000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A6000'") && seedCjs.includes("status: 'implemented'"), 'SUG-A6000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A6000') && sugJs.includes('APC Easy UPS SRV 6kVA'), 'SUG-A6000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_schneider_easy_ups_srv_6000va_rack_online'), 'backup_data.js debe contener energia_apc_schneider_easy_ups_srv_6000va_rack_online');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-easy-ups-srv-6kva-rack-online.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del UPS APC SRV 6kVA debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'srv6k'"), 'catalog.js debe incluir srv6k en stem variants');
+  assert.ok(catJs.includes('srv6k'), 'catalog.js debe priorizar APC Easy UPS SRV 6kVA');
+});
+
+test('Mejora demandada por usuarios: Switch Administrable Layer 3 Cisco Catalyst 9200L 24P PoE+ 4X 10G (SUG-C9200)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-C9200'") && seedCjs.includes("status: 'implemented'"), 'SUG-C9200 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-C9200') && sugJs.includes('Cisco Catalyst 9200L'), 'SUG-C9200 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_cisco_catalyst_9200l_24p_4x_poe'), 'backup_data.js debe contener redes_cisco_catalyst_9200l_24p_4x_poe');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'cisco-catalyst-9200l-24p-4x-switch.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Switch Cisco Catalyst 9200L debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'c9200'") && catJs.includes("'c9200l'"), 'catalog.js debe incluir c9200 en stem variants');
+  assert.ok(catJs.includes('c9200'), 'catalog.js debe priorizar Cisco Catalyst 9200L');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6E Tri-Banda Ubiquiti UniFi U6 Enterprise 2.5G (SUG-U6ENT)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-U6ENT'") && seedCjs.includes("status: 'implemented'"), 'SUG-U6ENT debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-U6ENT') && sugJs.includes('Ubiquiti UniFi U6 Enterprise'), 'SUG-U6ENT debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_ubiquiti_unifi_u6_enterprise_ap'), 'backup_data.js debe contener redes_ubiquiti_unifi_u6_enterprise_ap');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'ubiquiti-unifi-u6-enterprise-ap.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Ubiquiti UniFi U6 Enterprise debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'u6ent'") && catJs.includes("'u6-enterprise'"), 'catalog.js debe incluir u6ent en stem variants');
+  assert.ok(catJs.includes('u6-enterprise'), 'catalog.js debe priorizar Ubiquiti UniFi U6 Enterprise');
+});
+
+test('Mejora demandada por usuarios: Cloud Core Router MikroTik CCR2004-16G-2S+PC Silencioso (SUG-M2004)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-M2004'") && seedCjs.includes("status: 'implemented'"), 'SUG-M2004 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-M2004') && sugJs.includes('MikroTik CCR2004'), 'SUG-M2004 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_mikrotik_ccr2004_16g_2s_cloud_core_router'), 'backup_data.js debe contener redes_mikrotik_ccr2004_16g_2s_cloud_core_router');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'mikrotik-ccr2004-16g-2s-router.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del MikroTik CCR2004 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'ccr2004'") && catJs.includes("'ccr2004-16g'"), 'catalog.js debe incluir ccr2004 en stem variants');
+  assert.ok(catJs.includes('ccr2004'), 'catalog.js debe priorizar MikroTik CCR2004');
+});
+
+test('Mejora demandada por usuarios: Punto de Acceso Wi-Fi 6 TP-Link Omada EAP670 AX5400 2.5G (SUG-T6700)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-T6700'") && seedCjs.includes("status: 'implemented'"), 'SUG-T6700 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-T6700') && sugJs.includes('TP-Link Omada EAP670'), 'SUG-T6700 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('redes_tplink_omada_eap670_wifi6_ap'), 'backup_data.js debe contener redes_tplink_omada_eap670_wifi6_ap');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'tplink-omada-eap670-wifi6-ap.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del TP-Link Omada EAP670 debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'eap670'") && catJs.includes("'omada-eap670'"), 'catalog.js debe incluir eap670 en stem variants');
+  assert.ok(catJs.includes('eap670'), 'catalog.js debe priorizar TP-Link Omada EAP670');
+});
+
+test('Mejora demandada por usuarios: Proyector Láser Corporativo Full HD WUXGA Epson PowerLite L530U 5200lm (SUG-E5300)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-E5300'") && seedCjs.includes("status: 'implemented'"), 'SUG-E5300 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-E5300') && sugJs.includes('Epson PowerLite L530U'), 'SUG-E5300 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('oficina_epson_powerlite_l530u_proyector_laser'), 'backup_data.js debe contener oficina_epson_powerlite_l530u_proyector_laser');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'epson-powerlite-l530u-proyector-laser.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del Epson PowerLite L530U debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'l530u'") && catJs.includes("'powerlite-l530u'"), 'catalog.js debe incluir l530u en stem variants');
+  assert.ok(catJs.includes('l530u'), 'catalog.js debe priorizar Epson PowerLite L530U');
+});
+
+test('Mejora demandada por usuarios: UPS Online Doble Conversión en Rack APC Easy UPS SRV 6kVA 208/240V SNMP (SUG-A6000)', () => {
+  const seedCjs = fs.readFileSync(path.join(projectRoot, 'tools', 'seed-suggestions.cjs'), 'utf8');
+  assert.ok(seedCjs.includes("refCode: 'SUG-A6000'") && seedCjs.includes("status: 'implemented'"), 'SUG-A6000 debe figurar como implemented en seed-suggestions.cjs');
+
+  const sugJs = fs.readFileSync(path.join(projectRoot, 'js', 'suggestions.js'), 'utf8');
+  assert.ok(sugJs.includes('SUG-A6000') && sugJs.includes('APC Easy UPS SRV 6kVA'), 'SUG-A6000 debe figurar en el muro y lista canónica de suggestions.js');
+
+  const backupJs = fs.readFileSync(path.join(projectRoot, 'js', 'backup_data.js'), 'utf8');
+  assert.ok(backupJs.includes('energia_apc_schneider_easy_ups_srv_6000va_rack_online'), 'backup_data.js debe contener energia_apc_schneider_easy_ups_srv_6000va_rack_online');
+
+  const imgPath = path.join(projectRoot, 'img', 'productos', 'catalogo', 'apc-easy-ups-srv-6kva-rack-online.webp');
+  assert.ok(fs.existsSync(imgPath), 'La imagen del APC Easy UPS SRV 6kVA debe existir en disco');
+
+  const catJs = fs.readFileSync(path.join(projectRoot, 'js', 'catalog.js'), 'utf8');
+  assert.ok(catJs.includes("'srv6k'") && catJs.includes("'srv6krilrk'"), 'catalog.js debe incluir srv6k en stem variants');
+  assert.ok(catJs.includes('srv6k'), 'catalog.js debe priorizar APC Easy UPS SRV 6kVA');
+});
